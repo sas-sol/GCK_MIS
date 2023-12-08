@@ -1,0 +1,279 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Vendor>
+@{ if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+}
+
+<div class="bgc-white bd bdrs-3 p-20 mB-20">
+    <input type="hidden" value="@ViewBag.TransactionId" id="trans-id" />
+    <h4 style="text-align:center">Account Receivables</h4>
+    <hr />
+    <div class="row" id="ad-iven-stock">
+        <div class="col-md-12 cal" id="add-inv-1">
+            <div class="form-row">
+                <span class="add-inven-counter" style="margin-top: 35px;font-size: 15px;width:35px">1.</span>
+                <div class="form-group col-md-9">
+                    <label>Narration</label>
+                    <input type="text" class="form-control Name" maxlength="250" name="Name" data-id="1" placeholder="Narration" required />
+                </div>
+                @*<div class="form-group col-md-1">
+                    <label>Quantity</label>
+                    <input class="form-control coma" placeholder="12,345" required>
+                    <input type="hidden" id="" name="Quantity" class="amt Quantity rate-calc" data-id="1" required>
+                </div>
+                <div class="form-group col-md-1">
+                    <label>UOM</label>
+                    <select style="padding:5px" class="form-control Measurement meas-che" name="Measurement" data-id="1">
+                        <option value="-">N/A</option>
+                        <option value="Kg">Kg</option>
+                        <option value="Piece">Piece</option>
+                        <option value="Bag">Bag</option>
+                        <option value="Liter">Liter</option>
+                    </select>
+                </div>
+                <div class="form-group col-md-1">
+                    <label>Rate</label>
+                    <input type="text" class="form-control Rate inv-rate rate-calc" name="Rate" data-id="1" placeholder="Rate">
+                </div>
+                <div class="form-group col-md-2">
+                    <label>Amount</label>
+                    <input type="text" class="form-control coma p-r-c rate-calc" placeholder="Amount">
+                    <input type="hidden" id="" name="Quantity" class="amt Rate Purchase_Rate" data-id="1" required>
+                </div>*@
+                <i class="ti-plus pointer add-rec-box" style="margin-top: 35px;font-size: 20px;font-weight: bold;margin-left: 2%;"></i>
+            </div>
+            <div class="form-row">
+                <span style="width:35px"></span>
+                <div class="col-md-2"></div>
+                <div class="col-md-3"><h6>Head</h6></div>
+                <div class="col-md-2"><h6>Debit</h6></div>
+                <div class="col-md-2"><h6>Credit</h6></div>
+            </div>
+            <div class="dr-line">
+                <div class="form-row dr-row dr-row-1">
+                    <span style="width:35px"></span>
+                    <div class="form-group col-md-2"><i class="ti-plus  add-rec-dr-row" style="float:right;margin-top:10px;font-size:12px"></i></div>
+                    <div class="form-group col-md-3">
+                        @Html.DropDownList("debitAccounts", null, "Choose..", new { @class = "form-control acc-head", required = "" })
+                    </div>
+                    <div class="form-group col-md-2">
+                        <input type="text" class="form-control coma " placeholder="Amount">
+                        <input type="hidden" id="" class="amt Rate dr" data-id="1" required>
+                    </div>
+                </div>
+            </div>
+            <div class="cr-line">
+                <div class="form-row cr-row cr-row-1">
+                    <span style="width:35px"></span>
+                    <div class="form-group col-md-2"><i class="ti-plus add-rec-cr-row" style="float:right;margin-top:10px;font-size:12px"></i></div>
+                    <div class="form-group col-md-3">
+                        @Html.DropDownList("ReceivableAccounts", null, "Choose..", new { @class = "form-control acc-head", required = "" })
+                    </div>
+                    <div class="form-group col-md-2"></div>
+                    <div class="form-group col-md-2">
+                        <input type="text" class="form-control coma " placeholder="Amount">
+                        <input type="hidden" id="" class="amt Rate cr" data-id="1" required>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr />
+    <div class="form-row">
+        <span style="width:35px"></span>
+        <div class="form-group col-md-7">
+            <h4 style="padding-top:1%;float:right">Total</h4>
+        </div>
+        <div class="form-group col-md-2">
+            <input class="form-control coma f-amt" placeholder="12,345" required readonly>
+            <input type="hidden" id="amt" name="Amount" class="amt" required readonly>
+        </div>
+        <div class="form-group col-md-1"></div>
+    </div>
+    <div><button class="btn btn-primary rec-receivable-entry">Record Entries</button></div>
+</div>
+
+
+
+
+<script>
+    var cracc = '';
+    var dracc = '';
+    $(document).ready(function () {
+        cracc = $('#add-inv-1').first().find('#ReceivableAccounts').html();
+        dracc = $('#add-inv-1').first().find('#debitAccounts').html();
+        $('#debitAccounts').select2();
+        $('#ReceivableAccounts').select2();
+
+    });
+
+
+    $(document).on("click", ".add-rec-box", function () {
+        InventoryCounter++;
+        var dnumItems = $('.dr-row').length + 1;
+        var cnumItems = $('.cr-row').length + 1;
+        var html = '<div class="col-md-12 cal" id="add-inv-' + InventoryCounter + '"><div><hr></div>' +
+            '<div class="form-row"><span class="add-inven-counter" style="margin-top: 35px;font-size: 15px;width:35px">' + InventoryCounter + '.</span>' +
+            '<div class="form-group col-md-9"><label>Narration</label><input type="text" class="form-control Name" name="Name" placeholder="Narration" required /></div>' +
+            '<i class="ti-minus rm-add-inven pointer" style="margin-top: 35px;font-size: 20px;font-weight: bold;margin-left: 2%;"></i></div>' +
+            '<div class="form-row"><span style="width:35px"></span><div class="col-md-2"></div><div class="col-md-3"><h6>Head</h6></div><div class="col-md-2"><h6>Debit</h6></div><div class="col-md-2"><h6>Credit</h6></div></div>' +
+            '<div class="dr-line"><div class="form-row dr-row dr-row-' + dnumItems + '"><span style="width:35px"></span><div class="form-group col-md-2"><i class="ti-plus  add-rec-dr-row" style="float:right;margin-top:10px;font-size:12px"></i></div>' +
+            '<div class="form-group col-md-3"><select class="form-control acc-head acc-head-debit debit-acc" ></select></div>' +
+            '<div class="form-group col-md-2"><input type="text" class="form-control coma " placeholder="Amount"><input type="hidden" id="" class="amt Rate dr"  required></div></div></div>' +
+            '<div class="cr-line"><div class="form-row cr-row cr-row-' + cnumItems + '"><span style="width:35px"></span>' +
+            '<div class="form-group col-md-2"><i class="ti-plus add-rec-cr-row" style="float:right;margin-top:10px;font-size:12px"></i></div>' +
+            '<div class="form-group col-md-3"><select class="form-control acc-head acc-head-credit credit-acc" ></select></div>' +
+            '<div class="form-group col-md-2"></div>' +
+            '<div class="form-group col-md-2"><input type="text" class="form-control coma " placeholder="Amount"><input type="hidden" id="" class="amt Rate cr"  required></div></div></div>' +
+            '</div>';
+        //
+
+        $('#ad-iven-stock').append(html);
+        $('#ad-iven-stock').find('.debit-acc').last().append(dracc);
+        $('#ad-iven-stock').find('.debit-acc').last().select2();
+        $('#ad-iven-stock').find('.credit-acc').last().append(cracc);
+        $('#ad-iven-stock').find('.credit-acc').last().select2();
+    });
+    //
+    $(document).on("click", ".add-rec-dr-row", function () {
+        var numItems = $('.dr-row').length + 1;
+        var html = '<div class="form-row  dr-row dr-row-' + numItems + '"><span style="width:35px"></span><div class="form-group col-md-2"><i class="ti-minus rm-dr-row" style="float:right;margin-top:10px"></i></div><div class="form-group col-md-3">' +
+            '<select class="form-control acc-head acc-head-debit debit-acc" ></select></div><div class="form-group col-md-2"><input type="text" class="form-control coma " placeholder="Amount">' +
+            '<input type="hidden" id="" class="amt Rate dr" data-id="1" required></div></div>';
+        var id = $(this).closest(".cal").attr("id");
+        $('#' + id + ' .dr-line ').append(html);
+        $('#' + id + ' .dr-line ').find('.debit-acc').last().append(dracc);
+        $('#' + id + ' .dr-line ').find('.debit-acc').last().select2();
+    });
+    //
+    $(document).on("click", ".add-rec-cr-row", function () {
+        var numItems = $('.cr-row').length + 1;
+        var html = '<div class="form-row cr-row cr-row-' + numItems + '"><span style="width:35px"></span><div class="form-group col-md-2"><i class="ti-minus rm-cr-row" style="float:right;margin-top:10px"></i></div><div class="form-group col-md-3">' +
+            '<select class="form-control acc-head acc-head-credit credit-acc" ></select></div><div class="form-group col-md-2"></div><div class="form-group col-md-2"><input type="text" class="form-control coma " placeholder="Amount">' +
+            '<input type="hidden" id="" class="amt Rate cr" data-id="1" required></div></div>';
+        var id = $(this).closest(".cal").attr("id");
+        $('#' + id + ' .cr-line ').append(html);
+        $('#' + id + ' .cr-line ').find('.credit-acc').last().append(cracc);
+        $('#' + id + ' .cr-line ').find('.credit-acc').last().select2();
+    });
+
+    $(".rec-receivable-entry").click(function (e) {
+
+        var tran = $("#trans-id").val();
+        for (var i = 1; i <= InventoryCounter; i++) {
+            var dr = 0, cr = 0;
+
+            $("#add-inv-" + i + " .dr").each(function () {
+                var dr_amt = RemoveComma($(this).val());
+                if (dr_amt > 0) {
+                    dr = dr + parseInt(dr_amt);
+                }
+                else {
+                    alert("You Cannot Submit Empty Fields");
+                    return false;
+                }
+            });
+            $("#add-inv-" + i + " .cr").each(function () {
+                var cr_amt = RemoveComma($(this).val());
+                if (cr_amt > 0) {
+                    cr = cr + parseInt(cr_amt);
+                }
+                else {
+                    alert("You Cannot Submit Empty Fields");
+                    return false;
+                }
+            });
+
+            var t_amt = RemoveComma($("#add-inv-" + i + " .Purchase_Rate").val());
+            if (dr == cr) {
+                //if (dr == t_amt) {
+                //    continue;
+                //}
+                //else {
+                //    alert("Debit/Credit Values are not Equal to Total Amount at : " + $("#add-inv-" + i + " .Name").text());
+                //    return false;
+                //}
+            }
+            else {
+                alert("Debit & Credit Values are not Matching at :" + $("#add-inv-" + i + " .Name").text());
+                return false;
+            }
+        }
+
+        var des = $("#Description").val();
+        var Amt = $("#amt").val();
+        InventoryArray = [];
+        for (var i = 1; i <= InventoryCounter; i++) {
+            var Item_Name = $("#add-inv-" + i + " .Name").val();
+            //var Rate = $("#add-inv-" + i + " .inv-rate").val();
+            //var Quantity = $("#add-inv-" + i + " .Quantity").val();
+            //var UOM = $("#add-inv-" + i + " .Measurement").val();
+            //var Amount = $("#add-inv-" + i + " .Purchase_Rate").val(); // Amount
+            $("#add-inv-" + i + " .dr-row").each(function () {
+                var dat = $(this).find(".acc-head").select2('data')
+                var dataset =
+                {
+                    Item_Name: Item_Name,
+                    Rate: null,
+                    Quantity: null,
+                    UOM: null,
+                    Amount: null,
+                    Account_Head: dat[0].text,
+                    Account_Head_Id: dat[0].id,
+                    Debit: $(this).find(".dr").val(),
+                    Credit: $(this).find(".cr").val(),
+                    Line: i
+                };
+                InventoryArray.push(dataset);
+            });
+            $("#add-inv-" + i + " .cr-row").each(function () {
+                var dat = $(this).find(".acc-head").select2('data')
+                var dataset =
+                {
+                    Item_Name: Item_Name,
+                    Rate: null,
+                    Quantity: null,
+                    UOM: null,
+                    Amount: null,
+                    Account_Head: dat[0].text,
+                    Account_Head_Id: dat[0].id,
+                    Debit: $(this).find(".dr").val(),
+                    Credit: $(this).find(".cr").val(),
+                    Line: i
+                };
+                InventoryArray.push(dataset);
+            });
+        }
+        if (confirm("Are you sure you want to Record Entries")) {
+            $.ajax({
+                type: "POST",
+                url: '/AccountHeads/RecordReceivableEntries/',
+                data: { Details: InventoryArray, TransactionId: tran },
+                success: function (data) {
+                    if (data) {
+                        alert("Journal Entry Recorded");
+                        window.location.reload();
+                    }
+                    else {
+                        alert("Can not make Transaction at the Moment")
+                    }
+
+                }
+                , error: function (xmlhttprequest, textstatus, message) {
+                    if (textstatus === "timeout") {
+                        alert("got timeout");
+                    } else {
+                        alert(textstatus);
+                    }
+                }
+            });
+        }
+    });
+
+</script>
+

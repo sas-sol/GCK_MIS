@@ -1,0 +1,328 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Inventory_Demand_Req>
+<script>
+        var selectedInven = [];
+        var emps = @Html.Raw(Json.Encode(ViewBag.Employees));
+</script>
+<input type="hidden" value="@Model.FirstOrDefault().Group_Id" id="dr" />
+<input type="hidden" value="@ViewBag.GroupId" id="grp-id" />
+<div class="col-md-12">
+    <table class="table table-bordered" width="100%">
+        <thead>
+            <tr>
+                <th>Sr.</th>
+                <th style="text-align:center">Requested Items</th>
+                <th>Req By</th>
+                <th>Req Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{ int i = 1;}
+            @foreach (var g in Model.GroupBy(x => new { x.Group_Id, x.ReqBy_Name, x.ReqBy_Date, x.Type, x.ApprovedBy, x.ApprovedBy_Name }))
+            {
+
+                <tr id="@g.Key.Group_Id">
+                    <td>@i</td>
+                    <td class="tdscrol">
+                        <table class="table" style="margin-bottom:0px; border:none">
+                            <thead>
+                                <tr>
+                                    <th>Item Name</th>
+                                    <th>Qty</th>
+                                    <th>Details</th>
+                                </tr>
+                            </thead>
+                            @foreach (var item in g)
+                            {
+                                <tr>
+                                    <td>@item.Item_Name</td>
+                                    <td>@string.Format("{0:n0}", item.Qty)</td>
+                                    <td>@item.Details</td>
+                                </tr>
+                            }
+                        </table>
+                    </td>
+                    <td>@g.Key.ReqBy_Name</td>
+                    <td>@string.Format("{0:dd-MMM-yyyy}", g.Key.ReqBy_Date)</td>
+                   
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<hr />
+<div class="main-rec-do">
+    <div class="col-md-12 inv-assign-row">
+        <div class="form-row assign ml-md-12" id="assign-1">
+            <div class="form-group col-md-4">
+                <label>Item</label>
+                <select class="form-control item-name"></select>
+            </div>
+            <div class="form-group col-md-1 s-div" style="display: none;">
+                <label><b>Size:</b> <span class="size"></span></label>
+            </div>
+            <div class="form-group col-md-1 l-div" style="display: none;">
+                <label><b>Length:</b> <span class="len"></span></label>
+            </div>
+            <div class="form-group col-md-1 w-div" style="display: none;">
+                <label><b>Width:</b> <span class="wid"></span></label>
+            </div>
+            <div class="form-group col-md-1 h-div" style="display: none;">
+                <label><b>Heigth:</b> <span class="hei"></span></label>
+            </div>
+            <div class="form-group col-md-1 d-div" style="display: none;">
+                <label><b>Diameter:</b> <span class="dia"></span></label>
+            </div>
+            <div class="form-group col-md-1" style="display: none;">
+                <label><b>UOM</b></label>
+                <input type="text" class="form-control item-uom" required placeholder="Enter Quantity" readonly />
+            </div>
+            <div class="form-group col-md-2" style="display: block;">
+                <label>Available Qty.</label>
+                <input type="text" class="form-control ttl-qty" value="" readonly />
+            </div>
+            <div class="form-group col-md-1" style="display: block;">
+                <label>Enter Qty.</label>
+                <input type="text" class="form-control req-qty" />
+            </div>
+        </div>
+        <div class="form-row col-md-12">
+            <div class="form-group col-md-3" style="display: block;">
+                <label>Issue To</label>
+                <select class="form-control emp"></select>
+            </div>
+            <div class="form-group col-md-8" style="display: block;">
+                <label>Remarks</label>
+                <textarea class="form-control item-rems" rows="2" style="resize:none"></textarea>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col-md-8">
+    <div class="form-group col-md-12" style="display: block;">
+        <h4 id="do-no"></h4>
+    </div>
+</div>
+<div class="col-md-12" style="text-align:center;">
+    <button class="btn btn-success add-do-item">Add Another Item</button>
+</div>
+<script>
+
+    $(function () {
+        $('.modal-footer').append('<button class="btn btn-primary" id="save-multi-issue_rqst">Submit</button>');
+        InitEmps($('.emp'));
+        var prdctThat = $('.item-name');
+        $('.emp').select2({
+            dropdownParent: $('#Modal'),
+            minimumInputLength: 3
+        });
+        $(prdctThat).select2({
+            minimumInputLength: 3,
+            dropdownParent: $('#Modal'),
+            placeholder: "Search for Inventory",
+            ajax: {
+                url: '/Inventory/GetInventory_DepWise/',
+                dataType: 'json',
+                params: {
+                    contentType: 'application/json; charset=utf-8'
+                },
+                quietMillis: 100,
+                data: function (params) {
+                    return {
+                        d: params.term// search term
+                    };
+                },
+                processResults: function (data) {
+                    return {
+                        results: data.items
+                    };
+                }
+            }
+        });
+        $(prdctThat).on('select2:select', function (e) {
+            var s = e.params.data;
+            $.ajax({
+                type: "POST",
+                url: '/Inventory/GetInventoryItemById/',
+                data: { Id: s.id },
+                success: function (data) {
+                    $(prdctThat).closest('.inv-assign-row').find('.l-div').hide().find('.len').text('');
+                    $(prdctThat).closest('.inv-assign-row').find('.w-div').hide().find('.wid').text('');
+                    $(prdctThat).closest('.inv-assign-row').find('.h-div').hide().find('.hei').text('');
+                    $(prdctThat).closest('.inv-assign-row').find('.d-div').hide().find('.dia').text('');
+                    $(prdctThat).closest('.inv-assign-row').find('.s-div').hide().find('.size').text('');
+                    $(prdctThat).closest('.inv-assign-row').find('.item-uom').val('');
+                    $(prdctThat).closest('.inv-assign-row').find('.ttl-qty').val('');
+                    if (!isEmpty(data.Length) && !isBlank(data.Length)) {
+                        $(prdctThat).closest('.inv-assign-row').find('.l-div').show().find('.len').text(data.Length + " : " + data.L_UOM );
+                    }
+                    if (!isEmpty(data.Width) && !isBlank(data.Width)) {
+                        $(prdctThat).closest('.inv-assign-row').find('.w-div').show().find('.wid').text(data.Width + " : " + data.W_UOM);
+                    }
+                    if (!isEmpty(data.Heigth) && !isBlank(data.Heigth)) {
+                        $(prdctThat).closest('.inv-assign-row').find('.h-div').show().find('.hei').text(data.Heigth + " : " + data.H_UOM);
+                    }
+                    if (!isEmpty(data.Diameter) && !isBlank(data.Diameter)) {
+                        $(prdctThat).closest('.inv-assign-row').find('.d-div').show().find('.dia').text(data.Diameter + " : " + data.D_UOM);
+                    }
+                    if (!isEmpty(data.Size) && !isBlank(data.Size)) {
+                        
+                        $(prdctThat).closest('.inv-assign-row').find('.s-div').show().find('.size').text(data.Size + " : " + data.Size_UOM);
+                    }
+                    $(prdctThat).closest('.inv-assign-row').find('.item-uom').val(data.UOM);
+                    $(prdctThat).closest('.inv-assign-row').find('.ttl-qty').val(parseFloat(data.Total_In_Qty) - parseFloat(data.Total_Out_Qty));
+                }
+                , error: function (xmlhttprequest, textstatus, message) {
+                    if (textstatus === "timeout") {
+                        alert("got timeout");
+                    } else {
+                        alert(textstatus);
+                    }
+                }
+            });
+        });
+
+    });
+    $(document).on("click", ".del-do-row", function () {
+        $(this).parent().parent().remove();
+    });
+    $('.add-do-item').click(function () {
+        let _strctr = `<div class="col-md-12 inv-assign-row">
+        <div class="form-row assign ml-md-12" id="assign-1">
+        <i class="ti-trash del-do-row" style="margin: 4% 10px 0 0;"></i>
+            <div class="form-group col-md-4">
+                <label>Item</label>
+                <select class="form-control item-name"></select>
+            </div>
+            <div class="form-group col-md-1 s-div" style="display: none;">
+                <label><b>Size:</b> <span class="size"></span></label>
+            </div>
+            <div class="form-group col-md-1 l-div" style="display: none;">
+                <label><b>Length:</b> <span class="len"></span></label>
+            </div>
+            <div class="form-group col-md-1 w-div" style="display: none;">
+                <label><b>Width:</b> <span class="wid"></span></label>
+            </div>
+            <div class="form-group col-md-1 h-div" style="display: none;">
+                <label><b>Heigth:</b> <span class="hei"></span></label>
+            </div>
+            <div class="form-group col-md-1 d-div" style="display: none;">
+                <label><b>Diameter:</b> <span class="dia"></span></label>
+            </div>
+            <div class="form-group col-md-1" style="display: none;">
+                <label><b>UOM</b></label>
+                <input type="text" class="form-control item-uom" required placeholder="Enter Quantity" readonly />
+            </div>
+            <div class="form-group col-md-2" style="display: block;">
+                <label>Available Qty.</label>
+                <input type="text" class="form-control ttl-qty" value="" readonly />
+            </div>
+            <div class="form-group col-md-1" style="display: block;">
+                <label>Enter Qty.</label>
+                <input type="text" class="form-control req-qty" />
+            </div>
+
+        </div>
+        <div class="form-row col-md-12">
+            <div class="form-group col-md-3" style="display: block;">
+                <label>Issue To</label>
+                <select class="form-control emp"></select>
+            </div>
+            <div class="form-group col-md-8" style="display: block;">
+                <label>Remarks</label>
+                <textarea class="form-control item-rems" rows="2" style="resize:none"></textarea>
+            </div>
+        </div>
+    </div>`;
+
+        var newRec = $('.main-rec-do').append(_strctr);
+        InitEmps($(newRec).find('.emp').last());
+        //InitInv($(newRec).find('.item-name').last());
+        var prdctThat = $(newRec).find('.item-name').last();
+
+        $(prdctThat).select2({
+            dropdownParent: $('#Modal'),
+            minimumInputLength: 3,
+            placeholder: "Search for Inventory",
+            ajax: {
+                url: '/Inventory/GetInventory_DepWise/',
+                dataType: 'json',
+                params: {
+                    contentType: 'application/json; charset=utf-8'
+                },
+                quietMillis: 100,
+                data: function (params) {
+                    return {
+                        d: params.term// search term
+                    };
+                },
+                processResults: function (data) {
+                    return {
+                        results: data.items
+                    };
+                }
+            }
+        });
+        $(prdctThat).on('select2:select', function (e) {
+            var s = e.params.data;
+            $.ajax({
+                type: "POST",
+                url: '/Inventory/GetInventoryItemById/',
+                data: { Id: s.id },
+                success: function (data) {
+                    $(prdctThat).closest('.inv-assign-row').find('.l-div').hide().find('.len').text('');
+                    $(prdctThat).closest('.inv-assign-row').find('.w-div').hide().find('.wid').text('');
+                    $(prdctThat).closest('.inv-assign-row').find('.h-div').hide().find('.hei').text('');
+                    $(prdctThat).closest('.inv-assign-row').find('.d-div').hide().find('.dia').text('');
+                    $(prdctThat).closest('.inv-assign-row').find('.s-div').hide().find('.size').text('');
+                    $(prdctThat).closest('.inv-assign-row').find('.item-uom').val('');
+                    $(prdctThat).closest('.inv-assign-row').find('.ttl-qty').val('');
+                    if (!isEmpty(data.Length) && !isBlank(data.Length)) {
+                        $(prdctThat).closest('.inv-assign-row').find('.l-div').show().find('.len').text(data.Length + " : " + data.L_UOM);
+                    }
+                    if (!isEmpty(data.Width) && !isBlank(data.Width)) {
+                        $(prdctThat).closest('.inv-assign-row').find('.w-div').show().find('.wid').text(data.Width + " : " + data.W_UOM);
+                    }
+                    if (!isEmpty(data.Heigth) && !isBlank(data.Heigth)) {
+                        $(prdctThat).closest('.inv-assign-row').find('.h-div').show().find('.hei').text(data.Heigth + " : " + data.H_UOM);
+                    }
+                    if (!isEmpty(data.Diameter) && !isBlank(data.Diameter)) {
+                        $(prdctThat).closest('.inv-assign-row').find('.d-div').show().find('.dia').text(data.Diameter + " : " + data.D_UOM);
+                    }
+                    if (!isEmpty(data.Size) && !isBlank(data.Size)) {
+                        $(prdctThat).closest('.inv-assign-row').find('.s-div').show().find('.size').text(data.Size + " : " + data.Size_UOM);
+                    }
+                    $(prdctThat).closest('.inv-assign-row').find('.item-uom').val(data.UOM);
+                    $(prdctThat).closest('.inv-assign-row').find('.ttl-qty').val(parseFloat(data.Total_In_Qty) - parseFloat(data.Total_Out_Qty));
+                }
+                , error: function (xmlhttprequest, textstatus, message) {
+                    if (textstatus === "timeout") {
+                        alert("got timeout");
+                    } else {
+                        alert(textstatus);
+                    }
+                }
+            });
+        });
+        var emp = $(newRec).find('.emp').last();
+        $(emp).select2({
+            dropdownParent: $('#Modal'),
+            minimumInputLength: 3
+        });
+    });
+
+    function InitEmps(_ele) {
+        $(_ele).append('<option> Select Employee </option>');
+
+        var $prevGroup, prevGroupName;
+        $.each(emps, function () {
+            var group = (this.Group == null) ? ' ' : this.Group.Name;
+            if (prevGroupName !== group) {
+                $prevGroup = $('<optgroup />').prop('label', group).appendTo(_ele);
+            }
+            $("<option />").val(this.Value).text(this.Text).appendTo($prevGroup);
+            prevGroupName = group;
+        });
+
+    }
+
+</script>

@@ -1,0 +1,119 @@
+﻿
+@model IEnumerable<MeherEstateDevelopers.Models.Sp_Get_SalaryComparativeReport_Result>
+<div class="col-md-12">
+    <div class="row" style="align-items: flex-end;">
+        <div class="col-md-2">
+            <div class="col-md-8">From :</div>
+            <div class="col-md-12">
+                <input type="text" class="form-control st-dt-skdfj-sdfhjg" placeholder="From Date" />
+            </div>
+        </div>
+
+        <div class="col-md-2">
+            <div class="col-md-8">To :</div>
+            <div class="col-md-12">
+                <input type="text" class="form-control en-dt-hsfdgvhjs-asdhjgv" placeholder="To Date" />
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="col-md-12">Compare :</div>
+            <div class="col-md-12">
+                <select class="form-control cmprsn-typ-fdshjksdjfhk">
+                    <option value="AllComps">All Companies</option>
+                    <option value="SelectedComps">Selected Companies</option>
+                    <option value="AllDepts">All Departments</option>
+                    <option value="SelectedDepts">Selected Departments</option>
+                    <option value="AllDesigs">All Designations</option>
+                    <option value="SelectedDesigs">Selected Designations</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="col-md-4 last-opt-sal-rep-kjfhsd" style="display:none;">
+            <div class="col-md-10">Department :</div>
+            <div class="col-md-10">
+                <select class="form-control comp-sal-typ-dsfjk sel-typ" multiple>
+                    <option>All</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="col-md-1">
+            <button class="btn btn-primary get-sal-rep-btn-fdljk">Update</button>
+        </div>
+    </div>
+</div>
+<div id="comp-sal-rep">
+</div>
+<script>
+    $(document).ready(function () {
+        let salModelData = @Html.Raw(Json.Encode(Model));
+        let xVals = [];
+        let yVals = [];
+
+        let idents = salModelData.reduce((r, a) => {
+            r[a.Name] = [...r[a.Name] || [], a];
+            return r;
+        }, {});
+
+        let xIdents = salModelData.reduce((r, a) => {
+            r[a.SalaryMonth] = [...r[a.SalaryMonth] || [], a];
+            return r;
+        }, {});
+
+        $.each(xIdents, function (ind, val) {
+            let monthName = val[0].SalaryMonth;
+            xVals.push(monthName);
+        });
+
+        $.each(idents, function (ind, val) {
+            let name = '';
+            let data = [];
+            $.each(val, function (i, v) {
+                name = v.Name;
+                data.push(v.GrandTotal);
+            });
+            yVals.push({
+                name: name,
+                data: data
+            });
+        });
+
+        Highcharts.chart('comp-sal-rep', {
+
+        chart: {
+                type: 'line',
+                backgroundColor: '#212639'
+        },
+
+        title: {
+            text: 'Salaries Report'
+        },
+        subtitle: {
+            text: 'Salaries Comparative Report'
+        },
+            xAxis: {
+                categories: xVals,
+        },
+        yAxis: {
+            title: {
+                text: 'Comparative Salary Report',
+            }
+        },
+        plotOptions: {
+            line: {
+                dataLabels: {
+                    enabled: true
+                },
+                enableMouseTracking: false
+            }
+            },
+            series: yVals
+    });
+    });
+
+</script>
+
+<style>
+</style>

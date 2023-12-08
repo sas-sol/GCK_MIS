@@ -1,0 +1,105 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.DealerFileForm>
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <link href="~/assets/styles/Dealertemplate/base.min.css" rel="stylesheet" />
+    <link href="~/assets/styles/Dealertemplate/fancy.min.css" rel="stylesheet" />
+    <link href="~/assets/styles/Dealertemplate/main.css" rel="stylesheet" />
+    <title></title>
+    <style>
+        body, div, table, thead, tbody, tfoot, tr, th, td, p {
+            font-family: "Calibri";
+            font-size: 19px;
+        }
+    </style>
+</head>
+<body>
+    <div id="page-container">
+        @{
+            foreach (var item in Model)
+            {
+                <div id="pf1" class="pf w0 h0" data-page-no="1">
+                    <div class="pc pc1 w0 h0">
+                        <img class="bi x0 y0 w1 h1" src="~/assets/static/images/bg1.png" />
+                        <div class="c x1 y1 w2 h0"></div>
+                        <div class="c x0 y3 w3 h3">
+                            <div class="t m2 x4 h5 y5 ff3 fs2 fc1 sc0 ls0 ws0">Name:___________________________________Father’s/Husband’s Name:_____________________________</div>
+                            <div class="t m2 x4 h5 y6 ff3 fs2 fc1 sc0 ls0 ws0">Postal Address:______________________________________________________________________________</div>
+                            <div class="t m2 x4 h5 y7 ff3 fs2 fc1 sc0 ls0 ws0">Residential Address:__________________________________________________________________________</div>
+                            <div class="t m2 x4 h5 y8 ff3 fs2 fc1 sc0 ls0 ws0">Phone Of . #:______________________  Res #:______________________ Mobile 1 #:____________________</div>
+                            <div class="t m2 x4 h5 y9 ff3 fs2 fc1 sc0 ls0 ws0">Mobile # 2:____________________________ Email:________________________________________________</div>
+                            <div class="t m2 x4 h5 ya ff3 fs2 fc1 sc0 ls0 ws0">Occupation:__________________________________________________Nationality:______________________</div>
+                            <div class="t m2 x4 h5 yb ff3 fs2 fc1 sc0 ls2 ws0">Date of Birth:</div>
+                            <div class="t m2 x4 h5 yc ff3 fs2 fc1 sc0 ls0 ws0">CNIC / NICOP #</div>
+                            <div class="t m2 x4 h5 yd ff3 fs2 fc1 sc0 ls0 ws0">Name of Nominee:_______________________________________________ Relation:___________________________</div>
+                            <div class="t m2 x4 h5 ye ff3 fs2 fc1 sc0 ls0 ws0">Address Of Nominee:________________________________________________________________________________</div>
+                            <div class="t m2 x4 h5 yf ff3 fs2 fc1 sc0 ls0 ws0">CNIC / NICOP # </div>
+                            <div class="t m3 x5 h6 y10 ff3 fs3 fc1 sc0 ls0 ws0">Applicant</div>
+                            <div class="t m3 x5 h6 y11 ff3 fs3 fc1 sc0 ls0 ws0">Photo</div>
+                            <div class="t m3 x5 h7 y12 ff4 fs3 fc1 sc0 ls0 ws0">1.5”x2”</div>
+
+                            <div class="t m3 x5 h6 y13 ff3 fs3 fc1 sc0 ls0 ws0 special">
+                                @{
+                                    string img = item.FileCode + ".png";
+                                    if (item.Installment_Plan == 2)
+                                    {
+                                        <img style="width:100%;border:10px solid red" src="~/QR Codes/@img">
+                                    }
+                                    else
+                                    {
+                                        <img style="width:100%" src="~/QR Codes/@img">
+                                    }
+                                }
+
+                            </div>
+                            <div class="t m1 x6 h8 y15 ff5 fs4 fc2 sc0 ls0 ws0">DEALER APPLICATION FORM</div>
+                            <div class="t m1 x4 h9 y16 ff5 fs5 fc1 sc0 ls0 ws0">PAYMENT DETAILS:</div>
+                            <div class="t m2 x4 h5 y17 ff3 fs2 fc1 sc0 ls0 ws0">I enclose here with a sum of Rs._________________________________ By Cheque / Cash / Bank Draft / Pay Order No. ____________________________</div>
+                            <div class="t m2 x4 h5 y18 ff3 fs2 fc1 sc0 ls2 ws0">Dated___________________ Drawn on ___________________ account of booking above Plot.</div>
+                            <div class="t m2 x4 h5 y19 ff3 fs2 fc1 sc0 ls0 ws0">DATE______________<span class="_ _c"> </span><span class="ls6">Signature of Applicant:_________________________________________</span></div>
+                            <div class="t m2 x4 h5 y1a ff3 fs2 fc1 sc0 ls0 ws0">Thumb Impression: <span class="_ _c"> </span><span class="ls6">         Signature of Dealer:______________________________________________</span></div>
+                            <div class="t m2 x4 h5 y1b ff3 fs2 fc1 sc0 ls0 ws0">Application Form No.:__________________ Membership No:____________________Plot Size:____________</div>
+                            <div class="t m2 x4 h5 y1c ff3 fs2 fc1 sc0 ls0 ws0">Plot Preference:</div>
+                            <div class="t m1 x7 ha y1d ff3 fs6 fc1 sc0 ls0 ws0">Normal<span class="_ _d"> </span>Corner<span class="_ _e"> </span>Park Facing<span class="_ _f"> </span>Boulevard<span class="_ _10"> </span>Boulevard Corner</div>
+                            <div class="t m1 x8 ha y1e ff3 fs6 fc1 sc0 ls0 ws0">No Extra Charges<span class="_ _11"> </span>10% Extra Charges<span class="_ _12"> </span>10% Extra Charges<span class="_ _13"> </span>10% Extra Charges<span class="_ _13"> </span>15% Extra Charges</div>
+                            <div class="t m2 x4 h5 y1f ff3 fs2 fc1 sc0 ls0 ws0">Dealership ________________________________________________________________________________</div>
+                            <div class="t m2 x9 h5 y20 ff3 fs2 fc1 sc0 ls0 ws0">Signature of Director:_______________________________________</div>
+                        </div>
+                        <div class="c xa y21 w4 hb">
+                            <div class="t m1 xb hc y22 ff2 fs7 fc1 sc0 ls0 ws0" style="font-family:Calibri">@item.Dealership_Name</div>
+                        </div>
+                        <div class="c xc y23 w5 hd">
+                            <div class="t m1 x4 hc y24 ff2 fs7 fc1 sc0 ls0 ws0">@item.Dealership_Id</div>
+                        </div>
+
+                        <div class="c xe y27 w7 h10"><div class="t m0 x4 hf y28 ff1 fs8 fc1 sc0 ls0 ws0">@item.Plot_Size</div></div>
+                        <div class="c xf y29 w8 h11">
+                            <div class="t m0 x4 h12 y2a ff6 fs9 fc1 sc0 ls0 ws0"></div>
+                            <div class="t m0 x4 h12 y2b ff6 fs9 fc1 sc0 ls0 ws0"> </div>
+                            <div class="t m0 x4 h12 y2c ff6 fs9 fc1 sc0 ls0 ws0"> </div>
+                            <div class="t m0 x4 h12 y2d ff6 fs9 fc1 sc0 ls0 ws0"> </div>
+                            <div class="t m0 x4 h12 y2e ff6 fs9 fc1 sc0 ls0 ws0"> </div>
+                            <div class="t m0 x4 h12 y2f ff6 fs9 fc1 sc0 ls0 ws0"> </div>
+                            <div class="t m0 x4 h12 y30 ff6 fs9 fc1 sc0 ls0 ws0"> </div>
+                            <div class="t m0 x4 h12 y31 ff6 fs9 fc1 sc0 ls0 ws0"> </div>
+                            <div class="t m0 x4 h12 y32 ff6 fs9 fc1 sc0 ls0 ws0"> </div>
+                            <div class="t m0 x4 h12 y33 ff6 fs9 fc1 sc0 ls0 ws0"> </div>
+                            <div class="t m0 x4 h12 y34 ff7 fs9 fc0 sc0 ls0 ws0"> </div>
+                        </div>
+                        <div class="c x10 y35 w9 h13"><div class="t m0 x11 h14 y36 ff8 fsa fc0 sc0 lsd ws0" style="font-family:Calibri">@item.Dev_Charges_Text </div></div>
+                        <div class="c x12 y37 wa he"><div class="t m0 x4 hf y38 ff1 fs8 fc1 sc0 ls0 ws0">@item.FileCode</div></div>
+                    </div>
+                </div>
+
+            }
+        }
+
+    </div>
+
+</body>
+</html>

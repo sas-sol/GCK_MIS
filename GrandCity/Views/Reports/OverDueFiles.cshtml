@@ -1,0 +1,29 @@
+﻿@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<div class="row">
+    <div class="col-md-12">
+        <div class="bdrs-3 ov-h bgc-white p-10 bd">
+            <h3>Overdue Report</h3>
+            <div>
+                <ul class="nav nav-tabs" role="tablist">
+                    <li class="nav-item"><a class="nav-link" data-toggle="tab" data-link="/Reports/RegisterOverdue?Status=1" href="#tab-table1">Overdue Plots</a></li>
+                    <li class="nav-item"><a class="nav-link" data-toggle="tab" data-link="/Reports/MonthlyDue" href="#tab-table1">Monthly Due Report</a></li>
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane active" id="tab-table1">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        SASLoad($('#tab-table1'));
+        $('#tab-table1').load('/Reports/RegisterOverdue', { Status: 1 }, function () {
+            SASUnLoad($('#tab-table1'));
+        });
+    });
+</script>

@@ -1,0 +1,92 @@
+﻿@model MeherEstateDevelopers.Models.Sp_Get_ServiceCharge_Bill_ById_Result
+<script src="~/Scripts/scanning.js"></script>
+@using (Html.BeginForm("PayServiceCharges", "ServiceCharges", FormMethod.Post, new { @id = "pay-ser-ch", @class = "", role = "form", autocomplete = "off" }))
+{
+    <input type="hidden" value="@Model.Plot_Id" id="Plotid" name="PlotId" />
+    @Html.AntiForgeryToken()
+    decimal? gt = 0;
+    string biltext = "";
+    if (DateTime.UtcNow.Date > Model.Due_Date.Value.Date)
+    {
+        gt = Model.Net_Total;
+        biltext = "After Due Date";
+    }
+    else
+    {
+        gt = Model.Grand_Total;
+        biltext = "Bill Amount";
+    }
+    if (Model.Amount_Paid < Model.Grand_Total)
+    {
+
+        <div class="form-row">
+            <div class="form-group col-md-3">
+                <h4>@biltext :     <span style="position:absolute" id="@gt" class="b__amt">@string.Format("{0:n0}", gt - Model.Amount_Paid)</span></h4>
+
+            </div>
+            <div class="form-group col-md-3">
+                <h4>Due Date :     <span style="position:absolute">@string.Format("{0:dd MMM yyyy}", Model.Due_Date)</span></h4>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="col-md-12 justify-content-center d-flex">
+            <div class="alert alert-danger " style="text-align:" role="alert">Bill is Already Paid<i class="ti-check"></i></div>
+        </div>
+
+    }
+
+    <div class="form-row">
+        <div class="form-group col-md-2">
+            <label>Amount</label>
+            <input class="form-control coma" id="pay__amt" placeholder="12,345" required>
+            <input type="hidden" id="amt" name="Amount" class="amt" required>
+            <input type="hidden" id="TransactionId" name="TransactionId" class="TransactionId" value="@ViewBag.TransactionId">
+            <input type="hidden" id="imge" name="FileImage" />
+        </div>
+
+        <div class="form-group col-md-2">
+            <label>Cash / Bank</label>
+            <select class="form-control paytypesel-test" id="cah-chq-bak" name="PaymentType">
+                <option value="Cash">Cash</option>
+                <option value="BankDraft">Bank Draft</option>
+                <option value="Cheque">Cheque</option>
+                <option value="PayOrder">Pay Order</option>
+                <option value="Online_Cash">Online - Cash</option>
+                <option value="Online_Cheque">Online - Cheque</option>
+                <option value="Online_Payorder">Online - PayOrder</option>
+                <option value="Online_Bankdraft">Online - BankDraft</option>
+            </select>
+        </div>
+        <div class="form-group col-md-3 paymentotherinfo">
+            <label id="paytypelabel"></label>
+            <input type="text" class="form-control" id="paymenttype" name="PayChqNo" placeholder="" disabled>
+        </div>
+        <div class="form-group col-md-3 paymentotherinfo">
+            <label>Bank</label>
+            @Html.DropDownList("Bank", null, "Choose..", new { @class = "form-control", disabled = "" })
+        </div>
+        <div class="form-group col-md-2 paymentotherinfo">
+            <label>Branch </label>
+            <input type="text" class="form-control" id="Branch" name="Branch" placeholder="Mall Rd" disabled>
+        </div>
+        <div class="form-group col-md-2 paymentotherinfo">
+            <label>Date</label>
+            <input type="text" class="form-control" data-provide="datepicker" name="Ch_bk_Pay_Date" placeholder="mm/dd/yyyy" disabled required>
+        </div>
+
+        <div class="form-group col-md-1 paymentotherinfo">
+            <label>Scan File </label>
+            <button class=" btn btn-primary" data-v="1" type="button" id="scanbtn">Scan</button>
+
+        </div>
+        <div id="images-1" class="col-md-10" name=""></div>
+    </div>
+}
+<script>
+
+    $(function () {
+        $('.modal-footer').append('<button class="btn btn-success" id="gen-serv-ch-rec" type="submit">Generate Receipt</button>');
+    });
+</script>

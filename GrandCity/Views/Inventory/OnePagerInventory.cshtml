@@ -1,0 +1,58 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Sp_Get_InventoryList_Dep_Result>
+<table id="inv" class="table table-striped table-bordered " cellspacing="0" width="100%" style="margin-left:0%">
+    <thead class="thead-dark">
+        <tr>
+            <th>Department</th>
+            <th>Warehouse</th>
+            <th>Category</th>
+            <th>Item-Code</th>
+            <th>Name</th>
+            <th>UOM</th>
+            <th>Available Stock</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            if (Model.Any())
+            {
+                foreach (var item in Model.OrderBy(x => x.WarehouseName).ThenBy(x => x.Category_Name))
+                {
+
+                    string color = "";
+                    if (item.Minimum_Qty >= item.Remaining)
+                    {
+                        color = "bgc-red-50";
+                    }
+                <tr id="@item.Id" class="@color">
+                    <td>@item.Dep_Name</td>
+                    <th>@item.WarehouseName</th>
+                    <th>@item.Category_Name</th>
+                    <td>@item.SKU</td>
+                    <td>@item.Complete_Name</td>
+                    <td>@item.UOM</td>
+                    <td>@string.Format("{0:0,0.##}", item.Remaining)</td>
+                    <td>
+                        @*<i class="ti-home  Inven-asgn-popup pointer" data-toggle="modal" data-target="#Modal" id=""></i>*@
+                        @*<i class="ti-eye all-inve pointer" title="View detail" id="" data-item="" data-toggle="modal" data-target="#Modal"></i>*@<span>&nbsp;&nbsp;&nbsp;</span>
+                        <i class="ti-pencil pointer inven-crud-popup" title="Update" data-toggle="modal" data-target="#Modal"></i><span>&nbsp;&nbsp;&nbsp;</span>
+                        <i class="fa fa-clipboard pointer isu-det" title="Update" data-toggle="modal" data-target="#Modal"></i><span>&nbsp;&nbsp;&nbsp;</span>
+                        <i class="fas fa-tasks pointer cha-code" title="New Code" data-toggle="modal" data-target="#Modal"></i><span>&nbsp;&nbsp;&nbsp;</span>
+                        @*<i class="ti-trash pointer inven-crud-popup" title="Delete" id="" data-toggle="modal" data-target="#Modal"></i>*@
+                    </td>
+
+                </tr>
+                }
+            }
+        }
+    </tbody>
+</table>
+<script>
+    $('#inv').DataTable({
+        scrollY: "600px",
+        scrollCollapse: true,
+        paging: false,
+        dom: 'Bfrtip'
+    });
+
+</script>

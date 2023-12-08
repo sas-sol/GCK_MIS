@@ -1,0 +1,109 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Sp_Get_All_Employess_Salaries_Result>
+<style>
+    table tr, table td, table th {
+        padding: 2px !important;
+        color: black !important;
+        font-family: Arial, Helvetica, sans-serif;
+    }
+
+    @@media print {
+        table.salary-id tr td, table.print-friendly tr th {
+            page-break-inside: avoid;
+        }
+        #sumary {
+            font-size: 13px
+        }
+    }
+</style>
+<div style="width:100%">
+
+    <img src="~/assets/static/images/meherestate-simple.png" style="float:left;margin: 1%;width: 100px;" />
+    <span style="float:right;width:150px;text-align:center">Powered by<img src="~/assets/static/images/sas.png" style="width:100px;height:60px;margin:0.5%" /></span>
+</div>
+
+<div style="page-break-after:always"></div>
+<div id="">
+
+    @foreach (var g in Model.Where(x=> x.Stipend > 0).GroupBy(x => new { x.Stipend_Dep_Name, x.CompanyName }))
+    {
+        int sr = 1;
+        <table id="salary-dat" class="table table-striped table-bordered " cellspacing="0" width="100%">
+            <thead class="">
+
+                @if (string.IsNullOrEmpty(g.Key.Stipend_Dep_Name) || string.IsNullOrWhiteSpace(g.Key.Stipend_Dep_Name))
+                {
+                    <tr>
+                        <th colspan="16" style="font-size:21px;text-align:center"><b style="color:black">@g.Key.CompanyName Executive</b> </th>
+                    </tr>
+                }
+                else
+                {
+                    <tr>
+                        <th colspan="16" style="font-size:21px;text-align:center"><b style="color:black">@g.Key.CompanyName- @g.Key.Stipend_Dep_Name</b> </th>
+                    </tr>
+                }
+                <tr>
+                    <th>Sr.</th>
+                    <th>Code</th>
+                    <th>Name</th>
+                    <th>Designation</th>
+                    <th>Joining Date</th>
+                    <th>Stipend</th>
+                    <th>Allownces/Bonus</th>
+                    <th>Loan</th>
+                    <th>Advance</th>
+                    <th>Net Payable</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in g.OrderByDescending(x => x.Grand_total))
+                {
+                <tr class="fin-up-rec" id="@item.Id">
+                    <td>@sr</td>
+                    <td class="col-mod">@item.Employee_code</td>
+                    <td class="col-mod">@item.Employee_Name</td>
+                    <td class="col-mod">@item.Stipend_Designation</td>
+                    <td class="col-mod">@string.Format("{0: dd-MMM-yyyy }", item.Emp_Date_Of_Joining)</td>
+                    <td class="col-mod s-read" align="right">@String.Format("{0:n0}", item.Stipend)</td>
+                    <td class="col-mod t_allownce" align="right"> @String.Format("{0:n0}", item.Allownces + item.Bonus)</td>
+
+                    @{
+                        if (item.Basic_salary > 0)
+                        {
+                            <td class="col-mod fin-dedc" align="right">0</td>
+                            <td class="col-mod fin-dedc" align="right">0</td>
+                        }
+                        else
+                        {
+                            <td class="col-mod fin-dedc" align="right">@String.Format("{0:n0}", item.Ded_Loan)</td>
+                            <td class="col-mod fin-dedc" align="right">@String.Format("{0:n0}", item.Ded_Advance)</td>
+                        }
+                        if (item.Basic_salary > 0 && item.Stipend > 0)
+                        {
+                            <td class="col-mod GrndTot" align="right" style="font:bold"> @String.Format("{0:n0}", item.Stipend)</td>
+                        }
+                        else if (item.Basic_salary == 0 && item.Stipend > 0)
+                        {
+                            <td class="col-mod GrndTot" align="right" style="font:bold"> @String.Format("{0:n0}", item.Stipend_Grand_Total)</td>
+                        }
+                    }
+                </tr>
+                    sr++;
+                }
+            <tr class="" id="@g.Key.Stipend_Dep_Name">
+                <td colspan="5" class="col-mod"></td>
+                <td align="right">@String.Format("{0:n0}", g.Select(x => x.Stipend).Sum())</td>
+                <td id="totl_allownce" align="right">@String.Format("{0:n0}", g.Select(x => x.Allownces).Sum() + g.Select(x => x.Bonus).Sum()) </td>
+                <td id="deduc_group" align="right">@String.Format("{0:n0}", g.Where(x => x.Basic_salary == 0 && x.Stipend > 0).Select(x => x.Ded_Loan).Sum())</td>
+                <td id="deduc_group" align="right">@String.Format("{0:n0}", g.Where(x => x.Basic_salary == 0 && x.Stipend > 0).Select(x => x.Ded_Advance).Sum())</td>
+                @{
+                    var a = g.Where(x => x.Basic_salary > 0 && x.Stipend > 0).Sum(x => x.Stipend);
+                    var b = g.Where(x => x.Basic_salary == 0 && x.Stipend > 0).Sum(x => x.Stipend_Grand_Total);
+                }
+                <td align="right">@string.Format("{0:n0}",  Math.Round(Convert.ToDecimal(a + b))) </td>
+            </tr>
+            </tbody>
+        </table>
+        <div style="page-break-after:always"></div>
+    }
+</div>

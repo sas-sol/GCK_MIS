@@ -1,0 +1,111 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.PendingInvoicesModel>
+
+@{ if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+}
+<div id="" class="bgc-white bd bdrs-3 p-20 mB-20">
+    <div class="row">
+        <div class="col-md-6">
+            <h4 class="c-grey-900 mB-20">Payable Bills </h4>
+        </div>
+    </div>
+    <div class="row p-20 ">
+        <div class="col-md-4 " style="background-color:lightyellow">
+            <h4>RS. <span class="coma"> @String.Format("{0:n0}", Model.Sum(x => x.TotalAmount)) </span></h4>
+            <h6> Open Bills</h6>
+        </div>
+
+        <div class="col-md-4 bgc-red-50 ">
+            <h4>RS.  <span class="coma">@String.Format("{0:n0}", Model.Sum(x => x.Remaining))</span></h4>
+            <h6> Overdue</h6>
+        </div>
+        <div class="col-md-4 bgc-green-50">
+            <h4>RS. <span class="coma">@String.Format("{0:n0}", Model.Sum(x => x.Paid))</span></h4>
+            <h6> Paid </h6>
+        </div>
+    </div>
+    <table id="Vendor" class="table table-borderless clickable-rows " cellspacing="0" width="100%">
+        <thead class="thead-new-dark">
+            <tr>
+                <th width="5%"> Bills</th>
+                <th width="40%">Vendor / Company</th>
+                <th width="10%" style="text-align:right">Total Amount</th>
+                <th width="10%" style="text-align:right">Paid Amount</th>
+                <th width="10%" style="text-align:right">Remaining Amount</th>
+                <th width="10%">Pay Bill</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+
+                if (!Model.Any())
+                {
+                    <tr><td colspan="6" style="text-align:center">No data available</td></tr>
+                }
+                else
+                {
+                    int sr = 1;
+                    foreach (var item in Model.GroupBy(x => x.RecHeadId))
+                    {
+                        <tr class="MainVEn">
+                            <td> <i class="fa fa-plus pointer expndrow" id="@item.Select(x=> x.RecHeadId).FirstOrDefault()"> </i> </td>
+                            <td>@item.Select(x => x.RecHead).FirstOrDefault()</td>
+                            <td style="text-align:right">@String.Format("{0:n0}", item.Sum(x => x.TotalAmount))</td>
+                            <td style="text-align:right">@String.Format("{0:n0}", item.Sum(x => x.Paid))</td>
+                            <td style="text-align:right">@String.Format("{0:n0}", item.Sum(x => x.Remaining))</td>
+                            <td> @*<button class="btn btn-primary payfull" head-id="@item.HeadId">Pay Bill</button>*@ </td>
+                        </tr>
+                        foreach (var bil in item)
+                        {
+                            <tr class="billsone" id="@bil.RecHeadId">
+                                <td>  </td>
+                                <td><span>&nbsp;&nbsp;&nbsp;@String.Format("{0:n0}", bil.InvoiceNumber)</span></td>
+                                <td style="text-align:right;">@String.Format("{0:n0}", bil.TotalAmount)</td>
+                                <td style="text-align:right;">@String.Format("{0:n0}", bil.Paid)</td>
+                                <td style="text-align:right;">@String.Format("{0:n0}", bil.Remaining)</td>
+                                <td> <button class="btn btn-primary paysigle" head-id="@item.Select(x=> x.RecHeadId).FirstOrDefault()" grp-id="@bil.GroupId">Pay This Bill</button> </td>
+
+                            </tr>
+                        }
+                        sr++;
+                    }
+
+                }
+            }
+        </tbody>
+    </table>
+</div>
+<script>
+    $(document).ready(function () {
+
+        $(document).on("click", ".paysigle", function () {
+            window.open("/GeneralEntry/VoucherPayableDetails?Id=" + $(this).attr("grp-id") + "&HeadId=" + $(this).attr("head-id"), '_blank');
+        });
+        $(document).on("click", ".payfull", function () {
+            window.open("/GeneralEntry/VoucherPayableDetailsByVendor?HeadId=" + $(this).attr("head-id"), '_blank');
+
+        });
+        $('.billsone').each(function () {
+            $(this).toggle();
+
+        });
+        $(document).on("click", ".expndrow", function () {
+            var a = $(this).attr("id");
+            $('.billsone').each(function () {
+
+                var b = $(this).attr("id");
+                if (a == b) {
+                    $(this).toggle();
+                }
+            });
+        });
+    });
+</script>
+
+

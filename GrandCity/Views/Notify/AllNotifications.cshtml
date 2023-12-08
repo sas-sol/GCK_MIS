@@ -1,0 +1,65 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Sp_Get_Notifications_User_Result>
+@{
+    if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+    int i = 1;
+}
+<div class="container-fluid">
+    <h4 class="c-grey-900 mT-10 mB-30">Notifications</h4>
+    <ul class="nav nav-tabs" id="myTab" role="tablist">
+        @foreach (var item in Model.GroupBy(x => x.Module))
+        {
+            string active = "";
+            if (i == 1)
+            {
+                active = "active";
+            }
+            <li class="nav-item"><a class="nav-link @active" role="tab" data-toggle="tab" aria-controls="home" aria-selected="true" href="#@item.Key">@item.Key</a></li>
+            i++;
+        }
+    </ul>
+    <!-- Tab panes -->
+    <div class="tab-content">
+        @{ i = 1; }
+        @foreach (var g in Model.GroupBy(x => x.Module))
+        {
+            string active = "";
+            if (i == 1)
+            {
+                active = "active";
+            }
+            <div id="@g.Key" class="tab-pane @active">
+                @foreach (var item in g)
+                {
+                    string color = "";
+                    if (!item.IsRead)
+                    {
+                        color = "bisque";
+                    }
+                    <a href="@item.Path&noti=@item.Id" style="background-color:@color" class="peers fxw-nw td-n p-10 bdB c-grey-800 cH-blue bgcH-grey-100">
+                        <div class="peer mR-15"><img class="w-3r bdrs-50p" src="/assets/static/images/def-img.png" alt=""></div>
+                        <div class="peer peer-greed">
+                            <span>
+                                <span class="c-grey-600">@item.Text</span>
+                            </span>
+
+                            <p class="m-0"><small class="fsz-xs" id="t-@item.Id"></small></p>
+                        </div>
+                    </a>
+                    <script>
+                        var date = '@item.CreatedAt';
+                        var t = moment(date).fromNow();
+                        $("#t-@item.Id").text(t);
+                    </script>
+                }
+            </div>
+            i++;
+        }
+    </div>
+</div>

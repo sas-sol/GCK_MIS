@@ -1,0 +1,126 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Sp_Get_CommercialManagementDetail_Result>
+<style>
+    table thead tr th, table tbody tr td {
+        font-size: 12px;
+    }
+
+    .scrolling-box {
+        height: 740px;
+        overflow-y: scroll;
+        overflow-x: scroll;
+        width: 100%;
+        position: sticky;
+        top: 0;
+    }
+
+    .tableFixHead {
+        overflow: auto;
+        height: 700px;
+    }
+
+        .tableFixHead .ka th {
+            position: sticky;
+            top: 0;
+        }
+</style>
+
+<div class="tableFixHead">
+    <table id="sp__comm" class="table table-borderless" cellspacing="0" width="100%">
+        @*<thead class="thead-new-dark ka">
+            <tr>
+                <th>Sr.</th>
+                <th>Shop</th>
+                <th>Type</th>
+                <th>Area</th>
+                <th>Location</th>
+                <th>Status</th>
+                <th>Rate / Sq FT</th>
+                <th>Extra Amount</th>
+                <th>Final Rate</th>
+                <th></th>
+            </tr>
+        </thead>*@
+        @{
+            /**/
+            if (!Model.Any())
+            {
+                <tr><td colspan="6" style="text-align:center">No data available</td></tr>
+            }
+            else
+            {
+                int sr = 1;
+                foreach (var g in Model.GroupBy(x => new { x.projectid, x.Project_Name, x.Floor }))
+                {
+
+                    <thead class="thead-new-dark">
+                        <tr>
+                            <th colspan="9" style="font-size:21px;text-align:center">@g.Key.Project_Name -  @g.Key.Floor</th>
+                        </tr>
+                        <tr>
+                            <th>Sr.</th>
+                            <th>Unit</th>
+                            <th>Type</th>
+                            <th>Area</th>
+                            <th>Location</th>
+                            <th>Status</th>
+                            <th>Rate / Sq FT</th>
+                            <th>Extra Amount</th>
+                            <th>Final Rate</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in g)
+                        {
+                            string statuscolor = "";
+                            if (item.Status == "Registered") { statuscolor = "bgc-green-50"; }
+                        <tr id="@item.Id" class="@statuscolor">
+                            <td>@sr</td>
+                            @if (item.Project_Name == "SA Premium Homes")
+                            {
+                                <td>@item.ApplicationNo</td>
+                            }
+                            else
+                            {
+                                <td>@item.Shop</td>
+                            }
+                            <td>@item.Type</td>
+                            <td>@item.Area Sq Ft</td>
+                            <td>@item.Location</td>
+                            <td>@item.Status</td>
+                            <td>@string.Format("{0:0,0.##}", item.Final_Rate / item.Area)</td>
+                            <td>@string.Format("{0:0,0.##}", item.Extra_Amount)</td>
+                            <td>@string.Format("{0:0,0.##}", item.Final_Rate)</td>
+                            <td>
+                                @if (item.Status == "Available_For_Sale")
+                                {
+                                    <ul style="list-style:none;margin-left:0px;">
+                                        <li class="dropdown">
+                                            <a href="" class="dropdown-toggle no-after peers " data-toggle="dropdown">
+                                                <i class="ti-more-alt  c-grey-900" style="transform:rotate(90deg);"></i>
+                                            </a>
+                                            <ul class="dropdown-menu" style="padding:10px;width:auto !important">
+                                                <li><a id="@item.Id" class="pointer upda__comm" data-toggle="modal" data-target="#Modal"><span>Update</span></a></li>
+                                                <hr />
+                                                <li><a id="@item.Id" class=" del__comm pointer"><span>Delete</span></a></li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                }
+                            </td>
+                        </tr>
+                            sr++;
+                        }
+                    </tbody>
+                }
+            }
+        }
+
+    </table>
+</div>
+<style>
+    tr.group,
+    tr.group:hover {
+        background-color: #ddd !important;
+    }
+</style>

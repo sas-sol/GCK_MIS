@@ -1,0 +1,73 @@
+﻿@{
+    Layout = "~/Views/Shared/_StaffLayout.cshtml";
+}
+<style>
+    .col-centered {
+        margin: 0 auto;
+        float: none;
+    }
+</style>
+
+@{
+    if (User.IsInRole("Print Duplicate Receipt"))
+    {
+        <script>
+            function ShowPrint() {
+                $(".prin-dup").show();
+            }
+        </script>
+    }
+}
+<div class="row gap-20 pos-r">
+    <div class="col-md-12">
+        <div class="bgc-white p-20 bd">
+            @using (Html.BeginForm("SearchResult", "Commercial", FormMethod.Post, new { @id = "sea-com-info", @class = "", role = "form", autocomplete = "off" }))
+            {
+                @Html.AntiForgeryToken()
+
+
+                <div class="form-row">
+                    <h5 style="text-align:center;width:100%">Commercial Advance Search</h5>
+                </div>
+                <div class="form-row">
+                    <div class="col-md-2" style="text-align:center"></div>
+                    <div class="col-md-8" style="text-align:center">
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="sea-box" name="Text" style="width:100%;line-height:3" placeholder="Shop         |     Muhammad Ali     |     35202-1234567-9">
+                        </div>
+                        <div class="form-group">
+                            <div class="form-check">
+                                <label class="form-check-label" style="margin-left:3%"><input class="form-check-input" type="radio" name="SearchOption" value="1" checked>Unit Number</label>
+                                <label class="form-check-label" style="margin-left:3%"><input class="form-check-input" type="radio" name="SearchOption" value="2">Name</label>
+                                <label class="form-check-label" style="margin-left:3%"><input class="form-check-input" type="radio" name="SearchOption" value="3">CNIC</label>
+                                <label class="form-check-label" style="margin-left:3%"><input class="form-check-input" type="radio" name="SearchOption" value="4">Receipt No</label>
+                                <label class="form-check-label" style="margin-left:3%"><input class="form-check-input" type="radio" name="SearchOption" value="8">Instrument No</label>
+                                <label class="form-check-label" style="margin-left:3%"><input class="form-check-input" type="radio" name="SearchOption" value="5">Mobile No.</label>
+                                <label class="form-check-label" style="margin-left:3%"><input class="form-check-input" type="radio" name="SearchOption" value="6">Nominee Name</label>
+                                <label class="form-check-label" style="margin-left:3%"><input class="form-check-input" type="radio" name="SearchOption" value="7">Nominee CNIC</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <button type="submit" class="btn btn-primary" id="sea-com-info" style="height:55px"><i class="ti-search"></i>&nbsp;&nbsp;&nbsp; Search </button>
+                    </div>
+                </div>
+            }
+
+        </div>
+    </div>
+    <div class="col-md-12">
+        <div  id="tab-data-com">
+
+        </div>
+    </div>
+
+    <div class="col-md-12" id="com-det">
+    </div>
+</div>
+<script>
+    $(function () {
+        $("#sea-box").focus();
+    });
+</script>
+

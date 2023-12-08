@@ -1,0 +1,71 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.LeaveRequisitionModel>
+@{
+    if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+}
+<style>
+    #link {
+        color: #FF0000;
+    }
+</style>
+<div class="full-container">
+    <div class="email-app">
+        <div class="email-side-nav remain-height ov-h">
+            <div class="h-100 layers">
+                <div class="p-20 bgc-grey-100 layer w-100 text-white">
+                    <a href="javascript:void(0)" onclick="Userpenlaves('/Tickets/CreateReceptionTicket/')" id="link" class="btn btn-danger btn-block">Create Ticket</a>
+                </div>
+                <div class="scrollable pos-r bdT layer w-100 fxg-1">
+                    <h6 style="margin-left:15px"></h6>
+                    <ul class="p-20 nav flex-column">
+                        <li class="nav-item">
+                            <a href="javascript:void(0)" onclick="Userpenlaves('/Tickets/ResolvedCustomersTickets/')" class="nav-link c-grey-800 cH-blue-500 active">
+                                <div class="peers ai-c jc-sb">
+                                    <div class="peer peer-greed">
+                                        <i class="mR-10 ti-email"></i>
+                                        <span>Resolved</span>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="javascript:void(0)" onclick="Userpenlaves('/Tickets/PendingCustomersTickets/')" class="nav-link c-grey-800 cH-blue-500">
+                                <div class="peers ai-c jc-sb">
+                                    <div class="peer peer-greed">
+                                        <i class="mR-10 ti-share"></i>
+                                        <span>Pending</span>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="email-wrapper row remain-height pos-r scrollable bgc-white">
+            <div class="email-content open no-inbox-view">
+                <div class="email-compose" id="leaves_table_user">
+                    @{ Html.RenderAction("CreateReceptionTicket", "Tickets"); }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+

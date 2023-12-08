@@ -1,0 +1,238 @@
+﻿@model MeherEstateDevelopers.Models.Sp_Get_Receipt_Parameter_ById_Result
+@{
+    Layout = null;
+}
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title></title>
+    <style type="text/css" media="all">
+
+        body, div, table, thead, tbody, tfoot, tr, th, td, p {
+            font-family: "Calibri";
+            font-size: 19px;
+        }
+
+            table td {
+                height: 28px;
+            }
+
+        body {
+            -webkit-print-color-adjust: exact;
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    <table cellspacing="0" border="0" style="width:1000px">
+        <tr>
+            <td width="800px" align="right" valign=bottom style="padding-right: 95px;">
+                <img src="~/assets/static/images/LoanSettlement/employee.png" width=450 height=125>
+            </td>
+            <td width="200px" align="right" valign=bottom>
+                <img src="~/assets/static/images/employee-copy.png" width=125 height=125>
+            </td>
+        </tr>
+    </table>
+    <table cellspacing="0" border="0" style="width:1000px">
+        <tr>
+            <td width="250px"></td>
+            <td width="90px" valign=bottom style="font-weight:bold">Receipt No.</td>
+            <td width="125px" align="center" valign=bottom style="border-bottom:1px solid">@Model.ReceiptNo</td>
+            <td width="246x" valign=bottom></td>
+        </tr>
+    </table>
+    <table cellspacing="0" border="0" style="width:1000px">
+        <tr>
+            <td width="125px" align="left" valign=bottom style="font-weight:bold">For Payment of</td>
+            <td width="850px" align="center" valign=bottom style="border-bottom:1px solid">@Model.Text</td>
+        </tr>
+    </table>
+    <table cellspacing="0" border="0" style="width:1000px">
+        <tr>
+            <td width="340px" align="left" valign=bottom style="font-weight:bold">Received with Thanks from Mr./Mrs./Miss:</td>
+            <td width="660px" align="center" valign=bottom style="border-bottom:1px solid">@Model.Name</td>
+        </tr>
+    </table>
+    <table cellspacing="0" border="0" style="width:1000px">
+        <tr>
+            <td width="105px" align="left" valign=bottom style="font-weight:bold">S/O,D/O,W/O</td>
+            <td width="535px" align="center" valign=bottom style="border-bottom:1px solid">@Model.Father_Name</td>
+            <td width="95px" align="left" valign=bottom style="font-weight:bold">Contact No.</td>
+            <td width="260px" align="center" valign=bottom style="border-bottom:1px solid">@Model.Contact</td>
+        </tr>
+    </table>
+    <table cellspacing="0" border="0" style="width:1000px">
+        <tr>
+            <td width="140px" align="left" valign=bottom style="font-weight:bold">A Sum of Rupees</td>
+            <td width="530px" align="center" valign=bottom style="border-bottom:1px solid">@Model.AmountinWords</td>
+            <td width="10px"></td>
+            <td width="220px" align="center" valign=bottom style="border-bottom:1px solid;font-weight:bold"></td>
+        </tr>
+    </table>
+    <table cellspacing="0" border="0" style="width:1000px">
+        <tr>
+            <td width="340px" align="left" valign=bottom style="font-weight:bold">In Cash / Cheque / Pay Order / Bank Draft</td>
+            <td width="360px" align="center" valign=bottom style="border-bottom:1px solid">@Model.PaymentType</td>
+            <td width="35px" align="left" valign=bottom style="font-weight:bold">Date </td>
+            <td width="260px" align="center" valign=bottom style="border-bottom:1px solid">@string.Format("{0:D}", Model.DateTime)</td>
+        </tr>
+    </table>
+    @if (Model.PaymentType != "Cash")
+    {
+        <table class="bank" cellspacing="0" border="0" style="width:1000px">
+            <tr>
+                <td width="110px" align="left" valign=bottom style="font-weight:bold">Drawn Bank </td>
+                <td width="200px" align="center" valign=bottom style="border-bottom:1px solid">@Model.Bank</td>
+                <td width="180px" align="left" valign=bottom style="font-weight:bold"><span>@Model.PaymentType</span> No.</td>
+                <td width="200px" align="center" valign=bottom style="border-bottom:1px solid">@Model.Ch_Pay_Draft_No</td>
+                <td width="120px" align="left" valign=bottom style="font-weight:bold">On Account of </td>
+                <td width="200px" align="center" valign=bottom style="border-bottom:1px solid">@Model.Project</td>
+            </tr>
+        </table>
+    }
+    <table cellspacing="0" border="0" style="width:1000px">
+        <tr>
+            <td width="175px" align="left" valign=bottom style="font-weight:bold">Employee Code</td>
+            <td width="300px" align="center" valign=bottom style="border-bottom:1px solid">@Model.File_Plot_Number</td>
+            <td width="45px" align="left" valign=bottom style="font-weight:bold"> </td>
+            <td width="260px" align="center" valign=bottom style="border-bottom:1px solid"></td>
+            <td width="35px" align="left" valign=bottom style="font-weight:bold"> </td>
+            <td width="235px" align="center" valign=bottom style="border-bottom:1px solid"></td>
+        </tr>
+    </table>
+    <table cellspacing="0" border="0" style="width:1000px">
+        <tr>
+            <td align="right" valign=bottom><font size="4">A Project of</font></td>
+        </tr>
+    </table>
+    <table cellspacing="0" border="0" style="width:1000px">
+        <tr>
+            <td width="35px" align="left" valign=bottom style="font-weight:bold"><font size="6">Rs.</font></td>
+            <td width="170px" align="center" valign=bottom style="border-bottom:1px solid"><font size="6"> @string.Format("{0:n0}", Model.Amount)</font></td>
+            <td width="60px" align="left" valign=bottom><font size="4"></font></td>
+            <td width="220px" align="left" valign=bottom style="font-weight:bold"><font size="6">For Meher Estate Developers</font></td>
+            <td width="180px" align="center" valign=bottom style="border-bottom:1px solid"><font size="6"></font></td>
+            <td width="180px" align="left" valign=bottom><font size="4"></font></td>
+            <td width="130px" align="left" style="vertical-align:top"><img src="~/assets/static/images/meherestate-simple.png" width=130 height=29></td>
+        </tr>
+        @if (Model.PaymentType != "Cash")
+        {
+            <tr class="cheq-row">
+                <td width="550px" colspan="6" align="left" style="font-size:12px" valign=top>Receipt Valid Subject to Realization of @Model.PaymentType</td>
+            </tr>
+        }
+        
+    </table>
+    <!-- ************************************************************************** -->
+    <table cellspacing="0" border="0" style="width:1000px">
+        <tr>
+            <td align="center" valign="middle">-----------------------------------------------------------------------------------------------------------------------------------------------------------------------</td>
+        </tr>
+    </table>
+
+    <table bgcolor="#F7DCF7" cellspacing="0" border="0" style="width:1000px">
+        <tr>
+            <td width="800px" align="right" valign=bottom style="padding-right: 95px;">
+                <img src="~/assets/static/images/LoanSettlement/accounts.png" width=450 height=125>
+            </td>
+            <td width="200px" align="right" valign=bottom>
+                <img src="~/assets/static/images/accounts-copy.png" width=125 height=125>
+            </td>
+        </tr>
+    </table>
+    <table bgcolor="#F7DCF7" cellspacing="0" border="0" style="width:1000px">
+        <tr>
+            <td width="250px"></td>
+            <td width="90px" valign=bottom style="font-weight:bold">Receipt No.</td>
+            <td width="125px" align="center" valign=bottom style="border-bottom:1px solid">@Model.ReceiptNo</td>
+            <td width="246x" valign=bottom></td>
+        </tr>
+    </table>
+    <table bgcolor="#F7DCF7" cellspacing="0" border="0" style="width:1000px">
+        <tr>
+            <td width="125px" align="left" valign=bottom style="font-weight:bold">For Payment of</td>
+            <td width="850px" align="center" valign=bottom style="border-bottom:1px solid">@Model.Text</td>
+        </tr>
+    </table>
+    <table bgcolor="#F7DCF7" cellspacing="0" border="0" style="width:1000px">
+        <tr>
+            <td width="340px" align="left" valign=bottom style="font-weight:bold">Received with Thanks from Mr./Mrs./Miss:</td>
+            <td width="660px" align="center" valign=bottom style="border-bottom:1px solid">@Model.Name</td>
+        </tr>
+    </table>
+    <table bgcolor="#F7DCF7" cellspacing="0" border="0" style="width:1000px">
+        <tr>
+            <td width="105px" align="left" valign=bottom style="font-weight:bold">S/O,D/O,W/O</td>
+            <td width="535px" align="center" valign=bottom style="border-bottom:1px solid">@Model.Father_Name</td>
+            <td width="95px" align="left" valign=bottom style="font-weight:bold">Contact No.</td>
+            <td width="260px" align="center" valign=bottom style="border-bottom:1px solid">@Model.Contact</td>
+        </tr>
+    </table>
+    <table bgcolor="#F7DCF7" cellspacing="0" border="0" style="width:1000px">
+        <tr>
+            <td width="140px" align="left" valign=bottom style="font-weight:bold">A Sum of Rupees</td>
+            <td width="530px" align="center" valign=bottom style="border-bottom:1px solid">@Model.AmountinWords</td>
+            <td width="10px"></td>
+            <td width="220px" align="center" valign=bottom style="border-bottom:1px solid;font-weight:bold"></td>
+        </tr>
+    </table>
+    <table bgcolor="#F7DCF7" cellspacing="0" border="0" style="width:1000px">
+        <tr>
+            <td width="340px" align="left" valign=bottom style="font-weight:bold">In Cash / Cheque / Pay Order / Bank Draft</td>
+            <td width="360px" align="center" valign=bottom style="border-bottom:1px solid">@Model.PaymentType</td>
+            <td width="35px" align="left" valign=bottom style="font-weight:bold">Date </td>
+            <td width="260px" align="center" valign=bottom style="border-bottom:1px solid">@string.Format("{0:D}", Model.DateTime)</td>
+        </tr>
+    </table>
+    @if (Model.PaymentType != "Cash")
+    {
+        <table bgcolor="#F7DCF7" class="bank" cellspacing="0" border="0" style="width:1000px">
+            <tr>
+                <td width="110px" align="left" valign=bottom style="font-weight:bold">Drawn Bank </td>
+                <td width="200px" align="center" valign=bottom style="border-bottom:1px solid">@Model.Bank</td>
+                <td width="180px" align="left" valign=bottom style="font-weight:bold"><span>@Model.PaymentType</span> No.</td>
+                <td width="200px" align="center" valign=bottom style="border-bottom:1px solid">@Model.Ch_Pay_Draft_No</td>
+                <td width="120px" align="left" valign=bottom style="font-weight:bold">On Account of </td>
+                <td width="200px" align="center" valign=bottom style="border-bottom:1px solid">@Model.Project</td>
+            </tr>
+        </table>
+    }
+    <table bgcolor="#F7DCF7" cellspacing="0" border="0" style="width:1000px">
+        <tr>
+            <td width="175px" align="left" valign=bottom style="font-weight:bold">Employee Code</td>
+            <td width="300px" align="center" valign=bottom style="border-bottom:1px solid">@Model.File_Plot_Number</td>
+            <td width="45px" align="left" valign=bottom style="font-weight:bold"> </td>
+            <td width="260px" align="center" valign=bottom style="border-bottom:1px solid"></td>
+            <td width="35px" align="left" valign=bottom style="font-weight:bold"></td>
+            <td width="235px" align="center" valign=bottom style="border-bottom:1px solid"> </td>
+        </tr>
+    </table>
+    <table bgcolor="#F7DCF7" cellspacing="0" border="0" style="width:1000px">
+        <tr>
+            <td align="right" valign=bottom><font size="4">A Project of</font></td>
+        </tr>
+    </table>
+    <table bgcolor="#F7DCF7" cellspacing="0" border="0" style="width:1000px">
+        <tr>
+            <td width="35px" align="left" valign=bottom style="font-weight:bold"><font size="6">Rs.</font></td>
+            <td width="170px" align="center" valign=bottom style="border-bottom:1px solid"><font size="6"> @string.Format("{0:n0}", Model.Amount)</font></td>
+            <td width="60px" align="left" valign=bottom><font size="4"></font></td>
+            <td width="220px" align="left" valign=bottom style="font-weight:bold"><font size="6">For Meher Estate Developers</font></td>
+            <td width="180px" align="center" valign=bottom style="border-bottom:1px solid"><font size="6"></font></td>
+            <td width="180px" align="left" valign=bottom><font size="4"></font></td>
+            <td width="130px" align="left" style="vertical-align:top"><img src="~/assets/static/images/meherestate-simple.png" width=130 height=29></td>
+        </tr>
+        @if (Model.PaymentType != "Cash")
+        {
+            <tr class="cheq-row">
+                <td width="550px" colspan="6" align="left" style="font-size:12px" valign=top>Receipt Valid Subject to Realization of @Model.PaymentType</td>
+            </tr>
+        }
+         
+    </table>
+
+   
+</body>
+</html>

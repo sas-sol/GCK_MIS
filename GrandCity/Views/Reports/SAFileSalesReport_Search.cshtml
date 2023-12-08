@@ -1,0 +1,75 @@
+﻿@model IEnumerable<Management_Information_System.Models.Sp_Get_FilePlot_SalesReport_Result>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="bdrs-3 ov-h bgc-white p-10 bd">
+            <div class="">
+                <h2 style="text-align:center;">SA File Sales Report</h2>
+            </div>
+            <div>
+                <table id="sale-list" class="table table-borderless table-striped" width="100%">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>Sr No.</th>
+                            <th>Unit No.</th>
+                            <th>Block</th>
+                            <th>Owner Name</th>
+                            <th>Booking Date</th>
+                            <th>Total Price</th>
+                            <th>Discount</th>
+                            <th>Net Total</th>
+                            <th>Booking Amount</th>
+                            <th>Installments Amount</th>
+                            <th>Received Amount</th>
+                            <th>Remaining Amount</th>
+                        </tr>
+                    </thead>
+                    @if (Model.Any())
+                    {
+                        <tbody>
+                            @{
+                                int sr = 1;
+
+                                foreach (var v in Model)
+                                {
+
+                                    <tr data-unit="@v.Id">
+                                        <td>@sr</td>
+                                        <td>@v.Unit</td>
+                                        <td>@v.Block</td>
+                                        <td>@v.Name</td>
+                                        <td>@String.Format("{0:dd/MM/yyyy}", v.Booking_Date)</td>
+                                        <td>@String.Format("{0:n0}", v.Total_Amount)</td>
+                                        <td>@String.Format("{0:n0}", v.Discount_Amount)</td>
+                                        <td>@String.Format("{0:n0}", v.NetTotal)</td>
+                                        <td>@String.Format("{0:n0}", v.booking_Amount)</td>
+                                        <td>@String.Format("{0:n0}", v.Installment_Amount)</td>
+                                        <td>@String.Format("{0:n0}", v.Received_Amount)</td>
+                                        <td>@String.Format("{0:n0}", v.Outstanding_Amount)</td>
+                                    </tr>
+                                    sr++;
+                                }
+
+                            }
+                        </tbody>
+                    }
+                   
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+        $(document).ready(function () {
+        debugger
+        if (@ViewBag.Block != 1)
+        {
+            $('#sale-list').DataTable({
+                dom: 'Bfrtip',
+                buttons: [
+                    'copy', 'excel', 'pdf', 'print'
+                ]
+            });
+        }
+        });
+</script>

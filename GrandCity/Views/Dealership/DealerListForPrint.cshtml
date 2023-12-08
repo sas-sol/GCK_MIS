@@ -1,0 +1,22 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Dealer>
+
+<input type="hidden" class="datagrpdeal" value="@ViewBag.grp" />
+<div class="row">
+    <div class="col-md-6">
+        <label>Select Dealer </label>
+        <select class="dealerselected form-control">
+            <option value="0">Without Dealer info</option>
+            @foreach(var d in Model)
+            {
+                <option value="@d.Id">@d.Name </option>
+
+            }
+        </select>
+    </div><div class="col-md-6">
+
+    </div>
+</div>
+<script>
+    $('.modal-footer').append('<button class="btn btn-success" id="gen-deal-print" type="submit">Print</button>');
+</script>
+ 

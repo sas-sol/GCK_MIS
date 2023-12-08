@@ -1,0 +1,124 @@
+﻿<div class="col-md-12 mt-md-2">
+    <div class="form-row cal">
+        <div class="form-group col-md-12">
+            <label>Employee</label>
+            <select class="form-control employee_names emp_tag"></select>
+        </div>
+        <div class="form-group col-md-6">
+            <label>Employee Code</label>
+            <h5 id="emp_code"></h5>
+        </div>
+        <div class="form-group col-md-4 percent-red">
+            <label>Employee Designation</label>
+            <h5 id="emp_desig"></h5>
+        </div>
+        <div class="form-group col-md-4 months-dep">
+            <label>Bank Account</label>
+            <select class="form-control bank_accounts"></select>
+        </div>
+    </div>
+</div>
+<hr />
+<script>
+
+    $(function () {
+        $('.employee_names').select2({
+            dropdownParent: $('#Modal'),
+            placeholder: "Search for Employee",
+            ajax: {
+                url: '/Finance/EmployeeSearch/',
+                dataType: 'json',
+                params: {
+                    contentType: 'application/json; charset=utf-8'
+                },
+                quietMillis: 100,
+                data: function (params) {
+                    var query = {
+                        s: params.term,
+                        type: 'public'
+                    }
+                    // Query parameters will be ?search=[term]&type=public
+                    return query;
+                },
+                processResults: function (data) {
+                    console.log(data);
+                    // Transforms the top-level key of the response object from 'items' to 'results'
+                    return {
+                        results: data
+                    };
+                }
+            }
+        });
+
+        $('.bank_accounts').select2({
+            dropdownParent: $('#Modal'),
+            placeholder: "Search for Head",
+            ajax: {
+                url: '/AccountHeads/GetHeadInventory/',
+                dataType: 'json',
+                params: {
+                    contentType: 'application/json; charset=utf-8'
+                },
+                quietMillis: 100,
+                data: function (params) {
+                    return {
+                        q: params.term,// search term
+                        code: "/1/1/2/"
+                    };
+                },
+                processResults: function (data) {
+                    return {
+                        results: data.items
+                    };
+                }
+            }
+        });
+        $('.modal-footer').append(' <button type="button" class="btn btn-primary add_emp_bank">Add Employee</button>');
+    });
+    $(document).on('click', '.add_emp_bank', function (e) {
+        e.preventDefault();
+        var empid = $('.emp_tag option:selected').val();
+        if (empid == "" || empid == null) {
+            alert("Please Select an Employee");
+            return false;
+        }
+        var headid = $('.bank_accounts option:selected').val();
+        var headName = $('.bank_accounts option:selected').text();
+        if (headid == null || headid == "") {
+            alert("Please Select Bank Head");
+            return false;
+        }
+
+        if (confirm("Are you sure you want to update Employee Bank?")) {
+            $.ajax({
+                type: "POST",
+                url: '/Salaries/UpdateEmployeeBankHead/',
+                data: { EmpId: empid, HeadId: headid, HeadName: headName },
+                success: function (data) {
+                    alert("Employee Bank Account Updated.");
+                    window.location.reload();
+                },
+                error: function () {
+                    alert("Error Occured");
+                }
+            });
+        }
+    });
+    $(document).on('change', '.emp_tag', function () {
+        var empId = $('.emp_tag option:selected').val();
+        $.ajax({
+            type: "POST",
+            url: '/Salaries/GetEmployeeDetails/',
+            data: { EmpId: empId },
+            success: function (data) {
+                $('#emp_code').text(data.Employee_Code);
+                $('#emp_desig').text(data.Department);
+            },
+            error: function () {
+                alert("Error Occured");
+            }
+        });
+
+
+    });
+</script>

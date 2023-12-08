@@ -1,0 +1,144 @@
+﻿
+@model IEnumerable<MeherEstateDevelopers.Models.Sp_Get_DealershipComments_Result>
+<div class="peer peer-greed">
+    <div class="layer w-100">
+        <div class="p-20 bgc-white">
+            <h3>History</h3>
+        </div>
+    </div>
+    <div class="layer w-100 bd gapY-15 fxg-1 bgc-grey-200 pos-r">
+        <div class="p-20 layers ai-fe gapY-10 chat-box-height pre-scrollable" id="chat-msg" style="max-height:300px;overflow-y:scroll">
+            @{
+                if (Model.Any())
+                {
+                    foreach (var item in Model)
+                    {
+                        string color = "";
+                        if (item.Msg_Type == "Added_Dealer")
+                        {
+                            color = "bgc-purple-50";
+                        }
+                        else if (item.Msg_Type == "Dealer_Form_Association")
+                        {
+                            color = "bgc-blue-50";
+                        }
+                        else if (item.Msg_Type == "Deals_Form_Association")
+                        {
+                            color = "bgc-green-50";
+                        }
+                        else if (item.Msg_Type == "Update_Dealership")
+                        {
+                            color = "bgc-blue-50";
+                        }
+                        else if (item.Msg_Type == "Update_Dealer")
+                        {
+                            color = "bgc-purple-50";
+                        }
+                        else if (item.Msg_Type == "Dealer_Voucher")
+                        {
+                            color = "bgc-red-50";
+                        }
+                        else if (item.Msg_Type == "Dealer_Commession")
+                        {
+                            color = "bgc-red-50";
+                        }
+                        else if (item.Msg_Type == "Dealer_Deal")
+                        {
+                            color = "bgc-blue-50";
+                        }
+                        <div class="layer">
+                            <div class="peers fxw-nw ai-c pY-3 pX-10 bgc-white bdrs-2 lh-3/2 @color">
+                                <div class="peer-greed ord-0">
+                                    @if (item.Msg_Type == "file")
+                                    {
+                                        <img src="/Repository/DealershipData/@item.Dealership_Id/@item.Comment" width="200" height="200" />
+                                    }
+                                    else
+                                    {
+                                        <span>@item.Comment</span>
+                                    }
+                                </div>
+                            </div>
+                            <div class="peers fxw-nw ai-c pY-3 pX-10 bgc-white @color">
+                                <div class="peer-greed ord-0">
+                                    <span>@item.Name</span>
+                                </div>
+                                <div class="peer mL-10 ord-1">
+                                    <small>@string.Format("{0:d MMM yyy, h:mm tt}", item.Date)</small>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+            }
+        </div>
+    </div>
+    <div class="layer w-100">
+        <!-- Chat Send -->
+        <div class="bdT bgc-white" style="padding-top:2.5%">
+            @using (Html.BeginForm("PostDealershipComment", "Messages", FormMethod.Post, new { @id = "dlrshp-comt", @class = "", role = "form", enctype = "multipart/form-data" }))
+            {
+                <input type="hidden" name="DealershipId" value="@ViewBag.DealershipId" />
+                <div class="pos-r">
+                    <textarea type="text" name="Comment" class="chat-comment-box form-control m-0 fl-text" style="width:90%; padding-right:10%" placeholder="Add Comment"></textarea>
+                    <button type="submit" class="btn btn-primary w-2r p-0 h-2r pos-a r-1 t-1" style="margin-top:10px">
+                        <i class="fa fa-paper-plane-o"></i>
+                    </button>
+                    <input type="file" id="files" name="Files" style="margin:10px;" />
+                </div>
+            }
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        ChatBottom();
+    });
+    $(document).on("submit", "#dlrshp-comt", function (e) {
+        e.preventDefault();
+        var msg = $(".fl-text").val();
+        var file = $("#files").get(0).files;
+        if ((msg == null || msg == "") && file.length == 0) {
+            return false;
+        }
+        var date = moment().format('DD MMM, h:mm a');
+        var nam = $("#user-name").text();
+        var form = $("#dlrshp-comt");
+        var data = new FormData();
+        var files = $("#files").get(0).files;
+        data.append("Files", files[0]);
+        $.each(form.serializeArray(), function (key, input) {
+            data.append(input.name, input.value);
+        });
+        $.ajax({
+            type: "POST",
+            processData: false,
+            contentType: false,
+            url: $("#dlrshp-comt").attr('action'),
+            data: data,
+            success: function (data) {
+                $.each(data, function (i) {
+                    if (data[i].Msg_Type == "Text") {
+                        var html = '<div class="layer"><div class="peers fxw-nw ai-c pY-3 pX-10 bgc-white bdrs-2 lh-3/2"><div class="peer-greed ord-0">' +
+                            '<span>' + msg + '</span>' +
+                            '</div></div><div class="peers fxw-nw ai-c pY-3 pX-10 bgc-white"><div class="peer-greed ord-0"><span>' + nam + '</span>' +
+                            '</div><div class="peer mL-10 ord-1"><small>' + date + '</small></div></div></div>';
+                        $(html).hide().appendTo("#chat-msg").fadeIn(500);
+                        $(".fl-text").val('');
+                        $("#files").val("");
+                    }
+                    else {
+                        var html = '<div class="layer"><div class="peers fxw-nw ai-c pY-3 pX-10 bgc-white bdrs-2 lh-3/2"><div class="peer-greed ord-0">' +
+                            '<img src="/DealershipData/' + data[i].DealershipId + '/' + data[i].Comment + '" width="200" height="200" />' +
+                            '</div></div><div class="peers fxw-nw ai-c pY-3 pX-10 bgc-white"><div class="peer-greed ord-0"><span>' + nam + '</span>' +
+                            '</div><div class="peer mL-10 ord-1"><small>' + date + '</small></div></div></div>';
+                        $(html).hide().appendTo("#chat-msg").fadeIn(500);
+                        $(".fl-text").val('');
+                        $("#files").val("");
+                    }
+                });
+                ChatBottom();
+            }
+        });
+    });
+</script>

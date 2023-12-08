@@ -1,0 +1,97 @@
+﻿
+<script>
+    var banklist = @Html.Raw(Json.Encode(ViewBag.Bank));
+</script>
+
+<div>
+    <label>Pending Amount</label>
+    <h4>@string.Format("{0:n0}", ViewBag.ReceiptAmount)</h4>
+</div>
+<hr />
+
+<div class="form-row">
+    <div class="col-md-3">
+        <button type="button" id="add-pay-typ" class="btn btn-info"><i class="ti-plus"></i>&nbsp; Add Payment</button>
+    </div>
+</div>
+<input value="@ViewBag.ReceiptId" type="hidden" id="receiptid" />
+
+
+<div class="mT-30">
+    <div class="mT-30" id="pay-list">
+        <div class="form-row" id="pay-1">
+            <div class="form-group col-md-2">
+                <label>Cash / Bank</label>
+                <select class="form-control paytypesel" id="cah-chq-bak" required>
+                    <option value="Cash">Cash</option>
+                    <option value="BankDraft">Bank Draft</option>
+                    <option value="Cheque">Cheque</option>
+                    <option value="PayOrder">Pay Order</option>
+                    <option value="Online_Cash">Online - Cash</option>
+                    <option value="Online_Cheque">Online - Cheque</option>
+                    <option value="Online_Payorder">Online - PayOrder</option>
+                    <option value="Online_Bankdraft">Online - BankDraft</option>
+                </select>
+            </div>
+            <div class="form-group col-md-1">
+                <label>Amount</label>
+                <input class="form-control coma" placeholder="250,000" required>
+                <input type="hidden" id="Amount" class="amt" required>
+            </div>
+            <div class="form-group col-md-2 paymentotherinfo">
+                <label id="paytypelabel">-</label>
+                <input type="text" class="form-control" id="paymenttype" placeholder="" disabled required>
+            </div>
+            <div class="form-group col-md-1 paymentotherinfo">
+                <label>Date</label>
+                <input type="text" class="form-control" id="cbp-date" data-provide="datepicker" placeholder="mm/dd/yyyy" disabled required>
+            </div>
+            <div class="form-group col-md-2 paymentotherinfo">
+                <label>Bank</label>
+                <select class="form-control" id="bank" disabled>
+                    <option>Choose..</option>
+                </select>
+            </div>
+            <div class="form-group col-md-1 paymentotherinfo">
+                <label>Branch </label>
+                <input type="text" class="form-control" id="Branch" placeholder="Mall Rd" disabled required>
+            </div>
+            <div class="form-group col-md-1 paymentotherinfo">
+                <label>Scan File </label>
+                <button class=" btn btn-block" data-v="1" type="button" id="scanbtn">Scan</button>
+            </div>
+            <div id="images-1" class="col-md-1 images"></div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .paymentotherinfo {
+        display: none;
+    }
+
+    #inst-stat {
+        height: 1245px;
+        overflow-y: scroll;
+    }
+
+    img.scanned {
+        height: 200px; /** Sets the display size */
+        margin-right: 12px;
+    }
+
+    div#images {
+        margin-top: 20px;
+        text-align: center;
+    }
+</style>
+<script>
+
+    $(function () {
+        $('.modal-footer').append('<button type="submit" class="btn btn-primary" id="gen-de-rec">Submit</button>');
+    });
+    $('.hidn_member_trm_pay').hide();
+    $(function () {
+        InitBanks(1);
+    });
+</script>

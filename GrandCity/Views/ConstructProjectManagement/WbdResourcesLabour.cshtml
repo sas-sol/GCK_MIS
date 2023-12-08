@@ -1,0 +1,172 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Sp_Get_WbdResources_Labour_Result>
+
+<div class="table-scrollable" style="">
+
+    @*<h4 class="c-grey-900 mB-20">WBD Resource Labour</h4>*@
+    <table class="table table-bordered" id="mts-table" cellspacing="0" style="width:100%;table-layout:fixed">
+        <thead>
+            <tr>
+                <th width="5%">Sr.</th>
+                
+              
+                <th width="15%">Title</th>
+                <th width="8%">Qty</th>
+                <th width="8%">Rate</th>
+                <th width="8%">Amount</th>
+                <th width="7%">UOM</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                decimal? Total_Amount = 0;
+                if (Model.Any())
+                {
+                    int srcounter = 1;
+                    foreach (var item in Model)
+                    {
+                        Total_Amount += item.Amount;
+                        <tr>
+                            <td>@srcounter</td>
+                            <td>@item.Title</td>
+                         
+
+                            <td>@string.Format("{0:0,0.##}", item.Qty)</td>
+                            <td>@string.Format("{0:0,0.##}", item.Rate)</td>
+                            <td>@string.Format("{0:0,0.##}", item.Amount)</td>
+                            <td>@item.PerHrPerDay</td>
+                        </tr>
+                        srcounter++;
+                    }
+                }
+                else
+                {
+                    <tr><td colspan="12" align="center">No Activity has been created</td></tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
+
+
+<style>
+
+    .table-scrollable {
+        max-height: 500px;
+        overflow-x: auto;
+        overflow-y: auto;
+        scrollbar-width: thin;
+    }
+
+        .table-scrollable thead th {
+            position: sticky;
+            top: 0px;
+            background-color: white;
+            margin-top: -1px;
+            margin-bottom: -1px;
+            /* This is our fake border (see above comment) */
+            box-shadow: inset 0 1px 0 #dee2e6, inset 0 -1px 0 #dee2e6;
+        }
+
+        .table-scrollable tbody tr {
+            height: 10px;
+        }
+</style>
+
+
+
+
+<div class="container-fluid pl-0 ml-0 pr-0 mr-0">
+    <h4 class="text-center">WBD Resource Labour </h4>
+    <div class="form-group col-md-3">
+        @Html.DropDownList("ResourceActivity", null, "Select Activity ", new { Name = "Id", @class = "form-control", required = "" })
+    </div>
+</div>
+<div class="container-fluid ml-0 pr-0 mr-0 main-ms wbd-res in-active main-rec-do">
+    <div class="form-row inv-assign-row">
+      
+
+
+        <div class="form-group col-md-1">
+            <label>Quantity</label>
+            <input type="number" class="form-control wbd-res-rate" id="wbd-res-qty" placeholder="Quantity" autocomplete="off">
+        </div>
+        <div class="form-group col-md-1">
+            <label>Rate</label>
+            <input type="number" class="form-control wbd-res-rate" id="wbd-res-rate" placeholder="Rate" autocomplete="off">
+        </div>
+        <div class="form-group col-md-1">
+            <label>Amount</label>
+            <input type="number" class="form-control " id="wbd-res-Amnt" placeholder="Amount" readonly autocomplete="off">
+        </div>
+        <div class="form-group col-md-3" id="phpd">
+            <label>UOM</label>
+            <select class="form-control  select2" name="wbd-res-phpd" id="wbd-res-phpd" required>
+                <option>Select One</option>
+                <option value="PerHour" id="Material">Per Hour</option>
+                <option value="PerDay">Per Day</option>
+            </select>
+        </div>
+       
+        <input type="number" class="" hidden id="Prj_Id" value="@ViewBag.Proj_Id">
+
+        <div class="form-group col-md-12 justify-content-end d-flex px-0 mt-2">
+            <button class="btn btn-primary col-md-2 cr-WBD-rsrc-btn-lbr">Save</button>
+        </div>
+    </div>
+</div>
+<script>
+
+
+
+    $(document).ready(function () {
+
+        $('#ResourceActivity').on('change', function () {
+            var selectedCountry = $(this).children("option:selected").val();
+            console.log(selectedCountry);
+            debugger
+            if ((selectedCountry != undefined) && (selectedCountry != '')) {
+                if ($('.main-ms').css('display') == 'none') {
+                    $('.main-ms').slideToggle(300);
+                }
+            }
+            else {
+                console.log('hello');
+                $('.main-ms').slideToggle(300);
+            }
+        });
+    });
+
+
+
+</script>
+<style>
+    .invisi {
+        visibility: hidden;
+    }
+
+    .in-active {
+        display: none;
+    }
+
+    textarea {
+        resize: none;
+    }
+
+    .msi-row {
+        border-bottom: .1em solid #dddcdc;
+        margin-top: 10px;
+    }
+
+    .mile-name-mat {
+        font-size: 30px;
+        text-align: center;
+        vertical-align: middle !important;
+    }
+
+    .other {
+        margin-top: 0px !important;
+    }
+</style>
+
+

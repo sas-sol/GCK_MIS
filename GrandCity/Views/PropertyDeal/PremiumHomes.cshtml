@@ -1,0 +1,63 @@
+﻿@{
+    if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+}
+
+<div class="form-row bgc-white">
+    <div class="col-md-2">
+        <div class="vertical-menu">
+            <a href="javascript:void(0)" class="active sideLink" data-link="/PropertyDeal/PremiumHomesInventory/">Inventory</a>
+            <a href="javascript:void(0)" class="sideLink" data-link="/PropertyDeal/PremiumHomesLeads/">Leads</a>
+            @if (User.IsInRole("Assign New Leads") || User.IsInRole("Administrator"))
+            {
+        <a href="javascript:void(0)" class="sideLink" data-link="/PropertyDeal/PremiumUnassignedLeads/">Unassigned Leads</a>
+            }
+            
+        </div>
+        
+    </div>
+    <div class="col-md-10 " id="homedetails">
+        @{ Html.RenderAction("PremiumHomesInventory", "PropertyDeal");}
+    </div>
+</div>
+<script>
+    $('.sideLink').unbind().click(function () {
+        if (!$(this).hasClass('active')) {
+            $(this).addClass('active');
+            $(this).prevAll('.sideLink').removeClass('active');
+            $(this).nextAll('.sideLink').removeClass('active');
+            let typeOfLink = $(this).attr('data-link');
+            $('#homedetails').load(typeOfLink);
+        }
+    });
+
+</script>
+<style>
+    .vertical-menu {
+        width: 200px;
+    }
+
+        .vertical-menu a {
+            background-color: #eee;
+            color: black;
+            display: block;
+            padding: 12px;
+            text-decoration: none;
+        }
+
+            .vertical-menu a:hover {
+                background-color: #ccc;
+            }
+
+            .vertical-menu a.active {
+                background-color: #D0232A;
+                color: white !important;
+            }
+</style>
+

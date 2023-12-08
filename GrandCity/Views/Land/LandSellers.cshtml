@@ -1,0 +1,115 @@
+@model IEnumerable<MeherEstateDevelopers.Models.Land_Seller_Party>
+
+@{
+    if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+}
+
+
+<style>
+    .add-seller-btn {
+        float: right;
+    }
+</style>
+<div class="row col-md-12">
+    <div class="col-md-9">
+        <h3>Land Seller Details</h3>
+    </div>
+    <div class="col-md-3">
+        @if (User.IsInRole("Add New Land Seller") || User.IsInRole("Administrator"))
+        {
+            <button class="btn btn-primary add-seller-btn" data-toggle="modal" data-target="#Modal">Add New Seller</button>
+        }
+    </div>
+</div>
+
+<div>
+    <table class="table table-striped" style="margin-top:1%">
+        <thead>
+            <tr class="thead-dark">
+                <th>Sr.</th>
+                <th>Name</th>
+                <th>CNIC</th>
+                <th>Mobile No</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                if (Model.Any())
+                {
+                    int sr = 1;
+                    foreach (var item in Model)
+                    {
+
+                        <tr id="@item.Id">
+                            <td>@sr</td>
+                            <td>@item.Name</td>
+                            <td>@item.CNIC</td>
+                            <td>@item.Mobile_No</td>
+                            <td>
+                                @if (User.IsInRole("Update Land Seller Information") || User.IsInRole("Administrator"))
+                                {
+                                    <i class="ti-pencil pointer edit-seller-det" title="Update" data-toggle="modal" data-target="#Modal"></i><span>&nbsp;&nbsp;&nbsp;</span>
+                                }
+                                @if (User.IsInRole("Delete Land Seller Information") || User.IsInRole("Administrator"))
+                                {
+                                    <i class="fas fa-trash pointer del-seller-data" title="Delete"></i><span>&nbsp;&nbsp;&nbsp;</span>
+                                }
+                            </td>
+                        </tr>
+                        sr++;
+                    }
+                }
+            }
+        </tbody>
+    </table>
+</div>
+
+<script>
+    $(".edit-seller-det").click(function () {
+        
+        var sellerId = $(this).closest('tr').attr('id');
+        EmptyModel();
+        $('#ModalLabel').text("Update Seller Details");
+        $('#modalbody').load('/Land/UpdateSellerDetails/', { id: sellerId });
+    });
+
+    $('.del-seller-data').click(function () {
+        
+        var seller_id = $(this).closest('tr').attr('id');
+
+        if (confirm("Are you sure you want to Delete this Seller Details?")) {
+            $.ajax({
+                type: "POST",
+                url: '/Land/DeleteSellerData/',
+                data: {
+                    Id: seller_id,
+                },
+                success: function (data) {
+                    if (data.Status == true) {
+                        alert("Seller Data Successfully Deleted");
+                        window.location.reload();
+                    }
+                    else {
+                        alert(data.Msg);
+                    }
+                }
+                , error: function (xmlhttprequest, textstatus, message) {
+                    if (textstatus === "timeout") {
+                        alert("got timeout");
+                    } else {
+                        alert(textstatus);
+                    }
+                }
+            });
+        }
+
+    });
+</script>

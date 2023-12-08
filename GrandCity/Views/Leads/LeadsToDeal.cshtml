@@ -1,0 +1,303 @@
+﻿@model MeherEstateDevelopers.Models.LeadsData
+
+@using (Html.BeginForm("CreateLeadToDeal", "PropertyDeal", FormMethod.Post, new { @id = "c-l-deal", @class = "", role = "form" }))
+{
+    @Html.AntiForgeryToken()
+    <input type="hidden" id="l-id" name="LeadId" value="@Model.Lead.Id" />
+    <input type="hidden" id="l-proj" name="Project" value="@Model.Lead.Project" />
+    <div class="row">
+        <div class="form-group col-md-2">
+            <label>Type</label>
+            <select class="form-control r-n-f-p" id="type" name="Type">
+                <option value="New_Lead">New Lead</option>
+                <option value="Resale">Resale</option>
+                <option value="Investment">Investment</option>
+            </select>
+        </div>
+        <div class="form-group col-md-2 unitList">
+            <label>Units</label>
+            <select class="form-control leadUnits" id="units" name="UnitNo">
+                <option>Select Unit</option>
+            </select>
+        </div>
+        <div class="form-group col-md-2 fil_plt">
+            <label>File / Plot</label>
+            <select class="form-control r-n-f-p" id="fil-plt" name="File_Plot">
+                <option value="Plot">Plot</option>
+                <option value="File">File</option>
+            </select>
+        </div>
+        <div class="form-group col-md-4 n-p fil_plt">
+            <label>Plots</label>
+            @Html.DropDownList("NewLeadPlots", null, "Choose..", new { Name = "PlotId", @class = "form-control led-plot-det" })
+        </div>
+
+        <div class="form-group col-md-2 fil">
+            <label>Plot Size</label>
+            <select class="form-control" id="fil-plt-size" name="Size">
+                <option value="2 Marla">2 Marla</option>
+                <option value="3 Marla">3 Marla</option>
+                <option value="4 Marla">4 Marla</option>
+                <option value="5 Marla">5 Marla</option>
+                <option value="6 Marla">6 Marla</option>
+                <option value="8 Marla">8 Marla</option>
+                <option value="10 Marla">10 Marla</option>
+            </select>
+        </div>
+        <div class="form-group col-md-2 fil">
+            <label>Type</label>
+            <select class="form-control" name="Plot_Type" id="Plot_Type">
+                <option value="Residential">Residential</option>
+                <option value="Commercial">Commercial</option>
+            </select>
+        </div>
+        <div class="form-group col-md-2 fil">
+            <label>File Number</label>
+            <input class="form-control" type="text" name="File_Plot_Number" />
+        </div>
+        <div class="form-group col-md-2 r-plt">
+            <label>Block</label>
+            @Html.DropDownList("Block", null, "Choose..", new { @class = "form-control blk-plots", required = "" })
+        </div>
+
+        <div class="form-group col-md-2 r-plt">
+            <label>Type</label>
+            <select class="form-control blk-plots" id="plot-type">
+                <option value="Residential">Residential</option>
+                <option value="Commercial">Commercial</option>
+            </select>
+        </div>
+        <div class="form-group col-md-2 r-plt">
+            <label>Plot No</label>
+            <select class="form-control led-plot-det" name="PlotId" id="plot-details">
+                <option>Select Block</option>
+            </select>
+        </div>
+    </div>
+    <div class="row plt-info">
+        <div class="form-group col-md-1">
+            <label>Plot No.</label>
+            <h6 id="plt-no"></h6>
+        </div>
+        <div class="form-group col-md-1">
+            <label>Block</label>
+            <h6 id="blk-no"></h6>
+        </div>
+        <div class="form-group col-md-1">
+            <label>Size</label>
+            <h6 id="plt-size"></h6>
+            <input type="hidden" id="plt-size-n" name="Plot_Size" />
+        </div>
+        <div class="form-group col-md-2">
+            <label>Type</label>
+            <h6 id="plt-type"></h6>
+        </div>
+        <div class="form-group col-md-2">
+            <label>Status</label>
+            <h6 id="plt-status"></h6>
+        </div>
+        <div class="form-group col-md-2">
+            <label>Location</label>
+            <h6 id="plt-loc"></h6>
+        </div>
+        <div class="form-group col-md-2" id="stat">
+
+        </div>
+    </div>
+    <hr />
+    <div class="row">
+        <div class="form-group col-md-2 demand" style="display:none">
+            <label>Demand</label>
+            <input class="form-control coma" placeholder="12,345" required>
+            <input type="hidden" id="dem-pric" name="Demand" class="amt" required>
+        </div>
+        <div class="form-group col-md-2">
+            <label>Offer Price</label>
+            <input class="form-control coma" id="off-pr" value="@string.Format("{0:n0}",Model.Lead.Offered_Price)" placeholder="12,345" required>
+            <input type="hidden" id="off-pric" name="Offered_Price" class="amt" value="@Model.Lead.Offered_Price" required>
+        </div>
+        <div class="form-group col-md-2">
+            <label>Rate /Marla</label>
+            <input class="form-control coma" id="rateper" placeholder="12,345" required>
+            <input type="hidden" id="rate" name="RatePerMarla" class="amt" required>
+        </div>
+    </div>
+    <hr />
+    <div class="row">
+        <div class="form-group col-md-12">
+            <h5 id="buy-sel">Buyer Information</h5>
+        </div>
+        <input type="hidden" value="Buyer" id="bu-se" name="Buyer_Seller" />
+        <div class="form-group col-md-3">
+            <label>Name</label>
+            <input class="form-control text-box single-line" id="Name" name="Name" required="" type="text" value="@Model.Lead.Name" readonly>
+        </div>
+        <div class="form-group col-md-3">
+            <label>Mobile</label>
+            <input class="form-control text-box single-line" pattern="^0\d{10}" placeholder="03211234567" id="Mobile" name="Mobile" required="" type="text" value="@Model.Lead.Mobile_1" readonly>
+        </div>
+        <div class="form-group col-md-3">
+            <label>Address</label>
+            <input class="form-control text-box single-line" id="Address" name="Address" type="text" value="@Model.Lead.Address" readonly>
+        </div>
+        <div class="form-group col-md-3">
+            <label>Source</label>
+            <select class="form-control" name="Source" id="sour">
+                <option value="Walkin">Walk-in</option>
+                <option value="Social Media">Social Media</option>
+                <option value="UAN">UAN</option>
+                <option value="Reference">Reference</option>
+                <option value="Zameen Leads">Zameen Leads</option>
+            </select>
+            <script>
+            var a = "@Model.Lead.Source";
+            $("#sour").val(a);
+            </script>
+        </div>
+
+    </div>
+}
+<div class="form-row">
+    @if (Model.Receipts.Any())
+    {
+        <h5>Receipts</h5>
+        <table class="table table-striped table-bordered" cellspacing="0" width="100%">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Receipt No</th>
+                    <th>Date</th>
+                    <th>Amount</th>
+                    <th>Payment Type</th>
+                    <th>Bank</th>
+                    <th>Instrument No.</th>
+                    <th>Instrument date</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Receipts)
+                {
+                    string col = "";
+                    if (item.Status == "Approved")
+                    {
+                        col = "bgc-green-50";
+                    }
+                    else if (item.Status == "Dishonored")
+                    {
+                        col = "bgc-red-50";
+                    }
+                    else if (item.Status == "Pending" || item.Status == "Deposited")
+                    {
+                        col = "bgc-yellow-50";
+                    }
+                    <tr class="@col">
+                        <td>@item.ReceiptNo</td>
+                        <td>@string.Format("{0:d}", item.DateTime)</td>
+                        <td>@string.Format("{0:n0}", item.Amount)</td>
+                        <td>@item.PaymentType</td>
+                        <td>@item.Bank</td>
+                        <td>@item.Ch_Pay_Draft_No</td>
+                        <td>@string.Format("{0:d}", item.Ch_Pay_Draft_Date)</td>
+                    </tr>
+                }
+                <tr>
+                    <td><b>Offered Amount:</b> @string.Format("{0:n0}", Model.Lead.Offered_Price)</td>
+                    @{
+                        var tot = Model.Lead.Offered_Price;
+                        var sumamt = Model.Receipts.Where(x => (x.Status == "Approved" || x.Status == null)).Sum(x => x.Amount);
+                        var rem = tot - sumamt;
+                    }
+                    <td><b>Total:</b> @string.Format("{0:n0}", tot)</td>
+                    <td><b>Received:</b> @string.Format("{0:n0}", sumamt)</td>
+                    <td><b>Remaining:</b> @string.Format("{0:n0}", rem) </td>
+                </tr>
+            </tbody>
+        </table>
+    }
+    @if (Model.Vouchers.Any())
+    {
+        <h5>Vouchers</h5>
+        <table class="table table-striped table-bordered" cellspacing="0" width="100%">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Voucher No</th>
+                    <th>Date</th>
+                    <th>Amount</th>
+                    <th>Payment Type</th>
+                    <th>Bank</th>
+                    <th>Instrument No.</th>
+                    <th>Instrument date</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Vouchers)
+                {
+                    <tr>
+                        <td>@item.VoucherNo</td>
+                        <td>@string.Format("{0:d}", item.DateTime)</td>
+                        <td>@string.Format("{0:n0}", item.Amount)</td>
+                        <td>@item.PaymentType</td>
+                        <td>@item.Bank</td>
+                        <td>@item.Ch_Pay_Draft_No</td>
+                        <td>@string.Format("{0:d}", item.Ch_Pay_Draft_Date)</td>
+                    </tr>
+                }
+                <tr>
+                    <td><b>Offered Amount:</b> @string.Format("{0:n0}", Model.Lead.Offered_Price)</td>
+                    @{
+                        var sumamt = Model.Vouchers.Sum(x => x.Amount);
+                        var rem = Model.Lead.Offered_Price - sumamt;
+                    }
+                    <td><b>Total:</b> @string.Format("{0:n0}", Model.Lead.Offered_Price)</td>
+                    <td><b>Received:</b> @string.Format("{0:n0}", sumamt)</td>
+                    <td><b>Remaining:</b> @string.Format("{0:n0}", rem) </td>
+                </tr>
+            </tbody>
+        </table>
+    }
+</div>
+<script>
+    $(function () {
+        $('.modal-footer').append('<button class="btn btn-primary" id="cra-l-Deal" type="button">Create Deal</button>');
+        $(".modal-header").text("Create Deal");
+        $('.led-plot-det').select2({
+            dropdownParent: $('#Modal')
+        });
+    });
+    $(document).ready(function () {
+        var prj = $('#l-proj').val();
+        if (prj == "Meher Estate Developers") {
+            $('.unitList').hide();
+            $('.fil_plt').show();
+        }
+        else {
+            $('.fil_plt').hide();
+            $('.unitList').show();
+            $.ajax({
+                type: "POST",
+                url: "/Leads/GetProjectWiseInventory/",
+                data: { Project: prj, Type: $("#type").val() },
+                success: function (data) {
+                    if (data) {
+                        $('#units').html(' ');
+                        $('#units').append('<option>Select Unit</option>');
+                        $.each(data, function (key, value) {
+                            $("#units").append('<option value=' + value.Id + '>' + value.ApplicationNo + '</option>');
+                        });
+                    }
+                }
+                , error: function (xmlhttprequest, textstatus, message) {
+                    if (textstatus === "timeout") {
+                        alert("got timeout");
+                    } else {
+                        alert(textstatus);
+                    }
+                }
+            });
+        }
+    });
+</script>
+<style>
+    .fil, .r-plt {
+        display: none;
+    }
+</style>

@@ -1,0 +1,188 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.ServiceChargesPermission>
+
+
+<div class="col-md-12">
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th colspan="7" class="thead-dark central-text-align">
+                    Requested By : @Model.Select(x=>x.CreatedBy_Name).FirstOrDefault()
+                </th>
+            </tr>
+            <tr class="central-text-align thead-dark">
+                <th>Sr.</th>
+                <th>Type</th>
+                <th>Plot#</th>
+                @if (!Model.Any(x => x.ModuleType == "Manual_Meter_Reading"))
+                {
+                    <th>Amount</th>
+                }
+                <th>Requested By</th>
+                <th>Remarks</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @{ int count = 1;}
+            @foreach (var v in Model)
+            {
+                string cls = (v.Status == true) ? "bgc-green-50" : "bgc-red-50";
+            <tr class="central-text-align desc-row @cls" data-tr="@v.Id">
+                <td>@(count++)</td>
+                <td>@v.ForModuleType</td>
+                <td>@v.For_ModuleName</td>
+
+                @if (!Model.Any(x => x.ModuleType == "Manual_Meter_Reading"))
+                {
+                    if (!(v.Amount is null))
+                    {
+                        <td>@v.Amount</td>
+                    }
+                    else
+                    {
+                        <td>Full Waiver</td>
+                    }
+                }
+                <td>@v.CreatedBy_Name</td>
+                <td>
+                    @if (@v.Status == null)
+                    {
+                        <input type="text" class="form-control rems" placeholder="Remarks" />
+                    }
+                    else
+                    {
+                        @v.ApprovingBody_Remarks
+                    }
+                </td>
+                @if (v.Status == null && User.IsInRole("Utilities Manager"))
+                {
+                    <td><button type="button" class="btn btn-success fdg-uy-vc">Accept</button> <button class="btn btn-danger sd-lk-hgvf">Reject</button></td>
+                }
+                else
+                {
+                    <td>@((v.Status == true)?"Accepted":(v.Status == false)? "Rejected":"Pending")</td>
+                }
+            </tr>
+            }
+        </tbody>
+
+        @*<tfoot>
+            <tr class="central-text-align">
+                <td colspan="6"><button class="btn btn-success yu-jhbg-ds">Accept All</button> <button class="btn btn-danger jkldf-trfvc-vbfg">Reject All</button></td>
+            </tr>
+        </tfoot>*@
+    </table>
+
+    <div class="col-md-12">
+        <label><b>Reason :</b></label>
+        <pre>@Html.Raw(Model.Select(x => x.Permission_Details).FirstOrDefault())</pre>
+    </div>
+</div>
+
+<script>
+
+    $(document).ready(function () {
+        //accept btn of each row
+        $('.fdg-uy-vc').unbind().click(function () {
+        let conf = confirm("Are you sure you want to accept this?");
+
+        if (!conf) {
+            return;
+        }
+        showLoader();
+        //yahan pe ajax ki hit marni hai
+        let id = $(this).closest('tr').attr('data-tr');
+        let re = $(this).closest('tr').find('.rems').val();
+        let that = this;
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("ChangeRequestStat", "ServiceCharges")',
+            data: { Id: id, stat: 1, rems: re },
+            success: function (data) {
+                if (data) {
+                    hideLoader();
+                    $(that).closest('tr').fadeOut(function () {
+                        $(that).closest('tr').remove();
+                    });
+                }
+                else {
+                    hideLoader();
+                    alert("Failed to update status of this. Please try again");
+                }
+            }
+            , error: function (xmlhttprequest, textstatus, message) {
+                hideLoader();
+                if (textstatus === "timeout") {
+                    alert("got timeout");
+                } else {
+                    alert(textstatus);
+                }
+            }
+        });
+        });
+
+        //reject btn of each row
+    $('.sd-lk-hgvf').unbind().click(function () {
+        let conf = confirm("Are you sure you want to reject this?");
+        showLoader();
+        if (!conf) {
+            return;
+        }
+        let id = $(this).closest('tr').attr('data-tr');
+        let re = $(this).closest('tr').find('.rems').val();
+        let that = this;
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("ChangeRequestStat", "ServiceCharges")',
+            data: { Id: id, stat: 0, rems: re },
+            success: function (data) {
+                hideLoader();
+                if (data) {
+                    $(that).closest('tr').fadeOut(function () {
+                        $(that).closest('tr').remove();
+                    });
+                }
+                else {
+                    hideLoader();
+                    alert("Failed to update status of this request");
+                }
+            }
+            , error: function (xmlhttprequest, textstatus, message) {
+                if (textstatus === "timeout") {
+                    alert("got timeout");
+                } else {
+                    alert(textstatus);
+                }
+            }
+        });
+        //yahan pe ajax ki hit marni hai
+    });
+    });
+
+    //accept all
+    //$(document).on('click', '.yu-jhbg-ds', function () {
+    //    let conf = confirm("Are you sure you want to accept this?");
+
+    //    if (!conf) {
+    //        return;
+    //    }
+
+    //    $('.desc-row').each(function () {
+    //        $(this).find('.fdg-uy-vc').click();
+    //    });
+    //});
+
+    //reject all btn
+    //$(document).on('click', '.jkldf-trfvc-vbfg', function () {
+    //    let conf = confirm("Are you sure you want to accept this?");
+
+    //    if (!conf) {
+    //        return;
+    //    }
+
+    //    $('.desc-row').each(function () {
+    //        $(this).find('.sd-lk-hgvf').click();
+    //    });
+    //});
+</script>

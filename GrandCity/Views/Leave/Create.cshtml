@@ -1,0 +1,393 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Sp_Get_EmployeeLeaves_Result>
+<head>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link href="~/Content/Leave.css" rel="stylesheet" />
+    <link href="~/Content/JqueryStepsCss/aurstyle.css" rel="stylesheet" />
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+</head>
+<input type="hidden" class="granted_leaves_fld" />
+<div class="row bgc-white">
+    <div class="col-md-12">
+        <div class=" central-text-align">
+            <h5>Leaves Balance</h5>
+        </div>
+    </div>
+    @if (User.IsInRole("Leave For Others") || User.IsInRole("Leave For Department") || User.IsInRole("Administrator"))
+    {
+        <input type="hidden" class="extra-lvs-alld" value="1" />
+    }
+    <div class="" style="margin:auto;">
+        <table class="table table-borderless">
+            <thead>
+                <tr class="central-text-align">
+                    <th>Leave Type</th>
+                    <th>Granted</th>
+                    <th>Spent</th>
+                    <th>Remaining</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @if (Model.Any())
+                {
+                    foreach (var v in Model)
+                    {
+                        <tr class="central-text-align">
+                            <td>@v.LeaveType</td>
+                            <td>@v.Granted</td>
+                            <td>@v.Spent</td>
+                            <td>@v.Remaining</td>
+
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr class="bgc-red-50 central-text-align">
+                        <td colspan="4">No Record Found</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="bgc-white bdrs-3">
+        <h4>Create Leave</h4>
+
+    @using (Html.BeginForm("CreateLeave", "Leave", FormMethod.Post, new { @id = "leaveform_afhjks", @class = "", role = "form", autocomplete = "off" }))
+    {
+        @Html.AntiForgeryToken()
+        <div class="col-md-12">
+            <input type="hidden" name="EmpId" value="@ViewBag.EmployeeId" />
+            <div class="form-row">
+                <div class="form-group col-md-2">
+
+                    <label>From</label>
+                    @{ string def = ViewBag.defDate;}
+                    @if (string.IsNullOrEmpty(def))
+                    {
+                        <input name="StartDate" type="date" class="form-control date_picker" id="fromleave" onchange="checkdates();" required />
+                    }
+                    else
+                    {
+                        <input name="StartDate" type="date" class="form-control date_picker"  id="fromleave" onchange="checkdates();" value="@def" required />
+                    }
+                </div>
+
+                <div class="form-group col-md-2">
+                    <label>To</label>
+                    @if (string.IsNullOrEmpty(def))
+                    {
+                        <input name="EndDate" type="date" class="form-control date_picker" id="toleave" onchange="checkdates();" required />
+                    }
+                    else
+                    {
+                        <input name="EndDate" type="date" class="form-control date_picker"  id="toleave" onchange="checkdates();" required value="@def" />
+                    }
+                </div>
+                <div class="form-group col-md-2">
+                    <h6 style="margin-top:30px" id="ttldays">Number of days : 0</h6>
+                    <input type="hidden" id="NoOfDays" name="NoOfDays" />
+                </div>
+                <div class="form-group col-md-6">
+                    <label>Reason</label>
+                    <textarea class="createleave form-control" id="leaveReason" name="Reason" onkeyup="" rows="2" cols="1" required></textarea>
+                </div>
+            </div>
+            <hr />
+            <div class="form-row">
+                <h5>Leave Type  : </h5>
+                @foreach (var item in Model)
+                {
+                    <input type="radio" id="LeaveType" style="margin-top:5px" name="LeaveType" value="@item.LeaveType" class="@item.Id" onchange="leaveTypeChanged( @item.Remaining , @item.Granted )">
+                    <p style="margin:1%;">@item.LeaveType</p>
+                }
+                <input type="radio" id="LeaveType" style="margin-top:5px" name="LeaveType" value="CPL" class="" onchange="nonLimitLeave();">
+                <p style="margin:1%;">CPL</p>
+				<input type="radio" id="LeaveType" style="margin-top:5px" name="LeaveType" value="HD" class="" onchange="nonLimitLeave();">
+                <p style="margin:1%;">Half Day</p>
+                @if (User.IsInRole("HR Manager") || User.IsInRole("Administrator"))
+                {
+                    <input type="radio" id="LeaveType" name="LeaveType" style="margin-top:5px" value="SPL" class="" onchange="nonLimitLeave();">
+                    <p style="margin:1%;">Special Approval</p>
+					   <input type="radio" id="LeaveType" name="LeaveType" style="margin-top:5px" value="SPL" class="" onchange="nonLimitLeave();">
+                    <p style="margin:1%;">Maternity</p>
+                }
+
+                &nbsp;&nbsp;&nbsp;
+                <div class="form-group col-md-3">
+                    <h6 id="RemDisp">Remaining 0 out of 0</h6>
+                </div>
+            </div>
+        </div>
+        <div class="container" style="width:50%">
+            <div class="full-callender-div ">
+                <div class="leave-cal newcal">
+                    <div id="datepickerfullyear"></div>
+                </div>
+            </div>
+        </div>
+        <div class="form-row" style="margin-left:36%; margin-top:2%">
+            @foreach (var g in Model)
+            {
+                <div class="peer">
+                    <span class="badge badge-pill bgc-red-50 c-red-700"> @g.Spent </span>
+                </div>
+                <div class="form-group col-md-1">
+                    <label id="Notify">@g.LeaveType</label>
+                </div>
+            }
+            <div class="peer" style="margin-left:3%">
+                <span class="badge badge-pill bgc-amber-50 c-amber-700"> @(Convert.ToInt32(ViewBag.TotalOfficialsLeaves))</span>
+            </div>
+            <div class="form-group col-md-1">
+                <label id="Notify">Officials</label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <input type="checkbox" id="terms" required>
+                <span style="font-weight:bold"> I Accept the terms of the Official Leave Requisition Policy </span>
+            </div>
+            <div class="col-md-4">
+                <p>Total leaves in fiscal year | @Model.Sum(x => x.Spent)  out of  @Model.Sum(x => x.Granted) </p>
+            </div>
+            <div class="col-md-2">
+                <button class="btn btn-info leaveSubmt" type="submit" id="">Create</button>
+            </div>
+        </div>
+    }
+</div>
+<style>
+    #LeaveType {
+        margin-left: 5%;
+    }
+
+    #RemDisp {
+        margin-left: 10%;
+    }
+
+    #Notify {
+        margin-left: 15%;
+    }
+    input[type="radio"] {
+        margin-left: 10px;
+    }
+
+    #d2 {
+        font-size: 12px;
+    }
+</style>
+<script>
+    $(document).ready(function () {
+        $('.leaveSubmt').prop('disabled', true);
+
+        if ($('#fromleave').val() != '') {
+            checkdates();
+        }
+
+        $.ajax({
+            url: "/Leave/LeaveRequest/",
+            type: "GET",
+            contentType: "application/json;charset=utf-8",
+            dataType: "json",
+            data: {userid: @ViewBag.EmployeeId },
+            success: function (result) {
+                var OfficialdisabledDays = new Array();
+                //My code to map Leaves according to LeaveTypes on Calender goes here
+                var disabledDaysAL = new Array();
+                var disabledDaysSCL = new Array();
+                var disabledDaysCL = new Array();
+                var count = 2;
+                for (var i = 0; i < result.startDateAL.length; i++) {
+                    var dates = result.startDateAL[i];
+                    var parsedDate = new Date(parseInt(dates.substr(6)));
+                    var jsDate = new Date(parsedDate);
+                    var myday = jsDate.getDate();
+                    var mymonth = jsDate.getMonth() + 1;
+                    var year = jsDate.getFullYear();
+                    var myfulldate = year + '-' + mymonth + '-' + myday;
+                    disabledDaysAL.push(myfulldate);
+                }
+                for (var i = 0; i < result.startDateSCL.length; i++) {
+                    var dates = result.startDateSCL[i];
+                    var parsedDate = new Date(parseInt(dates.substr(6)));
+                    var jsDate = new Date(parsedDate);
+                    var myday = jsDate.getDate();
+                    var mymonth = jsDate.getMonth() + 1;
+                    var year = jsDate.getFullYear();
+                    var myfulldate = year + '-' + mymonth + '-' + myday;
+                    disabledDaysSCL.push(myfulldate);
+                }
+                for (var i = 0; i < result.startDateCL.length; i++) {
+                    var dates = result.startDateCL[i];
+                    var parsedDate = new Date(parseInt(dates.substr(6)));
+                    var jsDate = new Date(parsedDate);
+                    var myday = jsDate.getDate();
+                    var mymonth = jsDate.getMonth() + 1;
+                    var year = jsDate.getFullYear();
+                    var myfulldate = year + '-' + mymonth + '-' + myday;
+                    disabledDaysCL.push(myfulldate);
+                }
+                for (var i = 0; i < result.officialDates.length; i++) {
+                    var dates = result.officialDates[i];
+                    var parsedDate = new Date(parseInt(dates.substr(6)));
+                    var jsDate = new Date(parsedDate);
+                    var myday = jsDate.getDate();
+                    var mymonth = jsDate.getMonth() + 1;
+                    var year = jsDate.getFullYear();
+                    var myfulldate = year + '-' + mymonth + '-' + myday;
+                    OfficialdisabledDays.push(myfulldate);
+                }
+                var date = new Date();
+                $("#datepickerfullyear").datepicker({
+
+                    dateFormat: "mm/dd/yy",
+                    dayNamesMin: ['S', 'M', 'T', 'W', 'T', 'F', 'S'],
+                    numberOfMonths: [3, 4],
+                    minDate: new Date(2022,   0-1, 31),
+                    maxDate: new Date(2022, 12-1, 31),
+                    beforeShowDay: function (date) {
+
+                        var m = date.getMonth(), d = date.getDate(), y = date.getFullYear();
+                        for (i = 0; i < disabledDaysAL.length; i++) {
+
+                            if ($.inArray(y + '-' + (m + 1) + '-' + d, disabledDaysAL) != -1) {
+                                return [true, 'ui-state-selectedAL', ''];//ANNUAL leaves taken wala scene hai ye
+                            }
+                        }
+                        for (i = 0; i < disabledDaysSCL.length; i++) {
+
+                            if ($.inArray(y + '-' + (m + 1) + '-' + d, disabledDaysSCL) != -1) {
+                                return [true, 'ui-state-selected', ''];//SICK/CASUAL leaves taken wala scene hai ye
+                            }
+                        }
+                        for (i = 0; i < OfficialdisabledDays.length; i++) {
+
+                            if ($.inArray(y + '-' + (m + 1) + '-' + d, OfficialdisabledDays) != -1) {
+                                return [true, 'ui-state-selectedCL', ''];//official leave wala scene hai ye
+                            }
+                        }
+                        for (i = 0; i < disabledDaysCL.length; i++) {
+
+                            if ($.inArray(y + '-' + (m + 1) + '-' + d, disabledDaysCL) != -1) {
+                                return [true, 'ui-state-selected1', ''];// causual leva
+                            }
+                        }
+                        return [true];
+                    }
+                });
+            },
+            error: function (response) {
+                alert('eror');
+            }
+        });
+
+
+        $("#leaveform_afhjks").submit(function (e) {
+            e.preventDefault();
+            var LeaveType = $('input[name=LeaveType]:checked').val();
+            let apldDays = $('#NoOfDays').val();
+            let grntdLvs = parseInt($('.granted_leaves_fld').val());
+
+            if ((LeaveType == "HD") && (apldDays > 1)) {
+                alert('Half Day Leave cannot be Applied for more than 1 day');
+                return false;
+            }
+            if (typeof LeaveType === "undefined") {
+                alert('Please Select Leave Type');
+                return false;
+            }
+            if ((LeaveType == "Annual") && (apldDays < 6)) {
+                alert('Annual Leaves cannot be less than 6 of the allotted leaves');
+                return false;
+            }
+            else if ((LeaveType == "Casual") && (apldDays > 3)) {
+                alert('More Than 3 Casual Leave cannot be applied');
+                return false;
+            }
+            else if (apldDays > grntdLvs && ($(".extra-lvs-alld").val() == undefined)) {
+                alert('Cannot apply more leaves than available quota.');
+                return false;
+            }
+
+            $.ajax({
+                type: "POST",
+                url: $(this).attr("action"),
+                data: $(this).serialize(),
+                success: function (data) {
+                    if (data.Status) {
+                        alert(data.Msg);
+                        window.location.reload();
+
+                    }
+                    else {
+                        alert(data.Msg);
+                    }
+                }
+            });
+        });
+
+    });
+    function leaveTypeChanged(a, b) {
+        $('#RemDisp').html('Remaining: ' + a + ' out of ' + b);
+        $('.granted_leaves_fld').val(a);
+    }
+
+    function nonLimitLeave() {
+        $('.granted_leaves_fld').val(100);
+    }
+
+    function checkdates() {
+        var start = $('#fromleave').val();
+        var from = new Date(start);
+
+        var end = $('#toleave').val();
+        var To = new Date(end)
+        var a = moment(from);
+        var b = moment(To);
+        var daysCount = b.diff(a, 'days', false) + 1;
+        if (!isNaN(daysCount)) {
+            if (!dateCorrect()) {
+                alert('Check Dates From & To.');
+                $('.leaveSubmt').prop('disabled', true);
+                $('#ttldays').text('Number of days : ' + daysCount);
+                $('#NoOfDays').val(daysCount);
+            }
+            else {
+                $('#ttldays').text('Number of days : ' + daysCount);
+                $('#NoOfDays').val(daysCount);
+                $('.leaveSubmt').prop('disabled', false);
+            }
+        }
+    }
+    function dateCorrect() {
+        var date = new Date();
+        var from = $('#fromleave').val();
+        from = new Date(from);
+        var To = $('#toleave').val();
+        To = new Date(To);
+        if (To.getFullYear() >= from.getFullYear()) {
+            if (To.getMonth() == from.getMonth()) {
+                if (To.getDate() < from.getDate()) {
+                    return false;
+                }
+            }
+            else if (To.getMonth() < from.getMonth()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    var today = new Date();
+    var dd = String(today.getDate()).padStart(2, '0');
+    var mm = String(today.getMonth() + 1).padStart(2, '0');
+    var yyyy = today.getFullYear();
+
+    today = yyyy + '-' + mm + '-' + dd;
+    $('.date_picker').attr('min', today);
+  
+
+
+</script>

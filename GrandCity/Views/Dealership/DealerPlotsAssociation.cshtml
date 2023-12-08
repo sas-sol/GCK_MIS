@@ -1,0 +1,231 @@
+﻿@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<script>
+    var plotins = @Html.Raw(Json.Encode(ViewBag.PlotInst));
+</script>
+<div class="col-md-12 bgc-white">
+    <h5 class="central-text-align">Dealer Plot Assignment</h5>
+    <hr />
+    <div class="row mt-md-3">
+        <div class="col-md-12">
+            <label>Dealership :</label>
+            <select class="form-control dlrs-lst"></select>
+        </div>
+    </div>
+    <div class="col-md-12 mt-md-3">
+        <div class="row mt-md-2">
+            <div class="col-md-4">
+                <label><b>Plot</b></label>
+                <select class="form-control plts-lst"></select>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12  mt-md-3">
+        <div class="row plts-asgnmnt-area"></div>
+    </div>
+    <hr />
+    <div class="col-md-12">
+    </div>
+    <div class="row" style="justify-content:flex-end; align-items:center;">
+        <div class="col-md-2">
+            <button class="btn btn-outline-success sv-deal-btn-sjfhkg"><i class="fa fa-save"></i>&nbsp;Save Deal</button>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    var plts = [];
+    $(document).ready(function () {
+        $('.dlrs-lst').select2({
+            ajax: {
+                url: '/Dealership/GetDealers_ForSelect/',
+                data: function (params) {
+                    var query = {
+                        s: params.term,
+                        type: 'public'
+                    }
+                    // Query parameters will be ?search=[term]&type=public
+                    return query;
+                },
+                processResults: function (data) {
+                    // Transforms the top-level key of the response object from 'items' to 'results'
+                    return {
+                        results: data
+                    };
+                }
+            }
+        });
+        $('.plts-lst').select2({
+            ajax: {
+                url: '/Dealership/GetPlots_ForSelect/',
+                data: function (params) {
+                    var query = {
+                        s: params.term,
+                        type: 'public'
+                    }
+                    // Query parameters will be ?search=[term]&type=public
+                    return query;
+                },
+                processResults: function (data) {
+                    // Transforms the top-level key of the response object from 'items' to 'results'
+                    return {
+                        results: data
+                    };
+                }
+            }
+        });
+        $('.plts-lst').change(function () {
+            let chosenVal = $(this).val();
+            $.ajax({
+                type: "POST",
+                url: '/Plots/GetPlotData/',
+                data: { Id: chosenVal },
+                success: function (data) {
+                    //var no = plts.filter(x => x.Id == data.Id);
+                    //debugger;
+                    //if (no == null) {
+                    plts.push({
+                        Id: data.Id,
+                        Block: data.Block_Name,
+                        PlotNo: data.Plot_No,
+                        Type: data.Type,
+                        PlotSize: data.Plot_Size
+                    });
+                    //}
+
+                    GenSection();
+
+                }
+                , error: function (xmlhttprequest, textstatus, message) {
+                    HideFullScreenLoader();
+                    if (textstatus === "timeout") {
+                        alert("got timeout");
+                    } else {
+                        alert(textstatus);
+                    }
+                }
+            });
+        });
+        function GenSection() {
+            $('.plts-asgnmnt-area').empty();
+            var group_to_values = plts.reduce(function (obj, item) {
+                obj[item.PlotSize] = obj[item.PlotSize] || [];
+                obj[item.PlotSize].push(item);
+                return obj;
+            }, {});
+
+            var groups = Object.keys(group_to_values).map(function (key) {
+
+                var newid = key.replace(" ", "_").replace(".", "_");
+
+                var html = `<div class="col-md-3" id='${newid}'>
+                            ${key}
+                            <ol></ol>
+                            <select class="form-control plt-ins"></select>
+                            </div>`
+                $('.plts-asgnmnt-area').append(html);
+                $.each(group_to_values[key], function (abc) {
+                    $('#' + newid + ' ol').append(`<li id="${group_to_values[key][abc].Id}">${group_to_values[key][abc].PlotNo}  &nbsp&nbsp&nbsp&nbsp <i class="fas fa-trash del-plt"></i> </li>`)
+                });
+
+                var $prevGroup, prevGroupName;
+                var fdata = plotins.filter(x => x.Group.Name == key);
+                $.each(fdata, function () {
+                    if (prevGroupName !== this.Group.Name) {
+                        $prevGroup = $('<optgroup />').prop('label', this.Group.Name).appendTo("#" + newid + " .plt-ins");
+                    }
+                    $("<option />").val(this.Value).text(this.Text).appendTo($prevGroup);
+                    prevGroupName = this.Group.Name;
+                });
+            });
+        }
+
+        $(document).on('click', '.del-plt', function () {
+            var par = $(this).closest('li').attr("id");
+            plts = plts.filter(function (item) {
+                return item.Id != Number(par);
+            });
+            GenSection();
+        });
+
+        $('.sv-deal-btn-sjfhkg').unbind().click(function () {
+            var flag = true;
+            var dealer_id = $('.dlrs-lst option:selected').val();
+            var group_to_values = plts.reduce(function (obj, item) {
+                obj[item.PlotSize] = obj[item.PlotSize] || [];
+                obj[item.PlotSize].push(item);
+                return obj;
+            }, {});
+
+            var plotid = [];
+
+            var groups = Object.keys(group_to_values).map(function (key) {
+                var newid = key.replace(" ", "_").replace(".", "_");
+
+                $.each(group_to_values[key], function (abc) {
+                    var planid = $("#" + newid + " .plt-ins").val();
+                    plotid.push({
+                        Plot_Id: group_to_values[key][abc].Id,
+                        Dealer_Id: dealer_id,
+                        Plan_Id: planid
+                    });
+                });
+
+            });
+
+            if (flag) {
+                ShowFullScreenLoader();
+                $.ajax({
+                    type: "POST",
+                    url: '/Dealership/SaveDealerDeal/',
+                    data: { DealData: __temp__dat_hldr, title: _dealTitle },
+                    success: function (data) {
+                        HideFullScreenLoader();
+                        if (data.Status) {
+                            alert(data.Msg);
+                            window.location.reload(true);
+                        }
+                        else {
+                            alert(data.Msg);
+                            console.log(data._Log);
+                        }
+                    }
+                    , error: function (xmlhttprequest, textstatus, message) {
+                        HideFullScreenLoader();
+                        if (textstatus === "timeout") {
+                            alert("got timeout");
+                        } else {
+                            alert(textstatus);
+                        }
+            //if (flag) {
+            //    ShowFullScreenLoader();
+            //    $.ajax({
+            //        type: "POST",
+            //        url: '/Dealership/SavePlotDeals/',
+            //        data: { PlotsList: plotid, Dealer_Id: dealer_id },
+            //        success: function (data) {
+            //            HideFullScreenLoader();
+            //            if (data.Status) {
+            //                alert(data.Msg);
+            //                window.location.reload(true);
+            //            }
+            //            else {
+            //                alert(data.Msg);
+            //                console.log(data._Log);
+            //            }
+            //        }
+            //        , error: function (xmlhttprequest, textstatus, message) {
+            //            HideFullScreenLoader();
+            //            if (textstatus === "timeout") {
+            //                alert("got timeout");
+            //            } else {
+            //                alert(textstatus);
+            //            }
+                    }
+                });
+            }
+        });
+    });
+</script>

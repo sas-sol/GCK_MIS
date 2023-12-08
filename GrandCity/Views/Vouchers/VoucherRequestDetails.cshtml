@@ -1,0 +1,106 @@
+﻿@model MeherEstateDevelopers.Models.Sp_Get_SAM_Voucher_Req_Id_Result
+@using (Html.BeginForm("GenerateVoucher", "Vouchers", FormMethod.Post, new { @id = "up-vou-app", @class = "", role = "form" }))
+{
+    @Html.AntiForgeryToken()
+    if (Model.Company == "SAM")
+    {
+        <input type="hidden" name="Type" value="SAM Voucher" />
+
+    }
+    else if (Model.Company == "SPE")
+    {
+        <input type="hidden" name="Type" value="SPE Voucher" />
+
+    }
+    else
+    {
+        <input type="hidden" name="Type" value="SAM Voucher" />
+    }
+    <input type="hidden" name="Id" value="@Model.Id" />
+    <div class="form-row">
+        <div class="form-group col-md-2">
+            <label>Name</label>
+            <h6> @Model.Name</h6>
+        </div>
+        <div class="form-group col-md-3">
+            <label>Father Name</label>
+            <h6>@Model.Father_Name</h6>
+        </div>
+        <div class="form-group col-md-2">
+            <label>File / Plot No.</label>
+            <h6> @Model.File_Plot_Number  @Model.Block</h6>
+        </div>
+        <div class="form-group col-md-2">
+            <label>Size</label>
+            <h6> @Model.Size</h6>
+        </div>
+        <div class="form-group col-md-2">
+            <label>Amount</label>
+            <h6>@string.Format("{0:n0}", Model.Amount)</h6>
+        </div>
+
+    </div>
+    <hr />
+    <div class="form-row" id="pay-1">
+        <div class="form-group col-md-2">
+            <label>Cash / Bank</label>
+            <select class="form-control paytypesel" name="PaymentType" id="cah-chq-bak" required>
+                <option value="Cash">Cash</option>
+                <option value="BankDraft">Bank Draft</option>
+                <option value="Cheque">Cheque</option>
+                <option value="PayOrder">Pay Order</option>
+                <option value="Online_Cash">Online - Cash</option>
+                <option value="Online_Cheque">Online - Cheque</option>
+                <option value="Online_Payorder">Online - PayOrder</option>
+                <option value="Online_Bankdraft">Online - BankDraft</option>
+            </select>
+        </div>
+        <div class="form-group col-md-2">
+            <label>Amount</label>
+            <input class="form-control coma" placeholder="250,000" value="@string.Format("{0:n0}", Model.Amount)" readonly required>
+            <input type="hidden" id="Amount" name="Amount" class="amt" required>
+        </div>
+        <div class="form-group col-md-2 paymentotherinfo">
+            <label id="paytypelabel">-</label>
+            <input type="text" class="form-control" id="paymenttype" name="Cbp_No" placeholder="" disabled required>
+        </div>
+        <div class="form-group col-md-2 paymentotherinfo">
+            <label>Date</label>
+            <input type="text" class="form-control" id="cbp-date" name="Cbp_date" data-provide="datepicker" placeholder="mm/dd/yyyy" disabled required>
+        </div>
+        <div class="form-group col-md-2 paymentotherinfo">
+            <label>Bank</label>
+            @Html.DropDownList("Bank", null, "Choose..", new { id = "bank", @class = "form-control", disabled = "" })
+
+        </div>
+        <div class="form-group col-md-2 paymentotherinfo">
+            <label>Branch </label>
+            <input type="text" class="form-control" id="Branch" name="Branch" placeholder="Mall Rd" disabled required>
+        </div>
+    </div>
+    <hr />
+    <div class="form-row">
+        <div class="form-group col-md-12">
+            <h5>Requested Information</h5>
+        </div>
+        <div class="form-group col-md-3">
+            <label>Requested By</label>
+            <h6>@Model.RequestedName</h6>
+        </div>
+        <div class="form-group col-md-3">
+            <label>Requested Date</label>
+            <h6>@string.Format("{0:D}", Model.RequestedDate)</h6>
+        </div>
+    </div>
+}
+<script>
+    $(function () {
+        $('.modal-footer').append('<button class="btn btn-primary" id="up-vou-app-btn" type="button">Generate</button>');
+        $(".modal-header").text("Voucher Request");
+    });
+</script>
+<style>
+    .paymentotherinfo {
+        display: none;
+    }
+</style>

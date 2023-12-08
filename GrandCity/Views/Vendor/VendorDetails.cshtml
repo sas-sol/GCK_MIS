@@ -1,0 +1,199 @@
+﻿@model MeherEstateDevelopers.Models.VendorFullDetail
+
+@{ if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+}
+    <script src="~/Scripts/Inv.js"></script>
+<input type="hidden" id="ven-id" value="@Model.Vendor.Id" />
+<div id="" class="bgc-white bd bdrs-3 p-20 mB-20">
+    <div class="row">
+        <div class="col-md-1">
+            <img src="https://bootdey.com/img/Content/avatar/avatar7.png" class="mb-4" alt="" width="120" height="120" />
+        </div>
+        <div class="col-md-6">
+            <h4 class="c-grey-900 mB-20">@Model.Vendor.Company</h4>
+            <h5 class="c-grey-900 mB-20">@Model.Vendor.Address</h5>
+            <h5 class="c-grey-900 mB-20">@Model.Vendor.Office_Mobile</h5>
+        </div>
+        <div class="col-md-5">
+            <div class="row">
+                <div class="col-md-6">
+
+                </div>
+                <div class='col-md-6'>
+                    <div class="layers bd bgc-white p-10 mt-2">
+                        <div class="layer w-100">
+                            <div class="peers ai-sb fxw-nw">
+                                <div class="peer peer-greed">
+                                    <h6 class="lh-1">Total PO Values</h6>
+                                </div>
+                                <div class="peer">
+                                    <span class="d-ib lh-0 va-m fw-600 bdrs-10em pX-15 pY-15 bgc-green-50 c-green-500 ">RS @Math.Round(ViewBag.TotalPO).ToString("#,##0.00") </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layer w-100">
+                            
+                        </div>
+                    </div>
+                </div>
+                @*<div class='col-md-6'>
+                    <div class="layers bd bgc-white p-10 mt-2">
+                        <div class="layer w-100">
+                            <div class="peers ai-sb fxw-nw">
+                                <div class="peer peer-greed">
+                                    <h6 class="lh-1">Total Receive Values</h6>
+                                </div>
+                                <div class="peer">
+                                    <span class="d-ib lh-0 va-m fw-600 bdrs-10em pX-15 pY-15 bgc-green-50 c-green-500">RS  @Math.Round(ViewBag.TotalPayment).ToString("#,##0.00")    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layer w-100">
+                            
+                        </div>
+                    </div>
+                </div>*@
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-1">
+            <button class="btn btn-outline-primary upd-ven" id="@Model.Vendor.Id" style="float:right;margin-bottom:5px" data-toggle="modal" data-target="#Modal">Edit Vendor</button>
+        </div>
+        <div class="col-md-2">
+
+        </div>
+        <div class="col-md-6">
+
+        </div>
+
+        <div class="col-md-2">
+            <button class="btn btn-primary add-vend-view" style="float:right;margin-bottom:5px" data-toggle="modal" data-target="#Modal">Add New Representative</button>
+
+
+        </div>
+        <div class="col-md-1">
+            <button class="btn btn-primary add-ven-term" style="float:right;margin-bottom:5px" data-toggle="modal" data-target="#Modal">Add New Term</button>
+
+        </div>
+    </div>
+    <br />
+    <h4>All Representatives</h4>
+    <table id="Vendor" class="table table-striped table-bordered " cellspacing="0" width="100%">
+        <thead class="thead-dark">
+            <tr>
+                <th>Sr.</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Job Title</th>
+                <th>Office Mobile</th>
+                <th>Mobile Number</th>
+                <th>Fax</th>
+                <th>City</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+
+                if (!Model.Representative.Any())
+                {
+                    <tr><td colspan="10" style="text-align:center">No data available</td></tr>
+                }
+                else
+                {
+                    int sr = 1;
+                    foreach (var item in Model.Representative)
+                    {
+                        <tr   id="@item.Id">
+                            <td>@sr</td>
+                            <td>@item.Name</td>
+                            <td>@item.Email</td>
+                            <td>@item.Job_Title</td>
+                            <td>@item.Office_Mobile</td>
+                            <td>@item.Mobile_Number</td>
+                            <td>@item.Fax</td>
+                            <td>@item.City</td>
+                            <td>
+                                <i class="fa fa-close  pointer del-rep-ven" style="color:red"   id="@item.Id"></i>
+                                    @*<span>&nbsp;&nbsp;&nbsp;</span>
+                                    <i class="pointer ti-pencil upd-ven" data-toggle="modal" data-target="#Modal" id="@item.Id"></i>
+                                    <span>&nbsp;&nbsp;&nbsp;</span>
+                                    <button class="btn btn-info v-pay-det" style="padding:2px;font-size:12px">Payment Details</button>
+                                    <i class="pointer ti-trash del-ven" id="@item.Id"></i>*@
+                            </td>
+                        </tr>
+                        sr++;
+                    }
+                }
+            }
+        </tbody>
+    </table>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="form-row">
+                <h5>Terms & Conditions</h5>
+            </div>
+            @if (Model.Terms.Any())
+            {
+                int sr = 1;
+                <table class="table table-bordered">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>Sr</th>
+                            <th>Terms</th>
+                            <th>Days</th>
+                            @*<th></th>*@
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @foreach (var item in Model.Terms)
+                        {
+                            <tr id="@item.Id">
+                                <td>@sr</td>
+                                <td>@item.Terms</td>
+                                <td>@item.Days</td>
+                                @*<td><i class="ti-trash pointer del-term"></i></td>*@
+                            </tr>
+                            sr++;
+                        }
+                    </tbody>
+                </table>
+            }
+
+        </div>
+    </div>
+</div>
+
+
+<div class="bgc-white bd bdrs-3 p-20 mB-20">
+    <div class="col-md-12">
+        <ul class="nav nav-tabs" role="tablist" id="myTabs">
+            <li class="nav-item"><a class="nav-link active " role="tab" data-toggle="tab" data-link="/Vendor/PurchaseOrdersList?Id=@Model.Vendor.Id" id="proj" href="#coahead">Purchase Orders</a></li>
+
+            <li class="nav-item"><a class="nav-link  " role="tab" data-toggle="tab" data-link="/Vendor/VendorPayments?Id=@Model.Vendor.Id" id="proj" href="#coahead">Payments</a></li>
+            @*<li class="nav-item"><a class="nav-link " role="tab" data-toggle="tab" data-link="/Vendor/Ledger?Id=@Model.Vendor.Id" id="proj" href="#coahead">Ledger</a></li>*@
+        </ul>
+        <div class="tab-content">
+            <div role="tabpanel" id="coahead" class="tab-pane active p-20 table-responsive">
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(function () {
+        SASLoad($('#coahead'));
+        $('#coahead').load('/Vendor/PurchaseOrdersList?Id=@Model.Vendor.Id', function () {
+            SASUnLoad($('#coahead'));
+        });
+    });
+</script>

@@ -1,0 +1,191 @@
+﻿@model  MeherEstateDevelopers.Models.DealerFormPrint
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        @@page {
+            margin: 0;
+            size: A4
+        }
+        .bg {
+            height: 1555px;
+            width: 1186px;
+            margin-left: 0%;
+            background-image: url(../../assets/static/images/PlotsFile3.png);
+            background-size: 1186px 1620px;
+            font-family: sans-serif;
+            color: black;
+            background-repeat: no-repeat;
+        }
+        .uperdiv {
+            width: 100%;
+            float: left;
+            margin-top: 21%;
+            display: inline-flex;
+        }
+        .dealerdiv {
+            width: 100%;
+            float: left;
+            margin-top: 8%;
+            margin-left: 15px;
+            display: inline-flex;
+            font-weight: bold;
+        }
+        .firstdiv {
+            width: 80%;
+            font-size: 22px
+        }
+        .secdiv {
+            width: 20%
+        }
+        label {
+            text-align: center;
+        }
+        .imageqr {
+            width: 220px;
+            height: 228px;
+            float: left;
+        }
+        .imageqrs {
+            width: 100%
+        }
+        .mar {
+            margin-top: 1%;
+        }
+        .pagebreak {
+            page-break-before: always;
+        }
+
+        /**/
+
+        .bg2 {
+            height: 1555px;
+            width: 1186px;
+            margin-left: 0%;
+            background-image: url(../../assets/static/images/PlotsFilePrem.png);
+            background-size: 1186px 1620px;
+            font-family: sans-serif;
+            color: black;
+            background-repeat: no-repeat;
+        }
+
+
+
+    </style>
+</head>
+<body>
+    @foreach (var item in Model.plt)
+    {
+        if (item.Block_Name == "Premium")
+        {
+            <div class="bg2">
+                <div class="uperdiv">
+                    <div class="firstdiv">
+                        <div style="margin-top:4.5%">
+                            <label style="width:66%">@item.Plot_No</label>
+                            <label style="width:33%">@item.Block_Name</label>
+                        </div>
+                        <div style="font-size:20px">
+                            <label style="width:66%">@item.Plot_Size</label>
+                            <label style="width:33%">@item.Type</label>
+                        </div>
+                        <div style="margin-top:1%;font-size:20px">
+                            <label style="width:66%">@item.Plot_Location</label>
+                            <label style="width:33%">@Convert.ToDecimal(item.Area).ToString("0.##") SqFt</label>
+                        </div>
+                        <div style="margin-top:1.5%;font-size:20px">
+                            <label style="width:76%">@item.Dimension</label>
+                        </div>
+                    </div>
+                    <div class="secdiv">
+                        <div class="imageqr">
+                            @{ var img = item.Plot_No + "-" + item.Block_Name + ".png";}
+                            <img class="imageqrs" src="~/Repository/QR Codes/@img" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pagebreak"></div>
+        }
+        else
+        {
+
+            <div class="bg">
+                <div class="uperdiv">
+                    <div class="firstdiv">
+                        <div style="margin-top:2.5%">
+                            <label style="width:40%">@item.Plot_No</label>
+                            <label style="width:30%">@item.Block_Name</label>
+                            <label style="width:28%">@item.Plot_Size</label>
+                        </div>
+                        <div style="margin-top:3%;font-size:20px">
+                            <label style="width:15%"></label>
+                            <label style="width:25%">@item.Plot_Location</label>
+                            <label style="width:27%">@item.Type</label>
+                            <label style="width:26%">@Convert.ToDecimal(item.Area).ToString("0.##") SqFt</label>
+                        </div>
+                        <div style="margin-top:3%;font-size:20px">
+                            <label style="width:73%">@item.Dimension</label>
+                            <label style="width:26%">@ViewBag.DealerName</label>
+                        </div>
+                    </div>
+                    <div class="secdiv">
+                        <div class="imageqr">
+                            @{ var img = item.Plot_No + "-" + item.Block_Name + ".png";}
+                            <img class="imageqrs" src="~/Repository/QR Codes/@img" />
+                        </div>
+                    </div>
+                </div>
+                <div class="maindiv dealerdiv row">
+                    <div class="div1 row" style="width:100%;">
+                        <div class="div11" style="margin-left: 12%;    width: 44%;">@( (Model.dealer != null)? Model.dealer.Name : ""  )</div>
+                        <div class="div12">@( (Model.dealer != null)? Model.dealer.Father_Name : ""  )</div>
+                    </div>
+                    <div class="div2 row" style="width:100%;margin-top:1.5%;">
+                        <div class="div21  " style="margin-left: 18%; ">@( (Model.dealer != null)? Model.dealer.Address : ""  )</div>
+                    </div>
+                    <div class="div2 row" style="width:100%;margin-top:1.5%;">
+                        <div class="div21 " style="margin-left: 23%; ">@( (Model.dealer != null)? Model.dealer.Address : ""  )</div>
+                    </div>
+                    <div class="div4 row" style="width:100%;margin-top:1.5%;">
+                        <div class="div11 " style="margin-left: 18%; ">@( (Model.dealer != null)? Model.dealer.Mobile_1 : ""  )</div>
+                    </div>
+                    <div class="div4 row" style="width:100%;margin-top:1.5%;">
+                        <div class="div11  " style="margin-left: 18%; ">@( (Model.dealer != null)? Model.dealer.Mobile_2 : ""  )</div>
+                    </div>
+                    <div class="div4 row" style="width:100%;margin-top:1.5%;">
+                    </div>
+                    <div class="div4 row" style="width:100%;margin-top:5.2%;">
+                        @{
+                            if (Model.dealer != null)
+                            {
+                                if (Model.dealer.Date_Birth != null)
+                                {
+                                    <div class="div71  " style="margin-left: 18%;width: 44%;  ">@Model.dealer.Date_Birth.Value.ToShortDateString()</div>
+                                }
+                            }
+                        }
+                        <div class="div71  ">@( (Model.dealer != null)? Model.dealer.CNIC_NICOP : ""  )</div>
+                    </div>
+                    <div class="div4 row" style="width:100%;margin-top:1.5%;">
+                    </div>
+                    <div class="div4 row" style="width:100%;margin-top:1.5%;">
+                    </div>
+                    <div class="div4 row" style="width: 100%; margin-top: 1.5%;">
+                    </div>
+                    <div class="div4 row" style="width:100%;margin-top:1.5%;">
+                    </div>
+                    <div class="div1 row" style="width:100%;">
+                        <div class="div11  " style="margin-left: 18%; width: 44%; ">@( (Model.dealer != null)? Model.dealer.Father_Name : ""  )</div>
+                        <div class="div12 "></div>
+                    </div>
+                    <div class="div2 row" style="width:100%;margin-top:1.5%;">
+                        <div class="div21  " style="margin-left: 25%; ">@( (Model.dealer != null)? Model.dealer.Address : ""  ) </div>
+                    </div>
+                </div>
+                <div class="pagebreak"></div>
+            </div>
+        }
+    }
+</body>
+</html>

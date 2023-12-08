@@ -1,0 +1,156 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Sp_Get_PR_report_Result>
+
+   @if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else if (User.IsInRole("CEO"))
+    {
+        Layout = "~/Views/Shared/_CEOLayout.cshtml";
+    }
+    else if (User.IsInRole("Staff"))
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+
+
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/sunburst.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+<script src="https://code.highcharts.com/modules/export-data.js"></script>
+<script src="https://code.highcharts.com/modules/accessibility.js"></script>
+
+<br />
+<div class="col-md-12">
+    <div class="panel-heading central-text-align">
+        <h5>Purchase Requisitions</h5>
+    </div>
+</div>
+<br />
+
+<div id="PR_Report" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+
+<div class="col-md-12">
+    <div class="row bgc-white">
+        
+
+        <div  style="margin:auto;">
+            <table class="table table-borderless" id="data">
+                <thead>
+                    <tr class="central-text-align thead-dark">
+                        <th>Sr#</th>
+                        <th>Date</th>
+                        <th>Delivery Date</th>
+
+                        <th>Requisition No.</th>
+                        <th>Requested By</th>
+                        <th>Department</th>
+                        <th>Project</th>
+                        <th>Pending Days</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @if (Model.Any())
+                    {
+                        var sr = 1;
+                        foreach (var v in Model.OrderByDescending(x => x.DateTime))
+                        {
+                    <tr class="central-text-align">
+                        <td>@sr</td>
+                        
+                        <td>@string.Format("{0:dd-MMM-yyyy}", v.DateTime) </td>
+                        <td>@string.Format("{0:dd-MMM-yyyy}", v.Deliver_Date) </td>
+
+                        <td>@v.Requisition_No</td>
+                        <td>@v.Name</td>
+                        <td>@v.Dep_Name</td>
+                        <td>@v.Prj_Name</td>
+                         <td>    @(v.Deliver_Date.Value.Date.Subtract(v.DateTime.Value.Date).TotalDays.ToString()) Days</td>
+                        <td>@v.Status</td>
+
+
+
+                    </tr>
+                            sr++;
+
+                        }
+                    }
+                    else
+                    {
+                        <tr class="bgc-red-50 central-text-align">
+                            <td colspan="6">No Record Found</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+ 
+<script> 
+    $(document).ready(function () {
+        $('#data').DataTable({
+            dom: 'Bfrtip'
+        });
+        let cats = ["Purchase Requisition", "Pending", "Quotation_Approval"];
+        let sers = [];
+
+        sers.push({
+            name: 'Pending',
+            data: [ @Html.Raw(Json.Encode(Model.Where(x=>x.Status == "Pending").Count()))]
+        });
+       
+
+        sers.push({
+            name: 'Quotation_Approval',
+            data: [ @Html.Raw(Json.Encode(Model.Where(x=>x.Status == "Quotation_Approval").Count()))]
+        });
+       
+
+        Highcharts.chart('PR_Report', {
+
+        chart: {
+            type: 'column'
+        },
+
+        title: {
+            text: 'PR Report'
+        },
+
+        xAxis: {
+            categories: cats,
+        },
+        yAxis: {
+            allowDecimals: false,
+            min: 0,
+            title: {
+                text: ''
+            }
+        },
+
+        tooltip: {
+            formatter: function () {
+                return '<b>' + this.x + '</b><br/>' +
+                    this.series.name + ': ' + Number(this.y).toLocaleString() + '<br/>'
+            }
+        },
+        plotOptions: {
+            column: {
+                pointPadding: 0.2,
+                borderWidth: 0
+            },
+            series: {
+                pointWidth: 20
+            }
+        },
+        series: sers
+    });
+    });
+
+    
+
+
+</script>

@@ -1,0 +1,361 @@
+@model IEnumerable<MeherEstateDevelopers.Models.Sms_Draft>
+
+@{ Layout = "~/Views/Shared/_StaffLayout.cshtml"; }
+<div class="row gap-20 pos-r">
+    <div class="col-md-6">
+        <div class="bgc-white p-20 bd">
+            <h4 class="c-grey-900">Create Draft</h4>
+            <h6>Add Input Fields to create Draft</h6>
+            <div class="mT-30 msgBody p-5">
+                @if (Model.Any())
+                {
+
+                    <input type="hidden"  value="@Model.Select(x=>x.Group_Tag).FirstOrDefault()" class="oldgroup" />
+                    foreach (var text in Model.OrderBy(x => x.Line))
+                    {
+                        if (text.Msg_Text != null)
+                        {
+                            string cleaned = text.Msg_Text.Replace("\n", "").Replace("\r", "");
+
+                            if (cleaned != null)
+                            {
+                                <div class="div1 row">
+                                    <div class="col-md-8">
+                                        <textarea type="text" class=" are form-control p-5 msg" rows="5" placeholder="Add a Text box">@cleaned</textarea>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <i class="fa fa-minus pointer remove" style="color:green"> </i>
+                                    </div>
+                                </div><br />
+                            }
+                        }
+
+                        if (text.Msg_Data != null)
+                        {
+                            <div class="div1 row">
+                                <div class="col-md-8">
+                                    <select class="form-control slc msg p-5">
+                                        @if (text.Msg_Data == "CLIENT_NAME")
+                                        {
+                                            <option selected>
+                                                CLIENT_NAME
+                                            </option>
+                                            <option>
+                                                DUE_AMOUNT
+                                            </option>
+                                            <option>
+                                                FILE_PLOT_NUMBER
+                                            </option>
+                                        }
+                                        @if (text.Msg_Data == "DUE_AMOUNT")
+                                        {
+                                            <option>
+                                                CLIENT_NAME
+                                            </option>
+                                            <option selected>
+                                                DUE_AMOUNT
+                                            </option>
+                                            <option>
+                                                FILE_PLOT_NUMBER
+                                            </option>
+                                        }
+                                        @if (text.Msg_Data == "FILE_PLOT_NUMBER")
+                                        {
+                                            <option>
+                                                CLIENT_NAME
+                                            </option>
+                                            <option>
+                                                DUE_AMOUNT
+                                            </option>
+                                            <option selected>
+                                                FILE_PLOT_NUMBER
+                                            </option>
+                                        }
+
+
+                                    </select>
+                                </div>
+                                <div class="col-md-2">
+                                    <i class="fa fa-minus pointer remove" id="" style="color:green"> </i>
+                                </div>
+                            </div>
+                            <br />
+                        }
+
+
+
+                    }
+
+                }
+            </div>
+            <h6 class="c-grey-900" style="text-align:center">Draft Preview</h6>
+
+            <textarea class="mT-30 msypre form-control p-5" rows="6" readonly placeholder="Message">
+
+            </textarea>
+            @*Word Count:
+            <span id="display_count">0</span>*@
+        </div>
+        
+    </div>
+    <div class="col-md-6">
+        <div class="bgc-white p-20 bd">
+            <h6 class="c-grey-900">Add Input Fields</h6>
+            @*<div class="row p-5">
+                    <div class="col-md-8">
+                        <input type="text" readonly class="form-control" placeholder="Add a input box" />
+                    </div>
+                    <div class="col-md-2">
+                        <i class="fa fa-plus pointer" id="AddInput" style="color:green"> </i>
+                    </div>
+                </div>*@
+            <ul>
+                <li>Add Prefilled Data --> <i class="fa fa-plus pointer" id="AddSelect" style="color:green"> </i> 
+                
+                <ul>
+                    <li>
+                        Prefilled Data means Data which will be added by system which inclued 3 types:
+                        <ul>
+                            <li>
+                                Client Name
+                            </li>
+                            <li>
+                                Due Amount
+                            </li>
+                            <li>
+                                File / Plot Number 
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+                </li>
+                <li>
+                    Add Text Box --> <i class="fa fa-plus pointer" id="AddText" style="color:green"> </i>
+                    <ul>
+                        <li>
+                            Text Area is used for adding the text in msg.
+
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    Add New Line --> <i class="fa fa-plus pointer" id="NExtLine" style="color:green"> </i>
+                    <ul>
+                        <li>
+                            New Line is just for adding a space in msg and start msg from Next Line.
+
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+            @*<div class="row p-5">
+                <div class="col-md-8">
+                    <select class="form-control">
+                        <option selected>
+                            Prefilled Data
+                        </option>
+                        <option>
+                            CLIENT NAME
+                        </option>
+                        <option>
+                            DUE AMOUNT
+                        </option>
+                        <option>
+                            FILE / PLOT NUMBER
+                        </option>
+
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <i class="fa fa-plus pointer" id="AddSelect" style="color:green"> </i>
+                </div>
+            </div>
+            <div class="row p-5">
+                <div class="col-md-8">
+                    <textarea type="text" readonly class="form-control" placeholder="Add a Text box"></textarea>
+                </div>
+                <div class="col-md-2">
+                    <i class="fa fa-plus pointer" id="AddText" style="color:green"> </i>
+                </div>
+            </div>
+            <div class="row p-5">
+                <div class="col-md-8">
+                    <input type="text" readonly class="form-control" placeholder="Next Line" />
+                </div>
+                <div class="col-md-2">
+                    <i class="fa fa-plus pointer" id="NExtLine" style="color:green"> </i>
+                </div>
+            </div>*@
+
+        </div>
+    </div>
+</div>
+<div class="row p-5">
+    <div class="col-md-4">
+
+    </div>
+    <div class="col-md-1">
+        <button class="btn btn-primary  checkmsg">Preview Msg</button>
+    </div>
+    <div class="col-md-1">
+        <button class="btn btn-primary  Savedraft">Save Draft</button>
+    </div>
+    <div class="col-md-6">
+
+    </div>
+</div>
+
+<script>
+     
+    $(document).on("click", "#AddSelect", function (e) {
+        var html = ` <div class="div1 row">
+<div class="col-md-8">
+ <select class="form-control slc msg p-5" >
+
+                        <option  >
+                            CLIENT_NAME
+                        </option>
+                        <option  >
+                            DUE_AMOUNT
+                        </option>
+                        <option  >
+                            FILE_PLOT_NUMBER
+                        </option>
+
+                    </select>
+</div>
+<div class="col-md-2">
+<i class="fa fa-minus pointer remove" id="" style="color:red"> </i>
+</div>
+</div>
+
+<br/>
+`;
+        $('.msgBody').append(
+            html
+
+        );
+        $('#NExtLine').click();
+
+    });
+    $(document).on("click", "#AddText", function (e) {
+        var html = `  <div class="div1 row">  <div class="col-md-8">
+<textarea type="text" class=" are form-control p-5 msg" placeholder="Add a Text box"></textarea>
+</div>
+<div class="col-md-2">
+<i class="fa fa-minus pointer remove"  style="color:red"> </i> </div>
+ </div>`;
+        $('.msgBody').append(
+            html
+
+        );
+
+    });
+    $(document).on("click", "#NExtLine", function (e) {
+        var html = `<div class="div1 row">
+
+<span class="space msg">---------------------------------------- Line Break ---------------------------------------- <span>
+
+<i class="fa fa-minus pointer remove"  style="color:rec"> </i></div>
+ <br/>
+`;
+        $('.msgBody').append(
+            html
+
+        );
+         
+
+    });
+    
+
+    $(document).on("click", ".remove", function (e) {
+        $(this).closest('.div1').remove();
+
+    });
+    
+    $(document).on("click", ".checkmsg", function (e) {
+        $('.msypre').text('');
+
+        $('.msg').each(function () {
+            var c = $(this);
+            if (c.hasClass('inp')) {
+                $('.msypre').append($(this).val());
+                $('.msypre').append(' ');
+            }
+            if (c.hasClass('slc')) {
+                $('.msypre').append($(this).val());
+                $('.msypre').append(' ');
+            }
+            if (c.hasClass('are')) {
+                $('.msypre').append($(this).val());
+                $('.msypre').append(' ');
+            }
+            if (c.hasClass('space')) {
+                $('.msypre').append('\n');
+            }
+        });
+        
+        //$('#display_count').text($('.msypre'));
+
+    });
+    $(document).on("click", ".Savedraft", function (e) {
+
+        var array = [];
+        var line = 1;
+        $('.msg').each(function () {
+
+            var c = $(this);
+
+            if (c.hasClass('slc')) {
+                var msgtext = {
+                    line: line,
+                    text: '',
+                    data: $(this).val()
+                }
+                array.push(msgtext);
+            }
+            if (c.hasClass('are')) {
+                var msgtext = {
+                    line: line,
+                    text: $(this).val(),
+                    data: ''
+                }
+                array.push(msgtext);
+            }
+            if (c.hasClass('space')) {
+                var msgtext = {
+                    line: line,
+                    text: $(this).val(),
+                    data: ''
+                }
+                array.push(msgtext);
+            }
+            line++;
+
+        });
+        $.ajax({
+            type: "POST",
+            url: "/Sms/SaveDraft/",
+            contentType: "application/json",
+            traditional: true,
+            beforeSend: function () {
+
+            },
+            complete: function () {
+
+            },
+            data: JSON.stringify({ msg: array, group: @ViewBag.trans , oldgroup: $('.oldgroup').val()}),
+        }).done(function (data) {
+            if (data == false) {
+                alert('unable to process the Msg Draft');
+            }
+            else {
+                alert('Msg Draft has been Saved.');
+                window.location.reload();
+            }
+        });
+
+
+    });
+   
+</script>

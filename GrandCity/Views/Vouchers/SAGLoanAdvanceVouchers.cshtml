@@ -1,0 +1,905 @@
+﻿@model MeherEstateDevelopers.Models.Voucher
+
+@{
+    var res1 = Model.Description.Split(' ');
+    var res2 = res1.Count();
+
+    if (res2 < 10)
+    {
+
+    }
+}
+@{
+    string line1 = "", line2 = "", line3 = "", line4 = "", line5 = "";
+    for (int i = 0; i < res1.Count(); i++)
+    {
+        if (i <= 15)
+        {
+            line1 = line1 + " " + res1[i];
+        }
+        else if (15 <= i && i <= 30)
+        {
+            line2 = line2 + " " + res1[i];
+        }
+        else if (30 <= i && i <= 45)
+        {
+            line3 = line3 + " " + res1[i];
+        }
+        else if (45 <= i && i <= 60)
+        {
+            line4 = line4 + " " + res1[i];
+        }
+        else if (60 <= i && i <= 75)
+        {
+            line5 = line5 + " " + res1[i];
+        }
+
+    }
+}
+
+<style type="text/css">
+    .ritz .waffle a {
+        color: inherit;
+    }
+
+    .ritz .waffle .s48 {
+        text-align: right;
+        font-weight: bold;
+        color: #333f4f;
+        font-family: 'docs-Roboto',Arial;
+        font-size: 12pt;
+        vertical-align: middle;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s4 {
+        text-align: right;
+        font-weight: bold;
+        color: #4472c4;
+        font-family: 'docs-Roboto',Arial;
+        font-size: 22pt;
+        vertical-align: middle;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s2 {
+        text-align: left;
+        font-weight: bold;
+        color: #a5a5a5;
+        font-family: 'docs-Roboto',Arial;
+        font-size: 20pt;
+        vertical-align: middle;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s35 {
+        border-bottom: 1px SOLID #bfbfbf;
+        border-right: 1px SOLID #bfbfbf;
+        background-color: #f3f3f3;
+        text-align: right;
+        color: #000000;
+        font-family: 'docs-Roboto',Arial;
+        font-size: 9pt;
+        vertical-align: middle;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s9 {
+        text-align: center;
+        color: #000000;
+        font-family: 'docs-Roboto',Arial;
+        font-size: 10pt;
+        vertical-align: middle;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s31 {
+        border-bottom: 1px SOLID #bfbfbf;
+        border-right: 1px SOLID #bfbfbf;
+        text-align: center;
+        color: #000000;
+        font-family: 'docs-Roboto',Arial;
+        font-size: 9pt;
+        vertical-align: middle;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s28 {
+        border-bottom: 1px SOLID #999999;
+        border-right: 1px SOLID #999999;
+        text-align: center;
+        font-weight: bold;
+        color: #434343;
+        font-family: 'docs-Roboto',Arial;
+        font-size: 9pt;
+        vertical-align: middle;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s11 {
+        text-align: left;
+        color: #333f4f;
+        font-family: 'docs-Roboto',Arial;
+        font-size: 11pt;
+        vertical-align: middle;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s5 {
+        text-align: left;
+        color: #434343;
+        font-family: 'docs-Roboto',Arial;
+        font-size: 20pt;
+        vertical-align: middle;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s27 {
+        border-bottom: 1px SOLID #999999;
+        text-align: center;
+        font-weight: bold;
+        color: #434343;
+        font-family: 'docs-Roboto',Arial;
+        font-size: 9pt;
+        vertical-align: middle;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s36 {
+        text-align: left;
+        color: #000000;
+        font-family: 'docs-Roboto',Arial;
+        font-size: 9pt;
+        vertical-align: middle;
+        white-space: normal;
+        overflow: hidden;
+        word-wrap: break-word;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s0 {
+        background-color: #fff2cc;
+        text-align: left;
+        color: #000000;
+        font-family: 'docs-Roboto',Arial;
+        font-size: 12pt;
+        vertical-align: bottom;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s44 {
+        border-left: none;
+        text-align: right;
+        color: #000000;
+        font-family: 'docs-Roboto',Arial;
+        font-size: 9pt;
+        vertical-align: middle;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s14 {
+        text-align: center;
+        font-weight: bold;
+        color: #1f3864;
+        font-family: 'docs-Roboto',Arial;
+        font-size: 9pt;
+        vertical-align: middle;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s19 {
+        text-align: right;
+        font-weight: bold;
+        color: #000000;
+        font-family: 'docs-Roboto',Arial;
+        font-size: 9pt;
+        vertical-align: top;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s20 {
+        text-align: left;
+        color: #000000;
+        font-family: 'docs-Roboto',Arial;
+        font-size: 9pt;
+        vertical-align: top;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s54 {
+        text-align: center;
+        font-style: italic;
+        color: #333f4f;
+        font-family: 'docs-Roboto',Arial;
+        font-size: 9pt;
+        vertical-align: middle;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s7 {
+        text-align: left;
+        color: #000000;
+        font-family: 'docs-Roboto',Arial;
+        font-size: 10pt;
+        vertical-align: bottom;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s3 {
+        text-align: left;
+        font-weight: bold;
+        color: #4472c4;
+        font-family: 'docs-Roboto',Arial;
+        font-size: 22pt;
+        vertical-align: middle;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s8 {
+        text-align: left;
+        color: #434343;
+        font-family: 'docs-Roboto',Arial;
+        font-size: 11pt;
+        vertical-align: middle;
+        white-space: normal;
+        overflow: hidden;
+        word-wrap: break-word;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s33 {
+        border-bottom: 1px SOLID #bfbfbf;
+        border-right: 1px SOLID #bfbfbf;
+        background-color: #f3f3f3;
+        text-align: left;
+        color: #000000;
+        font-family: 'docs-Roboto',Arial;
+        font-size: 9pt;
+        vertical-align: middle;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s38 {
+        text-align: right;
+        font-weight: bold;
+        color: #333f4f;
+        font-family: 'docs-Roboto',Arial;
+        font-size: 12pt;
+        vertical-align: bottom;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s50 {
+        text-align: left;
+        font-weight: bold;
+        color: #000000;
+        font-family: 'docs-Roboto',Arial;
+        font-size: 9pt;
+        vertical-align: middle;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s12 {
+        text-align: left;
+        color: #000000;
+        font-family: 'Arial';
+        font-size: 10pt;
+        vertical-align: bottom;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s21 {
+        text-align: right;
+        font-style: italic;
+        color: #333f4f;
+        font-family: 'docs-Roboto',Arial;
+        font-size: 9pt;
+        vertical-align: top;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s52 {
+        border-bottom: 1px SOLID #999999;
+        text-align: left;
+        font-weight: bold;
+        color: #000000;
+        font-family: 'docs-Roboto',Arial;
+        font-size: 9pt;
+        vertical-align: middle;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s6 {
+        text-align: right;
+        font-weight: bold;
+        color: #666666;
+        font-family: 'docs-Roboto',Arial;
+        font-size: 21pt;
+        vertical-align: middle;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s30 {
+        border-bottom: 1px SOLID #bfbfbf;
+        border-right: 1px SOLID #bfbfbf;
+        text-align: center;
+        color: #000000;
+        font-family: 'docs-Roboto',Arial;
+        font-size: 11pt;
+        vertical-align: middle;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s41 {
+        text-align: center;
+        color: #000000;
+        font-family: 'docs-Roboto',Arial;
+        font-size: 10pt;
+        vertical-align: middle;
+        white-space: normal;
+        overflow: hidden;
+        word-wrap: break-word;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s43 {
+        border-left: none;
+        text-align: right;
+        font-weight: bold;
+        color: #333f4f;
+        font-family: 'docs-Roboto',Arial;
+        font-size: 8pt;
+        vertical-align: middle;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s29 {
+        border-right: 1px SOLID #bfbfbf;
+        text-align: left;
+        color: #000000;
+        font-family: 'docs-Roboto',Arial;
+        font-size: 10pt;
+        vertical-align: bottom;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s57 {
+        text-align: center;
+        color: #333f4f;
+        font-family: 'docs-Roboto',Arial;
+        font-size: 10pt;
+        vertical-align: bottom;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s26 {
+        border-right: 1px SOLID #999999;
+        text-align: left;
+        color: #000000;
+        font-family: 'docs-Roboto',Arial;
+        font-size: 10pt;
+        vertical-align: bottom;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s1 {
+        text-align: left;
+        color: #000000;
+        font-family: 'docs-Roboto',Arial;
+        font-size: 12pt;
+        vertical-align: middle;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s32 {
+        border-bottom: 1px SOLID #bfbfbf;
+        border-right: 1px SOLID #bfbfbf;
+        text-align: center;
+        color: #000000;
+        font-family: 'docs-Roboto',Arial;
+        font-size: 11pt;
+        vertical-align: middle;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s34 {
+        border-bottom: 1px SOLID #bfbfbf;
+        border-right: 1px SOLID #bfbfbf;
+        background-color: #f3f3f3;
+        text-align: center;
+        color: #000000;
+        font-family: 'docs-Roboto',Arial;
+        font-size: 9pt;
+        vertical-align: middle;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s39 {
+        text-align: right;
+        font-weight: bold;
+        color: #333f4f;
+        font-family: 'docs-Roboto',Arial;
+        font-size: 8pt;
+        vertical-align: middle;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s24 {
+        border-bottom: 1px SOLID #999999;
+        text-align: left;
+        color: #000000;
+        font-family: 'docs-Roboto',Arial;
+        font-size: 10pt;
+        vertical-align: middle;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s49 {
+        border-bottom: 1px SOLID #000000;
+        text-align: right;
+        font-weight: bold;
+        color: #000000;
+        font-family: 'docs-Roboto',Arial;
+        font-size: 12pt;
+        vertical-align: middle;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s40 {
+        border-bottom: 1px SOLID #bfbfbf;
+        text-align: right;
+        color: #000000;
+        font-family: 'docs-Roboto',Arial;
+        font-size: 9pt;
+        vertical-align: middle;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s37 {
+        text-align: left;
+        color: #000000;
+        font-family: 'docs-Roboto',Arial;
+        font-size: 10pt;
+        vertical-align: middle;
+        white-space: normal;
+        overflow: hidden;
+        word-wrap: break-word;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s46 {
+        border-bottom: 1px SOLID #000000;
+        text-align: right;
+        color: #000000;
+        font-family: 'docs-Roboto',Arial;
+        font-size: 9pt;
+        vertical-align: middle;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s18 {
+        text-align: left;
+        color: #000000;
+        font-family: 'docs-Roboto',Arial;
+        font-size: 10pt;
+        vertical-align: middle;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s56 {
+        text-align: left;
+        color: #000000;
+        font-family: 'docs-Roboto',Arial;
+        font-size: 12pt;
+        vertical-align: bottom;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s22 {
+        text-align: right;
+        color: #000000;
+        font-family: 'docs-Roboto',Arial;
+        font-size: 9pt;
+        vertical-align: middle;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s53 {
+        text-align: left;
+        color: #333f4f;
+        font-family: 'docs-Roboto',Arial;
+        font-size: 9pt;
+        vertical-align: middle;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s47 {
+        text-align: center;
+        color: #333f4f;
+        font-family: 'docs-Roboto',Arial;
+        font-size: 18pt;
+        vertical-align: middle;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s15 {
+        border-bottom: 1px SOLID #bfbfbf;
+        text-align: left;
+        font-weight: bold;
+        color: #1f3864;
+        font-family: 'docs-Roboto',Arial;
+        font-size: 9pt;
+        vertical-align: middle;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s17 {
+        text-align: left;
+        color: #000000;
+        font-family: 'docs-Roboto',Arial;
+        font-size: 11pt;
+        vertical-align: middle;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s25 {
+        border-bottom: 1px SOLID #999999;
+    }
+
+    .ritz .waffle .s10 {
+        text-align: right;
+        color: #7f7f7f;
+        font-family: 'docs-Roboto',Arial;
+        font-size: 18pt;
+        vertical-align: middle;
+        white-space: normal;
+        overflow: hidden;
+        word-wrap: break-word;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s23 {
+        text-align: left;
+        color: #1f3864;
+        font-family: 'docs-Roboto',Arial;
+        font-size: 11pt;
+        vertical-align: middle;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s51 {
+        text-align: center;
+        color: #000000;
+        font-family: 'docs-Roboto',Arial;
+        font-size: 12pt;
+        vertical-align: middle;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s45 {
+        border-bottom: 1px SOLID #000000;
+        text-align: right;
+        font-weight: bold;
+        color: #333f4f;
+        font-family: 'docs-Roboto',Arial;
+        font-size: 8pt;
+        vertical-align: middle;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s42 {
+        border-right: none;
+        text-align: right;
+        font-weight: bold;
+        color: #333f4f;
+        font-family: 'docs-Roboto',Arial;
+        font-size: 12pt;
+        vertical-align: bottom;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s13 {
+        text-align: center;
+        color: #ffffff;
+        font-family: 'docs-Roboto',Arial;
+        font-size: 11pt;
+        vertical-align: middle;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s55 {
+        text-align: center;
+        color: #333f4f;
+        font-family: 'docs-Roboto',Arial;
+        font-size: 10pt;
+        vertical-align: middle;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s16 {
+        text-align: right;
+        font-weight: bold;
+        color: #000000;
+        font-family: 'docs-Roboto',Arial;
+        font-size: 9pt;
+        vertical-align: middle;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+</style>
+@{
+    var data = Model.Description.Split('`');
+}
+<div class="ritz grid-container" dir="ltr">
+    <table bgcolor="#F7DCF7" class="waffle no-grid" cellspacing="0" cellpadding="0">
+        <thead>
+            <tr>
+                <th class="row-header"></th>
+                <th id="1194874101C0" style="width:57px"></th>
+                <th id="1194874101C1" style="width:170px"></th>
+                <th id="1194874101C2" style="width:51px"></th>
+                <th id="1194874101C3" style="width:171px"></th>
+                <th id="1194874101C4" style="width:128px"></th>
+                <th id="1194874101C5" style="width:72px"></th>
+                <th id="1194874101C6" style="width:72px"></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr style='height:18px;'><td class="s1"></td><td class="s2" dir="ltr"></td><td class="s3"></td><td class="s3"></td><td class="s3"></td><td class="s4"></td><td class="s4"></td></tr>
+            <tr style='height:18px;'><td class="s1"></td><td class="s2" dir="ltr"></td><td class="s3"></td><td class="s3"></td><td class="s3"></td><td class="s4"></td><td class="s4"></td></tr>
+            <tr style='height:18px;'>
+                <td class="s1"></td>
+                <td class="s2" dir="ltr"></td>
+                <td class="s3"></td>
+                <td class="s3">
+                    <img width="250" height="150" style="margin-left:20%" src="~/assets/static/images/SagVoucher/acc.jpg" />
+                </td>
+                <td class="s3"></td>
+                <td class="s4"></td>
+                <td class="s4"></td>
+            </tr>
+            <tr style='height:18px;'>
+                <td class="s1"></td>
+                <td class="s2" dir="ltr"></td>
+                <td class="s3"></td>
+                <td class="s3">
+                    @if (Model.Type == "Loan")
+                    {
+                        <img style="width: 400px;height: 60px;" src="~/assets/static/images/loan.png" />
+                    }
+                    else if ((Model.Type == "Advance"))
+                    {
+                        <img style="width: 400px;height: 60px;" src="~/assets/static/images/advance.png" />
+
+                    }
+                </td>
+                <td class="s3"></td>
+                <td class="s4"></td>
+                <td class="s4"></td>
+            </tr>
+            <tr style='height:18px;'>
+                <td class="s1"></td>
+                <td class="s5" dir="ltr" colspan="2">@Model.Name</td>
+                <td class="s3"></td>
+                <td class="s6" dir="ltr" colspan="2">Payment Voucher</td>
+                <td class="s4"></td>
+            </tr>
+            <tr style='height:18px;'>
+                <td class="s7"></td>
+                <td class="s8" dir="ltr" colspan="2">@Model.Address</td>
+                <td class="s1"></td>
+                <td class="s16" dir="ltr"></td>
+                <td class="s17" dir="ltr">Voucher No: @Model.VoucherNo</td>
+                <td class="s10" dir="ltr"></td>
+            </tr>
+            <tr style='height:18px;'>
+                <td class="s7"></td>
+                <td class="s12" dir="ltr" colspan="2"> @Model.Contact</td>
+                <td class="s1"></td>
+                <td class="s16" dir="ltr"></td>
+                <td class="s17" dir="ltr">Payment Date: @string.Format("{0:d}", Model.DateTime)</td>
+                <td class="s10" dir="ltr"></td>
+            </tr>
+            <tr style='height:18px;'>
+                <td class="s1"></td>
+                <td class="s2" dir="ltr"></td>
+                <td class="s3"></td>
+                <td class="s3"></td>
+                <td class="s3"></td>
+                <td class="s4"></td>
+                <td class="s4"></td>
+            </tr>
+            <tr style='height:23px;'>
+                <td class="s7"></td>
+                <td class="s11" dir="ltr"></td>
+                <td class="s1"></td>
+                <td class="s13"></td>
+                <td class="s1"></td>
+                <td class="s14"></td>
+                <td class="s14"></td>
+            </tr>
+            <tr style='height:23px;'>
+                <td class="s7"></td>
+                <td class="s24" dir="ltr"></td>
+                <td class="s24"></td>
+                <td class="s25"></td>
+                <td class="s24"></td>
+                <td class="s24"></td>
+                <td class="s18"></td>
+            </tr>
+            <tr style='height:40px;'>
+                <td class="s26"></td>
+                <td class="s27" colspan="4">DESCRIPTION</td>
+                <td class="s28">TOTAL</td>
+                <td class="s14"></td>
+            </tr>
+            <tr style='height:40px;'><td class="s29"></td><td class="s30" colspan="4"></td><td class="s32"></td><td class="s22"></td></tr>
+            <tr style='height:40px;'><td class="s29"></td><td class="s30" colspan="4"></td><td class="s32"></td><td class="s22"></td></tr>
+            <tr style='height:40px;'><td class="s29"></td><td class="s30" colspan="4">@line1  </td><td class="s32">@string.Format("{0:n0}", Model.Amount)</td><td class="s22"></td></tr>
+            <tr style='height:40px;'><td class="s29"></td><td class="s30" colspan="4">@line2 </td><td class="s32"></td><td class="s22"></td></tr>
+            <tr style='height:40px;'><td class="s29"></td><td class="s30" colspan="4">@line3</td><td class="s32"></td><td class="s22"></td></tr>
+            <tr style='height:40px;'><td class="s29"></td><td class="s30" colspan="4">@line4</td><td class="s32"></td><td class="s22"></td></tr>
+            <tr style='height:40px;'><td class="s29"></td><td class="s30" colspan="4">@line5</td><td class="s32"></td><td class="s22"></td></tr>
+            <tr style='height:40px;'><td class="s29"></td><td class="s30" colspan="4"></td><td class="s32"></td><td class="s22"></td></tr>
+            <tr style='height:40px;'><td class="s29"></td><td class="s30" colspan="4">@Model.PaymentType - @Model.Bank - @Model.Ch_Pay_Draft_No - @string.Format("{0:D}", Model.Ch_Pay_Draft_Date)</td><td class="s32"></td><td class="s22"></td></tr>
+            <tr style='height:40px;'><td class="s29"></td><td class="s30" colspan="4"></td><td class="s32"></td><td class="s22"></td></tr>
+            <tr style='height:40px;'><td class="s29"></td><td class="s30" colspan="4"></td><td class="s32"></td><td class="s22"></td></tr>
+            <tr style='height:40px;'><td class="s29"></td><td class="s30" colspan="4"></td><td class="s32"></td><td class="s22"></td></tr>
+            <tr style='height:40px;'><td class="s29"></td><td class="s30" colspan="4"></td><td class="s32"></td><td class="s22"></td></tr>
+            <tr style='height:40px;'><td class="s29"></td><td class="s30" colspan="4"></td><td class="s32"></td><td class="s22"></td></tr>
+            <tr style='height:40px;'><td class="s29"></td><td class="s30" colspan="4"></td><td class="s32"></td><td class="s22"></td></tr>
+            <tr style='height:40px;'><td class="s29"></td><td class="s30" colspan="4"></td><td class="s32"></td><td class="s22"></td></tr>
+            <tr style='height:40px;'><td class="s29"></td><td class="s30" colspan="4"></td><td class="s32"></td><td class="s22"></td></tr>
+            <tr style='height:25px;'>
+                <td class="s7"></td>
+                <td class="s41" dir="ltr" colspan="2" rowspan="3"></td>
+                <td class="s38"></td>
+                <td class="s39" dir="ltr"></td>
+                <td class="s40"></td>
+                <td class="s17"></td>
+            </tr>
+            <tr style='height:44px;'>
+                <td class="s7"></td>
+                <td class="s38"></td>
+                <td class="s48" dir="ltr">Total Amount</td>
+                <td class="s49"> Rs = @string.Format("{0:n0}", Model.Amount)/-  </td>
+                <td class="s50"></td>
+            </tr>
+            <tr style='height:60px;'>
+                <td class="s7"></td>
+                <td class="s2" dir="ltr"></td>
+                <td class="s3"></td>
+                <td class="s3"></td>
+                <td class="s3"></td>
+                <td class="s4"></td>
+                <td class="s4"></td>
+            </tr>
+            <tr style='height:18px;'>
+                <td class="s7"></td>
+                <td class="s12">@Model.Name</td>
+                <td class="s3"></td>
+                <td class="s12"></td>
+                <td class="s3"></td>
+                <td class="s12"></td>
+                <td class="s4"></td>
+            </tr>
+            <tr style='height:18px;'>
+                <td class="s7"></td>
+                <td class="s40"></td>
+                <td class="s3"></td>
+                <td class="s3"></td>
+                <td class="s3"></td>
+                <td class="s40"></td>
+                <td class="s4"></td>
+            </tr>
+        </tbody>
+    </table>
+</div> 

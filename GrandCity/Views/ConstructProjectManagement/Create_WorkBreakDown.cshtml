@@ -1,0 +1,108 @@
+﻿
+<div class="col-md-12 mt-2" id="WBD">
+    @*idhar sare milestone task ain gay*@
+</div>
+<div class="container-fluid pl-0 ml-0 pr-0 mr-0">
+    <h4 class="text-center">Create Work Break Down</h4>
+    <hr />
+</div>
+@*<div class="container-fluid ml-0 pr-0 mr-0">
+        <div class="form-row mts-form">
+            <div class="col-md-7 form-row">
+                <div class="form-group col-md-4">
+                    <label>Title</label>
+                    <input type="text" class="form-control" id="wbdwbd-title" autocomplete="off">
+                </div>
+                <div class="form-group col-md-8">
+                    <label>Description</label>
+                    <textarea rows="4" class=" form-control" id="wbdwbd-desc" placeholder="Enter Description"></textarea>
+                </div>
+            </div>
+
+            <input type="hidden" id="wbdwbd" value="wbdwbd" />
+            <div class="col-md-1 form-row">
+                <div class="form-group col-md-12">
+                    <button class="btn btn-primary cr-WBDWBD-btn">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>*@
+<div class="container-fluid ml-0 pr-0 mr-0">
+    <div class="form-row ">
+        <div class="col-md-10 form-row">
+            <div class="form-group col-md-3">
+                <label>Title</label>
+                <input type="text" class="form-control" onfocus="this.value=''" id="wbd-title" autocomplete="off">
+            </div>
+            <div class="form-group col-md-2">
+                <label>Type</label>
+                <select class="form-control  select2" name="wbd-type" id="wbd-type" required>
+                    <option value="0">Select Type</option>
+                    <option value="WBD" id="WBD">WBS</option>
+                    @*<option value="Activity" id="Activity">Activity</option>*@
+                </select>
+            </div>
+            <div class="form-group col-md-3" id="WBDdropdown" style="display:none">
+                <label>WBD</label>
+                @Html.DropDownList("WBDDDown", null, "Select WBD ", new { Name = "Id", @class = "form-control" })
+            </div>
+            <div class="form-group col-md-3" id="ActivityDropdown" style="display:none">
+                <label>Activity</label>
+                @Html.DropDownList("Dependency", null, "Select Activity ..", new { Name = "Id", @class = "form-control" })
+            </div>
+            @*<div class="form-group col-md-2">
+                <label>No Of Days</label>
+                <input type="text" class="form-control coma" id="wbd-NoDays" placeholder="No Of Days" autocomplete="off">
+            </div>*@
+
+            <input type="hidden" id="WBD" value="WBD" />
+            <div class="form-group col-md-1" style="margin-top: 28px">
+                <button class="btn btn-primary cr-WBD-btn">Save</button>
+            </div>
+        </div>
+        <div class="col-md-1 form-row">
+        </div>
+    </div>
+</div>
+
+<div class="mtrl-stmt-wrp container-fluid">
+
+</div>
+
+<script>
+    $(document).on('click',
+        '#AddSubtask',
+        function () {
+            $('#AddTask').hide();
+        });
+    $(function () {
+        var nullid = $("#wbd-title").val('');
+        var prjId = $("#Prj_Id").val();
+        $("#WBD").load("/ConstructProjectManagement/Get_WBD", { Prj_Id: prjId });
+    })
+    $("#mile-unit").append(unitlist);
+
+    $('#Type').on('change', function () {
+        if ($(this).find(":selected").val() === 'WBD') {
+            $('#WBDdropdown').css("display", "block");
+            $('#ActivityDropdown').css("display", "none");
+        }
+        else {
+            $('#WBDdropdown').css("display", "none");
+            $('#ActivityDropdown').css("display", "none");
+
+        }
+    });
+
+
+    $('#Type').on('change', function () {
+        if ($(this).find(":selected").val() === 'Activity') {
+            $('#WBDdropdown').css("display", "none");
+            $('#ActivityDropdown').css("display", "block");
+        }
+    });
+
+
+
+
+</script>

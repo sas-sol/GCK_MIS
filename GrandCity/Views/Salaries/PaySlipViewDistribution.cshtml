@@ -1,0 +1,476 @@
+﻿@model MeherEstateDevelopers.Models.SalariesDetails
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <link href="~/Content/salaryslip/Salry.css" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" media="print" href="~/Content/salaryslip/Salry.css">
+    <title>SalarySlip</title>
+</head>
+<body>
+    <div class=" ">
+        <div id="payslip" class="">
+            <div id="title">
+                Employee Copy
+                <img src="/assets/static/images/meherestate-simple.png" class="imagesas">
+            </div>
+            <div id="title2">
+                <label class="" style="font-weight:700; float:left">Salary Month: &nbsp;@string.Format("{0:MMMMMMMMM, yyyy}", Model.salary.Salary_Month) &nbsp;  </label>
+                <label class="" style="font-weight:700; float:right">Received Date: &nbsp;@string.Format("{0: dd MMMM yyyy h:mm tt}", Model.salary.Received_Date) &nbsp;  </label>
+            </div>
+            <div class="content">
+                <div class="left-panel ">
+                    <div class="details" id="">
+                        <div class="entry">
+                            <div class="label">Department</div>
+                            <div class="value">@Model.salary.DepartmentName</div>
+                        </div>
+                        <div class="entry">
+                            <div class="label">Employee Code</div>
+                            <div class="value">@Model.salary.Employee_code</div>
+                        </div>
+                        <div class="entry">
+                            <div class="label">Employee Name</div>
+                            <div class="value">@Model.salary.Employee_Name</div>
+                        </div>
+                        <div class="entry">
+                            <div class="label">CNIC / NICOP</div>
+                            <div class="value">@Model.salary.CNIC</div>
+                        </div>
+                        <div class="entry">
+                            <div class="label">Date Hired</div>
+                            <div class="value">@string.Format("{0: MM/dd/yyyy}", Model.salary.Emp_Date_Of_Joining)</div>
+                        </div>
+                        <div class="entry">
+                            <div class="label">Position</div>
+                            <div class="value">@Model.salary.Designation_name</div>
+                        </div>
+                        <div class="entry">
+                            <div class="label">Prepared by</div>
+                            <div class="value">HR Department</div>
+                        </div>
+                        <div class="entry">
+                            <div class="label">No Of Days</div>
+                            <div class="value">@Model.salary.No_Of_Days</div>
+                        </div>
+                        @if (Model.salary.Absentee != null && Model.salary.Absentee != 0)
+                        {
+                            <div class="entry">
+                                <div class="label">Absentee</div>
+                                <div class="value">@Model.salary.Absentee</div>
+                            </div>
+                        }
+                        @if (Model.salary.Salary_Leaves != null && Model.salary.Salary_Leaves != 0)
+                        {
+                            <div class="entry">
+                                <div class="label">Paid Leaves</div>
+                                <div class="value">@Model.salary.Salary_Leaves</div>
+                            </div>
+                        }
+                        @if (Model.salary.Extra_Working_Days != null && Model.salary.Extra_Working_Days != 0)
+                        {
+                            <div class="entry">
+                                <div class="label">Extra Working Days</div>
+                                <div class="value">@Model.salary.Extra_Working_Days</div>
+                            </div>
+                        }
+                        <div class="entry">
+                            <div class="label">Worked Days</div>
+                            <div class="value">@(Model.salary.No_Of_Days - Model.salary.Absentee + Model.salary.Extra_Working_Days )</div>
+                        </div>
+                    </div>
+                    <div class="gross">
+                        <div class="title">Gross Total</div>
+                        <div class="entry">
+                            <div class="label"></div>
+                            <div class="value">Rs. @String.Format("{0:n0}", Math.Round(Convert.ToDecimal(Model.salary.Grand_total)))</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="right-panel">
+                    <div class="details">
+                        <div class="taxable_allowance">
+                            <div class="entry">
+                                <div class="label">Basic Salary</div>
+                                <div class="value">@string.Format("{0:n0}", Model.salary.Basic_salary)</div>
+                            </div>
+                            <hr />
+                            @if (Model.salary.Extra_Working_Days != 0 && Model.salary.Extra_Working_Days != null)
+                            {
+                                <div class="entry">
+                                    <div class="label">Extra Days Wage</div>
+                                </div>
+                                <div class="entry">
+                                    <div class="label"></div>
+                                    <div class="detail">Payment</div>
+                                    <div class="amount">@String.Format("{0:n0}", (Math.Round(Convert.ToDecimal((Model.salary.Basic_salary / 30) * Model.salary.Extra_Working_Days))))</div>
+                                </div>
+                                <hr />
+                            }
+
+                            <div class="entry">
+                                <div class="label">Allowance and Bonus</div>
+                            </div>
+                            @if (Model.details.Any())
+                            {
+                                foreach (var item2 in Model.details.Where(x => x.Type == "AllowncesAndBonus"))
+                                {
+                                    <div class="entry">
+                                        <div class="label"></div>
+                                        <div class="detail">@item2.Description</div>
+                                        <div class="amount">@String.Format("{0:n0}", Math.Round(Convert.ToDecimal(item2.Amount)))</div>
+                                    </div>
+                                }
+                            }
+                            @if (Model.salary.Bonus != null && Model.salary.Bonus != 0)
+                            {
+                                <div class="entry">
+                                    <div class="label"></div>
+                                    <div class="detail">@Model.salary.Bonus_Description</div>
+                                    <div class="amount">@String.Format("{0:n0}", Math.Round(Convert.ToDecimal(Model.salary.Bonus)))</div>
+                                </div>
+                                <hr />
+                            }
+                            @if (Model.salary.Overtime != null && Model.salary.Overtime != 0)
+                            {
+                                <div class="entry">
+                                    <div class="label"></div>
+                                    <div class="detail">Overtime</div>
+                                    <div class="amount">@String.Format("{0:n0}", Math.Round(Convert.ToDecimal(Model.salary.Overtime)))</div>
+                                </div>
+                            }
+
+                            <div class="entry">
+                                <div class="label">Allownces/Arears/Bounus Total</div>
+                                <div class="detail"></div>
+                                <div class="amount">
+                                    @String.Format("{0:n0}", Math.Round(Convert.ToDecimal((Model.salary.Allownces) + (Model.salary.Bonus) + ((Model.salary.Basic_salary / 30) * (Model.salary.Extra_Working_Days)) + (Model.salary.Overtime) + (Model.salary.Extra_Fuel_Charges))))
+                                </div>
+                            </div>
+                        </div>
+                        <hr />
+                        <div class="deductions">
+                            <div class="entry">
+                                <div class="label">Deductions And Taxes</div>
+                            </div>
+                            @if (Model.details.Any())
+                            {
+                                foreach (var item3 in Model.details.Where(x => x.Type == "OtherDeduction"))
+                                {
+                                    <div class="entry">
+                                        <div class="label"></div>
+                                        <div class="detail">@item3.Description</div>
+                                        <div class="amount">@String.Format("{0:n0}", Math.Round(Convert.ToDecimal(item3.Amount)))</div>
+                                    </div>
+                                }
+                            }
+                            @if (Model.salary.Absentee != 0 && Model.salary.Absentee != null)
+                            {
+
+                                <div class="entry">
+                                    <div class="label"></div>
+                                    <div class="detail">Absentee</div>
+                                    <div class="amount">@String.Format("{0:n0}", Math.Round(Convert.ToDecimal((Model.salary.Basic_salary / 30) * (Model.salary.Absentee))))</div>
+                                </div>
+                                <hr />
+                            }
+
+                            @if (Model.salary.Extra_Fuel_Charges != 0 && Model.salary.Extra_Fuel_Charges != null)
+                            {
+
+                                <div class="entry">
+                                    <div class="label"></div>
+                                    <div class="detail">Extra Fuel&nbsp;&nbsp;@Model.salary.Extra_Fuel &nbsp;&nbsp; ;&nbsp; Payment</div>
+                                    <div class="amount">@String.Format("{0:n0}", Math.Round(Convert.ToDecimal(Model.salary.Extra_Fuel_Charges)))</div>
+                                </div>
+                                <hr />
+                            }
+                            @if (Model.salary.Ded_Tax != 0 && Model.salary.Ded_Tax != null)
+                            {
+
+                                <div class="entry">
+                                    <div class="label"></div>
+                                    <div class="detail">Tax</div>
+                                    <div class="amount">@String.Format("{0:n0}", Math.Round(Convert.ToDecimal((Model.salary.Ded_Tax))))</div>
+                                </div>
+                                <hr />
+                            }
+
+                            @if (Model.salary.Ded_Advance != 0 && Model.salary.Ded_Advance != null)
+                            {
+
+                                <div class="entry">
+                                    <div class="label"></div>
+                                    <div class="detail">Advance</div>
+                                    <div class="amount">@String.Format("{0:n0}", Math.Round(Convert.ToDecimal((Model.salary.Ded_Advance))))</div>
+                                </div>
+                                <hr />
+                            }
+                            @if (Model.salary.Ded_Loan != 0 && Model.salary.Ded_Loan != null)
+                            {
+
+                                <div class="entry">
+                                    <div class="label"></div>
+                                    <div class="detail">Tax</div>
+                                    <div class="amount">@String.Format("{0:n0}", Math.Round(Convert.ToDecimal((Model.salary.Ded_Loan))))</div>
+                                </div>
+                                <hr />
+                            }
+                            <div class="entry">
+                                <div class="label">Deduction Total</div>
+                                <div class="detail"></div>
+                                <div class="amount">@String.Format("{0:n0}", Math.Round(Convert.ToDecimal((Model.salary.Ded_Other + Model.salary.Ded_Tax + Model.salary.Ded_Absentee + Model.salary.Ded_Advance + Model.salary.Ded_Loan))))</div>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="net_pay">
+                            <div class="" style="width:100%">
+                                <div class="">NET PAY &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Cash:&nbsp; @String.Format("{0:n0}", Math.Round(Convert.ToDecimal(Model.salary.Cash)))   &nbsp; Bank:&nbsp;@String.Format("{0:n0}", Math.Round(Convert.ToDecimal(Model.salary.Bank))) <div style="float:right"> @String.Format("{0:n0}", Math.Round(Convert.ToDecimal(Model.salary.Grand_total)))</div>  </div>
+                            </div>
+                        </div>
+                        <br />
+                        <br />
+                    </div>
+                </div>
+            </div>
+            <br />
+            <div id="title2">
+                <lable class="imagesas">Employee Signature</lable>
+            </div>
+            <span>-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------</span>
+            <div style="margin-top:0%;">
+                <div id="payslip">
+                    <div id="title">
+                        Accounts Copy
+                        <img src="/assets/static/images/meherestate-simple.png" class="imagesas">
+                    </div>
+                    <div id="title2">
+                        <label class="" style="font-weight:700; float:left">Salary Month: &nbsp;@string.Format("{0:MMMMMMMMM, yyyy}", Model.salary.Salary_Month) &nbsp;  </label>
+                        <label class="" style="font-weight:700; float:right">Received Date: &nbsp;@string.Format("{0: dd MMMM yyyy h:mm tt}", Model.salary.Received_Date) &nbsp;  </label>
+                    </div>
+                    <div class="content">
+                        <div class="left-panel ">
+                            <div class="details" id="">
+                                <div class="entry">
+                                    <div class="label">Department</div>
+                                    <div class="value">@Model.salary.DepartmentName</div>
+                                </div>
+                                <div class="entry">
+                                    <div class="label">Employee Code</div>
+                                    <div class="value">@Model.salary.Employee_code</div>
+                                </div>
+                                <div class="entry">
+                                    <div class="label">Employee Name</div>
+                                    <div class="value">@Model.salary.Employee_Name</div>
+                                </div>
+                                <div class="entry">
+                                    <div class="label">CNIC / NICOP</div>
+                                    <div class="value">@Model.salary.CNIC</div>
+                                </div>
+                                <div class="entry">
+                                    <div class="label">Date Hired</div>
+                                    <div class="value">@string.Format("{0: MM/dd/yyyy}", Model.salary.Emp_Date_Of_Joining)</div>
+                                </div>
+                                <div class="entry">
+                                    <div class="label">Position</div>
+                                    <div class="value">@Model.salary.Designation_name</div>
+                                </div>
+                                <div class="entry">
+                                    <div class="label">Prepared by</div>
+                                    <div class="value">HR Department</div>
+                                </div>
+                                <div class="entry">
+                                    <div class="label">No Of Days</div>
+                                    <div class="value">@Model.salary.No_Of_Days</div>
+                                </div>
+                                @if (Model.salary.Absentee != null && Model.salary.Absentee != 0)
+                                {
+                                    <div class="entry">
+                                        <div class="label">Absentee</div>
+                                        <div class="value">@Model.salary.Absentee</div>
+                                    </div>
+                                }
+                                @if (Model.salary.Salary_Leaves != null && Model.salary.Salary_Leaves != 0)
+                                {
+                                    <div class="entry">
+                                        <div class="label">Paid Leaves</div>
+                                        <div class="value">@Model.salary.Salary_Leaves</div>
+                                    </div>
+                                }
+                                @if (Model.salary.Extra_Working_Days != null && Model.salary.Extra_Working_Days != 0)
+                                {
+                                    <div class="entry">
+                                        <div class="label">Extra Working Days</div>
+                                        <div class="value">@Model.salary.Extra_Working_Days</div>
+                                    </div>
+                                }
+                                <div class="entry">
+                                    <div class="label">Worked Days</div>
+                                    <div class="value">@(Model.salary.No_Of_Days - Model.salary.Absentee + Model.salary.Extra_Working_Days )</div>
+                                </div>
+                            </div>
+                            <div class="gross">
+                                <div class="title">Gross Total</div>
+                                <div class="entry">
+                                    <div class="label"></div>
+                                    <div class="value">Rs. @String.Format("{0:n0}", Math.Round(Convert.ToDecimal(Model.salary.Grand_total)))</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="right-panel">
+                            <div class="details">
+                                <div class="taxable_allowance">
+                                    <div class="entry">
+                                        <div class="label">Basic Salary</div>
+                                        <div class="value">@string.Format("{0:n0}", Model.salary.Basic_salary)</div>
+                                    </div>
+                                    <hr />
+                                    @if (Model.salary.Extra_Working_Days != 0 && Model.salary.Extra_Working_Days != null)
+                                    {
+                                        <div class="entry">
+                                            <div class="label">Extra Days Wage</div>
+                                        </div>
+                                        <div class="entry">
+                                            <div class="label"></div>
+                                            <div class="detail">Payment</div>
+                                            <div class="amount">@String.Format("{0:n0}", (Math.Round(Convert.ToDecimal((Model.salary.Basic_salary / 30) * Model.salary.Extra_Working_Days))))</div>
+                                        </div>
+                                        <hr />
+                                    }
+                                    <div class="entry">
+                                        <div class="label">Allowance and Bonus</div>
+                                    </div>
+                                    @if (Model.details.Any())
+                                    {
+                                        foreach (var item2 in Model.details.Where(x => x.Type == "AllowncesAndBonus"))
+                                        {
+                                            <div class="entry">
+                                                <div class="label"></div>
+                                                <div class="detail">@item2.Description</div>
+                                                <div class="amount">@String.Format("{0:n0}", Math.Round(Convert.ToDecimal(item2.Amount)))</div>
+                                            </div>
+                                        }
+                                    }
+                                    @if (Model.salary.Bonus != null && Model.salary.Bonus != 0)
+                                    {
+                                        <div class="entry">
+                                            <div class="label"></div>
+                                            <div class="detail">@Model.salary.Bonus_Description</div>
+                                            <div class="amount">@String.Format("{0:n0}", Math.Round(Convert.ToDecimal(Model.salary.Bonus)))</div>
+                                        </div>
+                                        <hr />
+                                    }
+
+                                    @if (Model.salary.Overtime != null && Model.salary.Overtime != 0)
+                                    {
+                                        <div class="entry">
+                                            <div class="label"></div>
+                                            <div class="detail">Overtime</div>
+                                            <div class="amount">@String.Format("{0:n0}", Math.Round(Convert.ToDecimal(Model.salary.Overtime)))</div>
+                                        </div>
+                                    }
+
+                                    <div class="entry">
+                                        <div class="label">Allownces/Arears/Bounus Total</div>
+                                        <div class="detail"></div>
+                                        <div class="amount">
+
+                                            @String.Format("{0:n0}", Math.Round(Convert.ToDecimal((Model.salary.Allownces) + (Model.salary.Bonus) + ((Model.salary.Basic_salary / 30) * (Model.salary.Extra_Working_Days)) + (Model.salary.Overtime) + (Model.salary.Extra_Fuel_Charges))))
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr />
+                                <div class="deductions">
+                                    <div class="entry">
+                                        <div class="label">Deductions And Taxes</div>
+                                    </div>
+                                    @if (Model.details.Any())
+                                    {
+                                        foreach (var item3 in Model.details.Where(x => x.Type == "OtherDeduction"))
+                                        {
+                                            <div class="entry">
+                                                <div class="label"></div>
+                                                <div class="detail">@item3.Description</div>
+                                                <div class="amount">@String.Format("{0:n0}", Math.Round(Convert.ToDecimal(item3.Amount)))</div>
+                                            </div>
+                                        }
+                                    }
+                                    @if (Model.salary.Absentee != 0 && Model.salary.Absentee != null)
+                                    {
+
+                                        <div class="entry">
+                                            <div class="label"></div>
+                                            <div class="detail">Absentee</div>
+                                            <div class="amount">@String.Format("{0:n0}", Math.Round(Convert.ToDecimal((Model.salary.Basic_salary / 30) * (Model.salary.Absentee))))</div>
+                                        </div>
+                                        <hr />
+                                    }
+
+                                    @if (Model.salary.Extra_Fuel_Charges != 0 && Model.salary.Extra_Fuel_Charges != null)
+                                    {
+
+                                        <div class="entry">
+                                            <div class="label"></div>
+                                            <div class="detail">Extra Fuel&nbsp;&nbsp;@Model.salary.Extra_Fuel &nbsp;&nbsp; ;&nbsp; Payment</div>
+                                            <div class="amount">@String.Format("{0:n0}", Math.Round(Convert.ToDecimal(Model.salary.Extra_Fuel_Charges)))</div>
+                                        </div>
+                                        <hr />
+                                    }
+                                    @if (Model.salary.Ded_Tax != 0 && Model.salary.Ded_Tax != null)
+                                    {
+
+                                        <div class="entry">
+                                            <div class="label"></div>
+                                            <div class="detail">Tax</div>
+                                            <div class="amount">@String.Format("{0:n0}", Math.Round(Convert.ToDecimal((Model.salary.Ded_Tax))))</div>
+                                        </div>
+                                        <hr />
+                                    }
+                                    @if (Model.salary.Ded_Advance != 0 && Model.salary.Ded_Advance != null)
+                                    {
+
+                                        <div class="entry">
+                                            <div class="label"></div>
+                                            <div class="detail">Advance</div>
+                                            <div class="amount">@String.Format("{0:n0}", Math.Round(Convert.ToDecimal((Model.salary.Ded_Advance))))</div>
+                                        </div>
+                                        <hr />
+                                    }
+                                    @if (Model.salary.Ded_Loan != 0 && Model.salary.Ded_Loan != null)
+                                    {
+
+                                        <div class="entry">
+                                            <div class="label"></div>
+                                            <div class="detail">Tax</div>
+                                            <div class="amount">@String.Format("{0:n0}", Math.Round(Convert.ToDecimal((Model.salary.Ded_Loan))))</div>
+                                        </div>
+                                        <hr />
+                                    }
+                                    <div class="entry">
+                                        <div class="label">Deduction Total</div>
+                                        <div class="detail"></div>
+                                        <div class="amount">@String.Format("{0:n0}", Math.Round(Convert.ToDecimal((Model.salary.Ded_Other + Model.salary.Ded_Tax + Model.salary.Ded_Absentee + Model.salary.Ded_Advance + Model.salary.Ded_Loan))))</div>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="net_pay">
+                                    <div class="" style="width:100%">
+                                        <div class="">NET PAY &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Cash:&nbsp; @String.Format("{0:n0}", Math.Round(Convert.ToDecimal(Model.salary.Cash)))   &nbsp; Bank:&nbsp;@String.Format("{0:n0}", Math.Round(Convert.ToDecimal(Model.salary.Bank))) <div style="float:right"> @String.Format("{0:n0}", Math.Round(Convert.ToDecimal(Model.salary.Grand_total)))</div>  </div>
+                                    </div>
+                                </div>
+                                <br />
+                                <br />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br />
+            <div id="title2">
+                Finance Manager Signature
+                <lable class="imagesas">Employee Signature</lable>
+            </div>
+            <span>-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------</span>
+        </div>
+    </div>
+</body>
+</html>

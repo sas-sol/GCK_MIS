@@ -1,0 +1,165 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Sp_Get_Final_Arrears_Salaries_Result>
+@{ Layout = "~/Views/Shared/_StaffLayout.cshtml"; }
+<style>
+    table thead tr th, table tbody tr td {
+        font-size: 12px;
+    }
+</style>
+<div class="col-md-12">
+    <div class="bgc-white bd bdrs-3 p-20 mB-20">
+        <h4 class="c-grey-900 mB-20">Employess salaries</h4>
+        <table id="salary-dat" class="table table-striped table-bordered " cellspacing="0" width="100%">
+            @{
+                foreach (var g in Model.GroupBy(x => new { x.Name }))
+                {
+                    <thead class="">
+                        <tr>
+                            <th colspan="21" style="font-size:21px;text-align:center"> @g.Key.Name</th>
+                        </tr>
+                        <tr>
+                            <th>Department</th>
+                            <th>Code</th>
+                            <th>Name</th>
+                            <th>Designation</th>
+                            <th>CNIC</th>
+                            <th>Basic Salary</th>
+                            <th>Per Day Wage</th>
+                            <th>Date Of Joining</th>
+                            <th>No Of Days</th>
+                            <th>Absentee</th>
+                            <th>No Of Worked Days</th>
+                            <th>Allownces & Bonus</th>
+                            <th>Bonus</th>
+                            <th>Absentee Ded.</th>
+                            <th>Loan</th>
+                            <th>Advance</th>
+                            <th>Tax Ded.</th>
+                            <th>Net Payable</th>
+                            <th>Cash</th>
+                            <th>Bank</th>
+                            <th>Received</th>
+                            <th>View Slip</th>
+                            <th>Print</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+
+
+                        @foreach (var item in g)
+                        {
+                            <tr class="" id="@item.Id">
+                          <td>@item.Name</td>
+                                <td class="">@item.Employee_code</td>
+                                <td class="">@item.Employee_Name</td>
+                                <td>@item.Employee_Designation</td>
+                                <td>@item.CNIC</td>
+                                <td class=""> @String.Format("{0:n0}", item.Basic_salary) </td>
+                                <td class="">@( Math.Round(Convert.ToDecimal(item.Basic_salary / 30)) )</td>
+                                <td>@string.Format("{0: dd-MMM-yyyy}", item.Emp_Date_Of_Joining)</td>
+                                <td>@item.No_Of_Days</td>
+                                <td>@item.Absentee</td>
+                                <td class="">@(item.No_Of_Days - item.Absentee)</td>
+                                <td class=""> @String.Format("{0:n0}", item.Allownces) </td>
+                                <td class="bonus">@string.Format("{0:n0}", item.Bonus)</td>
+                                <td class=""><label>@String.Format("{0:n0}", item.Ded_Absentee)</label></td>
+                                <td><span>0</span></td>
+                                <td><span>0</span></td>
+                                <td>@string.Format("{0:n0}", item.Ded_Tax*(-1))</td>
+                                <td class="col-mod" id="@item.Grand_total" style="font:bold"> @String.Format("{0:n0}", item.Grand_total)</td>
+                                <td>@String.Format("{0:n0}", item.Cash)</td>
+                                <td>@String.Format("{0:n0}", item.Bank)</td>
+                                <td class="">
+                                    @if (item.Received == "Received")
+                                    {
+
+                                        @item.Received
+                                    }
+                                    else
+                                    {
+                                        <input type="checkbox" id="Received" onchange="" required="required" class="peer Salary_Status" value="">
+                                    }
+
+                                </td>
+                                <td><i class="ti-eye pointer view-salary" id="@item.Id"></i></td>
+                                <td class="col-mod"><button class="btn btn-primary gen_salaris" id="" value="Gen">Print </button></td>
+                            </tr>
+                        }
+                            <tr class="" id="@g.Key.Name">
+                                <td style="font-size:20px">Gross Total</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td>@String.Format("{0:n0}", Math.Round(Convert.ToDecimal(g.Select(x => x.Basic_salary).Sum())))    </td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td>@String.Format("{0:n0}", Math.Round(Convert.ToDecimal(g.Select(x => x.Allownces).Sum()))) </td>
+                                <td>@String.Format("{0:n0}", Math.Round(Convert.ToDecimal(g.Select(x => x.Bonus).Sum())))</td>
+                                <td>@String.Format("{0:n0}", Math.Round(Convert.ToDecimal(g.Select(x => x.Ded_Absentee).Sum()))) </td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>@String.Format("{0:n0}", Math.Round(Convert.ToDecimal(g.Select(x => x.Ded_Tax).Sum())))</td>
+                                <td>@String.Format("{0:n0}", Math.Round(Convert.ToDecimal(g.Select(x => x.Grand_total).Sum())))</td>
+                                <td>@String.Format("{0:n0}", Math.Round(Convert.ToDecimal(g.Select(x => x.Cash).Sum())))</td>
+                                <td>@String.Format("{0:n0}", Math.Round(Convert.ToDecimal(g.Select(x => x.Bank).Sum())))</td>
+                                <td></td>
+                                <td></td>
+
+                            </tr>
+
+                    </tbody>
+
+
+                }
+                <tfoot>
+                    <tr>
+                        <td style="font-size:20px">Total</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>@String.Format("{0:n0}", Math.Round(Convert.ToDecimal(Model.Sum(x => x.Basic_salary))))</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>@String.Format("{0:n0}", Math.Round(Convert.ToDecimal(Model.Sum(x => x.Allownces))))</td>
+                        <td>@String.Format("{0:n0}", Math.Round(Convert.ToDecimal(Model.Sum(x => x.Bonus))))</td>
+                        <td>@String.Format("{0:n0}", Math.Round(Convert.ToDecimal(Model.Sum(x => x.Ded_Absentee))))</td>
+                        <td>0</td>
+                        <td>0</td>
+                        <td>@String.Format("{0:n0}", Math.Round(Convert.ToDecimal(Model.Sum(x => x.Ded_Tax))))</td>
+                        <td>@String.Format("{0:n0}", Math.Round(Convert.ToDecimal(Model.Sum(x => x.Grand_total))))</td>
+                        <td>@String.Format("{0:n0}", Math.Round(Convert.ToDecimal(Model.Sum(x => x.Cash))))</td>
+                        <td>@String.Format("{0:n0}", Math.Round(Convert.ToDecimal(Model.Sum(x => x.Bank))))</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </tfoot>
+
+            }
+
+
+
+        </table>
+    </div>
+</div>
+
+@*<script>
+        //$(document).ready(function () {
+        //    $('#salary-dat').DataTable({
+        //        "scrollX": true,
+        //        dom: 'Bfrtip',
+        //        buttons: [
+        //            'copy', 'csv', 'excel', 'pdf', 'print'
+        //        ]
+
+        //    });
+        //});
+    </script>*@
+

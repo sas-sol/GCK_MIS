@@ -1,0 +1,57 @@
+﻿@{ 
+    if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+}
+
+<div class="col-md-12 bgc-white p-20">
+    <h5>Departmental Loan Reports</h5>
+    <hr />
+
+    <div class="row">
+        <div class="2">
+            <b>Select Department :</b>
+        </div>
+
+        <div class="col-md-3">
+            @Html.DropDownList("Department", null, "Choose", new { @class = "form-control", multiple = "" })
+        </div>
+        <div class="col-md-2">
+            <select class="form-control" id="Emp_Status">
+                <option value="Registered">Registered</option>
+                <option value="Resigned">Resigned</option>
+                <option value="Suspended">Suspended</option>
+                <option value="Terminate">Terminate</option>
+            </select>
+        </div>
+        <div class="col-md-2">
+            <button class="btn btn-primary srch-btn"><i class="fa fa-search"></i>&nbsp;Search</button>
+        </div>
+    </div>
+
+    <div class="row depts-ln-area mt-md-5">
+
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('.srch-btn').unbind().click(function () {
+            $('.depts-ln-area').empty();
+            var depId = $('#Department').val();
+            var empStat = $('#Emp_Status option:selected').val();
+            SASLoad($('.depts-ln-area'));
+            
+            $('.depts-ln-area').load('/Loan/DepartmentalReportDetail/', { dep: depId, EmpStatus: empStat }, function () {
+                SASUnLoad($('.depts-ln-area'));
+            });
+        });
+
+        $('#Department').select2();
+    });
+</script>

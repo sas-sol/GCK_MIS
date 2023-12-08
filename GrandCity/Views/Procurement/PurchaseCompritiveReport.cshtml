@@ -1,0 +1,150 @@
+﻿@model  MeherEstateDevelopers.Models.QuotationsViewModel
+<table class="table" width="100%">
+    <tbody>
+        <tr style='height:18px;'>
+            <td colspan="21" style="text-align:center">
+                <img width="150" height="75" src="~/assets/static/images/SagVoucher/customer.jpg" />
+            </td>
+        </tr>
+        <tr>
+            <th width="50px">
+            </th>
+            <th style="text-align:center">
+                Purchase Requisition @Model.PurchaseRequistionDetails.Select(x => x.Requisition_No).FirstOrDefault() - Comparitive Report
+            </th>
+        </tr>
+        <tr style='height:18px;'>
+            <td class="s6" colspan="21" style="text-align:center">
+                <h5><span style="float:left">@Model.PurchaseRequistionDetails.Select(x => x.Dep_Name).FirstOrDefault() </span> <span style="float:right"> @Model.PurchaseRequistionDetails.Select(x => x.Prj_Name).FirstOrDefault() </span></h5>
+            </td>
+        </tr>
+    </tbody>
+</table>
+@if (Model.PurchaseRequistionDetails.Any())
+{
+    int i = 1;
+
+    var app = Model.PurchaseRequistionDetails.Select(x => x.ApprovedBy_Name).FirstOrDefault();
+    var appdes = Model.PurchaseRequistionDetails.Select(x => x.ApprovedBy_Designation).FirstOrDefault();
+    var requestname = Model.PurchaseRequistionDetails.Select(x => x.RequestedBy_Name).FirstOrDefault();
+    var requestdes = Model.PurchaseRequistionDetails.Select(x => x.RequestedBy_Desgination).FirstOrDefault();
+
+    <table class="table-bordered table">
+        <thead>
+            <tr>
+                <th>Sr.</th>
+                <th class="">Item</th>
+                <th class="">Vendor</th>
+                <th class="">Qty</th>
+                <th class="">Rate/UOM</th>
+                <th class="">Total</th>
+            </tr>
+        </thead>
+        @foreach (var v in Model.PurchaseRequistionDetails)
+        {
+
+            <tbody class="quotes-rec" data-itemid="@v.Id" data-itemInvId="@v.Item_Id" data-itemttl="@v.Item_Name">
+                @if (Model.AppliedBids.Any())
+                {
+                    int ii = 1;
+                    foreach (var item in Model.AppliedBids.Where(x => x.Bid_Item == v.Item_Id && x.Bid_PurReqId == v.Id))
+                    {
+                        string col = "";
+                        if (item.Bid_Finalized == true)
+                        {
+                            col = "back-color";
+                        }
+                        <tr>
+                            <td>
+                                @i
+                            </td>
+                            @if (ii == 1)
+                            {
+                                <td rowspan="@Model.AppliedBids.Where(x => x.Bid_Item == v.Item_Id && x.Bid_PurReqId == v.Id).Count()">
+                                    @v.Item_Name -- Required Quantity : @v.Qty
+                                </td>
+                            }
+
+
+                            <td class="@col">
+                                @if (item.Bid_Finalized == true)
+                                {
+                                    <i class="ti-check" style="color:green"></i>
+                                }
+                                @item.Bid_Vendor_Name
+                            </td>
+                            <td class="@col">@string.Format("{0:0,0.##}", item.BidQty)</td>
+                            <td class="@col">@string.Format("{0:0,0.##}", item.Bid_Pur_Rate) / @v.UOM</td>
+                            <td class="item-ttl @col"><span class="ccy">Rs. </span>@string.Format("{0:0,0.##}", item.TotalVal)</td>
+                        </tr>
+                        if (item.Bid_Desc != null)
+                        {
+                            <tr>
+                                <td class="">@item.Bid_Desc</td>
+                            </tr>
+                        }
+                        <tr style="display:none">
+                            <td colspan="4" class="term"></td>
+                            <td colspan="4" class="quo"></td>
+                        </tr>
+                        ii++;
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="8">No Quotations are Added yet</td>
+                    </tr>
+                }
+            </tbody>
+            i++;
+        }
+        <tfoot>
+            <tr>
+                <td colspan="5" style="text-align:right"><b>Total</b></td>
+                <td id="total-val"><span class="ccy">Rs. </span>@string.Format("{0:0,0.##}", Model.AppliedBids.Where(x => x.Bid_Finalized == true).Sum(x => x.TotalVal))</td>
+            </tr>
+        </tfoot>
+    </table>
+    <table class="table" width="100%">
+        <thead>
+            <tr>
+                @{
+                    var apdate = Model.PurchaseRequistionDetails.Select(x => x.ApprovedBy_Date).FirstOrDefault();
+                    var apda = (apdate != null) ? string.Format("{0:dd-MMM-yyyy}", apdate) : " ";
+                }
+                <td>Prepared By<br /><b> @requestname </b><br />@requestdes <br />@string.Format("{0:dd-MMM-yyyy}", Model.PurchaseRequistionDetails.Select(x => x.DateTime).FirstOrDefault())</td>
+                <td></td>
+                <td>Approved By <br /><b> @app </b><br /> @appdes <br /> @apda </td>
+                <td></td>
+                <td>Director Signature</td>
+                <td></td>
+                <td>CEO Signature</td>
+            </tr>
+        </thead>
+    </table>
+}
+<style>
+    table tr td, table tr th {
+        padding: 4px !important;
+    }
+
+    td {
+        font-size: 12px
+    }
+
+    .back-color {
+        background-color: rgba(0,0,0,.05);
+    }
+
+    .quotes-rec {
+        border: 3px solid #ccc !important;
+    }
+
+    @@media print {
+        .back-color {
+            background-color: rgba(0,0,0,.05) !important;
+            -webkit-print-color-adjust: exact;
+        }
+    }
+</style>

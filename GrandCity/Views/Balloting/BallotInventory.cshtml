@@ -1,0 +1,332 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.BallotPlot>
+@{ if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+}
+<div class="col-md-12 bgc-white pt-md-3">
+    <div class="c-grey-900">
+        <h5>Inventory Summary</h5>
+    </div>
+    <div class="col-md-12 custom-report-viewport">
+        <div class="row mt-md-2">
+            <div class="col-md-1">
+                <label><b>Range Start</b></label>
+            </div>
+            <div class="col-md-1">
+                <input type="number" class="form-control st-rng" />
+            </div>
+            <div class="col-md-1">
+                <label><b>Range End</b></label>
+            </div>
+            <div class="col-md-1">
+                <input type="number" class="form-control en-rng" />
+            </div>
+            <div class="col-md-2">
+                <select class="form-control st-typ">
+                    <option value="All">Select Status</option>
+                    @foreach (var stat in Model.Select(x => x.Status).Distinct())
+                    {
+                        <option value="@stat">@stat</option>
+                    }
+                </select>
+            </div>
+            <div class="col-md-2">
+                <select class="form-control loc-typ">
+                    <option value="All">Select Location</option>
+                    @foreach (var pref in Model.Select(x => x.PlotType).Distinct())
+                    {
+                        <option value="@pref">@pref</option>
+                    }
+                    <option value="All Special">All Special</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <select class="form-control sect-typ">
+                    <option value="All">Select Sector</option>
+                    @foreach (var pref in Model.Select(x => x.Sector).Distinct())
+                    {
+                        <option value="@pref">@pref</option>
+                    }
+                    <option value="All Special">All Sectors</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <input type="text" class="form-control count-ttl" placeholder="Title" />
+            </div>
+            <div class="col-md-1">
+                <button class="btn btn-primary pin-btn"><i class="fa fa-map-pin"></i>&nbsp; Pin</button>
+            </div>
+        </div>
+        <div class="row mt-md-2 hdr-custom-rep-row" style="display:none;">
+            <div class="col-md-2">
+                <label><b>Type</b></label>
+            </div>
+            <div class="col-md-1">
+                <label><b>Range Start</b></label>
+            </div>
+            <div class="col-md-1">
+                <label><b>Range End</b></label>
+            </div>
+            <div class="col-md-2">
+                <label><b>Location</b></label>
+            </div>
+            <div class="col-md-2">
+                <label><b>Status</b></label>
+            </div>
+            <div class="col-md-1">
+                <label><b>Count</b></label>
+            </div>
+            <div class="col-md-1">
+                <label><b>Sector</b></label>
+            </div>
+            <div class="col-md-1">
+                <label><b>Action</b></label>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-md-3">
+        @foreach (var st in Model.GroupBy(x => x.Status))
+        {
+            <div class="col-md-4">
+                <div class="panel-heading">
+                    <h5>@st.Key Summary</h5>
+                </div>
+                <table class="table table-borderless">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>Sr.</th>
+                            <th>Type</th>
+                            <th>Marla</th>
+                            <th>Count</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.Any())
+                        {
+                            int count = 1;
+                            foreach (var v in Model.Where(x => (x.PlotArea % 1) == 0 && (x.Status == st.Key)).GroupBy(x => x.PlotArea))
+                            {
+                                foreach (var det in v.GroupBy(x => x.Block))
+                                {
+                                    <tr>
+                                        <td colspan="4">
+                                            <h5>Block @det.Key</h5>
+                                        </td>
+                                    </tr>
+                                    foreach (var item in det.GroupBy(x => x.PlotType))
+                                    {
+                                        <tr>
+                                            <td>@(count++)</td>
+                                            <td>@v.Key Marla</td>
+                                            <td>@item.Key</td>
+                                            <td>@item.Count()</td>
+                                        </tr>
+                                    }
+                                }
+                            }
+                            foreach (var v in Model.Where(x => (x.PlotArea % 1) != 0 && (x.Status == st.Key) && (x.PlotArea <= 7.5)).GroupBy(x => x.PlotArea))
+                            {
+                                foreach (var item in v.GroupBy(x => x.Block))
+                                {
+                                    <tr>
+                                        <td colspan="4">
+                                            <h5>Block @item.Key</h5>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>@(count++)</td>
+                                        <td>Odd Sizes </td>
+                                        <td> < 7.5 Marla</td>
+                                        <td>@item.Count()</td>
+                                    </tr>
+                                }
+                            }
+                            foreach (var v in Model.Where(x => (x.PlotArea % 1) != 0 && (x.Status == st.Key) && (x.PlotArea >= 7.5)).GroupBy(x => x.PlotArea))
+                            {
+                                foreach (var item in v.GroupBy(x => x.Block))
+                                {
+                                    <tr>
+                                        <td colspan="4">
+                                            <h5>Block @item.Key</h5>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>@(count++)</td>
+                                        <td>Odd Sizes </td>
+                                        <td> > 7.5 Marla</td>
+                                        <td>@item.Count()</td>
+                                    </tr>
+                                }
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+    </div>
+    <div class="row">
+        <div class="col-md-8">
+            <h3>Total Letter Issued: @Model.Where(x => x.LetterA == true).Count()</h3>
+        </div>
+        <div class="col-md-4">
+            <button class="btn btn-primary new-plt-btn" data-toggle="modal" data-target="#Modal">New Allocation</button>
+        </div>
+    </div>
+    @foreach (var statuses in Model.GroupBy(x => x.Status))
+    {
+        <div class="col-md-12 @statuses.Key datas-fjdkh">
+            <h3>@statuses.Key</h3>
+            <table class="table table-borderless dattab" id="">
+                <thead>
+                    <tr class="thead-dark">
+                        <th>plot Size</th>
+                        <th>Sr.</th>
+                        <th>Block</th>
+                        <th>Plot No.</th>
+                        <th>Location</th>
+                        <th>Type</th>
+                        <th>Dimension</th>
+                        <th>File Balloted</th>
+                        <th>Owner Name</th>
+                        <th>Letter</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var sizes in statuses.GroupBy(x => x.PlotArea))
+                    {
+                        int counter = 1;
+                        foreach (var plt in sizes)
+                        {
+                            string cls = string.Empty;
+                            if (plt.Owner_Id != null)
+                            {
+                                cls = "bgc-green-50";
+                            }
+                            <tr class="@cls" id="@plt.Id">
+                                <td>@sizes.Key Marla ---- Total : @sizes.Count()</td>
+                                <td>@(counter++)</td>
+                                <td>@plt.Block</td>
+                                <td>@plt.PlotNo @plt.Sector</td>
+                                <td>@plt.PlotType</td>
+                                <td>@plt.Plot_Type</td>
+                                <td>@plt.PlotSize</td>
+                                @if (plt.BallotedOn == null)
+                                {
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                }
+                                else
+                                {
+                                    <td>@plt.BallotFile</td>
+                                    <td>@plt.Owner_Name</td>
+                                    if (plt.LetterA == true)
+                                    {
+                                        <td><i class="fa fa-check"></i></td>
+                                    }
+                                    else
+                                    {
+                                        <td>-</td>
+                                    }
+                                }
+                                @if (statuses.Key == "Balloted")
+                                {
+                                    <td>
+                                        <i class="fa fa-pencil up-plt" data-toggle="modal" data-target="#Modal"></i>   <i class="fa fa-refresh mig-data"></i>
+                                    </td>
+                                }
+                                else if (statuses.Key == "Available")
+                                {
+                                    <td><i class="fa fa-trash del-bal-inv"></i>  ||  <i class="fa fa-arrows-v hol-inv" data-Status="Hold"></i></td>
+                                }
+                                else if (statuses.Key == "Hold")
+                                {
+                                    <td>
+                                        <i class="fa fa-trash del-bal-inv"></i>  || <i class="fas fa-pallet hol-inv" data-Status="Available"></i>
+                                    </td>
+                                }
+                                else
+                                {
+                                    <td><i class="fa fa-trash del-bal-inv"></i></td>
+                                }
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>
+<script>
+    $(document).on("click", ".up-plt", function () {
+        EmptyModel();
+        $('#ModalLabel').text("Plot Movement");
+        $('#modalbody').load('/Balloting/BallotSearch/', { Id: id });
+        $('.modal-footer').append('<button class="btn btn-primary moveplts">Update</button>');
+    });
+
+    $(document).on("click", ".new-plt-btn", function () {
+        EmptyModel();
+        $('#ModalLabel').text("New Plot Allocation");
+        $('#modalbody').load('/Balloting/NewPlot_Ballot/');
+        $('.modal-footer').append('<button class="btn btn-primary new-aloc">Update</button>');
+    });
+    //$(document).on("click", ".swp-balt", function () {
+    //    EmptyModel();
+    //    $('#ModalLabel').text("Swap Balloted Plots");
+    //    $('#modalbody').load('/Balloting/NewPlot_Swap_Ballot/', { Id: id });
+    //    $('.modal-footer').append('<button class="btn btn-primary swp-balt-plt">Update</button>');
+    //});
+
+    $(document).on("click", ".hol-inv", function () {
+        var Id = $(this).closest('tr').attr('id');
+        var Status = $(this).data('status')
+        if (confirm("Are you sure you want to " + Status + " this unit")) {
+            $.ajax({
+                type: "POST",
+                url: '/Balloting/UpdateInvStatus/',
+                data: { Id: Id, Status: Status },
+                success: function (data) {
+                    if (data.Status) {
+                        alert(data.Msg)
+                        window.location.reload();
+                    }
+                    else {
+                        alert(data.Msg)
+                    }
+                },
+                error: function (data) {
+                    alert("error")
+                }
+            });
+        }
+    });
+    $(document).on('change', '.n-blk', function () {
+        var blk = $(this).val();
+        var plttype = $('#plt-type').val();
+        $.ajax({
+            type: "POST",
+            url: "/Balloting/BlockPlots/",
+            data: { Block: blk },
+            success: function (data) {
+                $('#n-pltnos').empty();
+                $('#n-pltnos').append('<option value="">Select Plot No</option>');
+                $.each(data, function (key, value) {
+                    $('#n-pltnos').append('<option value="' + value.Id + '">' + value.PlotNo + ' - ' + value.PlotType + ' - ' + value.PlotArea + ' Marla</option>');
+                });
+            }
+        });
+    });
+    $(document).ready(function () {
+        $('.dattab').DataTable({
+            rowGroup: { dataSrc: [0] },
+            columnDefs: [{ targets: [0], visible: false }],
+        });
+    });
+</script>

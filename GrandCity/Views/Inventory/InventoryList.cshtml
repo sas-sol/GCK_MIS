@@ -1,0 +1,147 @@
+﻿<script src="~/Scripts/Inv.js"></script>
+@{ if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+}
+<div class="bgc-white bd bdrs-3 p-20 mB-20">
+    <div class="row">
+        <div class="col-md-4">
+            <h4 class="c-grey-900 mB-20">Warehouse Inventory List</h4>
+        </div>
+        <div class="col-md-8" style="text-align:right">
+            &nbsp;&nbsp;&nbsp; | &nbsp;&nbsp;&nbsp;
+            <a href="~/Inventory/ManualStockIn/" target="_blank" data-toggle="tooltip" data-placement="top" title="" data-original-title="Manual Stock In"><img src="~/images/uncate.png" style="width:35px;height:35px" /></a>
+            &nbsp;&nbsp;&nbsp; | &nbsp;&nbsp;&nbsp;
+            <a href="~/Inventory/UNCode_Inventory/" target="_blank" data-toggle="tooltip" data-placement="top" title="" data-original-title="Uncategorized Items"><img src="~/images/inventory.png" style="width:35px;height:35px" /></a>
+            &nbsp;&nbsp;&nbsp; | &nbsp;&nbsp;&nbsp;
+            <a href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="Add Inventory Item"><img src="~/images/category.png" data-toggle="modal" data-target="#Modal" id="add-invent-popup" style="width:35px;height:35px" /></a>
+            &nbsp;&nbsp;&nbsp; | &nbsp;&nbsp;&nbsp;
+            <a href="~/Inventory/InventoryItems/" target="_blank" data-toggle="tooltip" data-placement="top" title="" data-original-title="Inventory Items"><img src="~/images/stock-in.png" style="width:35px;height:35px" /></a>
+            &nbsp;&nbsp;&nbsp; | &nbsp;&nbsp;&nbsp;
+            <a href="~/Inventory/Categories/" target="_blank" data-toggle="tooltip" data-placement="top" title="" data-original-title="Inventory Category"><img src="~/images/add-inv.png" style="width:35px;height:35px" /></a>
+            &nbsp;&nbsp;&nbsp; | &nbsp;&nbsp;&nbsp;
+            <a href="~/Inventory/InventoryTagging/" target="_blank" data-toggle="tooltip" data-placement="top" title="" data-original-title="Inventory Tagging"><img src="~/images/inv.png" style="width:35px;height:35px" /></a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="bgc-white bd bdrs-3 p-20 mB-20">
+                <ul class="nav nav-tabs" id="myTabs">
+                    @{ string activeclass = "active";}
+                    <li class="nav-item"><a class="nav-link @activeclass" data-toggle="tab" role="tab" data-link="/Inventory/Department_Wise" href="#over">Departmentalize</a></li>
+                    @{ activeclass = ""; }
+                    <li class="nav-item"><a class="nav-link @activeclass" data-toggle="tab" role="tab" data-link="/Inventory/OnePagerInventory" href="#over">One Pager Inventory</a></li>
+                </ul>
+                <!-- Tab panes -->
+                <div class="tab-content">
+                    <div id="over" class="tab-pane active bd bdrs-3 p-20">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <style>
+        table tr th, table tr td {
+            padding: 5px !important;
+            font-size: 12px;
+        }
+    </style>
+    <script>
+        $(function () {
+            $('#over').load('/Inventory/Department_Wise/')
+        });
+    </script>
+
+</div>
+<style>
+    #inv tr.odd td:first-child,
+    #inv tr.even td:first-child {
+        padding-left: 4em;
+    }
+
+    .dtrg-level-0 {
+        font-size: 20px;
+        text-align: center;
+        font-weight: bold;
+    }
+
+    .dtrg-level-1 {
+        font-size: 16px;
+        text-align: center;
+        font-weight: bold;
+    }
+
+    .dtrg-level-2 {
+        font-size: 14px;
+        font-weight: bold;
+    }
+</style>
+<script>
+    $(".navproject").click(function () {
+        var list = $(".navproject")
+        $(this).css("background-color", "ghostwhite");
+        $(".currentclass").css("background-color", "white");
+        $(".currentclass").removeClass("currentclass");
+        $(this).addClass('currentclass');
+    });
+
+    $(document).on("click", ".navproject", function () {
+        var id = $(this).data('id');
+        SASLoad($('#dep-inv'));
+        $('#dep-inv').load('/Inventory/Dep_InventoryList/', { Id: id }, function () {
+            SASUnLoad($('#dep-inv'));
+        });
+    });
+    $(document).on("click", ".inv-lst", function () {
+        window.open('/Inventory/InventoryItems/', '_Blank');
+    });
+
+    $(document).ready(function () {
+        $(".currentclass").css("background-color", "ghostwhite");
+
+    });
+
+
+    //$(document).ready(function () {
+    //    var groupColumn = 0;
+    //    var table = $('#inv').DataTable({
+
+    //        "columnDefs": [
+    //            { "visible": false, "targets": groupColumn }
+    //        ],
+    //        "ordering": false,
+    //        "displayLength": 25,
+    //        "drawCallback": function (settings) {
+    //            var api = this.api();
+    //            var rows = api.rows({ page: 'current' }).nodes();
+    //            var last = null;
+
+    //            api.column(groupColumn, { page: 'current' }).data().each(function (group, i) {
+    //                if (last !== group) {
+    //                    $(rows).eq(i).before(
+    //                        '<tr class="group"><th colspan="11">' + group + '</th></tr>'
+    //                    );
+
+    //                    last = group;
+    //                }
+    //            });
+    //        }
+    //    });
+    //    // Order by the grouping
+    //    $('#example tbody').on('click', 'tr.group', function () {
+    //        var currentOrder = table.order()[0];
+    //        if (currentOrder[0] === groupColumn && currentOrder[1] === 'asc') {
+    //            table.order([groupColumn, 'desc']).draw();
+    //        }
+    //        else {
+    //            table.order([groupColumn, 'asc']).draw();
+    //        }
+    //    });
+    //});
+</script>

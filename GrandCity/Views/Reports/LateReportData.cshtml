@@ -1,0 +1,81 @@
+﻿
+@model IEnumerable <MeherEstateDevelopers.Models.Sp_Get_LateComers_Result>
+
+<br />
+<br />
+ 
+<div class="col-md-12">
+    <div class="row bgc-white">
+        <div class="col-md-12">
+            @*<div class="panel-heading central-text-align">
+                <h5>Employees</h5>
+            </div>*@
+        </div>
+        <br />
+        <div class="col-md-12"  >
+            <table class="table table-borderless" id="latetable">
+                <thead>
+                    <tr class="central-text-align thead-dark">
+                        <th>Sr#</th>
+                        <th>Name</th> 
+                        <th>Employee Code</th>
+                        <th>Company</th>
+                        <th>Department</th>
+                 
+                        <th>Designation</th>
+                        <th>Check In Time</th>
+                        <th>Late</th>
+                          
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @if (Model.Any())
+                    {
+                        var sr = 1;
+                        foreach (var v in Model.OrderBy(x=>x.Late)  )
+                        {
+                            <tr class="central-text-align pointer "  >
+                                <td>@sr</td>
+                                <td>@v.Employee_Name</td>
+                                <td>@v.Employee_Code</td>
+                                <td>@v.Company</td>
+                                <td>@v.Department</td>
+                                <td>@v.Designation</td>
+                                <td>@v.Check_In_Time.Value.ToLongTimeString()</td>
+                                <td>@TimeSpan.FromMinutes(Math.Abs(Convert.ToDouble(v.Late??0))).ToString()</td>
+
+                                 
+
+
+                            </tr>
+                            sr++;
+
+                        }
+                    }
+                    else
+                    {
+                        <tr class="bgc-red-50 central-text-align">
+                            <td colspan="7">No Record Found</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+<script>
+    $(document).ready(function () {
+        
+        $('#latetable').DataTable({
+            dom: 'Bfrtip',
+            buttons: [
+                'copy', 'csv', 'excel', 'pdf', 'print'
+            ],
+            "order": []
+        });
+    });
+
+
+</script>

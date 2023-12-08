@@ -1,0 +1,145 @@
+﻿@model MeherEstateDevelopers.Models.Property_Deal_Parties
+@using (Html.BeginForm("UpdateParty_Info", "PropertyDeal", FormMethod.Post, new { @id = "up-info-part", @class = "", role = "form" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(x => x.Id)
+<div class="row">
+    <div class="form-group col-md-12">
+        <h5 id="buy-sel">@Model.Type Information</h5>
+    </div>
+    <div class="form-group col-md-3">
+        <label>Name</label>
+        <input class="form-control text-box single-line" id="Name" name="Name" required="" type="text" value="@Model.Name">
+    </div>
+    <div class="form-group col-md-3">
+        <label>Mobile</label>
+        <input class="form-control text-box single-line" id="Mobile" name="Mobile" required="" type="text" value="@Model.Mobile">
+    </div>
+    <div class="form-group col-md-3">
+        <label>Address</label>
+        <input class="form-control text-box single-line" id="Address" name="Address" type="text" value="@Model.Address">
+    </div>
+    @if (Model.Status == MeherEstateDevelopers.Models.LeadsStatus.Close.ToString())
+    {
+        <div class="">
+            <label>Status</label>
+            <h5 class="bgc-green-50">@Model.Status</h5>
+        </div>
+    }
+</div>
+    <hr />
+    <div class="row">
+        <div class="form-group col-md-2">
+            @if (Model.Status == MeherEstateDevelopers.Models.LeadsStatus.Close.ToString() && Model.Type == "Buyer")
+            {
+                <label>Selling Price</label>
+            }
+            else
+            {
+                <label>Offer Price</label>
+            }
+            <input class="form-control coma" id="of-pr" placeholder="12,345" value="@string.Format("{0:n0}",Model.Offered_Rate)" required>
+            <input type="hidden" id="off-pric" name="Offered_Rate" class="amt" value="@Model.Offered_Rate" required>
+        </div>
+        <div class="form-group col-md-2">
+            <label>Rate /Marla</label>
+            <input class="form-control coma" id="rateper" placeholder="12,345" value="@string.Format("{0:n0}",Model.Rate_Per_Marla)" required>
+            <input type="hidden" id="rate" name="Rate_Per_Marla" class="amt" value="@Model.Rate_Per_Marla" required>
+        </div>
+        <div class="form-group col-md-3">
+            <label>Commission Charges</label>
+            <select class="form-control com-cal" id="Commission_Type" name="Commission_Type">
+                <option value=""></option>
+                <option value="0">0%</option>
+                <option value="0.5">0.5%</option>
+                <option value="1">1%</option>
+                <option value="1.5">1.5%</option>
+                <option value="2">2%</option>
+                <option value="Other">Other</option>
+            </select>
+            <script>
+            var a = "@Model.Commission_Type";
+                $("#Commission_Type").val(a);
+            </script>
+            <input style="display:none;margin-top:5px" class="form-control coma" id="oth-com" placeholder="12,345">
+            <input type="hidden" id="rate" name="Rate_Per_Marla" class="amt oth-com">
+        </div>
+        <div class="form-group col-md-2">
+            <label>Commission</label>
+            <h6 id="f-com-s"> @string.Format("{0:n0}", Model.Commession)</h6>
+            <input type="hidden" id="com-rate" class="amt" name="Commession" value="@Model.Commession" required>
+        </div>
+        <div class="form-group col-md-2">
+            <label>Status</label>
+            <select class="form-control" name="Status" id="Status">
+                <option value="Close">Close</option>
+                <option value="Initial_Discussion">Initial Discussion</option>
+                <option value="Mature">Mature</option>
+                <option value="Loose">Loose</option>
+            </select>
+        </div>
+        <script>
+            var a = "@Model.Status";
+            $("#Status").val(a);
+        </script>
+    </div>
+    <hr />
+    <div class="row" id="pay-btns">
+        @if (Model.Type == "Seller")
+        {
+            <div class="form-group col-md-2">
+                <button type="button" class="btn btn-primary v-r-c" id="Voucher">Request Voucher</button>
+            </div>
+        }
+        else
+        {
+            <div class="form-group col-md-2">
+                <button type="button" class="btn btn-danger v-r-c" id="Receipt">Request Receipt</button>
+            </div>
+            if (ViewBag.Type == "New_Lead")
+            {
+                <div class="form-group col-md-2">
+                    <button type="button" class="btn btn-primary v-r-c" id="Voucher">Request Voucher</button>
+                </div>
+            }
+        }
+        @if (Model.Com_Approve is null)
+        {
+            <div class="form-group col-md-2">
+                <button type="button" class="btn btn-success v-r-c" id="Commession" style="display:none">Commession Receipt</button>
+            </div>
+        }
+        else
+        {
+            <h6>Commession is Pending For Approval</h6>
+        }
+    </div>
+    <input type="hidden" id="v-r-t" />
+    <div class="row" id="pay-voc" style="display:none">
+        <div class="form-group col-md-4">
+            <label><span id="type"></span> Amount</label>
+            <input class="form-control coma" placeholder="250,000" id="amt-t-p" required><input type="hidden" id="Amount" class="amt" required>
+        </div>
+        <div class="form-group col-md-8 des">
+            <label >Description</label>
+            <input id="desc" class="form-control" name="Description" placeholder="Description Written on Payment Voucher" required>
+        </div>
+    </div>
+}
+<script>
+    $(function () {
+        $('.modal-footer').append('<button class="btn btn-primary" id="up-inf-par" type="button">Update Information</button>');
+        $('.modal-footer').append('<button class="btn btn-info" style="display:none" id="v-r-c-btn" type="button">Request</button>');
+        $(".modal-header").text("Update Information");
+    });
+    var Amount_rece = $('#reciv-amt').val();
+    var Amount_pay = $('#pay-amt').val();
+    var Amount_Off = $('#off-pric').val();
+    var Type = "@Model.Type";
+    if (Amount_rece => Amount_Off  && Type =="Buyer") {
+        $("#Commession").show();
+    }
+    else if (Amount_pay => Amount_Off  && Type == "Seller") {
+        $("#Commession").show();
+    }
+</script>

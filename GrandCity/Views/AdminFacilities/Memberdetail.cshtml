@@ -1,0 +1,141 @@
+﻿@model MeherEstateDevelopers.Models.AdminFacilitiesMembership
+
+@{
+    if (Model.MemberDetails != null)
+    {
+        <div class="mT-30" id="">
+            <h6 class="c-grey-900" id="">Subscribe / Unsubscription Registration :-</h6>
+
+            @foreach (var it in Model.Subscription)
+            {
+                <div class="form-group">
+                    <div class="checkbox checkbox-circle checkbox-info peers ai-c">
+                        @{
+                            if (it.Status == "Registered")
+                            {
+                                <input type="checkbox" value="@it.Id" data-scnam="@it.Project_name" class="peer unsub__ad__pro" checked>
+
+                            }
+                            else
+                            {
+                                <input type="checkbox" value="@it.Id" data-scnam="@it.Project_name" class="peer unsub__ad__pro">
+                            }
+                        }
+
+                        <label class="peers peer-greed js-sb ai-c">
+                            <span class="peer peer-greed ser-ch-nam" style="font-weight:bold"> @it.Project_name   </span>
+                        </label>
+                        <div class="form-row col-md-12">
+                            @if (it.Status == "Registered")
+                            {
+                                <div class=" col-md-3">
+                                    <input type="text" value="@string.Format("{0:n0}",it.FeeAmount)" id="@it.Id" class="form-control up__fees__admin__pro " />
+                                </div>
+                            }
+                        </div>
+
+                    </div>
+                </div>
+            }
+            <hr />
+            <div class="form-row row">
+                <h6 class="c-grey-900" id="">Member Information :-</h6>
+                <div class="col-md-12">
+                    <div class="form-row fildatad" id="">
+                        <div class="form-group col-md-2">
+                            <label>Name</label>
+                            <h6 class="c-grey-900" id="">@Model.MemberDetails.Name</h6>
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label>Father's/Husband's Name</label>
+                            <h6 class="c-grey-900" id="">@Model.MemberDetails.Father_Name</h6>
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label>CNIC / NICOP</label>
+                            <h6 class="c-grey-900" id="">@Model.MemberDetails.CNIC</h6>
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label>Mobile 1</label>
+                            <h6 class="c-grey-900" id="">@Model.MemberDetails.Mobile_1</h6>
+                        </div>
+                    </div>
+                    <hr />
+
+                    <h6 class="c-grey-900" id="">History :-</h6>
+                    @if (!Model.FeeStructure.Any())
+                    {
+                        <h6 class="c-grey-900" id="">No Record exist</h6>
+                    }
+                    else
+                    {
+                        <div class="form-row">
+                            @foreach (var g in Model.FeeStructure.GroupBy(x => new { x.Project_Name }))
+                            {
+                                <div class="col-md-5">
+                                    <table class="table table-striped table-bordered" cellspacing="0" width="100%" style="margin-bottom:0px">
+                                        <thead class="thead-dark">
+                                            <tr>
+                                                <th colspan="1">@g.Key.Project_Name</th>
+                                            </tr>
+                                            <tr>
+                                                <th>Sr</th>
+                                                <th>Month</th>
+                                                <th>Amount</th>
+                                                <th>Status</th>
+                                            </tr>
+                                        </thead>
+                                    </table>
+                                    <div style="min-height:0px; max-height:500px;overflow:auto" class=" ps--active-y">
+                                        <table class="table table-striped table-bordered" id="all-instments" cellspacing="0" width="100%">
+                                            <tbody>
+                                                @{
+                                                    int pltinser = 1;
+                                                    foreach (var item in g)
+                                                    {
+                                                        string statuscolor = "";
+                                                        string sta = "";
+                                                        if (item.Status == "Approved")
+                                                        {
+                                                            statuscolor = "bgc-green-50 pointer";
+                                                            sta = "Paid";
+                                                        }
+                                                        else
+                                                        {
+                                                            statuscolor = "bgc-red-50";
+                                                            sta = "Pending";
+                                                        }
+                                                        <tr class="@statuscolor">
+                                                            <td>@pltinser</td>
+                                                            <td>@string.Format("{0: dd-MMM-yyyy}", item.FeeMonth)  </td>
+                                                            <td>@string.Format("{0:n0}", item.FeeAmount)</td>
+                                                            <td>@sta</td>
+                                                        </tr>
+                                                        pltinser++;
+                                                    }
+                                                }
+                                            </tbody>
+                                            <tfoot>
+                                                <tr>
+                                                    <th>Total Paid</th>
+                                                    <th>@string.Format("{0:n0}", g.Where(x => x.Status == "Approved").Select(x => x.FeeAmount).Sum())</th>
+                                                    <th>Total Pending</th>
+                                                    <th>@string.Format("{0:n0}", g.Where(x => x.Status != "Approved").Select(x => x.FeeAmount).Sum())</th>
+                                                </tr>
+                                            </tfoot>
+                                        </table>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <h6 class="c-grey-900" id="">No Record Found</h6>
+    }
+
+}
+

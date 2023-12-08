@@ -1,0 +1,91 @@
+﻿@{
+    if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else if (User.IsInRole("CEO"))
+    {
+        Layout = "~/Views/Shared/_CEOLayout.cshtml";
+    }
+    else if (User.IsInRole("Staff"))
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+}
+<div class="row gap-20 pos-r">
+    <div class="col-md-12">
+        <div class="bgc-white p-20 bd">
+            <h6 class="c-grey-900">New Installment Structure</h6>
+            <div class="mT-30">
+                @using (Html.BeginForm("CreateCommercialInstallmentStruc", "Installments", FormMethod.Post, new { @id = "cr-com-inst-str", @class = "", role = "form", autocomplete = "off" }))
+                {
+                    @Html.AntiForgeryToken()
+
+                    <div class="form-row">
+                        <div class="form-group col-md-2">
+                            <label>Project</label>
+                            @Html.DropDownList("Projects", null, "Select Project", htmlAttributes: new { @class = "form-control prj-com-flo" })
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label>Floors</label>
+                            <select class="form-control" id="floor">
+                                <option>Select Floor</option>
+                            </select>
+                        </div>
+                    </div>
+                    <h6 class="c-grey-900">Installment Structure</h6>
+                    <div class="instal-str bdT pT-10">
+                        <div class="form-row">
+                            <div class="form-group col-md-12">
+                                <button type="button" class="btn btn-primary cal-ins" style="float:right">Calculate</button>
+                            </div>
+                        </div>
+                        <div class="form-row in-st" id="inst-strc-1">
+                            <div class="form-group col-md-3">
+                                <label>Name</label>
+                                <input type="text" class="form-control inst-name" />
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label>Type</label>
+                                <select class="form-control inst-type">
+                                    <option>Select Installment Type</option>
+                                    <option value="2">Booking</option>
+                                    <option value="3">Confirmation</option>
+                                    <option value="1">Installments</option>
+                                    <option value="4">Possession</option>
+                                    <option value="5">Balloon Payments</option>
+                                    <option value="6">Skipping Installments</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-1">
+                                <label>Percentage %</label>
+                                <input type="text" class="form-control perc" />
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label>Total Installments</label>
+                                <input type="text" class="form-control ttl-inst" />
+                            </div>
+                            <div class="form-group col-md-1">
+                                <label>After Time</label>
+                                <input type="text" class="form-control af-tim" placeholder="Months" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row py-2">
+                        <a href="javascript:void(0);" class="add-com-inst-type"><i class="ti-plus"></i>&nbsp;Add</a>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Create Structure</button>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="row col-md-12" id="all-inst-strc">
+
+    </div>
+</div>
+@*<script>
+        $(document).ready(function () {
+            $('#all-inst-strc').load('/Installments/InstallmentDetails/');
+        });
+    </script>*@
+

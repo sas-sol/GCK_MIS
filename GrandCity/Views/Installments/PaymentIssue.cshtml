@@ -1,0 +1,40 @@
+﻿@model MeherEstateDevelopers.Models.Sp_Get_Receipt_Parameter_ById_Result
+<div class="form-row">
+    <div class="form-group col-md-2">
+        <label>Receipt No: </label>
+        <h6>@Model.ReceiptNo</h6>
+        <input type="hidden" id="rece-id" value="@Model.Id" />
+    </div>
+    <div class="form-group col-md-2">
+        <label>Amount: </label>
+        <h6>@string.Format("{0:n0}", Model.Amount)</h6>
+    </div>
+    <div class="form-group col-md-2">
+        <label>Payment Type </label>
+        <h6>@Model.PaymentType</h6>
+    </div>
+    <div class="form-group col-md-2">
+        <label>Bank</label>
+        <h6>@Model.Bank</h6>
+    </div>
+    <div class="form-group col-md-2">
+        <label>Instrument No</label>
+        <h6>@Model.Ch_Pay_Draft_No</h6>
+    </div>
+    <div class="form-group col-md-2">
+        <label>Instrument Date</label>
+        <h6>@string.Format("{0:D}", Model.Ch_Pay_Draft_Date)</h6>
+    </div>
+    <div class="form-group col-md-4">
+        <label>Remarks</label>
+        <textarea class="form-control" rows="2"></textarea>
+    </div>
+    <div class="form-group col-md-2">
+        <label>Status</label>
+        <select class="form-control" id="" name="">
+            <option value="">Choose..</option>
+            <option value="Dispute">Dispute</option>
+            <option value="Resolved">Resolved</option>
+        </select>
+    </div>
+</div>

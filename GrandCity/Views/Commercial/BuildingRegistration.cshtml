@@ -1,0 +1,79 @@
+﻿@{
+    if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+}
+
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-row">
+            <h6 class="c-grey-900">Floor </h6>
+            <div class="col-md-12">
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label>Select Project</label>
+                        @Html.DropDownList("ProjectId", null, "Choose..", new { @class = "form-control", required = "" })
+                        <hr />
+
+                        <label>Level Name</label>
+                        <input type="text" id="Level_Name" name="Level_Name" class="form-control" required>
+                        <hr />
+                        <label>Level #</label>
+                        <select class="form-control" id="Level_Count" name="Level_Count">
+                            <option value="0">Basement</option>
+                            <option value="1">Ground Floor</option>
+                            <option value="2">Second Floor</option>
+                            <option value="3">Third Floor</option>
+                            <option value="4">Fourth Floor</option>
+                            <option value="5">Fifth Floor</option>
+                            <option value="6">Sixth Floor</option>
+                            <option value="7">Seventh Floor</option>
+                            <option value="8">Eight Floor</option>
+                            <option value="9">Ninth Floor</option>
+                            <option value="10">Tenth Floor</option>
+                        </select>
+
+                    </div>
+                    <div class="col-md-3 form-group  own-det" id="1">
+                        <label>Floor Image</label>
+                        <img style="margin-top:0px" src="" width="200" height="180" id="own_img" />
+                        <input type="hidden" id="image" name="Image" required />
+                        <input type="button" class="btn btn-info own-img add-own-img" id="add-own-img1" style="margin-top:10px;" data-toggle="modal" value="Upload Image" data-target="#Modal" />
+                    </div>
+                </div>
+            </div>
+            <hr />
+            <div class="col-md-12 " id="ad-shp">
+                <h6 class="c-grey-900">Shop Or Apartment Registration</h6>
+                <hr />
+                <div class="form-row" id="shp-1">
+                    <h6 class="lh-1 mB-0 pln-counter">1.</h6>
+                    <div class="form-group col-md-3">
+                        <label>Type</label>
+                        <select class="form-control Type" id="Type" name="Type" data-id="1">
+                            <option value="Shop">Shop</option>
+                            <option value="Apartment">Apartment</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label>Name</label>
+                        <input type="text" id="" name="" class="form-control Name" data-id="1">
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label>Area</label>
+                        <input type="text" id="" name="" class="form-control Area" data-id="1">
+                    </div>
+
+                    <i class="ti-plus pointer ad-an-shp" style="margin-left:77%;margin-top:-12%;"></i>
+                </div>
+            </div>
+        </div>
+        <button type="button" class="btn btn-primary reg__Floor" style="margin-left:64%">Register</button>
+    </div>
+</div>

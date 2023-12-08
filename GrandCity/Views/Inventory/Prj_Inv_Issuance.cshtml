@@ -1,0 +1,70 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Inventory_PurchaseOrder>
+<div class="form-row col-md-12 mt-md-2 prj-row">
+    <div class="col-md-2"></div>
+    <div class="col-md-3 form-group">
+        <label>Project</label>
+        <select class="form-control prj-se">
+            <option>Select Project</option>
+        </select>
+    </div>
+    <div class="col-md-5 form-group">
+        <div class="col-md-12">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Code</th>
+                        <th>Item</th>
+                        <th>Qty</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.Where(x => x.OtherCharges == null))
+                    {
+                        item.ReceivedQuantity = (item.ReceivedQuantity is null) ? 0 : item.ReceivedQuantity;
+                        item.IssuedQuantity = (item.IssuedQuantity is null) ? 0 : item.IssuedQuantity;
+                        <tr class="prj-items">
+                            <input type="hidden" class="item-id" value="@item.Item_Id" />
+                            <input type="hidden" class="rece-qty" value="@item.ReceivedQuantity" />
+                            <input type="hidden" class="issd-qty" value="@item.IssuedQuantity" />
+                            <input type="hidden" class="rem-qty" value="@(item.ReceivedQuantity - item.IssuedQuantity)" />
+                            <td>@item.SKU</td>
+                            <td>@item.Item_Name</td>
+                            <td>
+                                <input type="text" class="form-control is-qty coma" value="@string.Format("{0:0,0.##}",item.Qty)" />
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <i class="fas fa-trash rem-prj"></i>
+    </div>
+</div>
+<script>
+    var prj = $(".prj-se").last();
+    $(prj).select2({
+        minimumInputLength: 3,
+        dropdownParent: $(prj).parent(),
+        placeholder: "Search for Project",
+        ajax: {
+            url: '/ConstructProjectManagement/GetProject/',
+            dataType: 'json',
+            params: {
+                contentType: 'application/json; charset=utf-8'
+            },
+            quietMillis: 100,
+            data: function (params) {
+                return {
+                    q: params.term// search term
+                };
+            },
+            processResults: function (data) {
+                return {
+                    results: data.items
+                };
+            }
+        }
+    });
+</script>

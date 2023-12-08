@@ -1,0 +1,34 @@
+﻿@model MeherEstateDevelopers.Models.RealEstate_Blocks
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>RealEstate_Blocks</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Block_Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Block_Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RealEstate_Phases.Phase_Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RealEstate_Phases.Phase_Name)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

@@ -1,0 +1,141 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Sp_Get_Cheque_BankDraft_PayOrder_MultiParamter_Result>
+
+<script>
+    var banks = @Html.Raw(Json.Encode(ViewBag.Bank));
+</script>
+
+@using (Html.BeginForm("UpdateCbp", "Banking", FormMethod.Post, new { @id = "up-cbp", @class = "", role = "form" }))
+{
+    @Html.AntiForgeryToken()
+
+    foreach (var g in Model.GroupBy(x => new { x.Check_DemandDraft_PayOrder, x.Cheque_BankDraft_Payorder_Number, x.Bank, x.Cheque_DemandDraft_PayOrder_Date, x.Posted_Date, x.Status, x.Clearance_Date, x.Deposit_Bank, x.Deposit_Bank_Acc_Number }))
+    {
+        <input type="hidden" value="@ViewBag.TransactionId" name="TransactionId" />
+        <div class="form-row">
+            <div class="form-group col-md-2">
+                <label>@g.Key.Check_DemandDraft_PayOrder No.</label>
+                <h6> @g.Key.Cheque_BankDraft_Payorder_Number</h6>
+            </div>
+            <div class="form-group col-md-3">
+                <label>Instrument Date</label>
+                <h6>@string.Format("{0:D}", g.Key.Cheque_DemandDraft_PayOrder_Date)</h6>
+            </div>
+            <div class="form-group col-md-3">
+                <label>Bank</label>
+                <h6> @g.Key.Bank</h6>
+            </div>
+            <div class="form-group col-md-1">
+                <label>Amount </label>
+                <h6> @string.Format("{0:n0}", g.Sum(x => x.Amount))</h6>
+            </div>
+        </div>
+        foreach (var item in g)
+        {
+            <input type="hidden" name="Id" value="@item.Id" />
+        }
+        <div class="form-row">
+            <div class="form-group col-md-2">
+                <label>Posted Date</label>
+                @{ var date = (g.Key.Posted_Date == null) ? DateTime.Now : g.Key.Posted_Date; }
+                <input type="text" class="form-control" value="@string.Format("{0:MM/dd/yyyy}", date)" data-provide="datepicker" name="Posted_Date" />
+            </div>
+            <div class="form-group col-md-3">
+                <label>Deposited Bank</label>
+                <script>
+                    $("#Bank").append('<option value="">Select Bank</option>');
+                    var u_bank = banks.reduce((r, a) => {
+                        r[a.Bank] = [...r[a.Bank] || [], a];
+                        return r;
+                    }, {});
+                    $.each(u_bank, function (key) {
+                        $("#Bank").append('<option value="' + key + '">' + key + '</option>');
+                    });
+
+                    var a = "@g.Key.Deposit_Bank";
+                    $("#Bank").val(a);
+                </script>
+                <select class="form-control" name="Bank" id="Bank"></select>
+            </div>
+            <div class="form-group col-md-2">
+                <script>
+                    $(".accnum").append('<option value="@g.Key.Deposit_Bank_Acc_Number">@g.Key.Deposit_Bank_Acc_Number</option>');
+                </script>
+                <label>Account Number</label>
+                <select class="form-control accnum" name="Deposit_Bank_Acc_Number"></select>
+            </div>
+            <div class="form-group col-md-2">
+                <label>Status</label>
+                @if (g.Key.Status == "Pending")
+                {
+                    <select class="form-control" id="ch-stat" name="Status">
+                        <option value="Deposited">Deposited</option>
+                    </select>
+                }
+                else if (g.Key.Status == "Deposited")
+                {
+                    <select class="form-control" id="ch-stat" name="Status">
+                        <option value="Deposited">Deposited</option>
+                        <option value="Approved">Approved</option>
+                        <option value="Dishonored">Dishonored</option>
+                    </select>
+                }
+                else if (g.Key.Status == "Approved")
+                {
+                    <select class="form-control" id="ch-stat" name="Status">
+                        <option value="Approved">Approved</option>
+                        <option value="Dishonored">Dishonored</option>
+                    </select>
+                }
+                else if (g.Key.Status == "Dishonored")
+                {
+                    <select class="form-control" id="ch-stat" name="Status">
+                        <option value="Approved">Approved</option>
+                        <option value="Dishonored">Dishonored</option>
+                    </select>
+                }
+            </div>
+            <div class="form-group col-md-2">
+                <label>Clearance Date</label>
+                <input type="text" class="form-control" data-provide="datepicker" name="Clearance_Date" />
+            </div>
+        </div>
+        <div class="form-row" id="dis-rea" style="display:none">
+            <div class="form-group col-md-4">
+                <label>Reason</label>
+                @Html.DropDownList("Reason", null, "Choose..", new { @class = "form-control" })
+            </div>
+        </div>
+        if (g.Key.Status == "Dishonored")
+        {
+            <div class="form-row" id="dis-rea">
+                <div class="form-group col-md-4">
+                    <label>Reason</label>
+                    @foreach (var item in g)
+                    {
+                        <input type="text" class="form-control" value="@item.Dishonored_Reason" />
+                    }
+                </div>
+            </div>
+        }
+    }
+
+}
+<script>
+    $(function () {
+        $('.modal-footer').append('<button class="btn btn-primary" id="up-cbp-btn" type="button">Update</button>');
+        $(".modal-header").text("Update Information");
+
+        // initialize all comp
+
+       
+    });
+    $(document).on("change", "#Bank", function () {
+        var val = $(this).val();
+        var a = banks.filter(x => x.Bank == val);
+        $('.accnum').empty();
+        $.each(a, function (b) {
+            $(".accnum").append('<option value="' + a[b].Account_Number + '">' + a[b].Account_Number + '</option>');
+        });
+
+    });
+</script>

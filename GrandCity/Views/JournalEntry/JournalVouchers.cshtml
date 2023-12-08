@@ -1,0 +1,40 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Sp_Get_JournalEntries_All_Result>
+<table class="table row-border" id="c-r-v">
+    <thead>
+        <tr>
+            <th>Sr.</th>
+            <th>Narration</th>
+            <th>Head</th>
+            <th>Head Name</th>
+            <th>Debit</th>
+            <th>Credit</th>
+            <th>Recorded By</th>
+            <th>Date</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            if (Model.Any())
+            {
+                int srcounter = 1;
+                foreach (var g in Model.GroupBy(x => new { x.GroupId, x.RecordedBy_Date, x.RecordedBy_Name }))
+                {
+                    foreach (var item in g)
+                    {
+                        <tr class="" id="@g.Key.GroupId">
+                            <td>@srcounter</td>
+                            <td>@item.Naration</td>
+                            <td>@item.Head_Code</td>
+                            <td>@item.Head_Name</td>
+                            <td>@string.Format("{0:n0}", item.Debit)</td>
+                            <td>@string.Format("{0:n0}", item.Credit)</td>
+                            <td>@item.RecordedBy_Name</td>
+                            <td>@string.Format("{0:dd-MMM-yyyy}", item.RecordedBy_Date)</td>
+                        </tr>
+                    }
+                    srcounter++;
+                }
+            }
+        }
+    </tbody>
+</table>

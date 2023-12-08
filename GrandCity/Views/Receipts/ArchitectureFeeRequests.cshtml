@@ -1,0 +1,298 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Architecture_Requests>
+
+@{ if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+}
+
+
+<div class="col-md-12">
+    <h5 style="text-align:center"><u>Architecture Fee Requests</u></h5>
+    <div class="peer peer-greed mt-md-5">
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item"><a class="nav-link active" role="tab" data-toggle="tab" data-lead="1" aria-controls="home" aria-selected="true" href="#RPending">Requested Receipts</a></li>
+            <li class="nav-item"><a class="nav-link" role="tab" data-toggle="tab" data-lead="1" aria-controls="home" aria-selected="true" href="#RApproved">Printed Receipts</a></li>
+
+            <li class="nav-item"><a class="nav-link" role="tab" data-toggle="tab" data-lead="1" aria-controls="home" aria-selected="true" href="#VPending">Requested Vouchers</a></li>
+            <li class="nav-item"><a class="nav-link" role="tab" data-toggle="tab" data-lead="1" aria-controls="home" aria-selected="true" href="#VApproved">Printed Vouchers</a></li>
+        </ul>
+        <div class="tab-content mt-3">
+            <div class="tab-pane active" id="RPending">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr class="central-text-align">
+                            <th>Sr.</th>
+                            <th>Name</th>
+                            <th>Father Name</th>
+                            <th>CNIC</th>
+                            <th>Contact</th>
+                            <th>Size</th>
+                            <th>Total Amount</th>
+                            <th>Created By</th>
+                            <th>Created At</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @{
+                            int cnt = 1;
+                            var filtered = Model.Where(x => x.Status == "Requested" && x.TransactionType == "Receipt").ToList();
+                        }
+                        @if (filtered.Any())
+                        {
+                            foreach (var v in filtered)
+                            {
+                                <tr>
+                                    <td>@(cnt++)</td>
+                                    <td>@v.CustomerName</td>
+                                    <td>@v.CustomerFatherName</td>
+                                    <td>@v.CustomerCNIC</td>
+                                    <td>@v.CustomerContact</td>
+                                    <td>@v.PlotSize</td>
+                                    <td>@string.Format("{0:n0}", v.TotalAmount)</td>
+                                    <td>@v.CreatedBy_Name</td>
+                                    <td>@v.CreatedAt.Value.ToString("MM-dd-yyyy")</td>
+                                    <td>
+                                        <div class="row" style="justify-content:space-evenly;">
+                                            <i class="fa fa-list pointer gen-rcpt-fsdhjkghsaf" data-idtag="@v.Id" data-gtag="@(new MeherEstateDevelopers.Models.Helpers().RandomNumber())" title="Generate Receipt"></i>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr class="bgc-red-50 central-text-align">
+                                <td colspan="10">No Record</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="tab-pane" id="RApproved">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr class="central-text-align">
+                            <th>Sr.</th>
+                            <th>Name</th>
+                            <th>Father Name</th>
+                            <th>CNIC</th>
+                            <th>Contact</th>
+                            <th>Size</th>
+                            <th>Total Amount</th>
+                            <th>Created By</th>
+                            <th>Created At</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @{
+                            int scnt = 1;
+                            var sfiltered = Model.Where(x => x.Status == "Receipt_Generated" && x.TransactionType == "Receipt").ToList();
+                        }
+                        @if (sfiltered.Any())
+                        {
+                            foreach (var v in sfiltered)
+                            {
+                                <tr>
+                                    <td>@(scnt++)</td>
+                                    <td>@v.CustomerName</td>
+                                    <td>@v.CustomerFatherName</td>
+                                    <td>@v.CustomerCNIC</td>
+                                    <td>@v.CustomerContact</td>
+                                    <td>@v.PlotSize</td>
+                                    <td>@string.Format("{0:n0}", v.TotalAmount)</td>
+                                    <td>@v.CreatedBy_Name</td>
+                                    <td>@v.CreatedAt.Value.ToString("MM-dd-yyyy")</td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr class="bgc-red-50 central-text-align">
+                                <td colspan="10">No Record</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="tab-pane" id="VPending">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr class="central-text-align">
+                            <th>Sr.</th>
+                            <th>Name</th>
+                            <th>Father Name</th>
+                            <th>CNIC</th>
+                            <th>Contact</th>
+                            <th>Size</th>
+                            <th>Total Amount</th>
+                            <th>Created By</th>
+                            <th>Created At</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @{
+                            int vcnt = 1;
+                            var vfiltered = Model.Where(x => x.Status == "Requested" && x.TransactionType == "Voucher").ToList();
+                        }
+                        @if (vfiltered.Any())
+                        {
+                            foreach (var v in vfiltered)
+                            {
+                                <tr>
+                                    <td>@(vcnt++)</td>
+                                    <td>@v.CustomerName</td>
+                                    <td>@v.CustomerFatherName</td>
+                                    <td>@v.CustomerCNIC</td>
+                                    <td>@v.CustomerContact</td>
+                                    <td>@v.PlotSize</td>
+                                    <td>@string.Format("{0:n0}", v.TotalAmount)</td>
+                                    <td>@v.CreatedBy_Name</td>
+                                    <td>@v.CreatedAt.Value.ToString("MM-dd-yyyy")</td>
+                                    <td>
+                                        <div class="row" style="justify-content:space-evenly;">
+                                            <i class="fa fa-list pointer gen-vchr-fsdhjkghsaf" data-idtag="@v.Id" data-gtag="@(new MeherEstateDevelopers.Models.Helpers().RandomNumber())" title="Generate Receipt"></i>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr class="bgc-red-50 central-text-align">
+                                <td colspan="10">No Record</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="tab-pane" id="VApproved">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr class="central-text-align">
+                            <th>Sr.</th>
+                            <th>Name</th>
+                            <th>Father Name</th>
+                            <th>CNIC</th>
+                            <th>Contact</th>
+                            <th>Size</th>
+                            <th>Total Amount</th>
+                            <th>Created By</th>
+                            <th>Created At</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @{
+                            int vscnt = 1;
+                            var vsfiltered = Model.Where(x => x.Status == "Receipt_Generated" && x.TransactionType == "Voucher").ToList();
+                        }
+                        @if (vsfiltered.Any())
+                        {
+                            foreach (var v in vsfiltered)
+                            {
+                                <tr>
+                                    <td>@(vscnt++)</td>
+                                    <td>@v.CustomerName</td>
+                                    <td>@v.CustomerFatherName</td>
+                                    <td>@v.CustomerCNIC</td>
+                                    <td>@v.CustomerContact</td>
+                                    <td>@v.PlotSize</td>
+                                    <td>@string.Format("{0:n0}", v.TotalAmount)</td>
+                                    <td>@v.CreatedBy_Name</td>
+                                    <td>@v.CreatedAt.Value.ToString("MM-dd-yyyy")</td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr class="bgc-red-50 central-text-align">
+                                <td colspan="10">No Record</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('.gen-rcpt-fsdhjkghsaf').unbind().click(function () {
+            if (!confirm('Are you sure you want to generate receipt of this request?')) {
+                return;
+            }
+
+            let reqId = $(this).attr('data-idtag');
+            let tag = $(this).attr('data-gtag');
+            $(this).closest('.row').remove();
+
+            $.ajax({
+                type: "POST",
+                url: '/Receipts/ArchiReceiptReq/',
+                data: { Id: reqId, token: tag },
+                success: function (data) {
+                    if (data) {
+                        window.open('/Receipts/ArchiReceipt?Id=' + reqId + '&token=' + tag, '_blank');
+                    }
+                    else {
+
+                    }
+                }
+                , error: function (xmlhttprequest, textstatus, message) {
+                    if (textstatus === "timeout") {
+                        alert("got timeout");
+                    } else {
+                        alert(textstatus);
+                    }
+                }
+            });
+
+
+        });
+
+        $('.gen-vchr-fsdhjkghsaf').unbind().click(function () {
+            let reqId = $(this).attr('data-idtag');
+            let tag = $(this).attr('data-gtag');
+            $(this).closest('.row').remove();
+            if (!confirm('Are you sure you want to generate voucher of this request?')) {
+                return;
+            }
+            $.ajax({
+                type: "POST",
+                url: '/Receipts/ArchiVoucherReq/',
+                data: { Id: reqId, token: tag },
+                success: function (data) {
+                    if (data) {
+                        window.open('/Receipts/ArchiVoucher?Id=' + reqId + '&token=' + tag, '_blank');
+                    }
+                    else {
+
+                    }
+                }
+                , error: function (xmlhttprequest, textstatus, message) {
+                    if (textstatus === "timeout") {
+                        alert("got timeout");
+                    } else {
+                        alert(textstatus);
+                    }
+                }
+            });
+
+            
+        });
+    });
+</script>

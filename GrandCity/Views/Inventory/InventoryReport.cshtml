@@ -1,0 +1,102 @@
+﻿@{ if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+}
+<link href="~/Content/amsify.suggestags.css" rel="stylesheet" />
+<script src="~/Scripts/jquery.amsify.suggestags.js"></script>
+<div class="row">
+    <div class="col-md-12">
+        <div class="bdrs-3 ov-h bgc-white p-10 bd">
+            <div class="form-row">
+                <h5>Custom Search Filters</h5>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-1">
+                    <label>From</label>
+                    <input type="text" id="from" class="form-control" data-provide="datepicker" />
+                </div>
+                <div class="form-group col-md-1">
+                    <label>To</label>
+                    <input type="text" id="to" class="form-control" data-provide="datepicker" />
+                </div>
+                <div class="form-group col-md-2">
+                    <label style="width:100%">Projects</label>
+                    @Html.DropDownList("Prj_Id", null, "Choose..", new { @class = "form-control searchbox", multiple = "" })
+                </div>
+                <div class="form-group col-md-2">
+                    <label style="width:100%">Vendor</label>
+                    @Html.DropDownList("Vendor", null, "Choose..", new { @class = "form-control searchbox", multiple = "" })
+                </div>
+                <div class="form-group col-md-2">
+                    <label style="width:100%">Inventory Item</label>
+                    @Html.DropDownList("Inv", null, "Choose..", new { @class = "form-control searchbox", multiple = "" })
+                </div>
+                <div class="form-group col-md-2">
+                    <label style="width:100%">Users</label>
+                    @Html.DropDownList("Users", null, "Choose..", new { @class = "form-control searchbox", multiple = "" })
+                </div>
+                <div class="form-group col-md-2">
+                    <label style="width:100%">Stock In / Out</label>
+                    <select class="form-control" id="in_out">
+                        <option value="2">In - Out</option>
+                        <option value="1">In</option>
+                        <option value="0">Out</option>
+                    </select>
+                </div>
+
+                <div class="form-group col-md-2">
+                    <button class="btn btn-info sea-inv-rep" style="margin:29px">Search</button>
+                </div>
+            </div>
+            <div class="col-md-12" id="report"></div>
+        </div>
+    </div>
+</div>
+<script>
+    var from = $("#from").val();
+    var to = $("#to").val();
+    var prj_id = $("#Prj_Id").val();
+    var vend = $("#Vendor").val();
+    var ivn = $("#Inv").val();
+    var user = $("#Users").val();
+    var in_out = $("#in_out").val();
+    $("#report").load("/Inventory/SearchInventoryReport/", {
+        From: from,
+        To: to,
+        Prj_Id: prj_id,
+        Vendor: vend,
+        Inv: ivn,
+        Users: user,
+        In_Out: in_out
+    });
+
+    $(document).ready(function () {
+        $('.searchbox').select2({ placeholder: 'Select an option' });
+    });
+
+    $(document).on("click", ".sea-inv-rep", function () {
+        var from = $("#from").val();
+        var to = $("#to").val();
+        var prj_id = $("#Prj_Id").val();
+        var vend = $("#Vendor").val();
+        var in_out = $("#in_out").val();
+        var user = $("#Users").val();
+        var ivn = $("#Inv").val();
+        $("#report").load("/Inventory/SearchInventoryReport/", {
+            From: from,
+            To: to,
+            Prj_Id: prj_id,
+            Vendor: vend,
+            Inv: ivn,
+            Users: user,
+            In_Out: in_out
+        });
+
+    });
+
+</script>

@@ -1,0 +1,67 @@
+﻿<script src="~/Scripts/webcam.min.js"></script>
+<div class="form-row">
+    <div class="col-md-4">
+        <div id="my_camera"></div>
+        <button class="btn btn-primary" style="margin-top:3%" onClick="take_snapshot()">Take Photo</button>
+    </div>
+    <div class="col-md-3">
+        <div class="dealer-img">
+            <div class="main-img-preview">
+                <img class="thumbnail img-preview deal-img" width="320" height="240" src="~/assets/static/images/def-img.png" />
+            </div>
+            <div class="input-group py-3 ml-4">
+                <div class="fileUpload btn btn-danger fake-shadow">
+                    <span><i class="glyphicon glyphicon-upload"></i> Upload Logo</span>
+                    <input name="logo" type="file" class="attachment_upload">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4"><div id="results"></div></div>
+</div>
+<div class="form-row">
+</div>
+
+
+
+<!-- First, include the Webcam.js JavaScript Library -->
+
+<!-- Configure a few settings and attach camera -->
+<script language="JavaScript">
+
+    Webcam.set({
+        // live preview size
+        width: 320,
+        height: 240,
+
+        // device capture size
+        dest_width: 320,
+        dest_height: 240,
+
+        // final cropped size
+        crop_width: 240,
+        crop_height: 240,
+
+        // format and quality
+        image_format: 'jpeg',
+        jpeg_quality: 90
+    });
+
+
+    Webcam.attach('#my_camera');
+</script>
+
+<!-- A button for taking snaps -->
+
+<!-- Code to handle taking the snapshot and displaying it locally -->
+<script language="JavaScript">
+    function take_snapshot() {
+        // take snapshot and get image data
+        Webcam.snap(function (data_uri) {
+            document.getElementById('results').innerHTML ='<img id="snap-photo" src="' + data_uri + '"/>';
+        });
+    }
+    $(function () {
+        $('.modal-footer').append('<button class="btn btn-primary" data-ref="@ViewBag.ImgDiv" data-ids="@ViewBag.Id" id="sav-own-img" type="button">Save</button>');
+    });
+</script>

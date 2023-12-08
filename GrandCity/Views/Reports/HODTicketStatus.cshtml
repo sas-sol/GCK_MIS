@@ -1,0 +1,40 @@
+﻿@model MeherEstateDevelopers.Models.Report_FilesStatus
+<div id="transferbarcontainer" style="width: auto; height: 400px; margin: 0 auto"></div>
+<script>
+    Highcharts.chart('transferbarcontainer', {
+        chart: {
+            type: 'column'
+        },
+        title: {
+            text: 'Tickets Report'
+        },
+        subtitle: {
+            text: 'Source: Meher Estate Developers'
+        },
+        xAxis: {
+            categories: @Html.Raw( Json.Encode(Model.Categories)) ,
+            crosshair: true
+        },
+        yAxis: {
+            min: 0,
+            title: {
+                text: 'Tickets'
+            }
+        },
+        tooltip: {
+            headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+            pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                '<td style="padding:0"><b>{point.y:1f}</b></td></tr>',
+            footerFormat: '</table>',
+            shared: true,
+            useHTML: true
+        },
+        plotOptions: {
+            column: {
+                pointPadding: 0.2,
+                borderWidth: 0
+            }
+        },
+        series:  @Html.Raw( Json.Encode(Model.Series))
+    });
+</script>

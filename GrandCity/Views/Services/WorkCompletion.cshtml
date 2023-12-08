@@ -1,0 +1,323 @@
+﻿@model MeherEstateDevelopers.Models.Serv_Comp
+@{
+    var group = Model.PO.Select(x => x.Group_Id).FirstOrDefault();
+    var vendor = Model.PO.Select(x => x.Vendor_Id).FirstOrDefault();
+    var vendor_Name = Model.PO.Select(x => x.Vendor_Name).FirstOrDefault();
+    var bid_id = Model.PO.Select(x => x.Bid_Id).FirstOrDefault();
+    var PO_num = Model.PO.Select(x => x.PO_Number).FirstOrDefault();
+    var PO_date = Model.PO.Select(x => x.DateTime).FirstOrDefault();
+    var Dep_Id = Model.PO.Select(x => x.Dep_Id).FirstOrDefault();
+    var Dep_Name = Model.PO.Select(x => x.Dep_Name).FirstOrDefault();
+}
+@{ if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+}
+<div class="bgc-white bd bdrs-3 p-20 mB-20">
+    <div class="col-md-12">
+        <div class="col-md-12">
+            <input type="hidden" value="@group" class="grpId" />
+            <input type="hidden" class="form-control Bid_Number" name="Bid_Number" placeholder="Bid Number" readonly value="@bid_id">
+            <div class="form-row">
+                <div class="form-group col-md-3">
+                    <label>Vendor</label>
+                    <h5>@vendor_Name</h5>
+                    <input type="hidden" id="vendors" value="@vendor_Name" />
+                    <input type="hidden" id="vendId" value="@vendor" />
+                </div>
+                <div class="form-group col-md-2">
+                    <label>PO Number</label>
+                    <h5>@PO_num</h5>
+                    <input type="hidden" class="PO_Number" name="PO_Number" value="@PO_num">
+                </div>
+                <div class="form-group col-md-2">
+                    <label>PO Date</label>
+                    <h5>@string.Format("{0:dd-MMM-yyyy}", PO_date)</h5>
+                    <input type="hidden" class="PO_Date" placeholder="mm/dd/yyyy" name="PO_Date" value="@Model.PO.Select(x=>x.DateTime).FirstOrDefault().Value.ToShortDateString()">
+                </div>
+                <div class="form-group col-md-2">
+                    <label>Department</label>
+                    <h5>@Dep_Name</h5>
+                    <input type="hidden" id="dep-name" value="@Dep_Name">
+                    <input type="hidden" id="dep-id" value="@Dep_Id">
+                </div>
+                <div class="form-group col-md-3" style="display: block;">
+                    <label>Checked By</label>
+                    @Html.DropDownList("Employees", null, "Choose..", new { @class = "form-control" })
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr />
+    @if (Model.PO.Any())
+    {
+        int sr = 1;
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th width="5%">Sr.</th>
+                    <th width="45%">Work/Service</th>
+                    @{
+                        if (Model.PO.Where(x => x.Length != null).Any())
+                        {
+                            <th width="10%">Length</th>
+                        }
+                        if (Model.PO.Where(x => x.Width != null).Any())
+                        {
+                            <th width="10%">Width</th>
+                        }
+                        if (Model.PO.Where(x => x.Heigth != null).Any())
+                        {
+                            <th width="10%">Heigth</th>
+                        }
+                        if (Model.PO.Where(x => x.Breadth != null).Any())
+                        {
+                            <th width="10%">Breadth</th>
+                        }
+                    }
+                    <th width="10%">Est Comp</th>
+                    <th width="25%">Remarks</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var v in Model.PO)
+                {
+                <tr class="main-inv-rec cal">
+                    <input type="hidden" class="po-id" value="@v.Id" />
+                    <input type="hidden" class="inv-rate" value="@v.Purchase_Rate" />
+                    <input type="hidden" class="qtty" value="@v.Qty" />
+
+                    <td>@(sr++)</td>
+                    <td class="invs" data-slval="@v.Id">@v.Item_Name</td>
+                    @{
+                        if (Model.PO.Where(x => x.Length != null).Any())
+                        {
+                            <td>
+                                @v.Length / @v.L_UOM
+                                <hr />
+                                <input type="number" class="form-control l">
+                            </td>
+                        }
+                        if (Model.PO.Where(x => x.Width != null).Any())
+                        {
+                            <td>
+                                @v.Width / @v.W_UOM
+                                <hr />
+                                <input type="number" class="form-control w">
+                            </td>
+                        }
+                        if (Model.PO.Where(x => x.Heigth != null).Any())
+                        {
+                            <td>
+                                @v.Heigth / @v.H_UOM
+                                <hr />
+                                <input type="number" class="form-control h">
+                            </td>
+                        }
+                        if (Model.PO.Where(x => x.Breadth != null).Any())
+                        {
+                            <td>
+                                @v.Breadth / @v.B_UOM
+                                <hr />
+                                <input type="number" class="form-control b">
+                            </td>
+                        }
+                    }
+                    <td class="ttl-qty">@v.Qty / @v.UOM</td>
+                    <td>
+                        <textarea class="form-control rems" placeholder="remarks" rows="3" cols="5" style="resize:none"></textarea>
+                    </td>
+                </tr>
+                }
+            </tbody>
+        </table>
+    }
+    <div class="foot-row row">
+        <div class="col-md-12 mt-md-2">
+            <div class="col-md-2 righty">
+                <button class="btn btn-success save-to-com">Generate Completion Note</button>
+            </div>
+        </div>
+    </div>
+    <hr />
+    <div class="col-md-12">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Sr.</th>
+                    <th>Date</th>
+                    <th>No</th>
+                    <th>Completed Services</th>
+                    <th>Remarks</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{ 
+                    int i = 1;
+                }
+                @foreach (var item in Model.SC.GroupBy(x => new { x.Completion_No, x.DateTime,x.Remarks }))
+                {
+                    <tr>
+                        <th>@i</th>
+                        <th>@string.Format("{0:dd-MMM-yyyy}",item.Key.DateTime)</th>
+                        <th>@item.Key.Completion_No</th>
+                        <th>
+                            <table>
+                                <tbody>
+                                    @foreach (var a in Model.SC)
+                                    {
+                                        <tr>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </th>
+                        <th>@item.Key.Remarks</th>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="clearfix"></div>
+</div>
+
+<script>
+
+    $('.save-to-com').click(function () {
+        var itemsData = [];
+        $('.main-inv-rec').each(function () {
+            let bidId = $('.Bid_Number').val();
+            let grp = $('.grpId').val();
+            let venId = $('#vendId').val();
+            let venName = $('#vendors').val();
+            let dep_id = $('#dep-id').val();
+            let dep_name = $('#dep-name').val();
+
+            let rate = $(this).find('.inv-rate').val();
+            let qty = $(this).find('.qtty').val();
+
+            let l = $(this).find('.l').val();
+            let w = $(this).find('.w').val();
+            let h = $(this).find('.h').val();
+            let b = $(this).find('.b').val();
+
+
+            let emp = $('#Employees option:selected').val();
+            let emp_nam = $('#Employees option:selected').text();
+
+
+            let itemId = $(this).find('.invs').attr('data-slval');
+            let itemnm = $(this).find('.invs').text();
+
+            let poid = $(this).find('.po-id').val();
+            let poNum = $('.PO_Number').val();
+            let rems = $(this).find('.rems').val();
+            itemsData.push({
+                Item_Id: itemId,
+                Group_Id: grp,
+                Qty: qty,
+                Rate: rate,
+                Vendor_Id: venId,
+                Vendor_Name: venName,
+                Remarks: rems,
+                PO_Id: poid,
+                PO_Number: poNum,
+                Bid_Id: bidId,
+                Item_name: itemnm,
+                Dep_Id: dep_id,
+                Dep_Name: dep_name,
+                QualityCheck_By: emp,
+                QualityCheck_By_Name: emp_nam,
+                Length: l,
+                Width: w,
+                Height: h,
+                Breadth: b
+            });
+
+        });
+        if (confirm("Are you sure you want to Generate Completion Note")) {
+            $.ajax({
+                type: "POST",
+                url: "/Services/ServiceCompleteNo_SC/",
+                contentType: "application/json",
+                traditional: true,
+                beforeSend: function () {
+
+                },
+                complete: function () {
+
+                },
+                data: JSON.stringify({ items: itemsData }),
+            }).done(function (data) {
+                if (data.Status == true) {
+                    alert(data.Msg);
+                    window.open('/Services/CompletionCertification?Id=' + data.PO);
+                    window.location.reload();
+                }
+                else {
+                    alert(data.Msg);
+                }
+            });
+        }
+    });
+
+    $(document).on('focusout', '.qty', function () {
+        
+        let qty = $(this).val();
+        let rt = $.trim($(this).closest('.cal').find('.inv-rate').text());
+        let rcvd = $.trim($(this).closest('.cal').find('.rcvd-qty').text());
+        let mainQty = $.trim($(this).closest('.cal').find('.ttl-qty').text());
+        if ((parseFloat(rcvd) + parseFloat(qty)) > parseFloat(mainQty)) {
+            alert('Quantity error. Quantity cannot exceed PO quantity');
+            qty = 0;
+            $(this).val(0);
+        }
+        $(this).closest('.cal').find('.ttl-prc').text(qty * rt);
+    });
+</script>
+
+<style>
+    .centralText {
+        text-align: center;
+    }
+
+    .warningText {
+        position: absolute;
+        left: 50%;
+        right: 50%;
+        /*font-size: 20px;*/
+        animation-name: warning;
+        animation-duration: .6s;
+        animation-iteration-count: infinite;
+    }
+
+    @@keyframes warning {
+        0% {
+            font-size: 15px;
+        }
+
+        25% {
+            font-size: 20px;
+        }
+
+        50% {
+            font-size: 25px;
+        }
+
+        70% {
+            font-size: 20px;
+        }
+
+        100% {
+            font-size: 15px;
+        }
+    }
+</style>

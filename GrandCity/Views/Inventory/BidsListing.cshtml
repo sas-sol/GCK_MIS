@@ -1,0 +1,298 @@
+﻿@model  MeherEstateDevelopers.Models.QuotationsViewModel
+@{
+    if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else if (User.IsInRole("CEO"))
+    {
+        Layout = "~/Views/Shared/_CEOLayout.cshtml";
+    }
+    else if (User.IsInRole("Staff"))
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+    var status = Model.AppliedBids.Any(x => x.PR_Status == MeherEstateDevelopers.Models.PurchaseRequisitionStatus.Purchase_Order_Generated.ToString() || x.PR_Status == MeherEstateDevelopers.Models.PurchaseRequisitionStatus.Purchase_Order_NotPrinted.ToString());
+    var printstatus = Model.AppliedBids.Any(x => x.PR_Status == MeherEstateDevelopers.Models.PurchaseRequisitionStatus.Purchase_Order_NotPrinted.ToString());
+    var reqno = Model.PurchaseRequistionDetails.Select(x => x.Requisition_No).FirstOrDefault();
+    var Dep_Name = Model.PurchaseRequistionDetails.Select(x => x.Dep_Name).FirstOrDefault();
+    var Date = Model.PurchaseRequistionDetails.Select(x => x.DateTime).FirstOrDefault();
+    var prj = Model.PurchaseRequistionDetails.Select(x => x.Prj_Name).FirstOrDefault();
+    var Reason = Model.PurchaseRequistionDetails.Select(x => x.Reason).FirstOrDefault();
+    var Deliver_Date = Model.PurchaseRequistionDetails.Select(x => x.Deliver_Date).FirstOrDefault();
+    var Group_Id = Model.PurchaseRequistionDetails.FirstOrDefault().Group_Id;
+}
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/magnific-popup.min.css" integrity="sha512-+EoPw+Fiwh6eSeRK7zwIKG2MA8i3rV/DGa3tdttQGgWyatG/SkncT53KHQaS5Jh9MNOT3dmFL0FjTY08And/Cw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+
+<script src="~/Scripts/Inv.js"></script>
+<input type="hidden" value="@Group_Id" id="Group_Id" />
+<div class="bgc-white bd bdrs-3 p-20 mB-20">
+
+    @*<div class="row">
+        @{ Html.RenderAction("AddAllQuotations", "Procurement", new { Group_Id = Model.PurchaseRequistionDetails.Select(x => x.Group_Id).FirstOrDefault() });}
+    </div>*@
+
+
+    @if (Model.PurchaseRequistionDetails.Any())
+    {
+    <div class="row">
+        @if (!status)
+        {
+            if (!User.IsInRole("View All Requisitions"))
+            {
+                <div class="col-md-3">
+                    <button class="btn btn-primary RFQ-reg-ven" style="float:right">Generate RFQ</button>
+                </div>
+                <div class="col-md-3">
+                    <button class="btn btn-primary temp-reg-ven" style="float:right" data-toggle="modal" data-target="#Modal">Add New Vendor</button>
+                </div>
+                <div class="col-md-6">
+                    <button class="btn btn-info add-al-quot" style="float:right" data-toggle="modal" data-target="#Modal">Add Quotations</button>
+                </div>
+            }
+
+        }
+    </div>
+    <div class="row">
+        <div class="col-md-2">
+            <label>Department</label>
+            <h4>@Dep_Name</h4>
+            <input type="hidden" id="Dep_Id" value="@Model.PurchaseRequistionDetails.Select(x => x.Dep_Id).FirstOrDefault();" />
+        </div>
+        <div class="col-md-3">
+            <label>Project</label>
+            <h4>@prj</h4>
+        </div>
+        <div class="col-md-3">
+            <label>Requisition No</label>
+            <h4><a href="">@reqno </a></h4>
+        </div>
+        <div class="col-md-2">
+            <label>Date</label>
+            <h4>@String.Format("{0:dd-MMM-yyyy}", Date)</h4>
+        </div>
+        <div class="col-md-2">
+            <label>Delivery Date</label>
+            <h4>@String.Format("{0:dd-MMM-yyyy}", Deliver_Date)</h4>
+        </div>
+        @if (!string.IsNullOrEmpty(Reason) || !string.IsNullOrWhiteSpace(Reason))
+        {
+            <div class="col-md-12">
+                <label>Reason to Send Back</label>
+                <h4>@Reason</h4>
+            </div>
+        }
+    </div>
+        int sr = 1;
+        foreach (var v in Model.PurchaseRequistionDetails)
+        {
+            <div class="row it" style="border:1px solid #ccc" id="@v.Id">
+                <div class="col-md-1 p-20 pr">
+                    <h6>@sr</h6>
+                    <br />
+                    @if (User.IsInRole("Delete Requisition Item") || User.IsInRole("Administrator"))
+                    {
+                        <i class="fas fa-trash del-item pointer" data-mod="Inventory"></i>
+                    }
+                </div>
+                <div class="col-md-3 p-20">
+                    <label>Item Code: <b>@v.SKU</b></label>
+                    <br />
+                    <label>Item Name:<b>@v.Item_Name</b></label>
+                    <br />
+                    <label>Required Quantity : <b>@v.Qty / @v.UOM</b></label>
+                    <br />
+                    <label><b>@v.Description @v.Specs</b></label>
+                    <br />
+                    @if (v.Attachment_Id != null)
+                    {
+                        <h6>
+                            Reference file:
+                            <img src="~/Repository/PurchseRef/@Group_Id" width="200" height="200" />
+                        </h6>
+                    }
+                </div>
+                <div class="col-md-8 p-0">
+                    <table class="table-bordered table">
+                        <thead>
+                            <tr>
+                                @if (!status)
+                                {
+                                    if (!User.IsInRole("View All Requisitions"))
+                                    {
+                                        <input type="hidden" value="@v.Item_Name &nbsp;&nbsp;&nbsp; - &nbsp;&nbsp;&nbsp;&nbsp;    Required Quantity : @v.Qty / @v.UOM" class="item-det" />
+                                        <td colspan="3">
+                                            <input type="checkbox" class="it-exp" title="Mark as Exception" /> &nbsp; Exclude from 3 Quotations
+                                        </td>
+                                        <td colspan="4">
+                                            <div style="float:right" class="new-bid-req" id="@v.Item_Id-new-quo" data-itemid="@v.Item_Id" data-code="@v.SKU" data-toggle="modal" data-target="#Modal"><i class="fa fa-plus-circle"></i>Add new quote</div>
+                                        </td>
+                                    }
+                                }
+                            </tr>
+                            <tr class="thTextHeading">
+                                <th width="50px">Sr.</th>
+                                <th width="350px">Vendor</th>
+                                <th width="100px">Payment Timeline</th>
+                                <th width="100px">QTY</th>
+                                <th width="100px">Rate/UOM</th>
+                                <th width="100px">GST</th>
+                                <th width="100px">Total</th>
+                                <th width="10px"></th>
+                            </tr>
+                        </thead>
+                        <tbody class="quotes-rec" data-itemid="@v.Id" data-itemInvId="@v.Item_Id" data-itemttl="@v.Item_Name">
+                            @if (Model.AppliedBids.Any())
+                            {
+                                int i = 1;
+                                foreach (var item in Model.AppliedBids.Where(x => x.Bid_PurReqId == v.Id))
+                                {
+                                    string col = "";
+                                    if (item.Bid_Finalized == true)
+                                    {
+                                        col = "bgc-green-50";
+                                    }
+                                    <tr class="exst-item-bid-info it-qu @col" data-bidIden="@item.Bid_Id" data-isfnl="@item.Bid_Finalized.ToString()">
+                                        <td class="">
+                                            @i
+                                            @if (item.Bid_Finalized == true)
+                                            {
+                                                <i class="ti-check" style="color:green"></i>
+                                            }
+
+
+                                            <div class="quote-det"><i class="fa fa-plus-circle"></i></div>
+                                        </td>
+                                        <td class="">@item.Bid_Vendor_Name</td>
+                                        <td class="">@item.PaymentTime</td>
+                                        <td class="">@item.BidQty</td>
+                                        <td class="">@string.Format("{0:0,0.##}", item.Bid_Pur_Rate) / @v.UOM</td>
+                                        <td class="">@string.Format("{0:0,0.##}", item.Tax)</td>
+                                        <td class="it-qu-val"><span class="ccy">@item.Currency</span> @string.Format("{0:0,0.##}", item.Bid_Pur_Rate * item.BidQty + item.Tax)</td>
+                                        <td class="">
+                                            @if (!status)
+                                            {
+                                                if (!User.IsInRole("View All Requisitions"))
+                                                {
+                                                <ul style="list-style:none;margin-left:0px;">
+                                                    <li class="dropdown">
+                                                        <a href="" class="dropdown-toggle no-after peers" data-toggle="dropdown">
+                                                            <i class="ti-more-alt  c-grey-900" style="transform:rotate(90deg);"></i>
+                                                        </a>
+                                                        <ul class="dropdown-menu" style="padding:10px;width:auto !important">
+                                                            <li class="up-quot" data-toggle="modal" data-target="#Modal" data-bidIden="@item.Bid_Id"><i class="ti-pencil"></i>&nbsp;&nbsp;Update</li>
+
+                                                            <li class="exst-bid-row-rmvr" data-bidIden="@item.Bid_Id"><i class="ti-trash"></i>&nbsp;&nbsp;Delete</li>
+                                                        </ul>
+                                                    </li>
+                                                </ul>
+                                                }
+                                            }
+                                        </td>
+                                    </tr>
+                                    if (!string.IsNullOrEmpty(item.Bid_Desc) && !string.IsNullOrWhiteSpace(item.Bid_Desc))
+                                    {
+                                        <tr>
+                                            <td colspan="6"><b>Remarks: </b> @item.Bid_Desc</td>
+                                        </tr>
+                                    }
+                                    <tr style="display:none" class="quot-deta-@item.Bid_Id">
+                                        <td colspan="3" class="term"></td>
+                                        <td colspan="4" class="gallerys quo"></td>
+                                    </tr>
+                                    i++;
+                                }
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td colspan="8">No Quotations are Added yet</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            sr++;
+        }
+        <div class="row">
+            <div class="col-md-12 p-20" style="text-align:right">
+                @{
+                    if (Model.AppliedBids.Any())
+                    {
+                        List<bool> Stat = new List<bool>();
+                        foreach (var item in Model.PurchaseRequistionDetails.GroupBy(x => new { x.Id }))
+                        {
+                            Stat.Add(Model.AppliedBids.Any(x => x.Bid_PurReqId == item.Key.Id));
+                        }
+                        if (Stat.All(x => x == true))
+                        {
+                            if (Model.AppliedBids.Any(x => x.Bid_Finalized == true) && printstatus)
+                            {
+                                <button type="button" class="btn btn-primary gen-po">Print Purchase Orders</button>
+                            }
+                            else if (Model.AppliedBids.Any(x => x.Bid_Finalized == true && x.PO_Generated == true) && !printstatus)
+                            {
+                                <h5>Purchase Order Generated</h5>
+                            }
+                            else
+                            {
+                                if (!Model.AppliedBids.Any(x => x.PR_Status == MeherEstateDevelopers.Models.PurchaseRequisitionStatus.Quotation_Approval.ToString()))
+                                {
+                                    if (!User.IsInRole("View All Requisitions"))
+                                    {
+                                        <button type="button" class="btn btn-info quo-app">Send for Quotation Approval</button>
+                                    }
+                                }
+                                else
+                                {
+                                    <h5>Sent for Approval</h5>
+                                }
+                            }
+                        }
+                    }
+                }
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="col-md-12">
+            <h5>It appears to have occurred some sort of error. Please try again or contact SA Systems Team.</h5>
+        </div>
+    }
+</div>
+<style>
+    tr th {
+        font-size: 13px;
+        padding: 5px !important;
+    }
+
+    .thTextHeading {
+        color: #FFF;
+        background-color: #212529;
+    }
+
+    /*.del-item {
+        visibility: hidden
+    }*/
+
+    .pr:hover .del-item {
+        visibility: visible
+    }
+</style>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/jquery.magnific-popup.min.js" integrity="sha512-IsNh5E3eYy3tr/JiX2Yx4vsCujtkhwl7SLqgnwLNgf04Hrt9BT9SXlLlZlWx+OK4ndzAoALhsMNcCmkggjZB1w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+
+
+<script>
+    $(document).ready(function () {
+        $('.gallerys').magnificPopup({
+            type: 'image',
+            delegate:'a'
+        });
+    });
+</script>

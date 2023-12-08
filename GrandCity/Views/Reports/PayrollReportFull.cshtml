@@ -1,0 +1,108 @@
+﻿
+@model IEnumerable<MeherEstateDevelopers.Models.Sp_Get_PayrollReport_Result>
+@*<div class="col-md-12">
+    <div class="row" style="align-items: flex-end;">
+        <div class="col-md-3">
+            <div class="col-md-5">From :</div>
+            <div class="col-md-10">
+                <input type="text" class="form-control st-dt-dfhjgs" placeholder="From Date" />
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="col-md-5">To :</div>
+            <div class="col-md-10">
+                <input type="text" class="form-control en-dt-fkjdghs" placeholder="To Date" />
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="col-md-10">Department :</div>
+            <div class="col-md-10">
+                <select class="form-control dep-payrl-lst-dsfjk">
+                    <option>All</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="col-md-2">
+            <button class="btn btn-primary get-payrl-rep-btn-fdljk">Update</button>
+            <button class="btn btn-primary dets-payrl-rep-btn-fdljk">Details</button>
+        </div>
+    </div>
+</div>
+<div class="col-md-12 mt-md-3" id="payrl_rep-ghjd">
+</div>*@
+
+<script>
+    $(document).ready(function () {
+        let p_cats = [];
+    let p_sers = [];
+    let payrlModelData = @Html.Raw(Json.Encode(Model));
+    $.each(payrlModelData, function (index, value) {
+        p_cats.push(value.SalaryMonth);
+    });
+
+    p_sers.push({
+        name: 'Step 1',
+        data: payrlModelData.map(x => x.Step_1)
+    });
+    p_sers.push({
+        name: 'Step 2',
+        data: payrlModelData.map(x => x.Step_2)
+    });
+    p_sers.push({
+        name: 'Step 3',
+        data: payrlModelData.map(x => x.Step_3)
+    });
+    p_sers.push({
+        name: 'Step 4',
+        data: payrlModelData.map(x => x.Step_4)
+    });
+    p_sers.push({
+        name: 'Received',
+        data: payrlModelData.map(x => x.Received)
+    });
+    p_sers.push({
+        name: 'Salary Generated',
+        data: payrlModelData.map(x => x.SalaryGenerated)
+    });
+
+    Highcharts.chart('payrl_rep-ghjd', {
+
+        chart: {
+            type: 'column',
+            backgroundColor: '#212639'
+        },
+
+        title: {
+            text: 'Payrol Report'
+        },
+
+        xAxis: {
+            categories: p_cats,
+        },
+        yAxis: {
+            allowDecimals: false,
+            min: 0,
+            title: {
+                text: ''
+            }
+        },
+        tooltip: {
+            formatter: function () {
+                return '<b>' + this.x + '</b><br/>' +
+                    this.series.name + ': ' + Number(this.y).toLocaleString() + '<br/>'
+            }
+        },
+        plotOptions: {
+            column: {
+                pointPadding: 0.2,
+                borderWidth: 0
+            }
+        },
+        series: p_sers
+    });
+    });
+
+</script>

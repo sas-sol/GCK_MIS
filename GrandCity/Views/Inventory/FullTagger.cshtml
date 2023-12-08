@@ -1,0 +1,49 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Sp_Get_Inventory_List_With_Departments_Result>
+
+    <table class="table table-borderless inv-tbl" id="tbl-full-tagger">
+        <thead>
+            <tr>
+                <th>Sr.</th>
+                <th>Item Name</th>
+                <th>QTY</th>
+                <th>UOM</th>
+                <th>SKU</th>
+                <th>Category</th>
+                <th>Code</th>
+                <th>Department</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @{ int sr = 1; }
+            @foreach (var v in Model.GroupBy(x => x.Id))
+            {
+                <tr>
+                    <td>@sr</td>
+                    <td>@v.Select(x => x.Item_Name).FirstOrDefault()</td>
+                    <td>@v.Select(x=> x.TotalQty).FirstOrDefault()</td>
+                    <td>@v.Select(x => x.UOM).FirstOrDefault()</td>
+                    <td>@v.Select(x => x.SKU).FirstOrDefault()</td>
+                    <td>@v.Select(x => x.Category_Name).FirstOrDefault()</td>
+                    <td>@v.Select(x => x.AccountCode).FirstOrDefault()</td>
+                    <td>@String.Join(", ", v.Select(x => x.Dep_Name))</td>
+                    <td><i class="fa fa-pencil update-invent" title="Update Item" data-toggle="modal" data-target="#Modal" data-itId="@v.Select(x=>x.Id).FirstOrDefault()"></i></td>
+                </tr>
+                sr++;
+            }
+        </tbody>
+    </table>
+
+
+<script>
+    $(document).ready(function () {
+        $('.update-invent').unbind().click(function () {
+            var name = $(this).attr('data-itId');
+            EmptyModel();
+            $('#ModalLabel').text(" Inventory Update");
+            $('#modalbody').load('/Inventory/InventoryByIdSearch/', { id: name });
+        });
+        $('.inv-tbl').DataTable();
+    });
+</script>

@@ -1,0 +1,34 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Sp_Get_JournalEntries_Parameter_All_Result>
+<div class="row">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Sr.</th>
+                <th>Date</th>
+                <th>Narration</th>
+                <th>Head</th>
+                <th>Debit</th>
+                <th>Credit</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{ int sr = 1;}
+            @foreach (var g in Model)
+            {
+                int i = 1;
+                <tr>
+                    <td>@sr</td>
+                    <td>@string.Format("{0:dd-MMM-yyyy}", g.RecordedBy_Date)</td>
+                    <td>@g.Naration</td>
+                    <td>@g.Head</td>
+                    <td>@string.Format("{0:n0}", g.Debit)</td>
+                    <td>@string.Format("{0:n0}", g.Credit)</td>
+                </tr>
+                sr++;
+            }
+        </tbody>
+    </table>
+</div>
+<script>
+    $('.modal-footer').append('<button type="button" data-grp="@Model.FirstOrDefault().GroupId" class="btn btn-info vouh-print">Print Voucher</button>');
+</script>

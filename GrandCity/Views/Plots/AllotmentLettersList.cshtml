@@ -1,0 +1,52 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Sp_Get_ChDDPO_Result>
+@{ Layout = "~/Views/Shared/_StaffLayout.cshtml"; }
+
+<div class="form-row">
+    <div class="col-md-2">
+        <div class="scrollable bd bgc-white pos-r bdT layer w-100 fxg-1">
+            <ul class="p-20 nav flex-column">
+                @*<li class="nav-item">
+                    <a href="javascript:void(0)" data-link="/Plots/RequestedAllotmentLetters/" class="nav-link c-grey-800 cH-blue-500 active chddpo-link">
+                        <div class="peers ai-c jc-sb">
+                            <div class="peer peer-greed">
+                                <span>Requested for Verification</span>
+                            </div>
+                        </div>
+                    </a>
+                </li>*@
+                <li class="nav-item">
+                    <a href="javascript:void(0)" data-link="/Plots/VerifiedAllotmentLetters/" class="nav-link c-grey-800 cH-blue-500 chddpo-link">
+                        <div class="peers ai-c jc-sb">
+                            <div class="peer peer-greed">
+                                <span>Verified & Generated</span>
+                            </div>
+                        </div>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="javascript:void(0)" data-link="/Plots/SignedAllotmentLetters/" class="nav-link c-grey-800 cH-blue-500 chddpo-link">
+                        <div class="peers ai-c jc-sb">
+                            <div class="peer peer-greed">
+                                <span>Signed</span>
+                            </div>
+                        </div>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="javascript:void(0)" data-link="/Plots/DeliveredAllotmentLetters/" class="nav-link c-grey-800 cH-blue-500 chddpo-link">
+                        <div class="peers ai-c jc-sb">
+                            <div class="peer peer-greed">
+                                <span>Delivered</span>
+                            </div>
+                        </div>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="col-md-10 ">
+        <div id="cheques">
+            @{ Html.RenderAction("VerifiedAllotmentLetters", "Plots"); }
+        </div>
+    </div>
+</div>

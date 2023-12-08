@@ -1,0 +1,86 @@
+﻿@model MeherEstateDevelopers.Models.Inventory
+<input type="hidden" class="pr-item" value="@Model.Id" />
+<div class="form-row ">
+    <div class="form-group row col-md-12">
+        <label class="col-sm-3 col-form-label">Requested Inventory: </label>
+        <div class="col-sm-9">
+            <h5>@Model.Complete_Name</h5>
+        </div>
+    </div>
+</div>
+<hr />
+<div class="form-row item-pur-req-row">
+    <div class="form-group col-md-6">
+        <label>New Item Assignment</label>
+        <select class="form-control product"></select>
+    </div>
+    <div class="form-group col-md-2">
+        <label>Code</label>
+        <input class="form-control item-code" readonly>
+    </div>
+    <div class="form-group col-md-2">
+        <label>UOM</label>
+        <input class="form-control item-uom" name="UOM" readonly>
+    </div>
+    <div class="form-group col-md-2">
+        <label>Available Qty</label>
+        <input class="form-control av-qty" readonly>
+    </div>
+</div>
+<script>
+    $('.modal-footer').append('<button type="button" class="btn btn-primary up-inv-code">Update</button>');
+    $(document).ready(function () {
+        var prdctThat = $(".product").first();
+        $(prdctThat).select2({
+            minimumInputLength: 3,
+            dropdownParent: $(prdctThat).parent(),
+            placeholder: "Search for Inventory",
+            ajax: {
+                url: '/Inventory/GetInventoryItem_WC/',
+                dataType: 'json',
+                params: {
+                    contentType: 'application/json; charset=utf-8'
+                },
+                quietMillis: 100,
+                data: function (params) {
+                    return {
+                        q: params.term// search term
+                    };
+                },
+                processResults: function (data) {
+                    return {
+                        results: data.items
+                    };
+                }
+            }
+        });
+        $(prdctThat).on('select2:select', function (e) {
+
+            var s = e.params.data;
+            $.ajax({
+                type: "POST",
+                url: '/Inventory/GetInventoryItemById/',
+                data: { Id: s.id },
+                success: function (data) {
+                    $(prdctThat).closest('.item-pur-req-row').find('.item-uom').val('');
+                    $(prdctThat).closest('.item-pur-req-row').find('.av-qty').val('');
+                    $(prdctThat).closest('.item-pur-req-row').find('.item-code').val('');
+                    $(prdctThat).closest('.item-pur-req-row').find('.stat').val('');
+
+                    $(prdctThat).closest('.item-pur-req-row').find('.item-uom').val(data.Inventory.UOM);
+                    $(prdctThat).closest('.item-pur-req-row').find('.item-code').val(data.Inventory.SKU);
+                    $(prdctThat).closest('.item-pur-req-row').find('.stat').val(data.Status);
+                    $(prdctThat).closest('.item-pur-req-row').find('.av-qty').val(Number(data.Inventory.Total_In_Qty - data.Inventory.Total_Out_Qty));
+                }
+                , error: function (xmlhttprequest, textstatus, message) {
+                    if (textstatus === "timeout") {
+                        alert("got timeout");
+                    } else {
+                        alert(textstatus);
+                    }
+                }
+            });
+        });
+    });
+
+</script>

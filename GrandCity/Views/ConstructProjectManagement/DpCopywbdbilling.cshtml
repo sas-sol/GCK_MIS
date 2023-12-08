@@ -1,0 +1,211 @@
+﻿@model IEnumerable<Management_Information_System.Models.Sp_Prj_Dcopy_Activity_Billing_Result>
+
+@{
+    decimal? sum = 0;
+
+}
+
+
+<div class="container-fluid ml-0 pr-0 mr-0">
+    <div class="form-row ">
+        <div class="col-md-10 form-row">
+            <div class="form-group col-md-3" id="vndr">
+                <label>Vendors</label>
+                @Html.DropDownList("Vendors", null, "Select Vendor ", new { Name = "Id", @class = "form-control select2" })
+            </div>
+        </div>
+    </div>
+</div>
+<div class="table-scrollable" style="">
+
+    <table class="table table-bordered" id="mts-table" cellspacing="0" style="width:100%;">
+        <thead>
+            <tr>
+                <th width="5%">Sr.</th>
+                <th width="15%">Title</th>
+                <th width="5%">UOM</th>
+                <th width="5%">L</th>
+                <th width="5%">w</th>
+                <th width="5%">H</th>
+                <th width="5%">B</th>
+                <th width="5%">Amount</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+
+                if (Model.Any())
+                {
+                    int srcounter = 1;
+                    foreach (var item in Model)
+                    {
+                        if (item.Type == "WBS")
+                        {
+
+                            <tr id="@item.Id">
+                                <td>@srcounter <input type="checkbox" value="@item.WBD_Id" class="check_WBD_Billing" style="margin-left:25%" /> </td>
+                                <td style="border-left:hidden">@item.Title</td>
+
+                                <td>@item.Unit</td>
+                                <td>@item.L</td>
+                                <td>@item.W</td>
+                                <td>@item.H</td>
+                                <td>@item.B</td>
+                                <td>@item.Amount</td>
+                                <td hidden id="@item.Dependencyid" class="Version">@item.Dependencyid</td>
+                            </tr>
+                            @TSView(Model.Where(x => x.Dependencyid == item.WBD_Id).ToList(), srcounter.ToString(), item.Type);
+
+                            srcounter++;
+                        }
+                    }
+                    <tr>
+                        <td colspan="5"></td>
+                        <td colspan="2"><button class="btn btn-primary Finalize-blng-prj-btn">Finalize</button></td>
+                        <td colspan="1"> @ViewBag.Total/-</td>
+                    </tr>
+                }
+                else
+                {
+                    <tr><td colspan="12" align="center">No Activity has been created</td></tr>
+                }
+            }
+        </tbody>
+
+
+        @helper TSView(IEnumerable<Management_Information_System.Models.Sp_Prj_Dcopy_Activity_Billing_Result> MTS, string Ver, string Type)
+        {
+            double task = 1; decimal? sum = 0;
+
+            foreach (var item in MTS)
+            {
+                if (item.Type == "Activity")
+                {
+
+                    string ed_u_wbd_blg = "", ed_l_wbd_blg = "", ed_w_wbd_blg = "", ed_h_wbd_blg = "", ed_b_wbd_blg = "", ed_a_wbd_blg = "";
+                    string version = Convert.ToString(Ver + "." + task);
+                    <tr id="@item.Id">
+                        <td>@version </td>
+                        <td>
+                            @item.Title
+                            @{
+                                ed_u_wbd_blg = "edit-u-wbd-blg"; ed_l_wbd_blg = "edit-l-wbd-blg"; ed_w_wbd_blg = "edit-w-wbd-blg"; ed_h_wbd_blg = "edit-h-wbd-blg"; ed_b_wbd_blg = "edit-b-wbd-blg"; ed_a_wbd_blg = "edit-a-wbd-blg";
+                            }
+                        </td>
+                        <td class="@ed_u_wbd_blg">@item.Unit</td>
+                        <td class="@ed_l_wbd_blg">@item.L</td>
+                        <td class="@ed_w_wbd_blg">@item.W</td>
+                        <td class="@ed_h_wbd_blg">@item.H</td>
+                        <td class="@ed_b_wbd_blg">@item.B</td>
+                        <td class="@ed_a_wbd_blg">@item.Amount</td>
+                        <td hidden id="@item.Dependencyid" class="Version">@item.Dependencyid</td>
+                        @{
+                            sum = sum + item.Amount;
+                        }
+                    </tr>
+                    @TSView(Model.Where(x => x.Dependencyid == item.WBD_Id).ToList(), version, item.Type);
+                    task += 1;
+
+                }
+            }
+        }
+
+
+    </table>
+
+</div>
+    <input id="prj_Id" hidden value="@ViewBag.prj_Id "/>
+<script>
+
+    $(document).ready(function () {
+  
+        var WbdId = [];
+        $('.Finalize-blng-prj-btn').unbind().click(function () {
+
+            if (!confirm('Are you sure you want to Finalize?')) {
+                return;
+            }
+            debugger
+            $('.check_WBD_Billing').each(function () {
+                if ($(this).is(':checked')) {
+                    WbdId.push($(this).val());
+                    //WbdId.push($(this).attr('data-WbdId'));
+                    //WBDId.push($(this).closest('tr').attr('id'));
+                }
+                else
+                {
+                    //WbdId.push($(this).val());
+
+                    //WbdId.push($(this).attr('data-WbdId'));
+                    //alert("Please Select Wbd");
+                    //return false;
+                }
+
+            });
+            var Vendorid = $("#Vendors").val();
+            var prj_Id = $("#prj_Id").val();
+            if (Vendorid == '' || Vendorid == null)
+            {
+                alert('Please Select Vendor');
+                return false;
+            }
+            debugger
+            $.ajax({
+                type: "POST",
+                url: '/ConstructProjectManagement/UpdateWbdBillingCheck/',
+                data: { Wbd_Id: WbdId, Vendor_id: Vendorid, prj_Id:prj_Id },
+                success: function (data) {
+                    debugger
+                    if (data.Status == false) {
+                        alert("Record Cannot be Updatd");
+
+                    }
+                    else {
+                        alert("Successfully Finalize WBD");
+                        
+                    }
+                },
+                //error: function () {
+                //    alert("Error Occured");
+                //    //window.location.reload();
+                //}
+
+
+            });
+        });
+    });
+</script>
+
+<style>
+    .del-mts {
+        display: none
+    }
+
+    .mts-div:hover .del-mts {
+        display: block
+    }
+
+    .table-scrollable {
+        max-height: 500px;
+        overflow-x: auto;
+        overflow-y: auto;
+        scrollbar-width: thin;
+    }
+
+        .table-scrollable thead th {
+            position: sticky;
+            top: 0px;
+            background-color: white;
+            margin-top: -1px;
+            margin-bottom: -1px;
+            /* This is our fake border (see above comment) */
+            box-shadow: inset 0 1px 0 #dee2e6, inset 0 -1px 0 #dee2e6;
+        }
+
+        .table-scrollable tbody tr {
+            line-height: 1px;
+        }
+</style>
+
+
+

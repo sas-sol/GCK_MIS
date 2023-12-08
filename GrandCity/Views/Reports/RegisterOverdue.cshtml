@@ -1,0 +1,79 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Sp_Reports_OverDue_Result>
+<h4>@ViewBag.Title</h4>
+<table class="table stripe table-bordered ovedue1">
+    <thead class="thead-dark">
+        <tr>
+            <th width="40px">Sr</th>
+            <th width="150px">Plot No</th>
+            <th width="150px">Plot Type</th>
+            <th width="100px">Plot Size</th>
+            <th width="100px">Dealership</th>
+            <th width="250px">Client Name</th>
+            <th width="250px">Father/Husband Name</th>
+            <th width="150px">Mobile 1</th>
+            <th width="150px">Mobile 2</th>
+            <th width="100px">Sale Price</th>
+            <th width="100px">Discount</th>
+            <th width="100px">Net Receivable</th>
+            <th width="100px">Received</th>
+            <th width="100px">Outstanding</th>
+            <th width="100px">Installments</th>
+            <th width="100px">Balance Receivable</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            int i = 1;
+        }
+        @foreach (var item in Model.Where(x => x.Status == 1).OrderBy(x => x.Balance_Amount))
+        {
+            <tr id="@item.Id">
+                <td>@i</td>
+                <td>@item.FileFormNumber <i style="float:right; z-index:1111111" class="ti-info-alt cust-info"></i></td>
+                <td>@item.Type</td>
+                <td>@item.Plot_Size</td>
+                <td>@item.Dealership_Name</td>
+                <td>@item.Name</td>
+                <td>@item.Father_Husband</td>
+                <td>@item.Mobile_1</td>
+                <td>@item.Mobile_2</td>
+                <td>@string.Format("{0:0,0.##}", Math.Round(Convert.ToDouble(item.Total_Amount)))</td>
+                <td>@string.Format("{0:0,0.##}", Math.Round(Convert.ToDouble(item.TotalDiscounts))) </td>
+                <td>@string.Format("{0:0,0.##}", Math.Round(Convert.ToDouble(item.Net_Receivable)))</td>
+                <td>@string.Format("{0:0,0.##}", Math.Round(Convert.ToDouble(item.Received_Amount)))</td>
+                <td>@string.Format("{0:0,0.##}", Math.Round(Convert.ToDouble(item.Out_Standing)))</td>
+                <td>@item.Installments</td>
+                <td>@string.Format("{0:0,0.##}", Math.Round(Convert.ToDouble(item.Balance_Amount)))</td>
+            </tr>
+            i++;
+        }
+
+    </tbody>
+    <tfoot>
+        <tr>
+            <th colspan="8"></th>
+            <th>@string.Format("{0:0,0.##}", Math.Round(Convert.ToDouble(Model.Where(x => x.Status == 1).Sum(x => x.Total_Amount)))) </th>
+            <th>@string.Format("{0:0,0.##}", Math.Round(Convert.ToDouble(Model.Where(x => x.Status == 1).Sum(x => x.TotalDiscounts)))) </th>
+            <th>@string.Format("{0:0,0.##}", Math.Round(Convert.ToDouble(Model.Where(x => x.Status == 1).Sum(x => x.Net_Receivable))))</th>
+            <th>@string.Format("{0:0,0.##}", Math.Round(Convert.ToDouble(Model.Where(x => x.Status == 1).Sum(x => x.Received_Amount))))</th>
+            <th>@string.Format("{0:0,0.##}", Math.Round(Convert.ToDouble(Model.Where(x => x.Status == 1).Sum(x => x.Out_Standing))))</th>
+            <th></th>
+            <th>@string.Format("{0:0,0.##}", Math.Round(Convert.ToDouble(Model.Where(x => x.Status == 1).Sum(x => x.Balance_Amount))))</th>
+        </tr>
+    </tfoot>
+</table>
+<script>
+    $(document).ready(function () {
+        $('table.table').DataTable({
+            dom: 'Bfrtip',
+            aaSorting: [],
+            scrollY: "500px",
+            scrollX: true,
+            scrollCollapse: true,
+            paging: false,
+            fixedColumns: {
+                leftColumns: 2
+            }
+        });
+    });
+</script>

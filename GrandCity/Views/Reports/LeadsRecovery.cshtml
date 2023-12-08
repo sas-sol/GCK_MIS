@@ -1,0 +1,23 @@
+﻿@model MeherEstateDevelopers.Models.Report_Amounts
+<div id="container2" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+
+<script>
+    Highcharts.chart('container2', {
+        chart: {
+            type: 'column'
+        },
+        title: {
+            text: 'Leads Token Amounts'
+        },
+        xAxis: {
+            categories: @Html.Raw( Json.Encode(Model.Categories)) ,
+        },
+        credits: {
+            enabled: false
+        },
+        series:  @Html.Raw( Json.Encode(Model.Series))
+    });
+
+
+
+</script>

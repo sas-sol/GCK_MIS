@@ -1,0 +1,135 @@
+﻿@model MeherEstateDevelopers.Models.LoanView
+
+<link href="~/Content/bootstrap-material-datetimepicker.css" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<script src="~/Scripts/bootstrap-material-datetimepicker.min.js"></script>
+
+<input type="hidden" class="loanId" value="@Model.LoanInfo.Id"/>
+<div class="col-md-12">
+    <table class="table table-borderless inst-strc-tbl-fkjhds">
+        <thead>
+            <tr>
+                <th>Installment</th>
+                <th>Month</th>
+                <th>Amount</th>
+                <th>Status</th>
+                <th></th>
+            </tr>
+        </thead>
+
+        <tbody class="tbl-inst-strctr-kfjshddfj">
+            @{ int count = 1;}
+            @foreach (var v in Model.Installments)
+            {
+            <tr data-instId="@v.Id" data-paid="@v.Status" class="inst-row-hjakdls">
+                <td class="sr-cnt-fsdljk">@(count++)</td>
+                @*@if (v.Status == "Paid")
+        {
+            <td><input type="text" class="form-control dt-dfsklhj" value="@v.Date.Value.ToString("MM/yyyy")" readonly /></td>
+            <td><input type="text" class="form-control inst-amt-hjgfsd" value="@(Convert.ToInt32(v.Loan_Amt))" readonly /></td>
+            <td>@v.Status</td>
+            <td></td>
+        }
+        else
+        {
+            <td><input type="text" class="form-control dt-dfsklhj" value="@v.Date.Value.ToString("MM/yyyy")" /></td>
+            <td><input type="text" class="form-control inst-amt-hjgfsd" value="@(Convert.ToInt32(v.Loan_Amt))" /></td>
+            <td>@v.Status</td>
+            <td><i class="fa fa-trash pointer del-rw-dfhjks"></i></td>
+        }*@
+                <td><input type="text" class="form-control dt-dfsklhj" value="@v.Date.Value.ToString("MM/yyyy")" /></td>
+                <td><input type="text" class="form-control inst-amt-hjgfsd" value="@(Convert.ToInt32(v.Loan_Amt))" /></td>
+                <td>@v.Status</td>
+                <td><i class="fa fa-trash pointer del-rw-dfhjks"></i></td>
+            </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<div class="col-md-12 central-text-align">
+    <button class="btn btn-success btn-add-inst-strctr-fdjhksdj">Add Another Installment</button>
+    <button class="btn btn-primary btn-updt-loan-inst-fhjdksl">Update</button>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('.dt-dfsklhj').bootstrapMaterialDatePicker({ weekStart: 0, time: false, format: 'MM/YYYY' });
+
+        $('.btn-updt-loan-inst-fhjdksl').unbind().click(function () {
+            let confi = confirm('Are you sure you want to update installments structure of this employee?');
+            if (!confi) {
+                return;
+            }
+
+            //yahan pe data collect kro
+            let instData = [];
+            let loan = $('.loanId').val();
+            $('.inst-row-hjakdls').each(function () {
+                let instId = $(this).attr('data-instId');
+                let insMon = $(this).find('.dt-dfsklhj').val();
+                let instAmt = $(this).find('.inst-amt-hjgfsd').val();
+                if (isNaN(instAmt)) {
+                    instAmt = 0;
+                }
+                let pd = $(this).attr('data-paid');
+                instData.push({
+                    Id: instId,
+                    Amount: instAmt,
+                    InstallmentMonth: insMon,
+                    IsPaid: (pd == 'Paid') ? true : false
+                });
+            });
+            //yahan pe ajax maaro
+
+            $.ajax({
+                type: "POST",
+                url: "/Loan/UpdateStructure/",
+                contentType: "application/json",
+                traditional: true,
+                beforeSend: function () {
+
+                },
+                complete: function () {
+
+                },
+                data: JSON.stringify({ instalments: instData, loanId: loan }),
+            }).done(function (data) {
+                if (data.Status == true) {
+                    alert(data.Msg);
+                    closeModal();
+                    window.location.reload();
+                }
+                else {
+                    alert(data.Msg);
+                }
+            });
+        });
+
+        $('.del-rw-dfhjks').unbind().click(function () {
+            let confi = confirm('Are you sure you want to remove this?');
+            if (!confi) {
+                return;
+            }
+
+            $(this).closest('tr').remove();
+
+            $('.inst-strc-tbl-fkjhds tr').each(function (i, v) {
+                $(this).find('.sr-cnt-fsdljk').text((i));
+            });
+        });
+
+        $('.btn-add-inst-strctr-fdjhksdj').unbind().click(function () {
+            let cnt = $('.tbl-inst-strctr-kfjshddfj tr').length + 1;
+            let strctr = `<tr data-instId="-1" data-paid="Pending" class="inst-row-hjakdls">
+                <td class="sr-cnt-fsdljk">${cnt}</td>
+                <td><input type="text" class="form-control dt-dfsklhj" /></td>
+                    <td><input type="text" class="form-control inst-amt-hjgfsd" value="0" /></td>
+                    <td>Pending</td>
+                    <td><i class="fa fa-trash pointer del-rw-dfhjks"></i></td>
+            </tr>`;
+
+            $('.tbl-inst-strctr-kfjshddfj').append(strctr);
+            $('.dt-dfsklhj').last().bootstrapMaterialDatePicker({ weekStart: 0, time: false, format: 'MM/YYYY' });
+        });
+    });
+</script>

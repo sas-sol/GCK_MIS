@@ -1,0 +1,104 @@
+﻿@using (Html.BeginForm("ReinstateFineCharges", "Installments", FormMethod.Post, new { @id = "re-ins-fine", @class = "", role = "form", autocomplete = "off" }))
+{
+    string plt = ViewBag.PlotSize;
+    var Amount = Convert.ToInt32(plt.Split(' ')[0]) * 10000;
+    <div class="form-row">
+        <input type="hidden" value="@ViewBag.TransactionId" id="trans-id" name="TransactionId" />
+        <input type="hidden" id="file-id" name="File_Id" value="@ViewBag.File_Id" />
+        <input type="hidden" id="module" name="Module" value="@ViewBag.Module" />
+        <input type="hidden" id="req-id" name="Req_Id" value="@ViewBag.Req_Id" />
+        <input type="hidden" id="imge" name="FileImage" />
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-md-2">
+            <label>Amount</label>
+            <input class="form-control coma" placeholder="12,345" value="@string.Format("{0:n0}", Amount)" required readonly>
+            <input type="hidden" id="amt" name="Amount" value="@Amount" class="amt" required readonly>
+        </div>
+        <div class="form-group col-md-2">
+            <label>Cash / Bank</label>
+            <select class="form-control paytypesel-test" id="cah-chq-bak" name="PaymentType">
+                <option value="Cash">Cash</option>
+                <option value="BankDraft">Bank Draft</option>
+                <option value="Cheque">Cheque</option>
+                <option value="PayOrder">Pay Order</option>
+                <option value="Online_Cash">Online - Cash</option>
+                <option value="Online_Cheque">Online - Cheque</option>
+                <option value="Online_Payorder">Online - PayOrder</option>
+                <option value="Online_Bankdraft">Online - BankDraft</option>
+            </select>
+        </div>
+        <div class="form-group col-md-3 paymentotherinfo">
+            <label id="paytypelabel"></label>
+            <input type="text" class="form-control" id="paymenttype" name="PayChqNo" placeholder="" disabled>
+        </div>
+        <div class="form-group col-md-3 paymentotherinfo">
+            <label>Bank</label>
+            @Html.DropDownList("Bank", null, "Choose..", new { @class = "form-control", disabled = "" })
+        </div>
+        <div class="form-group col-md-2 paymentotherinfo">
+            <label>Branch </label>
+            <input type="text" class="form-control" id="Branch" name="Branch" placeholder="Mall Rd" disabled>
+        </div>
+        <div class="form-group col-md-2 paymentotherinfo">
+            <label>Date</label>
+            <input type="text" class="form-control" data-provide="datepicker" name="Ch_bk_Pay_Date" placeholder="mm/dd/yyyy" disabled required>
+        </div>
+        <div class="form-group col-md-1 paymentotherinfo">
+            <label>Scan File </label>
+            <button class=" btn btn-primary" data-v="1" type="button" id="scanbtn">Scan</button>
+        </div>
+        <div id="images-1" class="col-md-10"></div>
+    </div>
+}
+<script>
+    $(function () {
+        $('.modal-footer').append('<button class="btn btn-success" id="gen-fin-rec" type="submit">Generate Receipt</button>');
+    });
+
+    // Add Genrate Invoice
+    $(document).on("click", "#gen-fin-rec", function (e) {
+        e.preventDefault();
+        $('#gen-rec').attr("disabled", true);
+        $("#amt-in-wrds").val(InWords($("#amt").val()));
+        var im = $("#scanned").attr('src');
+        $("#imge").val(im);
+        var con = confirm("Are you sure you want to Generate Receipt");
+        if (con) {
+            $.ajax({
+                type: "POST",
+                url: $("#re-ins-fine").attr('action'),
+                data: $("#re-ins-fine").serialize(),
+                success: function (data) {
+                    window.open("/Receipts/FineCharges?Id=" + data.Receiptid + "&Token=" + data.Token, '_blank');
+                },
+                error: function () {
+                    alert("Error Occured");
+                    $('#gen-rec').attr("disabled", false);
+                }
+            });
+        }
+    });
+</script>
+<style>
+    .paymentotherinfo {
+        display: none;
+    }
+
+    #inst-stat {
+        height: 1245px;
+        overflow-y: scroll;
+    }
+
+    img.scanned {
+        height: 200px; /** Sets the display size */
+        /*margin-right: 12px;*/
+        float: left;
+    }
+
+    div#images {
+        margin-top: 20px;
+        text-align: center;
+    }
+</style>

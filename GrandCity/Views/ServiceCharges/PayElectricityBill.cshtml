@@ -1,0 +1,42 @@
+﻿@model MeherEstateDevelopers.Models.Electricity_Bill
+@using (Html.BeginForm("PayElectricity", "ServiceCharges", FormMethod.Post, new { @id = "pay-elec-bill", @class = "", role = "form", autocomplete = "off" }))
+{
+    @Html.AntiForgeryToken()
+    decimal? gt = 0;
+    string biltext = "";
+    if (DateTime.UtcNow.Date > Model.Due_Date.Value.Date)
+    {
+        gt = Model.Net_Total;
+        biltext = "After Due Date :";
+    }
+    else
+    {
+        gt = Model.Grand_Total;
+
+        biltext = "Bill Amount :";
+    }
+    <input type="hidden" id="trans-id" name="TransactionId" value="@ViewBag.TransactionId" />
+    <input type="hidden" name="MeterNo" id="metno" />
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <h4>@biltext     <span style="position:absolute" id="@gt" class="p__am">@string.Format("{0:n}", gt)</span></h4>
+            <input type="hidden" value="@Model.Plot_Id" id="Plotid" name="PlotId" />
+        </div>
+        <div class="form-group col-md-6">
+            <h4>Due Date :     <span style="position:absolute">@string.Format("{0:dd MMM yyyy}", Model.Due_Date)</span></h4>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-2">
+            <label>Amount</label>
+            <input class="form-control coma" placeholder="12,345" id="paying__amt" required>
+            <input type="hidden" id="amt" name="Amount" class="amt" required>
+        </div>
+    </div>
+}
+<script>
+    $(function () {
+        $('.modal-footer').append('<button class="btn btn-success" id="gen-elec-ch-rec" type="submit">Generate Receipt</button>');
+        $("#metno").val($("#met-no").val())
+    });
+</script>

@@ -1,0 +1,75 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Sp_Get_Fuel_Details_Result>
+@{ if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+
+}
+
+<div class="col-md-12">
+    <div class="bgc-white bd bdrs-3 p-20 mB-20">
+        <div class="form-row">
+            <div class='col-md-3'>
+                <div class="layers bd bgc-white p-10 mt-2">
+                    <div class="layer w-100" style="text-align: center;font-size: 17px;">
+                        <a href="javascript:void(0);" class="ad-fuel pointer" data-toggle="modal" data-target="#Modal">Add Fuel Rates</a>
+                    </div>
+                </div>
+            </div>
+            <div class='col-md-3'>
+                <div class="layers bd bgc-white p-10 mt-2">
+                    <div class="layer w-100" style="text-align: center;font-size: 17px;">
+                        <a href="javascript:void(0);" class="up-fuel pointer" data-toggle="modal" data-target="#Modal">Update Rates</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <h4 class="c-grey-900 mB-20">Fuel Details</h4>
+        <table id="asset-dat" class="table table-striped table-bordered asset-dat" cellspacing="0" width="100%">
+            <thead class="">
+                <tr>
+                    <th>Employee Name</th>
+                    <th>Asset Name</th>
+                    <th>Model</th>
+                    <th>Registration Number</th>
+                    <th>Type</th>
+                    <th>Allowed Fuel</th>
+                    <th>Fuel Consumption</th>
+                    @*<th>Extra Consumption</th>*@
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    if (Model.Any())
+                    {
+                        foreach (var item in Model)
+                        {
+                <tr class="" id="@item.fdtid">
+                    <td>@item.empname</td>
+                    <td>@item.Name</td>
+                    <td>@item.Vehicle_Model</td>
+                    <td>@item.Vehicle_Registration_Number</td>
+                    <td>@item.Fuel_Type</td>
+                    <td class="allow_fuel" id="@item.Vehicle_Fuel">@item.Vehicle_Fuel</td>
+                    <td align="center" class="col-mod">
+                        <input class="form-control fuel-consmptn" placeholder="12,345" value="@item.Vehicle_Consumption">
+                    </td>
+                    @*@{ 
+                        var res = item.Vehicle_Consumption - item.Vehicle_Fuel_Allow;
+                        res = (res < 0) ? 0 : res;
+                    }
+                    <td> <label id="tot-con">@res</label></td>*@
+                    <td> <input class="form-control  totamt fuel-consmptn" placeholder="12,345" value="@item.Total"> </td>
+                </tr>
+                        }
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

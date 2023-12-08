@@ -1,0 +1,78 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.SP_Get_IssueNote_Items_Result>
+    <input type="hidden" value="@ViewBag.TransactionId" id="trans-id" />
+    <input type="hidden" value="@Model.Select(x=> x.Group_Id).FirstOrDefault()" id="grp-id" />
+    <input type="hidden" value="@Model.Select(x=> x.Dep_Id).FirstOrDefault()" id="dep-id" />
+    <input type="hidden" value="@Model.Select(x=> x.Dep_Name).FirstOrDefault()" id="dep-name" />
+    <input type="hidden" value="@Model.Select(x=> x.Prj_Id).FirstOrDefault()" id="prj-id" />
+    <input type="hidden" value="@Model.Select(x=> x.Prj_Name).FirstOrDefault()" id="prj-name" />
+    <input type="hidden" value="@Model.Select(x=> x.IssueNote_No).FirstOrDefault()" id="in-no" />
+<div class="col-md-12 bg-white">
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <td></td>
+                <td>Item</td>
+                <td>Quantity Issued</td>
+                <td>UOM</td>
+                <td>Issued To</td>
+                <td>Issued By</td>
+                <td>Requested By</td>
+                <td>Returned Qty</td>
+                <td>Warehouse</td>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.Any())
+            {
+                foreach (var v in Model)
+                {
+                    <tr class="agfs" data-item="@v.Item_Id" data-issueId="@v.Id">
+                        <td><i class="ti-trash pointer oijk"></i></td>
+                        <td class="it-nam">@v.Complete_Name</td>
+                        <td>@v.Qty</td>
+                        <td>@v.UOM</td>
+                        <td>@v.IssueTo_Name</td>
+                        <td>@v.IssueBy_Name</td>
+                        <td>@v.RequestedBy_Name</td>
+                        <td>
+                            <input type="number" class="myInpt qty" maxlength="5"/>
+                            <input type="hidden" class="orig" value="@v.Qty" />
+                        </td>
+                        <td>
+                            <select class="form-control warehouse">
+                                <option value="1">Warehouse 1</option>
+                                <option value="2">Warehouse 2</option>
+                                <option value="3">Warehouse 3</option>
+                            </select>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+
+        <tfoot>
+            <tr>
+                <td colspan="4">
+                    Return By : @Html.DropDownList("Employees", null, "Choose..", new { @class = "col-md-8 form-control sel-pro" })
+                </td>
+                <td colspan="4">
+                    <button class="btn btn-success jkgfhs">Save</button>
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+</div>
+
+<style>
+    .myInpt {
+        width: 100%;
+        height: 100%;
+        border: none;
+        text-align: center;
+    }
+</style>
+<script>
+    $(document).ready(function () {
+        $('.sel-pro').select2();
+    });
+</script>

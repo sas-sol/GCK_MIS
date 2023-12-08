@@ -1,0 +1,179 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.RealEstate_Projects>
+@{
+    if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+}
+<div class="row   bgc-white bd bdrs-3 p-20 mB-20">
+    <div class="col-md-12">
+        <div class="bgc-white p-20 bd">
+            <h6 class="c-grey-900">Member Registration</h6>
+            <input type="hidden" class="Gen__values" />
+            <input type="hidden" id="trans-id" name="TransactionId" value="@ViewBag.TransactionId" />
+            <div class="form-row">
+                <div class="form-group col-md-2">
+                    <label>Member Type</label>
+                    <select class="form-control" name="Type" id="regType">
+                        <option value="">Choose..</option>
+                        <option value="Employee">Employee</option>
+                        <option value="Residential">Residential</option>
+                        <option value="Outsider">Outsider</option>
+                    </select>
+                </div>
+                <div class="form-group col-md-2 hidd emp">
+                    <label>Employee Code</label>
+                    <input type="text" class="form-control" id="serchv">
+                </div>
+                <div class="form-group col-md-2 hidd res">
+                    <label>Block</label>
+                    @Html.DropDownList("Block", null, "Choose..", new { @class = "form-control blk-plts", })
+                </div>
+                <div class="form-group col-md-2 hidd res">
+                    <label>Type</label>
+                    <select class="form-control blk-plts" id="plot-type">
+                        <option value="Residential">Residential</option>
+                        <option value="Commercial">Commercial</option>
+                    </select>
+                </div>
+                <div class="form-group col-md-2  hidd res">
+                    <label>Plot No</label>
+                    <select class="form-control plt-reg-lst-data" id="plt-lst">
+                        <option>Select Block</option>
+                    </select>
+                </div>
+                <div class="form-group col-md-1 hidd emp ">
+                    <label>--------</label>
+                    <button type="button" class="btn btn-primary getda">Search</button>
+                </div>
+            </div>
+            <hr />
+            <div class="mT-30" id="">
+                <div class="form-row row">
+                    <h6 class="c-grey-900" id="Owner_slogn"></h6>
+                    <div class="col-md-12">
+                        <div class="form-row fildatad" id="">
+                            <div class="form-group col-md-2">
+                                <label>Name</label>
+                                <h6 class="c-grey-900" id="Namee"></h6>
+                                <h6 class="c-grey-900" id="Nameo"></h6>
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label>Father's/Husband's Name</label>
+                                <h6 class="c-grey-900" id="Father_Namee"></h6>
+                                <h6 class="c-grey-900" id="Father_Nameo"></h6>
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label>CNIC / NICOP</label>
+                                <h6 class="c-grey-900" id="CNICe"></h6>
+                                <h6 class="c-grey-900" id="CNICo"></h6>
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label>Mobile 1</label>
+                                <h6 class="c-grey-900" id="Mobile_1e"></h6>
+                                <h6 class="c-grey-900" id="Mobile_1o"></h6>
+                            </div>
+                        </div>
+                        <hr />
+                        <div class="form-row col-md-12 himemout">
+                            <div class="form-group col-md-2">
+                                <label>Name</label>
+                                <input type="text" class="form-control" name="Nameot" id="Nameot">
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label>Father Name</label>
+                                <input type="text" class="form-control" name="fNameot" id="fNameot">
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label>CNIC / NICOP</label>
+                                <input type="text" class="form-control" name="CNIC" id="CNICot" pattern="[0-9+]{5}-[0-9+]{7}-[0-9]{1}|[0-9+]{6}-[0-9+]{6}-[0-9]{1}" placeholder="12345-1234567-1   or   123456-123456-1">
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label>Mobile 1</label>
+                                <input type="text" class="form-control" id="Mobile_1ot" placeholder="03121234567" name="Mobile_1">
+                            </div>
+                        </div>
+                        <div class="form-row col-md-12 fildataf" id="">
+                            <div class="form-group col-md-2">
+                                <label>Name</label>
+                                <input type="text" class="form-control" name="Name" id="Name" required>
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label>Father's/Husband's Name</label>
+                                <input type="text" class="form-control" name="Father_Name" id="Father_Name" required>
+
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label>CNIC / NICOP</label>
+                                <input type="text" class="form-control" name="CNIC" id="CNIC" pattern="[0-9+]{5}-[0-9+]{7}-[0-9]{1}|[0-9+]{6}-[0-9+]{6}-[0-9]{1}" placeholder="12345-1234567-1   or   123456-123456-1" required>
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label>Address</label>
+                                <input type="text" class="form-control" name="Address" id="Address" required>
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label>Mobile 1</label>
+                                <input type="text" class="form-control" id="Mobile_1" placeholder="03121234567" name="Mobile_1" required>
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label>Mobile 2</label>
+                                <input type="text" class="form-control" id="Mobile_2" pattern="^0\d{10}" placeholder="03121234567" name="Mobile_2">
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label>City</label>
+                                @Html.DropDownList("City", null, "Choose..", new { @class = "form-control" })
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label>Blood Group</label>
+                                <select class="form-control" name="Blood_Group" id="Blood_Group" readonly>
+                                    <option value="">Choose..</option>
+                                    <option value="A+">A+</option>
+                                    <option value="A-">A-</option>
+                                    <option value="B+">B+</option>
+                                    <option value="B-">B-</option>
+                                    <option value="AB+">AB+</option>
+                                    <option value="AB-">AB-</option>
+                                    <option value="O+">O+</option>
+                                    <option value="O-">O-</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label>Emergency Contact</label>
+                                <input type="text" class="form-control" id="Emergency_Contact" name="Emergency_Contact">
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label>Relation with Contact Person</label>
+                                <input type="text" class="form-control" id="Relationship" name="Relationship">
+                            </div>
+                        </div>
+                        @{
+                            <div class="col-md-6">
+                                <div class="form-row">
+                                    @foreach (var item in Model)
+                                    {
+                                        <input type="checkbox" value="@item.Id" class="peer sub-ent-pro ent-chk" style="margin-top:1%"><span class="peer peer-greed " style="font-weight:bold;margin-left:2%"> @item.Project_Name   </span>
+                                    }
+                                    &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; <label>Membership Fee :&nbsp;&nbsp;&nbsp;&nbsp; <label id="tot-me-fe"></label></label>
+                                    <input type="hidden" class="tot-memcl" />
+                                    <input type="hidden" class="ids-set" name="ids" />
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="form-row">
+                <button type="submit" class="btn btn-primary" id="reg-mem" style="margin-left: 94%;">Register</button>
+            </div>
+        </div>
+        </div>
+    </div>
+    <script>
+        $('.hidd').hide();
+        $('.himemout').hide();
+        $('.fildataf').hide();
+    </script>

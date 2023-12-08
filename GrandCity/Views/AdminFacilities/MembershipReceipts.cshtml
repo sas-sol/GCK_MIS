@@ -1,0 +1,82 @@
+﻿@model IEnumerable<Management_Information_System.Models.Receipt>
+@{
+    if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+}
+<style>
+    .scrolling-box {
+        height: 311px;
+        overflow-y: scroll;
+        overflow-x: scroll;
+        width: 100%;
+    }
+
+    table thead tr th, table tbody tr td {
+        font-size: 12px;
+    }
+</style>
+<h6 class="heading-lgt-onDark">Membership Receipts</h6>
+<div class="col-md-5" style="margin-left:30%">
+    <table id="dataTable" class="table table-borderless clickable-rows" cellspacing="0" width="100%">
+        <thead class="thead-light">
+            <tr>
+                <th>Sr#</th>
+                <th>Receipt</th>
+                <th>Name</th>
+                <th>Amount</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (!Model.Any())
+            {
+
+                <tr><td colspan="5" style="text-align:center">No Recored Exists</td></tr>
+            }
+            else
+            {
+                var counter = 1;
+                foreach (var item in Model)
+                {
+                    string chk = "";
+                    if (item.Checked == true)
+                    {
+                        chk = "bgc-green-50";
+                    }
+                    else
+                    {
+                        chk = "";
+                    }
+                    <tr class="@chk rcgid" id="@item.Id">
+                        <td>@counter</td>
+                        <td>@item.ReceiptNo</td>
+                        <td>@item.Name</td>
+                        <td>@string.Format("{0:n}", item.Amount)</td>
+                        @if (item.Checked == false || item.Checked == null)
+                        {
+                            <td><button type="button" id="@item.ReceiptNo" value="@ViewBag.userid" class="btn btn-primary mem-rece">Print Receipt</button></td>
+                        }
+                        else
+                        {
+                            <td>Paid</td>
+                        }
+                    </tr>
+                    counter++;
+                }
+
+            }
+
+        </tbody>
+    </table>
+</div>
+
+
+
+
+

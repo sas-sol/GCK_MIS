@@ -1,0 +1,43 @@
+﻿@model MeherEstateDevelopers.Models.EmpModel
+
+
+<div class="bgc-white bd bdrs-3 p-20 mB-20">
+    <h4 class="c-grey-900 mB-20">Installments</h4>
+    <table class="table table-striped table-bordered" cellspacing="0" width="100%">
+        <thead>
+            <tr>
+                <th>Employee Name</th>
+                <th>Employee Code</th>
+                <th>Basic Salary</th>
+                <th>Installment</th>
+                <th>Apply</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+
+                if (Model == null)
+                {
+                    <tr><td colspan="5" style="text-align:center">No data available</td></tr>
+                }
+                else
+                {
+                    <tr class=" " id="@Model.Id">
+                        <td>@Model.Name</td>
+                        <td>@Model.Employee_Code</td>
+                        <td> @String.Format("{0:n0}", Model.Basic_Salary)</td>
+                        <td>
+                            @for (int i = 1; i <= Model.Installment_Values; i++)
+                            {
+                                @String.Format("{0:n2}", (Model.Amount) / (Model.Installment_Values)) <span> / Month</span> <br>
+                            }
+                        </td>
+                        <td id="@Model.Installment_Values "><button class="btn btn-primary app-for-loan">Apply</button></td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
+
+

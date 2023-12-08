@@ -1,0 +1,267 @@
+﻿
+@{ if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+}
+
+
+<div class="row gap-20 pos-r default-div-bg">
+    <div class="col-md-12">
+        <div class="default-div-bg p-20 bd">
+            <div class="form-row">
+                <div class="col-md-2">            </div>
+                <div class="col-md-8">
+                    <div class="form-row">
+                        <div class="form-group col-md-2">
+                            <label>Block</label>
+                            @Html.DropDownList("Block", null, "Choose..", new { @class = "form-control blk-plots", required = "" })
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label>Type</label>
+                            <select class="form-control blk-plots" id="plot-type">
+                                <option value="Residential">Residential</option>
+                                <option value="Commercial">Commercial</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label>Plot No</label>
+                            <select class="form-control" id="plot-details">
+                                <option>Select Block</option>
+                            </select>
+                        </div>
+                        <div class="col-md-1 form-group">
+                            <label>-----</label>
+                            <button class="btn btn-primary ser-plt-dets-jdksflgh">Search</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-12 ytr" style="display:none;">
+        <div class="row">
+            <div class="col-md-2">
+                <label>Plot Size</label>
+            </div>
+            <div class="col-md-2">
+                <label><b class="plt-size-jksdf"></b></label>
+            </div>
+
+            <div class="col-md-1"></div>
+
+            <div class="col-md-2">
+                <label>DC Rate</label>
+            </div>
+            <div class="col-md-2">
+                <label><b class="dc-rate-jksdf"></b></label>
+            </div>
+        </div>
+
+        <div class="row mt-md-3">
+            <div class="col-md-3">
+                <label>Selling Price</label>
+            </div>
+            <div class="col-md-3">
+                <input type="text" class="plt-act-prc coma form-control" />
+            </div>
+        </div>
+
+        <div class="row mt-md-5">
+            <div class="col-md-6">
+                <div class="panel-heading central-text-align">
+                    <h5>Seller's Info</h5>
+                </div>
+
+                <div class="sels-prnt-fjsd">
+
+                </div>
+
+                <div class="row mt-md-3">
+                    <div class="col-md-6"></div>
+                    <div class="col-md-2">
+                        <b>Total :</b>
+                    </div>
+                    <div class="col-md-4">
+                        <label><b class="sel-ttl-amt"></b></label>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="col-md-6">
+                <div class="panel-heading central-text-align">
+                    <h5>Buyer's Info</h5>
+                </div>
+                <div class="col-md-12 mt-md-2" style="text-align:right;">
+                    <span><i class="fa fa-plus fa-2x pointer add-buyer-fdshjk" style="color:limegreen"></i></span>
+                </div>
+
+                <div class="buys-prnt-fjsd">
+                    <div class="row mt-md-3">
+                        <div class="col-md-6">Transfer Fee</div>
+                        <div class="col-md-2">
+
+                        </div>
+                        <div class="col-md-4">
+                            <label><b class="trans-fee-amt"></b></label>
+                        </div>
+                    </div>
+                    <hr />
+                </div>
+
+                <div class="row mt-md-3">
+                    <div class="col-md-6"></div>
+                    <div class="col-md-2">
+                        <b>Total :</b>
+                    </div>
+                    <div class="col-md-4">
+                        <label><b class="buy-ttl-amt"></b></label>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<input type="hidden" class="dc-rate-jkfdhs"/>
+<input type="hidden" class="plt-prc-min-jhkfsd" />
+<input type="hidden" class="filerPerc"/>
+<input type="hidden" class="nonFilerPerc" />
+<input type="hidden" class="transFee" />
+
+
+<script>
+    $('.ser-plt-dets-jdksflgh').unbind().click(function () {
+        //perform an ajax hit here
+        let plt = $('#plot-details option:selected').val();
+        $.ajax({
+            type: "POST",
+            url: '/Plots/PlotTaxData/',
+            data: { Plotid: plt },
+            success: function (data) {
+                console.log(data);
+                $('.ytr').show();
+                //display the info here
+                $('.plt-size-jksdf').text(data.PlotSize);
+                $('.dc-rate-jksdf').text(data.DC_Rate.toLocaleString());
+                $('.plt-act-prc').val(data.Min_Sell_Price.toLocaleString());
+                $('.plt-prc-min-jhkfsd').val(data.Min_Sell_Price);
+                $('.trans-fee-amt').text((data.TransferFee).toLocaleString());
+                $('.buy-ttl-amt').text((data.TransferFee).toLocaleString());
+                $('.transFee').val((data.TransferFee));
+                $('.filerPerc').val(data.FilerPerc);
+                $('.nonFilerPerc').val(data.NonFilerPerc);
+
+                let _strct_sel_ = ``;
+                let ttlSelCost = 0;
+                $.each(data.CurrentOwners, function (ind, val) {
+                    let minRate = (data.Min_Sell_Price) / (data.CurrentOwners.length);
+                    let calcAmt = (minRate * ((data.CurrentOwners[ind].IsFiler) ? (data.FilerPerc / 100) : (data.NonFilerPerc / 100)));
+                    ttlSelCost += calcAmt;
+                    _strct_sel_ += `<div class="row sels-inf-fhjd mt-md-3">
+                        <div class="col-md-6">${data.CurrentOwners[ind].Name}</div>
+                        <div class="col-md-2">
+                            <label class="switch"><input type="checkbox" class="filerCheck" ${(data.CurrentOwners[ind].IsFiler) ? "checked" : ""}><span class="slider round"></span></label>
+                        </div>
+                        <div class="col-md-4">
+                            Rs. <span class="tax-amt"> ${calcAmt.toLocaleString()} </span>
+                        </div>
+                    </div> <hr />`;
+                });
+
+                $('.sels-prnt-fjsd').append(_strct_sel_);
+                $('.sel-ttl-amt').text(ttlSelCost.toLocaleString());
+            },
+            error: function () {
+                alert('Failed to fetch plot details. Please try again');
+            }
+        });
+    });
+
+    $('.add-buyer-fdshjk').unbind().click(function () {
+        let _strct_sel_ = ``;
+        _strct_sel_ += `<div class="row buys-inf-fhjd mt-md-3">
+                        <div class="col-md-6"><input type="text" class="form-control" placeholder="Buyer Name" /></div>
+                        <div class="col-md-2">
+                            <label class="switch"><input type="checkbox" class="filerCheck"><span class="slider round"></span></label>
+                        </div>
+                        <div class="col-md-3">
+                            <label><b class="tax-amt"></b></label>
+                        </div>
+                        <div class="col-md-1">
+                            <i class = "fa fa-trash pointer rmv-dfkj" style="color:#D0232A"></i>
+                        </div>
+                    </div> <hr />`;
+
+        $('.buys-prnt-fjsd').append(_strct_sel_);
+
+        updateTaxCalc();
+    });
+
+    $(document).on('click', '.rmv-dfkj', function () {
+        if (confirm('Are you sure you want to remove this buyer?')) {
+            $(this).closest('.buys-inf-fhjd').remove();
+            updateTaxCalc();
+        }
+    });
+
+    $(document).on('change', '.filerCheck', function () {
+        updateTaxCalc();
+    });
+
+    $('.plt-act-prc').unbind().change(function () {
+        let enteredPrc = parseFloat(RemoveComma($(this).val()));
+        let minAmt = parseFloat($('.plt-prc-min-jhkfsd').val());
+
+        if (enteredPrc < minAmt) {
+            alert(enteredPrc);
+            alert(minAmt);
+            alert('Selling price cannot be less than DC Rate per marla Plot price');
+            $(this).val(minAmt.toLocaleString());
+        }
+        updateTaxCalc();
+    });
+
+    function updateTaxCalc() {
+
+        let prc = parseFloat(RemoveComma($('.plt-act-prc').val()));
+        let flrRate = parseFloat($('.filerPerc').val());
+        let nonFlrRate = parseFloat($('.nonFilerPerc').val());
+
+        //calculate Sellers Tax
+        let selsPrc = (prc / $('.sels-inf-fhjd').length)
+        let ttlSelCost = 0;
+        $('.sels-inf-fhjd').each(function () {
+            let isFlr = $(this).find('.filerCheck').is(':checked');
+            let calc = (selsPrc * ((isFlr) ? (flrRate / 100) : (nonFlrRate / 100)));
+            calc = isNaN(calc) ? 0 : calc;
+            ttlSelCost += Math.ceil(calc);
+            $(this).find('.tax-amt').text(calc.toLocaleString());
+        });
+
+        $('.sel-ttl-amt').text(ttlSelCost.toLocaleString());
+
+        //calculate buyers tax
+        let buyersPrc = (prc / $('.buys-inf-fhjd').length)
+        let ttlBuyCost = parseFloat($('.transFee').val());
+        $('.buys-inf-fhjd').each(function () {
+            let isFlr = $(this).find('.filerCheck').is(':checked');
+            let calc = (buyersPrc * ((isFlr) ? (flrRate / 100) : (nonFlrRate / 100)));
+            calc = isNaN(calc) ? 0 : calc;
+            ttlBuyCost += Math.ceil(calc);
+            $(this).find('.tax-amt').text(calc.toLocaleString());
+        });
+        $('.buy-ttl-amt').text(ttlBuyCost.toLocaleString());
+    }
+
+</script>

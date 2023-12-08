@@ -1,0 +1,202 @@
+﻿@model MeherEstateDevelopers.Models.Assets
+
+
+@{ Layout = "~/Views/Shared/_StaffLayout.cshtml"; }
+
+
+
+<div class="row gap-20 pos-r">
+    <div class="col-md-4">
+        <div class="bgc-white p-20 bd">
+            <h6 class="c-grey-900">Asset Management</h6>
+            <div class="mT-30">
+                <div class="form-group col-md-12">
+                    <select class="form-control col-md-12 asset_selection">
+                        <option value="Please_select">Please select...</option>
+                        <option value="Add_Assets">Add Assets</option>
+                        <option value="Add_Assets_Types">Add Assets Types</option>
+                    </select>
+                </div>
+                <div id="Asset-barcode">
+
+                </div>
+
+                <hr />
+                <div class="addasset">
+                    <div class="form-group col-md-12">
+                        <label>Company</label>
+                        @Html.DropDownList("Company_Id", null, "Choose..", new { @class = "form-control assetcomp" })
+                    </div>
+                    <div class="form-group col-md-12">
+                        <label>Select Type</label>
+                        @Html.DropDownList("Type", null, "Choose..", new { @class = "form-control assettype" })
+                    </div>
+                    <div class="form-group col-md-12">
+                        <label>Asset Name</label>
+                        @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control assetname" } })
+                    </div>
+                    <hr />
+                    <div class="form-row">
+                        <h6 class="c-grey-900">Vehicle Information</h6>
+                        <div class="form-group col-md-12 ">
+                            <label>Vehicle Company</label>
+                            @Html.EditorFor(model => model.Vehicle_Company, new { htmlAttributes = new { @class = "form-control veh-com" } })
+                        </div>
+                        <div class="form-group col-md-12">
+                            <label>Vehicle Model</label>
+                            @Html.EditorFor(model => model.Vehicle_Registration_Number, new { htmlAttributes = new { @class = "form-control veh-mod" } })
+                        </div>
+                        <div class="form-group col-md-12">
+                            <label>Vehicle Registration</label>
+                            @Html.EditorFor(model => model.Vehicle_Registration_Number, new { htmlAttributes = new { @class = "form-control veh-reg", placeholder = "ABC-123  ||  ABC-16-1234" } })
+                        </div>
+                        <div class="form-group col-md-12">
+                            <label>Vehicle Fuel Quantity</label>
+                            @*@Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control veh-fuel" } })*@
+                            <input class="form-control coma " placeholder="12,345" required>
+                            <input type="hidden" id="" name="Vehicle_Fuel" class="amt veh-fuel" data-id="1" required>
+                        </div>
+                        <div class="form-group col-md-12">
+                            <label>Fuel Type</label>
+                            @Html.DropDownList("FuelTpe", null, "Choose..", new { @class = "form-control fuel_id" })
+                        </div>
+
+                    </div>
+
+                    <div class="form-group col-md-12">
+                        <label>Specificaton</label>
+                        <textarea class="form-control assetspec" id="descriptxtbx" name="Specs" rows="5"></textarea>
+                    </div>
+                    <div class="form-group col-md-12">
+                        <button type="button" class="btn btn-primary" onclick="assetsubmission()">Add Asset</button>
+                    </div>
+                </div>
+
+                <div class="addassetypes">
+                    <div class="form-group col-md-12">
+                        <label>Type</label>
+                        @Html.EditorFor(model => model.Types, new { htmlAttributes = new { @class = "form-control assettypes" } })
+                    </div>
+                    <div class="form-group col-md-12">
+                        <button type="button" class="btn btn-primary" onclick="assetsubmission()">Add Asset</button>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+    <div class="col-md-8">
+        @{ Html.RenderAction("AllVehicleList", "Company");}
+    </div>
+</div>
+<style>
+    #descriptxtbx {
+        resize: none;
+    }
+
+    .addasset {
+        margin-top: 8%;
+    }
+
+    .addassetypes {
+        margin-top: 8%;
+    }
+</style>
+<script>
+
+    //hidden members
+    $('.addasset').hide();
+    $('.addassetypes').hide();
+    // varable declaration
+    var selectedoption = '';
+    // select option change
+    $(".asset_selection").change(function () {
+        selectedoption = $(".asset_selection option:selected").val();
+
+        if (selectedoption == 'Add_Assets') {
+            $('.addasset').show();
+            $('.addassetypes').hide();
+        }
+        else if (selectedoption == 'Add_Assets_Types') {
+            $('.addasset').hide();
+            $('.addassetypes').show();
+        }
+        else if (selectedoption == 'Please_select') {
+            alert('Please select the option');
+            $('.addasset').hide();
+            $('.addassetypes').hide();
+        }
+        else {
+            alert('Please select the option');
+            $('.addasset').hide();
+            $('.addassetypes').hide();
+        }
+    });
+    //
+    function assetsubmission() {
+        var Name = $('.assetname').val();
+        var Company_Id = $('.assetcomp').val();
+        var Id = $('.assettype').val();
+        var Specs = $('.assetspec').val();
+        var Type = $('.assettype').val();
+        var Types = $('.assettypes').val();
+        var Vehicle_Company = $('.veh-com').val();
+        var Vehicle_Model = $('.veh-mod').val();
+        var Vehicle_Registration_Number = $('.veh-reg').val();
+        var Vehicle_Fuel = $('.veh-fuel').val();
+        var Fuel_Type_Id = $('.fuel_id').val();
+
+        var dataasset = {
+            Name: Name,
+            Company_Id: Company_Id,
+            Specs: Specs,
+            Type: Type,
+            Vehicle_Company: Vehicle_Company,
+            Vehicle_Model: Vehicle_Model,
+            Vehicle_Registration_Number: Vehicle_Registration_Number,
+            Vehicle_Fuel: Vehicle_Fuel,
+            Fuel_Type_Id: Fuel_Type_Id,
+        }
+        var comassetypes = {
+            Types: Types,
+        }
+        $.ajax({
+            type: "POST",
+            url: '/Company/AddAsset/',
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify({
+                Company_Asset: dataasset,
+                Companyassetstype: comassetypes,
+                selectedopt: selectedoption,
+            }),
+            success: function (data) {
+                if (data) {
+                    if (selectedoption == 'Add_Assets') {
+                        var html = '';
+                        $("#Asset-barcode").html("");
+                        if (data.ReturnData != "error") {
+                            html +=
+                                ' <img width="170" height="170" src="' + data.ReturnData + '" id="base64Img" class="img-thumbnail">' +
+                                '<a class="" href="' + data.ReturnData + '" download><button type="button" class="btn btn-primary" onclick="">Download</button></a>'
+                            $("#Asset-barcode").append(html);
+                            alert("Register");
+                        }
+                    }
+                    else {
+                        alert("Register");
+                        window.location.reload();
+                    }
+
+                }
+                else {
+
+                    alert("Already exist")
+                }
+            },
+            error: function (data) {
+                alert("error")
+            }
+        });
+    }
+</script>

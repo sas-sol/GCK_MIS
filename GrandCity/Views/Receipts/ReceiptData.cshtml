@@ -1,0 +1,81 @@
+﻿@model MeherEstateDevelopers.Models.Sp_Get_Receipt_Result_Result
+@using (Html.BeginForm("UpdateReceipt", "Banking", FormMethod.Post, new { @id = "up-rece", @class = "", role = "form" }))
+{
+    if(Model.CompType == true)
+    {
+        <script>
+            $("#first-rec :input").prop("disabled", true);
+            $("#up-rece-btn, .del__rece__btn").hide();
+        </script>
+    }
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(m => m.Id)
+    @Html.HiddenFor(m => m.TokenParameter)
+    @Html.HiddenFor(m => m.Userid)
+    @Html.HiddenFor(m => m.AmountinWords)
+    @Html.HiddenFor(m => m.Contact)
+    @Html.HiddenFor(m => m.Father_Name)
+    @Html.HiddenFor(m => m.File_Plot_No)
+    @Html.HiddenFor(m => m.Name)
+    @Html.HiddenFor(m => m.Size)
+    <input type="hidden" value="0" name="Cancel" id="can-stat" />
+    <div class="form-row" id="first-rec">
+        <div class="form-group col-md-2">
+            <label>Receipt No</label>
+            @Html.EditorFor(model => model.ReceiptNo, new { htmlAttributes = new { @class = "form-control" } })
+        </div>
+        <div class="form-group col-md-2">
+            <label>Amount</label>
+            <input type="text" value="@string.Format("{0:n0}",Model.Amount)" class="form-control coma" />
+            <input type="hidden" value="@Model.Amount" name="Amount" />
+        </div>
+        <div class="form-group col-md-2">
+            <label>Type</label>
+            @Html.DropDownList("Type", null, "Choose..", new { @class = "form-control" })
+        </div>
+        <div class="form-group col-md-2">
+            <label>Date</label>
+            <input type="text" value="@string.Format("{0:MM/dd/yyyy}",Model.DateTime)" name="DateTime" class="form-control" data-provide="datepicker" />
+        </div>
+        <div class="form-group col-md-2">
+            <label>Payment Type</label>
+            @Html.DropDownList("PaymentType", null, "Choose..", new { @class = "form-control" })
+        </div>
+        <div class="form-group col-md-2">
+            <label>Bank</label>
+            @Html.DropDownList("Bank", null, "Choose..", new { @class = "form-control" })
+        </div>
+        <div class="form-group col-md-2">
+            <label>Cheque No.</label>
+            @Html.EditorFor(model => model.Ch_Pay_Draft_No, new { htmlAttributes = new { @class = "form-control" } })
+        </div>
+        <div class="form-group col-md-2">
+            <label>Cheque Date</label>
+            <input class="form-control" data-provide="datepicker" value="@string.Format("{0:MM/dd/yyyy}",Model.Ch_Pay_Draft_Date)" name="Ch_Pay_Draft_Date" />
+        </div>
+    </div>
+}
+@if (User.IsInRole("Receipts Update"))
+{
+    <script>
+        $('.modal-footer').append('<button class="btn btn-primary" id="up-rece-btn" type="button">Update</button>');
+    </script>
+}
+@if (User.IsInRole("Receipts Delete"))
+{
+    <script>
+        $('.modal-footer').append('<button class="btn btn-danger del__rece__btn" id="@Model.Id" type="button">Delete</button>');
+    </script>
+}
+<script>
+    $(function () {
+        $('.modal-footer').append('<button class="btn btn-primary" id="up-rece-btn" type="button">Update</button> <button class="btn btn-danger del__rece__btn" id="@Model.Id" type="button">Delete</button>');
+        $(".modal-header").text("Update Information");
+        $("#up-rece #Size").val($("#pl-size").val())
+        $("#up-rece #Name").val($("#Name").val())
+        $("#up-rece #File_Plot_No").val($("#app-num").val())
+        $("#up-rece #Father_Name").val($("#Father_Husband").val())
+        $("#up-rece #Contact").val($("#Mobile_1").val())
+        $("#up-rece #AmountinWords").val(InWords($("#Amount").val()))
+    });
+</script>

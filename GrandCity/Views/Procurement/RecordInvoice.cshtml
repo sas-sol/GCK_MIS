@@ -1,0 +1,486 @@
+﻿
+@{ if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+}
+
+
+<div class="row gap-20 pos-r">
+    <div class="col-md-12">
+        <div class="bgc-white p-20 bd">
+            <h3 class="c-grey-900" style="text-align:center">Generate Invoice</h3>
+            <div class="form-row">
+
+                <div class="col-md-6">
+                    <div class="form-row">
+
+                        <div class="form-group col-md-6 vendor_wrapper">
+                            <label>Receivable Details</label>
+
+                            <select class="form-control " id="receivable_accounts" data-id="1">
+                                @*@foreach (var ven in Model)
+                                    {
+                                    <option value="@ven.Id" id="@ven.Id" address="@ven.Address"> @ven.Company </option>
+                                    }*@
+
+
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                </div>
+                <div class="col-md-2">
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            @*<label>Balance Due</label>*@
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-2">
+                    <label>Mailing Address</label>
+                    <textarea class="form-control " style="border:solid 0.5px #72777a;border-radius: 5px;" name="address_vendor" id="ven_addrs" rows="3" readonly></textarea>
+                </div>
+                @*<div class="form-group col-md-2">
+                    <label>Terms</label>
+                    <select class="form-control  " id="terms_days">
+                        <option value="15"> 15 Days </option>
+                        <option value="30"> 30 Days </option>
+                        <option value="60">  60 Days </option>
+                        <option value="90">  90 Days </option>
+
+
+                    </select>
+                </div>
+
+                <div class="form-group col-md-2">
+                    <label>Bill Date</label>
+                    <input type="text" id="gen_date" class="form-control" data-provide="datepicker" />
+                </div>*@
+                <div class="form-group col-md-2">
+                    <label>Due Date</label>
+                    <input type="text" id="due_date" class="form-control" data-provide="datepicker" />
+                </div>
+                <div class="form-group col-md-6">
+
+
+                </div>
+                <div class="form-group col-md-2">
+                    <label>Reference No.</label>
+                    <input type="text" id="bill_no" class="form-control" />
+                </div>
+
+            </div>
+            @*<label>Account Details</label>
+                <table class="table  ptc-line">
+
+                    <thead>
+                        <tr class="thead-dark">
+                            <th width="5%"></th>
+                            <th width="5%">#</th>
+
+                            <th width="10%">Account</th>
+                            <th>Description</th>
+                            <th width="10%">Amount</th>
+                            <th width="5%"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="it-lin">
+                            <td></td>
+                            <td class="sr">1</td>
+                            <td><input type="text" id="acc" class="form-control" /></td>
+                            <td><input type="text" id="dec" class="form-control" /></td>
+                            <td><input type="number" id="amt" class="form-control  " /></td>
+                            <td><i class="rm-row pointer fa fa-trash"></i></td>
+                        </tr>
+
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th colspan="2"><span class="add-row pointer"><i class="fa pointer fa-plus-circle "></i> Add Row </span>  </th>
+
+                        </tr>
+                    </tfoot>
+                </table>*@
+
+
+
+
+            <h5>Item Details</h5>
+            <input type="hidden" value="@ViewBag.TransactionId" id="trans-id" />
+            <table class="table  ptc-line-item">
+
+                <thead>
+                    <tr class="thead-dark">
+
+                        <th width="5%">#</th>
+
+                        <th width="15%">Product / Service</th>
+                        <th width="40%">Description</th>
+                        <th width="13%">Qty</th>
+                        <th width="13%">Rate</th>
+                        <th width="13%">Amount</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="it-lin-item">
+
+                        <td class="sr-item">1</td>
+                        <td>
+
+                            <select class="form-control acc-heads searchboxx" data-id="1"></select>
+                        </td>
+                        <td><input type="text" class="form-control desc_item" /></td>
+                        <td><input type="text" class="form-control coma qty     " /></td>
+                        <td><input type="text" class="form-control coma rate-item   " /></td>
+                        <td><input type="text" class="form-control coma amt   " readonly /></td>
+                        <td><i class="rm-row-item pointer fa fa-trash"></i></td>
+                    </tr>
+
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th colspan="2"><span class="add-row-item pointer"><i class="fa pointer fa-plus-circle "></i> Add Row </span>  </th>
+                        <th colspan="3"> </th>
+                        <th colspan="2"> <h5 id="total_amt"><span>Total RS. 0 </span> </h5> </th>
+                    </tr>
+                </tfoot>
+            </table>
+            <div class="form-row">
+                <div class="form-group col-md-3">
+                    <h5>Memo</h5>
+                    <textarea class="form-control " style="border:solid 0.5px #72777a;border-radius: 5px;" name="memo" id="memo" rows="8"></textarea>
+                </div>
+            </div>
+
+            <div class="form-row p-20 ">
+                @*<div class="form-group col-md-1" style="margin-top:10px;">
+                        <button class="btn btn-danger " id="cncl-btn">Cancel</button>
+                    </div>*@
+                <div class="form-group col-md-1" style="margin-top:10px;">
+                    <button class="btn btn-warning" id="cl-btn">Clear</button>
+                </div>
+                <div class="form-group col-md-10">
+
+                </div>
+                <div class="form-group col-md-1" style="margin-top:10px;">
+                    <button class="btn btn-success" id="save-btn-rec">Save</button>
+                </div>
+                @*<div class="form-group col-md-2" style="margin-top:10px;">
+                        <button class="btn btn-outline-success" id="save-rel">Save and New </button>
+                        <input type="hidden" class="btn-for-modal"data-toggle="modal" data-target="#Modal"/>
+                    </div>*@
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+        var total = 0;
+        var sritem = 1;
+        //$(document).on("click", ".add-row", function () {
+        //    var html = `<tr class="it-lin">
+        //                <td></td>
+        //                <td class="sr">1</td>
+        //                <td><input type="text" id="acc" class="form-control" /></td>
+        //                <td><input type="text" id="dec" class="form-control" /></td>
+        //                <td><input type="number" id="amt" class="form-control  "   /></td>
+        //                <td><i class="rm-row pointer fa fa-trash"></i></td>
+        //                </tr>`;
+        //    $('.ptc-line tbody').append(html);
+        //    resetsr();
+        //});
+        //$(document).on("click", ".rm-row", function () {
+        //    $(this).closest('tr').remove();
+        //    resetsr();
+        //});
+        //function resetsr() {
+        //    var sr = 1;
+        //    $('.sr').each(function () {
+        //        $(this).text(sr);
+        //        sr++;
+        //    });
+        //};
+        $(document).on("click", "#cl-btn", function () {
+            location.reload(true);
+
+        });
+        $(document).on("click", '.temp-reg-vendor-btn', function () {
+            location.reload(true);
+
+        });
+        $(document).on("click", "#cncl-btn", function () {
+            alert("redirect");
+
+        });
+        //$(document).on("click", "#save-btn", function () {
+        //    alert("save and redirect");
+
+        //});
+        //$(document).on("click", "#save-rel", function () {
+        //    alert("save");
+        //    location.reload(true);
+
+        //});
+
+
+
+        $(document).on("click", ".add-row-item", function () {
+            var html = ` <tr class="it-lin-item">
+
+                        <td class="sr-item">1</td>
+                        <td>
+
+                            <select class="form-control acc-heads searchboxx"   data-id="1"></select>
+                        </td>
+                        <td><input type="text"   class="form-control desc_item" /></td>
+                        <td><input type="text"   class="form-control coma qty     " /></td>
+                        <td><input type="text"   class="form-control coma rate-item   " /></td>
+                        <td><input type="text"   class="form-control coma amt   " readonly /></td>
+                        <td><i class="rm-row-item pointer fa fa-trash"></i></td>
+                    </tr>`;
+            $('.ptc-line-item tbody').append(html);
+            resetsritem();
+            $('.searchboxx').select2({
+                dropdownParent: $('.ptc-line-item'),
+                placeholder: "Search for Product / Services",
+                ajax: {
+                    url: '/AccountHeads/GetHeadInventoryExpenses/',
+                    dataType: 'json',
+                    params: {
+                        contentType: 'application/json; charset=utf-8'
+                    },
+                    data: function (params) {
+                        return {
+                            q: params.term// search term
+                        };
+                    },
+                    processResults: function (data) {
+                        return {
+                            results: $.map(data.items, function (item) {
+                                return {
+
+                                    text: item.Parent,
+                                    children: [{
+                                        id: item.id,
+                                        text: item.text + ' - ' + item.head
+                                    }]
+                                }
+                            })
+                        };
+                    }
+                }
+            });
+        });
+
+        $(document).on("click", ".rm-row-item", function () {
+            $(this).closest('tr').remove();
+            resetsritem();
+            var sum1 = 0;
+
+            $(".ptc-line-item tr").not(':first').not(':last').each(function () {
+                if (!isNaN(parseFloat(RemoveComma($(this).find('.amt').val()))))
+                    sum1 += parseFloat(RemoveComma($(this).find('.amt').val()));
+            });
+            sum1 = parseFloat(sum1);
+            $("#total_amt").text('Total RS. ' + sum1.toLocaleString());
+        });
+
+        function resetsritem() {
+            sritem = 1;
+            $('.sr-item').each(function () {
+                $(this).text(sritem);
+                sritem++;
+            });
+            sritem--;
+        };
+
+    $('#receivable_accounts').change(function () {
+            if ($('#vendor_de option:selected').attr('value') == -1) {
+                $('.btn-for-modal').click();
+                EmptyModel();
+                $('#ModalLabel').text("Add New Vendor");
+                $('#modalbody').load('/Vendor/TemporaryRegisterVendor/');
+            }
+            else {
+                $.ajax({
+                    type: "GET",
+                    url: "/Procurement/GetVendors_Select/",
+                    data: { s: $('#vendor_de option:selected').text() },
+                    contentType: "application/json;charset=utf-8",
+                    dataType: "json",
+                    success: function (result) {
+                        $("#ven_addrs").text((result.items[0].address))
+                    },
+                    error: function (response) {
+                        alert('eror');
+                    }
+                });
+            }
+        });
+    $(document).on('change', '.rate-item', function () {
+        var currentRow = $(this).closest('.ptc-line-item tr');
+        currentRow.find('.amt').val(RemoveComma($(this).val()) * RemoveComma(currentRow.find('.qty').val())).toLocaleString();
+        currentRow.find('.amt').trigger('keyup');
+
+        var sum1 = 0;
+        $(".ptc-line-item tr").not(':first').not(':last').each(function () {
+            if (!isNaN(parseFloat(RemoveComma($(this).find('.amt').val()))))
+                sum1 += parseFloat(RemoveComma($(this).find('.amt').val()));
+        });
+        sum1 = parseFloat(sum1);
+        $("#total_amt").text('Total RS. ' + sum1.toLocaleString());
+    });
+    $(document).on('change', '.qty', function () {
+        var currentRow = $(this).closest('.ptc-line-item tr');
+        currentRow.find('.amt').val(RemoveComma($(this).val()) * RemoveComma(currentRow.find('.rate-item').val())).toLocaleString();
+        currentRow.find('.amt').trigger('keyup');
+        var sum1 = 0;
+        $(".ptc-line-item tr").not(':first').not(':last').each(function () {
+            if (!isNaN(parseFloat(RemoveComma($(this).find('.amt').val()))))
+                sum1 += parseFloat(RemoveComma($(this).find('.amt').val()));
+        });
+        sum1 = parseFloat(sum1);
+        $("#total_amt").text('Total RS. ' + sum1.toLocaleString());
+    });
+    $(document).on('change', '#bill_no', function () {
+        var bill_no = $(this).val();
+    });
+    $(document).ready(function () {
+        $('#receivable_accounts').select2({
+            placeholder: "Search for Receivable Account",
+            ajax: {
+                url: '/AccountHeads/GetHeadInventory/',
+                dataType: 'json',
+                params: {
+                    contentType: 'application/json; charset=utf-8'
+                },
+                data: function (params) {
+                    return {
+                        q: params.term,// search term
+                        code: '/1/1/'
+                    };
+                },
+                processResults: function (data) {
+                    // Transforms the top-level key of the response object from 'items' to 'results'
+                    return {
+                        results: $.map(data.items, function (item) {
+                            return {
+
+                                text: item.Parent,
+                                children: [{
+                                    id: item.id,
+                                    text: item.text
+                                }]
+                            }
+                        })
+                    };
+                }
+            }
+        });
+        $('.searchboxx').select2({
+            dropdownParent: $('.ptc-line-item'),
+            placeholder: "Search for Inventory /Services",
+            ajax: {
+                url: '/AccountHeads/GetHeadInventoryExpenses/',
+                dataType: 'json',
+                params: {
+                    contentType: 'application/json; charset=utf-8'
+                },
+                data: function (params) {
+                    return {
+                        q: params.term// search term
+                    };
+                },
+                processResults: function (data) {
+                    return {
+                        results: $.map(data.items, function (item) {
+                            return {
+
+                                text: item.Parent,
+                                children: [{
+                                    id: item.id,
+                                    text: item.text
+                                }]
+                            }
+                        })
+
+                    };
+
+                }
+            }
+        });
+
+    });
+
+    $(document).on("click", "#save-btn-rec", function () {
+
+        var InventoryArray = [];
+        var i = 0;
+        $('.it-lin-item').each(function (i, v) {
+
+            var dat = $(this).find(".acc-heads option:selected").val();
+            var datName = $(this).find(".acc-heads option:selected").text();
+
+            var dataset =
+            {
+                description: $(this).find(".desc_item").val(),
+                Head: datName,
+                Head_id:dat,
+                Rate: RemoveComma($(this).find(".rate-item").val()),
+                Quantity: RemoveComma($(this).find(".qty").val()),
+                BillNo: $("#bill_no").val(),
+                Line: i+1,
+                VendorId: $('#receivable_accounts option:selected').val(),
+                terms: ""
+            };
+
+            InventoryArray.push(dataset);
+
+        });
+        if (confirm("Are you sure you want to Record Entries")) {
+
+            $.ajax({
+                type: "POST",
+                url: '/Procurement/GenerateNewInvoice/',
+                data: {
+                    Details: InventoryArray, DueDate: $("#due_date").val(), TransactionId: @ViewBag.TransactionId
+                },
+                success: function (data) {
+                    if (data) {
+                        if (data.Status) {
+                            alert(data.Msg);
+                            window.location.reload();
+                        }
+                        else {
+                            alert(data.Msg);
+                        }
+
+                    }
+                }
+                , error: function (xmlhttprequest, textstatus, message) {
+                    if (textstatus === "timeout") {
+                        alert("got timeout");
+                    } else {
+                        alert(textstatus);
+                    }
+                }
+            });
+        };
+        });
+</script>
+
+

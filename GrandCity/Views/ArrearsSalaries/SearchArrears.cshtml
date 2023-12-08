@@ -1,0 +1,123 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Sp_Get_ArrearsReport_Result>
+<style>
+    table thead tr th, table tbody tr td {
+        font-size: 12px;
+    }
+
+    .scrolling-box {
+        height: 740px;
+        overflow-y: scroll;
+        overflow-x: scroll;
+        width: 100%;
+    }
+
+    .tableFixHead {
+        overflow: auto;
+        height: 700px;
+    }
+
+        .tableFixHead .ka th {
+            position: sticky;
+            top: 0;
+        }
+</style>
+<div class="bgc-white bdrs-3 mB-20">
+    <h5>@Model.Select(x => x.Salary_Month.Value.ToString("yyyy MMMM")).FirstOrDefault()</h5>
+    @*<button class="bnt btn-outline-dark prnt-req-btn">Show Print</button>*@
+
+    <table id="salary-dat" class="table table-striped table-bordered" cellspacing="0" width="100%">
+        <thead class="thead-dark ka">
+            <tr>
+                <th>Sr.</th> 
+                <th>Company</th>
+                <th>Department</th>
+                <th>Code</th>
+                <th>Name</th>
+                <th>Basic Salary</th>
+                <th>Per Day Wage</th>
+                <th>Date Of Joining</th>
+                <th>Arrears</th>
+                <th>Description</th>
+                <th>Allowances</th>
+                <th>Deductions</th>
+                <th>Net Payable</th>
+                <th>Status</th>
+                <th>Recv Amt</th>
+            </tr>
+        </thead>
+        @{
+                int sr = 1;
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr id="@item.Id">
+                            <td>@sr</td>
+                            @if (item.CompId == null)
+                            {
+                                <td>----</td>
+                            }
+                            else
+                            {
+                                <td>@item.CompanyName</td>
+                            }
+                            @if (item.depid == null)
+                            {
+                                <td>----</td>
+                            }
+                            else
+                            {
+                                <td>@item.DepartmentName</td>
+                            }
+
+                            <td>@item.Employee_code</td>
+                            <td>@item.Employee_Name</td>
+                            <td class="basic_salary @item.depid-basicSalary" id="@item.depid">@String.Format("{0:n0}", Math.Round(Convert.ToDecimal(item.Basic_salary)))</td>
+                            <td class="">@( Math.Round(Convert.ToDecimal(item.Basic_salary / 30)) )</td>
+                            <td style="font-weight:bold">@string.Format("{0: dd-MMM-yyyy}", item.Emp_Date_Of_Joining)</td>
+                            <td> @String.Format("{0:n0}", Math.Round(Convert.ToDecimal(item.Arrears_Amount))) </td>
+                            <td>@item.Description</td>
+                            <td>@string.Format("{0:n0}", Math.Round(Convert.ToDecimal(item.Allownces)))</td>
+                            <td><span>@String.Format("{0:n0}", Math.Round(Convert.ToDouble(item.Deductions)))</span></td>
+                            <td style="font:bold">@String.Format("{0:n0}", Math.Round(Convert.ToDecimal(item.Grand_Total)))</td>
+                            <td>@item.Status</td>
+                            <td style="font:bold">@String.Format("{0:n0}", Math.Round(Convert.ToDecimal(item.Grand_Total)))</td>
+                        </tr>
+                        sr++;
+
+                    }
+                   
+                </tbody>
+        }
+        <tfoot>
+            <tr>
+                <th style="font-size:20px" colspan="5">Total</th>
+                <th>@String.Format("{0:n0}", Math.Round(Convert.ToDecimal(Model.Sum(x => x.Basic_salary))))</th>
+                <th></th>
+                <th></th>
+                <th>@String.Format("{0:n0}", Math.Round(Convert.ToDecimal(Model.Sum(x => x.Arrears_Amount))))</th>
+                <th></th>
+                <th>@String.Format("{0:n0}", Math.Round(Convert.ToDecimal(Model.Sum(x => x.Allownces))))</th>
+                <th>@String.Format("{0:n0}", Math.Round(Convert.ToDecimal(Model.Sum(x => x.Deductions))))</th>
+                <th>@String.Format("{0:n0}", Math.Round(Convert.ToDecimal(Model.Sum(x => x.Grand_Total))))</th>
+                <th></th>
+                <th>@String.Format("{0:n0}", Math.Round(Convert.ToDecimal(Model.Where(x => x.Status == "Received").Select(x => x.Grand_Total).Sum())))</th>
+            </tr>
+        </tfoot>
+    </table>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('#salary-dat').dataTable({
+            dom: 'Bfrtip',
+            buttons: [
+                'copy', 'csv', 'excel', 'pdf', 'print'
+            ],
+            aaSorting: [],
+            scrollY: "500px",
+            scrollX: true,
+            scrollCollapse: true,
+            paging: false,
+        });
+    });
+</script>

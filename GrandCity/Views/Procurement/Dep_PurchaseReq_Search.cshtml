@@ -1,0 +1,56 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Sp_Get_Purchase_Req_List_Result>
+<div class="col-md-12">
+    <table class="table table-bordered" id="inv" width="100%">
+        <thead>
+            <tr>
+                <th width="5%">Sr.</th>
+                <th width="10%">Requisition No</th>
+                <th width="10%">Project</th>
+                <th width="10%">Status</th>
+                <th width="10%">Date</th>
+                <th width="15%">Created By</th>
+                <th width="60%" style="text-align:center">Requested Items</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{ int sr = 1;
+                foreach (var v in Model.GroupBy(x => new { x.Group_Id,x.Prj_Name , x.Status, x.DateTime, x.Requisition_No, x.RequestedBy_Name }))
+                {
+                    <tr class="pointer exp-dfkhjsa">
+                        <td>@(sr++)</td>
+                        <td>@v.Key.Requisition_No</td>
+                        <td>@v.Key.Prj_Name</td>
+                        <td>@v.Key.Status</td>
+                        <td>@string.Format("{0:dd-MMM-yyyy}", v.Key.DateTime)</td>
+                        <td>@v.Key.RequestedBy_Name</td>
+                        <td class="tdscrol">
+                            <table class="table table-bordered" style="margin-bottom:0px; border:none">
+                                <thead>
+                                    <tr>
+                                        <th width="5%">Sr.</th>
+                                        <th width="80%">Item Name</th>
+                                        <th width="15%">Quantity</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{int count = 1;}
+                                    @foreach (var item in v)
+                                    {
+                                        <tr>
+                                            <td>@(count++)</td>
+                                            <td>@item.Item_Name</td>
+                                            <td>@item.Qty @item.UOM</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
+<script>
+    $("#inv").dataTable();
+</script>

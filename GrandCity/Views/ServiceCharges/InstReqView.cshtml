@@ -1,0 +1,58 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.ServiceChargesInstallment>
+@if (!(Model is null))
+{
+    <table class="table reqs-tbl">
+        <thead>
+            <tr class="central-text-align">
+                <th scope="col">Sr.</th>
+                <th scope="col">Plot No</th>
+                <th scope="col">Block</th>
+                <th scope="col">Meter No.</th>
+                <th scope="col">Requested By</th>
+                <th scope="col">Date</th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @{int count = 1; }
+           @foreach(var v in Model.OrderByDescending(x=>x.Create_DateTime))
+           {
+               <tr class="pointer inst-row-hjgfgd-uyt central-text-align" data-trgt="@v.Id" data-toggle="modal" data-target="#Modal">
+                   <td>@(count++)</td>
+                   <td>@v.Plot_Num</td>
+                   <td>@v.BillDetails.Block</td>
+                   <td>@v.BillDetails.Meter_No</td>
+                   <td>@v.CreatedBy_Name</td>
+                   <td>@v.Create_DateTime.Value.ToShortDateString()</td>
+                   <td><button class="btn btn-info hist-btn-gyui" data-plt="@v.Plot_Id" data-met="@v.Meter_Num" data-toggle="modal" data-target="#Modal">History</button></td>
+               </tr>
+           }
+        </tbody>
+    </table>
+}
+
+else
+{
+    <table class="table table-bordered">
+        <thead>
+            <tr class="bgc-red-50">
+                <th colspan="6" class="central-text-align">
+                    No Record Found
+                </th>
+            </tr>
+        </thead>
+    </table>
+}
+
+<script>
+    $(document).on('click', '.inst-row-hjgfgd-uyt', function () {
+        EmptyModel();
+        showLoader();
+        let a = $(this).attr('data-trgt');
+        //yahan pe modal main data load krna hai
+        $('#ModalLabel').text("Installment Details");
+        $('#modalbody').load('/ServiceCharges/InstallmentDetails/', { instId: a }, function () {
+            hideLoader();
+        });
+    });
+</script>

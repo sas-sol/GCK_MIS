@@ -1,0 +1,46 @@
+﻿<input type="hidden" value="@ViewBag.Group_Id" id="grp-id" />
+<div class="col-md-12">
+    <div class="form-row">
+        <div class="form-group col-md-4" style="display: block;">
+            <label>Requested To</label>
+            @Html.DropDownList("Department", null, "Choose..", new { @class = "form-control dep-se" })
+        </div>
+    </div>
+</div>
+<div class="col-md-12" id="inv-assign-row">
+    <div class="form-row assign" id="assign-1">
+        <div class="form-group col-md-1" style="display: block;">
+            <label class="sr ser">1.</label>
+        </div>
+        <div class="form-group col-md-4" style="display: block;">
+            <label>Item</label>
+            <input type="text" class="form-control itm-req" />
+        </div>
+        <div class="form-group col-md-2" style="display: block;">
+            <label>Req Qty</label>
+            <input type="text" class="form-control rq-qty" />
+        </div>
+        <div class="form-group col-md-4" style="display: block;">
+            <label>Details</label>
+            <input type="text" class="form-control details" />
+        </div>
+        <div class="form-group col-md-1" style="display: block;">
+            <label class="ser"></label>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('.modal-footer').append('<button class="btn btn-info" id="ad-dm-req">Add Another Item</button>');
+        $('.modal-footer').append('<button class="btn btn-primary sv-dem-re">Submit</button>');
+    });
+</script>
+<style>
+    .ser {
+        text-align: center;
+        vertical-align: middle;
+        width: 100%;
+        padding-top: 50%;
+    }
+</style>

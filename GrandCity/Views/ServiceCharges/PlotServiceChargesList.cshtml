@@ -1,0 +1,37 @@
+﻿@model MeherEstateDevelopers.Models.Subscribed_Service_Charges
+
+<input type="hidden" id="plot_id" value="@ViewBag.PlotId" />
+@foreach (var item in Model.SCList)
+{
+    <div class="form-group">
+        <div class="checkbox checkbox-circle checkbox-info peers ai-c">
+            @{
+                if (Model.Plot_SCList.Any(x => x.Service_Charges == item.Id))
+                {
+                    <input type="checkbox" value="@item.Id" data-scnam="@item.Charges_Name" class="peer ser-char-subunsb" checked>
+                }
+                else
+                {
+                    <input type="checkbox" value="@item.Id" data-scnam="@item.Charges_Name" class="peer ser-char-subunsb">
+                }
+            }
+            <label class="peers peer-greed js-sb ai-c">
+                @if (item.Type == "Size")
+                {
+                    <span class="peer peer-greed ser-ch-nam" style="font-weight:bold"> @item.Charges_Name  - @item.Plot_Size </span>
+                }
+                else
+                {
+                    <span class="peer peer-greed ser-ch-nam" style="font-weight:bold"> @item.Charges_Name   </span>
+
+                }
+            </label>
+        </div>
+    </div>
+}
+
+<script>
+    $(function () {
+        $(".modal-header").text("Subscribed Service Charges");
+    });
+</script>

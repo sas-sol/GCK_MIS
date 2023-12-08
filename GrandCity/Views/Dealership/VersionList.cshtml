@@ -1,0 +1,97 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Sp_Get_Version_Result>
+
+@{
+    /**/
+
+    var dealcounter = 1;
+}
+
+@if (!Model.Any())
+{
+
+    <label>No Version Available</label>
+}
+else
+{
+    foreach (var item in Model.GroupBy(x => new { x.Version_Group_Id, x.Amount, x.Deposit, x.Rare_Per_marla, x.Print_Flag, x.Form_Group_Id }))
+    {
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h5 class="panel-title">
+                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#@item.Key.Version_Group_Id" aria-expanded="true">
+                        V-1.@(dealcounter++)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@string.Format("{0:n0}", item.Key.Deposit)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@*@string.Format("{0: MM/dd/yyyy}", item.Key.DateTime)*@
+                    </a>
+                </h5>
+            </div>
+
+            <div id="@item.Key.Version_Group_Id" class="panel-collapse collapse in " aria-expanded="true">
+                <div class="panel-body">
+                    @if (item.Key.Print_Flag == false)
+                    {
+                        <button type="button" id="pnt-deal" value="@item.Key.Form_Group_Id" class="btn btn-primary" style="float:right">Print</button>
+                    }
+                    <div class="own-det">
+                        <table id="" class="table table-striped table-bordered" cellspacing="0" style="width:40%;margin-left:30%">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th>Plot Size</th>
+                                    <th>Total</th>
+                                    <th>Printed</th>
+                                    <th>Marlas</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+                                    foreach (var item2 in item)
+                                    {
+                                        <tr class="vl" id="@item2.Id">
+                                            <td>@item2.Plot_Size Marla</td>
+                                            <td>@item2.Filecount</td>
+                                            @if (item2.Print_Flag == true)
+                                            {
+                                                <td>@item2.Filecount</td>
+                                            }
+                                            else
+                                            {
+                                                <td>Pending</td>
+                                            }
+                                            <td>
+                                                @string.Format("{0:n0}", item2.Plot_Size * item2.Filecount)
+                                                <ul style="list-style:none;margin-left:0px;">
+                                                    <li class="dropdown">
+                                                        <a href="" class="dropdown-toggle no-after peers" data-toggle="dropdown">
+                                                            <i class="ti-more-alt  c-grey-900" style="transform:rotate(90deg);"></i>
+                                                        </a>
+                                                        <ul class="dropdown-menu">
+                                                            <li><a id="@item.Key.Form_Group_Id" class="pointer shw-file-num" data-toggle="modal" data-target="#Modal" value=""><span>Register Files List</span></a></li>
+                                                            <li role="separator" class="divider"></li>
+                                                        </ul>
+                                                    </li>
+                                                </ul>
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                        <div class="form-row" style="margin-left:30%">
+                            <label class="font">Rate/Marla :&nbsp;&nbsp;&nbsp;@string.Format("{0:n0}", item.Key.Rare_Per_marla)</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            <label class="font">Total :&nbsp;&nbsp;&nbsp;@string.Format("{0:n0}", item.Key.Amount)</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            <label class="font">Deposit : &nbsp;&nbsp;&nbsp;@ViewBag.Advancevalue% &nbsp;&nbsp; @string.Format("{0:n0}", item.Key.Deposit)</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+}
+<style>
+    .font {
+        font-weight: 700;
+    }
+
+    table thead tr th, table tbody tr td {
+        font-size: 12px;
+    }
+</style>

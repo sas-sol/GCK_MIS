@@ -1,0 +1,63 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Sp_Get_Assets_Logs_Result>
+
+@{ if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+}
+<div class="col-md-12">
+    <div class="bgc-white bd bdrs-3 p-20 mB-20">
+        <div id="accivity_seacrh_manag" class="bgc-white bd bdrs-3 p-20 mB-20">
+            <h4 class="c-grey-900 mB-20">Assets Activity</h4>
+            <table id="manag_levl_access" class="table table-striped table-bordered " cellspacing="0" width="100%">
+                <thead class="thead-light">
+                    <tr>
+                        <th>CURD</th>
+                        <th>Action</th>
+                        <th>User Id</th>
+                        <th>Operation Date</th>
+                        <th>AssetName</th>
+                        <th>AssetSpecs</th>
+                        <th>AssetHolderName</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        if (Model.Any())
+                        {
+                            foreach (var item in Model)
+                            {
+                                <tr class="pointer" id="@item.Id">
+                                    <td>@item.CURD</td>
+                                    <td>@item.Action</td>
+                                    <td>@item.UserName</td>
+                                    <td>@string.Format("{0: MM/dd/yyyy}", item.CurrentDate)</td>
+                                    <td>@item.AssetName</td>
+                                    <td>@item.AssetSpecs</td>
+                                    <td>@item.AssetHolderName</td>
+                                </tr>
+                            }
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<script>
+        $(document).ready(function () {
+            $('#manag_levl_access').DataTable({
+                dom: 'Bfrtip',
+                buttons: [
+                    'copy', 'csv', 'excel', 'pdf', 'print'
+                ]
+            });
+        });
+
+</script>
+
+

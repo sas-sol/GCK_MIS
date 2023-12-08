@@ -1,0 +1,64 @@
+﻿<div class="form-row">
+    <div class="col-md-8">
+        <div class="row">
+            @*<h3 class="del-nam">##########</h3>*@
+        </div>
+        <div class="row">
+            <label>Advance Rate:  @ViewBag.DealerAdvance%</label>
+        </div>
+    </div>
+</div>
+<hr />
+<div class="col-md-12 " id="ad-pln-altmnt">
+    <input type="hidden" value="@ViewBag.DealerAdvance" id="dea-adv"/>
+    <div class="row" style="margin-left:18%">
+        <h5>Rate/Marla</h5>  &nbsp;&nbsp;: &nbsp;&nbsp;&nbsp;
+        <input class="form-control coma rat-per-mar" placeholder="12,345" required style="width:50%">
+        <input type="hidden" id="rat-per-mar" name="Amount" class="amt" required>
+    </div>
+    <hr />
+    <div class="form-row cal" id="add-pln-1">
+        <h6 class="lh-1 mB-0 pln-counter">1.</h6>
+        <div class="form-group col-md-4">
+            <label>Plot Size</label>
+            <select class="form-control plt_ch" id="plot_size" data-id="1">
+                <option value="">Choose..</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
+            </select>
+        </div>
+        <div class="form-group col-md-2">
+            <label># Of Files</label>
+            <input type="text" class="form-control mrls_cal" name="plot_num" id="plot_num" data-id="1">
+        </div>
+        <div class="form-group col-md-2">
+            <label>Marlas</label>
+            <input type="text" class="form-control marlas-cal" name="Marlas" id="" data-id="1" readonly>
+        </div>
+        <i class="ti-plus pointer alt-pln"></i>
+    </div>
+</div>
+<hr />
+<div>
+    <label>Total Files&nbsp;&nbsp;:&nbsp;&nbsp; <label id="tot_files"></label></label>
+    <input type="hidden" id="tot_files_1"/>
+    <label>&nbsp;&nbsp;&nbsp;&nbsp;Total Marlas :&nbsp;&nbsp;&nbsp;:&nbsp; <label id="tot_marla_amt"></label></label>
+    <input type="hidden" id="tot_marla_amt_1"/>
+    <label>&nbsp;&nbsp;&nbsp;&nbsp;Total Price :&nbsp;&nbsp;&nbsp;:&nbsp; <label id="tot_marla_price"></label></label>
+    <input  type="hidden" id="tot_marla_price_1"/>
+    <label>&nbsp;&nbsp;&nbsp;&nbsp;Pending Deposit Amount:&nbsp;&nbsp;&nbsp;:&nbsp; <label id="dea-dep-amt"></label></label>
+    <input type="hidden" id="dea-dep-amt-1" />
+</div>
+<hr />
+<button type="button" id="gen-de-pln" value="@ViewBag.DealId" class="btn btn-info" style="float:right">Generate Plan</button>
+
+
+

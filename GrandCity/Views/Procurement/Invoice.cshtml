@@ -1,0 +1,56 @@
+﻿@{ if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+}
+<div class="bgc-white bd bdrs-3 p-20 mB-20">
+    <div class="col-md-12">
+        <h5 class="text-cen">
+            Invoice
+        </h5>
+    </div>
+    <div class="row col-md-12">
+        <div class="form-group col-md-2">
+            <label>PO Number</label>
+            <input type="text" class="form-control po-num-search" placeholder="PO Number">
+        </div>
+        <div class="form-group col-md-2">
+            <button class="btn btn-primary ser-po" style="margin-top:29px">Search</button>
+        </div>
+    </div>
+
+    <div class="stck-in-items"></div>
+</div>
+
+<style>
+    .text-cen {
+        text-align: center;
+    }
+
+    .inv-item-wrap {
+        padding: 5px;
+        border-bottom: 1px solid #72777A;
+    }
+
+    .auto-mar {
+        margin: auto;
+    }
+
+    .rmv {
+        align-items: center;
+        height: 100%;
+        display: flex;
+    }
+
+    .righty {
+        float: right;
+    }
+
+    .clearfix {
+        clear: both;
+    }
+</style>

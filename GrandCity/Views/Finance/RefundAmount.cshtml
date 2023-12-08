@@ -1,0 +1,32 @@
+﻿@model MeherEstateDevelopers.Models.PlotDetailData
+@using (Html.BeginForm("RefundRequest", "Finance", FormMethod.Post, new { @id = "ref-req", @class = "", role = "form" }))
+{
+    <input type="hidden" name="ReceiptId" value="@Model.Plotda" />
+    <div class="form-row">
+        <div class="form-group col-md-2">
+            <label>Total Amount</label>
+            <h6> @Model.Name</h6>
+        </div>
+        <div class="form-group col-md-3">
+            <label>Received Amount</label>
+            <h6>@Model.Father_Name</h6>
+        </div>
+        <div class="form-group col-md-3">
+            <label>Other Received Amount</label>
+            <h6> @Model.File_Plot_Number</h6>
+        </div>
+    </div>
+    
+    <div class="form-row">
+        <div class="form-group col-md-3">
+            <label>Amount To Refund</label>
+            <input name="Refund_Amt"  class="form-control" />
+        </div>
+    </div>
+}
+<script>
+    $(function () {
+        $('.modal-footer').append('<button class="btn btn-primary" id="req-ref" type="button">Request for Refund</button>');
+        $(".modal-header").text("Refund Request");
+    });
+</script>

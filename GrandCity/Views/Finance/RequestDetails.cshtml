@@ -1,0 +1,92 @@
+﻿@model MeherEstateDevelopers.Models.Sp_Get_ReceiptRequests_Update_Details_Result
+
+@using (Html.BeginForm("UpdateReceipts", "Finance", FormMethod.Post, new { @id = "up-rec", @class = "", role = "form" }))
+{
+    @Html.AntiForgeryToken()
+    <input type="hidden" name="ReceiptId" value="@Model.ReceiptId" />
+    @Html.HiddenFor(m=>m.Description)
+    @Html.HiddenFor(m=>m.RequestId)
+    <div class="form-row">
+        <div class="form-group col-md-2">
+            <label>Name</label>
+            <h6> @Model.Name</h6>
+        </div>
+        <div class="form-group col-md-3">
+            <label>Father Name</label>
+            <h6>@Model.Father_Name</h6>
+        </div>
+        <div class="form-group col-md-2">
+            <label>File / Plot No.</label>
+            <h6> @Model.File_Plot_No</h6>
+        </div>
+        <div class="form-group col-md-2">
+            <label>Size</label>
+            <h6> @Model.Size</h6>
+        </div>
+        <div class="form-group col-md-2">
+            <label>Receipt No.</label>
+            <h6> @Model.ReceiptNo</h6>
+        </div>
+        <div class="form-group col-md-2">
+            <label>Amount</label>
+            <h6>@string.Format("{0:n0}", Model.Amount)</h6>
+        </div>
+        <div class="form-group col-md-2">
+            <label>Payment Type</label>
+            <h6> @Model.PaymentType</h6>
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-md-2">
+            <label>Bank</label>
+            @Html.DropDownList("Bank", null, "Choose..", new { @class = "form-control" })
+        </div>
+        <div class="form-group col-md-2">
+            <label>Payment Type</label>
+            @Html.DropDownList("PaymentType", null, "Choose..", new { @class = "form-control",@id="Type" })
+        </div>
+        <div class="form-group col-md-2">
+            <label>@Model.PaymentType No</label>
+            <input type="text" class="form-control" name="Ch_Pay_Draft_No" value="@Model.Ch_Pay_Draft_No" />
+        </div>
+        <div class="form-group col-md-2">
+            <label>@Model.PaymentType Date</label>
+            <input type="text" class="form-control" data-provide="datepicker" name="Ch_Pay_Draft_date" 
+                   value="@( (string.IsNullOrEmpty(Model.Req_Ch_Pay_Draft_date.ToString())) ? "-" : string.Format("{0:M/dd/yyyy}", Model.Req_Ch_Pay_Draft_date))" />
+            @*value="@string.Format("{0:M/dd/yyyy}", Model.Ch_Pay_Draft_Date)"*@
+        </div>
+        <div class="form-group col-md-4">
+            <label>Remarks</label>
+            <textarea name="Remarks" class="form-control"> </textarea>
+        </div>
+    </div>
+    <hr />
+    <div class="form-row">
+        <div class="form-group col-md-12">
+            <h5>Requested Information</h5>
+        </div>
+        <div class="form-group col-md-2">
+            <label>Bank</label>
+            <h6>  @( (string.IsNullOrEmpty(Model.Req_Bank)) ? "-" : Model.Req_Bank)</h6>
+        </div>
+        <div class="form-group col-md-2">
+            <label>@Model.PaymentType No</label>
+            <h6>  @( (string.IsNullOrEmpty(Model.Req_Ch_Pay_Draft_No)) ? "-" : Model.Req_Ch_Pay_Draft_No)</h6>
+        </div>
+        <div class="form-group col-md-2">
+            <label>@Model.PaymentType Date</label>
+            <h6>  @( (string.IsNullOrEmpty(Model.Req_Ch_Pay_Draft_date.ToString())) ? "-" : string.Format("{0:D}", Model.Req_Ch_Pay_Draft_date))</h6>
+        </div>
+        <div class="form-group col-md-3">
+            <label>Description</label>
+            <h6>@Model.Description</h6>
+        </div>
+    </div>
+}
+<script>
+    $(function () {
+        $('.modal-footer').append('<button class="btn btn-primary" id="up-rec-btn" type="button">Update</button>');
+        $(".modal-header").text("Update Request");
+    });
+</script>

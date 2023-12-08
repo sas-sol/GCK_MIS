@@ -1,0 +1,127 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Sp_Get_Stock_SKU_Null_Result>
+@{
+    if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else if (User.IsInRole("Staff"))
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+}
+<script src="~/Scripts/Inv.js"></script>
+<table class="table table-bordered sumtab" style="width:30%">
+    <thead>
+        <tr>
+            <td>Sr.</td>
+            <td>Department</td>
+            <td>Total</td>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            int iii = 1;
+            var res = Model.GroupBy(x => new { x.Group_Id, x.Dep_Name }).Select(x => new { x.Key.Group_Id, x.Key.Dep_Name }).ToList();
+        }
+        @foreach (var item in res.GroupBy(x => new { x.Dep_Name }).OrderByDescending(x => x.Count()))
+        {
+            <tr>
+                <td>@(iii++)</td>
+                <td>@item.Key.Dep_Name</td>
+                <td>@item.Count()</td>
+            </tr>
+        }
+    </tbody>
+</table>
+<hr />
+<table class="table table-striped table-bordered DemadnOrder" cellspacing="0" width="100%">
+    <thead class="thead-dark">
+        <tr>
+            <th width="50px">Sr.</th>
+            <th width="50px">Department</th>
+            <th width="50px">Month</th>
+            <th width="150px">Project</th>
+            <th width="450px">Requested Item</th>
+            <th width="90px">Date</th>
+            <th width="90px">Req No</th>
+            <th width="90px">Req By</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            if (Model.Any())
+            {
+                int i = 1;
+                foreach (var item in Model.GroupBy(x => new { x.Group_Id, x.Dep_Name, x.Requisition_No, x.RequestedBy_Name, x.Prj_Name, x.Requested_Date }).OrderByDescending(x => x.Key.Requested_Date.Value.Year).ThenByDescending(x => x.Key.Requested_Date.Value.Month).ThenByDescending(x => x.Key.Dep_Name).ThenByDescending(x => x.Key.Requested_Date))
+                {
+                    int ii = 1;
+                    <tr class="single-row po-det-wk" id="@item.Key.Group_Id">
+                        <td style="max-width:50px">@i</td>
+                        <td class="pur-req-prdct-name">@item.Key.Dep_Name</td>
+                        <td class="pur-req-prdct-name">@string.Format("{0:MMMM - yyyy}", item.Key.Requested_Date)</td>
+                        <td class="pur-req-prdct-name">
+                            @item.Key.Prj_Name
+                            <br />
+                            @Model.Select(x => x.Project_Department).FirstOrDefault()
+                        </td>
+                        <td class="tdscrol">
+                            <table class="table" style="margin-bottom:0px; border:none">
+                                <thead>
+                                    <tr>
+                                        <th style="max-width:50px">Sr.</th>
+                                        <th width="350px">Item Name</th>
+                                        <th width="50px">UOM</th>
+                                        <th width="50px">Qty</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var a in item)
+                                    {
+                                        <tr id="@a.Item_Id">
+                                            <td>@ii</td>
+                                            <td>@a.Item_Name</td>
+                                            <td>@a.UOM</td>
+                                            <td>@a.Qty</td>
+                                            <td>
+                                                <i class="ti-pencil pointer inven-crud-popup" title="Update" data-toggle="modal" data-target="#Modal"></i><span>&nbsp;&nbsp;&nbsp;</span>
+                                                <hr />
+                                                <i class="fas fa-tasks pointer cha-code" title="New Code" data-toggle="modal" data-target="#Modal"></i><span>&nbsp;&nbsp;&nbsp;</span>
+                                            </td>
+                                        </tr>
+                                        ii++;
+                                    }
+                                </tbody>
+                            </table>
+                        </td>
+                        <td>@string.Format("{0:dd-MMM-yyyy}", item.Key.Requested_Date)</td>
+                        <td>@item.Key.Requisition_No</td>
+                        <td>@item.Key.RequestedBy_Name</td>
+                    </tr>
+                    i++;
+
+                }
+            }
+        }
+    </tbody>
+</table>
+<script>
+    $(function () {
+        $('.DemadnOrder').DataTable({
+            rowGroup: {
+                dataSrc: [2, 1]
+            },
+            columnDefs: [{ targets: 4, type: "date-eu" }],
+            columnDefs: [{ targets: [2, 1], visible: false }]
+        });
+        $('.sumtab').DataTable({
+            "searching": false,
+            "pageLength": 5
+        });
+    });
+
+    //$('.comp-rep-kjhfd').click(function () {
+    //    let gid = parseInt($(this).attr('data-iden'));
+    //    window.open("/Procurement/PurchaseCompritiveReport?Group_Id=" + gid);
+    //});
+</script>

@@ -1,0 +1,63 @@
+﻿@{
+    if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+}
+<div class="col-md-12 bgc-white">
+    <hr />
+    <h5 class="central-text-align">Dealership Deals</h5>
+    <hr />
+
+    <div class="row mt-md-3">
+        <div class="col-md-1">
+            <label><b>Dealer :</b></label>
+        </div>
+
+        <div class="col-md-3">
+            <select class="form-control dlrs-lst"></select>
+        </div>
+    </div>
+
+    <div class="row mt-md-3 dlrs-deals-deta-area">
+
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('.dlrs-lst').select2({
+            ajax: {
+                url: '/Dealership/GetDealers_ForSelect/',
+                data: function (params) {
+                    var query = {
+                        s: params.term,
+                        type: 'public'
+                    }
+
+                    // Query parameters will be ?search=[term]&type=public
+                    return query;
+                },
+                processResults: function (data) {
+                    // Transforms the top-level key of the response object from 'items' to 'results'
+                    return {
+                        results: data
+                    };
+                }
+            }
+        });
+
+        $('.dlrs-lst').unbind().change(function () {
+            $('.dlrs-deals-deta-area').empty();
+            let dlr = $(this).val();
+            SASLoad($('.dlrs-deals-deta-area'));
+            $('.dlrs-deals-deta-area').load('/Dealership/DealershipDealsDetails/', { DealerId: dlr }, function () {
+                SASUnLoad($('.dlrs-deals-deta-area'));
+            });
+        });
+    });
+</script>

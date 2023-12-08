@@ -1,0 +1,272 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Service_PurchaseOrder>
+@{ if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+
+    var group = Model.Select(x => x.Group_Id).FirstOrDefault();
+    var vendor = Model.Select(x => x.Vendor_Id).FirstOrDefault();
+    var vendor_Name = Model.Select(x => x.Vendor_Name).FirstOrDefault();
+    var bid_id = Model.Select(x => x.Bid_Id).FirstOrDefault();
+    var PO_num = Model.Select(x => x.PO_Number).FirstOrDefault();
+    var PO_date = Model.Select(x => x.DateTime).FirstOrDefault();
+    var Dep_Id = Model.Select(x => x.Dep_Id).FirstOrDefault();
+    var Dep_Name = Model.Select(x => x.Dep_Name).FirstOrDefault();
+    int sr = 1;
+}
+<div class="bgc-white bd bdrs-3 p-20 mB-20">
+    <div class="col-md-12">
+        <div class="col-md-12">
+            <h5 style="text-align:center"><u> Record Advance </u></h5>
+        </div>
+        <div class="col-md-12">
+            <input type="hidden" value="@group" class="grpId" />
+            <input type="hidden" value="@ViewBag.Transaction" class="transaction" />
+            <input type="hidden" class="form-control Bid_Number" name="Bid_Number" placeholder="Bid Number" readonly value="@bid_id">
+            <div class="form-row">
+                <div class="form-group col-md-3">
+                    <label>Vendor</label>
+                    <h5>@vendor_Name</h5>
+                    <input type="hidden" id="vendors" value="@vendor_Name" />
+                    <input type="hidden" id="vendId" value="@vendor" />
+                </div>
+                <div class="form-group col-md-2">
+                    <label>PO Number</label>
+                    <h5>@PO_num</h5>
+                    <input type="hidden" class="PO_Number" name="PO_Number" value="@PO_num">
+                </div>
+                <div class="form-group col-md-2">
+                    <label>PO Date</label>
+                    <h5>@string.Format("{0:dd-MMM-yyyy}", PO_date)</h5>
+                    <input type="hidden" class="PO_Date" placeholder="mm/dd/yyyy" name="PO_Date" value="@Model.Select(x=>x.DateTime).FirstOrDefault().Value.ToShortDateString()">
+                </div>
+                <div class="form-group col-md-2">
+                    <label>Department</label>
+                    <h5>@Dep_Name</h5>
+                    <input type="hidden" id="dep-name" value="@Dep_Name">
+                    <input type="hidden" id="dep-id" value="@Dep_Id">
+                </div>
+                <div class="form-group col-md-1">
+                    <button class="btn btn-primary rec-advan" style="margin-top:29px" data-toggle="modal" data-target="#Modal">Record Advance Amount</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    @if (Model.Any())
+    {
+        decimal? g_total = 0;
+        <table class="table table-bordered inv-det">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th colspan="5" style="text-align:center;border-right:1px solid #000000">Purchase Order</th>
+                </tr>
+                <tr>
+                    <th width="10px">Sr.</th>
+                    <th>Item</th>
+                    <th width="75px">Qty</th>
+                    <th width="100px">UOM</th>
+                    <th width="100px">Rate</th>
+                    <th width="120px" style="border-right:1px solid #000000">Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var v in Model)
+                {
+                    g_total += (v.Qty * v.Purchase_Rate);
+                    <tr class="main-inv-rec cal">
+                        <td>@(sr++)</td>
+                        <td class="invs" data-slval=''>@v.Item_Name</td>
+                        <td>@v.Qty</td>
+                        <td>@v.UOM</td>
+                        <td class="inv-rate"><span class="ccy">Rs. </span>@string.Format("{0:0,0.##}", v.Purchase_Rate)</td>
+                        <td style="border-right:1px solid #000000"><span class="ccy">Rs. </span>@string.Format("{0:0,0.##}", v.Qty * v.Purchase_Rate)</td>
+                    </tr>
+                }
+
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td></td>
+                    <td colspan="4" style="text-align:right">Grand Total</td>
+                    <td><span class="ccy">Rs. </span>@string.Format("{0:0,0.##}", g_total)</td>
+                </tr>
+            </tfoot>
+        </table>
+        <input type="hidden" value="@g_total" id="total-payable" />
+    }
+    <div class="clearfix"></div>
+</div>
+
+<script>
+    var sr = @sr;
+    $(document).on("click", ".oth-cha", function () {
+        var id = $(this).attr("id");
+        if (id == "tran") {
+            var ch = $(this).is(":checked");
+            if (ch) {
+                var html = `<tr class="trans-cha bgc-yellow-50">
+                            <td>${sr++}</td>
+                            <td>Transportation Charges</td>
+                            <td colspan="6"></td>
+                            <td><input type="number" class="form-control tran ttl-prc" data-type="Transportation Charges" value="0"><td>
+                            </tr>`
+                $(".inv-det tbody").append(html);
+            }
+            else {
+                sr--;
+                $(".trans-cha").remove();
+            }
+        }
+        else if (id == "lod") {
+            var ch = $(this).is(":checked");
+            if (ch) {
+                var html = `<tr class="load-cha bgc-yellow-50">
+                            <td>${sr++}</td>
+                            <td>Loading Charges</td>
+                            <td colspan="6"></td>
+                            <td><input type="number" class="form-control lod ttl-prc" data-type="Loading Charges" value="0"><td>
+                            </tr>`
+                $(".inv-det tbody").append(html);
+            }
+            else {
+                sr--;
+                $(".load-cha").remove();
+            }
+        }
+        else if (id == "unlod") {
+            var ch = $(this).is(":checked");
+            if (ch) {
+                var html = `<tr class="unload-cha bgc-yellow-50">
+                            <td>${sr++}</td>
+                            <td>Unloading Charges</td>
+                            <td colspan="6"></td>
+                            <td><input type="number" class="form-control unlod ttl-prc" data-type="Unloading Charges" value="0"><td>
+                            </tr>`
+                $(".inv-det tbody").append(html);
+            }
+            else {
+                sr--;
+                $(".unload-cha").remove();
+            }
+        }
+    });
+    $(document).on("click", ".gen-inv", function () {
+        let grp = $('.grpId').val();
+        let tran = $('.transaction').val();
+        let vend = $('#vendId').val();
+        var newline = []
+
+        $('.oth-cha').each(function () {
+            if ($(this).is(":checked")) {
+                var id = $(this).attr('id');
+                var line = { Text: $('.' + id).data("type"), Amt: $('.' + id).val() };
+                newline.push(line);
+            }
+        });
+        var formData = new FormData();
+        var files = $("#files").get(0).files
+        for (var i = 0; i < files.length; i++) {
+            formData.append('Files[]', files[i]);
+        }
+        formData.append('Vend', vend);
+        formData.append('GroupId', grp);
+        formData.append('Transaction_Id', tran);
+        formData.append('OtherCharges', JSON.stringify(newline));
+
+        if (confirm("Are you sure you want to Generate Invoice")) {
+            $.ajax({
+                type: "POST",
+                url: "/Procurement/GenerateInvoice/",
+                dataType: 'json',
+                processData: false,
+                contentType: false,
+                beforeSend: function () { },
+                complete: function () { },
+                data: formData,
+                //data: JSON.stringify({ Vend: vend, GroupId: grp, Transaction_Id: tran }),
+                success: function (data) {
+                    if (data.Status == true) {
+                        alert(data.Msg);
+                        window.location.reload();
+                    }
+                    else {
+                        alert(data.Msg);
+                    }
+                }
+            });
+        }
+    });
+
+    $(document).on('keyup', '.inv-qty', function () {
+        let qty = $(this).val();
+        let rt = RemoveComma($(this).closest('.cal').find('.inv-rate').text());
+        let rcvd = $.trim($(this).closest('.cal').find('.rcvd-qty').text());
+        let mainQty = $.trim($(this).closest('.cal').find('.ttl-qty').text());
+        if ((parseFloat(rcvd) + parseFloat(qty)) > parseFloat(mainQty)) {
+            alert('Quantity error. Quantity cannot exceed PO quantity');
+            qty = 0;
+            $(this).val(0);
+        }
+        $(this).closest('.cal').find('.ttl-prc').val(qty * rt);
+        calinvamt();
+    });
+    $(document).on('keyup', '.ttl-prc', function () {
+        $(this).closest('.cal').find('.inv-qty').val('');
+        calinvamt();
+    });
+    $(document).on('keyup', '.oth-cha', function () {
+        calinvamt();
+    });
+    function calinvamt() {
+        var ttlamt = 0;
+        $('.ttl-prc').each(function () {
+            var amt = Number(RemoveComma($(this).val()));
+            ttlamt += amt;
+        });
+        $('#tt-invc-amt').text('Rs. ' + Number(ttlamt).toLocaleString());
+    }
+
+</script>
+
+<style>
+    .centralText {
+        text-align: center;
+    }
+
+    .warningText {
+        position: absolute;
+        left: 50%;
+        right: 50%;
+        /*font-size: 20px;*/
+        animation-name: warning;
+        animation-duration: .6s;
+        animation-iteration-count: infinite;
+    }
+
+    @@keyframes warning {
+        0% {
+            font-size: 15px;
+        }
+
+        25% {
+            font-size: 20px;
+        }
+
+        50% {
+            font-size: 25px;
+        }
+
+        70% {
+            font-size: 20px;
+        }
+
+        100% {
+            font-size: 15px;
+        }
+    }
+</style>

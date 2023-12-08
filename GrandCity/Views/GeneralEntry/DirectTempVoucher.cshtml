@@ -1,0 +1,126 @@
+﻿
+@{ if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+}
+<script>
+    var banks = @Html.Raw(Json.Encode(ViewBag.Bank));
+</script>
+<div class="bgc-white bd bdrs-3 p-20 mB-20">
+    <input type="hidden" value="@ViewBag.TransactionId" id="trans-id" />
+    <h4 style="text-align:center">Record Temporary Expense</h4>
+    <h6 style="text-align:center">@ViewBag.Head</h6>
+    <hr />
+    <div class="row" id="ad-iven-stock">
+        <div class="col-md-12 cal" id="add-inv-1">
+            <div class="form-row">
+                <div class="col-md-12 form-group row">
+                    <h6 class="col-md-3">Description (will be written on voucher)</h6>
+                    <input type="text" class="form-control col-md-7 desc" />
+                </div>
+            </div>
+            <hr />
+            <div class="form-row" id="sel1">
+                <div class="form-group col-md-2">
+                    <label>Cash / Bank</label>
+                    <select class="form-control paytypesel" name="PaymentType" id="paymenttype" required>
+                        <option value="Cash">Cash</option>
+                        <option value="BankDraft">Bank Draft</option>
+                        <option value="Cheque">Cheque</option>
+                        <option value="PayOrder">Pay Order</option>
+                        <option value="Online_Cash">Online - Cash</option>
+                        <option value="Online_Cheque">Online - Cheque</option>
+                        <option value="Online_Payorder">Online - PayOrder</option>
+                        <option value="Online_Bankdraft">Online - BankDraft</option>
+                    </select>
+                </div>
+                <div class="form-group col-md-2">
+                    <label>Amount</label>
+                    <input class="form-control coma" placeholder="250,000" value="" required>
+                    <input type="hidden" id="Amount" name="Amount" class="amt Rate Purchase_Rate" value="" required>
+                </div>
+                <div class="form-group col-md-2 paymentotherinfo">
+                    <label>Bank</label>
+                    <select class="form-control" name="Bank" id="Bank"></select>
+                </div>
+                <div class="form-group col-md-2 paymentotherinfo">
+                    <label id="paytypelabel">-</label>
+                    <input type="text" class="form-control" id="inst-no" name="Cbp_No" placeholder="" disabled required>
+                </div>
+                <div class="form-group col-md-2 paymentotherinfo">
+                    <label>Date</label>
+                    <input type="text" class="form-control" id="cbp-date" name="Cbp_date" data-provide="datepicker" placeholder="mm/dd/yyyy" disabled required>
+                </div>
+
+                <div class="form-group col-md-2 paymentotherinfo">
+                    <label>Branch </label>
+                    <input type="text" class="form-control" id="Branch" name="Branch" placeholder="Mall Rd" disabled required>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr />
+    <div><button class="btn btn-primary rec-temp-ent">Record Entries</button></div>
+</div>
+
+<script>
+
+    $(document).ready(function () {
+        $('.searchbox').select2({ placeholder: 'Select an option' });
+
+        $(".rec-temp-ent").click(function (e) {
+            var tran = $("#trans-id").val();
+            var des = $(".desc").val();
+            var Amt = $("#Amount").val();
+            var chqNum = $("#inst-no").val();
+            var chqDt = $("#cbp-date").val();
+            var bank = $("#Bank").val();
+            var chqBrnch = $("#Branch").val();
+            var payType = $("#paymenttype").val();
+
+            if (confirm("Are you sure you want to Generate Payment Voucher")) {
+                $.ajax({
+                    type: "POST",
+                    url: '/GeneralEntry/RecordTempEntry/',
+                    data: { Amount: Amt, Bank: bank, Branch: chqBrnch, Inst_No: chqNum, Inst_Date: chqDt, Description: des, PaymentType: payType , TransactionId: tran },
+                    success: function (data) {
+                        if (data.Status) {
+                            alert(data.Msg);
+                            window.open("/Vouchers/SAGVouchers_Vendor?Id=" + data.VoucherNo + "&Token=" + data.Token, '_blank');
+                            window.location.reload();
+                        }
+                        else {
+                            alert(data.Msg);
+                        }
+                    }
+                    , error: function (xmlhttprequest, textstatus, message) {
+                        if (textstatus === "timeout") {
+                            alert("Internet Connectivity Issue.");
+                        } else {
+                            alert(textstatus);
+                        }
+                    }
+                });
+            }
+        });
+
+        $("#Bank").append('<option value="">Select Bank</option>');
+        var u_bank = banks.reduce((r, a) => {
+            r[a.Bank] = [...r[a.Bank] || [], a];
+            return r;
+        }, {});
+        $.each(u_bank, function (key) {
+            $("#Bank").append('<option value="' + key + '">' + key + '</option>');
+        });
+    });
+</script>
+<style>
+    .paymentotherinfo{
+        display:none
+    }
+</style>

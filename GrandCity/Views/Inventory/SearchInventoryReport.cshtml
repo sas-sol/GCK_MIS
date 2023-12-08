@@ -1,0 +1,61 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Sp_Get_Inventory_Report_Result>
+<table id="inv-rep" class="table table-striped table-bordered " cellspacing="0" width="100%" style="margin-left:0%">
+    <thead class="thead-dark">
+        <tr>
+            <th>Sr.</th>
+            <th>Item Name</th>
+            <th>Doc Number</th>
+            <th>Rate</th>
+            <th>Qty</th>
+            <th>UOM</th>
+            <th>Project</th>
+            <th>Vendor</th>
+            <th>Date</th>
+            <th>Name</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            if (Model.Any())
+            {
+                int i = 1;
+                foreach (var item in Model.OrderBy(x=> x.DATETIME))
+                {
+                    string color = "";
+                    if (item.In_Out == 1)
+                    {
+                        color = "bgc-green-50";
+                    }
+                    else
+                    {
+                        color = "bgc-red-50";
+                    }
+                    <tr id="@item.Id" class="@color">
+                        <td>@i</td>
+                        <td>@item.Item_Name</td>
+                        <td>@item.Doc_Number</td>
+                        <td>@item.Rate</td>
+                        <td>@item.Qty</td>
+                        <td>@item.UOM</td>
+                        <td>@item.Prj</td>
+                        <td>@item.Vendor_Name</td>
+                        <td>@string.Format("{0:dd-MMM-yyyy}", item.DATETIME)</td>
+                        <td>@item.UserName</td>
+                    </tr>
+                    i++;
+                }
+            }
+        }
+    </tbody>
+</table>
+<script>
+    $(document).ready(function () {
+        $('#inv-rep').DataTable({
+            ordering: false,
+            dom: 'Bfrtip',
+            buttons: [
+                'excel', 'pdf'
+            ],
+        });
+    });
+</script>

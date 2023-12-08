@@ -1,0 +1,26 @@
+﻿@model Management_Information_System.Models.AdjPlotRequest
+<div class="row">
+    <div class="col-md-2">
+        <label><b></b></label>
+    </div>
+</div>
+<table class="table table-borderless">
+    <thead>
+        <tr>
+            <th>Sr.</th>
+            <th>From Plot #</th>
+            <th>To Plot#</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{ int cnt = 1;}
+        @foreach (var v in Model.Swaps)
+        {
+            <tr>
+                <td>@(cnt++)</td>
+                <td>@v.FromPlotNum</td>
+                <td>@v.ToPlotNum</td>
+            </tr>
+        }
+    </tbody>
+</table>

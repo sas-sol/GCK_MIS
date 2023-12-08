@@ -1,0 +1,128 @@
+﻿@model MeherEstateDevelopers.Models.NewConnectionCharges
+@if (Model != null)
+{
+    using (Html.BeginForm("PayFineCharges", "ServiceCharges", FormMethod.Post, new { @id = "pay-fin-char", @class = "", role = "form", autocomplete = "off" }))
+    {
+        @Html.AntiForgeryToken()
+        <input type="hidden" value="@Model.PlotData.Id" name="PlotId" />
+        <input type="hidden" id="trans-id" name="TransactionId" value="@ViewBag.TransactionId" />
+        <input type="hidden" value="PlotManagement" name="Module" />
+        <div class="bgc-white p-20 bd">
+            <div class="mT-30">
+                <div class="form-row row">
+                    <div class="col-md-12">
+                        <div class="form-row">
+                            <div class="form-group col-md-1">
+                                <label>Plot No.</label>
+                                <h5 id="plt-no">@Model.PlotData.Plot_No</h5>
+                            </div>
+                            <div class="form-group col-md-1">
+                                <label>Block</label>
+                                <h5 id="plt-blk">@Model.PlotData.Block_Name</h5>
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label>Size</label>
+                                <h5 id="plt-size">@Model.PlotData.Plot_Size</h5>
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label>Type</label>
+                                <h5 id="plt-type">@Model.PlotData.Type</h5>
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label>Name</label>
+                                <h5 id="nam">@string.Join(",", Model.OwnerData.Select(x=> x.Name))</h5>
+                            </div>
+                        </div>
+                        <hr />
+                        <div class="form-row">
+                            <div class="form-group col-md-2">
+                                <label>Type</label>
+                                <select class="form-control rec-type" name="Type">
+                                    <option value="Fines_And_Penalties">Fine & Penalties</option>
+                                    <option value="Duplicate_AllotmentLetter">Duplicate Allotment Letter</option>
+                                    <option value="Power_Of_Attorney">Power of Attorney</option>
+                                    <option value="Out_Station_Charges">Out Station Charges</option>
+                                    <option value="Other_Transfer_Charges">Other Transfer Charges</option>
+                                    <option value="Advance_Tax_236_C">Advance Tax 236 C</option>
+                                    <option value="Duplicate_Customer_File">Duplicate Customer File</option>
+                                    <option value="Possession_Charges">Possession Charges</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label>Amount</label>
+                                <input class="form-control coma" placeholder="12,345" required>
+                                <input type="hidden" id="amt" name="Amount" class="amt" required>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label>Description</label>
+                                <textarea class="form-control" name="Remarks" id="desc"></textarea>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <button class="btn btn-info" type="submit" id="pay-fin-char-btn">Generate Receipt</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <hr />
+
+        </div>
+    }
+}
+else
+{
+    <div class="bgc-white p-20 bd">
+        <h5 class="c-grey-900">No Record Found</h5>
+    </div>
+}
+<script>
+    $(document).on("change", ".rec-type", function () {
+        var val = $(this).val();
+        if (val == "Fines_Penalities" || val == "Out_Station_Charges" || val == "Other_Transfer_Charges") {
+            $(".amt , .coma ").removeAttr("readonly");
+            $(".amt , .coma ").val('');
+
+        }
+        else if (val == "Power_Of_Attorney") {
+            $(".coma").val("5,000");
+            $(".amt").val(5000);
+            $(".amt , .coma ").attr("readonly", "true")
+        }
+        else if (val == "Duplicate_AllotmentLetter" || val == "Duplicate_Customer_File" ) {
+            var v = $("#plt-size").text();
+            var t = $("#plt-type").text();
+            var size = v.split(' ')[0];
+            if (t== "Residential") {
+                var amount = size * 3000;
+                $(".coma").val(Number(amount).toLocaleString());
+                $(".amt").val(amount);
+                //$(".amt , .coma ").attr("readonly", "true")
+            }
+            else if (t == "Commercial") {
+                var amount = size * 6000;
+                $(".coma").val(Number(amount).toLocaleString());
+                $(".amt").val(amount);
+                //$(".amt , .coma ").attr("readonly", "true")
+            }
+        }
+        else if (val == "Possession_Charges") {
+            var v = $("#plt-size").text();
+            var t = $("#plt-type").text();
+            var size = v.split(' ')[0];
+            if (t == "Residential") {
+                var amount = size * 2000;
+                $(".coma").val(Number(amount).toLocaleString());
+                $(".amt").val(amount);
+                $(".amt , .coma ").attr("readonly", "true")
+            }
+            else if (t == "Commercial") {
+                var amount = size * 5000;
+                $(".coma").val(Number(amount).toLocaleString());
+                $(".amt").val(amount);
+                $(".amt , .coma ").attr("readonly", "true")
+            }
+        }
+    });
+</script>
+

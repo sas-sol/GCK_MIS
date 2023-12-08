@@ -1,0 +1,25 @@
+﻿<div class="container-fluid pl-0 ml-0 pr-0 mr-0">
+    <div class="row">
+        <div class="col-md-2 bdrs-3 ov-h bgc-white ml-0 bd">
+            <ul class="nav flex-column mx-0">
+                <li class="nav-item sas col-md-12 my-1">
+                    <a class="nav-link prj-vouch-link active" data-link="/ConstructProjectManagement/RequestNewVoucher/" href="javascript:void(0)"><b>Request New Voucher</b></a>
+                </li>
+                <li class="nav-item sas col-md-12 my-1">
+                    <a class="nav-link prj-vouch-link" data-link="/ConstructProjectManagement/VoucherList?Prj_Id=@ViewBag.Prj_Id&Status=Pending" href="javascript:void(0)"><b>Pending For Approval</b></a>
+                </li>
+                <li class="nav-item sas col-md-12 my-1">
+                    <a class="nav-link prj-vouch-link" data-link="/ConstructProjectManagement/VoucherList?Prj_Id=@ViewBag.Prj_Id&Status=Approved" href="javascript:void(0)"><b>Approved</b></a>
+                </li>
+            </ul>
+        </div>
+        <hr />
+        <div class="col-md-10 bdrs-3 ov-h bgc-white bd">
+            <div class="container-fluid" id="vouch-list">
+                @{
+                    Html.RenderAction("RequestNewVoucher", "ConstructProjectManagement", new { Prj_Id = ViewBag.Prj_Id });
+                }
+            </div>
+        </div>
+    </div>
+</div>

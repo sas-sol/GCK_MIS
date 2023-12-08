@@ -1,0 +1,265 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Inventory_Stock_Out>
+@{ if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+}
+<script src="~/Scripts/jquery-3.3.1.js"></script>
+    @{
+        var GroupId = ViewBag.Group_Id;
+    }
+    <input type="hidden" class="grp_Id" value="@GroupId"/>
+<div class="row">
+    <div class="col-md-4">
+
+    </div>
+    <div class="col-md-4" style="text-align: center;">
+        <h3>Material Shift Note</h3>
+    </div>
+    <div class="col-md-4"></div>
+</div>
+<br />
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <select class="form-control searchbox ">
+                </select>
+            </div>
+            <div class="IssueNoteDetail"></div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-row">
+                <div class="col-md-4 form-group">
+                    <select class="form-control searchboxPrj "></select>
+                </div>
+                <div class="col-md-4 form-group">
+                    <select class="form-control searchboxIssToName"></select>
+                </div>
+                <div class="col-md-4 form-group">
+                    <select class="form-control searchboxReceivedByName"></select>
+                </div>
+            </div>
+            <div class="ProjectDetails"></div>
+        </div>
+    </div>
+
+
+<script>
+    $(document).ready(function () {
+        
+        $('.searchbox').select2({
+            //dropdownParent: $('#Modal'),
+            placeholder: "Search for Issue Note",
+            ajax: {
+                url: '/Inventory/GetIssueNote/',
+                dataType: 'json',
+                params: {
+                    contentType: 'application/json; charset=utf-8'
+                },
+                quietMillis: 100,
+                data: function (params) {
+                    return {
+                        q: params.term// search term
+                    };
+                },
+                processResults: function (data) {
+                    return {
+                        results: data.items
+                    };
+                }
+            }
+
+        });
+    });
+
+    $(document).ready(function () {
+        $('.searchboxPrj').select2({
+            //dropdownParent: $('#Modal'),
+            placeholder: "Search for Project",
+            ajax: {
+                url: '/Inventory/GetProject/',
+                dataType: 'json',
+                params: {
+                    contentType: 'application/json; charset=utf-8'
+                },
+                quietMillis: 100,
+                data: function (params) {
+                    return {
+                        q: params.term// search term
+                    };
+                },
+                processResults: function (data) {
+                    return {
+                        results: data.items
+                    };
+                }
+            }
+        });
+    });
+    $(document).ready(function () {
+        
+        $('.searchboxIssToName').select2({
+            //dropdownParent: $('#Modal'),
+            placeholder: "Search for IssueTo Name",
+            ajax: {
+                url: '/Inventory/IssueToName/',
+                dataType: 'json',
+                params: {
+                    contentType: 'application/json; charset=utf-8'
+                },
+                quietMillis: 100,
+                data: function (params) {
+                    return {
+                        q: params.term// search term
+                    };
+                },
+                processResults: function (data) {
+                    return {
+                        results: data.items
+                    };
+                }
+            }
+        });
+    });
+    $(document).ready(function () {
+        
+        $('.searchboxReceivedByName').select2({
+            //dropdownParent: $('#Modal'),
+            placeholder: "Search for Receiver Name",
+            ajax: {
+                url: '/Inventory/ReceivedBy/',
+                dataType: 'json',
+                params: {
+                    contentType: 'application/json; charset=utf-8'
+                },
+                quietMillis: 100,
+                data: function (params) {
+                    return {
+                        q: params.term// search term
+                    };
+                },
+                processResults: function (data) {
+                    return {
+                        results: data.items
+                    };
+                }
+            }
+        });
+    });
+    $(document).on("change", ".searchbox", function () {
+        
+        var id = $('.searchbox').val();
+        var issResult = $('.searchbox').text();
+        var issueNote = $.trim(issResult);
+        $('.IssueNoteDetail').load('/Inventory/GetIssueNoteDetails/', { IssueNote: issueNote, id: id });
+        $.ajax({
+            type: "POST",
+            url: "/Inventory/IssueToName/",
+            data: { Id: issueNote },
+            success: function (data) {
+            }
+            , error: function (xmlhttprequest, textstatus, message) {
+                if (textstatus === "timeout") {
+                    alert("got timeout");
+                } else {
+                    alert(textstatus);
+                }
+            }
+        });
+    });     
+    $(document).on("change", ".searchbox", function () {
+        
+        var id = $('.searchbox').val();
+        var issResult = $('.searchbox').text();
+        var issueNote = $.trim(issResult);
+        $('.ProjectDetails').load('/Inventory/GetProjectDetails/', { projName: issueNote, id: id });
+    });
+
+   
+    $(document).on("click", ".btn-submit", function () {
+        
+        let qty1;
+        let qty2;
+        $('.item').each(function () {
+             qty1 = Number( $(this).closest('tr').find('.qty').text());
+        });
+        $('.newitem').each(function () {
+             qty2 = Number($(this).closest('tr').find('.qty_one').val());
+        });
+        if (qty1 >= qty2) {
+            var arr = [];
+            $('.newitem').each(function () {
+                
+                var itemId = $(this).closest('tr').find('.itemId').val();
+                var qty = $(this).closest('tr').find('.qty_one').val();
+                arr.push({
+                    Item_Id: itemId,
+                    Qty: qty
+                });
+            });
+            var reqDate = $('.reqDate').val();
+            var issResult = $('.searchbox :selected').text();
+            var IssueNoteNoPrj = $.trim(issResult);
+            var prjId = $('.searchboxPrj :selected').val();
+            var issResult = $('.searchboxPrj :selected').text();
+            var prjName = $.trim(issResult);
+            if (prjName == "") {
+                alert("Please Select the Project First");
+                return false;
+
+            }
+            
+            var OprojId = $('.OprojId').val();
+            var OprjName = $('.prjName').val();
+            var issueToName = $('.searchboxIssToName :selected').text();
+            if (issueToName == "") {
+                alert("Please Select the Issue to Name");
+                return false;
+            }
+            var receivedBy = $('.searchboxReceivedByName :selected').text();
+            if (receivedBy == "") {
+                alert("Please Select the Receiver Name");
+                return false;
+            }
+            var issueToId = $('.searchboxIssToName :selected').val();
+            var requestedById = $('.requestedById').val();
+            var requestedByName = $('.requestedByName').val();
+            var issueById = $('.issueById').val();
+            var issueByName = $('.issueByName').val();
+            var demandOrderId = $('.demandOrderId').val();
+            //var issueNoteNo = $('.issueNoteNo').val();
+            var depId = $('.depId').val();
+            var depName = $('.depName').val();
+            var wId = $('.wId').val();
+            var wName = $('.wName').val();
+            var poId = $('.poId').val();
+            //var poNum = $('.poNum').val();
+            var grpId = $('.grp_Id').val();
+            if (confirm("Are you sure you want to Generate Material Shift Note")) {
+                $.ajax({
+                    type: "POST",
+                    url: "/Inventory/AddMaterialShiftEntries/",
+                    contentType: "application/json; charset=utf-8",
+                    data: JSON.stringify({ InventoryStockOut: arr, Group_Id: grpId, PrjId: prjId, PrjName: prjName, IssueToId: issueToId, IssueToName: issueToName, RequestedById: requestedById, RequestedByName: requestedByName, RequestedDate: reqDate, IssueById: issueById, IssueByName: issueByName, DemandOrderId: demandOrderId, DepId: depId, DepName: depName, WId: wId, WName: wName, PoId: poId, IssueNoteNoPrj: IssueNoteNoPrj, ProjId: OprojId, ProjName: OprjName, ReceivedBy: receivedBy }),
+                    success: function (data) {
+                        alert("Material Shifted Succesfully")
+                        window.open("/Inventory/MaterialShiftIssueNote?Id=" + grpId,  { ProjName: prjName }),
+                            window.location.reload();
+                    },
+                    error: function (xmlhttprequest, textstatus, message) {
+                    }
+                });
+            }
+
+        }
+        else {
+            alert("Quantity Should be less then the Orginal one");
+        }
+    });
+   
+    
+</script>

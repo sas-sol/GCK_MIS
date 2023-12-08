@@ -1,0 +1,58 @@
+﻿<head>
+    <script>
+        var Project = @Html.Raw(Json.Encode(ViewBag.Project));
+    </script>
+</head>
+
+<div class="col-md-12">
+    <div class="form-group col-md-6">
+        <label>Project Name</label>
+        @Html.DropDownList("Project", null, "Choose..", new { @class = "form-control Project" })
+    </div>
+</div>
+
+<div class="col-md-12 " id="ad-demand">
+    <div class="form-row cal" id="add-demd-1">
+        <div class="form-group col-md-2">
+            <label>Product</label>
+            <input type="text" class="form-control Product" name="Product" data-id="1" required placeholder="Product" />
+        </div>
+        <div class="form-group col-md-1">
+            <label>Quantity</label>
+            <input class="form-control coma" placeholder="12,345" required>
+        </div>
+        <div class="form-group col-md-1">
+            <label>Len</label>
+            <input class="form-control len" placeholder="0" required>
+        </div>
+        <div class="form-group col-md-1">
+            <label>Wid</label>
+            <input class="form-control wid" placeholder="0" required>
+        </div>
+        <div class="form-group col-md-1">
+            <label>Hei</label>
+            <input class="form-control hei" placeholder="0" required>
+        </div>
+        <div class="form-group col-md-1">
+            <label>Dia</label>
+            <input class="form-control dia" placeholder="0" required>
+        </div>
+        <div class="form-group col-md-1">
+            <label>UOM</label>
+            <input type="text" class="form-control Measurement" name="Measurement" data-id="1" required placeholder="Measurement">
+        </div>
+        <div class="form-group col-md-2">
+            <label>Required Date</label>
+            <input type="text" class="form-control Required_Date" data-provide="datepicker" placeholder="mm/dd/yyyy" data-id="1" name="">
+        </div>
+        <i class="ti-plus pointer add-row-dmd " title="Add more"></i>
+    </div>
+</div>
+
+
+<script>
+    $(function () {
+        $('.modal-footer').append('<button type="submit"  id="reg-DemndOrdr" class="btn btn-primary">Submit</button>');
+    });
+    InitProject(1);
+</script>

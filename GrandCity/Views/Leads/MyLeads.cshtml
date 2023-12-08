@@ -1,0 +1,70 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Sp_Get_Lead_Search_Comp_Result>
+@{ Layout = "~/Views/Shared/_StaffLayout.cshtml"; }
+
+<input type="hidden" value="1" id="flagid" />
+<div class=" bgc-white bd bdrs-3 p-20 mB-20 row">
+    <div class="col-md-12">
+        <h3 style="text-align:center">My Leads</h3>
+        <div class="row">
+            <div class="col-md-6">
+
+            </div>
+            <div class="col-md-3">
+                <button data-toggle="modal" data-target="#Modal" style="float:right" class="cr-lead btn btn-info">Create Lead</button>
+
+            </div>
+            <div class="col-md-3" style="float:right;">
+                <button data-toggle="modal" data-target="#Modal" style="float:right" class="btn btn-outline-dark all-leads-up-btn"><i class="fa fa-file-excel"></i> &nbsp; Upload Meher Estate Developers Leads </button>
+            </div>
+        </div>
+        <div class="row" style="margin-top:10px;">
+            <div class="col-md-9"></div>
+            <div class="col-md-3" style="float:right;">
+                <button data-toggle="modal" data-target="#Modal" style="float:right" class="btn btn-info all-leads-sa-up-btn"><i class="fa fa-file-excel"></i> &nbsp; Upload SA Premium Leads </button>
+            </div>
+        </div>
+        <br />
+        <hr />
+    </div>
+
+
+    <div class="col-md-12">
+        <div class="form-row">
+            <div class="form-group col-md-2">
+                <label>Sales Person</label>
+                <input type="hidden" value="@ViewBag.user" class="lead_user" />
+                <input type="text" class="form-control"  disabled value="@ViewBag.namee"  />
+               
+            </div>
+            <div class="form-group col-md-2">
+                <label>Status</label>
+                <select class="form-control" name="SAM_Lead_Status" id="SAM_Lead_Status" value="">
+                    <option value="">Choose..</option>
+                    <option value="Initial_Discussion">Initial Discussion</option>
+                    <option value="Token">Token</option>
+                    <option value="Mature">Mature</option>
+                    <option value="Loose">Loose</option>
+                </select>
+            </div>
+            <div class="form-group col-md-2">
+                <label>From</label>
+                <input type="text" class="form-control " id="SAM-lead-from" placeholder="mm/dd/yyyy" data-provide="datepicker" name="" required>
+            </div>
+            <div class="form-group col-md-2">
+                <label>To</label>
+                <input type="text" class="form-control " id="SAM-lead-to" placeholder="mm/dd/yyyy" data-provide="datepicker" name="" required>
+            </div>
+            <div class="form-group col-md-2">
+                <label>Phone Number</label>
+                <input type="text" class="form-control " id="leadphone" placeholder="Phone Number">
+            </div>
+            <div class="form-group col-md-1">
+                <button type="button" class="btn btn-primary" style="margin-top:29px" id="ser-my-lead">Search</button>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12 " id="SAMLeads">
+        @{ Html.RenderAction("MyLeadSearch", "Leads", new { From = DateTime.Now, To = DateTime.Now, LeadStatus = "", LeadUser = ViewBag.user, Phone = "" });}
+    </div>
+</div>
+

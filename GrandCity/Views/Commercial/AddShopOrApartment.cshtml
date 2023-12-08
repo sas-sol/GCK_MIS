@@ -1,0 +1,72 @@
+﻿@{
+    if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+}
+
+<div class="row" style="margin-left:0%">
+    <div class="col-md-10">
+        <h6 class="c-grey-900">Floor Registration </h6>
+        <div class="form-row">
+            <div class="col-md-6">
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label>Projects</label>
+                        @Html.DropDownList("Projects", null, "Choose..", new { @class = "form-control proj-types", required = "" })
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Select Floor</label>
+                        <select class="form-control prj-phase Floor" id="phase-type"></select>
+                    </div>
+                </div>
+            </div>
+            <hr />
+            
+            <div class="row col-md-12" id="ad-shp">
+                <div class="form-row col-md-12">
+                    <h6 class="c-grey-900">Shop / Apartment / Office registration</h6>
+                    <hr />
+                </div>
+                <div class="form-row" id="shp-1">
+                    <h6 class=" mB-0 pln-counter">1.</h6>
+                    <div class="form-group col-md-2">
+                        <label>Type</label>
+                        <select class="form-control Type" id="Type" name="Type" data-id="1">
+                            <option value="Shop">Shop</option>
+                            <option value="Apartment">Apartment</option>
+                            <option value="Office">Office</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label>Name</label>
+                        <input type="text" id="" name="" class="form-control Name" data-id="1">
+                    </div>
+                    <div class="form-group col-md-1">
+                        <label>Total Sq Ft</label>
+                        <input type="text" id="" name="" class="form-control Area" data-id="1">
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label>Location</label>
+                        <input type="text" id="" name="" class="form-control loc" data-id="1">
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label>Rate Sq Ft</label>
+                        <input type="text" id="" name="" class="form-control r__Sq__Ft" data-id="1">
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label>Extra Amount</label>
+                        <input class="form-control coma" placeholder="250,000" required data-id="1">
+                        <input type="hidden" id="Amount" class="amt" required>
+                    </div>
+                    <i class="ti-plus pointer ad__shp" style="margin-left:96%;margin-top:-7%;"></i>
+                </div>
+            </div>
+        </div>
+        <button type="button" class="btn btn-primary reg__shp__Floo" style="margin-left:81%">Register</button>
+    </div>
+</div>

@@ -1,0 +1,39 @@
+﻿@model MeherEstateDevelopers.Models.Comp_Dep_Desig
+<link href="http://www.getorgchart.com/GetOrgChart/getorgchart/getorgchart.css" rel="stylesheet" />
+<script src="http://www.getorgchart.com/GetOrgChart/getorgchart/getorgchart.js"></script>
+<div class="row gap-20 pos-r">
+    <div class="col-md-12">
+        <div class="bgc-white p-20 bd">
+            <h6 class="c-grey-900">Company Organization Chart</h6>
+            <div class="mT-30">
+                <div id="people" style="width: auto; margin: 0 auto;"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(function () {
+        var readUrl = "@Url.Action("Read")";
+
+    $.getJSON(readUrl, function (data) {
+        var peopleElement = document.getElementById("people");
+        var orgChart = new getOrgChart(peopleElement, {
+            primaryFields: ["Name"],
+            expandToLevel: 100,
+            removeNodeEvent: removeNodeEvent,
+            layout: getOrgChart.MIXED_HIERARCHY_RIGHT_LINKS,
+            dataSource: data.Result,
+            customize: JSON.parse(data.Colors),
+            enablePrint: true
+        });
+    });
+    });
+    function removeNodeEvent(sender, args) {
+        var con = confirm("Are you sure you want to delete ");
+        if (con) {
+            $.post('/Company/DeleteNode/', { Id: args.id }, function () {
+                alert("Node Deleted");
+            });
+        }
+    }
+</script>

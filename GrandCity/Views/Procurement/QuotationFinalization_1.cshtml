@@ -1,0 +1,329 @@
+﻿@model  MeherEstateDevelopers.Models.QuotationsViewModel
+@{
+    if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else if (User.IsInRole("CEO"))
+    {
+        Layout = "~/Views/Shared/_CEOLayout.cshtml";
+    }
+    else if (User.IsInRole("Staff"))
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+    var status = Model.AppliedBids.Any(x => x.PR_Status == MeherEstateDevelopers.Models.PurchaseRequisitionStatus.Purchase_Order_Generated.ToString() || x.PR_Status == MeherEstateDevelopers.Models.PurchaseRequisitionStatus.Purchase_Order_NotPrinted.ToString());
+    var reqno = Model.PurchaseRequistionDetails.Select(x => x.Requisition_No).FirstOrDefault();
+    var Dep_Name = Model.PurchaseRequistionDetails.Select(x => x.Dep_Name).FirstOrDefault();
+    var Date = Model.PurchaseRequistionDetails.Select(x => x.DateTime).FirstOrDefault();
+    var prj = Model.PurchaseRequistionDetails.Select(x => x.Prj_Name).FirstOrDefault();
+    var dr = Model.PurchaseRequistionDetails.Select(x => x.Demand_Req).FirstOrDefault();
+    var Reason = Model.PurchaseRequistionDetails.Select(x => x.Reason).FirstOrDefault();
+}
+<script src="~/Scripts/Inv.js"></script>
+<input type="hidden" value="@Model.PurchaseRequistionDetails.FirstOrDefault().Group_Id" id="Group_Id" />
+<div class="bgc-white bd bdrs-3 p-20 mB-20 table-responsive">
+    @if (Model.PurchaseRequistionDetails.Any())
+    {
+        <div class="row">
+            <div class="col-md-3">
+                <label>Department</label>
+                <h4>@Dep_Name</h4>
+            </div>
+            <div class="col-md-3">
+                <label>Project</label>
+                <h4>@prj</h4>
+            </div>
+            <div class="col-md-3">
+                <label>Requisition No</label>
+                <h4>@reqno</h4>
+            </div>
+            <div class="col-md-3">
+                <label>Date</label>
+                <h4>@String.Format("{0:dd-MMM-yyyy}", Date)</h4>
+            </div>
+            @if (!string.IsNullOrEmpty(Reason) || !string.IsNullOrWhiteSpace(Reason))
+            {
+                <div class="col-md-12">
+                    <label>Reason to Send Back</label>
+                    <h4>@Reason</h4>
+                </div>
+            }
+        </div>
+        int sr = 1;
+        var bidVendors = Model.AppliedBids.Select(x => new { x.Bid_Vendor_Id, x.Bid_Vendor_Name }).Distinct().ToList();
+
+        sr = 1;
+
+<div class="new-tbl-wrapper" style="overflow-x:scroll;">
+    <table class="table table-bordered" style="overflow-x:scroll; text-align:center;">
+        <thead class="thead-dark">
+            <tr>
+                <th class="wid-10"></th>
+                <th class="wid-50"></th>
+                <th class="wid-20"></th>
+                @foreach (var v in bidVendors)
+                {
+                    <th colspan="2" class="wid-40">@v.Bid_Vendor_Name</th>
+                }
+            </tr>
+            <tr>
+                <th class="wid-10"></th>
+                <th class="wid-50"></th>
+                <th class="wid-20"></th>
+                @foreach (var v in bidVendors)
+                {
+                    <th class="wid-20" colspan="2">Rs. @string.Format("{0:n0}", Model.AppliedBids.Where(x => x.Bid_Vendor_Id == v.Bid_Vendor_Id).Sum(x => (x.Bid_Pur_Rate * x.BidQty)))</th>
+                }
+            </tr>
+            <tr>
+                <th class="wid-10">Sr.</th>
+                <th class="wid-50">Item</th>
+                <th class="wid-20">Qty.</th>
+                @foreach (var v in bidVendors)
+                {
+                    <th class="wid-20">Rate</th>
+                    if (Model.AppliedBids.Where(x => x.Bid_Vendor_Id == v.Bid_Vendor_Id).Any(x => x.Bid_Finalized != true))
+                    {
+                        <th class="wid-20">Total &nbsp;&nbsp;<input type="checkbox" class="toggleAll" data-tag="@v.Bid_Vendor_Id" /></th>
+                    }
+                    else
+                    {
+                        <th class="wid-20">Total &nbsp;&nbsp;<input type="checkbox" class="toggleAll" data-tag="@v.Bid_Vendor_Id" checked /></th>
+                    }
+                }
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var v in Model.PurchaseRequistionDetails)
+            {
+                <tr class="it">
+                    <td class="wid-10">@(sr++)</td>
+                    <td class="wid-50">
+                        <label>Item Code: <b> @v.SKU</b></label>
+                        <br />
+                        <label>Item Name:<b> @v.Item_Name</b></label>
+                        <br />
+                        <label>Required Quantity : <b>@v.Qty / @v.UOM</b></label>
+                        <br />
+                        <label><b>@v.Description @v.Specs</b></label>
+                        <br />
+                    </td>
+                    <td class="wid-20">@v.Qty</td>
+                    @foreach (var vendor in bidVendors)
+                    {
+                        var bidData = Model.AppliedBids.Where(x => x.Bid_Vendor_Id == vendor.Bid_Vendor_Id && x.Bid_PurReqId == v.Id).FirstOrDefault();
+                        string col = "";
+                        if (bidData == null)
+                        {
+                            <td class="wid-20">---</td>
+                            <td class="wid-20">---</td>
+                        }
+                        else
+                        {
+                            if (bidData.Bid_Finalized == true)
+                            {
+                                col = "style=background-color:#e8f5e9!important";
+                            }
+                            <td @col class="wid-20">
+                                <div class="row" style="align-items: center;justify-content: space-around;">
+                                    <span>
+                                        <b>Rate/UOM : </b>@string.Format("{0:0,0.##}", bidData.Bid_Pur_Rate)
+                                        <br />
+                                        <b>GST : </b>@string.Format("{0:0,0.##}", bidData.Tax)
+                                    </span>
+                                </div>
+                            </td>
+                            <td @col class="wid-20">
+                                <div class="row" style="align-items: center;justify-content: space-around;">
+                                    <span class="">
+                                        <b>Total : <span class="ccy">@bidData.Currency. </span> <span class="item-ttl">@string.Format("{0:0,0.##}", bidData.Bid_Pur_Rate * bidData.BidQty + bidData.Tax)</span></b>
+                                    </span>
+                                    <span>
+                                        @if (status)
+                                        {
+                                            if (bidData.Bid_Finalized == true)
+                                            {
+                                                <i class="ti-check" style="color:green"></i>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            if (User.IsInRole("Purchase Comparative Approval"))
+                                            {
+                                                if (bidData.Bid_Finalized == true)
+                                                {
+                                                    <input type="checkbox" data-rates="@Math.Round(Convert.ToDecimal(bidData.Bid_Pur_Rate * bidData.BidQty), 2)" checked value="@bidData.Bid_Id" class="po-fin bid-vend-@bidData.Bid_Vendor_Id" />
+                                                }
+                                                else
+                                                {
+                                                    <input type="checkbox" data-rates="@Math.Round(Convert.ToDecimal(bidData.Bid_Pur_Rate * bidData.BidQty), 2)" value="@bidData.Bid_Id" class="po-fin bid-vend-@bidData.Bid_Vendor_Id" />
+                                                }
+                                            }
+                                        }
+                                    </span>
+                                </div>
+                            </td>
+                        }
+                    }
+                </tr>
+            }
+        </tbody>
+
+        <tfoot style="background-color:rgba(243,209,108,0.7);">
+            <tr>
+                <th class="wid-10"></th>
+                <th class="wid-50"></th>
+                <th class="wid-20"></th>
+                @foreach (var v in bidVendors)
+                {
+                    <th class="wid-20" colspan="2">@v.Bid_Vendor_Name -  Rs. @string.Format("{0:n0}", Model.AppliedBids.Where(x => x.Bid_Vendor_Id == v.Bid_Vendor_Id).Sum(x => (x.Bid_Pur_Rate * x.BidQty)))</th>
+                }
+            </tr>
+        </tfoot>
+    </table>
+</div>
+        @*<div class="row">
+                <div class="col-md-12">
+                    <h6 style="text-align:right" class="total-val">Grand Total - <span class="ccy">Rs. </span>@string.Format("{0:0,0.##}", Model.AppliedBids.Where(x => x.Bid_Finalized == true).Sum(x => x.TotalVal))</h6>
+                </div>
+            </div>*@
+
+        <div class="total-val demo bottomright">
+            Grand Total : <span class="ccy">Rs. </span>@string.Format("{0:0,0.##}", Model.AppliedBids.Where(x => x.Bid_Finalized == true).Sum(x => x.TotalVal))
+        </div>
+        <div class="col-md-12 mt-3">
+            @if (status)
+            {
+                <h5 style="text-align:right">Quoations are Finalized</h5>
+            }
+            else
+            {
+                if (Model.AppliedBids.Any(x => x.PR_Status == MeherEstateDevelopers.Models.PurchaseRequisitionStatus.Pending.ToString()))
+                {
+                    <h5>In Quotations Process</h5>
+                }
+                else
+                {
+                    if (Model.PurchaseRequistionDetails.FirstOrDefault().Status == MeherEstateDevelopers.Models.PurchaseRequisitionStatus.Demand_Approval.ToString())
+                    {
+                        <h5>Sent to Requestor Department</h5>
+                    }
+                    else
+                    {
+                        <button type="button" style="float:left" data-type="Inv" data-status="Pending" class="btn btn-danger quo-s-bk">Send Back to Procurement</button>
+                        if (dr == null)
+                        {
+                            if (!User.IsInRole("View All Requisitions"))
+                            {
+                                <button type="button" style="text-align:right;float:right" class="btn btn-success quo-fina">Finalize Quotations</button>
+                            }
+                        }
+                        else
+                        {
+                            if (!User.IsInRole("View All Requisitions"))
+                            {
+                                <button type="button" style="text-align:right;float:right" class="btn btn-info dem-fina">Send to Department Approval</button>
+                            }
+                        }
+                    }
+                }
+            }
+        </div>
+    }
+    else
+    {
+        <div class="col-md-12">
+            <h5>It appears to have occurred some sort of error. Please try again or contact SA Systems Team.</h5>
+        </div>
+    }
+</div>
+<style>
+    tr th {
+        font-size: 13px;
+        padding: 5px !important;
+    }
+
+    .thTextHeading {
+        color: #FFF;
+        background-color: #212529;
+    }
+
+    .centralText {
+        text-align: center;
+    }
+
+    .po-fin {
+        float: right;
+        margin-top: 10px;
+    }
+
+    .bottomright {
+        position: fixed;
+        bottom: 0px;
+        right: 0px;
+    }
+
+    .demo {
+        background-color: white;
+        border: 1px solid blue;
+        box-shadow: rgba(0,0,0,0.8) 0 0 10px;
+        border-radius: 5px;
+        padding: 20px;
+        margin: 4% 12% 4% 4%;
+        font-weight: bold;
+        z-index: 999999
+    }
+
+    .edit-item {
+        visibility: hidden
+    }
+
+    .pr:hover .edit-item {
+        visibility: visible
+    }
+
+    .wid-10 {
+        min-width: 100px;
+    }
+
+    .wid-20 {
+        min-width: 150px;
+    }
+
+    .wid-40 {
+        min-width: 400px;
+    }
+
+    .wid-50{
+        min-width:500px;
+    }
+
+</style>
+
+<script>
+    $(document).ready(function () {
+        $('.toggleAll').unbind().change(function () {
+            debugger;
+            let dTag = $(this).attr('data-tag');
+            if ($(this).is(':checked')) {
+                $('.bid-vend-' + dTag).each(function (i, v) {
+                    //$(this).prop('checked', true);
+                    $(this).click();
+                });
+                //$('.bid-vend-' + dTag).each(function (i, v) {
+                //    $(this).trigger('click');
+                //});
+            }
+            else {
+                $('.bid-vend-' + dTag).each(function (i, v) {
+                    //$(this).prop('checked', false);
+                    $(this).click();
+                });
+                //$('.bid-vend-' + dTag).each(function (i, v) {
+                //    $(this).trigger('click');
+                //});
+            }
+        });
+    });
+</script>

@@ -1,0 +1,388 @@
+﻿@{
+    Layout = "~/Views/Shared/_StaffLayout.cshtml";
+}
+
+<script>
+    var banklist = @Html.Raw(Json.Encode(ViewBag.Bank));
+     var cities = @Html.Raw(Json.Encode(ViewBag.Cities));
+</script>
+<div class="bgc-white row gap-20 pos-r">
+    <h2 style="text-align:center">Commercial Booking</h2>
+    <div class="col-md-12">
+        <div class="p-20 bd">
+            @using (Html.BeginForm("CommercialTokenRegisteration", "Commercial", FormMethod.Post, new { @id = "re-tok-com", @class = "", role = "form", autocomplete = "off" }))
+            {
+                <div class="mT-30">
+                    <div class="form-row row">
+                        <div class="col-md-9">
+                            <div class="form-row">
+                                <div class="form-group col-md-3">
+                                    <label>Project</label>
+                                    @Html.DropDownList("Projects", null, "Choose..", new { @class = "form-control prj-com-flo", required = "" })
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label>Floors</label>
+                                    <select class="form-control prj-shp-sa-prem" id="floor">
+                                        <option>Select Floor</option>
+                                    </select>
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label>Units</label>
+                                    <select class="form-control com_shp__da" id="shp">
+                                        <option>Select Unit</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <input type="hidden" id="app-fil-id" />
+                                <input type="hidden" id="com-id" />
+                                <div class="form-group col-md-2">
+                                    <label>Floor</label>
+                                    <input type="text" class="form-control" id="floor__name" readonly>
+                                </div>
+                                <input type="hidden" class="form-control" id="Image" readonly>
+                                <div class="form-group col-md-2">
+                                    <label>Area</label>
+                                    <input type="text" class="form-control" id="area" readonly>
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <label>Type</label>
+                                    <input type="text" class="form-control" id="type" name="Plot_Size" readonly>
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <label>Location</label>
+                                    <input type="text" class="form-control" id="loc" readonly>
+                                </div>
+                                <div class="form-group col-md-2" id="sts__div">
+                                    <label>Status</label>
+                                    <div class="alert alert-success" role="alert"><label id="get__stat"></label></div>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>&nbsp;</label>
+                                    <button type="button" class="btn btn-primary my-4" id="sea-com-premium">Check Availability</button>
+                                </div>
+                            </div>
+                            <div class="row col-md-12 stru__map" id="">
+
+                            </div>
+                        </div>
+                        @*<div class="col-md-2 form-group  own-det" id="1">
+                        <img style="margin-top:0px" src="/assets/static/images/no-img.png" width="200" height="180" id="own_img" name="Owner_Image1" />
+                        <input type="hidden" id="image" name="Image" required />
+                        <input type="button" class="btn btn-info own-img add-own-img" id="add-own-img1" style="margin-top:10px;" data-toggle="modal" value="Upload Image" data-target="#Modal" />
+                    </div>*@
+
+                    </div>
+                </div>
+                <hr />
+                @*<button type="button" class="btn btn-primary fi-reg-ath" style="float:right">Add Another</button>*@
+                <h6 class="c-grey-900">Applicant Information</h6>
+                <div class="mT-30">
+                    <div class="col-md-12 " id="ad-reg-form">
+                        <div class="" id="add-reg-1">
+                            @*<h6 class="lh-1 mB-0 add-reg-counter">1.</h6>*@
+                            <div class="form-row">
+                                <div class="form-group col-md-3">
+                                    <label>Name</label>
+                                    <input type="text" class="form-control Name" id="Name" required data-id="1">
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label>Father's/Husband's Name</label>
+                                    <input type="text" class="form-control Father_Husband" id="Father_Husband" required data-id="1">
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label>Contact</label>
+                                    <input type="text" class="form-control" id="Mobile_1" pattern="^0\d{10}" placeholder="03121234567" name="" required data-id="1">
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr />
+                <hr />
+                <div class="form-row">
+                    @*<div class="col-md-2">
+                    <h6 class="c-grey-900"></h6>
+                </div>*@
+                    @*<div class="col-md-3">
+                    <h6 class="c-grey-900">Total Amount: <span id="adv-pmt"></span></h6>
+                    <input type="hidden" id="adv" />
+                    <input type="hidden" id="bok" />
+                </div>*@
+                    @*<div class="form-group col-md-1">
+                    <div class="checkbox checkbox-circle checkbox-info peers ai-c">
+                        <input type="checkbox" value="1" id="full__pay__Commer" class="peer" autocomplete="off">
+                        <label class="peers peer-greed js-sb ai-c">
+                            <span class="peer peer-greed ser-ch-nam" style="font-weight:bold">Full Payment</span>
+                        </label>
+                    </div>
+                </div>*@
+                    @*<div class="form-group col-md-1 hidden_memb">
+                    <label>Discount %</label>
+                    <input class="form-control" id="dis__amt" placeholder="%">
+                </div>*@
+                    @*<div class="col-md-3">
+
+                                <h6 style="width: auto;float: left;margin: 7px;">Token</h6>
+                <label class="switch" style="float:left">
+                    <input type="checkbox" id="book-stat">
+                    <span class="slider round"></span>
+                </label>
+                <h6 style="width: auto;float: left;margin: 7px;">Booking</h6>
+                    <label>Token Expiry Date</label>
+                    <input type="text" id="tok-exp-date" class="form-control col-md-4" data-provide="datepicker" placeholder="Expire Date" />
+                </div>*@
+                    @*<div class="col-md-2">
+                    <button type="submit" id="reg-tok-file" class="btn btn-primary btn__reg__com" disabled>Register</button>
+                </div>*@
+                </div>
+                <div class="mT-30">
+                    <div class="mT-30" id="pay-list">
+                        <div class="form-row" id="pay-1">
+                            @*<div class="col-md-2">
+                                <label>Token Expiry Date</label>
+                                <input type="text" id="tok-exp-date" class="form-control" data-provide="datepicker" placeholder="Expire Date" />
+                            </div>*@
+                            <div class="form-group col-md-2">
+                                <label>Cash / Bank</label>
+                                <select class="form-control paytypesel" id="cah-chq-bak" disabled required>
+                                    <option value="Cash">Cash</option>
+                                    <option value="BankDraft">Bank Draft</option>
+                                    <option value="Cheque">Cheque</option>
+                                    <option value="PayOrder">Pay Order</option>
+                                    <option value="Online_Cash">Online - Cash</option>
+                                    <option value="Online_Cheque">Online - Cheque</option>
+                                    <option value="Online_Payorder">Online - PayOrder</option>
+                                    <option value="Online_Bankdraft">Online - BankDraft</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-1">
+                                <label>Amount</label>
+                                <input class="form-control coma" placeholder="250,000" required>
+                                <input type="hidden" id="Amount" class="amt" required>
+                            </div>
+                            <div class="form-group col-md-2 paymentotherinfo">
+                                <label id="paytypelabel">-</label>
+                                <input type="text" class="form-control" id="paymenttype" placeholder="" disabled required>
+                            </div>
+                            <div class="form-group col-md-2 paymentotherinfo">
+                                <label>Date</label>
+                                <input type="text" class="form-control" id="cbp-date" data-provide="datepicker" placeholder="mm/dd/yyyy" disabled required>
+                            </div>
+                            <div class="form-group col-md-2 paymentotherinfo">
+                                <label>Bank</label>
+                                <select class="form-control" id="bank" disabled>
+                                    <option>Choose..</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-2 paymentotherinfo">
+                                <label>Branch </label>
+                                <input type="text" class="form-control" id="Branch" placeholder="Mall Rd" disabled required>
+                            </div>
+                            <div class="form-group col-md-1 paymentotherinfo">
+                                <label>Scan File </label>
+                                <button class=" btn btn-block" data-v="1" type="button" id="scanbtn">Scan</button>
+                            </div>
+                            <div id="images-1" class="col-md-1 images"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <button type="submit" id="reg-tok-file" class="btn btn-primary btn__reg__com" style="width:300px; margin-left:auto;margin-right:auto;" disabled>Register</button>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+<style>
+    .paymentotherinfo {
+        display: none;
+    }
+
+    #inst-stat {
+        height: 1245px;
+        overflow-y: scroll;
+    }
+</style>
+<script>
+    $(function () {
+        InitBanks(1);
+        Initcity(1);
+    });
+    $("#sts__div").hide();
+    $(".hidden_memb").hide();
+    //$(document).on("change", "#book-stat", function () {
+    //    if (this.checked) {
+    //        $("#tok-exp-date").hide();
+    //    } else {
+    //        $("#tok-exp-date").show();
+    //    }
+    //});
+
+    $(document).on("submit", "#re-tok-com", function (e) {
+        e.preventDefault();
+        var totalamt = $(".amt").val();
+        if (totalamt == null || totalamt < 500 || totalamt == "")
+    {
+        alert("Please Enter Valid Amount");
+        return false;
+    }
+        var token = false;
+        //if ($("#book-stat").is(":checked")) {
+        //    token = true;
+        //}
+        //else {
+        //    token = false;
+        //}
+        //var expiry = $("#tok-exp-date").val();
+        //if (expiry == "" || expiry == null) {
+        //    alert("Please Enter Valid Token Expiry Date");
+        //    return false;
+        //}
+        var name = $("#Name").val();
+        var fName = $("#Father_Husband").val();
+        var cont = $("#Mobile_1").val();
+        if (name == "" || name == null) {
+            alert("Enter Customer Name");
+            return false;
+        }
+        if (fName == "" || fName == null) {
+            alert("Enter Customer's Father/Husband Name");
+            return false;
+        }
+        if (cont == "" || cont == null) {
+            alert("Enter Customer Contact");
+            return false;
+        }
+
+        //var fileno = $("#app-num").val();
+        var recedata = {
+            Amount: "", AmountInWords: "", Bank: "", PayChqNo: "", PaymentType: "",
+            Project_Name: "", Branch: "", Ch_bk_Pay_Date: "", Block: "", FileImage: ""
+        };
+        recedata.Amount = totalamt;
+        recedata.AmountInWords = InWords(totalamt);
+        recedata.Bank = $("#bank").val();
+        recedata.PayChqNo = $("#paymenttype").val();
+        recedata.PaymentType = $("#cah-chq-bak").val();
+        recedata.Project_Name = $("#Projects option:selected").text();
+        recedata.Branch = $("#Branch").val();
+        recedata.Ch_bk_Pay_Date = $("#cbp-date").val();
+        recedata.FileImage = $("#scanned").attr('src');
+        recedata.Block = $("#floor").val();
+        var Name = "", Mobile_1 = "", Father_Husband = "";
+
+        for (var r = 1; r <= plotowncount; r++) {
+            Name = Name + 'Ѭ' + ($("#add-reg-" + r + " .Name").val() || '_');
+            Father_Husband = Father_Husband + 'Ѭ' + ($("#add-reg-" + r + "  .Father_Husband").val() || '_');
+            Mobile_1 = Mobile_1 + 'Ѭ' + ($("#add-reg-" + r + " #Mobile_1").val() || '_');
+        }
+
+        var regfiledata = {
+            Name: Name.substr(1),
+            Father_Husband: Father_Husband.substr(1),
+            Mobile_1: Mobile_1.substr(1),
+            OwnerCount: plotowncount,
+            ComRom_Id: $("#com-id").val()
+        }
+
+        var alldata = {
+            amount: totalamt,
+            comdata: regfiledata,
+            ComRom_Num: $('.com_shp__da option:selected').text(),
+            Receiptdata: recedata,
+            Token: token
+        };
+        var con = confirm("Are you sure you want to Generate Receipt");
+        if (con) {
+            $.ajax({
+                type: "POST",
+                url: $(this).attr("action"),
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify(alldata),
+                success: function (data) {
+
+                    if (data == false) {
+                        alert('Error Occured');
+                    }
+                    else if (data.Status == "1") {
+                        alert("Successfully Registerd");
+                        window.open("/Receipts/CommercialReceipt?Id=" + data.Receiptid + "&Token=" + data.Token, '_blank');
+                        window.location.reload();
+                    }
+                    else if (data.Status == "2") {
+                        alert("Wait Until You Payment is Clear from Bank");
+                        window.open("/Receipts/CommercialReceipt?Id=" + data.Receiptid + "&Token=" + data.Token, '_blank');
+                        window.location.reload();
+                    }
+                }
+                , error: function (xmlhttprequest, textstatus, message) {
+                    if (textstatus === "timeout") {
+                        alert("got timeout");
+                    } else {
+                        alert(textstatus);
+                    }
+                }
+            });
+        }
+    });
+    $(document).on("click", "#sea-com-premium", function () {
+        var proj = $("#Projects").val();
+        var app = $("#shp").val();
+
+        $.ajax({
+            type: "POST",
+            url: "/Commercial/SearchComFile/",
+            data: { ProjectId: proj, FormId: app},
+            success: function (data) {
+                if (data == false) {
+                    alert("No Result Found");
+                    return false;
+                }
+                if (data.length <= 0) {
+                    alert("No Result Found");
+                    return false;
+                }
+                if (data.Status != "Registered" && data.Status != "Hold") {
+                    $('.btn__reg__com').prop('disabled', false);
+                }
+                $("#sts__div").show();
+                $('#get__stat').text(data.Status.replace(/_/g, ' '));
+                //$('#get__stat').text(data.Status);
+                $("#area").val(data.Area);
+                $("#type").val(data.Type);
+                $("#loc").val(data.Location);
+                $("#com-id").val(data.Comercial_Id);
+                $("#app-fil-id").val(data.Com_App_Shop_Number);
+                $("#floor__name").val(data.Floor);
+                $('#qr_img').attr("src", '/QR Codes/' + data.Comercial_Id + '_' + data.Floor_Id + '.png');
+                var totval = data.Final_Rate;
+                var adv = Math.round((totval))
+                var bok = (totval);
+                $("#adv").val(Number.toLocaleString(adv));
+                $("#bok").val(bok);
+                $("#adv-pmt").text(Number(adv).toLocaleString());
+            }
+            , error: function (xmlhttprequest, textstatus, message) {
+                if (textstatus === "timeout") {
+                    alert("got timeout");
+                } else {
+                    alert(textstatus);
+                }
+            }
+        });
+    });
+
+    //$(document).on("blur", "#tok-exp-date", function () {
+    //    var date = $(this).val();
+    //    var date1 = moment();
+    //    var date2 = moment(date);
+    //    var diff = date2.diff(date1, 'days');
+    //    diff++;
+    //    if (diff < 1) {
+    //        alert("Please Select a Valid Token Date");
+    //        $(this).val('');
+    //    }
+    //});
+</script>

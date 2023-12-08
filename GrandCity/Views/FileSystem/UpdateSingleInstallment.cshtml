@@ -1,0 +1,34 @@
+﻿@model MeherEstateDevelopers.Models.Installment
+    <div class="form-row">
+        <div class="col-md-4">
+            <label>Installment</label>
+            <input type="text" class="form-control" id="" value="@string.Format("{0: MMMM  yyyy}", Model.Due_Date), @Model.Installment_Name" readonly />
+        </div>
+        <div class="col-md-2">
+            <label>Date</label>
+            <input type="text" class="form-control" data-provide="datepicker" id="Dv__date" value="@string.Format("{0: MM/dd/yyyy}", Model.Due_Date)" placeholder="mm/dd/yyyy" name="">
+        </div>
+        <div class="col-md-2">
+            <label>Amount</label>
+            <input type="text" class="form-control" id="Dv__amt" value="@Model.Amount" />
+        </div>
+        <div class="col-md-2">
+            <label>Type</label>
+            <select class="form-control inst-type">
+                <option value="3">Advance</option>
+                <option value="1">Installment</option>
+                <option value="2">Development Charges</option>
+                <option value="4">Special Preference Charges</option>
+                <option value="0">Balloting</option>
+            </select>
+        </div>
+
+    </div>
+<script>
+    $(function () {
+        $('.modal-footer').append(' <button type="button" class="btn btn-primary upda___Sing__ins" id="@Model.Id" >Update</button>');
+
+        var val = "@Model.Installment_Type";
+        $('.inst-type').val(val);
+    });
+</script>

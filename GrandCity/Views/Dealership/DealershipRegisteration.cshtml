@@ -1,0 +1,87 @@
+﻿@{
+    if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+
+}
+<input  type="hidden" id="trans-id" value="@ViewBag.TransactionId"/>
+<div class="row gap-20 pos-r">
+    <div class="col-md-12">
+        <div class="bgc-white p-20 bd">
+            <h6 class="c-grey-900">Dealership Registeration</h6>
+            <div class="mT-30">
+                <div class="form-row">
+                    <div class="form-group  col-md-3">
+                        <label>Dealership</label>
+                        @Html.DropDownList("Dealership", null, "Select Dealership", htmlAttributes: new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="form-row">
+                        <div class="form-group col-md-2">
+                            <label>Amount</label>
+                            <input class="form-control coma" placeholder="12,345" required>
+                            <input type="hidden" id="amt" name="Amount" class="amt" required>
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label>Cash / Bank</label>
+                            <select class="form-control paytypesel-test" id="cah-chq-bak" name="PaymentType">
+                                <option value="Cash">Cash</option>
+                                <option value="BankDraft">Bank Draft</option>
+                                <option value="Cheque">Cheque</option>
+                                <option value="PayOrder">Pay Order</option>
+                                <option value="Online_Cash">Online - Cash</option>
+                                <option value="Online_Cheque">Online - Cheque</option>
+                                <option value="Online_Payorder">Online - PayOrder</option>
+                                <option value="Online_Bankdraft">Online - BankDraft</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-3 paymentotherinfo">
+                            <label id="paytypelabel"></label>
+                            <input type="text" class="form-control" id="paymenttype" name="PayChqNo" placeholder="" disabled>
+                        </div>
+                        <div class="form-group col-md-3 paymentotherinfo">
+                            <label>Bank</label>
+                            @Html.DropDownList("Bank", null, "Choose..", new { @class = "form-control", disabled = "" })
+                        </div>
+                        <div class="form-group col-md-2 paymentotherinfo">
+                            <label>Branch </label>
+                            <input type="text" class="form-control" id="Branch" name="Branch" placeholder="Mall Rd" disabled>
+                        </div>
+                        <div class="form-group col-md-2 paymentotherinfo">
+                            <label>Date</label>
+                            <input type="text" class="form-control" data-provide="datepicker" name="Ch_bk_Pay_Date" placeholder="mm/dd/yyyy" id="instDate" disabled required>
+                        </div>
+
+                        <div class="form-group col-md-1 paymentotherinfo">
+                            <label>Scan File </label>
+                            <button class=" btn btn-primary" data-v="1" type="button" id="scanbtn">Scan</button>
+
+                        </div>
+                        <div id="images-1" class="col-md-10"></div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-3">
+                            <button class="btn btn-primary del-reg-fee">Generate Receipt</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(function () {
+        $('#Dealership').select2();
+    })
+</script>
+<style>
+    .paymentotherinfo{
+        display:none
+    }
+</style>

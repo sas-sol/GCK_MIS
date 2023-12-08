@@ -1,0 +1,91 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.SpecialPref>
+@{
+    if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+}
+<div class="row">
+    <div class="col-md-12">
+        <div class="bgc-white bd bdrs-3 p-20 mB-20">
+            <h4 class="c-grey-900 mB-20" style="text-align:center">Special Prefrences Charges</h4>
+            <table class="table table-bordered">
+                <thead class="thead-dark">
+                    <tr>
+                        <th style="text-align:center" colspan="2"></th>
+                        <th style="text-align:center" colspan="2">Paid</th>
+                        <th style="text-align:center" colspan="2">Not Paid</th>
+                        <th style="text-align:center" colspan="2">Total</th>
+                    </tr>
+                    <tr>
+                        <th>Month</th>
+                        <th>Size</th>
+                        <th>No. Of Plots</th>
+                        <th>Total Amount</th>
+                        <th>No. Of Plots</th>
+                        <th>Total Amount</th>
+                        <th>No. Of Plots</th>
+                        <th>Total Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var g in Model.GroupBy(x => x.DueDate))
+                    {
+                        int i = 1;
+                        decimal? Ttlnum = 0;
+                        foreach (var gg in g.GroupBy(x => x.Plot_Size))
+                        {
+                            string col = "";
+                            if (i == 1)
+                            {
+                                col = "Border-top:2px solid #ccc";
+                            }
+                            <tr style="@col">
+                                @if (i == 1)
+                                {
+                                    <th rowspan="@g.GroupBy(x=> x.Plot_Size).Count()" style="text-align:center;vertical-align:middle">@string.Format("{0:MMM - yyyy}", g.Key)</th>
+                                }
+                                <td>@gg.Key</td>
+                                <td>@string.Format("{0:n0}", gg.Where(x => x.Status == "Paid").Count())</td>
+                                <td>@string.Format("{0:n0}", gg.Where(x => x.Status == "Paid").Sum(x => x.Amount))</td>
+                                <td>@string.Format("{0:n0}", gg.Where(x => x.Status == "NotPaid").Count())</td>
+                                <td>@string.Format("{0:n0}", gg.Where(x => x.Status == "NotPaid").Sum(x => x.Amount))</td>
+                                <td>@string.Format("{0:n0}", gg.Count())</td>
+                                <td>@string.Format("{0:n0}", gg.Sum(x => x.Amount))</td>
+                            </tr>
+                            i++;
+                        }
+                        <tr>
+                            <th></th>
+                            <th></th>
+                            <th class="pointer sp-list" data-toggle="modal" data-target="#Modal" data-status="Paid" data-due="@g.Key"><u>@string.Format("{0:n0}", g.Where(x => x.Status == "Paid").Count())</u></th>
+                            <th>@string.Format("{0:n0}", g.Where(x => x.Status == "Paid").Sum(x => x.Amount))</th>
+                            <th class="pointer sp-list" data-toggle="modal" data-target="#Modal" data-status="NotPaid" data-due="@g.Key" ><u>@string.Format("{0:n0}", g.Where(x => x.Status == "NotPaid").Count())</u></th>
+                            <th>@string.Format("{0:n0}", g.Where(x => x.Status == "NotPaid").Sum(x => x.Amount))</th>
+                            <th>@string.Format("{0:n0}", g.Count())</th>
+                            <th>@string.Format("{0:n0}", g.Sum(x => x.Amount))</th>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<style>
+    table tr th, table tr td {
+        font-size: 13px;
+    }
+</style>
+<script>
+    $(document).on("click", ".sp-list", function () {
+        var status = $(this).data('status');
+        var due = $(this).data('due');
+        EmptyModel();
+        $('#ModalLabel').text("Special Prefences Charges List");
+        $('.modal-body').load('/Plots/SpecialPrefList/', { Due_Date: due, Status: status }, function () { });
+    });
+</script>

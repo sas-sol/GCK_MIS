@@ -1,0 +1,24 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Sp_Get_Responsibilities_Result>
+
+@{
+    if (Model.Any())
+    {
+        foreach (var item in Model)
+        {
+            <div>
+                <div class="form-group">
+                    <div class="checkbox-info peers ai-c">
+                        <label class="peers peer-greed js-sb ai-c">
+                            <span class="peer peer-greed" style="font-weight:bold"> @item.Responsibility_Name </span>
+                        </label>
+                    </div>
+                    <span class="peer peer-greed"> @item.Details  </span>
+                </div>
+            </div>
+        }
+    }
+    else
+    {
+        <h3>No Responosilities has been created yet</h3>
+    }
+}

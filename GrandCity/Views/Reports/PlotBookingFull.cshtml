@@ -1,0 +1,145 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Booking_Report>
+
+<div class="row mt-md-3 drag-hero-demos__item drag-hero-demos__item--masonry">
+    <div class="form-group col-md-3">
+        <label>Start Date</label>
+        <input type="text" class="form-control" data-provide="datepicker" onchange="getbookingdata();" id="startdate" name="startdate" placeholder="mm/dd/yyyy" required>
+    </div>
+    <div class="form-group col-md-3">
+        <label>End Date</label>
+        <input type="text" class="form-control" data-provide="datepicker" onchange="getbookingdata();" id="enddate" name="enddate" placeholder="mm/dd/yyyy" required>
+    </div>
+    <div class="form-group col-md-3">
+        <label>Choose Last Booking Records</label>
+        <select class="form-control" id="opt" onchange="getoptions();">
+            <option selected disabled>Choose...</option>
+            <option value="weekly">Weekly</option>
+            <option value="monthly">Monthly</option>
+            <option value="6months">6 Month</option>
+            <option value="yearly">Yearly</option>
+        </select>
+    </div>
+    <div class="col-md-12">
+        <div class="row mt-md-3">
+            <div id="container"></div>
+        </div>
+    </div>
+</div>
+
+
+<table class="table table-striped-blue" style="margin-top:10px">
+    <thead class="thead-dark">
+        <tr>
+            <th>Sr.</th>
+            <th>Plot Number</th>
+            <th>Block</th>
+            <th>Plot Size</th>
+        </tr>
+    </thead>
+    <tbody>
+    <td>1</td>
+    <td>8 - Residential</td>
+    <td>Quaid Block</td>
+    <td>5 Marla</td></tr>
+    <tr><td>2</td><td>6 - Residential</td><td>Quaid Block</td><td>10 Marla</td></tr>
+    <tr><td>3</td><td>58 - Residential</td><td>Iqbal Block</td><td>6 Marla</td></tr>
+    <tr><td>4</td><td>45 - Commercial</td><td>Rehmat Block</td><td>3 Marla</td></tr>
+
+    </tbody>
+</table>
+<script>
+
+    // Build the chart
+    Highcharts.chart('container', {
+        chart: {
+            plotBackgroundColor: null,
+            plotBorderWidth: null,
+            plotShadow: false,
+            type: 'pie',
+            backgroundColor: '#212639'
+        },
+        title: {
+            text: 'Plot Booking'
+        },
+        tooltip: {
+            pointFormat: '{series.name}: <b>{point.y:1f}</b>'
+        },
+        plotOptions: {
+            pie: {
+                allowPointSelect: true,
+                cursor: 'pointer',
+                dataLabels: {
+                    enabled: true,
+                    format: '<b>{point.name}</b>: {point.y:1f}',
+                    style: {
+                        color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                    },
+                    connectorColor: 'silver'
+                }
+            },
+            series: {
+                cursor: 'pointer',
+                point: {
+                    events: {
+                        click: function () {
+                            var f = $("#f-date").val();
+                            var t = $("#t-date").val();
+                            var block = this.name;
+                            $("#bk-det").slideDown("slow", function () {
+                                $.post("/Reports/PlotBookingList/", { Block: block, From: f, To: t }, function (data) {
+                                    $("#bk-det").empty();
+                                    var html = `<table class="table table-striped-blue">
+    <thead class="thead-dark">
+        <tr>
+            <th>Sr.</th>
+            <th>Plot Number</th>
+            <th>Block</th>
+            <th>Plot Size</th>
+        </tr>
+    </thead>
+    <tbody>
+        <td>1</td><td>8 - Residential</td><td>Quaid Block</td><td>5 Marla</td></tr>
+            <tr><td>2</td><td>6 - Residential</td><td>Quaid Block</td><td>10 Marla</td></tr>
+            <tr><td>3</td><td>58 - Residential</td><td>Iqbal Block</td><td>6 Marla</td></tr>
+            <tr><td>4</td><td>45 - Commercial</td><td>Rehmat Block</td><td>3 Marla</td></tr>
+
+    </tbody>
+</table>
+
+`;
+                                    $("#bk-det").append(html);
+                                    $("#bk-det table").DataTable();
+                                });
+                            });
+                            return false;
+                        }
+                    }
+                }
+            }
+        },
+        series: [{
+            name: 'Plot Bookings',
+            data: [{
+                name: 'Quaid Block',
+                y: 5,
+            }, {
+                name: 'Iqbal Block',
+                y: 3
+            }, {
+                name: 'Rehmat Block',
+                y: 2
+            }]
+        }]
+    });
+    $("#container").load('/Reports/PlotBooking/', { Startdate: date, Enddate: date }, function () {
+        SASUnLoad($("#container"));
+        initRearrangerBase();
+    });
+</script>
+<style>
+    #bk-det table tr th, #bk-det table tr td {
+        padding: 2px;
+        font-size: 12px;
+    }
+</style>
+

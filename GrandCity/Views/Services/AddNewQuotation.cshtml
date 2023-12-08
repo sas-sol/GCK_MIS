@@ -1,0 +1,93 @@
+﻿@using (Html.BeginForm("AddQuotation", "Services", FormMethod.Post, new { @id = "ad-quo", @class = "", role = "form", autocomplete = "off" }))
+{
+    <input type="hidden" name="Req_Id" value="@ViewBag.Req_Id" />
+    <input type="hidden" name="Group_Id" value="@ViewBag.GroupId" />
+    <div class="col-md-12">
+        <div class="form-row">
+            <div class="form-group col-md-12">
+                <h6>@ViewBag.Item</h6>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-3">
+                <label>Vendor</label>
+                <select class='form-control vendor' name="V"></select>
+            </div>
+            <div class="form-group col-md-2">
+                <label>Est Completion <span id="est-uom"></span></label>
+                <div class="btn-group">
+                    <input type="text" class="form-control" name="Q">
+                    <button type="button" class="btn btn-danger dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <span class="sr-only">Toggle Dropdown</span>
+                    </button>
+                    <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(183px, 34px, 0px); top: 0px; left: 0px; will-change: transform;">
+                        <a class="dropdown-item ser-uom" href="#" data-val="No.">No.</a>
+                        <a class="dropdown-item ser-uom" href="#" data-val="Hrs">Hrs</a>
+                        <a class="dropdown-item ser-uom" href="#" data-val="Days">Days</a>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group col-md-2">
+                <label>Gst</label>
+                <input type="text" class="form-control rat-cal tax coma" name="T">
+            </div>
+            <div class="form-group col-md-2">
+                <label>Total <select name="C"><option value="Rs">Rs</option><option value="$">$</option><option value="£">£</option></select> </label>
+                <input type="text" class="form-control rat-cal rate" name="R">
+            </div>
+            <div class="form-group col-md-2">
+                <label>Grand Total</label>
+                <input type="text" class="form-control ttl-rate" name="R" readonly />
+            </div>
+            <div class="form-group col-md-6">
+                <label>Remarks</label>
+                <input type="text" class="form-control rems" name="Rem">
+            </div>
+            <div class="form-group col-md-3">
+                <label>Attachments</label>
+                <input type="file" id="files">
+            </div>
+            <input name="U" type="hidden" id="ser-uom" />
+        </div>
+    </div>
+}
+<script>
+    $(document).on('click', '.ser-uom', function () {
+        var val = $(this).data("val");
+        $("#ser-uom").val(val)
+        $('#est-uom').text(" /"+ val);
+    });
+    // Rate & qty calc
+    $(document).on('keyup', '.rat-cal', function () {
+        
+        var tax = Number(RemoveComma($(".tax").val()));
+        var rate = Number(RemoveComma($(".rate").val()));
+        $(".ttl-rate").val(Number(tax + rate).toLocaleString());
+    });
+    $(function () {
+        $('.vendor').select2({
+            dropdownParent: $('#Modal'),
+            placeholder: "Search for item",
+            ajax: {
+                url: '/Vendor/GetVendorsForAutoComplete/',
+                dataType: 'json',
+                params: {
+                    contentType: 'application/json; charset=utf-8'
+                },
+                quietMillis: 100,
+                data: function (params) {
+                    return {
+                        q: params.term// search term
+                    };
+                },
+                processResults: function (data) {
+                    return {
+                        results: data.items
+                    };
+                }
+            }
+        });
+        $('.modal-footer').append(' <button type="button" class="btn btn-primary add-ser-quot-btn">Add Quote</button>');
+    });
+
+</script>

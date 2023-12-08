@@ -1,0 +1,175 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Prj_WBD_Activity>
+
+
+<div class="table-scrollable" style="">
+
+    <table class="table table-bordered" id="wbd-table" cellspacing="0" style="width:100%;">
+        <thead>
+            <tr>
+                <th width="5%">Sr.</th>
+                <th width="15%">Title</th>
+                @* <th width="30%">Description</th>*@
+                <th width="7%">Type</th>
+
+                <th width="6%">No Of Days</th>
+                <th width="0.5%">Relation Type</th>
+                <th width="8%">Start Date</th>
+                <th width="8%">Deadline</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                decimal? Total_Amount = 0;
+                if (Model.Any())
+                {
+                    int srcounter = 1;
+                    foreach (var item in Model)
+                    {
+                        if (item.Type == "WBS" && item.Dependencyid == null)
+                        {
+                            string ed_t_wbd = "", ed_nodays = ""; 
+
+                            Total_Amount += item.Amount;
+                            <tr id="@item.Id">
+                                <td class="mts-div">
+                                    <input id="Proj_Id" value="@item.Prj_Id" hidden />
+                                    <i class="fas fa-plus-square ad-wbd-tsk-row"></i>
+                                    @srcounter
+                                    @if (ViewBag.Userid == item.Task_CreatedBy)
+                                    {
+                                        ed_t_wbd = "edit-titl-wbd"; ed_nodays = "edit-nodays-wbd";
+                                        @*<i class="fas fa-trash del-mts"></i>*@
+                                    }
+                                </td>
+                               
+                                <td class="@ed_t_wbd td">@item.Title </td>
+                                
+                                <td id="@item.Type" class="TypeId">@item.Type</td>
+                                <td id="@item.No_Days" class="@ed_nodays td nodaysId">@item.No_Days</td>
+                                <td></td>
+                                <td hidden id="@item.Dependencyid" class="Version">@item.Dependencyid</td>
+                              
+                                <td class="">@string.Format("{0:dd-MMM-yyyy}", item.Start_Date)</td>
+                                <td class="">@string.Format("{0:dd-MMM-yyyy}", item.Deadline)</td>
+                            </tr>
+                            @TSView(Model.Where(x => x.Dependencyid == item.Id).ToList(), srcounter.ToString(), item.Type);
+
+                            srcounter++;
+                        }
+                    }
+                }
+                else
+                {
+                    <tr><td colspan="12" align="center">No Activity has been created</td></tr>
+                }
+            }
+        </tbody>
+
+
+        @helper TSView(IEnumerable<MeherEstateDevelopers.Models.Prj_WBD_Activity> MTS, string Ver, string Type)
+        {
+            double task = 1;
+            //double stask = 1;
+            foreach (var item in MTS)
+            {
+
+                <tr id="@item.Id">
+                    @if (item.Type == "WBS" )
+                    {
+                        string ed_t_wbd = "", ed_nodays = "";
+                        string version = Convert.ToString(Ver + "." + task);
+                        <td id="@item.Id" class="mts-div">
+                            <i class="fas fa-plus-square ad-wbd-tsk-row"></i>
+                            @version
+                            @if (ViewBag.Userid == item.Task_CreatedBy)
+                            {
+                                ed_t_wbd = "edit-titl-wbd";  ed_nodays = "edit-nodays-wbd";
+                                @*<i class="fas fa-trash del-mts"></i>*@
+                            }
+                        </td>
+                       <td class="@ed_t_wbd td">@item.Title </td>
+                                
+                                <td id="@item.Type" class="TypeId">@item.Type</td>
+                                <td id="@item.No_Days" class="@ed_nodays td nodaysId">@item.No_Days</td>
+                                <td></td>
+                                <td hidden id="@item.Version" class="Version">@item.Version</td>
+                        <td>@string.Format("{0:dd-MMM-yyyy}", item.Start_Date)</td>
+                        <td>@string.Format("{0:dd-MMM-yyyy}", item.Deadline)</td>
+                        @TSView(Model.Where(x => x.Dependencyid == item.Id).ToList(), version, item.Type);
+                        task += 1;
+
+                    }
+                </tr>
+
+                <tr id="@item.Id">
+                    @if (item.Type == "Activity")
+                    {
+                        string ed_t_wbd = "", ed_nodays = "";
+                        string version = Convert.ToString(Ver + "." + task);
+                        <td id="@item.Type" Value=""  class="mts-div ChkAct3">
+
+                            @*<i class="fas fa-plus-square ad-wbd-tsk-row"></i>*@
+                            <label style="margin-left:15px">
+                               @version
+                            </label>
+                            @if (ViewBag.Userid == item.Task_CreatedBy)
+                            {
+                                ed_t_wbd = "edit-titl-wbd"; ed_nodays = "edit-nodays-wbd";
+                                @*<i class="fas fa-trash del-mts"></i>*@
+                            }
+                        </td>
+                        <td class="@ed_t_wbd td" ><p style="margin-left:25px">@item.Title</p> </td>
+
+                        <td id="@item.Type" class="TypeId">@item.Type</td>
+                        <td id="@item.No_Days" class="@ed_nodays td nodaysId">@item.No_Days </td>
+                        <td>@item.Description</td>
+                        <td hidden id="@item.Dependencyid" class="Version">@item.Dependencyid</td>
+                        <td>@string.Format("{0:dd-MMM-yyyy}", item.Start_Date)</td>
+                        <td>@string.Format("{0:dd-MMM-yyyy}", item.Deadline)</td>
+                        @TSView(Model.Where(x => x.Dependencyid == item.Id).ToList(), version, item.Type);
+                        task += 1;
+
+                    }
+
+                </tr>
+
+            }
+        }
+
+
+
+
+    </table>
+</div>
+
+<style>
+    .del-mts {
+        display: none
+    }
+
+    .mts-div:hover .del-mts {
+        display: block
+    }
+
+    .table-scrollable {
+        max-height: 500px;
+        overflow-x: auto;
+        overflow-y: auto;
+        scrollbar-width: thin;
+    }
+
+        .table-scrollable thead th {
+            position: sticky;
+            top: 0px;
+            background-color: white;
+            margin-top: -1px;
+            margin-bottom: -1px;
+            /* This is our fake border (see above comment) */
+            box-shadow: inset 0 1px 0 #dee2e6, inset 0 -1px 0 #dee2e6;
+        }
+
+        .table-scrollable tbody tr {
+            line-height;
+            1px
+        }
+</style>

@@ -1,0 +1,62 @@
+﻿@{ if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+}
+<div class="row gap-20  pos-r">
+    <div class="col-md-8">
+        <div class="bgc-white p-20 bd">
+            <h6 class="c-grey-900">Add Serive Charges</h6>
+            <div class="mT-30">
+                @using (Html.BeginForm("AddSurCharge", "ServiceCharges", FormMethod.Post, new { @id = "ad-sur-ch", @class = "", role = "form", autocomplete = "off" }))
+                {
+                    @Html.AntiForgeryToken()
+                <div class="form-row">
+                    <div class="form-group col-md-5">
+                        <label for="inputCity">Name</label>
+                        <input type="text" class="form-control" name="Charges_Name" id="" required>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="inputState">Type</label>
+                        <select name="Type" class="form-control">
+                            <option value="Constant">Constant</option>
+                            <option value="PerMarla">Per Marla</option>
+                            <option value="Size">Plot Size</option>
+                            <option value="Square_Feet">Square Feet</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="inputState">Plot Size</label>
+                        <select name="Plot_Size" class="form-control">
+                            <option value="3">3 Marla</option>
+                            <option value="5">5 Marla</option>
+                            <option value="10">10 Marla</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="inputCity">Rates</label>
+                        <input type="text" class="form-control" name="Rate" id="sur-ch-rat" required>
+                    </div>
+                </div>
+                    <button type="submit" class="btn btn-primary">Create</button>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="col-md-8">
+        <div class="bgc-white p-20 bd">
+            <h6 class="c-grey-900">Service Charges</h6>
+            <div class="mT-30" id="surch-lst">
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $("#surch-lst").load("/ServiceCharges/AllServiceCharges/");
+    });
+</script>

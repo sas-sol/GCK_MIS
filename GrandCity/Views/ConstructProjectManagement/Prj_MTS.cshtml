@@ -1,0 +1,276 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Prj_Milestone_Tasks_SubTasks>
+<div class="container-fluid pl-2 pr-2 row">
+    <div class="col-md-10">
+        @{ int srcounter = 1;}
+        @foreach (var item in Model)
+        {
+            if (item.Type == "Milestone")
+            {
+                <div id="@item.Id" class="pl-0 pr-0 m-0">
+                    <div class="card">
+                        <div class="card-header" id="heading-@item.Id">
+                            <h5 class="mb-0">
+                                <a role="button" data-toggle="collapse" href="#collapse-@item.Id" aria-expanded="false" aria-controls="collapse-@item.Id">
+                                    @srcounter - @item.Title
+                                </a>
+                            </h5>
+                        </div>
+                        <div id="collapse-@item.Id" class="collapse" data-parent="#@item.Id" aria-labelledby="heading-@item.Id">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-10">
+                                        <p class="lead">@item.Description</p>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="checkbox checkbox-circle checkbox-info peers ai-c">
+                                            @{
+                                                if (item.Current_Status == "Completed")
+                                                {
+                                                    <input type="checkbox" value="@item.Id" id="all-doc" class="peer mile-stat-up" checked>
+                                                }
+                                                else
+                                                {
+                                                    <input type="checkbox" value="@item.Id" id="all-doc" class="peer mile-stat-up">
+                                                }
+                                            }
+                                            <label class="peers peer-greed js-sb ai-c">
+                                                <span class="peer peer-greed ser-ch-nam" style="font-weight:bold"> Status </span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="card m-0 p-0" style="border: white !important">
+                                            <h5 class="card-header">Qty</h5>
+                                            <div class="card-body">
+                                                <p class="card-text">@string.Format("{0:n}", item.Qty)</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="card m-0 p-0" style="border: white !important">
+                                            <h5 class="card-header">Rate</h5>
+                                            <div class="card-body">
+                                                <p class="card-text">@string.Format("{0:n}", item.Rate)</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="card m-0 p-0" style="border: white !important">
+                                            <h5 class="card-header">Total</h5>
+                                            <div class="card-body">
+                                                <p class="card-text">@string.Format("{0:n}", item.Amount)</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="card m-0 p-0" style="border: white !important">
+                                            <h5 class="card-header">Start Date</h5>
+                                            <div class="card-body">
+                                                <p class="card-text">@string.Format("{0: dd-MMM-yyyy}", item.Start_Date)</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="card m-0 p-0" style="border: white !important">
+                                            <h5 class="card-header">End Date</h5>
+                                            <div class="card-body">
+                                                <p class="card-text">@string.Format("{0: dd-MMM-yyyy}", item.Deadline)</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    @if (item.Current_Status != "Completed")
+                                    {
+                                        <div class="col-md-2">
+                                            <div class="container">
+                                                <i data-toggle="modal" id="@item.Id" data-target="#Modal" class="align-center pl-6 fas fa-edit fa-lg ml-4 edit-mts"></i>
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                                @CardTSView(Model.Where(x => x.MTS_Id == item.Id).ToList(), srcounter, item.Type)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                srcounter++;
+            }
+        }
+    </div>
+    <div class="col-md-2 bdrs-3 bd" id="mts-req"></div>
+</div>
+<script>
+    var prj_id = $("#Prj_Id").val();
+    $("#mts-req").load("/ConstructProjectManagement/MTS_UpdateReqs/", { Prj_Id: prj_id });
+</script>
+
+
+@helper CardTSView(IEnumerable<MeherEstateDevelopers.Models.Prj_Milestone_Tasks_SubTasks> MTS, double Ver, string Type)
+{
+    double task = 1;
+    double stask = 1;
+    foreach (var item in MTS)
+    {
+        if (item.Type == "Task")
+        {
+            string version = Convert.ToString(Ver + "." + task);
+            <div id="@item.Id-1">
+                <div class="card">
+                    <div class="card-header" id="heading-1-@item.Id">
+                        <p class="mb-0">
+                            <a class="collapsed" role="button" data-toggle="collapse" href="#collapse-1-@item.Id" aria-expanded="false" aria-controls="collapse-1-@item.Id">
+                                @version - @item.Description
+                            </a>
+                        </p>
+                    </div>
+                    <div id="collapse-1-@item.Id" class="collapse" data-parent="#@item.Id-1" aria-labelledby="heading-1-@item.Id">
+                        <div class="card-body">
+                            <div class="row">
+
+                                <div class="col-md-11">
+                                    <p class="lead">@item.Description</p>
+                                </div>
+                                <div class="col-md-1">
+                                    <i data-toggle="modal" id="@item.Id" data-target="#Modal" class="align-center pl-6 fas fa-edit fa-lg ml-4 edit-mts"></i>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="card m-0 p-0" style="border: white !important">
+                                        <h5 class="card-header">Qty</h5>
+                                        <div class="card-body">
+                                            <p class="card-text">@string.Format("{0:n}", item.Qty)</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="card m-0 p-0" style="border: white !important">
+                                        <h5 class="card-header">Rate</h5>
+                                        <div class="card-body">
+                                            <p class="card-text">@string.Format("{0:n}", item.Rate)</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="card m-0 p-0" style="border: white !important">
+                                        <h5 class="card-header">Total</h5>
+                                        <div class="card-body">
+                                            <p class="card-text">@string.Format("{0:n}", item.Amount)</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="card m-0 p-0" style="border: white !important">
+                                        <h5 class="card-header">Start Date</h5>
+                                        <div class="card-body">
+                                            <p class="card-text">@string.Format("{0: dd-MMM-yyyy}", item.Start_Date)</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="card m-0 p-0" style="border: white !important">
+                                        <h5 class="card-header">End Date</h5>
+                                        <div class="card-body">
+                                            <p class="card-text">@string.Format("{0: dd-MMM-yyyy}", item.Deadline)</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            @{
+                                task += 1;
+                            }
+                            @CardTSView(Model.Where(x => x.MTS_Id == item.Id).ToList(), Ver, item.Type)
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+        else
+        {
+            string version = Convert.ToString(Ver + "." + task) + "." + stask;
+
+            <div id="accordion-1-@item.Id">
+                <div class="card">
+                    <div class="card-header" id="heading-1-1-@item.Id">
+                        <p class="mb-0">
+                            <a class="collapsed" role="button" data-toggle="collapse" href="#collapse-1-1-@item.Id" aria-expanded="false" aria-controls="collapse-1-1-@item.Id">
+                                @version - @item.Description
+                            </a>
+                        </p>
+                    </div>
+                    <div id="collapse-1-1-@item.Id" class="collapse" data-parent="#accordion-1-@item.Id" aria-labelledby="heading-1-1-@item.Id">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-11">
+                                    <p class="lead">@item.Description</p>
+                                </div>
+                                <div class="col-md-1">
+                                    <i data-toggle="modal" id="@item.Id" data-target="#Modal" class="align-center pl-6 fas fa-edit fa-lg ml-4 edit-mts"></i>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="card m-0 p-0" style="border: white !important">
+                                        <h5 class="card-header">Qty</h5>
+                                        <div class="card-body">
+                                            <p class="card-text">@string.Format("{0:n}", item.Qty)</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="card m-0 p-0" style="border: white !important">
+                                        <h5 class="card-header">Rate</h5>
+                                        <div class="card-body">
+                                            <p class="card-text">@string.Format("{0:n}", item.Rate)</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="card m-0 p-0" style="border: white !important">
+                                        <h5 class="card-header">Total</h5>
+                                        <div class="card-body">
+                                            <p class="card-text">@string.Format("{0:n}", item.Amount)</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="card m-0 p-0" style="border: white !important">
+                                        <h5 class="card-header">Start Date</h5>
+                                        <div class="card-body">
+                                            <p class="card-text">@string.Format("{0: dd-MMM-yyyy}", item.Start_Date)</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="card m-0 p-0" style="border: white !important">
+                                        <h5 class="card-header">End Date</h5>
+                                        <div class="card-body">
+                                            <p class="card-text">@string.Format("{0: dd-MMM-yyyy}", item.Deadline)</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            stask += 1;
+        }
+    }
+}
+
+            <div class="mtrl-stmt-wrp container-fluid">
+
+            </div>
+<style>
+    .mb-0 > a {
+        display: block;
+        position: relative;
+    }
+
+        .mb-0 > a:after {
+            content: "\f078"; /* fa-chevron-down */
+            font-family: 'FontAwesome';
+            position: absolute;
+            right: 0;
+        }
+
+        .mb-0 > a[aria-expanded="true"]:after {
+            content: "\f077"; /* fa-chevron-up */
+        }
+</style>

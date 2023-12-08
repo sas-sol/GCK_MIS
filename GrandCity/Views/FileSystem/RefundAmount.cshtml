@@ -1,0 +1,73 @@
+﻿<script src="~/Scripts/scanning.js"></script>
+@using (Html.BeginForm("FinalRefundAmount", "FileSystem", FormMethod.Post, new { @id = "plt-fin-ref", @class = "", role = "form", autocomplete = "off" }))
+{
+    @Html.AntiForgeryToken()
+    <input type="hidden" id="can-id" name="Id" />
+    <input type="hidden" id="n-rece-id" name="ReceiptId" />
+    <input type="hidden" id="can-type" name="Type" />
+    <input type="hidden" id="plt-c-id" name="FileId" />
+    <input type="hidden" id="imge" name="FileImage" />
+    <div class="form-row">
+        <div class="form-group col-md-3">
+            <label>Approval Status</label>
+            <select class="form-control" name="Status" id="stat">
+                <option>Choose..</option>
+                <option value="Approve">Approve</option>
+                <option value="Reject">Reject</option>
+            </select>
+        </div>
+        <div class="form-group col-md-4">
+            <label>Desciption Written on Voucher</label><textarea class="form-control" name="Description" id="Remarks"></textarea>
+        </div>
+    </div>
+    <hr />
+    <div class="form-row">
+        <div class="form-group col-md-2">
+            <label>Amount</label>
+            <input class="form-control coma" placeholder="50,000" value="@string.Format("{0:0,0.##}", ViewBag.RefundAmount)" required>
+            <input type="hidden" id="amt" name="Amount" class="amt" value="@ViewBag.RefundAmount" required>
+        </div>
+        <div class="form-group col-md-2">
+            <label>Cash / Bank</label>
+            <select class="form-control paytypesel-test" id="cah-chq-bak" name="PaymentType">
+                <option value="Cash">Cash</option>
+                <option value="BankDraft">Bank Draft</option>
+                <option value="Cheque">Cheque</option>
+                <option value="PayOrder">Pay Order</option>
+                <option value="Online_Cash">Online - Cash</option>
+                <option value="Online_Cheque">Online - Cheque</option>
+                <option value="Online_Payorder">Online - PayOrder</option>
+                <option value="Online_Bankdraft">Online - BankDraft</option>
+            </select>
+        </div>
+        <div class="form-group col-md-3 paymentotherinfo">
+            <label id="paytypelabel"></label>
+            <input type="text" class="form-control" id="paymenttype" name="PayChqNo" placeholder="" disabled>
+        </div>
+        <div class="form-group col-md-3 paymentotherinfo">
+            <label>Bank</label>
+            @Html.DropDownList("Bank", null, "Choose..", new { @class = "form-control", disabled = "" })
+        </div>
+        <div class="form-group col-md-2 paymentotherinfo">
+            <label>Branch </label>
+            <input type="text" class="form-control" id="Branch" name="Branch" placeholder="Mall Rd" disabled>
+        </div>
+        <div class="form-group col-md-2 paymentotherinfo">
+            <label>Date</label>
+            <input type="text" class="form-control" id="cbp-date" data-provide="datepicker" name="Ch_bk_Pay_Date" placeholder="mm/dd/yyyy" disabled required>
+        </div>
+        <div class="form-group col-md-1 paymentotherinfo">
+            <label>Scan File </label>
+            <button class=" btn btn-primary" data-v="1" type="button" id="scanbtn">Scan</button>
+        </div>
+        <div id="images-1" class="col-md-2"></div>
+    </div>
+}
+<script>
+    $(document).ready(function () {
+        $("#can-id").val($("#can-req-id").val());
+        $("#can-type").val($("#type").val());
+        $("#plt-c-id").val($("#plt-id").val());
+        $("#n-rece-id").val($("#rece-id").val());
+    });
+</script>

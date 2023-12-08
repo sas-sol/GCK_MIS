@@ -1,0 +1,67 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Employee>
+
+@{ if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+}
+
+    <div class="col-md-12 bgc-white p-10">
+        <div class=" central-text-align mt-md-2" style="text-align:center;">
+            <h5>Salary Bank Configuration</h5>
+        </div>
+        <div class="row mt-md-2 mb-md-2">
+            <div class="col-md-2" style="align-content:flex-end;">
+                <button class="btn btn-primary add_new_emp_bank"  data-toggle="modal" data-target="#Modal">Add new Employee</button>
+            </div>
+        </div>
+        <div>
+            <table class="table table-striped table-bordered" id="mytable" cellspacing="0" width="100%">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>Sr No.</th>
+                        <th>Employee Code</th>
+                        <th>Employee Name</th>
+                        <th>Department</th>
+                        <th>Salary Issuance Bank</th>
+                        <th></th>
+                    </tr>
+                </thead>
+
+                @if (Model.Any())
+                {
+                    <tbody>
+                        @{
+                            int sr = 1;
+                            foreach (var v in Model)
+                            {
+                                <tr empId="@v.Id" bId="@v.BankId">
+                                    <td>@sr</td>
+                                    <td>@v.Employee_Code</td>
+                                    <td>@v.Name</td>
+                                    <td>@v.Department_Designation</td>
+                                    <td>@v.BankName</td>
+                                    <td><i class="fa fa-trash pointer rmv-emp-bank-account" data-empid="@v.Id" title="Remove Employee Bank Account"></i></td>
+                                </tr>
+                                sr++;
+                            }
+                        }
+                    </tbody>
+                }
+                else
+                {
+                    <tfoot>
+                        <tr>
+                            <td colspan="22">No Record Exists</td>
+                        </tr>
+                    </tfoot>
+                }
+
+            </table>
+        </div>
+    </div>
+    

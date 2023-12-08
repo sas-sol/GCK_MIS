@@ -1,0 +1,54 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Sp_Get_HOH_SaleReceipt_Result>
+<h2>House of Heritage SaleReceipt</h2>
+<h5>Token @ViewBag.Token</h5>
+
+<style>
+    table thead tr th, table tbody tr td {
+        font-size: 12px;
+    }
+</style>
+@{
+    decimal? sum = 0;
+    decimal? Rate = 0;
+}
+
+<table class="table table-striped table-bordered " cellspacing="0" style="margin-left:0%;width:40%">
+    <thead>
+        <tr>
+            <th>Sr.</th>
+            <th>Item</th>
+            <th>Qty</th>
+            <th>Rate</th>
+            <th>Amount</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            if (Model.Any())
+            {
+                int i = 1;
+                foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@i</td>
+                        <td>@item.Complete_Name</td>
+                        <td>@item.Qty</td>
+                        <td>@string.Format("{0:0,0.##}", item.Sale_Rate)</td>
+                        <td>@string.Format("{0:0,0.##}", item.Sale_Amount)</td>
+                        @{
+                            sum = sum + item.Sale_Amount;
+                        }
+                    </tr>
+                    i++;
+
+                }
+            }
+            <tr>
+                <th colspan="4" style="text-align:right">Total</th>
+                <th> @string.Format("{0:0,0.##}", sum)</th>
+            </tr>
+        }
+
+    </tbody>
+</table>
+

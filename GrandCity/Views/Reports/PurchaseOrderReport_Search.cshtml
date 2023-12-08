@@ -1,0 +1,84 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Sp_Get_PurchaseOrder_Report_Result>
+
+
+<style>
+    table thead tr th, table tbody tr td {
+        font-size: 12px;
+    }
+</style>
+
+<table id="pr-list" class="table table-striped table-bordered " cellspacing="0" width="100%" style="margin-left:0%">
+    <thead class="thead-dark">
+        <tr>
+            <th>Sr.</th>
+            <th>PR NO</th>
+            <th>PR Date</th>
+            <th>PO NO</th>
+            <th>PO Date</th>
+            <th>Rate</th>
+            <th>Department</th>
+            <th>Project</th>
+            <th>Vendor</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @{
+            if (Model.Any())
+            {
+                int i = 1;
+                foreach (var item in Model)
+                {
+
+                    <tr id="">
+                        <td>@i</td>
+                        <td>@item.Requisition_No</td>
+                        @if (item.PR_Date == null)
+                        {
+                            <td></td>
+                        }
+                        else
+                        {
+                            <td>@item.PR_Date.Value.ToShortDateString()</td>
+                        }
+                        <td>@item.PO_Number</td>
+                        @if (item.PO_Date == null)
+                        {
+                            <td></td>
+                        }
+                        else
+                        {
+                            <td>@item.PO_Date.Value.ToShortDateString()</td>
+
+                        }
+                        <td>@item.Purchase_Rate</td>
+                        <td>@item.Dep_Name</td>
+                        <td>@item.Prj_Name</td>
+                        <td>@item.Vendor_Name</td>
+                    </tr>
+                    i++;
+                }
+            }
+        }
+    </tbody>
+</table>
+
+<script>
+
+    $(document).ready(function () {
+        $('#pr-list').DataTable({
+            dom: 'Bfrtip',
+            buttons: [
+                'copy', 'excel', 'pdf', 'print'
+            ]
+        });
+    });
+</script>
+
+<style>
+    tr.group,
+    tr.group:hover {
+        background-color: #ddd !important;
+    }
+</style>
+

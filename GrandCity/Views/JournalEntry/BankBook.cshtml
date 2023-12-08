@@ -1,0 +1,70 @@
+﻿@{
+    if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+}
+<script>
+    $(document).ready(function () {
+        $('.pay-typ').select2();
+    });
+</script>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="bdrs-3 ov-h bgc-white p-10 bd">
+            <div class="form-row">
+                <h5>Bank Book</h5>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-2">
+                    <label>From</label>
+                    <input type="text" id="from" class="form-control" data-provide="datepicker" />
+                </div>
+                <div class="form-group col-md-2">
+                    <label>To</label>
+                    <input type="text" id="to" class="form-control" data-provide="datepicker" />
+                </div>
+                <div class="form-group col-md-2">
+                    <label style="width:100%">Bank</label>
+                    @Html.DropDownList("Bank", null, null, new { @class = "form-control" })
+                </div>
+                <div class="form-group col-md-2">
+                    <label style="width:100%">Users</label>
+                    @Html.DropDownList("Users", null, null, new { id = "users", @class = "form-control pay-typ", multiple = "" })
+                </div>
+                <div class="form-group col-md-2">
+                    <button class="btn btn-info sea-bb-res" style="margin-top:29px">Search</button>
+                </div>
+            </div>
+            <div class="form-row " id="report">
+
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+    table tr td, table tr th {
+        padding: 2px !important;
+        font-size: 12px;
+    }
+</style>
+<script>
+    var from = $("#from").val();
+    var to = $("#to").val();
+    var Bank = $("#Bank").val();
+    var user = $("#users").val();
+    $("#report").load("/JournalEntry/SearchBankBook/", { From: from, To: to, Users: user, Bank_Id: Bank });
+
+    $(document).on("click", ".sea-bb-res", function () {
+        var from = $("#from").val();
+        var to = $("#to").val();
+        var Bank = $("#Bank").val();
+        var user = $("#users").val();
+        $("#report").load("/JournalEntry/SearchBankBook/", { From: from, To: to, Users: user, Bank_Id: Bank });
+    });
+</script>

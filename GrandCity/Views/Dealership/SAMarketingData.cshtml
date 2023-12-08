@@ -1,0 +1,84 @@
+﻿@model MeherEstateDevelopers.Models.DealersData
+@{
+    if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+}
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+<script src="https://code.highcharts.com/modules/export-data.js"></script>
+<script>
+    $(function () {
+        $('#stock-sum').load('/Dealership/DealerStockSummary/', { Id: @ViewBag.Id});
+        $('#stock-issua-rep').load('/Reports/StockIssuanceReport/', { Id: @ViewBag.Id});
+    });
+</script>
+<div class="bgc-white bd bdrs-3 p-20 mB-20">
+    <div class="form-row">
+        <div class="col-md-8">
+            <div class="row">
+                <h3 class="del-nam">@Model.Dealership </h3>
+            </div>
+            <div class="row">
+                <label>Registeration:  @string.Format("{0:D}", Model.RegisterationDate)</label>
+            </div>
+        </div>
+        <div class="col-md-4">
+            @{ var img = Model.Dealership + ".png";}
+            <img src="/QR Codes/@img" width="150" height="150" />
+        </div>
+    </div>
+    <div class="form-row">
+        <table class="table table-striped table-bordered" cellspacing="0" width="100%">
+            <thead>
+                <tr>
+                    <th>Sr.</th>
+                    <th></th>
+                    <th>Name</th>
+                    <th>Father Name</th>
+                    <th>CNIC</th>
+                    <th>Mobile 1</th>
+                    <th>Mobile 2</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    int sr = 1;
+                    foreach (var item in Model.Dealers)
+                    {
+                        <tr>
+                            <td>@sr</td>
+                            <td><img width="50" height="50" src="/Repository/Dealers/@(item.Id).jpg" /></td>
+                            <td>@item.Name</td>
+                            <td>@item.Father_Name</td>
+                            <td>@item.CNIC_NICOP</td>
+                            <td>@item.Mobile_1</td>
+                            <td>@item.Mobile_2</td>
+                        </tr>
+                        sr++;
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+    <div id="stock-sum" class="form-row"></div>
+    <div class="form-row"><div class="col-md-12" id="stock-issua-rep"></div></div>
+    <div class="form-row"><div class="col-md-12" id="assigne-fil"> </div></div>
+</div>
+<style>
+    .up-del-info {
+        display: none;
+    }
+
+    .del-nam:hover .up-del-info {
+        display: inline-block;
+    }
+    #assigne-fil table tr td, #assigne-fil table tr th{
+        padding:2px;
+    }
+</style>

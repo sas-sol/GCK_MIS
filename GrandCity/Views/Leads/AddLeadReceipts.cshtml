@@ -1,0 +1,99 @@
+﻿@model MeherEstateDevelopers.Models.LeadsData
+@using (Html.BeginForm("LeadManualReceipt", "Leads", FormMethod.Post, new { @id = "sam-rece-manual", @class = "", role = "form" }))
+{
+    <input type="hidden" id="bal-val" name="Balance" value="0" />
+    <input type="hidden" id="amt-file-id" value="@Model.Lead.Id" name="Filefromid" />
+    <input type="hidden" id="amt-file-no" name="FilePlotNumber" />
+    <input type="hidden" id="amt-in-wrds" name="AmountInWords" />
+    <input type="hidden" id="mbl" name="Mobile_1" />
+    <input type="hidden" id="fth-husbad" name="Father_Husband" />
+    <input type="hidden" id="name" name="Name" />
+    <input type="hidden" id="total-amt" name="TotalAmount" />
+    <input type="hidden" id="prj-name" name="Project_Name" />
+    <input type="hidden" id="rate" name="Rate" />
+    <input type="hidden" id="off-pric" value="@Model.Lead.Offered_Price" />
+    <input type="hidden" id="paymentfor" name="Paymentfor" />
+    <input type="hidden" id="plotid" name="Plotid" />
+    <input type="hidden" id="blk-nam" name="Block" />
+    <input type="hidden" id="scanimage" name="FileImage" />
+    <div class="form-row" id="pay-1">
+        <div class="form-group col-md-3">
+            <label>Name</label>
+            <h6>@Model.Lead.Name</h6>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-2">
+            <label>Receipt No</label>
+            <input class="form-control" id="rece-no" type="text" />
+        </div>
+        <div class="form-group col-md-2">
+            <label>Date</label>
+            <input class="form-control" id="rece-date" data-provide="datepicker" type="text" />
+        </div>
+        <div class="form-group col-md-2">
+            <label>Amount</label>
+            <input class="form-control coma" placeholder="50,000" required>
+            <input type="hidden" id="amt" name="Amount" class="amt" required>
+        </div>
+        <div class="form-group col-md-2">
+            <label>Cash / Bank</label>
+            <select class="form-control paytypesel-test" id="cah-chq-bak" name="PaymentType">
+                <option value="Cash">Cash</option>
+                <option value="BankDraft">Bank Draft</option>
+                <option value="Cheque">Cheque</option>
+                <option value="PayOrder">Pay Order</option>
+                <option value="Online_Cash">Online - Cash</option>
+                <option value="Online_Cheque">Online - Cheque</option>
+                <option value="Online_Payorder">Online - PayOrder</option>
+                <option value="Online_Bankdraft">Online - BankDraft</option>
+            </select>
+        </div>
+        <div class="form-group col-md-3 paymentotherinfo">
+            <label id="paytypelabel"></label>
+            <input type="text" class="form-control" id="paymenttype" name="PayChqNo" placeholder="" disabled>
+        </div>
+        <div class="form-group col-md-3 paymentotherinfo">
+            <label>Bank</label>
+            @Html.DropDownList("Bank", null, "Choose..", new { @class = "form-control", disabled = "" })
+        </div>
+        <div class="form-group col-md-2 paymentotherinfo">
+            <label>Branch </label>
+            <input type="text" class="form-control" id="Branch" name="Branch" placeholder="Mall Rd" disabled>
+        </div>
+        <div class="form-group col-md-2 paymentotherinfo">
+            <label>Date</label>
+            <input type="text" class="form-control" data-provide="datepicker" id="cbp-date" name="Ch_bk_Pay_Date" placeholder="mm/dd/yyyy" disabled required>
+        </div>
+        <div class="form-group col-md-1 paymentotherinfo">
+            <label>Scan File </label>
+            <button class=" btn btn-primary" data-v="1" type="button" id="scanbtn">Scan</button>
+        </div>
+        <div id="images-1" class="col-md-10"></div>
+    </div>
+}
+<script>
+    $(function () {
+        $('.modal-footer').append('<button class="btn btn-success" id="gen-sam-rec-man" type="submit">Generate Receipt</button>');
+    });
+</script>
+<style>
+    .paymentotherinfo {
+        display: none;
+    }
+
+    #inst-stat {
+        height: 1245px;
+        overflow-y: scroll;
+    }
+
+    img.scanned {
+        height: 200px;
+        float: left;
+    }
+
+    div#images {
+        margin-top: 20px;
+        text-align: center;
+    }
+</style>

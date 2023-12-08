@@ -1,0 +1,78 @@
+﻿@model MeherEstateDevelopers.Models.LoginViewModel
+@{
+    ViewBag.Title = "Login";
+}
+<script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
+<div id="loader">
+    <div class="spinner"></div>
+</div>
+<script type="text/javascript">
+    window.addEventListener('load', () => {
+        const loader = document.getElementById('loader');
+        setTimeout(() => {
+            loader.classList.add('fadeOut');
+        }, 300);
+    });</script>
+<div class="peers ai-s fxw-nw h-100vh">
+    <div class="d-n@sm- peer peer-greed h-100 pos-r bgr-n bgpX-c bgpY-c bgsz-cv " id="bkgr-adj" style="background-size: contain; background-color: black; background-image: url(/assets/static/images/grandcity.jpeg) "></div>
+    <div class="col-12 col-md-4 peer pX-40 pY-80 h-100 bgc-white scrollable pos-r" style="min-width:320px">
+        <h4 class="fw-300 c-grey-900 mB-40">Login</h4>
+        @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "", role = "form" }))
+        {
+            @Html.AntiForgeryToken()
+            <div class="form-group">
+                <label class="text-normal text-dark">Email</label>
+                @Html.TextBoxFor(m => m.Email, new { @class = "form-control", onchange = "CheckBackground(this.value)" })
+            </div>
+            <div class="form-group">
+                <label class="text-normal text-dark">Password</label>
+                @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+            </div>
+            <div class="form-group">
+                <div class="peers ai-c jc-sb fxw-nw">
+                    <div class="peer">
+                        <div class="checkbox checkbox-circle checkbox-info peers ai-c">
+                            @Html.CheckBoxFor(m => m.RememberMe, new { @class = "peer" })
+                            <label for="inputCall1" class="peers peer-greed js-sb ai-c"><span class="peer peer-greed">Remember Me</span></label>
+                        </div>
+                    </div>
+                    <div class="peer">
+                        <button class="btn btn-primary">Login</button>
+                    </div>
+                    <div class="peer">
+                        @Html.ActionLink("Forgot your password?", "ForgotPassword")
+                    </div>
+                </div>
+            </div>
+        }
+        <footer class="bdT ta-c p-30 lh-0 fsz-sm c-grey-600">
+            <span>Ignited By . SA Systems.</span>
+        </footer>
+    </div>
+</div>
+<script>
+    // Check Background of login page
+    function CheckBackground(e) {
+        var domain = e.split("@@");
+        if (domain[1] == "meharestate.com") {
+            $("#bkgr-adj").fadeOut(400, function () {
+                $("#bkgr-adj").css("background-image", "url(/assets/static/images/grandcity.jpeg)");
+                $("#bkgr-adj").css("background-color", "#000000");
+            }).fadeIn(400);
+        }
+        //else if (domain[1] == "sagpropertyexchange.com") {
+        //    $("#bkgr-adj").fadeOut(400, function () {
+        //        $("#bkgr-adj").css("background-image", "url(/assets/static/images/propertyex.jpg)");
+        //        $("#bkgr-adj").css("background-color", "#1a1919");
+        //    }).fadeIn(400);
+        //}
+        else {
+            $("#bkgr-adj").fadeOut(400, function () {
+                $("#bkgr-adj").css("background-image", "url(/assets/static/images/grandcity.jpeg)");
+                $("#bkgr-adj").css("background-color", "#000000");
+            }).fadeIn(400);
+
+        }
+
+    }
+</script>

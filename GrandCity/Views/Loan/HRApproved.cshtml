@@ -1,0 +1,52 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Sp_Get_LoanManagement_HR_Result>
+<div class="bgc-white bd col-md-12 bdrs-3 p-20 mB-20">
+    <h4 class="c-grey-900 mB-20">HR Approved Loans</h4>
+    <table class="table table-striped table-bordered" cellspacing="0" width="100%">
+        <thead>
+            <tr>
+                <th>Sr#</th>
+                <th>Created At</th>
+                <th>Employee Name</th>
+                <th>Reason</th>
+                <th>Manager Approvel</th>
+                <th>HR Approvel</th>
+                <th>Installments</th>
+                <th>Total Amount</th>
+                <th>Details</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+
+                if (!Model.Any())
+                {
+                    <tr><td colspan="6" style="text-align:center">No data available</td></tr>
+                }
+                else
+                {
+                    var couter = 1;
+                    foreach (var item in Model.OrderByDescending(x=> x.CreatedAt))
+                    {
+
+                        <tr class="bgc-green-50 pointer" id="@item.Id">
+                            <td>@couter</td>
+                            <td>@string.Format("{0: dd-MMM-yyyy}", item.CreatedAt)</td>
+                            <td>@item.Employee_Name</td>
+                            <td>@item.Reason</td>
+                            <td>@item.ManagerApproval</td>
+                            <td>@item.HrApproval</td>
+                            <td>@item.Installments</td>
+                            <td>
+                                @String.Format("{0:n1}", item.Amount)
+                            </td>
+                            <td>
+                                <i data-toggle="modal" data-target="#Modal" id="@item.Id" class="l-a-det ti-eye"></i>
+                            </td>
+                        </tr>
+                        couter++;
+                    }
+                }
+            }
+        </tbody>
+    </table>
+</div>

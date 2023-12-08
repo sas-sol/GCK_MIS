@@ -1,0 +1,38 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Sp_Get_Lead_All_Result>
+@{ Layout = "~/Views/Shared/_StaffLayout.cshtml"; }
+<div class=" bgc-white bd bdrs-3 p-20 mB-20 row">
+    <div class="col-md-6">
+        <h4 class="c-grey-900 mB-20">All Leads</h4>
+    </div>
+    <div class="col-md-12">
+        <div class="form-row">
+            <div class="form-group col-md-2">
+                <label>Sales Person</label>
+                @Html.DropDownList("LeadsUser", null, "Choose..", new { @class = "form-control lead_user" })
+            </div>
+            <div class="form-group col-md-2">
+                <label>Lead Status</label>
+                <select class="form-control" name="SPE_Lead_Status" id="SPE_Lead_Status" value="">
+                    <option value="">Choose..</option>
+                    <option value="Token">Token</option>
+                    <option value="Mature">Mature</option>
+                    <option value="Loose">Loose</option>
+                </select>
+            </div>
+            <div class="form-group col-md-2">
+                <label>From</label>
+                <input type="text" class="form-control" id="SPE-lead-from" placeholder="mm/dd/yyyy" data-provide="datepicker" name="" required>
+            </div>
+            <div class="form-group col-md-2">
+                <label>To</label>
+                <input type="text" class="form-control" id="SPE-lead-to" placeholder="mm/dd/yyyy" data-provide="datepicker" name="" required>
+            </div>
+            <div class="form-group col-md-1">
+                <button type="button" class="btn btn-primary" style="margin-top:29px" id="ser-SPE-lead">Search</button>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12" id="SPElead">
+        @{ Html.RenderAction("SPESearch", "Leads", new { From = DateTime.Now, To = DateTime.Now, LeadStatus = "", LeadUser = 0 });}
+    </div>
+</div>

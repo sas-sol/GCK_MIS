@@ -1,0 +1,219 @@
+﻿
+@model  IEnumerable<MeherEstateDevelopers.Models.Sp_Get_Ledger_Result>
+
+
+
+<div class="row">
+    <div class="col-md-10">
+        <div class="bgc-white bd bdrs-3 p-20 mB-20" style="margin-left:20%">
+            @*<h4 class="c-grey-900 mB-20">Ledger Report</h4>*@
+            <table id="" class="table table-striped table-bordered" cellspacing="0" width="100%">
+                <colgroup span="3"></colgroup>
+                <colgroup span="3"></colgroup>
+                <tr>
+                    <td rowspan="3"></td>
+                    <th colspan="3" scope="colgroup" style="font-size:15px;text-align:center">Advance</th>
+                    <th colspan="3" scope="colgroup" style="font-size:15px;text-align:center">Commission</th>
+                </tr>
+                <tr>
+                    <th scope="col">Receipt</th>
+                    <th scope="col">Payment</th>
+                    <th scope="col">Balance</th>
+                    <th scope="col">Rebate</th>
+                    <th scope="col">Payment</th>
+                    <th scope="col">Balance</th>
+                </tr>
+
+                <tbody>
+                    @{
+                        int forzeor = 0;
+                        decimal? rebatecal = 0;
+                        decimal? b1 = 0;
+                        decimal? b2 = 0;
+                        decimal? balance = 0;
+                        decimal? ComAdInAd = 0;
+
+
+                        decimal? cal = 0;
+                    }
+                    @foreach (var item in Model.OrderBy(g => g.Receipt_Date))
+                    {
+
+
+                        if (item.Type == "Dealer_Advance")
+                        {
+                            b1 = item.Amount + balance;
+
+                        }
+                        if (item.Type == "Dealer_Commission_Adjust")
+                        {
+
+                            b1 = b1 + item.Amount;
+                            rebatecal = rebatecal - item.Amount;
+
+                        }
+                        if (item.Type == "Dealer_Commission")
+                        {
+
+                            b1 = b1 - item.Rebate*(-1);
+
+                        }
+
+                        if (item.Type == "File_Advance")
+                        {
+
+                            b2 = b1 - item.Rebate;
+                            b1 = b2;
+                            balance = b1;
+                            rebatecal = item.Rebate + rebatecal;
+                        }
+
+                        <tr class="" id="@item.Id">
+
+                            @if (item.Flag == true)
+                            {
+
+                            <td>
+                                @if (item.Type == "Dealer_Advance")
+                                {
+                                    @item.Type
+                                }
+                                else if (item.Type == "File_Advance")
+                                {
+                                    @item.FileFormNumber
+                                }
+                                else if (item.Type == "Dealer_Commission")
+                                {
+                                    @item.Type
+                                }
+                                else if (item.Type == "Dealer_Commission_Adjust")
+                                {
+                                    @item.Type
+
+                                }
+                                else if (item.Type == "Dealer_Commission")
+                                {
+                                    @item.Type
+
+                                }
+
+                            </td>
+
+                            <td>
+                                @if (item.Type == "Dealer_Advance")
+                                {
+                                    @String.Format("{0:n0}", item.Amount)
+                                }
+                                else if (item.Type == "File_Advance")
+                                {
+                                    @forzeor
+                                }
+                                else if (item.Type == "Dealer_Commission_Adjust")
+                                {
+                                    @String.Format("{0:n0}", item.Amount)
+
+                                }
+                                else if (item.Type == "Dealer_Commission")
+                                {
+                                    @String.Format("{0:n0}", item.Rebate*(-1))
+
+                                }
+                            </td>
+
+
+                                <td>
+                                    @if (item.Type == "Dealer_Advance")
+                                    {
+
+                                    }
+                                    else if (item.Type == "File_Advance")
+                                    {
+
+                                        @String.Format("{0:n0}", item.Amount * (-1))
+                                    }
+                                  
+                                </td>
+
+
+                                <td>
+                                    @String.Format("{0:n0}", b1)
+                                </td>
+
+                                <td>
+                                    @if (item.Type == "Dealer_Advance")
+                                    {
+
+                                    }
+                                    else if (item.Type == "File_Advance")
+                                    {
+
+                                        @String.Format("{0:n0}", item.Rebate)
+
+                                    }
+                                 
+
+                                </td>
+                                <td>
+                                    @if (item.Type == "Dealer_Advance")
+                                    {
+
+                                    }
+                                    else if (item.Type == "File_Advance")
+                                    {
+                                        @forzeor
+                                    }
+                                    else if (item.Type == "Dealer_Commission_Adjust")
+                                    {
+                                        @String.Format("{0:n0}", item.Amount)
+
+                                    }
+                                    else if (item.Type == "Dealer_Commission")
+                                    {
+                                        @String.Format("{0:n0}", item.Rebate*(-1))
+
+                                    }
+
+                                </td>
+                                <td>
+
+                                    @if (item.Type == "Dealer_Advance")
+                                    {
+
+                                    }
+                                    else if (item.Type == "File_Advance")
+                                    {
+
+                                        @String.Format("{0:n0}", rebatecal)
+                                    }
+                                    else if (item.Type == "Dealer_Commission_Adjust")
+                                    {
+                                        @String.Format("{0:n0}", rebatecal)
+
+                                    }
+                                    else if (item.Type == "Dealer_Commission")
+                                    {
+                                        @String.Format("{0:n0}", item.Amount)
+
+                                    }
+                                </td>
+
+
+
+                                @*<td>@item.FileFormNumber</td>
+                                    <td>0</td>
+                                    <td>@string.Format("{0:n0}", item.Amount)</td>
+                                    <td>@string.Format("{0:n0}", cal)</td>
+                                    <td>@string.Format("{0:n0}", item.Rebate)</td>
+                                    <td>0</td>
+                                    <td>@string.Format("{0:n0}", item.Rebate)</td>*@
+
+
+                            }
+
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

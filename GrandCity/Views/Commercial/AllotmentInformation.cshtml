@@ -1,0 +1,42 @@
+﻿
+@{
+    ViewBag.Title = "UpdateCommercialInformation";
+    Layout = "~/Views/Shared/_StaffLayout.cshtml";
+}
+<div class="row gap-20 pos-r">
+    <div class="col-md-12">
+        <div class="bgc-white p-20 bd">
+            <div class="mT-30">
+                <div class="form-row row">
+                    <div class="col-md-12">
+                        <div class="form-row">
+                            <div class="form-group col-md-2">
+                                <label>Projects</label>
+                                @Html.DropDownList("Projects", null, "Choose..", new { @class = "form-control proj-types", required = "" })
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label>Select Floor</label>
+                                <select class="form-control prj-phase" id="phase-type"></select>
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label>Shop No</label>
+                                <select class="form-control up-shp-det__all" id="shp-lst"></select>
+                            </div>
+                            <div class="col-md-1"></div>
+                            <div class="col-md-3"><div id="file-trans-alert"></div></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="mT-30">
+                <div class="form-row row">
+                    <div class="col-md-12" id="shop-det">
+                        @*@{Html.RenderAction("CommercialInformation", "Commercial");}*@
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+

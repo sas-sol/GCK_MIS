@@ -1,0 +1,49 @@
+﻿@model MeherEstateDevelopers.Models.Sp_Get_LoanDetails_Result
+<input type="hidden" id="loanId" value="@Model.Id">
+<div class="form-row">
+    <div class="form-group col-md-3">
+        <label>Employee Name</label>
+        <input type="text" class="form-control" name="" value="@Model.Employee_Name" readonly>
+    </div>
+    <div class="form-group col-md-2">
+        <label>Created At</label>
+        <input type="text" class="form-control" name="" value="@string.Format("{0:dd-MMM-yyyy}", Model.CreatedAt)" readonly>
+    </div>
+    <div class="form-group col-md-2">
+        <label>Installments</label>
+        <input type="text" class="form-control" name="" value="@Model.Installments" readonly>
+    </div>
+    <div class="form-group col-md-2">
+        <label>Loan Amount</label>
+        <input type="text" class="form-control" name="" value="@string.Format("{0:n2}",Model.Amount)" readonly>
+    </div>
+    <div class="form-group col-md-6">
+        <label>Reason</label>
+        <input type="text" class="form-control" value="@Model.Reason" readonly>
+    </div>
+</div>
+<div class="form-row">
+    <div class="col-md-6">
+        <div class="form-group col-md-12">
+            <label>HR Remarks</label>
+            <textarea type="text" class="form-control" id="hr-remarks" rows="2" disabled>@Model.HrRemarks</textarea>
+        </div>
+        <div class="form-group col-md-6">
+            <h6>Status : @Model.HrApproval</h6>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group col-md-12">
+            <label>Manager Remarks</label>
+            <textarea type="text" class="form-control" id="mang-remarks" rows="2" disabled>@Model.ManagerRemarks</textarea>
+        </div>
+        <div class="form-group col-md-6">
+            <h6>Status : @Model.ManagerApproval</h6>
+        </div>
+    </div>
+</div>
+<script>
+    $(function () {
+        $('.modal-footer').append('<button class="btn btn-success" id="gen-l-vou" type="button">Generate Voucher</button>');
+    });
+</script>

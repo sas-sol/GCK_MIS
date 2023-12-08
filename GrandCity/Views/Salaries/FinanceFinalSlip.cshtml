@@ -1,0 +1,58 @@
+﻿@{
+    if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+}
+
+@{
+    String sDate = DateTime.Now.ToString();
+    DateTime datevalue = (Convert.ToDateTime(sDate.ToString()));
+    String mn = datevalue.Month.ToString();
+    String yy = datevalue.Year.ToString();
+
+
+}
+<h4 class="c-grey-900 mT-10 mB-30">Search</h4>
+<div class="col-md-12">
+    <div class="form-row">
+        @*<div class="form-group col-md-1">
+            <label>Date Of</label>
+            <input type="text" class="form-control m__y__date" data-provide="datepicker" placeholder="mm/dd/yyyy" >
+        </div>*@
+        <div class="col-md-1">
+            <label>Month</label>
+            <input type="text" class="form-control" id="m__ser" />
+        </div>
+        <div class="col-md-1">
+            <label>Year</label>
+            <input type="text" class="form-control" id="ye__ser" />
+        </div>
+        <div class="col-md-1">
+            <label>--------</label>
+            <button class="btn btn-primary" id="cbp__Ser">Search</button>
+        </div>
+    </div>
+</div>
+<hr />
+<div class="container-fluid" id="cb__app">
+    <h4 class="c-grey-900 mT-10 mB-30"></h4>
+    <ul class="nav nav-tabs" id="myTabs">
+        @{ string activeclass = "active";}
+        <li class="nav-item"><a class="nav-link @activeclass" data-toggle="tab" role="tab" data-link="/Salaries/CashPayables?Month=@mn&Year=@yy" href="#salaries">Cash Payable</a></li>
+        @{ activeclass = ""; }
+        <li class="nav-item"><a class="nav-link @activeclass" data-toggle="tab" role="tab" data-link="/Salaries/BankPayables?Month=@mn&Year=@yy" href="#salaries">Bank Payable</a></li>
+        @{ activeclass = ""; }
+        <li class="nav-item"><a class="nav-link @activeclass" data-toggle="tab" role="tab" data-link="/Salaries/DailySalaryDistribution?Month=@mn&Year=@yy" href="#salaries">Salary Distribution</a></li>
+    </ul>
+    <!-- Tab panes -->
+    <div class="tab-content">
+        <div id="salaries" class="tab-pane active">
+            @{ Html.RenderAction("CashPayables", "Salaries", new { Month = mn, Year = yy });}
+        </div>
+    </div>
+</div>

@@ -1,0 +1,47 @@
+﻿@{ if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+}
+<div class="row">
+    <div class="col-md-12">
+        <div class="bdrs-3 ov-h bgc-white p-10 bd">
+            <div class="form-row">
+                <h5>Purchase Order</h5>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-2">
+                    <label style="width:100%">PR No</label>
+                    <input type="text" id="prno" class="form-control" />
+                </div>
+                <div class="form-group col-md-2">
+                    <button class="btn btn-info sea-do-PRNO-rprt" style="margin-top:29px">Search</button>
+                </div>
+            </div>
+            <div id="report">
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        SASLoad($("#report"));
+        $("#report").load("/Reports/PurchaseOrderReport_Search/", function () {
+            SASUnLoad($("#report"));
+        });
+    });
+    $('.sea-do-PR-rprt').click(function () {
+        SASLoad($("#report"));
+        var prno = $("#prno").val();
+        var from = $("#from").val();
+        var to = $("#to").val();
+        $("#report").load("/Reports/PurchaseOrderReport_Search/", { PRNO: prno, From: from, To: to }, function () {
+            SASUnLoad($("#report"));
+        });
+    });
+</script>

@@ -1,0 +1,465 @@
+﻿@model MeherEstateDevelopers.Models.LatestPlotDetailData
+@{
+    Layout = null;
+    string bg = "bg";
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        .bg {
+            height: 1045px;
+            width: 1850px;
+            background-image: url('../../images/1-01 - Copy - Copy.jpg');
+            background-size: 1850px 1045px;
+            background-repeat: no-repeat;
+        }
+
+        .bg1 {
+            height: 1045px;
+            width: 1850px;
+            background-image: url('../../images/bgprim.jpg');
+            background-size: 1850px 1045px;
+            background-repeat: no-repeat;
+        }
+
+        .back-side {
+            height: 1045px;
+            width: 1850px;
+        }
+
+        .badge-Holder {
+            width: 200px;
+            height: 200px;
+            position: absolute;
+            right: 35%;
+            top: 8%;
+        }
+
+        .badge-holder-fds {
+            width: 200px;
+            height: 200px;
+            position: absolute;
+            right: 15%;
+            top: 8%;
+        }
+
+        .badge-Holder img {
+            width: 100%;
+        }
+
+        .badge-holder-fds img {
+            width: 100%;
+        }
+
+        table, th, td {
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
+
+        table {
+            width: 40%;
+        }
+
+        tr, td, th {
+            height: 35px;
+            text-align: center;
+        }
+
+        @@media print {
+            .bg {
+                height: 1045px;
+                width: 1850px;
+                background-size: 1850px 1045px;
+                background-repeat: no-repeat;
+            }
+
+            .badge-Holder {
+                width: 200px;
+                height: 200px;
+                position: absolute;
+                right: 35%;
+                top: 0%;
+            }
+
+                .badge-Holder img {
+                    width: 100%;
+                }
+
+            .badge-Holder {
+                width: 200px;
+                height: 200px;
+                position: absolute;
+                right: 35%;
+                top: 8%;
+            }
+
+            .badge-holder-fds {
+                width: 200px;
+                height: 200px;
+                position: absolute;
+                right: 15%;
+                top: 8%;
+            }
+
+            .badge-Holder img {
+                width: 100%;
+            }
+
+            .badge-holder-fds img {
+                width: 100%;
+            }
+
+            .back-side {
+                height: 1045px;
+                width: 1850px;
+            }
+
+            table, th, td {
+                border: 1px solid black;
+                border-collapse: collapse;
+            }
+
+            table {
+                width: 40%;
+            }
+
+            tr, td, th {
+                height: 35px;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body style="padding: 0; margin: 0">
+    @if (Model.PlotData.Block_Name == "Premium")
+    {
+        bg = "bg1";
+    }
+    <div class="badge-Holder">
+        @if (ViewBag.isTrans)
+        {
+            <img src="~/assets/static/images/FileStatus/Transferred.png" />
+        }
+    </div>
+    <div class="badge-holder-fds">
+        @if (Model.PlotOwners.OrderByDescending(x => x.Ownership_DateTime).FirstOrDefault().Dup_Customer_File == true)
+        {
+            <img src="~/assets/static/images/FileStatus/Duplicate.png" />
+        }
+    </div>
+    @{
+        string a = Model.PlotData.Type + "_" + Model.PlotData.Block_Name + "_" + Model.PlotData.Plot_No + ".png";
+        string dev = "";
+        var count = Model.PlotOwners.Count();
+    }
+    <div class="@bg" style="padding: 0;margin: 0">
+        <div style="height:58% ; margin-right:0px">
+            <img src="~/Repository/CustomerImagesPlots/@Model.PlotData.Id/@Model.PlotOwners.ElementAt(0).Id/1.jpg" alt="Alternate Text" style="height: 35.7%;width: 10%;margin-left: 69.5%;margin-top: 8%;" />
+            <img src="~/Repository/QR Codes/@a" alt="Alternate Text" style="height: 36%;width: 12.7%;margin-top: 8%;margin-left: 1.6%;" />
+            @if (count == 2)
+            {
+                <img src="~/Repository/CustomerImagesPlots/@Model.PlotData.Id/@Model.PlotOwners.ElementAt(1).Id/1.jpg" alt="Alternate Text" style="height: 35.7%;width: 11%;margin-left: 81.5%;margin-top: 1.3%;" />
+            }
+            else if (count == 3)
+            {
+                <img src="~/Repository/CustomerImagesPlots/@Model.PlotData.Id/@Model.PlotOwners.ElementAt(1).Id/1.jpg" alt="Alternate Text" style="height: 35.7%;width: 11%;margin-left: 81.5%;margin-top: 1.3%;" />
+                <img src="~/Repository/CustomerImagesPlots/@Model.PlotData.Id/@Model.PlotOwners.ElementAt(2).Id/1.jpg" alt="Alternate Text" style="height: 37.7%;width: 11%;margin-left: 81.5%;margin-top: 1.3%;" />
+            }
+            else if (count == 4)
+            {
+                <img src="~/Repository/CustomerImagesPlots/@Model.PlotData.Id/@Model.PlotOwners.ElementAt(1).Id/1.jpg" alt="Alternate Text" style="height: 25%;width: 7%;margin-left: 81.5%;margin-top: 1.3%;" />
+                <img src="~/Repository/CustomerImagesPlots/@Model.PlotData.Id/@Model.PlotOwners.ElementAt(2).Id/1.jpg" alt="Alternate Text" style="height: 25%;width: 7%;margin-left: 81.5%;margin-top: 1.3%;" />
+                <img src="~/Repository/CustomerImagesPlots/@Model.PlotData.Id/@Model.PlotOwners.ElementAt(3).Id/1.jpg" alt="Alternate Text" style="height: 25%;width: 7%;margin-left: 81.5%;margin-top: 1.3%;" />
+            }
+        </div>
+        <div style="margin-top: -21%;">
+            @if (Model.PlotData.Development_Charges == true)
+            {
+                dev = "With Development Charges";
+            }
+            else if (Model.PlotData.Development_Charges == false)
+            {
+                dev = "No Development Charges";
+            }
+            else
+            {
+                if (Model.PlotData.Application_FileNo == null)
+                {
+                    dev = "Not Applicable";
+                }
+                else
+                {
+                    dev = "To Be Announced";
+                }
+            }
+            <label style="margin-left: 8%;max-width: 20%;width: 12%;text-align:center">@Model.PlotData.Plot_No</label>
+            <label style="margin-left: 1.5%;max-width: 17%;width: 10.5%;text-align:center">@Model.PlotData.Block_Name</label>
+            <label style="margin-left: 6.5%;max-width: 17%;width: 6%;text-align:center">@Model.PlotData.Dealership_Id</label>
+            <label style="margin-left: 3%;max-width: 8%;width: 8%;text-align:center">@Model.PlotData.Plot_Size</label>
+        </div>
+        <div style="margin-top: 35px">
+            <label style="margin-left: 8%;max-width: 20%;width: 12%;text-align:center">  @Model.PlotData.Type</label>
+            <label style="margin-left: 4%;max-width: 9%;width: 9%;text-align:center">@Model.PlotData.Plot_Location</label>
+            <label style="margin-left: 7%;max-width: 12%;width: 12%;text-align:center">@dev</label>
+        </div>
+        <div style="margin-top: 6%;">
+            <label style="margin-left: 7.5%;max-width: 32%;width: 32%;text-align:center">@string.Join(",", Model.PlotOwners.Select(x => x.Name)) </label>
+            <label style="margin-left: 10.5%;max-width: 30%;width: 30%;text-align:center">@string.Join(",", Model.PlotOwners.Select(x => x.Father_Husband).Distinct())</label>
+        </div>
+        <div style="margin-top: 1%;">
+            <label style="margin-left: 10.5%;max-width: 70%;width: 70%;text-align:center">@string.Join(",", Model.PlotOwners.Select(x => x.Residential_Address).Distinct()) </label>
+        </div>
+        <div style="margin-top: 1%;">
+            <label style="margin-left: 10.5%;max-width: 70%;width: 70%;text-align:center">@string.Join(",", Model.PlotOwners.Select(x => x.Postal_Address).Distinct())</label>
+        </div>
+        <div style="margin-top:1% ">
+            <label style="margin-left: 9.5%;max-width: 15%;width: 15%;text-align:center">@string.Join(",", Model.PlotOwners.Select(x => x.Phone_Office).Distinct())</label>
+            <label style="margin-left: 2.5%;max-width: 13%;width: 13%;text-align:center">@string.Join(",", Model.PlotOwners.Select(x => x.Residential).Distinct())</label>
+            <label style="margin-left: 4%;max-width: 16%;width: 16%;text-align:center">@string.Join(",", Model.PlotOwners.Select(x => x.Mobile_1).Distinct())</label>
+            <label style="margin-left: 4%;max-width: 15%;width: 15%;text-align:center">@string.Join(",", Model.PlotOwners.Select(x => x.Mobile_2).Distinct())</label>
+        </div>
+        <div style="margin-top: 0.8%">
+            <label style="margin-left: 7%;max-width: 33%;width: 33%;text-align:center">@string.Join(",", Model.PlotOwners.Select(x => x.Email).Distinct())</label>
+            <label style="margin-left: 4%;max-width: 17.5%;width: 17.5%;text-align:center">@string.Join(",", Model.PlotOwners.Select(x => x.Occupation).Distinct())</label>
+            <label style="margin-left: 4%;max-width: 14%;width: 14%;text-align:center">@string.Join(",", Model.PlotOwners.Select(x => x.Nationality).Distinct())</label>
+        </div>
+        <div style="margin-top: 1%;">
+            <label style="margin-left: 15%;">@string.Join(",", Model.PlotOwners.Select(x => string.Format("{0:dd-MMM-yyyy}", x.Date_Of_Birth))) </label>
+        </div>
+        <div style="margin-top: 1%;">
+            <label style="margin-left: 11%;text-align:center">@string.Join(",", Model.PlotOwners.Select(x => x.CNIC_NICOP))</label>
+        </div>
+        <div style="margin-top: 1%;">
+            <label style="margin-left: 12%;max-width: 24%;width: 24%;text-align:center">@string.Join(",", Model.PlotOwners.Select(x => x.Nominee_Name).Distinct())</label>
+            <label style="margin-left: 3%;max-width: 17%;width: 17%;text-align:center">@string.Join(",", Model.PlotOwners.Select(x => x.Nominee_Relation).Distinct())</label>
+        </div>
+        <div style="margin-top: 0.8%">
+            <label style="margin-left: 13%;max-width: 47%;width: 47%;text-align:center">@string.Join(",", Model.PlotOwners.Select(x => x.Nominee_Address).Distinct())</label>
+        </div>
+        <div style="margin-top: 1.3%;">
+            <label style="margin-left: 11.25%;text-align:center">@string.Join(",", Model.PlotOwners.Select(x => x.Nominee_CNIC_NICOP).Distinct())</label>
+        </div>
+        @if (Model.PlotReceipts.Any(x => x.Type == "Booking"))
+        {
+            <div style="margin-top: 3.75%;">
+                <label style="margin-left: 16.5%;max-width: 8.5%;width: 8.5%;text-align:center">
+                    @foreach (var i in Model.PlotReceipts.Where(x => x.Type == "Booking" && (x.Status == null || x.Status == "Approved")).ToList())
+                    {
+                        <span>@string.Format("{0:n0}", i.Amount)</span>
+                        <br />
+                    }
+                </label>
+                <label style="margin-left: 18%;max-width: 11%;width: 11%;text-align:center">
+                    @foreach (var i in Model.PlotReceipts.Where(x => x.Type == "Booking" && (x.Status == null || x.Status == "Approved")).ToList())
+                    {
+                        <span>@i.PaymentType - @i.Ch_Pay_Draft_No</span>
+                        <br />
+                    }
+                </label>
+                <label style="margin-left: 2.5%;max-width: 10%;width: 10%;text-align:center">
+                    @foreach (var i in Model.PlotReceipts.Where(x => x.Type == "Booking" && (x.Status == null || x.Status == "Approved")).ToList())
+                    {
+                        <span>@string.Format("{0:dd MMMM yyyy}", i.DateTime)</span>
+                        <br />
+                    }
+                </label>
+                <label style="margin-left: 2.5%;max-width: 11%;width: 11%;text-align:center">
+                    @foreach (var i in Model.PlotReceipts.Where(x => x.Type == "Booking" && (x.Status == null || x.Status == "Approved")).ToList())
+                    {
+                        <span>@i.Bank</span>
+                        <br />
+                    }
+                </label>
+            </div>
+        }
+        else
+        {
+            <div style="margin-top: 4.25%;">
+                <label style="margin-left: 16.5%;max-width: 8.5%;width: 8.5%;text-align:center">
+                    @foreach (var i in Model.PlotReceipts.Where(x => x.Type == "Installment" && (x.Status == null || x.Status == "Approved")).ToList())
+                    {
+                        <span>@string.Format("{0:n0}", i.Amount)</span>
+                        <br />
+                    }
+                </label>
+                <label style="margin-left: 18%;max-width: 11%;width: 11%;text-align:center">
+                    @foreach (var i in Model.PlotReceipts.Where(x => x.Type == "Installment" && (x.Status == null || x.Status == "Approved")).ToList())
+                    {
+                        <span>@i.PaymentType - @i.Ch_Pay_Draft_No</span>
+                        <br />
+                    }
+                </label>
+                <label style="margin-left: 2.5%;max-width: 10%;width: 10%;text-align:center">
+                    @foreach (var i in Model.PlotReceipts.Where(x => x.Type == "Installment" && (x.Status == null || x.Status == "Approved")).ToList())
+                    {
+                        <span>@string.Format("{0:dd MMMM yyyy}", i.DateTime)</span>
+                        <br />
+                    }
+                </label>
+                <label style="margin-left: 2.5%;max-width: 11%;width: 11%;text-align:center">
+                    @foreach (var i in Model.PlotReceipts.Where(x => x.Type == "Installment" && (x.Status == null || x.Status == "Approved")).ToList())
+                    {
+                        <span>@i.Bank</span>
+                        <br />
+                    }
+                </label>
+            </div>
+        }
+        <div style="margin-top: 3%;">
+            <label style="margin-left: 7.5%;max-width: 12%;width: 12%;">@string.Format("{0:dd-MMMM-yyyy}", DateTime.UtcNow) </label>
+        </div>
+    </div>
+    @*back side of the file*@
+    <div style="page-break-after:always"></div>
+    <div class="back-side" style="padding: 0;margin: 0">
+        @if (Model.PlotData.Block_Name != "Premium")
+        {
+            <div style="margin-top:5%;">
+                <table style="margin:0 auto;font-family:Arial, Helvetica, sans-serif;">
+                    <thead>
+                        <tr>
+                            <th>Instalment Name</th>
+                            <th>Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var ins in Model.InstalmentStructureDetail.OrderByDescending(x => x.Installment_Type))
+                        {
+                            if (ins.Installment_Type == "2" && Model.PlotData.Development_Charges == false || Model.PlotData.Development_Charges == null)
+                            {
+                                continue;
+                            }
+                            <tr>
+                                <td>@ins.Installment_Name</td>
+                                <td>@string.Format("{0:n0}", ins.Amount)</td>
+                            </tr>
+                        }
+                        @foreach (var item in Model.PlotInstallments.Where(x => x.Installment_Type == "5"))
+                        {
+                            <tr>
+                                <td>@item.Installment_Name</td>
+                                <td>@string.Format("{0:n0}", item.Amount)</td>
+                            </tr>
+                        }
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th>Grand Total</th>
+                            @if (Model.PlotData.Development_Charges == false || Model.PlotData.Development_Charges == null)
+                            {
+                                <th>@string.Format("{0:n0}", Model.PlotInstallments.Where(x => x.Installment_Type != "2").Sum(x => x.Amount))</th>
+                            }
+                            else
+                            {
+                                <th>@string.Format("{0:n0}", Model.PlotInstallments.Sum(x => x.Amount))</th>
+                            }
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        }
+
+            <div style="margin-top:6%; margin-left:5%;">
+                <div style="width:25%; height:60px;background-color:#d0232A; color:white; font-size:35px; font-weight:bolder;font-family:Arial, Helvetica, sans-serif;display:flex;align-items:center;padding-left: 10px;">
+                    <sigma style="width:90%;height:50%">TERMS &amp; CONDITIONS</sigma>
+                </div>
+            </div>
+            @if (Model.PlotData.Block_Name == "Premium")
+            {
+                <div class="terms-contain" style="width:90%;margin-left:5%;margin-top:1%;">
+                    <ol style="width:100%; font-family:Arial, Helvetica, sans-serif; line-height:1.5;font-size:14px;">
+                        <li>The society shall offer Plots of various sizes in the project, for sale on installment basis and provisional possession on a 30% payment.</li>
+                        <li>The plot shall be used for the sole purpose of constructing a residential building. the price of the plot is including development charges.</li>
+                        <li>All Pakistani citizens and non-resident Pakistanis living abroad are eligible to apply for Plots.</li>
+                        <li>
+                            All booking forms for booking shall be submitted on the prescribed form duly filled in and signed by the applicant along with a Cheque / pay order / demand draft drawn in the name of S A GARDENS
+                            (Pvt) Ltd.Client shall not pay the amount in the shape of cash to any dealer or representative except at the Cash Counters of Meher Estate Developers, otherwise, the company will not be responsible.
+                        </li>
+                        <li>The buyer shall abide by all the bye - laws, rules and regulations of the Meher Estate Developers Housing Scheme in full letter and spirit.</li>
+                        <li>
+                            In case any buyer desires to cancel the Booking / allotment of the Plot and get the refund of the amount deposited towards the cost the amount shall be refunded after a deduction of 10 % of the Total
+                            Paid Amount of the Plot as service charges, after Six months from the date of the written request.
+                        </li>
+                        <li>
+                            The allottee shall make timely payment of maintenance charges, Electricity, Gas, Water connection charges, and any other charges to society for security and maintenance, etc.after acquiring the
+                            possession of the plot, as per applicable rules.
+                        </li>
+                        <li>
+                            The allottee may take formal possession of the plot within 90 days from the issuance of notice by the Housing Scheme; a formal Possession Letter will be issued to the allottee. If the construction is
+                            not completed within the prescribed period, the Housing Scheme shall charge fees for non - construction at the rates to be decided by the Management.
+                        </li>
+                        <li>
+                            The allottee shall not sublet, transfer, sell, or part with the possession, or mortgage the plot to anyone else without the prior permission of the society.However, the plot can be transferred after
+                            clearance of all outstanding dues payable to society, and a predefined transfer fee will be charged to transfer the plot.
+                        </li>
+                        <li>
+                            The schedule fixed for each and every installment for the payment shall be the essence of the contract.A demand notice of(7) seven days shall be served to the buyer by registered SD / Post.If the
+                            payment is not received within the stipulated period, the penalty will be charged, or the society shall serve a final notice and then cancel the booking / allotment.The amount received by the society till
+                            that time will be refunded after six months when the said plot is re - booked by a new buyer and after deducting 10 % of the total paid amount of the plot as services charges.
+                        </li>
+                        <li>The allottee shall abide by laws and by the existing rules and regulations prescribed by the society and the TMA and other concerned authorities.</li>
+                        <li>The allottee shall intimate the change of address to the Housing Society Office at the earliest in order to avoid any inconvenience at a later stage.</li>
+                        <li>The area of the plot mentioned is approximate.If the actual measurement of the area is found more or less, the buyer shall be charged on the actual allocated area on a proportionate basis.</li>
+                        <li>
+                            The allottee shall pay all the taxes, Registration / Mutation Charges, Stamp Paper Duty, Property Tax, or any other charges / taxes, etc.levied by Govt.local bodies and municipal bodies, or any other
+                            authorities / agencies including those existing at present and those that may be levied by the above mentioned and / or other authorities in future.
+                        </li>
+                        <li>
+                            The construction on the plot shall be strictly in accordance with applicable town planning architectural(Control) Rules and Regulations of the concerned authorities, No Objection Certificate(NOC)
+                            shall have to be obtained from the society before submitting the building plans for the approval of the authorities after Clearance of all dues of the society.No construction on the plot shall be carried
+                            out without approval by the authorities and intimation of such approval, to the society.
+                        </li>
+                        <li>All disputes between the society and the allottee relating to the Plot shall be referred to the arbitrator and the decision of the Arbitrator shall be final and binding on both parties.</li>
+                        <li>The society reserves the right to any changes in location, size, and dimension of the plot due to changes in the layout plan, without any prior notice.</li>
+                        <li>All Original Documents Would be recovered by Meher Estate Developers at the time of handing over the final ownership document to the Client.</li>
+                        <li>Balance payment of dues must be paid as per the payment schedule to avoid cancellation of this allotment.</li>
+                    </ol>
+                </div>
+            }
+            else
+            {
+
+                <div class="terms-contain" style="width:90%;margin-left:5%;margin-top:1%;">
+                    <ol style="width:100%; font-family:Arial, Helvetica, sans-serif; line-height:1.5;font-size:14px;">
+                        <li>Booking forms can be submitted along with payment via Cheque / Cash / Bank Draft / Pay Order only in favour of Meher Estate Developers (Pvt) Ltd.</li>
+                        <li>The Size and location of the plot is tentative and subject to adjustment after demarcation / measurement of the plot at the time of handing over the possession.</li>
+                        <li>All payments are to be made according to the schedule given by Meher Estate Developers (Pvt) Ltd.</li>
+                        <li>If allottee fails to pay 3 consecutive installments within specified time then the allotment will be liable for cancellation.</li>
+                        <li>Current pricing structure includes cost of land only.</li>
+                        <li>In case of extra land with any plot, extra land charges will be added to the total amount as determined by Meher Estate Developers (Pvt) Ltd.</li>
+                        <li>One application / Booking Form can be used for booking of one plot only.</li>
+                        <li>Construction is only permissible with prior permission of the design studio / management committee of the Meher Estate Developers (Pvt) Ltd.</li>
+                        <li>In case of any dispute between buyer / allottee and Meher Estate Developers (Pvt) Ltd. The dispute will be referred to the arbitration committee of Meher Estate Developers (Pvt) Ltd.</li>
+                        <li>Promp payments at the due date for each and every installment as per annexure of the schedule of payments / installments must be paid by each calendar month.</li>
+                        <li>Transfer and Possession commencing from the date of taking possession of the plot given by the seller to the buyer, the buyer shall be liable to bear and pay all Government  Tax charges, for Electricity, gas, telephone, registration, legal fees and other charges imposed by the concerned authorities.</li>
+                        <li>In case of cancellation / refund, 10% of the unit price will be deducted as service charges and the balance will be paid after resale of the plot, or a six month post dated cheque of balance amount shall be presented.</li>
+                        <li>Eligibility for balloting will be confirmed after the applicable balloting charges.</li>
+                        <li>Each applicant will abide by these Terms &amp; Conditions in addition to the by-law, rules and regulations of Meher Estate Developers (Pvt) Ltd.</li>
+                        <li>Due to any ground variations and technicalities the allotted plot &amp; the size of the allotted plot can be changed.</li>
+                        <li>Meher Estate Developers (Pvt) Ltd. will not be responsible for the project, if delayed due to the changes in the rules and regulation set by the Government authorities.</li>
+                        <li>Owner of the plot will follow the rules of LDA / TMA or Meher Estate Developers (Pvt) Ltd by-law for the construction of their plots.</li>
+                        <li>Any changes/variations in rate of development shall be charged as escalation charges from the allottee.</li>
+                        <li>Meher Estate Developers (Pvt) Ltd. shall not be considered liable to the extent that performance of their respective obligations is prevented by an Event of Force Majeure that arises at the later date.</li>
+                    </ol>
+                </div>
+            }
+            <div style="margin-left:5%">
+                <p style="font-size:14px;text-transform:uppercase;font-family:Arial, Helvetica, sans-serif;"><b>declaration: </b>i have read these terms &amp; conditions carefully and i hereby agree to be legally bound by the terms and conditions described herein and by all terms, policies and guidelines incorporated by reference. these terms may be amended at any time by Meher Estate Developers (pvt) ltd. and its management committee and i can not challenge thse at any court of law or any other forum.</p>
+            </div>
+            <div style="display:flex;margin-left:35%;align-items: center; margin-top:5%;">
+                <b style="text-transform:uppercase;">thumb impression : </b>
+                <div style="height:80px; width:250px;border:1px solid #000;margin-left: 20px;"></div>
+                <b style="text-transform:uppercase;margin-left:5%;">signature of applicant : ___________________________________________</b>
+            </div>
+        </div>
+</body>
+</html>
+<style>
+    label {
+        display: inline-block;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-size: 20px
+    }
+</style>

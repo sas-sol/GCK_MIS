@@ -1,0 +1,80 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Sp_Get_Followups_Result>
+<div class="peer peer-greed" id='chat-box'>
+    <div class="layers h-100">
+        <div class="layer w-100">
+            <!-- Header -->
+            <div class="peers fxw-nw jc-sb ai-c bgc-white">
+                <div class="peers">
+                    <label style="width:100%"> File Number: <h6 id="file-no" class="peer td-n c-grey-900 fsz-md mR-30"></h6></label>
+                    <label style="width:100%"> Name: <h6 id="name" class="peer td-n c-grey-900 fsz-md mR-30"></h6></label>
+                </div>
+            </div>
+        </div>
+        <div class="layer w-100 fxg-1 bgc-grey-200 scrollable pos-r">
+            <!-- Chat Box -->
+            <div class="p-20 gapY-15">
+                <!-- Chat Conversation -->
+                <div class="peers fxw-nw ai-fe">
+                    <div class="peer peer-greed ord-0">
+                        <div class="layers ai-fe gapY-10" id="chat-msg">
+                            @{
+                                if (Model.Any())
+                                {
+                                    foreach (var item in Model)
+                                    {
+                                        string color = "";
+                                        if (item.Userid == 0)
+                                        {
+                                            color = "bgc-purple-50";
+                                        }
+                                        <div class="layer">
+                                            <div class="peers fxw-nw ai-c pY-3 pX-10 bgc-white bdrs-2 lh-3/2 @color">
+                                                <div class="peer-greed ord-0">
+                                                    @if (item.Msg_Type == "Text")
+                                                    {
+                                                        <span>@item.Message</span>
+                                                    }
+                                                    else
+                                                    {
+                                                        <img src="/Followups/@item.File_Plot_Number/@item.Message" width="200" height="200" />
+                                                    }
+                                                </div>
+                                            </div>
+                                            <div class="peers fxw-nw ai-c pY-3 pX-10 bgc-white">
+                                                <div class="peer-greed ord-0">
+                                                    <span>@item.Name</span>
+                                                </div>
+                                                <div class="peer mL-10 ord-1">
+                                                    <small>@string.Format("{0:d MMM, h:mm tt}", item.Datetime)</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                }
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layer w-100">
+            <!-- Chat Send -->
+            <div class="p-20 bdT bgc-white">
+                @using (Html.BeginForm("AddFollowup", "CallCenter", FormMethod.Post, new { @id = "ad-flo", @class = "", role = "form", enctype = "multipart/form-data" }))
+                {
+                    <input type="hidden" name="File_Plot_Number" id="File_Plot_Number" />
+                    <input type="hidden" name="Owner_Name" id="Owner_Name" />
+                    <div class="pos-r">
+                        <input type="text" name="Message" class="form-control bdrs-10em m-0 fl-text" placeholder="Add Follow up">
+                        <button type="submit" class="btn btn-primary bdrs-50p w-2r p-0 h-2r pos-a r-1 t-1">
+                            <i class="fa fa-paper-plane-o"></i>
+                        </button>
+                        <input type="file" id="files" name="Files" style="margin:10px;" />
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+

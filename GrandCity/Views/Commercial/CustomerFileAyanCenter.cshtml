@@ -1,0 +1,615 @@
+﻿@model MeherEstateDevelopers.Models.CommercialDetailData
+@{
+
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        @@page {
+            margin: 0;
+        }
+
+        .bg {
+            height: 1250px;
+            width: 1850px;
+            margin-left: 0%;
+            margin-top: 1%;
+            background-size: 1850px 1250px;
+            font-family: sans-serif;
+            color: black;
+            background-image: url(../../assets/static/images/AyanCenterCustomerFile.png);
+            background-repeat: no-repeat;
+        }
+
+        .bg1 {
+            
+            height: 1250px;
+            width: 1850px;
+            background-size: 1850px 1250px;
+            font-family: sans-serif;
+            margin-left: 0%;
+            color: black;
+            background-repeat: no-repeat;
+        }
+
+        .unit-info {
+            width:100%;
+            float:left;
+            margin-top:10%;
+        }
+        .inst-struct {
+            width: 100%;
+            float: left;
+            margin-top: 5%;
+        }
+
+        .imgsec {
+            width: 100%;
+            margin-top: -10.2%;
+            float: left;
+        }
+
+        .imageqr {
+            width: 289px;
+            margin-left: 1.5%;
+            margin-top:-1%;
+            float: left;
+        }
+
+        .imageqrs {
+            width: 100%
+        }
+
+        .custimgdiv {
+            width: 200px;
+            float: left;
+            margin-left: 67.9%;
+            height: 250px;
+        }
+
+        .custimg {
+            width: 100%;
+            height: 100%
+        }
+
+        .section1 {
+            width: 100%;
+            float: left;
+            margin-top: 6.6%;
+        }
+
+        .sec1-1 {
+            margin-top: 1%;
+            font-size: 18px;
+            float: left;
+            width: 7%;
+            margin-left: 13%;
+            text-align: center;
+        }
+
+        .sec1-2 {
+            margin-top: 1%;
+            margin-left: 7.1%;
+            font-size: 18px;
+            width: 7%;
+            text-align: center;
+        }
+
+        .sec1-3 {
+            width: 8%;
+            text-align: center;
+            margin-left: 10.5%;
+            margin-top: 1%;
+            font-size: 18px;
+        }
+
+        .section2 {
+            width: 100%;
+            float: left;
+            margin-top: 0.6%;
+        }
+
+        .sec2-1 {
+            margin-top: 1%;
+            font-size: 18px;
+            float: left;
+            width: 11%;
+            margin-left: 7.5%;
+            text-align: center;
+        }
+
+        .sec2-2 {
+            margin-top: 1%;
+            margin-left: 6.5%;
+            font-size: 18px;
+            width: 7.5%;
+            text-align: center;
+        }
+        .owner-info {
+            width:100%;
+            float:left;
+            margin-top: 2%;
+        }
+        .section3 {
+            width: 100%;
+            float: left;
+        }
+
+        .sec3-1 {
+            font-size: 18px;
+            float: left;
+            width: 29%;
+            margin-left: 9.4%;
+            text-align: center;
+        }
+        .sec3-2 {
+            font-size: 18px;
+            float: left;
+            width: 28%;
+            margin-left: 15%;
+            text-align: center;
+        }
+
+        .section4 {
+            width: 100%;
+            float: left;
+            margin-top:1%;
+        }
+
+        .sec4-1 {
+            font-size: 18px;
+            float: left;
+            width: 68%;
+            margin-left: 13.6%;
+            text-align: center;
+        }
+
+        .section5 {
+            width: 100%;
+            float: left;
+            margin-top: 1%;
+        }
+
+        .sec5-1 {
+            font-size: 18px;
+            float: left;
+            width: 66%;
+            margin-left: 15.1%;
+            text-align: center;
+        }
+
+        .section6 {
+            width: 100%;
+            float: left;
+            margin-top: 1%;
+        }
+
+        .sec6-1 {
+            font-size: 18px;
+            float: left;
+            width: 11.2%;
+            margin-left: 11.3%;
+            text-align: center;
+        }
+
+        .sec6-2 {
+            margin-left: 5.7%;
+            font-size: 18px;
+            width: 11%;
+            text-align: center;
+        }
+
+        .sec6-3 {
+            width: 13%;
+            text-align: center;
+            margin-left: 7.5%;
+            font-size: 18px;
+        }
+
+        .sec6-4 {
+            width: 15%;
+            text-align: center;
+            margin-left: 6.1%;
+            font-size: 18px;
+        }
+
+        .section7 {
+            width: 100%;
+            float: left;
+            margin-top: 1%;
+        }
+
+        .sec7-1 {
+            font-size: 18px;
+            width: 25.5%;
+            margin-left: 8.8%;
+            text-align: center;
+        }
+
+        .sec7-2 {
+            margin-left: 11%;
+            font-size: 18px;
+            width: 14.5%;
+            text-align: center;
+        }
+
+        .sec7-3 {
+            width: 15%;
+            text-align: center;
+            margin-left: 6.3%;
+            font-size: 18px;
+        }
+
+        .section8 {
+            width: 100%;
+            float: left;
+            margin-top: 1%;
+        }
+
+        .sec8-1 {
+            font-size: 18px;
+            float: left;
+            width: 11%;
+            margin-left: 13%;
+            text-align: center;
+        }
+
+        .section9 {
+            width: 100%;
+            float: left;
+            margin-top: 2%;
+        }
+
+        .sec9-1 {
+            font-size: 18px;
+            width: 50%;
+            margin-left: 13%;
+            text-align: left;
+        }
+
+        .section10 {
+            width: 100%;
+            float: left;
+            margin-top: 1.3%;
+        }
+
+        .sec10-1 {
+            font-size: 18px;
+            width: 22%;
+            margin-left: 14.2%;
+            text-align: center;
+            float:left;
+        }
+
+        .sec10-2 {
+            font-size: 18px;
+            width: 22%;
+            margin-left: 4.8%;
+            text-align: center;
+        }
+
+        .section11 {
+            width: 100%;
+            float: left;
+            margin-top: 1%;
+        }
+
+        .sec11-1 {
+            font-size: 18px;
+            float: left;
+            width: 48%;
+            margin-left: 14.8%;
+            text-align: center;
+        }
+
+        .section12 {
+            width: 100%;
+            float: left;
+            margin-top: 2%;
+        }
+
+        .sec12-1 {
+            font-size: 18px;
+            float: left;
+            width: 50%;
+            margin-left: 13%;
+            text-align: left;
+        }
+
+        .section13 {
+            width: 100%;
+            float: left;
+            margin-top: 4%;
+        }
+
+        .sec13-1 {
+            font-size: 18px;
+            float: left;
+            width: 7%;
+            margin-left: 19%;
+            text-align: center;
+        }
+
+        .sec13-2 {
+            font-size: 18px;
+            width: 7%;
+            margin-left: 19%;
+            text-align: center;
+        }
+
+        .sec13-3 {
+            font-size: 18px;
+            width: 8%;
+            margin-left: 4%;
+            text-align: center;
+        }
+
+        .section14 {
+            width: 100%;
+            float: left;
+            margin-top: 3.5%;
+        }
+
+        .sec14-1 {
+            font-size: 18px;
+            float: left;
+            width: 14%;
+            margin-left: 8.6%;
+            text-align: center;
+        }
+
+        .pagebreak {
+            page-break-before: always;
+        }
+        .terms-conditions {
+            margin-top:15%;
+            width:100%;
+        }
+
+        .terms-head {
+            margin-top:2%;
+            margin-left:5%;
+        }
+
+        .terms-heading {
+            width: 25%;
+            height: 60px;
+            background-color: #d0232A;
+            color:white;
+            font-size:35px;
+            font-weight:bolder;
+            font-family:Arial, Helvetica, sans-serif;
+            display:flex;
+            align-items:center;
+            padding-left:10px;
+        }
+        .terms-contain {
+            width:90%;
+            margin-left:5%;
+            margin-top:1%;
+        }
+
+        .conditions {
+            width:100%;
+            font-family:Arial, Helvetica, sans-serif;
+            line-height:1.5;
+            font-size:14px;
+        }
+
+        .decleration {
+            font-family:Arial, Helvetica, sans-serif;
+            font-size:14px;
+            text-transform:uppercase;
+            width:100%;
+        }
+
+        label {
+            display: inline-block;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            font-size: 20px
+        }
+
+        table tr th, tr td {
+            text-align: center;
+            border: 1px solid black;
+            padding: 5px;
+        }
+
+        table {
+            margin: auto;
+            font-family: Arial, Helvetica, sans-serif;
+            width: 35%;
+            font-size: 18px;
+            border-collapse: collapse;
+        }
+    </style>
+</head>
+<body>
+    <div class="bg">
+        <div class="unit-info">
+            <div class="unit-det">
+                <div class="section1">
+                    <label class="sec1-1">@Model.commercialData.shop_no</label>
+                    <label class="sec1-2">@Model.commercialData.Project_Name</label>
+                    <label class="sec1-3">@Model.commercialData.Area Sq.Ft</label>
+                </div>
+                <div class="section2">
+                    <label class="sec2-1">@Model.commercialData.Type</label>
+                    <label class="sec2-2">@Model.commercialData.Floor</label>
+                </div>
+            </div>
+            <div class="imgsec">
+                <div class="custimgdiv">
+                    <img class="custimg" src="@Model.shopOwnersforallt.Select(x=> x.Owner_Image1).FirstOrDefault()" />
+                </div>
+                <div class="imageqr">
+                    @{
+                        var qr = Model.commercialData.shop_no + ".png";
+                    }
+                    <img class="imageqrs" src="~/Repository/QR Codes Ayan/@qr" alt="" />
+                </div>
+            </div>
+        </div>
+        <div class="owner-info">
+            <div class="section3">
+                <label class="sec3-1">@string.Join(",", Model.shopOwnersforallt.Select(x => x.Name).Distinct())</label>
+                <label class="sec3-2">@string.Join(",", Model.shopOwnersforallt.Select(x => x.Father_Husband).Distinct())</label>
+            </div>
+            <div class="section4">
+                <label class="sec4-1">@string.Join(",", Model.shopOwnersforallt.Select(x => x.Postal_Address).Distinct())</label>
+            </div>
+            <div class="section5">
+                <label class="sec5-1">@string.Join(",", Model.shopOwnersforallt.Select(x => x.Residential_Address).Distinct())</label>
+            </div>
+            <div class="section6">
+                <label class="sec6-1">@string.Join(",", Model.shopOwnersforallt.Select(x => x.Phone_Office).Distinct())</label>
+                <label class="sec6-2">@string.Join(",", Model.shopOwnersforallt.Select(x => x.Residential).Distinct())</label>
+                <label class="sec6-3">@string.Join(",", Model.shopOwnersforallt.Select(x => x.Mobile_1).Distinct())</label>
+                <label class="sec6-4">@string.Join(",", Model.shopOwnersforallt.Select(x => x.Mobile_2).Distinct())</label>
+            </div>
+            <div class="section7">
+                <label class="sec7-1">@string.Join(",", Model.shopOwnersforallt.Select(x => x.Email).Distinct())</label>
+                <label class="sec7-2">@string.Join(",", Model.shopOwnersforallt.Select(x => x.Occupation).Distinct())</label>
+                <label class="sec7-3">@string.Join(",", Model.shopOwnersforallt.Select(x => x.Nationality).Distinct())</label>
+            </div>
+            <div class="section8">
+                <label class="sec8-1">@string.Join(",", Model.shopOwnersforallt.Select(x => x.Date_Of_Birth).Distinct())</label>
+            </div>
+            <div class="section9">
+                <label class="sec9-1">@string.Join(",", Model.shopOwnersforallt.Select(x => x.CNIC_NICOP).Distinct())</label>
+            </div>
+            <div class="section10">
+                <label class="sec10-1">@string.Join(",", Model.shopOwnersforallt.Select(x => x.Nominee_Name).Distinct())</label>
+                <label class="sec10-2">@string.Join(",", Model.shopOwnersforallt.Select(x => x.Nominee_Relation).Distinct())</label>
+            </div>
+            <div class="section11">
+                <label class="sec11-1">@string.Join(",", Model.shopOwnersforallt.Select(x => x.Nominee_Address).Distinct())</label>
+            </div>
+            <div class="section12">
+                <label class="sec12-1">@string.Join(",", Model.shopOwnersforallt.Select(x => x.Nominee_CNIC_NICOP).Distinct())</label>
+            </div>
+            <div class="section13">
+                <label class="sec13-1">@String.Format("{0:n0}", Model.CommercialReceipts.Where(x => x.Type == "Booking" && x.Cancel == null).Select(x => x.Amount).FirstOrDefault())</label>
+                <label class="sec13-2">@String.Format("{0:n0}", Model.CommercialReceipts.Where(x => x.Type == "Booking" && x.Cancel == null).Select(x => x.PaymentType).FirstOrDefault())</label>
+                <label class="sec13-3">@String.Format("{0:MMMM dd, yyyy}", Model.CommercialReceipts.Where(x => x.Type == "Booking" && x.Cancel == null).Select(x => x.DateTime).FirstOrDefault())</label>
+            </div>
+            <div class="section14">
+                <label class="sec14-1">@String.Format("{0:MMMM dd, yyyy}", DateTime.UtcNow)</label>
+            </div>
+        </div>
+    </div>
+
+    @*back side of the file*@
+    <div style="page-break-after:always"></div>
+
+    <div class="bg1">
+        <div class="inst-struct">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Payment Details</th>
+                        <th>Amount</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach (var ins in Model.CommercialInstallments.GroupBy(x => new { x.Installment_Type }))
+                    {
+                        <tr>
+                            @if (ins.Key.Installment_Type == 1)
+                            {
+                                <td>Advance</td>
+                                <td>@string.Format("{0:n0}", ins.Sum(x => x.Amount))</td>
+                            }
+                            else if (ins.Key.Installment_Type == 2)
+                            {
+                                <td>Installments</td>
+                                <td>@string.Format("{0:n0}", ins.Sum(x => x.Amount))</td>
+                            }
+                            else if (ins.Key.Installment_Type == 3)
+                            {
+                                <td>Grand Installment</td>
+                                <td>@string.Format("{0:n0}", ins.Sum(x => x.Amount))</td>
+                            }
+                            else if (ins.Key.Installment_Type == 4)
+                            {
+                                <td>Possession</td>
+                                <td>@string.Format("{0:n0}", ins.Sum(x => x.Amount))</td>
+                            }
+                            else if (ins.Key.Installment_Type == 5)
+                            {
+                                <td>Balloon Payment</td>
+                                <td>@string.Format("{0:n0}", ins.Sum(x => x.Amount))</td>
+                            }
+                            else if (ins.Key.Installment_Type == 6)
+                            {
+                                <td>Installments</td>
+                                <td>@string.Format("{0:n0}", ins.Sum(x => x.Amount))</td>
+                            }
+                            else if (ins.Key.Installment_Type == 7)
+                            {
+                                <td>Confirmation</td>
+                                <td>@string.Format("{0:n0}", ins.Sum(x => x.Amount))</td>
+                            }
+                            else
+                            {
+                                <td> - </td>
+                                <td>@string.Format("{0:n0}", ins.Sum(x => x.Amount))</td>
+                            }
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div class="terms-conditions">
+            <div class="terms-head">
+                <div class="terms-heading">
+                    <sigma style="width:90%;height:50%">TERMS &amp; CONDITIONS</sigma>
+                </div>
+            </div>
+
+            <div class="terms-contain">
+                <ol class="conditions">
+                    <li>Booking forms can be submitted along with payment via Cheque / Cash / Bank Draft / Pay Order only in favour of Meher Estate Developers (Pvt) Ltd.</li>
+                    <li>The Size and location of the plot is tentative and subject to adjustment after demarcation / measurement of the plot at the time of handing over the possession.</li>
+                    <li>All payments are to be made according to the schedule given by Meher Estate Developers (Pvt) Ltd.</li>
+                    <li>If allottee fails to pay 3 consecutive installments within specified time then the allotment will be liable for cancellation.</li>
+                    <li>Current pricing structure includes cost of land only.</li>
+                    <li>In case of extra land with any plot, extra land charges will be added to the total amount as determined by Meher Estate Developers (Pvt) Ltd.</li>
+                    <li>One application / Booking Form can be used for booking of one plot only.</li>
+                    <li>Construction is only permissible with prior permission of the design studio / management committee of the Meher Estate Developers (Pvt) Ltd.</li>
+                    <li>In case of any dispute between buyer / allottee and Meher Estate Developers (Pvt) Ltd. The dispute will be referred to the arbitration committee of Meher Estate Developers (Pvt) Ltd.</li>
+                    <li>Promp payments at the due date for each and every installment as per annexure of the schedule of payments / installments must be paid by each calendar month.</li>
+                    <li>Transfer and Possession commencing from the date of taking possession of the plot given by the seller to the buyer, the buyer shall be liable to bear and pay all Government  Tax charges, for Electricity, gas, telephone, registration, legal fees and other charges imposed by the concerned authorities.</li>
+                    <li>In case of cancellation / refund, 10% of the unit price will be deducted as service charges and the balance will be paid after resale of the plot, or a six month post dated cheque of balance amount shall be presented.</li>
+                    <li>Eligibility for balloting will be confirmed after the applicable balloting charges.</li>
+                    <li>Each applicant will abide by these Terms &amp; Conditions in addition to the by-law, rules and regulations of Meher Estate Developers (Pvt) Ltd.</li>
+                    <li>Due to any ground variations and technicalities the allotted plot &amp; the size of the allotted plot can be changed.</li>
+                    <li>Meher Estate Developers (Pvt) Ltd. will not be responsible for the project, if delayed due to the changes in the rules and regulation set by the Government authorities.</li>
+                    <li>Owner of the plot will follow the rules of LDA / TMA or Meher Estate Developers (Pvt) Ltd by-law for the construction of their plots.</li>
+                    <li>Development charges are to be paid within a year after the last installment.</li>
+                    <li>Meher Estate Developers (Pvt) Ltd. shall not be considered liable to the extent that performance of their respective obligations is prevented by an Event of Force Majeure that arises at the later date.</li>
+                </ol>
+            </div>
+
+            <div style="margin-left:5%">
+                <p class="decleration"><b>declaration: </b>i have read these terms &amp; conditions carefully and i hereby agree to be legally bound by the terms and conditions described herein and by all terms, policies and guidelines incorporated by reference. these terms may be amended at any time by Meher Estate Developers (pvt) ltd. and its management committee and i can not challenge thse at any court of law or any other forum.</p>
+            </div>
+
+
+            <div style="display:flex;margin-left:35%;align-items: center; margin-top:5%;">
+                <b style="text-transform:uppercase;">thumb impression : </b>
+                <div style="height:80px; width:250px;border:1px solid #000;margin-left: 20px;"></div>
+
+
+                <b style="text-transform:uppercase;margin-left:5%;">signature of applicant : ___________________________________________</b>
+            </div>
+        </div>
+    </div>
+
+    
+</body>
+</html>

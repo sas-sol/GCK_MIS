@@ -1,0 +1,191 @@
+﻿@model MeherEstateDevelopers.Models.Project
+    @{
+        if (User.IsInRole("Administrator"))
+        {
+            Layout = "~/Views/Shared/_AdminLayout.cshtml";
+        }
+        else
+        {
+            Layout = "~/Views/Shared/_StaffLayout.cshtml";
+        }
+    }
+    <script src="~/Scripts/Inv.js"></script>
+    <script src="~/Scripts/Prj.js"></script>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script>
+    var milesList = @Html.Raw(Json.Encode(ViewBag.Milestones));
+    </script>
+    <div class="bgc-white p-20 bd">
+        <div style="text-align:center">
+            <h3>Services Requisition</h3>
+        </div>
+        <input type="hidden" class="grpId" value="@ViewBag.Group_Id" />
+        <div class="row col-md-12 mt-md-3">
+            <div class="form-group col-md-3">
+                <label>Project Name</label>
+                <h4>@Model.Name</h4>
+                <input type="hidden" value="@Model.Id" id="Prj_Id" />
+            </div>
+        </div>
+        <hr />
+        <div class="col-md-12 " id="ad-demand">
+            <div class="cal ">
+                <div class="item-pur-req-row">
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            <label>Milestone</label>
+                            <select class="form-control mil-st"></select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-md-1">
+                            <div class="sr">1</div>
+                        </div>
+                        <div class="form-group col-md-5">
+                            <label>Name</label>
+                            <input type="text" class="form-control Product" id="Product" required placeholder="Services Name" />
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label>Details</label>
+                            <textarea class="form-control descr" rows="1" cols="5" placeholder="Services Details"></textarea>
+                        </div>
+                        <div class="col-md-2" style="padding-top:2%">
+                            <i class="fa fa-trash rmv-pur-req-row "></i>
+                            &nbsp;&nbsp;&nbsp;
+                            <i class="fa fa-plus-circle add-new-ser-row"></i>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-2">
+                            <h6>Specifications</h6>
+                            <select style="float:left" class="form-control slwhd">
+                                <option>Choose ..</option>
+                                <option value="l">Length</option>
+                                <option value="w">Width</option>
+                                <option value="h">Height</option>
+                                <option value="b">Breadth</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-1 l-div" style="display:none">
+                            <label>Length</label>
+                            <input class="form-control len" placeholder="0" required>
+                        </div>
+                        <div class="form-group col-md-1 l-div" style="display:none">
+                            <label>Length UOM</label><i class="ti-close l-cros" style="float:right;font-size:9px"></i>
+                            <select class="form-control len-uom isuom" name="UOM" data-id="1">
+                                <option value="Sq Ft">Sq Ft</option>
+                                <option value="Sq Metre">Sq Metre</option>
+                                <option value="Kilometre">Kilometre</option>
+                                <option value="Meter">Metre</option>
+                                <option value="Centimetre">Centimetre</option>
+                                <option value="Millimetre">Millimetre</option>
+                                <option value="Mile">Mile</option>
+                                <option value="Yard">Yard</option>
+                                <option value="Foot">Foot</option>
+                                <option value="Inch">Inch</option>
+                                <option value="Sooter">Sooter</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-1 w-div" style="display:none">
+                            <label>Width</label>
+                            <input class="form-control wid" placeholder="0" required>
+                        </div>
+                        <div class="form-group col-md-1 w-div" style="display:none">
+                            <label>Width UOM</label><i class="ti-close w-cros" style="float:right;font-size:9px"></i>
+                            <select class="form-control wid-uom isuom" name="UOM" data-id="1">
+                                <option value="Sq Ft">Sq Ft</option>
+                                <option value="Sq Metre">Sq Metre</option>
+                                <option value="Kilometre">Kilometre</option>
+                                <option value="Meter">Metre</option>
+                                <option value="Centimetre">Centimetre</option>
+                                <option value="Millimetre">Millimetre</option>
+                                <option value="Mile">Mile</option>
+                                <option value="Yard">Yard</option>
+                                <option value="Foot">Foot</option>
+                                <option value="Inch">Inch</option>
+                                <option value="Sooter">Sooter</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-1 h-div" style="display:none">
+                            <label>Height</label>
+                            <input class="form-control hei" placeholder="0" required>
+                        </div>
+                        <div class="form-group col-md-1 h-div" style="display:none">
+                            <label>Height UOM</label><i class="ti-close h-cros" style="float:right;font-size:9px"></i>
+                            <select class="form-control hei-uom isuom" name="UOM" data-id="1">
+                                <option value="Sq Ft">Sq Ft</option>
+                                <option value="Sq Metre">Sq Metre</option>
+                                <option value="Kilometre">Kilometre</option>
+                                <option value="Meter">Metre</option>
+                                <option value="Centimetre">Centimetre</option>
+                                <option value="Millimetre">Millimetre</option>
+                                <option value="Mile">Mile</option>
+                                <option value="Yard">Yard</option>
+                                <option value="Foot">Foot</option>
+                                <option value="Inch">Inch</option>
+                                <option value="Sooter">Sooter</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-1 b-div" style="display:none">
+                            <label>Breadth</label>
+                            <input class="form-control bre" placeholder="0" required>
+                        </div>
+                        <div class="form-group col-md-1 b-div" style="display:none">
+                            <label>Breadth UOM</label><i class="ti-close b-cros" style="float:right;font-size:9px"></i>
+                            <select class="form-control b-uom isuom" name="UOM" data-id="1">
+                                <option value="Sq Ft">Sq Ft</option>
+                                <option value="Sq Metre">Sq Metre</option>
+                                <option value="Kilometre">Kilometre</option>
+                                <option value="Meter">Metre</option>
+                                <option value="Centimetre">Centimetre</option>
+                                <option value="Millimetre">Millimetre</option>
+                                <option value="Mile">Mile</option>
+                                <option value="Yard">Yard</option>
+                                <option value="Foot">Foot</option>
+                                <option value="Inch">Inch</option>
+                                <option value="Sooter">Sooter</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr />
+        <div class="row">
+            <div class="col-md-2">
+                <button type="button" id="add-new-serm-row" class="btn btn-success">Add Another Line</button>
+            </div>
+            <div class="col-md-2">
+                <button type="submit" id="reg-SerReq" class="btn btn-primary">Submit</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            InitMileByEle($('.mil-st').first(), milesList)
+        });
+    </script>
+
+    <style>
+        .rmv-pur-req-row, .add-new-ser-row {
+            text-align: center;
+            margin: auto;
+            font-size: 20px;
+        }
+
+            .rmv-pur-req-row:hover, .add-new-ser-row:hover {
+                color: #d0232A;
+                cursor: pointer;
+            }
+
+        .left-mar-temp {
+            margin-left: 6rem !important;
+        }
+
+        .sr {
+            text-align: center;
+            margin-top: 35px;
+        }
+    </style>

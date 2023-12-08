@@ -1,0 +1,32 @@
+﻿
+
+
+
+
+<div class="col-md-12 " id="">
+    <div class="form-row " id="">
+        <div class="form-group col-md-3">
+            <label>Type</label>
+            <select class="form-control" id="Fuel_Type" name="Fuel_Type">
+                <option value="">Choose..</option>
+                <option value="Petrol">Petrol</option>
+                <option value="High Octane">High Octane</option>
+                <option value="Diesel">Diesel</option>
+            </select>
+        </div>
+        <div class="form-group col-md-3">
+            <label>Rate</label>
+            <input class="form-control coma " placeholder="12,345" required>
+            <input type="hidden" id="" name="Fuel_Rate" class="amt Fuel_Rate " data-id="1" required>
+
+        </div>
+    </div>
+</div>
+
+
+<script>
+    $(function () {
+        $('.modal-footer').append('<button type="submit" id="ad-fuel-rate" class="btn btn-primary">Add Rate</button>');
+    });
+
+</script>

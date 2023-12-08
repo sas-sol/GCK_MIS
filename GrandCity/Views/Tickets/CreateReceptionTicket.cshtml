@@ -1,0 +1,55 @@
+﻿@model MeherEstateDevelopers.Models.Ticket
+<div class="bgc-white bd bdrs-3 p-20 mB-20">
+    @using (Html.BeginForm("CreateTicket", "Tickets", FormMethod.Post, new { @id = "c-tik", @class = "", role = "form" }))
+    {
+        @Html.AntiForgeryToken()
+        <input type="hidden" name="Department" id="dep-nam" />
+        <input type="hidden" name="Customer" value="true" />
+        <h5>Customer Information</h5>
+        <div class="row">
+            <div class="form-group col-md-3">
+                <label>Name</label>
+                <input class="form-control" id="name" name="Name" required />
+            </div>
+            <div class="form-group col-md-2">
+                <label>Mobile</label>
+                <input class="form-control" id="Mobile_No" name="Mobile_No" required />
+            </div>
+            <div class="form-group col-md-7">
+                <label>Address</label>
+                <input class="form-control" id="Address" name="Address" />
+            </div>
+        </div>
+        <hr />
+        <div class="row">
+            <div class="form-group col-md-5">
+                <label>Department</label>
+                @Html.DropDownList("Department", null, "Choose..", new { Name = "Dep_Id", @class = "form-control dep-user" })
+            </div>
+            <div class="form-group col-md-5">
+                <label>Subject</label>
+                <input class="form-control" id="title" name="Title" />
+            </div>
+            <div class="form-group col-md-5">
+                <label>Assigned To</label>
+                <select class="form-control" id="AssignedTo" name="AssignedTo"></select>
+                <label>Deadline</label>
+                <input class="form-control" id="Deadline" data-provide="datepicker" name="Deadline" />
+            </div>
+            <div class="form-group col-md-7">
+                <label>Description</label>
+                <textarea class="form-control" name="Description" rows="4"></textarea>
+            </div>
+            <div class="col-md-6">
+                <button class="btn btn-primary" id="c-tick-btn" type="button">Create Ticket</button>
+            </div>
+        </div>
+        <hr />
+        <div class="row">
+            <div class="col-md-6">
+                <h3>Ticket No: <span id="tick-no"><b></b></span></h3>
+            </div>
+        </div>
+
+    }
+</div>

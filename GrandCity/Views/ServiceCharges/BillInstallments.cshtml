@@ -1,0 +1,359 @@
+﻿
+
+@{ if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+
+}
+
+<input type="hidden" class="act-service-type" value="@ViewBag.serTyp" />
+    <div class="col-md-12 pt-md-5 pb-md-5 bg-white">
+        <div class="col-md-12">
+            <div class="panel-heading central-text-align">
+
+                <h5>Bill Actions</h5>
+            </div>
+        </div>
+
+        <div class="col-md-12">
+            <div class="row align-to-flex-end mt-md-5">
+                <div class="col-md-4">
+                    <label>Bill No : </label>
+                    <input type="text" class="form-control met-no" maxlength="15" placeholder="Bill No." />
+                </div>
+                <div class="col-md-2">
+                    <button class="btn btn-primary met-ser-btn"><i class="ti-search">&nbsp;Search</i></button>
+                </div>
+            </div>
+        </div>
+
+        <div class="bill-inst-main-content-area mt-md-5">
+
+        </div>
+
+        <span id="boundary-bill-hjg"></span>
+        <div class="bill-installments-sec mt-md-5" style="display:none;">
+            <div class="col-md-12">
+                <div class="panel-heading central-text-align">
+                    Installments Structure
+                </div>
+            </div>
+            
+            <div class="row mt-md-5 ml-md-5 central-text-align">
+                <div class="col-md-3">
+                    <label><b>Bill Amount:</b></label>
+                    <br />
+                    <label class="bill-amt-orig">7457564</label>
+                </div>
+
+                <div class="col-md-3">
+                    <label><b>Arrears</b></label>
+                    <br />
+                    <label class="bill-amt-arrear">567765</label>
+                </div>
+
+                <div class="col-md-3">
+                    <label><b>Fine (After Due Date)</b></label>
+                    <br />
+                    <label class="bill-amt-fine">67544576</label>
+                </div>
+
+                <div class="col-md-3">
+                    <label><b>Installment Amount</b></label>
+                    <br />
+                    <label class="bill-amt-inst">546543</label>
+                </div>
+
+            </div>
+
+            <hr />
+
+            <div class="col-md-12">
+                <div class="row align-to-flex-end">
+                    <div class="col-md-4">
+                        <label>Installment Plan : </label>
+                        <select class="form-control pln-opts-hgj">
+                            <option value="-1">Select Plan</option>
+                            <option value="3">3 Months (Equal)</option>
+                            <option value="6">6 Months (Equal)</option>
+                            <option value="9">9 Months (Equal)</option>
+                            <option value="12">12 Months (Equal)</option>
+                            <option value="0">Custom</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-2">
+                        <button class="btn btn-primary cr-inst-pln-yui"><i class="ti-plus">&nbsp;Create</i></button>
+                    </div>
+                </div>
+                <div class="col-md-12 mt-md-5 plan-rec-yuijhk">
+                </div>
+                <div class="col-md-12">
+                    <label>Remarks : </label>
+                    <textarea class="form-control inst-strct-rems-jkhoi" placeholder="Remarks" rows="5"></textarea>
+                </div>
+                <div class="col-md-12">
+                    <button class="btn btn-primary save-cust-inst-jhg" style="float:right; display:none;">Send For Approval</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<style>
+    .align-to-flex-end{
+        align-items:flex-end;
+    }
+
+    .myInpt {
+        width: 100%;
+        height: 100%;
+        border: none;
+        text-align: center;
+    }
+</style>
+
+<script>
+    $('.met-ser-btn').unbind().click(function () {
+        let a = $('.met-no').val();
+        let typ = parseInt($('.act-service-type').val());
+        if (a == '') {
+            alert('Enter a meter numnber to search.');
+            return;
+        }
+
+        showLoader();
+        $('.bill-inst-main-content-area').load('/ServiceCharges/MeterBillDetails/', { billId: a, tp: typ }, function () {
+            hideLoader();
+        });
+    });
+
+    $('.cr-inst-pln-yui').click(function () {
+        const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
+            "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+        ];
+        let plan = parseInt($('.pln-opts-hgj option:selected').val());
+
+        //if user selects an option other than custom
+        if (plan > 0) {
+            let __rowStrct = ``;
+            let itr = 1;
+            let nowDt = new Date();
+            let dt = nowDt;
+            let pmInst = Math.ceil((currMonBillDets.Total_Amount + currMonBillDets.Arrears) / plan);
+            installmentPlan = plan;
+            installmentAmount = pmInst;
+            __rowStrct += `<tr class="inst-pl-row-hjkl central-text-align">
+                                <td>1</td>
+                                <td>${monthNames[dt.getMonth()]}/${dt.getFullYear()}</td>
+                                <td>${pmInst}</td>
+                            </tr>`
+            for (itr = 1; itr < plan; itr++) {
+                let dt = new Date(nowDt.setMonth(nowDt.getMonth() + 1));
+                __rowStrct += `<tr class="inst-pl-row-hjkl central-text-align">
+                                <td>${itr + 1}</td>
+                                <td>${monthNames[dt.getMonth()]}/${dt.getFullYear()}</td>
+                                <td>${pmInst}</td>
+                            </tr>`
+            }
+
+            let __strct = `<table class="table table-bordered">
+                        <thead>
+                            <tr class="thead-dark central-text-align">
+                                <td colspan="3">Installments Schedule</td>
+                            </tr>
+                            <tr class="central-text-align">
+                                <td>Installment</td>
+                                <td>Date</td>
+                                <td>Amount</td>
+                            </tr>
+                        </thead>
+                        <tbody class="inst-strctr-rec-tyhj">
+                            ${__rowStrct}
+                        </tbody>
+                    </table>`;
+            $('.plan-rec-yuijhk').empty().append(__strct);
+            $('.save-cust-inst-jhg').show();
+        }
+
+        else if (plan == 0) {
+
+            let _cust_strct = `<table class="table table-bordered">
+                        <thead>
+                            <tr class="thead-dark central-text-align">
+                                <td colspan="4">Installments Schedule</td>
+                            </tr>
+                            <tr class="central-text-align">
+                                <td></td>
+                                <td>Installment</td>
+                                <td>Date</td>
+                                <td>Amount</td>
+                            </tr>
+                        </thead>
+                        <tbody class="inst-strctr-rec-tyhj">
+                            <tr class="inst-pl-row-hjkl central-text-align">
+                                <td><i class="ti-trash pointer inst-row-rmv-hkj"></i></td>
+                                <td class="sr">1</td>
+                                <td><input type="text" class="form-control pmt-dt myInpt" data-provide="datepicker" /></td>
+                                <td><input type="number" class="form-control pmt-amt myInpt" /></td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr class="central-text-align">
+                                <td colspan="4">
+                                    <button class="btn btn-success add-new-row-hfg">Insert New Row</button>
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>`;
+
+            $('.plan-rec-yuijhk').empty().append(_cust_strct);
+            $('.save-cust-inst-jhg').show();
+        }
+        else {
+            $('.plan-rec-yuijhk').empty();
+            $('.save-cust-inst-jhg').hide();
+        }
+
+    });
+
+    $(document).on('focusout', '.pmt-dt', function () {
+        if ($(this).val() == '') {
+            return;
+        }
+        let dt = $(this).val().split('/');
+        if (dt.length < 2) {
+            alert('Invalid Date Selected');
+            $(this).val(null);
+            return;
+        }
+        let selDt = new Date(dt[2], dt[0]);
+        let currDtr = new Date();
+        if (selDt < currDtr) {
+            alert('Invalid date. Cannot select past dates');
+            return;
+        }
+
+        $(this).val(dt[0] + '/' + dt[2]);
+        checkCustomInstallmentValid(false);
+    });
+
+    function checkCustomInstallmentValid(isSubmission) {
+
+        //checking Dates and Amount validity
+        let ttlPmt = 0;
+        $('.inst-pl-row-hjkl').each(function () {
+            let that = this;
+            ttlPmt += parseFloat($('.pmt-amt').val());
+            let a = $(that).find('.pmt-dt').val().split('/')[0];
+            $('.inst-pl-row-hjkl').each(function () {
+                if (that != this) {
+                    let b = $(this).find('.pmt-dt').val().split('/')[0];
+
+                    if (a == b) {
+                        if (!isSubmission) {
+                            alert('Two entries with same month found. Month is ' + b + '. Removing both entries');
+                            $(this).remove();
+                        }
+                        return false;
+                    }
+                }
+            });
+        });
+
+        let instAmt = Math.ceil(parseFloat(currMonBillDets.Total_Amount + currMonBillDets.Arrears));
+        if (((instAmt - ttlPmt) < (-10)) || ((instAmt - ttlPmt) > (10))) {
+            if (!isSubmission) {
+                alert('Installment amounts mismatch with the bill amount.');
+            }
+            return false;
+        }
+
+        return true;
+    }
+
+    $(document).on('click', '.inst-row-rmv-hkj', function () {
+        let conf = confirm('Are you sure you want to remove this row?');
+        if (conf) {
+            $(this).closest('.inst-pl-row-hjkl').remove();
+            let a = 1;
+            $('.inst-pl-row-hjkl').each(function () {
+                $(this).find('.sr').val(a++);
+            });
+        }
+    });
+
+    $('.add-new-row-hfg').unbind().click(function () {
+        let rows = $('.inst-pl-row-hjkl').length;
+
+        let row_strct = `<tr class="inst-pl-row-hjkl central-text-align">
+                                <td><i class="ti-trash pointer inst-row-rmv-hkj"></i></td>
+                                <td class="sr">${rows + 1}</td>
+                                <td><input type="text" class="form-control pmt-dt myInpt" data-provide="datepicker" /></td>
+                                <td><input type="number" class="form-control pmt-amt myInpt" /></td>
+                            </tr>`;
+
+        $('.inst-strctr-rec-tyhj').append(row_strct);
+    });
+
+    $('.save-cust-inst-jhg').unbind().click(function () {
+        let confi = confirm('Are you sure you want to forward this installment plan for approval?');
+        if (!confi) {
+            return;
+        }
+        showLoader();
+        //yahan pe ajax ki hit maarni hai
+        let inst = [];
+        let remarks = $('.inst-strct-rems-jkhoi').val();
+
+        if (installmentPlan > 0) {
+            //for installment plans other than custom
+            inst.push({
+                Id: installmentAmount,
+                Status: '00/0000'
+            });
+            currMonBillDets.PastMonthBills = null;
+        }
+        else if (installmentPlan == 0) {
+            //for custom plan
+
+            $('.inst-pl-row-hjkl').each(function () {
+                let amt = parseFloat($('.pmt-amt').val());
+                let a = $(that).find('.pmt-dt').val();
+                inst.push({
+                    Id: amt,
+                    Status:a
+                });
+            });
+            currMonBillDets.PastMonthBills = null;
+        }
+
+        //ajax hit to send data to the controller
+        $.ajax({
+            type: "POST",
+            url: "/ServiceCharges/SaveInstallments/",
+            contentType: "application/json",
+            traditional: true,
+            beforeSend: function () {
+                showLoader();
+            },
+            complete: function () {
+                hideLoader();
+            },
+            data: JSON.stringify({ installments: inst, plan: installmentPlan, rems: remarks, details: currMonBillDets }),
+        }).done(function (data) {
+            if (data.Status == true) {
+                alert(data.Msg);
+                window.location.reload();
+            }
+            else {
+                alert(data.Msg);
+            }
+        });
+    });
+
+</script>

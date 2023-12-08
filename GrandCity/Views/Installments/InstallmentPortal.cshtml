@@ -1,0 +1,94 @@
+﻿@{ if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+}
+<script src="~/Scripts/scanning.js"></script>
+<div class="row gap-20 pos-r">
+    <div class="col-md-12">
+        <div class="bgc-white p-20">
+            <div class="form-row row">
+                <div class="col-md-12">
+                    <div class="form-row">
+                        <div class="form-group col-md-2">
+                            <label>Plot No</label>
+                            <input type="text" class="form-control" name="plotno" id="plotno" required placeholder="Plot No." />
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label>Block</label>
+                            @Html.DropDownList("Block", null, "Choose..", new { @class = "form-control blk-plots", required = "" })
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label>Type</label>
+                            <select class="form-control" id="plttype" name="plttype">
+                                <option value="Residential">Residential</option>
+                                <option value="Commercial">Commercial</option>
+                            </select>
+                        </div>
+
+                        @*@if (!User.IsInRole("ReadOnly"))
+                        {*@
+                            <div class="col-md-1 form-group"><button type="button" id="plot-info-searcher" style="margin-top:29px" class="btn btn-primary">Search</button></div>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        @*<h6 class="heading-lgt-onDark">Plot information</h6>*@
+        <div class="mT-30">
+            <div class="form-row row">
+                <div class="col-md-12" id="plot-det-dfasgjkhafjkdgs">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('#plot-info-searcher').click(function (e) {
+            e.preventDefault();
+            $('#plot-det-dfasgjkhafjkdgs').empty();
+            let plt = $('#plotno').val();
+            let tp = $('#plttype option:selected').val();
+            let blk = $('#Block option:selected').val();
+
+            if (plt == '' || plt == undefined) {
+                alert('Enter a file number before proceeding.');
+                return;
+            }
+            else if (blk == undefined || blk == '') {
+                alert('Please select a block before proceeding.');
+                return;
+            }
+            ShowFullScreenLoader();
+            $.ajax({
+                type: "POST",
+                url: '/Installments/FetchInstallmentData/',
+                data: { plotno: plt, Block: blk, plttype: tp },
+                success: function (data) {
+                    if (data) {
+                        $('#plot-det-dfasgjkhafjkdgs').append(data);
+                    }
+                    else {
+                        alert('Failed to find any record.');
+                    }
+                    HideFullScreenLoader();
+                }
+                , error: function (xmlhttprequest, textstatus, message) {
+                    if (textstatus === "timeout") {
+                        alert("got timeout");
+                    } else {
+                        alert('Failed to proceed with the request.');
+                    }
+                    HideFullScreenLoader();
+                }
+            });
+        });
+    });
+</script>

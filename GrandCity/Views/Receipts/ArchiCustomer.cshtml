@@ -1,0 +1,460 @@
+﻿@model MeherEstateDevelopers.Models.ArchiCustomerLedgerModel
+
+@{ if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+}
+
+<div class="col-md-12 bgc-white pt-md-3">
+    <h5 class="central-text-align">Customer Ledger</h5>
+    <hr />
+    @*<div class="row">
+            <div class="col-md-1">
+                <label>Customer</label>
+            </div>
+            <div class="col-md-3">
+                <select class="form-control slct-archi-cust-fsdkjha"></select>
+            </div>
+        </div>*@
+
+<div class="row">
+    <div class="col-md-1">
+        <label><b>Name :</b></label>
+    </div>
+    <div class="col-md-2">
+        <label>@Model.CustomerDetails.CustomerName</label>
+    </div>
+
+    <div class="col-md-1"></div>
+
+    <div class="col-md-1">
+        <label><b>Father :</b></label>
+    </div>
+    <div class="col-md-2">
+        <label>@Model.CustomerDetails.CustomerFatherName</label>
+    </div>
+
+    <div class="col-md-1"></div>
+
+    <div class="col-md-1">
+        <label><b>CNIC :</b></label>
+    </div>
+    <div class="col-md-2">
+        <label>@Model.CustomerDetails.CustomerCNIC</label>
+    </div>
+
+    <div class="col-md-1"></div>
+
+    <div class="col-md-1">
+        <label><b>Address :</b></label>
+    </div>
+    <div class="col-md-2">
+        <label>@Model.CustomerDetails.CustomerAddress</label>
+    </div>
+
+    <div class="col-md-1"></div>
+
+    <div class="col-md-1">
+        <label><b>Plot :</b></label>
+    </div>
+    <div class="col-md-2">
+        <label>@Model.CustomerDetails.PlotNo</label>
+    </div>
+
+    <div class="col-md-1"></div>
+
+    <div class="col-md-1">
+        <label><b>Block :</b></label>
+    </div>
+    <div class="col-md-2">
+        <label>@Model.CustomerDetails.Block</label>
+    </div>
+
+    <div class="col-md-1"></div>
+
+    <div class="col-md-1">
+        <label><b>Plot Size :</b></label>
+    </div>
+    <div class="col-md-2">
+        <label>@Model.CustomerDetails.PlotSize</label>
+    </div>
+
+    <div class="col-md-1"></div>
+</div>
+
+    <div class="row mt-md-5 ldgr-area">
+        <div class="col-md-12">
+            <table class="table table-borderless">
+                <thead>
+                    <tr>
+                        <th>Sr.</th>
+                        <th>Date</th>
+                        <th>Debit</th>
+                        <th>Credit</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @{
+                        int cnt = 1;
+                    }
+                    @foreach (var v in Model.LedgerDetails.OrderBy(x => x.ActionDate))
+                    {
+                        <tr>
+                            <td>@(cnt++)</td>
+                            <td>@v.ActionDate.ToShortDateString()</td>
+                            <td>@((v.Debit == 0) ? "-":string.Format("{0:n0}",v.Debit))</td>
+                            <td>@((v.Credit == 0)? "-":string.Format("{0:n0}",v.Credit))</td>
+                        </tr>
+                    }
+                </tbody>
+
+                <tfoot>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td>@string.Format("{0:n0}", Model.LedgerDetails.Sum(x => x.Debit))</td>
+                        <td>@string.Format("{0:n0}", Model.LedgerDetails.Sum(x => x.Credit))</td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+</div>
+
+<input type="hidden" class="trans" value="@ViewBag.trans" />
+<input type="hidden" class="custId" value="@ViewBag.cust" />
+
+<div class="col-md-12 bgc-white">
+    <h5 style="text-align:center"><u>Architecture Fee Requests</u></h5>
+    <div class="peer peer-greed mt-md-5">
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item"><a class="nav-link active" role="tab" data-toggle="tab" aria-controls="home" aria-selected="true" href="#Pending">Request Receipt</a></li>
+            <li class="nav-item"><a class="nav-link" role="tab" data-toggle="tab" aria-controls="home" aria-selected="true" href="#Approved">Request Voucher</a></li>
+        </ul>
+        <div class="tab-content mt-3">
+            <div class="tab-pane active" id="Pending">
+                <div class="col-md-12 bgc-white pt-md-3">
+                    <h4 style="text-align:center"><u> Architecture Receipt </u></h4>
+                    <div class="col-md-12 pt-md-3">
+
+                        <div class="row mt-md-2" style="align-items:center;">
+                            <div class="col-md-4">
+                                <input type="checkbox" data-serv="Architectural Drawings + Submissions" class="serv-inpt" />&nbsp;&nbsp;<b>Architectural Drawings + Submissions</b>
+                            </div>
+                        </div>
+                        <hr />
+                        <div class="row mt-md-2" style="align-items:center;">
+                            <div class="col-md-4">
+                                <input type="checkbox" data-serv="Working Drawing" class="serv-inpt" />&nbsp;&nbsp;<b>Working Drawing</b>
+                            </div>
+                        </div>
+                        <hr />
+
+                        <div class="row mt-md-2" style="align-items: center;">
+                            <div class="col-md-4">
+                                <input type="checkbox" data-serv="Electric + Plumbing + Sewerage" class="serv-inpt" />&nbsp;&nbsp;<b>Electric + Plumbing + Sewerage</b>
+                            </div>
+                        </div>
+                        <hr />
+
+                        <div class="row mt-md-2" style="align-items:center;">
+                            <div class="col-md-4">
+                                <input type="checkbox" data-serv="3D Views" class="serv-inpt" />&nbsp;&nbsp;<b>3D Views</b>
+                            </div>
+                        </div>
+                        <hr />
+
+                        <div class="row mt-md-2" style="align-items:center;">
+                            <div class="col-md-4">
+                                <input type="checkbox" data-serv="Structure" class="serv-inpt" />&nbsp;&nbsp;<b>Structure</b>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mt-md-2 pb-md-5" style="border-top:1px solid rgba(0,0,0,0.6);">
+                        <div class="col-md-9"></div>
+                        <div class="col-md-3">
+                            <span style="font-size:26px;"><b>Grand Total :</b></span>&nbsp;&nbsp;<span style="font-size:20px;" class="ttl-amt-span">0</span>
+                        </div>
+                    </div>
+
+                    <div class="row mt-md-2 pb-md-5">
+                        <div class="col-md-10"></div>
+                        <div class="col-md-2">
+                            <button class="btn btn-primary gen-recpt-btn-fdshksldkf"> &nbsp; Request Receipt</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-pane" id="Approved">
+                <div class="col-md-12 bgc-white pt-md-3">
+                    <h4 style="text-align:center"><u> Architecture Voucher </u></h4>
+                    <div class="col-md-12 pt-md-3">
+
+                        <div class="row mt-md-2" style="align-items: center;">
+
+                            <div class="col-md-2">
+                                <label><b>Amount : </b></label>
+                            </div>
+
+                            <div class="col-md-3">
+                                <input type="text" class="form-control coma cust-wthdrw-amt-dfsj" />
+                            </div>
+                        </div>
+
+                        <div class="row mt-md-2" style="align-items: center;">
+                            <div class="col-md-2">
+                                <label><b>Description : </b></label>
+                            </div>
+
+                            <div class="col-md-4">
+                                <input type="text" class="form-control vchr-descrptn" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mt-md-2 pb-md-5">
+                        <div class="col-md-10"></div>
+                        <div class="col-md-2">
+                            <button class="btn btn-primary gen-vchr-btn-fdshksldkf"> &nbsp; Request Voucher</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    function UpdateGrandTotal() {
+        let ttl_amt_md = 0;
+        $('.serv-inpt').each(function () {
+            if ($(this).is(':checked')) {
+                //gather kro sab data;
+                let amt = parseInt(RemoveComma($(this).closest('.row').find('.srv-inf-charges-amount').val()));
+                ttl_amt_md += (isNaN(amt) ? 0 : amt);
+            }
+        });
+        $('.ttl-amt-span').text(Number(ttl_amt_md).toLocaleString());
+    }
+    $(document).ready(function () {
+        $('.serv-inpt').unbind().change(function () {
+            if ($(this).is(':checked')) {
+
+                let __strc = `<div class="col-md-3 info-field">
+                <input type="text" class="form-control srv-inf-charges-amount coma" placeholder="Amount" />
+            </div>
+
+            <div class="col-md-4 info-field">
+                <input type="text" class="ser-desc-sfd form-control" placeholder="Description"/>
+            </div>`;
+
+                $(this).closest('.row').append(__strc);
+
+                $(this).closest('.row').find('.srv-inf-charges-amount').unbind().change(function () {
+                    UpdateGrandTotal();
+                });
+            }
+            else {
+                $(this).closest('.row').find('.info-field').remove();
+            }
+        });
+
+        $('.gen-recpt-btn-fdshksldkf').unbind().click(function () {
+            if (!confirm('Are you sure you want to generate receipt?')) {
+                return;
+            }
+
+            //yahan pe total amount agar 0 ho tau receipt nahi generate krne deni
+            //agar ek b service ni selected to receipt ni generate krne deni
+
+            let plt_sz = $('.cust-plt-sz-dfsj').val();
+            let cust = $('.custId').val();
+            let trans = $('.trans').val();
+            let services = []
+
+            if (cust == '' || cust == undefined) {
+                alert('Select a customer before proceeding');
+                return;
+            }
+
+            let ttl_amt = 0;
+            let txt = '';
+            $('.serv-inpt').each(function () {
+                if ($(this).is(':checked')) {
+                    //gather kro sab data;
+                    let amt = parseInt(RemoveComma($(this).closest('.row').find('.srv-inf-charges-amount').val()));
+                    let serDesc = $(this).closest('.row').find('.ser-desc-sfd').val();
+                    let serNm = $(this).attr("data-serv");;
+                    ttl_amt += (isNaN(amt) ? 0 : amt);
+                    if (txt != '') {
+                        txt += '\n\r';
+                    }
+                    txt += serNm
+                    txt += " : " + serDesc;
+
+                    services.push({
+                        ServiceName: serNm,
+                        ServiceAmount: amt,
+                        Description: serDesc
+                    })
+                }
+            });
+
+            if (services.length == undefined || services.length <= 0) {
+                alert('Please select a minimum of 1 service to proceed');
+                return;
+            }
+            //sending the data to the server
+            $.ajax({
+                type: "POST",
+                url: '/Receipts/SaveArchiFee/',
+                data: { Size: plt_sz, Amount: ttl_amt, Description: txt, TokenParameter: trans, servs: services, cust: cust },
+                success: function (data) {
+                    if (data.Status) {
+                        alert(data.Msg);
+                        window.location.reload(true);
+                    }
+                    else {
+                        console.log(data._Log);
+                        alert('Failed to generate this receipt.');
+                    }
+                }
+                , error: function (xmlhttprequest, textstatus, message) {
+                    if (textstatus === "timeout") {
+                        alert("got timeout");
+                    } else {
+                        alert(textstatus);
+                    }
+                }
+            });
+
+        });
+
+        $('.slct-cust-fsdkjha').select2({
+            ajax: {
+                url: '/Receipts/SearchArchiCustomers_Select/',
+                data: function (params) {
+                    var query = {
+                        s: params.term,
+                        type: 'public'
+                    }
+
+                    // Query parameters will be ?search=[term]&type=public
+                    return query;
+                },
+                processResults: function (data) {
+                    // Transforms the top-level key of the response object from 'items' to 'results'
+                    return {
+                        results: data
+                    };
+                }
+            }
+        });
+
+        $('.slct-cust-wthdrw-fsdkjha').select2({
+            ajax: {
+                url: '/Receipts/SearchArchiCustomers_Select/',
+                data: function (params) {
+                    var query = {
+                        s: params.term,
+                        type: 'public'
+                    }
+
+                    // Query parameters will be ?search=[term]&type=public
+                    return query;
+                },
+                processResults: function (data) {
+                    // Transforms the top-level key of the response object from 'items' to 'results'
+                    return {
+                        results: data
+                    };
+                }
+            }
+        });
+
+        $('.ad-cust-btn').unbind().click(function () {
+            EmptyModel();
+            $('#ModalLabel').text("Add New Customer");
+            $('#modalbody').load('/Receipts/AddCustomer/', function () {
+                hideLoader();
+            });
+        });
+
+        $('.gen-vchr-btn-fdshksldkf').unbind().click(function () {
+            if (!confirm('Are you sure you want to generate voucher?')) {
+                return;
+            }
+
+            let amt = parseFloat(RemoveComma($('.cust-wthdrw-amt-dfsj').val()));
+            let custo = $('.custId').val();
+            let desc = $('.vchr-descrptn').val();
+            if (isNaN(amt)) {
+                alert('Amount is not in correct format. Enter amount in correct format and try again.');
+            }
+            $.ajax({
+                type: "POST",
+                url: '/Receipts/SaveArchiVoucher/',
+                data: { cust: custo, amount: amt, desc: desc },
+                success: function (data) {
+                    if (data.Status) {
+                        alert(data.Msg);
+                        window.location.reload(true);
+                    }
+                    else {
+                        console.log(data._Log);
+                        alert('Failed to generate this voucher.');
+                    }
+                }
+                , error: function (xmlhttprequest, textstatus, message) {
+                    if (textstatus === "timeout") {
+                        alert("got timeout");
+                    } else {
+                        alert(textstatus);
+                    }
+                }
+            });
+        });
+    });
+</script>
+
+<script>
+    $(document).ready(function () {
+        $('.slct-archi-cust-fsdkjha').select2({
+            ajax: {
+                url: '/Receipts/SearchArchiCustomers_Select/',
+                data: function (params) {
+                    var query = {
+                        s: params.term,
+                        type: 'public'
+                    }
+
+                    // Query parameters will be ?search=[term]&type=public
+                    return query;
+                },
+                processResults: function (data) {
+                    // Transforms the top-level key of the response object from 'items' to 'results'
+                    return {
+                        results: data
+                    };
+                }
+            }
+        });
+
+        $('.slct-archi-cust-fsdkjha').unbind().change(function () {
+            let cid = $('.slct-archi-cust-fsdkjha option:selected').val();
+            SASLoad($('.ldgr-area'));
+            $('.ldgr-area').load('/Receipts/ArchiCustomerLedger/', { id: cid }, function () {
+                SASUnLoad($('.ldgr-area'));
+            });
+        });
+    });
+</script>

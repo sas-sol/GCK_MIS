@@ -1,0 +1,117 @@
+﻿
+@*<div class="form-row">
+    <div class="form-group">
+        <label class="labl">
+            <input type="radio" name="bngrp" value="alldep" />
+        </label>
+    </div>
+    <div class="form-group col-md-3">
+        <h5 style="margin-left:8%">All Departments</h5>
+    </div>
+</div>
+
+<div class="col-md-12">
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label>Description</label>
+            <input type="text" class="form-control bon-des" name="" required placeholder="">
+        </div>
+        <div class="form-group col-md-2">
+            <label>Percentage</label>
+            <input type="text" class="form-control bon-per coma" name="" required placeholder="%">
+        </div>
+    </div>
+</div>
+<hr />
+<div class="form-row">
+    <div class="form-group">
+        <label class="labl">
+            <input type="radio" name="bngrp" value="depbonus" />
+        </label>
+    </div>
+    <div class="form-group">
+        <h5 style="margin-left:8%">Departments</h5>
+    </div>
+</div>
+
+<div class="col-md-12">
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label>Select Department</label>
+            @Html.DropDownList("Department", null, "Choose", new { @class = "form-control dep-bo-val" })
+        </div>
+        <div class="form-group col-md-4">
+            <label>Description</label>
+            <input type="text" class="form-control bon-dep-des" name="" required placeholder="">
+        </div>
+        <div class="form-group col-md-2">
+            <label>Percentage</label>
+            <input type="text" class="form-control bon-per-dep coma" name="" required placeholder="%">
+        </div>
+    </div>
+</div>
+
+
+
+<div class="form-row">
+    <div class="form-group">
+        <label class="labl">
+            <input type="radio" name="bngrp" value="religion" />
+        </label>
+    </div>
+    <div class="form-group">
+        <h5 style="margin-left:8%">Religion</h5>
+    </div>
+</div>
+<h5></h5>
+<div class="col-md-12">
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label>Religion</label>
+            <select class="form-control" name="Religion" id="relign">
+                <option value="">Select Religion</option>
+                <option value="Muslim">Muslim</option>
+                <option value="christian">Christian</option>
+            </select>
+        </div>
+        <div class="form-group col-md-4">
+            <label>Description</label>
+            <input type="text" class="form-control bon-re-des" name="" required>
+        </div>
+        <div class="form-group col-md-2">
+            <label>Percentage</label>
+            <input type="text" class="form-control bon-per-re coma" name="" required placeholder="%">
+        </div>
+    </div>
+</div>*@
+<div class="form-row">
+    <div class="form-group">
+        <label class="labl">
+            <input type="radio" name="bngrp" value="cola__on__sal" />
+        </label>
+    </div>
+
+    <div class="form-group">
+        <h5 style="margin-left:8%">COLA</h5>
+        <div class="alert alert-info" role="alert" style="float:right">The COLA will not be aplicable on those employees which has joined this organization in JAN-2021</div>
+    </div>
+</div>
+
+<h5></h5>
+<div class="col-md-12">
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label>Description</label>
+            <input type="text" class="form-control cola__des" name="" required>
+        </div>
+        <div class="form-group col-md-2">
+            <label>Percentage</label>
+            <input type="text" class="form-control cola__per coma" name="" required placeholder="%">
+        </div>
+    </div>
+</div>
+<script>
+    $(function () {
+        $('.modal-footer').append('<button type="submit" id="@ViewBag.SalId" class="btn btn-info  radiochkIndividual">Add</button>');
+    });
+</script>  

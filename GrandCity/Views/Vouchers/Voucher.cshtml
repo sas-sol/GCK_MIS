@@ -1,0 +1,981 @@
+﻿@model MeherEstateDevelopers.Models.JournalEntry
+<style type="text/css">
+    .ritz .waffle a {
+        color: inherit;
+    }
+
+    td, th, h1, h2, h3, h4, h5, h6 {
+        font-family: Book Antiqua,Palatino,Palatino Linotype,Palatino LT STD,Georgia,serif !important;
+    }
+
+    .ritz .waffle .s48 {
+        text-align: right;
+        font-weight: bold;
+        color: #333f4f;
+        font-family: Book Antiqua,Palatino,Palatino Linotype,Palatino LT STD,Georgia,serif;
+        font-size: 12pt;
+        vertical-align: middle;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s4 {
+        text-align: right;
+        font-weight: bold;
+        color: #4472c4;
+        font-family: Book Antiqua,Palatino,Palatino Linotype,Palatino LT STD,Georgia,serif;
+        font-size: 22pt;
+        vertical-align: middle;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s2 {
+        text-align: left;
+        font-weight: bold;
+        color: #a5a5a5;
+        font-family: Book Antiqua,Palatino,Palatino Linotype,Palatino LT STD,Georgia,serif;
+        font-size: 20pt;
+        vertical-align: middle;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s35 {
+        border-bottom: 1px SOLID #bfbfbf;
+        border-right: 1px SOLID #bfbfbf;
+        background-color: #f3f3f3;
+        text-align: right;
+        color: #000000;
+        font-family: Book Antiqua,Palatino,Palatino Linotype,Palatino LT STD,Georgia,serif;
+        font-size: 9pt;
+        vertical-align: middle;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s9 {
+        text-align: center;
+        color: #000000;
+        font-family: Book Antiqua,Palatino,Palatino Linotype,Palatino LT STD,Georgia,serif;
+        font-size: 10pt;
+        vertical-align: middle;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s31 {
+        border-bottom: 1px SOLID #bfbfbf;
+        border-right: 1px SOLID #bfbfbf;
+        text-align: center;
+        color: #000000;
+        font-family: Book Antiqua,Palatino,Palatino Linotype,Palatino LT STD,Georgia,serif;
+        font-size: 9pt;
+        vertical-align: middle;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s28 {
+        border: 1px SOLID;
+        text-align: center;
+        font-weight: bold;
+        color: #434343;
+        font-family: Book Antiqua,Palatino,Palatino Linotype,Palatino LT STD,Georgia,serif;
+        font-size: 9pt;
+        vertical-align: middle;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s11 {
+        text-align: left;
+        color: #333f4f;
+        font-family: Book Antiqua,Palatino,Palatino Linotype,Palatino LT STD,Georgia,serif;
+        font-size: 11pt;
+        vertical-align: middle;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s5 {
+        text-align: left;
+        color: #434343;
+        font-family: Book Antiqua,Palatino,Palatino Linotype,Palatino LT STD,Georgia,serif;
+        font-size: 18pt;
+        vertical-align: middle;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s27 {
+        border: 1px SOLID;
+        text-align: center;
+        font-weight: bold;
+        color: #434343;
+        font-family: Book Antiqua,Palatino,Palatino Linotype,Palatino LT STD,Georgia,serif;
+        font-size: 9pt;
+        vertical-align: middle;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s36 {
+        text-align: left;
+        color: #000000;
+        font-family: Book Antiqua,Palatino,Palatino Linotype,Palatino LT STD,Georgia,serif;
+        font-size: 9pt;
+        vertical-align: middle;
+        white-space: normal;
+        overflow: hidden;
+        word-wrap: break-word;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s0 {
+        background-color: #fff2cc;
+        text-align: left;
+        color: #000000;
+        font-family: Book Antiqua,Palatino,Palatino Linotype,Palatino LT STD,Georgia,serif;
+        font-size: 12pt;
+        vertical-align: bottom;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s44 {
+        border-left: none;
+        text-align: right;
+        color: #000000;
+        font-family: Book Antiqua,Palatino,Palatino Linotype,Palatino LT STD,Georgia,serif;
+        font-size: 9pt;
+        vertical-align: middle;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s14 {
+        text-align: center;
+        font-weight: bold;
+        color: #1f3864;
+        font-family: Book Antiqua,Palatino,Palatino Linotype,Palatino LT STD,Georgia,serif;
+        font-size: 9pt;
+        vertical-align: middle;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s19 {
+        text-align: right;
+        font-weight: bold;
+        color: #000000;
+        font-family: Book Antiqua,Palatino,Palatino Linotype,Palatino LT STD,Georgia,serif;
+        font-size: 9pt;
+        vertical-align: top;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s20 {
+        text-align: left;
+        color: #000000;
+        font-family: Book Antiqua,Palatino,Palatino Linotype,Palatino LT STD,Georgia,serif;
+        font-size: 9pt;
+        vertical-align: top;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s54 {
+        text-align: center;
+        font-style: italic;
+        color: #333f4f;
+        font-family: Book Antiqua,Palatino,Palatino Linotype,Palatino LT STD,Georgia,serif;
+        font-size: 9pt;
+        vertical-align: middle;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s7 {
+        text-align: left;
+        color: #000000;
+        font-family: Book Antiqua,Palatino,Palatino Linotype,Palatino LT STD,Georgia,serif;
+        font-size: 10pt;
+        vertical-align: bottom;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s3 {
+        text-align: left;
+        font-weight: bold;
+        color: #4472c4;
+        font-family: Book Antiqua,Palatino,Palatino Linotype,Palatino LT STD,Georgia,serif;
+        font-size: 22pt;
+        vertical-align: middle;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s8 {
+        text-align: left;
+        color: #434343;
+        font-family: Book Antiqua,Palatino,Palatino Linotype,Palatino LT STD,Georgia,serif;
+        font-size: 11pt;
+        vertical-align: middle;
+        white-space: normal;
+        overflow: hidden;
+        word-wrap: break-word;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s33 {
+        border-bottom: 1px SOLID #bfbfbf;
+        border-right: 1px SOLID #bfbfbf;
+        background-color: #f3f3f3;
+        text-align: left;
+        color: #000000;
+        font-family: Book Antiqua,Palatino,Palatino Linotype,Palatino LT STD,Georgia,serif;
+        font-size: 9pt;
+        vertical-align: middle;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s38 {
+        text-align: right;
+        font-weight: bold;
+        color: #333f4f;
+        font-family: Book Antiqua,Palatino,Palatino Linotype,Palatino LT STD,Georgia,serif;
+        font-size: 12pt;
+        vertical-align: bottom;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s50 {
+        text-align: left;
+        font-weight: bold;
+        color: #000000;
+        font-family: Book Antiqua,Palatino,Palatino Linotype,Palatino LT STD,Georgia,serif;
+        font-size: 9pt;
+        vertical-align: middle;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s12 {
+        text-align: left;
+        color: #000000;
+        font-family: 'Arial';
+        font-size: 10pt;
+        vertical-align: bottom;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s21 {
+        text-align: right;
+        font-style: italic;
+        color: #333f4f;
+        font-family: Book Antiqua,Palatino,Palatino Linotype,Palatino LT STD,Georgia,serif;
+        font-size: 9pt;
+        vertical-align: top;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s52 {
+        border-bottom: 1px SOLID #999999;
+        text-align: left;
+        font-weight: bold;
+        color: #000000;
+        font-family: Book Antiqua,Palatino,Palatino Linotype,Palatino LT STD,Georgia,serif;
+        font-size: 9pt;
+        vertical-align: middle;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s6 {
+        text-align: right;
+        font-weight: bold;
+        color: #666666;
+        font-family: Book Antiqua,Palatino,Palatino Linotype,Palatino LT STD,Georgia,serif;
+        font-size: 19pt;
+        vertical-align: middle;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s30 {
+        border: 1px SOLID;
+        text-align: center;
+        color: #000000;
+        font-family: Book Antiqua,Palatino,Palatino Linotype,Palatino LT STD,Georgia,serif;
+        font-size: 13pt;
+        vertical-align: middle;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s41 {
+        text-align: left;
+        color: #000000;
+        font-family: Book Antiqua,Palatino,Palatino Linotype,Palatino LT STD,Georgia,serif;
+        font-size: 10pt;
+        vertical-align: middle;
+        white-space: normal;
+        overflow: hidden;
+        word-wrap: break-word;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s43 {
+        border-left: none;
+        text-align: right;
+        font-weight: bold;
+        color: #333f4f;
+        font-family: Book Antiqua,Palatino,Palatino Linotype,Palatino LT STD,Georgia,serif;
+        font-size: 8pt;
+        vertical-align: middle;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s29 {
+        border-right: 1px SOLID #bfbfbf;
+        text-align: left;
+        color: #000000;
+        font-family: Book Antiqua,Palatino,Palatino Linotype,Palatino LT STD,Georgia,serif;
+        font-size: 10pt;
+        vertical-align: bottom;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s57 {
+        text-align: center;
+        color: #333f4f;
+        font-family: Book Antiqua,Palatino,Palatino Linotype,Palatino LT STD,Georgia,serif;
+        font-size: 10pt;
+        vertical-align: bottom;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s26 {
+        border-right: 1px SOLID #999999;
+        text-align: left;
+        color: #000000;
+        font-family: Book Antiqua,Palatino,Palatino Linotype,Palatino LT STD,Georgia,serif;
+        font-size: 10pt;
+        vertical-align: bottom;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s1 {
+        text-align: left;
+        color: #000000;
+        font-family: Book Antiqua,Palatino,Palatino Linotype,Palatino LT STD,Georgia,serif;
+        font-size: 12pt;
+        vertical-align: middle;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s34 {
+        border-bottom: 1px SOLID #bfbfbf;
+        border-right: 1px SOLID #bfbfbf;
+        background-color: #f3f3f3;
+        text-align: center;
+        color: #000000;
+        font-family: Book Antiqua,Palatino,Palatino Linotype,Palatino LT STD,Georgia,serif;
+        font-size: 9pt;
+        vertical-align: middle;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s39 {
+        text-align: right;
+        font-weight: bold;
+        color: #333f4f;
+        font-family: Book Antiqua,Palatino,Palatino Linotype,Palatino LT STD,Georgia,serif;
+        font-size: 8pt;
+        vertical-align: middle;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s24 {
+        border-bottom: 1px SOLID #999999;
+        text-align: left;
+        color: #000000;
+        font-family: Book Antiqua,Palatino,Palatino Linotype,Palatino LT STD,Georgia,serif;
+        font-size: 10pt;
+        vertical-align: middle;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s49 {
+        border-bottom: 1px SOLID #000000;
+        text-align: right;
+        font-weight: bold;
+        color: #000000;
+        font-family: Book Antiqua,Palatino,Palatino Linotype,Palatino LT STD,Georgia,serif;
+        font-size: 12pt;
+        vertical-align: middle;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s40 {
+        border-bottom: 1px SOLID #bfbfbf;
+        text-align: right;
+        color: #000000;
+        font-family: Book Antiqua,Palatino,Palatino Linotype,Palatino LT STD,Georgia,serif;
+        font-size: 9pt;
+        vertical-align: middle;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s37 {
+        text-align: left;
+        color: #000000;
+        font-family: Book Antiqua,Palatino,Palatino Linotype,Palatino LT STD,Georgia,serif;
+        font-size: 10pt;
+        vertical-align: middle;
+        white-space: normal;
+        overflow: hidden;
+        word-wrap: break-word;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s46 {
+        border-bottom: 1px SOLID #000000;
+        text-align: right;
+        color: #000000;
+        font-family: Book Antiqua,Palatino,Palatino Linotype,Palatino LT STD,Georgia,serif;
+        font-size: 9pt;
+        vertical-align: middle;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s18 {
+        text-align: left;
+        color: #000000;
+        font-family: Book Antiqua,Palatino,Palatino Linotype,Palatino LT STD,Georgia,serif;
+        font-size: 10pt;
+        vertical-align: middle;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s56 {
+        text-align: left;
+        color: #000000;
+        font-family: Book Antiqua,Palatino,Palatino Linotype,Palatino LT STD,Georgia,serif;
+        font-size: 12pt;
+        vertical-align: bottom;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s22 {
+        text-align: right;
+        color: #000000;
+        font-family: Book Antiqua,Palatino,Palatino Linotype,Palatino LT STD,Georgia,serif;
+        font-size: 9pt;
+        vertical-align: middle;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s53 {
+        text-align: left;
+        color: #333f4f;
+        font-family: Book Antiqua,Palatino,Palatino Linotype,Palatino LT STD,Georgia,serif;
+        font-size: 9pt;
+        vertical-align: middle;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s47 {
+        text-align: center;
+        color: #333f4f;
+        font-family: Book Antiqua,Palatino,Palatino Linotype,Palatino LT STD,Georgia,serif;
+        font-size: 18pt;
+        vertical-align: middle;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s15 {
+        border-bottom: 1px SOLID #bfbfbf;
+        text-align: left;
+        font-weight: bold;
+        color: #1f3864;
+        font-family: Book Antiqua,Palatino,Palatino Linotype,Palatino LT STD,Georgia,serif;
+        font-size: 9pt;
+        vertical-align: middle;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s17 {
+        text-align: left;
+        color: #000000;
+        font-family: Book Antiqua,Palatino,Palatino Linotype,Palatino LT STD,Georgia,serif;
+        font-size: 11pt;
+        vertical-align: middle;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s25 {
+        border-bottom: 1px SOLID #999999;
+    }
+
+    .ritz .waffle .s10 {
+        text-align: right;
+        color: #7f7f7f;
+        font-family: Book Antiqua,Palatino,Palatino Linotype,Palatino LT STD,Georgia,serif;
+        font-size: 18pt;
+        vertical-align: middle;
+        white-space: normal;
+        overflow: hidden;
+        word-wrap: break-word;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s23 {
+        text-align: left;
+        color: #1f3864;
+        font-family: Book Antiqua,Palatino,Palatino Linotype,Palatino LT STD,Georgia,serif;
+        font-size: 11pt;
+        vertical-align: middle;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s51 {
+        text-align: center;
+        color: #000000;
+        font-family: Book Antiqua,Palatino,Palatino Linotype,Palatino LT STD,Georgia,serif;
+        font-size: 12pt;
+        vertical-align: middle;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s45 {
+        border-bottom: 1px SOLID #000000;
+        text-align: right;
+        font-weight: bold;
+        color: #333f4f;
+        font-family: Book Antiqua,Palatino,Palatino Linotype,Palatino LT STD,Georgia,serif;
+        font-size: 8pt;
+        vertical-align: middle;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s42 {
+        border-right: none;
+        text-align: right;
+        font-weight: bold;
+        color: #333f4f;
+        font-family: Book Antiqua,Palatino,Palatino Linotype,Palatino LT STD,Georgia,serif;
+        font-size: 12pt;
+        vertical-align: bottom;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s13 {
+        text-align: center;
+        color: #ffffff;
+        font-family: Book Antiqua,Palatino,Palatino Linotype,Palatino LT STD,Georgia,serif;
+        font-size: 11pt;
+        vertical-align: middle;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s55 {
+        text-align: center;
+        color: #333f4f;
+        font-family: Book Antiqua,Palatino,Palatino Linotype,Palatino LT STD,Georgia,serif;
+        font-size: 10pt;
+        vertical-align: middle;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s16 {
+        text-align: right;
+        font-weight: bold;
+        color: #000000;
+        font-family: Book Antiqua,Palatino,Palatino Linotype,Palatino LT STD,Georgia,serif;
+        font-size: 9pt;
+        vertical-align: middle;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    table {
+        table-layout: fixed;
+    }
+
+    td {
+        word-wrap: break-word;
+    }
+
+    @@media print {
+        @@Page {
+            size: A4
+        }
+
+        tfoot {
+            position: fixed;
+            bottom: 0;
+        }
+    }
+</style>
+<div class="ritz grid-container" dir="ltr">
+    <table class="waffle no-grid" cellspacing="0" cellpadding="0">
+        <thead>
+            <tr>
+                <th width="20px"></th><!-- 1 -->
+                <th width="50px"></th><!-- 2 -->
+                <th width="50px"></th><!-- 3 -->
+                <th width="50px"></th><!-- 4 -->
+                <th width="50px"></th><!-- 5 -->
+                <th width="50px"></th><!-- 6 -->
+                <th width="50px"></th><!-- 7 -->
+                <th width="50px"></th><!-- 8 -->
+                <th width="50px"></th><!-- 9 -->
+                <th width="50px"></th><!-- 10 -->
+                <th width="50px"></th><!-- 11 -->
+                <th width="50px"></th><!-- 12 -->
+                <th width="50px"></th><!-- 13 -->
+                <th width="50px"></th><!-- 14 -->
+                <th width="50px"></th><!-- 15 -->
+                <th width="50px"></th><!-- 16 -->
+                <th width="50px"></th><!-- 17 -->
+                <th width="50px"></th><!-- 18 -->
+                <th width="50px"></th><!-- 19 -->
+                <th width="50px"></th><!-- 20 -->
+                <th width="50px"></th><!-- 21 -->
+            </tr>
+        </thead>
+        <tbody>
+            <tr style='height:18px;'>
+                <td colspan="3" style="text-align:left">
+                </td>
+                <td colspan="10" style="text-align:center;">
+                    <img width="150" height="75" src="~/assets/static/images/logo2.png" />
+                    @if (Model.JE.FirstOrDefault().Voucher_Type == "CPV")
+                    {
+                        <h3>Cash Payment Voucher</h3>
+                    }
+                    else if (Model.JE.FirstOrDefault().Voucher_Type == "CRV")
+                    {
+                        <h3>Cash Receipt Voucher</h3>
+                    }
+                    else if (Model.JE.FirstOrDefault().Voucher_Type == "BRV")
+                    {
+                        <h3>Bank Receipt Voucher</h3>
+                    }
+                    else if (Model.JE.FirstOrDefault().Voucher_Type == "BPV")
+                    {
+                        <h3>Bank Payment Voucher</h3>
+                    }
+                    else
+                    {
+                        <h3>Journal Voucher</h3>
+                    }
+                </td>
+                <td colspan="5" style="text-align:right">
+                </td>
+            </tr>
+            <tr style='height:18px;'>
+                <td class="s8" colspan="15"></td>
+                <td class="s8" colspan="2"><b>Date:</b></td>
+                <td class="s17" colspan="2"><b>@string.Format("{0:dd-MMM-yyyy}", Model.JE.FirstOrDefault().RecordedBy_Date)</b></td>
+            </tr>
+            <tr style='height:18px;'>
+                <td class="s8" colspan="15"></td>
+                <td class="s8" colspan="2"><b>@Model.JE.FirstOrDefault().Voucher_Type </b></td>
+                <td class="s17" colspan="2"><b>@Model.JE.FirstOrDefault().Voucher_No</b></td>
+            </tr>
+            @if (Model.JE.FirstOrDefault().Voucher_Type == "BRV" || Model.JE.FirstOrDefault().Voucher_Type == "BPV")
+            {
+                <tr style='height:18px;'>
+                    <td class="s8" colspan="15"></td>
+                    <td class="s8" colspan="2"><b>Instrument</b></td>
+                    <td class="s17" colspan="2"><b>@Model.JE.FirstOrDefault().Inst_No</b></td>
+                </tr>
+                <tr style='height:18px;'>
+                    <td class="s8" colspan="15"></td>
+                    <td class="s8" style="font-size:9pt" colspan="2"><b>Instrument Date</b></td>
+                    <td class="s17" colspan="2"><b>@string.Format("{0:dd-MMM-yyyy}", Model.JE.FirstOrDefault().Inst_Date)</b></td>
+                </tr>
+            }
+
+            <tr style='height:23px;'>
+                <td colspan="19"></td>
+            </tr>
+            <tr style='height:30px;'>
+                <td class="s27" colspan="2" style="font-size:12pt"><b>GL Code</b></td>
+                <td class="s27" colspan="2" style="font-size: 12pt"><b>GL Name</b></td>
+                <td class="s28" colspan="11" style="font-size: 12pt"><b>Description</b></td>
+                <td class="s28" colspan="2" style="font-size: 12pt"><b>Debit</b></td>
+                <td class="s28" colspan="2" style="font-size: 12pt"><b>Credit</b></td>
+            </tr>
+            @foreach (var item in Model.JE.OrderBy(x => x.Naration))
+            {
+                <tr style='height:30px;'>
+                    <td class="s30" colspan="2">
+                        @item.Head_Code
+                    </td>
+                    <td class="s30" colspan="2">
+                        @{
+                            var b = item.Head_Name.Split(' ');
+                            string b1 = "", b2 = "", b3 = "";
+                            for (int i = 0; i < b.Count(); i++)
+                            {
+                                if (i <= 3)
+                                {
+                                    b1 = b1 + " " + b[i];
+                                }
+                                else if (3 <= i && i <= 6)
+                                {
+                                    b2 = b2 + " " + b[i];
+                                }
+                                else if (6 <= i && i <= 10)
+                                {
+                                    b3 = b3 + " " + b[i];
+                                }
+                            }
+                            if (!string.IsNullOrEmpty(b1))
+                            {
+                                <span>@b1</span><br />
+                            }
+                            if (!string.IsNullOrEmpty(b2))
+                            {
+                                <span>@b2</span><br />
+                            }
+                            if (!string.IsNullOrEmpty(b3))
+                            {
+                                <span>@b3</span><br />
+                            }
+                        }
+                    </td>
+                    <td class="s30" colspan="11" style=" word-wrap: break-word">
+
+                        @{
+                            var res1 = item.Naration.Split(' ');
+                            string line1 = "", line2 = "", line3 = "", line4 = "", line5 = "";
+                            for (int i = 0; i < res1.Count(); i++)
+                            {
+                                if (i <= 10)
+                                {
+                                    line1 = line1 + " " + res1[i];
+                                }
+                                else if (10 <= i && i <= 20)
+                                {
+                                    line2 = line2 + " " + res1[i];
+                                }
+                                else if (20 <= i && i <= 30)
+                                {
+                                    line3 = line3 + " " + res1[i];
+                                }
+                                else if (30 <= i && i <= 40)
+                                {
+                                    line4 = line4 + " " + res1[i];
+                                }
+                                else if (40 <= i && i <= 50)
+                                {
+                                    line5 = line5 + " " + res1[i];
+                                }
+                            }
+                            if (!string.IsNullOrEmpty(line1))
+                            {
+                                <span>@line1</span><br />
+                            }
+                            if (!string.IsNullOrEmpty(line2))
+                            {
+                                <span>@line2</span><br />
+                            }
+                            if (!string.IsNullOrEmpty(line3))
+                            {
+                                <span>@line3</span><br />
+                            }
+                            if (!string.IsNullOrEmpty(line4))
+                            {
+                                <span>@line4</span><br />
+                            }
+                        }
+                    </td>
+                    @if (item.Debit > 0)
+                    {
+                        <td class="s30" colspan="2">@string.Format("{0:0,0.##}", item.Debit)</td>
+                    }
+                    else
+                    {
+                        <td class="s30" colspan="2">-</td>
+                    }
+                    @if (item.Credit > 0)
+                    {
+                        <td class="s30" colspan="2">@string.Format("{0:0,0.##}", item.Credit)</td>
+                    }
+                    else
+                    {
+                        <td class="s30" colspan="2">-</td>
+                    }
+                </tr>
+            }
+            <tr style='height:30px;'>
+                <td class="s30" colspan="2"></td>
+                <td class="s30" colspan="2"></td>
+                <td class="s30" colspan="11"><b>Total</b></td>
+                <td class="s30" colspan="2"><b>@string.Format("{0:0,0.##}", Model.JE.Sum(x => x.Debit))</b></td>
+                <td class="s30" colspan="2"><b>@string.Format("{0:0,0.##}", Model.JE.Sum(x => x.Credit))</b></td>
+            </tr>
+            @{
+                var amtinword = MeherEstateDevelopers.Models.GeneralMethods.NumberToWords(Convert.ToInt32(Model.JE.Sum(x => x.Debit)));
+            }
+            <tr style='height:37px;'>
+                <td class="s41" colspan="4"><b>Amount in Words: </b></td>
+                <td class="s48" colspan="15" style="text-align:left">@(amtinword) only/-</td>
+            </tr>
+
+            <tr style='height:18px;'>
+                <td colspan="21">&nbsp;</td>
+            </tr>
+            <tr style='height:18px;'>
+                <td colspan="21">&nbsp;</td>
+            </tr>
+
+            <tr style='height:37px;'>
+                <td class="s41" colspan="4"><b>Bill Vouchers</b></td>
+                <td class="s48" colspan="15" style="text-align:left"></td>
+            </tr>
+
+            @{
+                foreach (var item in Model.Previous_Vouchers)
+                {
+                    <tr style='height:20px;'>
+                        <td class="s30"></td>
+                        <td class="s30" colspan="4">@item.VoucherNo</td>
+                        <td class="s30" colspan="4">@string.Format("{0:dd-MMM-yyyy}", item.DateTime)</td>
+                        <td class="s30" colspan="4"><b>@string.Format("{0:n0}", item.Amount)</b></td>
+                        <td class="s30" colspan="3"><b></b></td>
+                        <td class="s30" colspan="3"><b></b></td>
+                    </tr>
+                }
+            }
+
+            <tr style='height:18px;'>
+                <td colspan="21">&nbsp;</td>
+            </tr>
+
+            <tr style='height:18px;'>
+                <td colspan="21">&nbsp;</td>
+            </tr>
+
+            <tr style='height:18px;'>
+                <td colspan="21">&nbsp;</td>
+            </tr>
+            @if (Model.PV != null)
+            {
+                <tr>
+                    <th></th>
+                    <th colspan="4" style="border-bottom:1px solid">Recorded By: @Model.PV.Pre_Name</th>
+                    <th></th>
+                    <th colspan="6" style="border-bottom: 1px solid">Supervised By: @Model.PV.Sup_Name</th>
+                    <th></th>
+                    <th colspan="5" style="border-bottom: 1px solid">Paid By: @Model.PV.Gen_Name</th>
+                    <th></th>
+                    <th colspan="5" style="border-bottom: 1px solid">Received By: @Model.PV.Name</th>
+                </tr>
+            }
+            else
+            {
+                <tr>
+                    <th></th>
+                    <th colspan="5" style="border-bottom:1px solid">Recorded By: @Model.JE.FirstOrDefault().RecordedBy_Name</th>
+                    <th></th>
+                    <th colspan="7" style="border-bottom: 1px solid">Supervised By: @Model.JE.FirstOrDefault().RecordedBy_Name</th>
+                    <th></th>
+                    <th colspan="6" style="border-bottom: 1px solid"></th>
+                </tr>
+            }
+
+        </tbody>
+    </table>
+</div> 

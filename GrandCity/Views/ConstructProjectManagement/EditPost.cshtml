@@ -1,0 +1,24 @@
+﻿@model MeherEstateDevelopers.Models.Discussion_Post
+<div class="row">
+    <input type="hidden" value="@Model.Id" id="post-id" />
+    <div class="col-md-12">
+        <div class="form pl-0 pr-0">
+            <div class="form-group">
+                <textarea class="form-control col-md-12" rows="5" id="post" name="Description"></textarea>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $('.modal-footer').append('<button class="btn btn-success" id="up-post" type="button">Update</button>');
+    $.when(
+        tinymce.remove('#post')
+    ).then(function (x) {
+        tinymce.init({
+            selector: '#post',
+        });
+
+        var newHTML = "@Html.Raw(Model.Post)"
+        tinymce.get('post').setContent(newHTML);
+    });
+</script>

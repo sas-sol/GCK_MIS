@@ -1,0 +1,102 @@
+﻿
+@model MeherEstateDevelopers.Models.Sp_Get_ServiceCharge_Bill_ById_Result
+
+<head>
+    <script>
+        var billDets = @Html.Raw(Json.Encode(Model));
+    </script>
+</head>
+<input type="hidden" value="@ViewBag.tp" class="waiver-tp" />
+<input type="hidden" value="@ViewBag.serTyp" class="service-tp" />
+<div class="col-md-12">
+    <table class="table table-borderless">
+        <thead>
+            <tr class="central-text-align">
+                <th>Amount</th>
+                <th>Arrears</th>
+                <th>Fine</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr class="central-text-align">
+                <td>@string.Format("{0:n2}", Model.Amount)</td>
+                <td>@Model.Arrears</td>
+                <td>@Model.Fine_Amount</td>
+                <td>@string.Format("{0:n2}", Model.Net_Total)</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="row central-text-align">
+    <div class="col-md-2">
+        <label>Amount To Waive</label>
+        <input type="number" class="form-control amt-fhjkds" />
+    </div>
+    <div class="col-md-9">
+        <label>Remarks:</label>
+        <textarea class="form-control rems-jhkl" rows="1" cols="7"></textarea>
+    </div>
+</div>
+<div class="col-md-12 central-text-align mt-md-3">
+    <button class="btn btn-primary waiver-sv-btn-asljkhg">Save</button>
+</div>
+
+<script>
+    //yahan pe save krna hai waiver
+    $('.waiver-sv-btn-asljkhg').click(function () {
+        let a = $('.waiver-tp').val();
+        let rems = $('.rems-jhkl').val();
+        let currAmt = parseFloat($('.amt-fhjkds').val());
+        if (currAmt < 0) {
+            alert('Cannot enter a negative waiver amount. Please check you input waiver amount again');
+            return;
+        }
+        if (a == 1) {
+            //fine waiver
+            if (currAmt > billDets.Fine_Amount) {
+                alert('Waiver amount cannot be greater than fine amount.');
+                return;
+            }
+        }
+        else if (a == 2) {
+            //bill waiver
+            if (currAmt > billDets.Amount) {
+                alert('Waiver amount cannot be greater than current bill amount');
+                return;
+            }
+        }
+        else if (a == 3) {
+            //arrears waiver
+            if (currAmt > billDets.Arrears) {
+                alert('Waiver amount cannot be greater than arrear amount.');
+                return;
+            }
+        }
+
+        //yahan pe ajax ki hit maar do
+        $.ajax({
+            type: "POST",
+            url: '/ServiceCharges/SaveMeterWaiverRequest/',
+            data: { plot: billDets.Plot_Id, remarks: rems, billType: 2, waiveType: a, amt: currAmt },
+            success: function (data) {
+                if (data) {
+                    alert('Waiver request has been submitted successfully');
+                    closeModal();
+                }
+                else {
+                    alert('Failed to forward request for this waiver. Please try again');
+                }
+            },
+            error: function (xmlhttprequest, textstatus, message) {
+                if (textstatus === "timeout") {
+                    alert("Request timeout. Internet connectivity issue.");
+                } else {
+                    alert(textstatus);
+                }
+            }
+        });
+    });
+</script>

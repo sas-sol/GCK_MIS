@@ -1,0 +1,47 @@
+﻿@{ if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+}
+<div class="row">
+    <div class="col-md-12">
+        <div class="bdrs-3 ov-h bgc-white p-10 bd">
+            <div class="form-row">
+                <h5>File Sale Report</h5>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-2">
+                    <label style="width:100%">Blocks</label>
+                    @Html.DropDownList("Blocks", null, "Choose..", new { @class = "form-control", required = "" })
+                </div>
+                <div class="form-group col-md-2">
+                    <label style="width:100%">Sector</label>
+                    <input type="text" id="sector" class="form-control" />
+                </div>
+                <div class="form-group col-md-2">
+                    <button class="btn btn-info sea-do-filesale-rprt" style="margin-top:29px">Search</button>
+                </div>
+            </div>
+            <div id="report">
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+ 
+    $('.sea-do-filesale-rprt').click(function () {
+        debugger
+        SASLoad($("#report"));
+        var block = $("#Blocks").val();
+        var sector = $("#sector").val();
+      
+        $("#report").load("/Reports/SAFileSalesReport_Search/", { blockId: block, Sector: sector }, function () {
+            SASUnLoad($("#report"));
+        });
+    });
+</script>

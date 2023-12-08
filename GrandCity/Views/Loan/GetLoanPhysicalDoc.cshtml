@@ -1,0 +1,409 @@
+﻿@model MeherEstateDevelopers.Models.LoanAdvancePhysicalDocModel
+
+@{
+    Layout = null;
+}
+
+@if (Model.LoanData.Type.Contains("Advance"))
+{
+
+    <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+    <html>
+    <head>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+        <title></title>
+        <style type="text/css" media="all">
+
+            body {
+                -webkit-print-color-adjust: exact;
+                margin: 0;
+                width: 210mm;
+                height: 297mm;
+            }
+
+            .secA {
+                background-image: url('../../assets/static/images/AdvanceForm/Section A.jpg');
+                height: 250px;
+                background-size: 100%;
+                height: 50%;
+                position: relative;
+            }
+
+            .tblSecA_FormDets {
+                position: absolute;
+                top: 6.5%;
+                left: 3%;
+            }
+
+            .matchFormFont {
+                color: #020202;
+                font-family: Calibri;
+                font-weight: bolder;
+            }
+
+            .secC {
+                background-image: url('../../assets/static/images/AdvanceForm/Section C.jpg');
+                height: 360px;
+                background-size: 100%;
+                position: relative;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="secA">
+            <table class="tblSecA_FormDets">
+                <tbody>
+                    <tr>
+                        <td colspan="2"><b class="matchFormFont">SAG-HR-Forms-@Model.LoanData.PhysicalDocNum</b></td>
+                        <td>&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td colspan="3" align="right" valign="top"> <b class="matchFormFont">&nbsp;@DateTime.Now.ToShortDateString()</b></td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td align="left" valign="top"> <b class="matchFormFont">&nbsp;1</b></td>
+                        <td>&nbsp;</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <table style="margin-top:22%;margin-right:7%;font-family:Calibri;" align="right">
+                <tbody>
+                    <tr>
+                        <td colspan="2"><b class="matchFormFont">@DateTime.Now.ToShortDateString()</b></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <table style="position:absolute;top:49%;left:10%;width:100%;">
+                <tbody>
+                    <tr>
+                        <td width="350">@Model.EmployeeDetails.Name @Model.EmployeeDetails.Father_Name</td>
+                        <td width="50">&nbsp;</td>
+                        <td width="200">@Model.EmployeeDetails.Employee_Code</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <table style="position:absolute;top:56%;left:10%;width:100%;font-family:Calibri;">
+                <tbody>
+                    <tr>
+                        <td width="10">&nbsp;</td>
+                        <td width="100">@string.Join(" , ", Model.Designations.Select(x => x.Designation))</td>
+                        <td width="50">&nbsp;</td>
+                        <td width="90">@string.Join(" , ", Model.Designations.Select(x => x.DepName))</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <table style="position:absolute;top:62.5%;left:10%;width:100%;font-family:Calibri;">
+                <tbody>
+                    <tr>
+                        <td width="80">@Model.EmployeeDetails.Date_Of_Joining.Value.ToShortDateString()</td>
+                        <td width="5">@string.Format("{0:n0}", Model.EmployeeDetails.Basic_Salary)</td>
+                        <td width="20">&nbsp;</td>
+                        <td width="50">@string.Format("{0:n0}", Model.LoanData.Amount)</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <table style="position:absolute;top:76.5%;left:10%;width:100%;font-family:Calibri;">
+                <tbody>
+                    <tr>
+                        <td>@Model.LoanData.Reason</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <table style="position:absolute;top:88.5%;left:16%;width:100%;font-family:Calibri;">
+                <tbody>
+                    <tr>
+                        <td>@ViewBag.RequestedBy</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="secB" style="width:100%;">
+            <table style="width:95%;margin-left:2.5%; font-family:Calibri;font-size:14px;" cellspacing="0">
+                <thead style="background-color:#363636;color:white;">
+                    <tr style="height:27px;">
+                        <th colspan="2">Section B</th>
+                        <td colspan="3">(Previous Loans &amp; Advances)</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                    </tr>
+                    <tr style="height:27px;text-align:center;">
+                        <td>Sr.</td>
+                        <td>Amount</td>
+                        <td>Date</td>
+                        <td>Reason</td>
+                        <td>Installments</td>
+                        <td>Paid</td>
+                        <td>Remaining</td>
+                    </tr>
+                </thead>
+
+                <tbody style="line-height:2;">
+                    @{ int cnt = 1;}
+                    @foreach (var v in Model.PreviousLoanRequests.OrderByDescending(x => x.CreatedAt))
+                    {
+                        <tr style="text-align:center;">
+                            <td>@(cnt++).</td>
+                            <td>@string.Format("{0:n0}", v.Amount)</td>
+                            <td>@v.CreatedAt.Value.ToShortDateString()</td>
+                            <td>@v.Reason</td>
+                            <td>@Model.PreviousLoanInstallments.Where(x => x.Loan_Id == v.Id && x.Status == "Paid").Count() paid out of @Model.PreviousLoanInstallments.Where(x => x.Loan_Id == v.Id).Count()</td>
+                            <td>@string.Format("{0:n0}", Model.PreviousLoanInstallments.Where(x => x.Loan_Id == v.Id && x.Status == "Paid").Sum(x => x.Loan_Amt))</td>
+                            <td>@string.Format("{0:n0}", Model.PreviousLoanInstallments.Where(x => x.Loan_Id == v.Id).Sum(x => x.Loan_Amt) - Model.PreviousLoanInstallments.Where(x => x.Loan_Id == v.Id && x.Status == "Paid").Sum(x => x.Loan_Amt))</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <div class="secC">
+
+        </div>
+
+    </body>
+</html>
+}
+
+else
+{
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title></title>
+    <style type="text/css" media="all">
+
+        body {
+            -webkit-print-color-adjust: exact;
+            margin: 0;
+            width: 210mm;
+            /*height: 297mm;*/
+        }
+
+        .secA {
+            background-image: url('../../assets/static/images/LoanForm/Section A.jpg');
+            background-size: 100%;
+            height: 62%;
+            position: relative;
+            background-repeat:no-repeat;
+        }
+
+        .tblSecA_FormDets {
+            position: absolute;
+            top: 7.5%;
+            left: 3%;
+        }
+
+        .matchFormFont {
+            color: #020202;
+            font-family: Calibri;
+            font-weight: bolder;
+        }
+
+        .secC {
+            background-image: url('../../assets/static/images/LoanForm/Section C.jpg');
+            height: 200px;
+            background-size: 100%;
+            position: relative;
+        }
+
+        .secD {
+            background-image: url('../../assets/static/images/LoanForm/Section D.jpg');
+            height: 435px;
+            background-size: 100%;
+            position: relative;
+        }
+
+        @@media print{
+            body {
+                -webkit-print-color-adjust: exact;
+                margin: 0;
+                width: 210mm;
+                /*height: 297mm;*/
+            }
+
+            .secA {
+                background-image: url('../../assets/static/images/LoanForm/Section A.jpg');
+                background-size: 100%;
+                height: 33%;
+                position: relative;
+                background-repeat: no-repeat;
+            }
+
+            .tblSecA_FormDets {
+                position: absolute;
+                top: 7.5%;
+                left: 3%;
+            }
+
+            .matchFormFont {
+                color: #020202;
+                font-family: Calibri;
+                font-weight: bolder;
+            }
+
+            .secC {
+                background-image: url('../../assets/static/images/LoanForm/Section C.jpg');
+                height: 200px;
+                background-size: 100%;
+                position: relative;
+            }
+
+            .secD {
+                background-image: url('../../assets/static/images/LoanForm/Section D.jpg');
+                height: 435px;
+                background-size: 100%;
+                position: relative;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="secA">
+        <table class="tblSecA_FormDets">
+            <tbody>
+                <tr>
+                    <td colspan="2"><b class="matchFormFont">SAG-HR-Forms-@Model.LoanData.PhysicalDocNum</b></td>
+                    <td>&nbsp;</td>
+                </tr>
+                <tr>
+                    <td colspan="3" align="right" valign="top"> <b class="matchFormFont">&nbsp;@DateTime.Now.ToShortDateString()</b></td>
+                </tr>
+                <tr>
+                    <td>&nbsp;</td>
+                    <td align="left" valign="top"> <b class="matchFormFont">&nbsp;1</b></td>
+                    <td>&nbsp;</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <table style="margin-top:22%;margin-right:7%;font-family:Calibri;" align="right">
+            <tbody>
+                <tr>
+                    <td colspan="2"><b class="matchFormFont">@DateTime.Now.ToShortDateString()</b></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <table style="position:absolute;top:60%;left:10%;width:100%;">
+            <tbody>
+                <tr>
+                    <td width="350">@Model.EmployeeDetails.Name @Model.EmployeeDetails.Father_Name</td>
+                    <td width="50">&nbsp;</td>
+                    <td width="200">@Model.EmployeeDetails.Employee_Code</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <table style="position:absolute;top:68%;left:10%;width:100%;font-family:Calibri;">
+            <tbody>
+                <tr>
+                    <td width="10">&nbsp;</td>
+                    <td width="100">@string.Join(" , ", Model.Designations.Select(x => x.Designation))</td>
+                    <td width="50">&nbsp;</td>
+                    <td width="90">@string.Join(" , ", Model.Designations.Select(x => x.DepName))</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <table style="position:absolute;top:76.5%;left:10%;width:100%;font-family:Calibri;">
+            <tbody>
+                <tr>
+                    <td width="80">@Model.EmployeeDetails.Date_Of_Joining.Value.ToShortDateString()</td>
+                    <td width="5">@string.Format("{0:n0}", Model.EmployeeDetails.Basic_Salary)</td>
+                    <td width="20">&nbsp;</td>
+                    <td width="50">@string.Format("{0:n0}", Model.LoanData.Amount)</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <table style="position:absolute;top:85.5%;left:10%;width:100%;font-family:Calibri;">
+            <tbody>
+                <tr>
+                    <td>@Model.LoanData.Reason</td>
+                </tr>
+            </tbody>
+        </table>
+
+        @*<table style="position:absolute;top:88.5%;left:16%;width:100%;font-family:Calibri;">
+            <tbody>
+                <tr>
+                    <td>@Model.LoanData.Employee_Name</td>
+                </tr>
+            </tbody>
+        </table>*@
+    </div>
+
+    <div class="secB" style="width:100%;">
+        <table style="width:95%;margin-left:2.5%; font-family:Calibri;font-size:14px;" cellspacing="0">
+            <thead style="background-color:#363636;color:white;">
+                <tr style="height:27px;">
+                    <th colspan="2">Section B</th>
+                    <td colspan="3">(Previous Loans &amp; Advances)</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                </tr>
+                <tr style="height:27px;text-align:center;">
+                    <td>Sr.</td>
+                    <td>Amount</td>
+                    <td>Date</td>
+                    <td>Reason</td>
+                    <td>Installments</td>
+                    <td>Paid</td>
+                    <td>Remaining</td>
+                </tr>
+            </thead>
+
+            <tbody style="line-height:2;">
+                @{ int cnt = 1;}
+                @foreach (var v in Model.PreviousLoanRequests.OrderByDescending(x => x.CreatedAt))
+                {
+                    <tr style="text-align:center;">
+                        <td>@(cnt++).</td>
+                        <td>@string.Format("{0:n0}", v.Amount)</td>
+                        <td>@v.CreatedAt.Value.ToShortDateString()</td>
+                        <td>@v.Reason</td>
+                        <td>@Model.PreviousLoanInstallments.Where(x => x.Loan_Id == v.Id && x.Status == "Paid").Count() paid out of @Model.PreviousLoanInstallments.Where(x => x.Loan_Id == v.Id).Count()</td>
+                        <td>@string.Format("{0:n0}", Model.PreviousLoanInstallments.Where(x => x.Loan_Id == v.Id && x.Status == "Paid").Sum(x => x.Loan_Amt))</td>
+                        <td>@string.Format("{0:n0}", Model.PreviousLoanInstallments.Where(x => x.Loan_Id == v.Id).Sum(x => x.Loan_Amt) - Model.PreviousLoanInstallments.Where(x => x.Loan_Id == v.Id && x.Status == "Paid").Sum(x => x.Loan_Amt))</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <div class="secC">
+        <table style="position:absolute;top: 30.5%;left: 33.5%;">
+            <tr>
+                <td><input type="checkbox" checked disabled /></td>
+            </tr>
+        </table>
+
+        <table style="position:absolute;top: 60.5%;left: 20.5%;">
+            <tr>
+                <td width="550">@Model.LoanData.Installments</td>
+                <td width="200">@string.Format("{0:n0}", Model.LoanData.Amount/Model.LoanData.Installments)</td>
+            </tr>
+        </table>
+
+        <table style="position:absolute;top: 80.5%;left: 19.5%;">
+            <tr>
+                <td>@ViewBag.RequestedBy</td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="secD">
+
+    </div>
+
+</body>
+</html>
+}

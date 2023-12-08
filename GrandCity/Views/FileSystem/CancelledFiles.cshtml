@@ -1,0 +1,94 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Sp_Get_TempCancel_File_Result>
+<h4>Cancelled Files</h4>
+<table class="table clickable-rows table-borderless" id="ovde" cellspacing="0" width="100%">
+    <thead class="thead-new-dark central-text-align">
+        <tr>
+            <th>Sr.</th>
+            <th>Name</th>
+            <th>File Number</th>
+            <th>Type</th>
+            <th>Postal Address</th>
+            <th>Plot Size</th>
+            <th>1st </th>
+            <th>2nd </th>
+            <th>3rd </th>
+            <th>Overdue Amount</th>
+            <th>Pending Installments</th>
+            <th>Mobile 1</th>
+            <th>Mobile 2</th>
+            <th>Verification</th>
+            @*<th></th>*@
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody class="central-text-align">
+        @{
+            if (Model.Any())
+            {
+                int dealercounter = 1;
+                foreach (var item in Model.OrderBy(x => x.Status))
+                {
+                    decimal? amt = -(item.Balance_Amount);
+
+                    <tr class="pointer file-folo-det" id="@item.FileFormNumber">
+                        <td>@dealercounter</td>
+                        <td class="name">@item.Name <i style="float:right; z-index:1111111" class="ti-info-alt cust-info" data-toggle="modal" data-target="#Modal"></i></td>
+                        <td class="file-num">@item.FileFormNumber</td>
+                        <td class="file-num">@item.Type</td>
+                        <td>@item.PostalAddress</td>
+                        <td>@item.Plot_Size</td>
+                        <td>@string.Format("{0:dd-MMM-yyyy}", item.First_Warning)</td>
+                        <td>@string.Format("{0:dd-MMM-yyyy}", item.Second_Warning)</td>
+                        <td>@string.Format("{0:dd-MMM-yyyy}", item.Third_Warning)</td>
+                        @if (item.Balance_Amount < 0)
+                        {
+                            <td>@string.Format("{0:n0}", amt)</td>
+                        }
+                        else
+                        {
+                            <td>0</td>
+                        }
+                        <td>@item.Installments</td>
+                        <td>@item.Mobile_1</td>
+                        <td>@item.Mobile_2</td>
+                        @if (item.Status == 1)
+                        {
+                            <td>
+                                <button class="btn btn-primary can-let-f" data-id="@item.Id" data-num="@item.FileFormNumber" data-ownid="@item.Owner_Id" style="font-size:13px;padding: 3px;">Cancellation Letter</button>
+                            </td>
+                        }
+                        else
+                        {
+                            <td>
+                                <a href="/FileSystem/CancellationLetter?Id=@item.Id" target="_blank" class="btn btn-dark" data-id="@item.Id" data-num="@item.FileFormNumber" data-ownid="@item.Owner_Id" style="font-size:13px;padding: 3px;color:white !important">View Cancellation Letter</a>
+                            </td>
+                        }
+                        @*<td><i data-ownid="@item.Owner_Id" data-num="@item.FileFormNumber" data-let="3" class="fas fa-backward war-step-f"></i></td>*@
+                        <td class="col-md-2">
+                            <div class="form-group ">
+                                <select class="form-control select4 cancel-war-com-file" name="Type" id="Type" data-ownid="@item.Owner_Id" data-id="@item.Id" data-let="1">
+                                    <option value="">Select One</option>
+                                    <option value="Qualify">Qualify</option>
+                                    <option value="First">First Warning</option>
+                                    <option value="Second">Second Warning</option>
+                                </select>
+                            </div>
+                        </td>
+                    </tr>
+                    dealercounter++;
+                }
+            }
+        }
+    </tbody>
+</table>
+<style>
+    table tr th, table tr td {
+        padding: 5px !important;
+        font-size: 12px;
+    }
+
+    .slider:before {
+        height: 13px !important;
+        width: 13px !important;
+    }
+</style>

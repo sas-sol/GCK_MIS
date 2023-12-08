@@ -1,0 +1,183 @@
+﻿
+    <div class="row mt-md-5">
+
+        <div class="col-md-1"></div>
+        <div class="col-md-1" style="margin:auto;">
+            <div class="usr-img-loc img-box" @*style="position: absolute;top: 25%;left: 5%;display:flex;"*@>
+                <img src="~/images/profile.jpg" class="img-style" />
+            </div>
+        </div>
+
+        <div class="col-md-3" style="margin:auto;">
+            <div style="margin-left:20px;">
+                <label style="font-size:18pt; color:white;">Hi,</label>
+                @{string nm = ViewBag.empName;
+                    string[] prsd = nm.Split(' ');
+                    string newName = string.Empty;
+                    if (prsd.Length > 1)
+                    {
+                        newName = string.Join(" ", prsd[0], prsd[1]);
+                    }
+                    else
+                    {
+                        newName = prsd[0];
+                    }
+                }
+                <label class="animate__animated animate__fadeInRight animate__delay-2s	animate__slower	3s" style="font-size:18pt;font-weight:600; white-space:nowrap; color:white;"><b>@newName</b></label>
+            </div>
+        </div>
+
+        <div class="col-md-3"></div>
+
+        <div class="col-md-4 weath-widgt-fsjklhd">
+        </div>
+
+        <div class="col-md-1"></div>
+        <div class="col-md-9 quote-widg-jklfasd">
+        </div>
+        <div class="col-md-2"></div>
+
+    </div>
+
+<style>
+    .img-box {
+        /*height: 80px;*/
+        width: 80px;
+    }
+
+    .img-style {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        max-height: 80px;
+    }
+</style>
+
+<script>
+    function LoadQuote() {
+        SASLoad($('.quote-widg-jklfasd'));
+        let dy = moment().dayOfYear();
+        const settings = {
+            "async": true,
+            "crossDomain": true,
+            "url": "https://type.fit/api/quotes",
+            "method": "GET"
+        }
+
+        $.ajax(settings).done(function (response) {
+            SASUnLoad($('.quote-widg-jklfasd'));
+            const data = JSON.parse(response);
+            if (data.length > dy) {
+                let __strct = `<label class="animate__animated animate__fadeInUp animate__slower 3s" style="color:white;font-size:20pt;font-style:italic;"><b>${data[dy].text}</b></label>`;
+                $('.quote-widg-jklfasd').append(__strct);
+            }
+            else {
+                let __strct = `<label class="animate__animated animate__fadeInUp animate__slower 3s" style="color:white;font-size:20pt;font-style:italic;"><b>I'm a great believer in luck, and I find the harder I work, the more I have of it.</b></label>`;
+                $('.quote-widg-jklfasd').append(__strct);
+            }
+        });
+    }
+
+    function showError() {
+        SASLoad($('.weath-widgt-fsjklhd'));
+        let settt = {
+            "async": true,
+            "crossDomain": true,
+            "url": "https://api.openweathermap.org/data/2.5/weather?lat=31.7250&lon=74.2677&appid=7e2b8642dd5f688d96537c9f78799138",
+            "method": "GET"
+        }
+
+        $.ajax(settt).done(function (response) {
+            SASUnLoad($('.weath-widgt-fsjklhd'));
+            let tempAct = parseInt((response.main.temp - 273.15));
+            let city = response.name;
+            if (city == 'Muridke') {
+                city = 'Kala Shah Kaku';
+            }
+
+            let __strc = `<div class="img-box animate__animated animate__flipInX animate__slower 3s" style="margin:auto;">
+                <img src="/assets/static/images/Weather Icons/sun-cloud.png" class="img-style" />
+                <div>
+                    <label style="color:white; font-size:12pt; white-space:nowrap; margin:0px;">${city}</label>
+                    <label style="color:white; font-size:36pt; white-space:nowrap; margin:0px;"><b>${tempAct} &#8451;</b></label>
+                </div>
+            </div>`;
+
+            $('.weath-widgt-fsjklhd').append(__strc);
+        });   
+    }
+
+    function showPosition(position) {
+        SASLoad($('.weath-widgt-fsjklhd'));
+        let settt = {
+            "async": true,
+            "crossDomain": true,
+            "url": "https://api.openweathermap.org/data/2.5/weather?lat=" + position.coords.latitude + "&lon=" + position.coords.longitude+"&appid=7e2b8642dd5f688d96537c9f78799138",
+            "method": "GET"
+        }
+
+        $.ajax(settt).done(function (response) {
+            SASUnLoad($('.weath-widgt-fsjklhd'));
+            let tempAct = parseInt((response.main.temp - 273.15));
+            let city = response.name;
+            if (city == 'Muridke') {
+                city = 'Kala Shah Kaku';
+            }
+
+            let __strc = `<div class="img-box animate__animated animate__flipInX animate__slower 3s" style="margin:auto;">
+                <img src="/assets/static/images/Weather Icons/sun-cloud.png" class="img-style" />
+                <div>
+                    <label style="color:white; font-size:12pt; white-space:nowrap; margin:0px;">${city}</label>
+                    <label style="color:white; font-size:36pt; white-space:nowrap; margin:0px;"><b>${tempAct} &#8451;</b></label>
+                </div>
+            </div>`;
+
+            $('.weath-widgt-fsjklhd').append(__strc);
+        }); 
+    }
+
+    function LoadWeather() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(showPosition, showError);
+        } else {
+            SASLoad($('.weath-widgt-fsjklhd'));
+            let settt = {
+                "async": true,
+                "crossDomain": true,
+                "url": "https://api.openweathermap.org/data/2.5/weather?lat=31.7250&lon=74.2677&appid=7e2b8642dd5f688d96537c9f78799138",
+                "method": "GET"
+            }
+
+            $.ajax(settt).done(function (response) {
+                SASUnLoad($('.weath-widgt-fsjklhd'));
+                let tempAct = parseInt((response.main.temp - 273.15));
+                let city = response.name;
+                if (city == 'Muridke') {
+                    city = 'Kala Shah Kaku';
+                }
+
+                let __strc = `<div class="img-box animate__animated animate__flipInX animate__slower 3s" style="margin:auto;">
+                <img src="/assets/static/images/Weather Icons/sun-cloud.png" class="img-style" />
+                <div>
+                    <label style="color:white; font-size:12pt; white-space:nowrap; margin:0px;">${city}</label>
+                    <label style="color:white; font-size:36pt; white-space:nowrap; margin:0px;"><b>${tempAct} &#8451;</b></label>
+                </div>
+            </div>`;
+
+                $('.weath-widgt-fsjklhd').append(__strc);
+            });   
+        }
+    }
+
+    $(document).ready(function () {
+
+        const welcomeLoader = new Promise(function (resolve, reject) {
+            setTimeout(() => resolve(1), 1000);
+        }).then(function (result) {
+            LoadQuote();
+        }).then(function () {
+            LoadWeather();
+        });
+
+    });
+</script>

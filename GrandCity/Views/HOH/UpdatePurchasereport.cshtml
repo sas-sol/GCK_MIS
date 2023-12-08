@@ -1,0 +1,30 @@
+﻿@model MeherEstateDevelopers.Models.HOH_Purchases
+
+
+<input type="text" hidden id="ShopID" class="form-control" value="@ViewBag.ShopID" />
+<div class="row">
+    <div class="col-md-12">
+        <h2>House of Heritage Purchase Report</h2>
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label>Qty</label>
+                <input type="number" id="Qty" value="@Model.Qty" class="form-control" />
+            </div>
+            <div class="form-group col-md-2">
+                <label>Rate</label>
+                <input type="number" id="Rate" value="@Model.Rate" class="form-control" />
+            </div>
+            <div class="form-group col-md-4">
+                <label>Remarks</label>
+                <input type="text" id="Remarks" value="@Model.Remarks" class="form-control" />
+            </div>
+            <input type="text" id="DateTime" hidden value="@Model.DateTime" class="form-control" />
+            <input type="text" id="Item_Id" hidden value="@Model.Item_Id" class="form-control" />
+            <input type="text" id="Group_Id" hidden value="@Model.Group_Id" class="form-control" />
+
+        </div>
+    </div>
+</div>
+<script>
+    $('.modal-footer').append('<button class="btn btn-info up-Purchase-hoh" type="submit" id="@Model.Id" >Update</button>');
+</script>

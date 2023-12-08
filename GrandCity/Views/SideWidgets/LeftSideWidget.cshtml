@@ -1,0 +1,173 @@
+﻿<div class="sidebar">
+    <div class="sidebar-inner" style="background-color: #FDDC5C; box-shadow: 20px 0px 5px rgba(0, 0, 0, 0.5); ">
+        @*#9ED1CA;*@
+        <div class="sidebar-logo">
+            <div class="peers ai-c fxw-nw">
+                <div class="peer peer-greed">
+                    <a class="sidebar-link td-n" href="/Home/Index">
+                        <div class="peers ai-c fxw-nw">
+                            <div class="peer">
+                                <div class="logo" style="padding:20px 10px 10px 10px">
+                                    <img style="width: 100%; height: 50px" src="~/assets/static/images/logo2.png" alt="">
+                                </div>
+                            </div>
+                            <div class="peer peer-greed">
+                                <h5 class="lh-1 mB-0 logo-text">Grand City</h5>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="peer">
+                    <div class="mobile-toggle sidebar-toggle">
+                        <a href="javascript:void(0);" class="td-n"><i class="ti-arrow-circle-left"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <ul class="sidebar-menu scrollable pos-r">
+            @if (User.IsInRole("Dashboard_Auth"))
+            {
+                <li class="nav-item mT-30 active">
+                    <a class="sidebar-link" href="/Home/Index" default>
+                        <span class="icon-holder"><i class="c-blue-500 ti-home"></i> </span><span class="title" style="color: black !important;">Dashboard</span>
+                    </a>
+                </li>
+            }
+            @if (User.IsInRole("Roles_Res_Auth"))
+            {
+                <li class="nav-item dropdown">
+                    <a class="dropdown-toggle dash-tile" href="javascript:void(0);">
+                        <span class="icon-holder">
+                            <i class="c-red-500 ti-agenda"></i>
+                        </span>
+                        <span class="title" style="color: black !important;">Roles & Responsibilities</span>
+                        <span class="arrow">
+                            <i class="ti-angle-right"></i>
+                        </span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a class='sidebar-link get-link' data-link="/RolesAndResponsibilities/CreateRoles/" href="javascript:void(0);" style="color: black !important;">Roles</a>
+                        </li>
+                        <li>
+                            <a class='sidebar-link get-link' data-link="/RolesAndResponsibilities/AssignRoles/" href="javascript:void(0);" style="color: black !important;">Responsibilities</a>
+                        </li>
+                    </ul>
+                </li>
+            }
+            @if (User.IsInRole("RE_Config_Auth"))
+            {
+                <li class="nav-item dropdown">
+                    <a class="dropdown-toggle dash-tile" href="javascript:void(0);">
+                        <span class="icon-holder">
+                            <i class="c-red-500 ti-home"></i>
+                        </span>
+                        <span class="title" style="color: black !important;">Real Estate Configuration</span>
+                        <span class="arrow">
+                            <i class="ti-angle-right"></i>
+                        </span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a class='sidebar-link get-link' data-link="/RealEstateProjects/ProjectConfiguration/" href="javascript:void(0);" style="color: black !important;">Projects Configuration </a>
+                        </li>
+                        <li>
+                            <a class='sidebar-link get-link' data-link="/Plots/PlotsModuleConfiguration/" href="javascript:void(0);" style="color: black !important;">Transfer </a>
+                        </li>
+                    </ul>
+                </li>
+            }
+            @if (User.IsInRole("Dealership_Auth"))
+            {
+                <li class="nav-item dropdown">
+                    <a class="dropdown-toggle dash-tile" href="javascript:void(0);" data-dash="dealer">
+                        <span class="icon-holder">
+                            <i class="c-red-500 ti-id-badge"></i>
+                        </span>
+                        <span class="title" style="color: black !important;" style="color: black !important;">Dealership Management</span>
+                        <span class="arrow">
+                            <i class="ti-angle-right"></i>
+                        </span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a class='sidebar-link get-link' data-link="/Dealership/DealershipRegisteration/" href="javascript:void(0);" style="color: black !important;">Registeration</a>
+                        </li>
+                    </ul>
+                </li>
+            }
+            @if (User.IsInRole("Cash_Counter_Auth"))
+            {
+                <li class="nav-item dropdown">
+                    <a class="dropdown-toggle dash-tile" href="javascript:void(0);" data-dash="cash counter">
+                        <span class="icon-holder">
+                            <i class="c-blue-500 ti-user"></i>
+                        </span>
+                        <span class="title" style="color: black !important;">Cash Counter</span>
+                    </a>
+                </li>
+            }
+            @if (User.IsInRole("File_Plot_Auth"))
+            {
+                <li class="nav-item dropdown">
+                    <a class="dropdown-toggle dash-tile" href="javascript:void(0);" data-dash="files Plots">
+                        <span class="icon-holder">
+                            <i class="c-blue-500 ti-file"></i>
+                        </span>
+                        <span class="title" style="color: black !important;">Files Plots</span>
+                    </a>
+                </li>
+            }
+            @if (User.IsInRole("Ballot_Auth"))
+            {
+                <li class="nav-item dropdown">
+                    <a class="dropdown-toggle dash-tile" href="javascript:void(0);" data-dash="ballot">
+                        <span class="icon-holder">
+                            <i class="c-blue-500 ti-file"></i>
+                        </span>
+                        <span class="title" style="color: black !important;">Balloting</span>
+                    </a>
+                </li>
+            }
+            @*<li class="nav-item dropdown">
+            <a class="dropdown-toggle dash-tile" href="javascript:void(0);" data-dash="accounts">
+                <span class="icon-holder">
+                    <i class="c-teal-500 ti-view-list-alt"></i>
+                </span>
+                <span class="title" style="color: black !important;">Accounts</span>
+            </a>
+        </li>*@
+        <li class="nav-item dropdown">
+            <a class="dropdown-toggle dash-tile" href="javascript:void(0);" data-dash="tickets">
+                <span class="icon-holder">
+                    <i class="c-pink-500 ti-ticket"></i>
+                </span>
+                <span class="title" style="color: black !important;">Tickets</span>
+            </a>
+        </li>
+            @if (User.IsInRole("Audit_Auth"))
+            {
+                <li class="nav-item dropdown">
+                    <a class="dropdown-toggle dash-tile" href="javascript:void(0);" data-dash="audit">
+                        <span class="icon-holder">
+                            <i class="c-pink-500 ti-user"></i>
+                        </span>
+                        <span class="title" style="color: black !important;">Audit</span>
+                    </a>
+                </li>
+            }
+            @*asdf*@
+            @if (User.IsInRole("Reports_Auth"))
+            {
+                <li class="nav-item dropdown">
+                    <a class="dropdown-toggle dash-tile" href="javascript:void(0);" data-dash="reports">
+                        <span class="icon-holder">
+                            <i class="c-blue-500 ti-user"></i>
+                        </span>
+                        <span class="title" style="color: black !important;">Reports</span>
+                    </a>
+                </li>
+            }
+            </ul>
+    </div>
+</div>

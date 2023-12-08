@@ -1,0 +1,29 @@
+﻿@model MeherEstateDevelopers.Models.Sp_Get_Deal_Parameter_Result
+<div class="form-row">
+    <div class="col-md-8">
+        <div class="row">
+            <h3 class="del-nam">@Model.Dealer_Name</h3>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <h6>Update Deal</h6>
+    <table class="table table-striped table-bordered" cellspacing="0" width="100%">
+        <thead>
+            <tr>
+                <th>Total Amount</th>
+                <th>Advance</th>
+                <th>Rebate</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><input type="text" value="@string.Format("{0:n0}", Model.Deal_Total_Amount)" class="form-control" id="deal_amt" style="width:250px;" /></td>
+                <td><input type="text" value="@Model.Advance" class="form-control" style="width:80px;" id="advance" /></td>
+                <td><input type="text" value="@Model.Rebate" class="form-control" style="width:80px;" id="rebate" /></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<button type="button" class="btn btn-info pointer" value="@Model.Id" id="up-deal" style="float:right">Update</button>

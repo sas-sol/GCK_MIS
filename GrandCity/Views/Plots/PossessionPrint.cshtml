@@ -1,0 +1,433 @@
+﻿@model MeherEstateDevelopers.Models.LatestPlotDetailData
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <style>
+        th {
+            border: 1px solid black;
+            border-collapse: collapse;
+            border-spacing: 0px;
+            font-family: Arial;
+        }
+
+        body {
+            font-family: Roboto,-apple-system,system-ui,BlinkMacSystemFont,Segoe UI,Oxygen,Ubuntu,Cantarell,Fira Sans,Droid Sans,Helvetica Neue,Arial,sans-serif;
+        }
+
+        @@page {
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+
+        @@media all {
+            body {
+                -webkit-print-color-adjust: exact;
+            }
+
+            .watermark {
+                background-image: url(/images/watermark.jpg);
+                background-repeat: no-repeat;
+                background-size: 100%;
+                background-position: 50% 50%;
+                width: 1000px;
+                position: absolute;
+                height: 800px;
+                opacity: 0.1;
+                margin-top: 32%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="watermark"></div>
+    <table cellspacing="0" border="0" style="width:1000px">
+        <tr>
+            <td width="200px" align="center" valign=bottom style="font-weight:bold"><img src="~/assets/static/images/sag scheme logo.jpg" width=160 height=110></td>
+            <td width="650px" align="right" valign="top" style="font-weight:bold">
+                <table style="margin-top:1px;font-size:20px">
+                    <tbody>
+                        <tr><td align="right" valign="top">@string.Format("{0:MMMM dd, yyyy}", DateTime.Now) </td></tr>
+                    </tbody>
+                </table>
+            </td>
+            @{
+                string img = "";
+                string plt = Model.PlotData.Plot_No.Replace(" ", "_");
+                var name = Model.PlotOwners.OrderBy(x=> x.Ownership_DateTime).Select(x => x.Name).FirstOrDefault();
+                img = Model.PlotData.Phase_Name + "_" + Model.PlotData.Plot_No + "_" + name + ".png";
+            }
+            <td width="150px" align="center" valign=bottom style="font-weight:bold"><img src="~/Repository/QR Codes/@img" width=120 height=125></td>
+        </tr>
+    </table>
+    <table cellspacing="0" border="0" style="width:1000px">
+        <tr style="background-color: red;color: white;">
+            <td width="1000px" align="center" style="padding:11px" valign=bottom><font size="6"><b>POSSESSION LETTER</b></font></td>
+        </tr>
+    </table>
+    <table cellspacing="0" border="0" style="width:1000px;font-size: 21px;margin-top: 7px;">
+        <tr>
+            <td width="700px" valign="top">
+                <table cellspacing="0" border="0" style="width:1000px">
+                    <tr>
+                        <p>
+                            <b style="font-size:medium">Plot No</b>&nbsp;
+                            <u style="font-size:medium">@Model.PlotData.Plot_No (@Model.PlotData.Type)</u>
+                            <b style="font-size:medium">Block</b> &nbsp;
+                            <u style="font-size:medium">@Model.PlotData.Block_Name</u>  &nbsp;
+                            <u style="font-size:medium">@Model.PlotData.Phase_Name</u> &nbsp;
+                            <b style="font-size:medium">Size</b> &nbsp;
+                            <u style="font-size:medium">@Model.PlotData.Plot_Size</u> &nbsp;
+                        </p>
+                        <p>
+                            <b style="font-size:medium">Name</b>&nbsp;
+                            <u style="font-size:medium">@string.Join(",", Model.PlotOwners.Select(x => x.Name))</u>
+                            <b style="font-size:medium">Father/Husband Name</b> &nbsp;
+                            <u style="font-size:medium">@string.Join(",", Model.PlotOwners.Select(x => x.Father_Husband).Distinct())</u>
+                        </p>
+                        <p>
+                            <b style="font-size:medium">CNIC</b> &nbsp; <u style="font-size:medium">@string.Join(",", Model.PlotOwners.Select(x => x.CNIC_NICOP))</u>
+                        </p>
+                        @if (Model.PlotOwners.Count() == 1)
+                        {
+                            <p style="margin-top:-10%;margin-left:58%">
+                                <u style="font-size:medium">
+                                    <img style="border: 1px solid;padding: 5px;float:right;margin-top:-16%" src="~/Repository/CustomerImagesPlots/@Model.PlotOwners.ElementAt(0).Plot_Id/@Model.PlotOwners.ElementAt(0).Id/1.jpg" width=120 height=130>
+                                </u>
+                            </p>
+                        }
+                        else if (Model.PlotOwners.Count() == 2)
+                        {
+                            <p style="margin-top:-12%;margin-left: 72%;">
+                                <img style="border: 1px solid;padding: 5px;margin-top:-16%" src="~/Repository/CustomerImagesPlots/@Model.PlotOwners.ElementAt(0).Plot_Id/@Model.PlotOwners.ElementAt(0).Id/1.jpg" width=120 height=130>
+                                <img style="border: 1px solid;padding: 5px;margin-top:-16%" src="~/Repository/CustomerImagesPlots/@Model.PlotOwners.ElementAt(1).Plot_Id/@Model.PlotOwners.ElementAt(1).Id/1.jpg" width=120 height=130>
+                            </p>
+                        }
+                        else if (Model.PlotOwners.Count() == 3)
+                        {
+                            <p style="margin-top: -12%;margin-left:76%;">
+                                <img style="border: 1px solid;padding: 5px;margin-top:-16%" src="~/Repository/CustomerImagesPlots/@Model.PlotOwners.ElementAt(0).Plot_Id/@Model.PlotOwners.ElementAt(0).Id/1.jpg" width=105 height=120>
+                                <img style="border: 1px solid;padding: 5px;margin-top:-16%" src="~/Repository/CustomerImagesPlots/@Model.PlotOwners.ElementAt(1).Plot_Id/@Model.PlotOwners.ElementAt(1).Id/1.jpg" width=105 height=120>
+                                <img style="border: 1px solid;padding: 5px;margin-top: -43%;margin-left: -149%;" src="~/Repository/CustomerImagesPlots/@Model.PlotOwners.ElementAt(2).Plot_Id/@Model.PlotOwners.ElementAt(2).Id/1.jpg" width=105 height=120>
+                            </p>
+                        }
+                        else if (Model.PlotOwners.Count() == 4)
+                        {
+                            <p style="margin-top: -12%;margin-left:76%;">
+                                <img style="border: 1px solid;padding: 5px;margin-top:-16%" src="~/Repository/CustomerImagesPlots/@Model.PlotOwners.ElementAt(0).Plot_Id/@Model.PlotOwners.ElementAt(0).Id/1.jpg" width=105 height=120>
+                                <img style="border: 1px solid;padding: 5px;margin-top:-16%" src="~/Repository/CustomerImagesPlots/@Model.PlotOwners.ElementAt(1).Plot_Id/@Model.PlotOwners.ElementAt(1).Id/1.jpg" width=105 height=120>
+                                <img style="border: 1px solid;padding: 5px;margin-top: -43%;margin-left: -149%;" src="~/Repository/CustomerImagesPlots/@Model.PlotOwners.ElementAt(2).Plot_Id/@Model.PlotOwners.ElementAt(2).Id/1.jpg" width=105 height=120>
+                                <img style="border: 1px solid;padding: 5px;margin-top: -43%;margin-left: -95%;" src="~/Repository/CustomerImagesPlots/@Model.PlotOwners.ElementAt(3).Plot_Id/@Model.PlotOwners.ElementAt(3).Id/1.jpg" width=105 height=120>
+                            </p>
+                        }
+                    </tr>
+                </table>
+                <table>
+                    <tr>
+                        <td width="1000px" valign="top">
+                            <p style="line-height:10px">
+                                <span style="font-size:medium">Possession is taken over as under.<br /></span>
+                            </p>
+                        </td>
+                    </tr>
+                </table>
+                @{string f = ""; }
+                <table style="margin-top:20px" width="58%">
+                    <tbody>
+                        <tr>
+                            <th style="width: 50%">
+                                <label style="font-size:small">Positions</label>
+                            </th>
+                            <th style="width: 50%">
+                                <label style="font-size:small">Bounded Plots</label>
+                            </th>
+                        </tr>
+                        @if (Model.Plots.North != null && Model.Plots.North != Convert.ToDecimal(0.00))
+                        {
+                            <tr>
+                                <th style="width: 50%">
+                                    @if (Model.Plots.North != null)
+                                    {
+                                        if (Model.Plots.Front == "North")
+                                        {
+                                            f = "(Front)";
+                                        }
+                                        <label class="" style="font-size:small"> North @f: @Model.Plots.North RFt   </label>
+
+                                        f = "";
+                                    }
+                                </th>
+                                <th style="width: 50%">
+                                    @if (Model.Plots.North != null)
+                                    {
+                                        var a = string.Join(" , ", Model.PlotBounding.Where(i => i.Position == "North").Select(x => x.Bonded_Plot_Number + " - " + x.Block_Name));
+
+                                        <lable style="font-size:small">@a</lable>
+                                        f = "";
+                                    }
+                                </th>
+                            </tr>
+                        }
+                        @if (Model.Plots.East != null && Model.Plots.East != Convert.ToDecimal(0.00))
+                        {
+                            <tr>
+                                <th style="width: 50%">
+                                    @if (Model.Plots.East != null)
+                                    {
+                                        if (Model.Plots.Front == "East")
+                                        {
+                                            f = "(Front)";
+                                        }
+                                        <label class="" style="font-size:small"> East @f: @Model.Plots.East RFt   </label>
+
+                                        f = "";
+                                    }
+                                </th>
+                                <th style="width: 50%">
+                                    @if (Model.Plots.East != null)
+                                    {
+                                        var a = string.Join(" , ", Model.PlotBounding.Where(i => i.Position == "East").Select(x => x.Bonded_Plot_Number + " - " + x.Block_Name));
+
+                                        <lable style="font-size:small">@a</lable>
+                                        f = "";
+                                    }
+                                </th>
+                            </tr>
+                        }
+                        @if (Model.Plots.West != null && Model.Plots.West != Convert.ToDecimal(0.00))
+                        {
+                            <tr>
+                                <th style="width: 50%">
+                                    @if (Model.Plots.West != null)
+                                    {
+                                        if (Model.Plots.Front == "West")
+                                        {
+                                            f = "(Front)";
+                                        }
+                                        <label class="" style="font-size:small"> West @f: @Model.Plots.West RFt   </label>
+                                        f = "";
+                                    }
+                                </th>
+                                <th style="width: 50%">
+                                    @if (Model.Plots.West != null)
+                                    {
+                                        var a = string.Join(" , ", Model.PlotBounding.Where(i => i.Position == "West").Select(x => x.Bonded_Plot_Number + " - " + x.Block_Name));
+
+                                        <lable style="font-size:small">@a</lable>
+                                        f = "";
+                                    }
+                                </th>
+                            </tr>
+                        }
+                        @if (Model.Plots.South != null && Model.Plots.South != Convert.ToDecimal(0.00))
+                        {
+                            <tr>
+                                <th style="width: 50%">
+                                    @if (Model.Plots.South != null)
+                                    {
+                                        if (Model.Plots.Front == "South")
+                                        {
+                                            f = "(Front)";
+                                        }
+                                        <label class="" style="font-size:small"> South @f: @Model.Plots.South RFt   </label>
+                                        f = "";
+                                    }
+                                </th>
+                                <th style="width: 50%">
+                                    @if (Model.Plots.South != null)
+                                    {
+                                        var a = string.Join(" , ", Model.PlotBounding.Where(i => i.Position == "South").Select(x => x.Bonded_Plot_Number + " - " + x.Block_Name));
+
+                                        <lable style="font-size:small">@a</lable>
+                                        f = "";
+                                    }
+                                </th>
+                            </tr>
+                        }
+
+
+                        @if (Model.Plots.North_East != null && Model.Plots.North_East != Convert.ToDecimal(0.00))
+                        {
+                            <tr>
+                                <th style="width: 50%">
+                                    @if (Model.Plots.North_East != null)
+                                    {
+                                        if (Model.Plots.Front == "North_East")
+                                        {
+                                            f = "(Front)";
+                                        }
+                                        <label class="" style="font-size:small"> North East @f: @Model.Plots.North_East RFt   </label>
+                                        f = "";
+                                    }
+                                </th>
+                                <th style="width:50%">
+                                    @if (Model.Plots.North_East != null)
+                                    {
+                                        var a = string.Join(" , ", Model.PlotBounding.Where(i => i.Position == "North_East").Select(x => x.Bonded_Plot_Number + " - " + x.Block_Name));
+
+                                        <lable style="font-size:small">@a</lable>
+                                        f = "";
+                                    }
+                                </th>
+                            </tr>
+                        }
+                        @if (Model.Plots.North_West != null && Model.Plots.North_West != Convert.ToDecimal(0.00))
+                        {
+                            <tr>
+                                <th style="width:50%">
+                                    @if (Model.Plots.North_West != null)
+                                    {
+                                        if (Model.Plots.Front == "North_West")
+                                        {
+                                            f = "(Front)";
+                                        }
+                                        <label style="font-size:small"> North West @f: @Model.Plots.North_West RFt   </label>
+                                        f = "";
+                                    }
+                                </th>
+                                <th style="width:50%">
+                                    @if (Model.Plots.North_West != null)
+                                    {
+                                        var a = string.Join(" , ", Model.PlotBounding.Where(i => i.Position == "North_West").Select(x => x.Bonded_Plot_Number + " - " + x.Block_Name));
+
+                                        <lable style="font-size:small">@a</lable>
+                                        f = "";
+                                    }
+                                </th>
+                            </tr>
+                        }
+                        @if (Model.Plots.South_East != null && Model.Plots.South_East != Convert.ToDecimal(0.00))
+                        {
+                            <tr>
+                                <th style="width:50%">
+                                    @if (Model.Plots.South_East != null)
+                                    {
+                                        if (Model.Plots.Front == "North_West")
+                                        {
+                                            f = "(Front)";
+                                        }
+                                        <label class="" style="font-size:small"> South East @f: @Model.Plots.South_East RFt   </label>
+                                        f = "";
+                                    }
+                                </th>
+                                <th style="width:50%">
+                                    @if (Model.Plots.South_East != null)
+                                    {
+                                        var a = string.Join(" , ", Model.PlotBounding.Where(i => i.Position == "Souh_East").Select(x => x.Bonded_Plot_Number + " - " + x.Block_Name));
+
+                                        <lable style="font-size:small">@a</lable>
+                                        f = "";
+                                    }
+                                </th>
+                            </tr>
+                        }
+
+                        @if (Model.Plots.South_West != null && Model.Plots.South_West != Convert.ToDecimal(0.00))
+                        {
+                            <tr>
+                                <th style="width:50%">
+                                    @if (Model.Plots.South_West != null)
+                                    {
+                                        if (Model.Plots.Front == "South_West")
+                                        {
+                                            f = "(Front)";
+                                        }
+                                        <label class="" style="font-size:small"> South East @f: @Model.Plots.South_West RFt   </label>
+                                        f = "";
+                                    }
+                                </th>
+                                <th style="width:50%">
+                                    @if (Model.Plots.South_West != null)
+                                    {
+                                        var a = string.Join(" , ", Model.PlotBounding.Where(i => i.Position == "South_West").Select(x => x.Bonded_Plot_Number + " - " + x.Block_Name));
+                                        <lable style="font-size:small">@a</lable>
+                                        f = "";
+                                    }
+                                </th>
+                            </tr>
+                        }
+
+                    </tbody>
+                </table>
+            </td>
+
+
+            <table cellspacing="0" border="0" style="width:1000px;font-size: 11.5pt;">
+                <tr>
+                    <td width="1000px" align="left" valign=bottom>
+                        <ol>
+                            <li>Total area  <u>&nbsp;&nbsp;&nbsp;@string.Format("{0:n}", Math.Round(Convert.ToDecimal(Model.PlotData.Area)))&nbsp;&nbsp;&nbsp;</u>   SFt.<br /></li>
+                            <li> All dues have been cleared upto date.<br /></li>
+                            <li>
+                                I will not indulge in any unauthorised encroachments & <br />violation of Meher Estate Developers as well as TMA/LDA Byelaws.<br /> Original state will be restored
+                                in the event of any default <br /> besides penal action imposed by management under the<br /> byelaws.<br />
+                            </li>
+                            <li>I will construct the boundary wall conforming to above demarcation, <br />prior to underaking construction of main building.<br /></li>
+                            <li>Plot No @Model.PlotOwners.FirstOrDefault().Allotted_Mat_Plot_Name is alloted for material.<br /></li>
+                        </ol>
+
+                    </td>
+                </tr>
+            </table>
+            <table>
+                <tr>
+                    <td width="1000px" valign="top">
+                        @{var str = Model.PlotData.Id + ".png";}
+                        <img src="~/Repository/PlotsData/@Model.PlotData.Id/SitePlan/@str" style="float:right;margin-top:-42%;" width="400" class="" height="310" />
+                    </td>
+                </tr>
+            </table>
+            <table style="margin-top:5px">
+                <tbody>
+                    <tr><td width="800px" align="left" valign="bottom">Possession Handed/Taken over on   </td></tr>
+                    <tr><td width="800px" align="left" valign="bottom"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<u>@string.Join(",", Model.PlotOwners.Select(x => x.Name))</u>  </td></tr>
+                </tbody>
+            </table>
+            <table style="margin-top:10px" cellspacing="0" border="0" style="width:1000px">
+                <tr style="background-color: black;color: white; ">
+                    <td width="1000px" align="center" style="padding:1px" valign=bottom><font size="0"></font></td>
+                </tr>
+            </table>
+            <table style="margin-top:30px">
+                <tbody>
+                    <tr><td width="800px" align="left" valign="bottom"><u>Project Manager</u>  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<u>Director Development</u>  </td></tr>
+
+                </tbody>
+            </table>
+            <table style="margin-top:20px" cellspacing="0" border="0" style="width:1000px">
+                <tr style="background-color: black;color: white; ">
+                    <td width="1000px" align="center" style="padding:1px" valign=bottom><font size="0"></font></td>
+                </tr>
+            </table>
+    </table>
+    <table cellspacing="0" border="0" style="width:1000px;font-size: 20px;margin-top:15px">
+        <tr></tr>
+    </table>
+    <table cellspacing="0" border="0" style="width:1000px;font-size: 20px;margin-top: 10px;"></table>
+    <table cellspacing="0" border="0" style="width:1000px;font-size: 21px;margin-top: 4px;">
+        <tr>
+            <td width="50px" align="left" valign="middle" style="font-weight:bold"><img width="50" src="~/assets/static/images/termscond.png" /></td>
+            <td width="950px" align="left" valign="middle"><b>Terms & Conditions</b></td>
+        </tr>
+    </table>
+    <table cellspacing="0" border="0" style="width:1000px;font-size: 11.5pt;">
+        <tr>
+            <td width="1000px" align="left" valign=bottom>
+                <ol>
+                    <li>Following Documents Required:<br /></li>
+                    <li>CNIC Copy &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  Allotment Letter Copy&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  Submission drawing</li>
+                    <li>Submit the form with relevant documents in development department.</li>
+                    <li>Only Alotte/Owner/Attorney is authorized to get Possession at Site.</li>
+                    <li>Alotte/Owner/Attorney is bound to get Possession within 30 days from the due date otherwise its compulsory to resubmit the plan and dues have to pay. First time Rs.5, 000/, Second time Rs.10, 000/- and third time Rs.15, 000/-.</li>
+                    <li>After possession, excavation should be started very next day otherwise, possession considered as cancelled.</li>
+                    <li>Alotte/Owner/Attorney is bound to submit his submission drawing in LDA/TMA office along with Govt. fees.</li>
+                    <li>Building completion time is eighteen months after having possession at site, otherwise Rs.1,000/- per Marla will be charged on monthly basis.</li>
+                    <li>Structure Stability certificate and drawing should be submitted.</li>
+                </ol>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>

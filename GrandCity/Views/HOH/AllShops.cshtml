@@ -1,0 +1,77 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.HOH_Shops>
+<script src="~/Scripts/hoh.js"></script>
+@{ if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+}
+<div class="bgc-white bd bdrs-3 p-20 mB-20">
+    <div class="row">
+        <div class="col-md-4">
+            <h4 class="c-grey-900 mB-20">Shops List</h4>
+        </div>
+        <div class="col-md-8" style="text-align:right">
+            @if (User.IsInRole("Add Shop")|| User.IsInRole("Administrator"))
+            {
+                <a href="#" class="btn btn-primary" data-placement="top" title="" data-original-title="Add Shop" data-toggle="modal" data-target="#Modal" id="add-shop">Create a Shop</a>
+            }
+        </div>
+    </div>
+    <div class="row">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Sr.</th>
+                    <th>Shop</th>
+                    <th>Details</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    int i = 1;
+                    if (Model.Any())
+                    {
+                        foreach (var item in Model)
+                        {
+                            <tr  id="@item.Id">
+                                <td>@i</td>
+                                <td class="shop-det">@item.ShopName</td>
+                                <td>@item.Description</td>
+                                <td>
+                                    <i class="fa fa-pencil" data-toggle="modal" data-target="#Modal" id="up-shp-info"></i>
+                                    <i class="fa fa-trash del-shp"></i>
+                                </td>
+                            </tr>
+                            i++;
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="4">No Shops Has been Created</td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+<script>
+    $(document).on("click", ".shop-det", function () {
+        var id = $(this).closest('tr').attr('id');
+        window.open('/HOH/ShopDetails?Id='+id , '_Blank');
+    });
+
+    $(document).on("click", "#up-shp-info", function () {
+        var id = $(this).closest('tr').attr('id');
+        EmptyModel();
+        $('#ModalLabel').text("Shop Details");
+        $('#modalbody').load('/HOH/Edit/', {id: id});
+    })
+
+</script>

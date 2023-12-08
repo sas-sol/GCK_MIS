@@ -1,0 +1,287 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Sp_Get_BallotedPlotsList_Result>
+
+@{ if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+}
+
+<script src="~/Scripts/flipdown.js"></script>
+<link href="~/Content/flipdown.css" rel="stylesheet" />
+<div class="col-md-12 bgc-white pt-md-3">
+    <h3 style="text-align:center">Ballot Intimation Letter Printing</h3>
+
+
+
+    <div class="row" style="align-items: center;">
+        <div class="form-row col-md-12">
+            <span class="col-md-2"></span>
+            <input type="text" class="col-md-7 form-control ent-proof-fjghd usr-rqst" placeholder="4901234    ||   35302-3535353-1" style="height:50px;border-radius: 10px;padding-left:1%" />
+            <button class="col-md-1 btn btn-primary ballotPlotSearch" style="margin-left:1%"><i class="fa fa-search"></i>&nbsp;Search</button>@*onclick="SearchData()"*@
+            <span class="col-md-2"></span>
+        </div>
+    </div>
+
+    
+
+
+    <div class=" row mt-md-5 pb-md-3 srch-rslts">
+
+    </div>
+
+</div>
+<script>
+    @*var __kiosk_serve_list__ = @Html.Raw(Json.Encode(Model));
+    __kiosk_serve_list__.*@
+    $(document).ready(function () {
+        $('.prnt-ltr-fdsjkhl').unbind().click(function () {
+            if ($(this).hasClass('dplct')) {
+                if (!confirm('This intimation letter has already been printed. Are you sure you want to print again?')) {
+                    return;
+                }
+            }
+            else {
+                $(this).removeClass('fa-envelope').addClass('fa-check animate__animated animate__fadeInUp animate__slower');
+            }
+
+            let vtag = $(this).attr('data-vtag');
+            window.open('/Balloting/IntimationLetter?id=' + vtag);
+        });
+        $('.table').DataTable();
+    });
+    function searchData() {
+        debugger
+        var qry = $('.usr-rqst').val();
+        $.ajax({
+            type: "POST",
+            url: "/Balloting/BallotedPlotsData/",
+            data: { "query": qry },
+            success: function (data) {
+                
+                let __strc = `<table class="table table-bordered">
+        <thead>
+            <tr class="thead-dark">
+                <th>Sr.</th>
+                <th>Plot</th>
+                <th>Sector</th>
+                <th>Plot Type</th>
+                <th>Plot Dimension</th>
+                <th>Plot Area</th>
+                <th>Allotted To</th>
+                <th>Owner Name</th>
+                <th>Owner CNIC</th>
+                <th>Nominee Name</th>
+                <th>Nominee CNIC</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>`;
+
+                if (data.length <= 0) {
+                    __strc += `<tr class="bgc-red-50 central-text-align">
+                    <td colspan="9">No Record Found</td>
+                </tr>`;
+                }
+                else {
+                    $.each(data, function (i, v) {
+                        let _dem = ``;
+                        if (v.LetterA == null) {
+                            _dem = `<td><i class="fa fa-envelope fa-2x pointer prnt-ltr-fdsjkhl" data-vtag="${v.Id}" style="color:greenyellow;"></i></td>`;
+                        }
+                        else {
+                            _dem = `<td><i class="fa fa-check fa-2x pointer prnt-ltr-fdsjkhl dplct" data-vtag="${v.Id}" style="color:greenyellow;"></i> <br/><span style="font-size:10px;">Printed By (${v.LetterA_IssuedBy_Name})</span> </td>`;
+                        }
+                        __strc += `<tr id="${v.BallotFile}">
+                        <td>${i + 1}</td>
+                        <td>${v.PlotNo}</td>
+                        <td>${v.Sector}</td>
+                        <td>${v.PlotType}</td>
+                        <td>${v.PlotSize}</td>
+                        <td>${v.PlotArea} Marla</td>
+                        <td>${v.BallotFile}  <i style="float:right; z-index:1111111" class="ti-info-alt cust-info" data-toggle="modal" data-target="#Modal"></i> </td>
+                        <td>${v.Name}</td>
+                        <td>${v.CNIC_NICOP}</td>
+                        <td>${v.Nominee_Name}</td>
+                        <td>${v.Nominee_CNIC_NICOP}</td>
+                        ${_dem}
+                    </tr>`;
+                    });
+                }
+                __strc += `</tbody></table>`;
+                $('.srch-rslts').empty().append(__strc);
+            },
+            error: function (xmlhttprequest, textstatus, message) {
+                if (textstatus === "timeout") {
+                    alert("got timeout");
+                } else {
+                    alert(textstatus);
+                }
+            }
+        });
+    }
+    $('.ballotPlotSearch').click(function () {
+        searchData();
+    });
+
+    $('.ent-proof-fjghd').keypress(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            searchData();
+        }
+    });
+    //$('.prnt-ltr-fdsjkhl').click(function () {
+    //    if ($(this).hasClass('dplct')) {
+    //        if (!confirm('This intimation letter has already been printed. Are you sure you want to print again?')) {
+    //            return;
+    //        }
+    //    }
+    //    else {
+    //        $(this).removeClass('fa-envelope').addClass('fa-check animate__animated animate__fadeInUp animate__slower');
+    //    }
+
+    //    let vtag = $(this).attr('data-vtag');
+    //    window.open('/Balloting/IntimationLetter?id=' + vtag);
+    //});
+
+
+    //function SearchData() {
+    //    let qry = $('.usr-rqst').val();
+    //    let inf = __kiosk_serve_list__.filter(x => x.BallotFile == qry || x.CNIC_NICOP == qry);
+
+    //    let __strc = `<table class="table table-bordered">
+    //    <thead>
+    //        <tr class="thead-dark">
+    //            <th>Sr.</th>
+    //            <th>Plot</th>
+    //            <th>Sector</th>
+    //            <th>Plot Type</th>
+    //            <th>Plot Dimension</th>
+    //            <th>Plot Area</th>
+    //            <th>Allotted To</th>
+    //            <th>Owner Name</th>
+    //            <th>Owner CNIC</th>
+    //            <th>Nominee Name</th>
+    //            <th>Nominee CNIC</th>
+    //            <th>Status</th>
+    //        </tr>
+    //    </thead>
+
+    //    <tbody>`;
+
+    //    if (inf.length <= 0) {
+    //        __strc += `<tr class="bgc-red-50 central-text-align">
+    //                <td colspan="9">No Record Found</td>
+    //            </tr>`;
+    //    }
+    //    else {
+    //        $.each(inf, function (i, v) {
+    //            let _dem = ``;
+    //            if (v.LetterA == null) {
+    //                _dem = `<td><i class="fa fa-envelope fa-2x pointer prnt-ltr-fdsjkhl" data-vtag="${v.Id}" style="color:greenyellow;"></i></td>`;
+    //            }
+    //            else {
+    //                _dem = `<td><i class="fa fa-check fa-2x pointer prnt-ltr-fdsjkhl dplct" data-vtag="${v.Id}" style="color:greenyellow;"></i> <br/><span style="font-size:10px;">Printed By (${v.LetterA_IssuedBy_Name})</span> </td>`;
+    //            }
+    //            __strc += `<tr id="${v.BallotFile}">
+    //                    <td>${i + 1}</td>
+    //                    <td>${v.PlotNo}</td>
+    //                    <td>${v.Sector}</td>
+    //                    <td>${v.PlotType}</td>
+    //                    <td>${v.PlotSize}</td>
+    //                    <td>${v.PlotArea} Marla</td>
+    //                    <td>${v.BallotFile}  <i style="float:right; z-index:1111111" class="ti-info-alt cust-info" data-toggle="modal" data-target="#Modal"></i> </td>
+    //                    <td>${v.Owner_Name}</td>
+    //                    <td>${v.CNIC_NICOP}</td>
+    //                    <td>${v.Nominee_Name}</td>
+    //                    <td>${v.Nominee_CNIC_NICOP}</td>
+    //                    ${_dem}
+    //                </tr>`;
+    //        });
+    //    }
+
+    //    __strc += `</tbody>
+    //</table>`;
+
+    //    $('.srch-rslts').empty().append(__strc);
+
+    //    $('.prnt-ltr-fdsjkhl').unbind().click(function () {
+    //        if ($(this).hasClass('dplct')) {
+    //            if (!confirm('This intimation letter has already been printed. Are you sure you want to print again?')) {
+    //                return;
+    //            }
+    //        }
+    //        else {
+    //            $(this).removeClass('fa-envelope').addClass('fa-check animate__animated animate__fadeInUp animate__slower');
+    //        }
+
+    //        let vtag = $(this).attr('data-vtag');
+    //        window.open('/Balloting/IntimationLetter?id=' + vtag);
+    //    });
+    //}
+</script>
+<style>
+    th{
+        font-size:15px;
+    }
+</style>
+
+
+
+
+
+
+@*<table class="table table-borderless">
+        <thead>
+            <tr>
+                <th>Sr.</th>
+                <th>Plot</th>
+                <th>Sector</th>
+                <th>Plot Type</th>
+                <th>Plot Size</th>
+                <th>Plot Area</th>
+                <th>Allotted To</th>
+                <th>Owner Name</th>
+                <th>Balloted At</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @{ int cnt = 1;}
+            @if (Model.Any())
+            {
+                foreach (var v in Model)
+                {
+                    <tr>
+                        <td>@(cnt++)</td>
+                        <td>@v.PlotNo</td>
+                        <td>@v.Sector</td>
+                        <td>@v.PlotType</td>
+                        <td>@v.PlotSize</td>
+                        <td>@v.PlotArea</td>
+                        <td>@v.BallotFile</td>
+                        <td>@v.Owner_Name</td>
+                        <td>@v.BallotedOn.Value.ToShortDateString()</td>
+                        @if (v.LetterA is null)
+                        {
+                            <td><i class="fa fa-envelope fa-2x pointer prnt-ltr-fdsjkhl" data-vtag="@v.Id" style="color:greenyellow;"></i></td>
+                        }
+                        else
+                        {
+                            <td><i class="fa fa-check fa-2x pointer prnt-ltr-fdsjkhl dplct" data-vtag="@v.Id" style="color:greenyellow;"></i></td>
+                        }
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr class="bgc-red-50 central-text-align">
+                    <td colspan="10">No Record Found</td>
+                </tr>
+            }
+        </tbody>
+    </table>*@

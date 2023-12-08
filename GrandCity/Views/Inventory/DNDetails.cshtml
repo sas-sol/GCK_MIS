@@ -1,0 +1,222 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Stock_In_Details>
+@{
+    var group = Model.Select(x => x.Inv.Group_Id).FirstOrDefault();
+    var transaction = Model.Select(x => x.Inv.TransactionId).FirstOrDefault();
+    var vendor = Model.Select(x => x.Inv.Vendor_Id).FirstOrDefault();
+    var vendor_Name = Model.Select(x => x.Inv.Vendor_Name).FirstOrDefault();
+    var bid_id = Model.Select(x => x.Inv.Bid_Id).FirstOrDefault();
+    var PO_num = Model.Select(x => x.Inv.PO_Number).FirstOrDefault();
+    var PO_date = Model.Select(x => x.Inv.DateTime).FirstOrDefault();
+    var Dep_Id = Model.Select(x => x.Inv.Dep_Id).FirstOrDefault();
+    var Dep_Name = Model.Select(x => x.Inv.Dep_Name).FirstOrDefault();
+    var Grn = Model.Select(x => x.Inv.GRN).FirstOrDefault();
+    var Grn_date = Model.Select(x => x.Inv.DateTime).FirstOrDefault();
+    var qlty = Model.Select(x => x.Inv.QualityCheck_By_Name).FirstOrDefault();
+}
+@{ if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+}
+<script src="~/Scripts/Inv.js"></script>
+<div class="bgc-white bd bdrs-3 p-20 mB-20">
+    <h5 style="text-align:center">Delivery Note Supervision</h5>
+    <hr />
+    <div class="col-md-12">
+        <input type="hidden" value="@group" class="grpId" />
+        <input type="hidden" value="@transaction" class="trs" />
+        <input type="hidden" class="trans-id" value="@ViewBag.TransactionId" />
+        <input type="hidden" class="form-control Bid_Number" name="Bid_Number" placeholder="Bid Number" readonly value="@bid_id">
+        <div class="form-row">
+            <div class="form-group col-md-2">
+                <label>Vendor</label>
+                <h5>@vendor_Name</h5>
+                <input type="hidden" id="vendors" value="@vendor_Name" />
+                <input type="hidden" id="vendId" value="@vendor" />
+            </div>
+            <div class="form-group col-md-2">
+                <label>PO Number</label>
+                <h5>@PO_num</h5>
+                <input type="hidden" class="PO_Number" name="PO_Number" value="@PO_num">
+            </div>
+            <div class="form-group col-md-2">
+                <label>PO Date</label>
+                <h5>@string.Format("{0:dd-MMM-yyyy}", PO_date)</h5>
+                <input type="hidden" class="PO_Date" placeholder="mm/dd/yyyy" name="PO_Date" value="@Model.Select(x=>x.Inv.DateTime).FirstOrDefault().Value.ToShortDateString()">
+            </div>
+            <div class="form-group col-md-2">
+                <label>DN Number</label>
+                <h5>@Grn</h5>
+            </div>
+            <div class="form-group col-md-2">
+                <label>DN Date</label>
+                <h5>@string.Format("{0:dd-MMM-yyyy}", Grn_date)</h5>
+            </div>
+            <div class="form-group col-md-2">
+                <label>Department</label>
+                <h5>@Dep_Name</h5>
+            </div>
+            <div class="form-group col-md-3" style="display: block;">
+                <label>Quality Check By</label>
+                <h5>@qlty</h5>
+            </div>
+        </div>
+    </div>
+    <hr />
+    @if (Model.Any())
+    {
+        int sr = 1;
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th width="5%">Sr.</th>
+                    <th width="30%">Item</th>
+                    <th width="5%">UOM</th>
+                    <th width="5%">Rcvd Qty</th>
+                    <th width="10%">Rate</th>
+                    <th width="10%">Total</th>
+                    <th width="12%">Expiry</th>
+                    <th width="15%">Warehouse</th>
+                    @*<th width="13%">Remarks</th>*@
+                    <th>Is Asset</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var v in Model)
+                {
+                    <tr class="main-inv-rec cal" id="@v.Inv.Id">
+                        <td>@(sr++)</td>
+                        <td class="invs" data-slval='@v.Inv.Item_Id'>@v.Item_Name</td>
+                        <td>@v.UOM</td>
+                        <td class="rcvd-qty">@( string.Format("{0:0,0.##}", v.Inv.Qty))</td>
+                        <td class="rcvd-rate">@( string.Format("{0:0,0.##}", v.Inv.Rate))</td>
+                        <td>@( string.Format("{0:0,0.##}", v.Inv.Qty * v.Inv.Rate))</td>
+                        <td><input class="form-control expiry" data-id="1" value="@( string.Format("{0:MM/dd/yyyy}", v.Inv.Expire_Date))" data-provide="datepicker" placeholder="Date"></td>
+                        <td>@v.Warehouse</td>
+                        <td style="padding-top:10px">
+                            <label class="switch"><input type="checkbox" class="is-ast"><span class="slider round"></span></label>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+
+    <div class="row">
+        <div class="form-row col-md-12 mt-md-2">
+            @if (Model.Where(x => x.Inv.Supervise == true).Any())
+            {
+                <h5>
+                    Supervised by : @Model.Select(x => x.Inv.SuperviseBy_Name).FirstOrDefault()
+                </h5>
+            }
+            else
+            {
+                <div class="col-md-2 righty form-group">
+                    <button class="btn btn-success sup-dn-to">Supervise DN</button>
+                </div>
+            }
+
+        </div>
+    </div>
+
+
+    <div class="clearfix"></div>
+</div>
+
+<style>
+    .centralText {
+        text-align: center;
+    }
+
+    .warningText {
+        position: absolute;
+        left: 50%;
+        right: 50%;
+        /*font-size: 20px;*/
+        animation-name: warning;
+        animation-duration: .6s;
+        animation-iteration-count: infinite;
+    }
+
+    @@keyframes warning {
+        0% {
+            font-size: 15px;
+        }
+
+        25% {
+            font-size: 20px;
+        }
+
+        50% {
+            font-size: 25px;
+        }
+
+        70% {
+            font-size: 20px;
+        }
+
+        100% {
+            font-size: 15px;
+        }
+    }
+</style>
+<script>
+    $(document).on("click", ".sup-dn-to", function () {
+        var itemsData = [];
+        allok = true;
+        let trans = $('.trans-id').val();
+        let grp = $('.grpId').val();
+        let trs = $('.trs').val();
+        let venId = $('#vendId').val();
+
+        $('.main-inv-rec').each(function () {
+            let grnid = $(this).attr('id');
+            let isaset = $(this).find('.is-ast').is(":checked");
+            let qty = RemoveComma($(this).find('.rcvd-qty').text());
+            let rate = RemoveComma($(this).find('.rcvd-rate').text());
+            let itemid = $(this).find('.invs').data("slval");
+            let exp = $(this).find('.expiry').val();
+            itemsData.push({
+                Id: grnid,
+                Item_Id: itemid,
+                IsAsset: isaset,
+                Qty: qty,
+                Rate: rate,
+                Expirey: exp
+            });
+
+        });
+        if (allok) {
+            if (confirm("Are you sure you want to Supervise DN")) {
+                $.ajax({
+                    type: "POST",
+                    url: "/Inventory/SuperviseDN/",
+                    contentType: "application/json",
+                    traditional: true,
+                    beforeSend: function () {
+
+                    },
+                    complete: function () {
+
+                    },
+                    data: JSON.stringify({ items: itemsData, StockIn_Trans: trs, TransactionId: trans, Vendor_Id: venId, Group_Id: grp }),
+                }).done(function (data) {
+                    if (data.Status == true) {
+                        alert(data.Msg);
+                        window.location.reload();
+                    }
+                    else {
+                        alert(data.Msg);
+                    }
+                });
+            }
+        }
+
+    });
+
+</script>

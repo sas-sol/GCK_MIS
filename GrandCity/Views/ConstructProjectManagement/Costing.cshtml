@@ -1,0 +1,118 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Sp_Get_Prj_Costing_Result>
+@{
+    decimal? BdgAmt = 0;
+}
+<div class="container-fluid">
+    <table class="table table-bordered">
+        <thead class="thead-dark">
+            <tr>
+                <th class="thead-light"></th>
+                <th colspan="5" style="text-align:center">Budgted</th>
+                <th colspan="5" style="text-align:center">Actual</th>
+            </tr>
+        </thead>
+        <thead>
+            <tr>
+                <th>Milestones</th>
+                <th>Description</th>
+                <th>Unit</th>
+                <th>Quantity</th>
+                <th>Rate</th>
+                <th>Total</th>
+                <th>Description</th>
+                <th>Unit</th>
+                <th>Quantity</th>
+                <th>Rate</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var g in Model.GroupBy(x => new { x.Title, x.Type, x.Description, x.Unit, x.Qty, x.rate, x.Amount }))
+            {
+                int span = g.Count() + 1;
+                BdgAmt += g.Key.Amount;
+            <tr id="1" style="font-size: 12pt !important">
+                @{
+                    string style = "";
+                    if (g.Key.Type == "Milestone")
+                    {
+                        style = "font-size:14px";
+                    }
+                    else if (g.Key.Type == "Task")
+                    {
+                        style = "font-size:13px";
+                    }
+                    else if (g.Key.Type == "SubTask")
+                    {
+                        style = "font-size:12px";
+                    }
+                }
+                <td style="@style" rowspan="@span">@g.Key.Title</td>
+                <td style="@style" rowspan="@span">@g.Key.Description</td>
+                <td style="@style" rowspan="@span">@g.Key.Unit</td>
+                <td style="@style" rowspan="@span"> @string.Format("{0:n2}", g.Key.Qty)</td>
+                <td style="@style" rowspan="@span"> @string.Format("{0:n2}", g.Key.rate)</td>
+                <td style="@style" rowspan="@span"> @string.Format("{0:n2}", g.Key.Amount)</td>
+                <td class="hidden"></td>
+                <td class="hidden"></td>
+                <td class="hidden"></td>
+                <td class="hidden"></td>
+                <td class="hidden"></td>
+            </tr>
+                foreach (var item in g)
+                {
+                    int counter = 1;
+                    if (counter == 1)
+                    {
+                        <tr>
+                            <td>@item.PR_Desc</td>
+                            <td>@item.PT_Unit</td>
+                            <td>@string.Format("{0:n2}", item.PR_Qty)</td>
+                            <td> @string.Format("{0:n2}", item.PR_Rate)</td>
+                            <td> @string.Format("{0:n2}", item.PR_Amount)</td>
+                        </tr>
+                    }
+                    else
+                    {
+                        <tr>
+                            <td>@item.PR_Desc</td>
+                            <td>@item.PT_Unit</td>
+                            <td>@item.PR_Qty</td>
+                            <td>@item.PR_Rate</td>
+                            <td>@item.PR_Amount</td>
+                        </tr>
+                    }
+                    counter++;
+                }
+            }
+            <tr>
+                @{
+                    var actAmt = Model.Sum(x => x.PR_Amount);
+                    string color = "bgc-green-50";
+                    if (actAmt > BdgAmt)
+                    {
+                        color = "bgc-red-50";
+                    }
+                }
+                <td colspan="5"></td>
+                <td><b>@string.Format("{0:n2}", BdgAmt)</b></td>
+                <td colspan="4"></td>
+                <td colspan="1" class="@color" style="text-align:right;"><b>@string.Format("{0:n2}", actAmt)</b></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<script>
+    $(document).on('click',
+        'add-task',
+        () => {
+            let html = ``;
+            $(this).append(html);
+        });
+</script>
+<style>
+    td.hidden {
+        border-width: 0px;
+        padding: 0px;
+    }
+</style>

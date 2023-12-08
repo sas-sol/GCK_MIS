@@ -1,0 +1,316 @@
+﻿@model Management_Information_System.Models.NewFileLedger
+
+<script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
+
+<style>
+    @@media print {
+        table, tr, td, th {
+            padding: 2px !important;
+        }
+
+        body {
+            margin: 2px;
+            color: black;
+        }
+    }
+
+    .trnsctnCol td {
+        padding: 0px 0px 10px 0px !important;
+        text-align: center;
+        vertical-align: baseline !important;
+    }
+
+        .trnsctnCol td hr {
+            margin: 2px !important;
+        }
+
+    .trnsctnCol {
+        box-sizing: inherit !important;
+    }
+</style>
+<table>
+    <tr>
+        <td align="left" style="width:500px"><img style="width:75px;font-size:16px;padding:10px" src="/assets/static/images/logo.png" alt=""> &nbsp;SA Management Information System</td>
+        <td align="right" style="width:500px"><img style="width:120px" src="~/assets/static/images/whitesaprj.png" /></td>
+    </tr>
+</table>
+<h5>Owner Information</h5>
+<div style="display:table;width:100%">
+    <table style="font-size:12px;float:left" width="500">
+        <tr><td width="170">Registeration Number:</td><td>@Model.FileData.File_Form_Number</td></tr>
+        <tr><td>CNIC / NICOP No.</td><td>@Model.FileData.CNIC_NICOP</td></tr>
+        <tr><td>Owner Name</td><td>@Model.FileData.Name</td></tr>
+        <tr><td>Mobile No.</td><td>@Model.FileData.Mobile_1</td></tr>
+        <tr><td>Address</td><td>@Model.FileData.Postal_Address</td></tr>
+    </table>
+    <table style="font-size:12px;float:left" width="200">
+        @{
+            if (Model.FileData.Verify == true)
+            {
+                <tr><td width="80"><img width="50" src="~/assets/static/images/verified.png" /></td><td>Verified</td></tr>
+            }
+            else
+            {
+                <tr><td width="80"><img width="50" src="~/assets/static/images/notver.png" /></td><td></td></tr>
+            }
+        }
+    </table>
+</div>
+
+<hr />
+<h4>Plot Details</h4>
+<table>
+    <tr>
+        <td width="120"><b>Project</b></td>
+        <td width="120">@Model.FileData.Project_Name</td>
+        <td width="130"><b>Plot No.</b></td>
+        <td width="120">@Model.FileData.File_Form_Number</td>
+        <td width="120"><b>Phase</b></td>
+        <td width="120">@Model.FileData.Phase_Name</td>
+        <td width="120"><b>Block</b></td>
+        <td width="120">@Model.FileData.Block_Name</td>
+
+    </tr>
+    @{
+        string dev = "";
+        if (Model.FileData.Development_Charges == "False")
+        {
+            dev = "Non Development Charges";
+        }
+        else if (Model.FileData.Development_Charges == "True")
+        {
+            dev = "With Development Charges";
+        }
+        else
+        {
+            dev = "To Be Announce";
+        }
+    }
+    <tr>
+        <td width="120"><b>Plot Size</b></td>
+        <td width="120">@Model.FileData.Plot_Size</td>
+        <td width="130"><b>Preference</b></td>
+        <td width="120">@Model.FileData.Plot_Prefrence</td>
+        @*<td width="120" colspan="2"><b>Development Charges</b></td>
+            <td width="120" colspan="2">@dev</td>*@
+    </tr>
+</table>
+<hr />
+<h4>Booking Details</h4>
+<table style="margin-top:5px">
+    <tr>
+        <td width="150"><b>Booking Price</b></td>
+        <td width="150">@string.Format("{0:n0}", Model.TotalAmt)</td>
+        <td width="150"><b>Rate / Marla</b></td>
+        @{
+            int plotsize = Convert.ToInt16(Model.FileData.Plot_Size.Split(' ')[0]);
+            var rate = Model.TotalAmt / plotsize;
+
+        }
+        <td width="150">@string.Format("{0:n0}", rate)</td>
+
+        <td width="150"><b>Booking Date</b></td>
+        <td width="150" id="booking-date"></td>
+    </tr>
+</table>
+<hr />
+<h5>Payment Details</h5>
+<table class=" table-borderless clickable-rows" style="font-size:10px">
+    <thead>
+        <tr>
+            <th width="100">Date</th>
+            <th width="100">Description</th>
+            <th width="100">Receipt/Voucher #</th>
+            <th width="100">Mode</th>
+            <th width="100">Intrument No.</th>
+            <th width="100">Debit</th>
+            <th width="100">Credit</th>
+            <th width="180">Balance</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            decimal? bal = 0;
+            decimal? Total_Amt = 0;
+            decimal? Rec_amt = 0;
+            decimal? OutStand_amt = 0;
+        }
+        @foreach (var item in Model.Report.Where(z => z.Date <= DateTime.Now).OrderBy(x => x.Date))
+        {
+            if (item.Description == "Advance")
+            {
+                <script>
+                    var res = "@string.Format("{0:MMM dd yyyy}", item.Date)"
+                    $("#booking-date").text(res);
+                </script>
+            }
+            if ((item.Inst_Status == "Approved" || string.IsNullOrEmpty(item.Inst_Status) || string.IsNullOrWhiteSpace(item.Inst_Status)) && (item.Mode != "Cash" || string.IsNullOrEmpty(item.Mode) || string.IsNullOrWhiteSpace(item.Mode)))
+            {
+                Total_Amt += (item.Debit == null) ? 0 : item.Debit;
+                Rec_amt += (item.Credit == null) ? 0 : item.Credit;
+                bal += (item.Debit == null) ? 0 : -(item.Debit);
+                bal += (item.Credit == null) ? 0 : item.Credit;
+            }
+            if (item.Mode == "Cash")
+            {
+                Total_Amt += (item.Debit == null) ? 0 : item.Debit;
+                Rec_amt += (item.Credit == null) ? 0 : item.Credit;
+                bal += (item.Debit == null) ? 0 : -(item.Debit);
+                bal += (item.Credit == null) ? 0 : item.Credit;
+            }
+
+            <tr class="trnsctnCol">
+                <td>@string.Format("{0:dd-MMM-yyyy}", item.Date)</td>
+                <td>@item.Description</td>
+                <td>@item.Receipt_Voucher_No</td>
+                @if (item.Mode == "Cheque" || item.Mode == "PayOrder" || item.Mode == "BankDraft")
+                {
+                    if (item.Inst_Status == "Dishonored")
+                    {
+                        <td>@item.Mode </td>
+                    }
+                    else
+                    {
+                        <td>@item.Mode @*(@item.Inst_Status)*@</td>
+                    }
+                }
+                else
+                {
+                    <td>@item.Mode</td>
+                }
+                @if (!string.IsNullOrEmpty(item.Bank))
+                {
+                    <td>@string.Concat(item.Chq_No, "  (" + item.Bank + ")")</td>
+                }
+                else
+                {
+                    <td>@string.Concat(item.Chq_No, item.Bank)</td>
+                }
+                @if (item.Debit == null || item.Debit == 0)
+                {
+                    <td style="text-align:center; font-size:15px">-</td>
+                }
+                else
+                {
+                    <td style="text-align:center">@string.Format("{0:n0}", item.Debit)</td>
+                }
+                @if (item.Credit == null || item.Credit == 0)
+                {
+                    <td style="text-align:center; font-size:15px">-</td>
+                }
+                else
+                {
+                    <td style="text-align:center">@string.Format("{0:n0}", item.Credit)</td>
+                }
+                @if (item.Inst_Status == "Dishonored")
+                {
+                    <td>@string.Format("{0:n0}", bal + item.Credit)</td>
+                }
+                else
+                {
+                    <td>@string.Format("{0:n0}", bal)</td>
+                }
+            </tr>
+            if (item.Inst_Status == "Dishonored")
+            {
+                <tr class="trnsctnCol">
+                    <td>@string.Format("{0:dd-MMM-yyyy}", item.Date)</td>
+                    <td>@item.Description</td>
+                    <td>@item.Receipt_Voucher_No</td>
+                    @if (item.Mode == "Cheque" || item.Mode == "PayOrder" || item.Mode == "BankDraft")
+                    {
+                        <td>@item.Mode  @*(@item.Inst_Status)*@</td>
+                    }
+                    else
+                    {
+                        <td>@item.Mode</td>
+                    }
+                    @if (!string.IsNullOrEmpty(item.Bank))
+                    {
+                        <td>@string.Concat(item.Chq_No, "  (" + item.Bank + ")")</td>
+                    }
+                    else
+                    {
+                        <td>@string.Concat(item.Chq_No, item.Bank)</td>
+                    }
+                    <td style="text-align:center;">@string.Format("{0:n0}", item.Credit)</td>
+                    <td style="text-align:center">-</td>
+                    <td>@string.Format("{0:n0}", bal)</td>
+                </tr>
+
+            }
+        }
+        @{ OutStand_amt = Total_Amt - Rec_amt;}
+    </tbody>
+</table>
+<table class="table">
+    <tbody>
+        <tr>
+            <td><b>Total Amount</b></td>
+            <script>
+                var pltprice = "@Model.FileData.GrandTotal";
+                if (pltprice > 0) {
+                    $("#plot-price").text(Number(parseFloat(pltprice).toFixed(0)).toLocaleString());
+
+                }
+                else {
+                     var t_plt_amt = "@string.Format("{0:n0}", Math.Round(Convert.ToDecimal(Total_Amt)))";
+                    $('#plot-price').text(t_plt_amt);
+
+
+                }
+                 var disamt =  "@Model.Discount";
+
+                if (disamt > 0 || disamt != "" || disamt != null) {
+                    $(".dis-amt-sec").show();
+                    $("#dis-amt").text(Number(disamt).toLocaleString());
+                }
+            </script>
+            <td>@string.Format("{0:n0}", Math.Round(Convert.ToDecimal(Model.TotalAmt)))</td>
+            <td><b>Received Amount</b></td>
+            <td>@string.Format("{0:n0}", Math.Round(Convert.ToDecimal(Rec_amt)))</td>
+            <td><b>Outstanding Amount</b></td>
+            <td>@string.Format("{0:n0}", Math.Round(Convert.ToDecimal(Model.TotalAmt - (double)Rec_amt)))</td>
+            <td colspan="4"></td>
+        </tr>
+    </tbody>
+</table>
+@{
+    if (Model.Discount != null)
+    {
+        <h5> Discount </h5>
+        <table class="table">
+            <tbody>
+                <tr>
+                    <td><b>Total Amount</b></td>
+                    <td>@string.Format("{0:n0}", Model.Discount.Total_Amount)</td>
+                    <td><b>Discount  @Math.Round(Convert.ToDouble(Model.Discount.Percentage), 2) % </b></td>
+                    <td>@string.Format("{0:n0}", Model.Discount.Discount_Amount)</td>
+                    <td><b>Outstanding Amount</b></td>
+                    @{ OutStand_amt -= Model.Discount.Discount_Amount; }
+                    <td>@string.Format("{0:n0}", OutStand_amt)</td>
+                </tr>
+                <tr>
+                    <td><b>Remarks</b></td>
+                    <td colspan="4">@Model.Discount.Remarks</td>
+                </tr>
+            </tbody>
+        </table>
+    }
+}
+
+<table style="margin-top:50px">
+    <tbody>
+        <tr>
+            <td width="500"></td>
+            <td width="500"></td>
+        </tr>
+        <tr>
+            <td width="500"><b>@ViewBag.Name</b></td>
+            <td width="500"><b>Approved By Audit Manager</b></td>
+        </tr>
+        <tr>
+            <td width="500">@string.Format("{0:}", DateTime.Now)</td>
+        </tr>
+    </tbody>
+</table>

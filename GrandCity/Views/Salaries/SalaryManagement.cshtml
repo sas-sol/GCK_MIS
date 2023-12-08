@@ -1,0 +1,94 @@
+﻿
+@{ Layout = "~/Views/Shared/_StaffLayout.cshtml"; }
+
+<div class="row default-div-bg bd bdrs-3 ">
+    <div class="col-md-12">
+        <h2 style="text-align:center;">Salary Management</h2>
+        <ul class="nav nav-tabs" id="myTabs">
+            @if (User.IsInRole("Salary 1st Stage") || User.IsInRole("Administrator"))
+            {
+                <li class="nav-item"><a class="nav-link sal-lnker" data-toggle="bankstabs" data-link="/Salaries/Step1" id="pen-ap" href="javascript:void(0)">HR Salary Generation</a></li>
+            }
+            @if (User.IsInRole("Salary 2nd Stage") || User.IsInRole("Administrator"))
+            {
+                <li class="nav-item"><a class="nav-link sal-lnker" data-toggle="bankstabs" data-link="/Salaries/Step2" id="pen" href="javascript:void(0)">HR Manager Approval</a></li>
+            }
+            @if (User.IsInRole("Salary 3rd Stage") || User.IsInRole("Administrator"))
+            {
+                <li class="nav-item"><a class="nav-link sal-lnker" data-toggle="bankstabs" data-link="/Salaries/Step3" id="q-f" href="javascript:void(0)">Finance Approval</a></li>
+            }
+            @if (User.IsInRole("Salary 4th Stage") || User.IsInRole("Administrator"))
+            {
+                <li class="nav-item"><a class="nav-link sal-lnker" data-toggle="bankstabs" data-link="/Salaries/Step4" id="p-o" href="javascript:void(0)">Distribution</a></li>
+            }
+            @if (User.IsInRole("Salary Search") || User.IsInRole("Administrator"))
+            {
+                <li class="nav-item"><a class="nav-link sal-lnker" data-toggle="bankstabs" data-link="/Salaries/SalaryList" id="p-o-z" href="javascript:void(0)">Archive</a></li>
+            }
+        </ul>
+        <div class="tab-content">
+            <div id="coahead" class="tab-pane active "></div>
+        </div>
+    </div>
+</div>
+
+@if (User.IsInRole("Salary 1st Stage") || User.IsInRole("Administrator"))
+{
+    <script>
+        $(function () {
+            $('#coahead').load('/Salaries/Step1/');
+            $("#pen-ap").addClass('active');
+        });
+    </script>
+}
+else if (User.IsInRole("Salary 2nd Stage") || User.IsInRole("Administrator"))
+{
+    <script>
+        $(function () {
+            $('#coahead').load('/Salaries/Step2');
+            $("#pen").addClass('active');
+        });
+    </script>
+}
+else if (User.IsInRole("Salary 3rd Stage") || User.IsInRole("Administrator"))
+{
+    <script>
+        $(function () {
+            $('#coahead').load('/Salaries/Step3');
+            $("#q-f").addClass('active')
+        });
+    </script>
+}
+else if (User.IsInRole("Salary 4th Stage") || User.IsInRole("Administrator"))
+{
+    <script>
+        $(function () {
+            $('#coahead').load('/Salaries/Step4');
+            $("#po").addClass('active')
+        });
+    </script>
+}
+
+else if (User.IsInRole("Salary Search") || User.IsInRole("Administrator"))
+{
+    <script>
+        $(function () {
+            $('#coahead').load('/Salaries/SalaryList');
+            $("#po").addClass('active')
+        });
+    </script>
+}
+
+<script>
+    $(document).ready(function () {
+        $('.sal-lnker').unbind().click(function () {
+            let link = $(this).attr('data-link');
+            showLoader();
+            $('#coahead').load(link, function () {
+                $('.sal-lnker').removeClass('active');
+                $(this).addClass('active');
+                hideLoader();
+            });
+        });
+    });
+</script>

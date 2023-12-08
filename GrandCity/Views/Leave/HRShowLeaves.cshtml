@@ -1,0 +1,116 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.LeaveRequisitionModel>
+@{
+    if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+}
+
+
+
+
+<div class="container-fluid">
+    <h4 class="c-grey-900 mT-10 mB-30"></h4>
+    <ul class="nav nav-tabs" id="myTabs">
+        @{ string activeclass = "active";}
+        <li class="nav-item"><a class="nav-link @activeclass" data-toggle="Leavetabs" data-link="/Leave/AllLeaves?Status=pending" href="#LLEaves">Leaves</a></li>
+        @*<li class="nav-item"><a class="nav-link @activeclass" data-toggle="Leavetabs" data-link="/Banking/Cheques?Status=Pending" href="#LLEaves">Pending</a></li>*@
+        @*@{ activeclass = ""; }
+            <li class="nav-item"><a class="nav-link @activeclass" data-toggle="tab" role="tab" data-link="/Banking/Cheques?Status=Deposited" href="#cheques">Deposited</a></li>
+            @{ activeclass = ""; }
+            <li class="nav-item"><a class="nav-link @activeclass" data-toggle="tab" role="tab" data-link="/Banking/Cheques?Status=Approved" href="#cheques">Approved</a></li>
+            @{ activeclass = ""; }
+            <li class="nav-item"><a class="nav-link @activeclass" data-toggle="tab" role="tab" data-link="/Banking/Cheques?Status=Dishonored" href="#cheques">Dishonored</a></li>
+            @{ activeclass = ""; }
+            <li class="nav-item"><a class="nav-link @activeclass" data-toggle="tab" role="tab" data-link="/Banking/ReturnedCheques" href="#cheques">Returned Cheques</a></li>
+            @{ activeclass = ""; }*@
+
+    </ul>
+    <!-- Tab panes -->
+    <div class="tab-content">
+        <div id="" class="tab-pane active">
+
+            <div class="row">
+                <div class="col-md-2">
+                    <div class="scrollable bd bgc-white pos-r bdT layer w-100 fxg-1">
+                        <ul class="p-20 nav flex-column">
+                            <li class="nav-item">
+                                <button style="border:none; background:none" href="" onclick="Hrpenlaves()" class="nav-link c-grey-800 cH-blue-500 active ">
+                                    <div class="peers ai-c jc-sb">
+                                        <div class="peer peer-greed">
+                                            <span>Pending</span>
+                                        </div>
+                                    </div>
+                                </button>
+                            </li>
+                            <li class="nav-item">
+                                <button style="border:none; background:none" href="" onclick="Hrapplaves()" class="nav-link c-grey-800 cH-blue-500 active ">
+                                    <div class="peers ai-c jc-sb">
+                                        <div class="peer peer-greed">
+                                            <span>Approved</span>
+                                        </div>
+                                    </div>
+                                </button>
+                            </li>
+
+                            <li class="nav-item">
+                                <button style="border:none; background:none" href="" onclick="Hrlrejlaves()" class="nav-link c-grey-800 cH-blue-500 active ">
+                                    <div class="peers ai-c jc-sb">
+                                        <div class="peer peer-greed">
+                                            <span>Reject</span>
+                                        </div>
+                                    </div>
+                                </button>
+                            </li>
+
+                        </ul>
+                    </div>
+                </div>
+                <div id=""></div>
+                <div id="leaves_table_hr" class="col-md-10 ">
+                    <div class="bgc-white bd bdrs-3 p-20 mB-20" id="">
+                        <h4 class="c-grey-900 mB-20">Pending</h4>
+                        <div class="table-responsive" id="">
+                            <table id="" class="table table-striped table-bordered" cellspacing="0" width="100%">
+                                <thead>
+                                    <tr>
+                                        <th>Employee Name</th>
+                                        <th>Leave Type</th>
+                                        <th>Reason</th>
+                                        <th>From</th>
+                                        <th>To</th>
+                                        <th>Number Of Days</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{
+                                        if (Model.Any())
+                                        {
+                                            foreach (var item in Model)
+                                            {
+                                                <tr class="pop_show_pwnding_lvs" data-toggle="modal" data-target="#Modal" id="@item.Id">
+                                                    <td>@item.UserName</td>
+                                                    <td>@item.Name</td>
+                                                    <td>@item.Reason</td>
+                                                    <td> @string.Format("{0: MM/dd/yyyy}", item.StartDate)</td>
+                                                    <td> @string.Format("{0: MM/dd/yyyy}", item.EndDate)</td>
+                                                    <td>@item.NoOfDays</td>
+                                                </tr>
+                                            }
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

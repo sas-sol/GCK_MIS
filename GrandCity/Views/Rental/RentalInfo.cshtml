@@ -1,0 +1,200 @@
+﻿@model MeherEstateDevelopers.Models.RentalInfoView
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <style>
+        .img-full {
+            width: 100% !important;
+            height: 100% !important;
+        }
+
+        .pic-div {
+            width: 160px;
+            height: 160px;
+        }
+        .pic-div-small {
+            width: 150px;
+        }
+        .jeeba{
+            line-height:1px;
+        }
+        @@media print {
+            .img-full {
+                width: 100% !important;
+                height:100% !important;
+            }
+
+            .pic-div {
+                width: 160px;
+                height: 160px;
+            }
+
+            .pic-div-small {
+                width: 150px;
+            }
+            .jeeba{
+                line-height: 1px;
+            }
+        }
+    </style>
+</head>
+
+<body class="nayi-body">
+    <div class="col-md-12 bgc-white">
+        <div class="pic-div-small" style="margin:0 auto">
+            <img src="~/assets/static/images/sag scheme logo.jpg" class="img-full" />
+        </div>
+        <table class="table-borderless table">
+            <tbody>
+                <tr>
+                    <td colspan="2">
+                        Police Station __________________
+                    </td>
+                    @*<td colspan="2" style="text-align:center">Verification form  Rentee</td>*@
+                    <td colspan="2"></td>
+                    <td>District __________________</td>
+                </tr>
+
+                <tr>
+                    <td colspan="2">
+                        <div class="pic-div" style="margin:auto;">
+                            <img class="img-full" src="~/Repository/Rental Images/@(Model.RentalDetails.Id).png" />
+                        </div>
+                    </td>
+
+                    <td colspan="2">
+                        Serial # <b><u>@Model.RentalDetails.Serial_No</u></b>
+                    </td>
+
+                    <td colspan="2">
+                        <div class="pic-div" style="margin:auto;">
+                            <img class="img-full" src="@Model.PlotOwners.Select(x=>x.Owner_Img).FirstOrDefault()" />
+                        </div>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td colspan="2" style="text-align:center;">Picture of Rentee</td>
+                    <td colspan="2" style="text-align:center;"><b><u>Documents of Rentee</u></b></td>
+                    <td colspan="2" style="text-align:center;">Picture of Owner</td>
+                </tr>
+            </tbody>
+        </table>
+
+        @*<div class="col-md-4" style="margin:auto;">
+            <div class="pic-div">
+                <img src="~/assets/static/images/sag scheme logo.jpg" class="img-full" />
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-4">Police Station _______________________________________</div>
+            <div class="col-md-3 central-text-align">Verification form form Rentee</div>
+            <div class="col-md-1"></div>
+            <div class="col-md-4">District _______________________________________</div>
+        </div>
+
+        <div class="row mt-md-3">
+            <div class="col-md-4">
+                <div class="pic-div" style="margin:auto;">
+                    <img class="img-full" src="~/assets/static/images/def-img.png" />
+                </div>
+            </div>
+            <div class="col-md-3 central-text-align">Serial # ____________</div>
+            <div class="col-md-1"></div>
+            <div class="col-md-4">
+                <div class="pic-div" style="margin:auto;">
+                    <img class="img-full" src="@Model.PlotOwners.Select(x=>x.Owner_Img).FirstOrDefault()" />
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-4 central-text-align">Picture of Rentee</div>
+            <div class="col-md-3 central-text-align"><b><u>Documents of Rentee</u></b></div>
+            <div class="col-md-1"></div>
+            <div class="col-md-4 central-text-align">Picture of Owner</div>
+        </div>*@
+
+        <table class="table table-bordered jeeba">
+            <tbody>
+                <tr class="jeeba">
+                    <td colspan="3"><b>Full Name :</b> @Model.RentalDetails.Name</td>
+                    <td colspan="3"><b>Nationality :</b> @Model.RentalDetails.Nationality</td>
+                </tr>
+
+                <tr>
+                    <td colspan="3"><b>CNIC/NICOP :</b> @Model.RentalDetails.CNIC_NICOP</td>
+                    <td colspan="3"><b>Phone # :</b> @Model.RentalDetails.Mobile_1</td>
+                </tr>
+
+                <tr>
+                    <td colspan="3"><b>Occupation :</b> @Model.RentalDetails.Occupation</td>
+                    <td colspan="3"><b>DOB :</b> @((Model.RentalDetails.Date_Of_Birth is null) ? string.Empty : Model.RentalDetails.Date_Of_Birth.Value.ToShortDateString())</td>
+                </tr>
+
+                <tr>
+                    <td colspan="6"><b>Temporary Address :</b> @Model.RentalDetails.Residential_Address</td>
+                </tr>
+
+                <tr>
+                    <td colspan="6"><b>Permanant Address :</b> @Model.RentalDetails.Postal_Address</td>
+                </tr>
+
+                <tr>
+                    <td colspan="6"><b>Current Address of Rentee</b> @Model.RentalDetails.Previous_Rental_Info</td>
+                </tr>
+                <tr>
+                    <td colspan="6"><b>Address of Rental Property:</b> <b> @Model.RentalDetails.Current_Rental_Info</b></td>
+                </tr>
+
+                <tr>
+                    <td colspan="3"><b>Duration :</b></td>
+                    <td colspan="3"><b>Education :</b></td>
+                </tr>
+
+                <tr>
+                    <td><b>Total Family Members :</b></td>
+                    <td colspan="2"><b>Male :</b> @Model.RentalDetails.Gents</td>
+                    <td colspan="2"><b>Female :</b> @Model.RentalDetails.Ladies</td>
+                    <td colspan="1"><b>Children :</b> @Model.RentalDetails.Children</td>
+                </tr>
+
+                <tr>
+                    <td colspan="6"><b>Car/Arms/Passport :</b> @Model.RentalDetails.Car_Arms_Passport_No</td>
+                </tr>
+
+                <tr style="background-color: rgba(0,0,0,0.7);color:white">
+                    <td colspan="6" class="central-text-align"><b><u>Details Of Property Owner</u></b></td>
+                </tr>
+
+                <tr>
+                    <td colspan="3"><b>Full Name :</b> @string.Join(" , ", Model.PlotOwners.Select(x => x.Name))</td>
+                    <td colspan="3"><b>Nationality :</b> @string.Join(" , ", Model.PlotOwners.Select(x => x.Nationality))</td>
+                </tr>
+
+                <tr>
+                    <td colspan="3"><b>CNIC/NICOP :</b> @string.Join(" , ", Model.PlotOwners.Select(x => x.CNIC_NICOP))</td>
+                    <td colspan="3"><b>Phone # :</b> @string.Join(" , ", Model.PlotOwners.Select(x => x.Mobile_1))</td>
+                </tr>
+
+                <tr>
+                    <td colspan="6"><b>Property Address :</b> @string.Join(" , ", Model.PlotOwners.Select(x => x.Residential_Address))</td>
+                </tr>
+
+                <tr>
+                    <td colspan="6"><b>Permanant Address :</b> @string.Join(" , ", Model.PlotOwners.Select(x => x.Postal_Address))</td>
+                </tr>
+                <tr>
+                    <td colspan="6">
+                        <img style="width:100%;" src="~/assets/static/images/rental_footer.png" />
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+</body>
+
+</html>

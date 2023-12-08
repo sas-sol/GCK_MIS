@@ -1,0 +1,166 @@
+﻿@{
+    Layout = "~/Views/Shared/_StaffLayout.cshtml";
+}
+
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/sunburst.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+<script src="https://code.highcharts.com/modules/export-data.js"></script>
+<script src="https://code.highcharts.com/modules/accessibility.js"></script>
+
+<div class="row">
+    <ul class="info-blocks">
+        @{
+            if (User.IsInRole("Commercial Registration"))
+            {
+                <li>
+                    <div style="width:160px">
+                        <a href="/Commercial/CommercialRegisteration">
+                            <img src="~/assets/static/images/Tileicons/Commercial-Registration.png" style="width:100%" />
+                        </a>
+                    </div>
+                </li>
+            }
+            if (User.IsInRole("Activity Logs"))
+            {
+                <li>
+                    <div style="width:160px">
+                        <a href="/Activity/ManagerLevlActivityListshow">
+                            <img src="~/assets/static/images/Tileicons/ac-lg.png" style="width:100%" />
+                        </a>
+                    </div>
+                </li>
+            }
+            if (User.IsInRole("Commercial Registeration-M"))
+            {
+                @*<li>
+                        <div style="width:160px">
+                            <a href="/Commercial/CommercialMannualRegisteration">
+                                <img src="~/assets/static/images/Tileicons/ven.png" style="width:100%" />
+                            </a>
+                        </div>
+                    </li>*@
+                <li class="bg-info">
+                    <div class="top-info">
+                        <a href="javascript:void(0);" class="get-link text-white" data-link="/Commercial/CommercialMannualRegisteration/">Commercial Registeration</a>
+                    </div>
+                </li>
+            }
+            if (User.IsInRole("Update Commercial Record"))
+            {
+                <li>
+                    <div style="width:160px">
+                        <a href="/Commercial/UpdateCommercialInformation">
+                            <img src="~/assets/static/images/Tileicons/Update-Commercial-Record.png" style="width:100%" />
+                        </a>
+                    </div>
+                </li>
+            }
+            if (User.IsInRole("Add Dealership Deals"))
+            {
+                @*<li>
+                        <div style="width:160px">
+                            <a href="/Dealership/Deal">
+                                <img src="~/assets/static/images/Tileicons/ven.png" style="width:100%" />
+                            </a>
+                        </div>
+                    </li>*@
+                <li class="bg-info">
+                    <div class="top-info">
+                        <a href="javascript:void(0);" class="get-link text-white" data-link="/Dealership/Deal/">Add Deal</a>
+                    </div>
+                </li>
+            }
+            if (User.IsInRole("Dealership Deals List"))
+            {
+                <li>
+                    <div style="width:160px">
+                        <a href="/Dealership/DealList">
+                            <img src="~/assets/static/images/Tileicons/Deals-List.png" style="width:100%" />
+                        </a>
+                    </div>
+                </li>
+            }
+            if (User.IsInRole("Cashier Receipts"))
+            {
+                @*<li>
+                        <div style="width:160px">
+                            <a href="/Finance/Receipts">
+                                <img src="~/assets/static/images/Tileicons/ven.png" style="width:100%" />
+                            </a>
+                        </div>
+                    </li>*@
+                <li class="bg-info text-white">
+                    <div class="top-info">
+                        <a href="javascript:void(0);" class="get-link text-white" data-link="/Finance/Receipts/">Receipts Adjustment Request</a>
+                    </div>
+                </li>
+            }
+            if (User.IsInRole("New Admin Project"))
+            {
+                @*<li>
+                        <div style="width:160px">
+                            <a href="/AdminFacilities/Project">
+                                <img src="~/assets/static/images/Tileicons/ven.png" style="width:100%" />
+                            </a>
+                        </div>
+                    </li>*@
+                <li class="bg-success">
+                    <div class="top-info">
+                        <a href="javascript:void(0);" class="get-link text-white" data-link="/AdminFacilities/Project/">Projects</a>
+                    </div>
+                </li>
+            }
+            if (User.IsInRole("Members Registeration"))
+            {
+                @*<li>
+                        <div style="width:160px">
+                            <a href="/AdminFacilities/Registration">
+                                <img src="~/assets/static/images/Tileicons/ven.png" style="width:100%" />
+                            </a>
+                        </div>
+                    </li>*@
+                <li class="bg-success">
+                    <div class="top-info">
+                        <a href="javascript:void(0);" class="get-link text-white" data-link="/AdminFacilities/Registration/">Member Registration</a>
+                    </div>
+                </li>
+            }
+            if (User.IsInRole("Admin Monthly Collection Details"))
+            {
+                @*<li>
+                        <div style="width:160px">
+                            <a href="/AdminFacilities/Detail">
+                                <img src="~/assets/static/images/Tileicons/ven.png" style="width:100%" />
+                            </a>
+                        </div>
+                    </li>*@
+                <li class="bg-info">
+                    <div class="top-info">
+                        <a href="javascript:void(0);" class="get-link text-white" data-link="/AdminFacilities/Detail/">Fee</a>
+                    </div>
+                </li>
+            }
+            if (User.IsInRole("Members List"))
+            {
+                @*<li>
+                        <div style="width:160px">
+                            <a href="/AdminFacilities/MemberListingproject">
+                                <img src="~/assets/static/images/Tileicons/ven.png" style="width:100%" />
+                            </a>
+                        </div>
+                    </li>*@
+                <li class="bg-info">
+                    <div class="top-info">
+                        <a href="javascript:void(0);" class="get-link text-white" data-link="/AdminFacilities/MemberListingproject">All Member</a>
+                    </div>
+                </li>
+            }
+        }
+    </ul>
+</div>
+<style>
+    .a {
+        color: #592a88;
+    }
+</style>

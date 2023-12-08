@@ -1,0 +1,127 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.File_Installments>
+
+    <div class="row">
+        <div class="col-md-10">
+            <div class="installmentStructure" style="overflow-y:scroll; overflow-x:hidden; height:400px;">
+                <input type="hidden" id="com_id" name="comId" value="@ViewBag.id" />
+
+                @foreach (var r in Model.Where(x => x.File_Id == ViewBag.id))
+                {
+
+                    <div class="row arrElements" id="allbody">
+                        <div class="col-md-3 ">
+                            <input type="hidden" class="Ins-id" value="@r.Id" />
+                            <input type="text" class="form-control insName" name="name" value="@r.Installment_Name" />
+                        </div>
+                        <div class="col-md-2">
+                            <input type="hidden" class="inst-type-old" value="@r.Installment_Type" />
+                            <select class="inst-type form-control">
+                                <option value="0">Balloting</option>
+                                <option value="1">Instalment</option>
+                                <option value="2">Development Charges</option>
+                                <option value="3">Advance</option>
+                                <option value="4"></option>
+                                <option value="5">Half Yearly</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3 ">
+                            <input type="text" class="form-control coma amunt" name="amount" value="@string.Format("{0:n0}", r.Amount)" />
+                        </div>
+                        <div class="col-md-3 ">
+                            @{ var date = @String.Format("{0:MM/dd/yyyy}", r.Due_Date); }
+                            <input type="text" class="form-control datTim" data-provide="datepicker" value="@date" />
+                        </div>
+                        <div class="col-md-1">
+                            <a href="javascript:void(0);" class="btnRemove"><i class="fas fa-minus-circle"></i></a>
+                        </div>
+
+                    </div>
+                }
+            </div>
+            <br />
+            <div class="col-md-1">
+                <button id="btnAppend" class="btn btn-primary">Add Row</button>
+            </div>
+        </div>
+
+        <div class="col-md-2 totalamount">
+            <div class="ttl" style="height: 60px; width: 160px; background-color:lightblue; color: black;  border-radius: 10px; text-align: center; padding-top: 16px; position: fixed"><i>Total Amount:</i> </div>
+        </div>
+    </div>
+    <script>
+
+        $(document).ready(function () {
+            $('.inst-type').each(function () {
+                $(this).val($(this).closest('div').find('.inst-type-old').val());
+            });
+            var total = 0;
+            $('.amunt').each(function () {
+                total = total + parseFloat(RemoveComma($(this).val()));
+            });
+            $(".ttl").text(total.toLocaleString());
+            $('.modal-footer').append('<button class="btn btn-success upInsInf" type="submit">Update Installment Info</button>');
+        });
+    $("#btnAppend").click(function () {
+        $(".installmentStructure").append(
+
+            '<div class="row arrElements">' +
+            '<div class="col-md-3">' +
+            '<input type="text" class="form-control insName" name="name" Placeholder="Installment Name"/>' +
+            '</div>' +
+            '<div class="col-md-2"><select class="inst-type form-control"><option value="0">Balloting</option>' +
+            '<option value="1">Instalment</option><option value="2">Development Charges</option>' +
+            '<option value="3">Advance</option><option value="4"></option><option value="5">Half Yearly</option></select></div>' +
+            '<div class="col-md-3">' +
+            ' <input type="text" class="form-control coma amunt" name="amount" Placeholder="Amount" />' +
+            '</div>' +
+            '<div class="col-md-3">' +
+            '<input type="text" class="form-control datTim" data-provide="datepicker" Placeholder="MM/DD/YYYY" />' +
+            '</div>' +
+            '<div class="col-md-1">' +
+            '<a href="javascript:void(0);" class="btnRemove" ><i class="fas fa-minus-circle"></i></a>' +
+            '</div>' +
+            '</div>');
+    });
+
+    $(document).on("click", ".upInsInf", function () {
+        debugger;
+        var id = $("#com_id").val();
+        var arr = [];
+        $('.arrElements').each(function () {
+            debugger
+            //var ins_Id = $(this).find('.Ins-id').val();
+            var instType = $(this).find('.inst-type option:selected').val();
+            var name = $(this).find('.insName').val();
+            var amnt = RemoveComma($(this).find('.amunt').val());
+            var date = $(this).find('.datTim').val();
+            arr.push({
+                Installment_Type: instType,
+                Installment_Name: name,
+                Amount: amnt,
+                Due_Date: date
+            });
+
+        });
+        debugger
+        var con = confirm("Are You sure you want to Update the Installments");
+        if (con) {
+            $.ajax({
+                type: "POST",
+                url: '/FileSystem/UpdateInstallmentInfoFile/',
+                dataType: "json",
+                data: { id: id, installmentData: arr},
+                success: function (data) {
+                    debugger
+
+                    alert('Successfully done');
+                    window.location.reload();
+                    //window.open("/Salaries/DepartmentReport/");
+                },
+                error: function () {
+                    alert("Error Occured");
+                }
+            });
+        }
+    });
+    </script>
+

@@ -1,0 +1,129 @@
+﻿@{
+    Layout = "~/Views/Shared/_StaffLayout.cshtml";
+}
+<style>
+    #loanreason {
+        resize: none;
+    }
+</style>
+<div class="email-app">
+    <div class="email-side-nav ov-h">
+        <div class="h-100 layers">
+            <div class="p-20 pos-r bdT layer w-100 fxg-1">
+                <h6>Loan Requisition</h6>
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a href="javascript:void(0)" onclick="loanrequsition('/Loan/OtherPending/')" class="nav-link c-grey-800 cH-blue-500 active">
+                            <div class="peers ai-c jc-sb">
+                                <div class="peer peer-greed">
+                                    <i class="mR-10 ti-email"></i>
+                                    <span>Pending</span>
+                                </div>
+                            </div>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="javascript:void(0)" onclick="loanrequsition('/Loan/OtherRejected/')" class="nav-link c-grey-800 cH-blue-500">
+                            <div class="peers ai-c jc-sb">
+                                <div class="peer peer-greed">
+                                    <i class="mR-10 ti-trash"></i>
+                                    <span>Rejected</span>
+                                </div>
+                            </div>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="javascript:void(0)" onclick="loanrequsition('/Loan/OtherApproved/')" class="nav-link c-grey-800 cH-blue-500">
+                            <div class="peers ai-c jc-sb">
+                                <div class="peer peer-greed">
+                                    <i class="mR-10 ti-share"></i>
+                                    <span>Approved</span>
+                                </div>
+                            </div>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="email-wrapper bd row pos-r bgc-white">
+        <div class="email-content open no-inbox-view">
+            <div class="p-20 email-compose" id="loan_table_append">
+                <h4 class="c-grey-900 mB-20">Apply For Loan</h4>
+                <div class="col-md-12">
+                    <div class="form-row">
+                        <div class="form-group col-md-3">
+                            <label>Employee Name</label>
+                            @Html.DropDownList("Employee", null, "Choose..", new { @class = "form-control emp-det-raw" })
+                        </div>
+                    </div>
+                </div>
+                <hr />
+                <input type="hidden" class="basic_sal" id="basic_sal" />
+                <input type="hidden" id="emp_id" name="Emp_Id" />
+                <h5>Can apply for loan upto <span id="loan-limit"></span></h5>
+                <div class="col-md-12">
+                    <div class="form-row">
+                        <div class="form-group col-md-3">
+                            <label>Name</label>
+                            <input type="text" class="form-control" id="name" readonly>
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label>CNIC</label>
+                            <input type="text" class="form-control" id="cnic" readonly>
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label>Employee Code</label>
+                            <input type="text" class="form-control" id="code" readonly>
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label>Department</label>
+                            <input type="text" class="form-control" id="dep" readonly>
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label>Date Of joning</label>
+                            <input type="text" class="form-control" id="date-of-join" readonly>
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label>Basic Salary</label>
+                            <input class="form-control" id="basic-sal" readonly>
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="form-row">
+                        <div class="form-group col-md-2">
+                            <label>Select</label>
+                            <select class="form-control" name="loan-advance-app" id="loan-advance-app">
+                                <option>choose</option>
+                                <option value="Loan">Loan</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label>Amount</label>
+                            <input class="form-control coma" placeholder="12,345" required>
+                            <input type="hidden" id="Loan_Installment" name="Amount" class="amt" required>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label>Reason</label>
+                            <textarea class="form-control" rows="1" id="loanreason" cols="1" required></textarea>
+                        </div>
+                        <div class="form-group col-md-1 hidden-mem">
+                            <label>Installments</label>
+                            <input class="form-control " value="" id="inst-num">
+                        </div>
+                        <div class="form-group col-md-1">
+                            <label>-------</label>
+                            <button class="btn btn-primary" id="dir-loan">Apply</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $('.hidden-mem').hide();
+    $(document).on("click", ".dir-loan", function () {
+        
+    });
+</script>

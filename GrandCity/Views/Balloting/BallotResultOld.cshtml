@@ -1,0 +1,403 @@
+﻿@model MeherEstateDevelopers.Models.BallotOutputModel
+
+<script>
+     let __dummy = [];
+    __dummy = @Html.Raw(Json.Encode(Model));
+</script>
+<div class="panel-heading">
+    <h5>Ballot Summary</h5>
+</div>
+
+<div class="col-md-12 bgc-white mt-md-5" style="height:650px;padding-top:20px; display:none;" id="repcont">
+
+</div>
+
+<div class="row mt-md-3">
+
+    @*Plots in Hand Summary Area*@
+    <div class="col-md-6">
+        <table class="table table-borderless">
+            <thead>
+                <tr>
+                    <th colspan="3">Plots In Hand Summary</th>
+                </tr>
+                <tr>
+                    <th>Sr.</th>
+                    <th>Type</th>
+                    <th>Count</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @{ int countP = 1;}
+                @foreach (var v in Model.plotSummary)
+                {
+                    <tr>
+                        <td>@(countP++)</td>
+                        <td>@v.Ident</td>
+                        <td>@v.Count</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+    </div>
+
+    @*Qualifying Files Summary Area*@
+    <div class="col-md-6">
+        <table class="table table-borderless">
+            <thead>
+                <tr>
+                    <th colspan="3">Qualifying Files Summary</th>
+                </tr>
+                <tr>
+                    <th>Sr.</th>
+                    <th>Type</th>
+                    <th>Count</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @{ countP = 1;}
+                @foreach (var v in Model.filesSummary.OrderBy(x=>x.Ident))
+                {
+                    <tr>
+                        <td>@(countP++)</td>
+                        <td>@v.Ident</td>
+                        <td>@v.Count</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+    </div>
+</div>
+
+<div class="col-md-12 mt-md-3">
+    <table class="table table-borderless">
+        <thead>
+            <tr class="thead-dark">
+                <th colspan="6">Comparative Summary</th>
+            </tr>
+            <tr>
+                <th>Plot Type</th>
+                <th>Total</th>
+                <th>Available</th>
+                <th>Requests</th>
+                <th>Alloted</th>
+                <th>Hold</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (var v in Model.ComparativeReport.OrderByDescending(x => x.Ident))
+            {
+                <tr>
+                    <td>@v.Ident</td>
+                    <td>@v.Total</td>
+                    <td>@v.Available</td>
+                    <td>@v.Requests</td>
+                    <td>@v.Balloted</td>
+                    <td>@v.Hold</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<div class="col-md-12">
+    @foreach (var prefer in Model.ballotFiles.GroupBy(x => x.Preference))
+    {
+        <div class="panel-heading central-text-align" style="background-color:#d0232a;color:#fff;">
+            <h5>@prefer.Key --- Total : @prefer.Count()</h5>
+        </div>
+
+        foreach (var marla in prefer.GroupBy(x => x.PlotArea))
+        {
+            <div class="col-md-12">
+                <div class="panel-heading" style="color:white; background:rgba(0,0,0,0.9);">
+                    <h5>@marla.Key Marla ------ Total : @marla.Count()</h5>
+                </div>
+            </div>
+            <hr />
+            <table class="table table-bordered dt-format-fdhjks">
+                <thead>
+                    <tr class="thead-dark">
+                        <th>Sr#</th>
+                        <th>File No.</th>
+                        <th>File Size</th>
+                        <th>Balance</th>
+                        <th>Owner Name</th>
+                        <th>Owner CNIC</th>
+                        <th>Booking Date</th>
+                        <th>First Installment</th>
+                        <th>Development Charges</th>
+                        <th>Plot Assigned</th>
+                        <th>Plot Size</th>
+                        <th>Plot Dimensions</th>
+                        <th>File Details</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @{ int _counter = 1;}
+                    @foreach (var item in marla)
+                    {
+                        <tr>
+                            <td>@(_counter++)</td>
+                            <td>@item.FileNo</td>
+                            <td>@item.FileSize</td>
+                            <td>@string.Format("{0:n0}", item.BalanceAmount)</td>
+                            <td>@item.Name</td>
+                            <td>@item.CNIC_NICOP</td>
+                            <td>@item.Due_Date.ToShortDateString()</td>
+                            <td>@item.FirstInstallment</td>
+                            @if (item.DevelopmentCharges == true)
+                            {
+                                <td>DC</td>
+                            }
+                            else if (item.DevelopmentCharges == false)
+                            {
+                                <td>NDC</td>
+                            }
+                            else if (item.DevelopmentCharges is null)
+                            {
+                                <td>TBA</td>
+                            }
+                            <td>@item.PlotNo</td>
+                            <td>@item.PlotArea Marla</td>
+                            <td>@item.PlotDimensions</td>
+                            <td><i class="fa fa-eye pointer file-inf" data-dtag="@item.FileNo" data-toggle="modal" data-target="#Modal"></i></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    }
+</div>
+
+<div class="col-md-12">
+    <div class="panel-heading central-text-align" style="background-color:#d0232a;color:#fff;">
+        <h5>UnBalloted Plots</h5>
+    </div>
+    @if (Model.unballotedPlots.Any())
+    {
+        foreach (var prefer_ in Model.unballotedPlots)
+        {
+            <div class="panel-heading" style="background:rgba(0,0,0,0.9);color:white;">
+                <h5>@prefer_.PlotSize Marla @prefer_.Prefrence --- Total : @prefer_.Plots.Count()</h5>
+            </div>
+            <table class="table table-bordered dt-format-fdhjks">
+                <thead>
+                    <tr>
+                        <th>Sr#</th>
+                        <th>Plot#</th>
+                        <th>Sector</th>
+                        <th>Marla</th>
+                        <th>Location</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @{ int c_ = 1;}
+                    @if (prefer_.Plots.Any())
+                    {
+                        foreach (var ubp in prefer_.Plots)
+                        {
+                            <tr>
+                                <td>@(c_++)</td>
+                                <td>@ubp.PlotNo</td>
+                                <td>@ubp.Sector</td>
+                                <td>@ubp.PlotArea</td>
+                                <td>@ubp.PlotType</td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="5">No Unballoted Plots Found</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+        }
+    }
+    else
+    {
+        <div class="col-md-12">
+            <h5>No Unballoted plots found</h5>
+        </div>
+        <hr />
+    }
+
+</div>
+
+<div class="col-md-12">
+    <div class="panel-heading central-text-align" style="background-color:#d0232a;color:#fff;">
+        <h5>UnBalloted Files</h5>
+    </div>
+
+    @foreach (var prefer_ in Model.unballotedFiles.GroupBy(x => x.Plot_Prefrence))
+    {
+        <div class="panel-heading" style="background:rgba(0,0,0,0.9);color:white;">
+            <h5>@prefer_.Key  --- Total : @prefer_.Count()</h5>
+        </div>
+
+        foreach (var ubf in prefer_.GroupBy(x => x.Plot_Size))
+        {
+            <div class="panel-heading">
+                <h5>@ubf.Key --- Total : @ubf.Count()</h5>
+            </div>
+
+            <table class="table table-bordered dt-format-fdhjks">
+                <thead>
+                    <tr>
+                        <th>Sr#</th>
+                        <th>File#</th>
+                        <th>Size</th>
+                        <th>Location</th>
+                        <th>Owner</th>
+                        <th>CNIC/NICOP</th>
+                        <th>Booking Date</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @{ int c_ = 1;}
+                    @if (ubf.Any())
+                    {
+                        foreach (var item in ubf)
+                        {
+                            <tr>
+                                <td>@(c_++)</td>
+                                <td>@item.FileFormNumber</td>
+                                <td>@item.Plot_Size</td>
+                                <td>@item.Plot_Prefrence</td>
+                                <td>@item.Name</td>
+                                <td>@item.CNIC_NICOP</td>
+                                <td>@item.Due_Date.Value.ToShortDateString()</td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="7"> No Unballoted File Found</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    }
+</div>
+
+<script>
+
+    let __cats = __dummy.ballotFiles.reduce((r, a) => {
+        r[a.Preference] = [...r[a.Preference] || [], a];
+        return r;
+    }, {});
+
+    let __cats_Final = [];
+    let __sers_Final = [];
+    $.each(__cats, function (_i, _v) {
+        __cats_Final.push(_v[0].Preference);
+    });
+
+
+    let __sizes = __dummy.ballotFiles.reduce((r, a) => {
+        r[a.PlotArea] = [...r[a.PlotArea] || [], a];
+        return r;
+    }, {});
+
+    $.each(__sizes, function (_ii, _vv) {
+        let _counts = [];
+        $.each(__cats, function (_iii, _vvv) {
+            _counts.push(_vv.filter(x => x.PlotArea == _vv[0].PlotArea && x.Preference == _vvv[0].Preference).length);
+        });
+
+        __sers_Final.push({
+            name: _vv[0].PlotArea + ' Marla',
+            data: _counts
+        });
+    });
+
+    //console.log(__cats_Final);
+    //console.log(__sers_Final);
+    $('#repcont').show();
+    Highcharts.chart('repcont', {
+        chart: {
+            type: 'column'
+        },
+        title: {
+            text: 'Balloting Summary'
+        },
+        xAxis: {
+            categories: __cats_Final
+        },
+        yAxis: {
+            min: 0,
+            title: {
+                text: 'Total Plots Balloted'
+            },
+            stackLabels: {
+                enabled: true,
+                style: {
+                    fontWeight: 'bold',
+                    color: ( // theme
+                        Highcharts.defaultOptions.title.style &&
+                        Highcharts.defaultOptions.title.style.color
+                    ) || 'gray'
+                }
+            }
+        },
+        legend: {
+            align: 'right',
+            x: -30,
+            verticalAlign: 'top',
+            y: 25,
+            floating: true,
+            backgroundColor:
+                Highcharts.defaultOptions.legend.backgroundColor || 'white',
+            borderColor: '#CCC',
+            borderWidth: 1,
+            shadow: false
+        },
+        tooltip: {
+            headerFormat: '<b>{point.x}</b><br/>',
+            pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}'
+        },
+        plotOptions: {
+            column: {
+                pointPadding: 0.2,
+                borderWidth: 0,
+                stacking: 'normal',
+                dataLabels: {
+                    enabled: true
+                }
+            }
+        },
+        series: __sers_Final
+    });
+
+    $(document).ready(function () {
+        $('.file-inf').unbind().click(function () {
+            var id = $(this).attr("data-dtag");
+            EmptyModel();
+            $('.modal-body').load('/FileSystem/GetFileDetails/', { FileId: id }, function () {
+                $(".modal-dialog").attr('style', 'max-width: 1500px !important');
+                $("#ModalLabel").text("Details");
+            });
+        });
+
+        console.log(__dummy);
+        $('.dt-format-fdhjks').DataTable({
+            dom: 'Bfrtip',
+            buttons: [
+                'copy', 'csv', 'excel', 'pdf', 'print'
+            ],
+        });
+    });
+</script>

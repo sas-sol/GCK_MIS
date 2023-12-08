@@ -1,0 +1,177 @@
+﻿<input type="hidden" class="grpTag" value="@ViewBag.grpTag" />
+    <div class="row own-row-dat">
+        <div class="col-md-12">
+            <div class="form-row">
+                <div class="form-group col-md-3">
+                    <label>Ownership Status</label>
+                    <select class="form-control Ownership_Status" id="Ownership_Status" name="">
+                        <option value="">Select Ownership</option>
+                        <option value="Owner">Owner</option>
+                        <option value="Transfered">Transfered</option>
+                        <option value="Cancelled">Cancelled</option>
+                        <option value="Pending">Pending</option>
+                    </select>
+                </div>
+                <div class="form-group col-md-3">
+                    <label>Name</label>
+                    <input type="text" class="form-control Name" name="">
+                </div>
+                <div class="form-group col-md-3">
+                    <label style="white-space:nowrap;">Father's/Husband's Name</label>
+                    <input type="text" class="form-control Father_Husband" name="">
+                </div>
+                <div class="form-group col-md-3">
+                    <label>CNIC / NICOP</label>
+                    <input type="text" class="form-control CNIC_NICOP" name="" placeholder="12345-1234567-1   or   123456-123456-1">
+                </div>
+                <div class="form-group col-md-2">
+                    <label>Date Of Birth</label>
+                    <input type="text" class="form-control Date_Of_Birth" data-provide="datepicker" placeholder="mm/dd/yyyy" name="">
+                </div>
+                <div class="form-group col-md-6">
+                    <label>Postal Address</label>
+                    <input type="text" class="form-control Postal_Address" name="" placeholder="1234 Main St">
+                </div>
+                <div class="form-group col-md-6">
+                    <label>Residential Address</label>
+                    <input type="text" class="form-control Residential_Address" name="" placeholder="Apartment, Plot, or floor">
+                </div>
+                <div class="form-group col-md-2">
+                    <label>City</label>
+                    <input type="text" class="form-control City">
+                </div>
+                <div class="form-group col-md-3">
+                    <label>Occupation</label>
+                    <input type="text" class="form-control Occupation" name="">
+                </div>
+                <div class="form-group col-md-2">
+                    <label>Nationality</label>
+                    <input type="text" class="form-control Nationality" name="">
+                </div>
+                <div class="form-group col-md-3">
+                    <label>Email</label>
+                    <input type="text" class="form-control Email" name="">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-3">
+                    <label>Phone Office</label>
+                    <input type="text" class="form-control Phone_Office" name="">
+                </div>
+                <div class="form-group col-md-3">
+                    <label>Residential</label>
+                    <input type="text" class="form-control Residential" name="">
+                </div>
+
+                <div class="form-group col-md-3">
+                    <label>Mobile 1</label>
+                    <input type="text" class="form-control Mobile_1" placeholder="03121234567" name="">
+                </div>
+
+                <div class="form-group col-md-3">
+                    <label>Mobile 2</label>
+                    <input type="text" class="form-control Mobile_2" pattern="^0\d{10}" placeholder="03121234567" name="">
+                </div>
+                <div class="form-group col-md-3">
+                    <label>Date of Ownership</label>
+                    <input type="text" class="form-control Ownership_DateTime" data-provide="datepicker" name="">
+                </div>
+                <div class="form-group col-md-6" style="margin:auto;">
+                    <h6 style="width: auto;float: left;margin: 7px;">Filer</h6>
+                    <label class="switch"><input type="checkbox" class="IsFiler"><span class="slider round"></span></label>
+                </div>
+            </div>
+            <h6 class="heading-lgt-onDark">Nominee</h6>
+            <div class="form-row">
+                <div class="form-group col-md-3">
+                    <label>Name</label>
+                    <input type="text" class="form-control Nominee_Name" name="">
+                </div>
+                <div class="form-group col-md-2">
+                    <label>CNIC / NICOP</label>
+                    <input type="text" class="form-control Nominee_CNIC_NICOP" placeholder="12345-1234567-1 or 123456-123456-1" name="">
+                </div>
+                <div class="form-group col-md-2">
+                    <label>Relation</label>
+                    <input class="form-control Nominee_Relation" name="" placeholder="">
+                </div>
+                <div class="form-group col-md-5">
+                    <label>Address</label>
+                    <input type="text" class="form-control Nominee_Address" name="" placeholder="1234 Main St">
+                </div>
+            </div>
+            @*<div class="form-row">
+                <div class="col-md-3">
+                    <img style="margin-top:10px" width="200" height="200" id="own_img" />
+                    <input type="button" class="btn btn-info own-img add-own-img" id="add-own-img1" style="margin-top:10px;display:none" data-toggle="modal" value="Add Image" data-target="#Modal" />
+                </div>
+            </div>*@
+            <div class="form-row">
+                <div class="col-md-2">
+                    <button class="btn btn-success sav-new-own-info-jkshfd-yuie" style="margin-top:5px;" id="">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<script>
+    $(".sav-new-own-info-jkshfd-yuie").unbind().click(function () {
+        var that = $(this);
+        var id = $(".grpTag").val();
+        var prnt = $(this).closest(".own-row-dat");
+        var plotowndata = {
+            //Plot_Size: $(prnt).find(".pl-size").val(),
+            Name: $(prnt).find(".Name").val(),
+            Father_Husband: $(prnt).find(".Father_Husband").val(),
+            Postal_Address: $(prnt).find(".Postal_Address").val(),
+            Residential_Address: $(prnt).find(".Residential_Address").val(),
+            Phone_Office: $(prnt).find(".Phone_Office").val(),
+            Residential: $(prnt).find(".Residential").val(),
+            Mobile_1: $(prnt).find(".Mobile_1").val(),
+            Mobile_2: $(prnt).find(".Mobile_2").val(),
+            Email: $(prnt).find(".Email").val(),
+            Occupation: $(prnt).find(".Occupation").val(),
+            Nationality: $(prnt).find(".Nationality").val(),
+            Date_Of_Birth: $(prnt).find(".Date_Of_Birth").val(),
+            CNIC_NICOP: $(prnt).find(".CNIC_NICOP").val(),
+            Ownership_DateTime: $(prnt).find(".Ownership_DateTime").val(),
+            Nominee_Name: $(prnt).find(".Nominee_Name").val(),
+            Nominee_Relation: $(prnt).find(".Nominee_Relation").val(),
+            Nominee_Address: $(prnt).find(".Nominee_Address").val(),
+            Nominee_CNIC_NICOP: $(prnt).find(".Nominee_CNIC_NICOP").val(),
+            DateTime: $(prnt).find(".DateTime").val(),
+            Ownership_Status: $(prnt).find(".Ownership_Status").val(),
+            Plot_Id: $("#plt-id").val(),
+            GroupTag: id,
+            //Total_Price: $("#plt-price").val(),
+            City: $(prnt).find(".City").val(),
+            IsFiler: $(prnt).find(".IsFiler").is(':checked'),
+        }
+        if (plotowndata.Name == null || plotowndata.Name.trim() == "") {
+            alert("Please Enter Name");
+            return false;
+        }
+        else if (plotowndata.CNIC_NICOP == null || plotowndata.CNIC_NICOP.trim() == "") {
+            alert("Please CNIC");
+            return false;
+        }
+        else if (plotowndata.Ownership_DateTime == null || plotowndata.Ownership_DateTime.trim() == "") {
+            alert("Ownership Date");
+            return false;
+        }
+        $.ajax({
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            url: '/Plots/AddNewPlotOwner/',
+            data: JSON.stringify(plotowndata),
+            success: function (data) {
+                $(that).hide();
+                alert("Data Updated");
+                closeRightPopup
+            },
+            error: function (data) {
+                alert("Failed to add owner");
+            }
+        });
+    });
+</script>

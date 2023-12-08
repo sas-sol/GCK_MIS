@@ -1,0 +1,150 @@
+@model IEnumerable<Management_Information_System.Models.COA_Mapper>
+@using Management_Information_System.Models;
+@{
+    var overtime = Model.Where(x => x.ModuleType == COA_Mapper_ModuleTypes.Salary_Overtime.ToString()).FirstOrDefault();
+    var bonus = Model.Where(x => x.ModuleType == COA_Mapper_ModuleTypes.Salary_Bonus.ToString()).FirstOrDefault();
+    var allowance = Model.Where(x => x.ModuleType == COA_Mapper_ModuleTypes.Salary_Allowance.ToString()).FirstOrDefault();
+    var basicsalary = Model.Where(x => x.ModuleType == COA_Mapper_ModuleTypes.Salary_BasicSalary.ToString()).FirstOrDefault();
+    var taxded = Model.Where(x => x.ModuleType == COA_Mapper_ModuleTypes.Salary_TaxDeduction.ToString()).FirstOrDefault();
+    var loanded = Model.Where(x => x.ModuleType == COA_Mapper_ModuleTypes.Salary_LoanDeduction.ToString()).FirstOrDefault();
+    var advanceded = Model.Where(x => x.ModuleType == COA_Mapper_ModuleTypes.Salary_AdvanceDeduction.ToString()).FirstOrDefault();
+    var otherded = Model.Where(x => x.ModuleType == COA_Mapper_ModuleTypes.Salary_OtherDeductions.ToString()).FirstOrDefault();
+    var extFuel = Model.Where(x => x.ModuleType == COA_Mapper_ModuleTypes.Salary_ExtraFuelCharges.ToString()).FirstOrDefault();
+    var netsalary = Model.Where(x => x.ModuleType == COA_Mapper_ModuleTypes.Salary_NetSalary.ToString()).FirstOrDefault();
+}
+<h4>Human Resource</h4>
+<div class="col-md-12">
+    <div class="form-row row">
+        <div class="col-md-6">
+            <div class="from-row row p-20">
+                <div class="form-group col-md-6">
+                    <h5>Net Salary</h5>
+                    <select class="form-control sel-plug sal-net" data-param="@COA_Mapper_ModuleTypes.Salary_NetSalary.ToString()">
+                        @if (netsalary != null)
+                        {
+                            <option value="@netsalary.AccountId">@netsalary.AccountCode - @netsalary.Head_Name</option>
+                        }
+                    </select>
+                </div>
+                <div class="form-group col-md-6">
+                    <h5>Basic Salary</h5>
+                    <select class="form-control sel-plug sal-bas">
+                        @if (basicsalary != null)
+                        {
+                            <option value="@basicsalary.AccountId">@basicsalary.AccountCode - @basicsalary.Head_Name</option>
+                        }
+                    </select>
+                </div>
+                <div class="form-group col-md-6">
+                    <h5>Allowance</h5>
+                    <select class="form-control sel-plug sal-all">
+                        @if (allowance != null)
+                        {
+                            <option value="@allowance.AccountId">@allowance.AccountCode - @allowance.Head_Name</option>
+                        }
+                    </select>
+                </div>
+                <div class="form-group col-md-6">
+                    <h5>Bonus</h5>
+                    <select class="form-control sel-plug sal-bon">
+                        @if (bonus != null)
+                        {
+                            <option value="@bonus.AccountId">@bonus.AccountCode - @bonus.Head_Name</option>
+                        }
+                    </select>
+                </div>
+                <div class="form-group col-md-6">
+                    <h5>Overtime</h5>
+                    <select class="form-control sel-plug sal-over">
+                        @if (overtime != null)
+                        {
+                            <option value="@overtime.AccountId">@overtime.AccountCode - @overtime.Head_Name</option>
+                        }
+                    </select>
+                </div>
+                <div class="form-group col-md-6">
+                    <h5>Tax Deduction</h5>
+                    <select class="form-control sel-plug tax-ded">
+                        @if (taxded != null)
+                        {
+                            <option value="@taxded.AccountId">@taxded.AccountCode - @taxded.Head_Name</option>
+                        }
+                    </select>
+                </div>
+                <div class="form-group col-md-6">
+                    <h5>Loan Deduction</h5>
+                    <select class="form-control sel-plug loan-ded">
+                        @if (loanded != null)
+                        {
+                            <option value="@loanded.AccountId">@loanded.AccountCode - @loanded.Head_Name</option>
+                        }
+                    </select>
+                </div>
+                <div class="form-group col-md-6">
+                    <h5>Advance Deduction</h5>
+                    <select class="form-control sel-plug adv-ded">
+                        @if (advanceded != null)
+                        {
+                            <option value="@advanceded.AccountId">@advanceded.AccountCode - @advanceded.Head_Name</option>
+                        }
+                    </select>
+                </div>
+                <div class="form-group col-md-6">
+                    <h5>Other Deduction</h5>
+                    <select class="form-control sel-plug oth-ded">
+                        @if (otherded != null)
+                        {
+                            <option value="@otherded.AccountId">@otherded.AccountCode - @otherded.Head_Name</option>
+                        }
+                    </select>
+                </div>
+                <div class="form-group col-md-6">
+                    <h5>Extra Fuel Deduction</h5>
+                    <select class="form-control sel-plug ext-fuel">
+                        @if (extFuel != null)
+                        {
+                            <option value="@extFuel.AccountId">@extFuel.AccountCode - @extFuel.Head_Name</option>
+                        }
+                    </select>
+                </div>
+                <div class="form-group col-md-12">
+                    <button class="btn btn-primary up-salaries">Update</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $('.sel-plug').select2({
+        placeholder: "Search for Account",
+        ajax: {
+            url: '/AccountHeads/GetHead/',
+            dataType: 'json',
+            params: {
+                contentType: 'application/json; charset=utf-8'
+            },
+            data: function (params) {
+                return {
+                    q: params.term// search term
+                };
+            },
+            processResults: function (data) {
+                // Transforms the top-level key of the response object from 'items' to 'results'
+                return {
+                    results: $.map(data.items, function (item) {
+                        return {
+                            text: item.Parent,
+                            children: [{
+                                id: item.id,
+                                text: item.text
+                            }]
+                        }
+                    })
+                };
+            }
+        }
+    });
+
+    
+
+</script>

@@ -1,0 +1,39 @@
+﻿@{ if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+}
+<div class="row">
+    <div class="col-md-12">
+        <div class="bdrs-3 bgc-white p-10 bd">
+            <div class="form-row">
+                <h5>Custom Search Filters</h5>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-2">
+                    <label>From</label>
+                    <input type="text" id="from" class="form-control" data-provide="datepicker" />
+                </div>
+                <div class="form-group col-md-2">
+                    <label>To</label>
+                    <input type="text" id="to" class="form-control" data-provide="datepicker" />
+                </div>
+                <div class="form-group col-md-2">
+                    <button style="margin-top:29px" class="btn btn-info mat-rec-rep">Search</button>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="table-responsive" id="report"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var from = $("#from").val();
+    var to = $("#to").val();
+    $("#report").load("/Reports/SearchMaterialReceivingReport/", { From: from, To: to });
+</script>

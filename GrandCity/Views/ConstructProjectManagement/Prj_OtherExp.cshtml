@@ -1,0 +1,147 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Other_Expense>
+<div class="col-md-12">
+    <div class="form-group col-md-3">
+        <button type="submit" class="btn btn-info oth-exp"><i class="fas fa-clipboard-list"></i> Other Expense/TA-DA Requisition</button>
+    </div>
+    <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <li class="nav-item"><a class="nav-link active" role="tab" data-toggle="tab" data-lead="1" aria-controls="home" aria-selected="true" href="#assigned">Requisitions</a></li>
+        <li class="nav-item"><a class="nav-link" role="tab" data-toggle="tab" data-lead="1" aria-controls="home" aria-selected="true" href="#created">Approved</a></li>
+    </ul>
+    <div class="tab-content">
+        <div id="assigned" class="tab-pane active">
+            <div class="p-20">
+                <table class="table table-bordered" id="inv" width="100%">
+                    <thead>
+                        <tr>
+                            <th width="5%">Sr.</th>
+                            <th width="10%">Date</th>
+                            <th width="10%">Requested By</th>
+                            <th width="65%">Expense</th>
+                            @if (User.IsInRole("Purchase Requisition Approval"))
+                            {
+                                <th width="10%"></th>
+                            }
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.Where(x => x.Status != "Approved").Any())
+                        {
+                            int sr = 1;
+                            foreach (var v in Model.Where(x => x.Status != "Approved").GroupBy(x => new { x.Group_Id, x.DateTime, x.RequestedBy_Name }))
+                            {
+                        <tr class="pointer exp-dfkhjsa" id="@v.Key.Group_Id">
+                            <td>@(sr++)</td>
+                            <td>@string.Format("{0:dd-MMM-yyyy}", v.Key.DateTime)</td>
+                            <td>@v.Key.RequestedBy_Name</td>
+                            <td class="tdscrol">
+                                <table class="table table-bordered" style="margin-bottom:0px; border:none">
+                                    <thead>
+                                        <tr>
+                                            <th width="5%">Sr.</th>
+                                            <th width="30%">Expense</th>
+                                            <th width="40%">Details</th>
+                                            <th width="15%">Amount</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @{int count = 1;}
+                                        @foreach (var item in v)
+                                        {
+                                            <tr>
+                                                <td>@(count++)</td>
+                                                <td>@item.Item_Name</td>
+                                                <td>@item.Description</td>
+                                                <td>@item.Currency @string.Format("{0:0,0.##}", item.Amount)</td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </td>
+                            @if (User.IsInRole("Purchase Requisition Approval"))
+                            {
+                                <td>
+                                    <span class="oe-app pointer bgc-green-50" style="display:block;width:20px;float:left;text-align:center"><i class="fas fa-check"></i></span>
+                                    @*<label class="switch"><input type="checkbox" class=""><span class="slider round"></span></label>*@
+                                    <span class="rem-oe pointer bgc-red-50" style="display:block;width:20px;float:right;text-align:center" data-id="@v.Key.Group_Id"> <i class="fas fa-trash"></i></span>
+                                </td>
+                            }
+
+                        </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="5"> No requisitions created yet</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div id="created" class="tab-pane">
+            <div class="p-20">
+
+                <table class="table table-bordered potbl" cellspacing="0" width="100%">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th width="5%">Sr.</th>
+                            <th width="10%">Date</th>
+                            <th width="10%">Req No</th>
+                            <th width="10%">Requested By</th>
+                            <th width="60%">Expense</th>
+                            <th width="5%"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.Where(x => x.Status == "Approved").Any())
+                        {
+                            int sr = 1;
+                            foreach (var v in Model.Where(x => x.Status == "Approved").GroupBy(x => new { x.Group_Id, x.Requisition_No, x.DateTime, x.RequestedBy_Name }))
+                            {
+                                <tr class="pointer exp-dfkhjsa" id="@v.Key.Group_Id">
+                                    <td>@(sr++)</td>
+                                    <td>@string.Format("{0:dd-MMM-yyyy}", v.Key.DateTime)</td>
+                                    <td>@v.Key.Requisition_No</td>
+                                    <td>@v.Key.RequestedBy_Name</td>
+                                    <td class="tdscrol">
+                                        <table class="table table-bordered" style="margin-bottom:0px; border:none">
+                                            <thead>
+                                                <tr>
+                                                    <th width="5%">Sr.</th>
+                                                    <th width="30%">Expense</th>
+                                                    <th width="40%">Details</th>
+                                                    <th width="15%">Amount</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @{int count = 1;}
+                                                @foreach (var item in v)
+                                                {
+                                                <tr>
+                                                    <td>@(count++)</td>
+                                                    <td>@item.Item_Name</td>
+                                                    <td>@item.Description</td>
+                                                    <td>@item.Currency @string.Format("{0:0,0.##}", item.Amount)</td>
+                                                </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <span class="pri-oe pointer" data-id="@v.Key.Group_Id"> <i class="fas fa-print"></i></span>
+                                    </td>
+                                </tr> }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="5">No Record Exists</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

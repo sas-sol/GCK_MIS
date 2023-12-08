@@ -1,0 +1,15 @@
+﻿<div class="container-fluid">
+    <h4 class="c-grey-900 mT-10 mB-30"></h4>
+    <ul class="nav nav-tabs" id="myTabs">
+        @{ string activeclass = "active";}
+        <li class="nav-item"><a class="nav-link @activeclass" data-toggle="tab" role="tab" data-link="/ArrearsSalaries/FinanceSalariesSlip?Month=@ViewBag.MO&Year=@ViewBag.Yr" href="#salaries">Payable</a></li>
+        @{ activeclass = ""; }
+        <li class="nav-item"><a class="nav-link @activeclass" data-toggle="tab" role="tab" data-link="/ArrearsSalaries/DistributorDetail?Month=@ViewBag.MO&Year=@ViewBag.Yr" href="#salaries">Daily Distribution</a></li>
+    </ul>
+    <!-- Tab panes -->
+    <div class="tab-content">
+        <div id="salaries" class="tab-pane active">
+            @{ Html.RenderAction("FinanceSalariesSlip", "ArrearsSalaries", new { Month = ViewBag.Mo, Year = ViewBag.Yr });}
+        </div>
+    </div>
+</div>

@@ -1,0 +1,65 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Sp_Get_Dealership_Plots_Report_Result>
+@*@using MeherEstateDevelopers.Models
+@{
+    var all = Model.Select(x => new { x.Id, x.FileFormNumber, x.Plot_Size, Status = ((FileStatus)x.Status).ToString(), x.Development_Charges, Date = string.Format("{0:dd-MMM-yyyy}", x.Date), Reg_Date = string.Format("{0:dd-MMM-yyyy}", x.Reg_Date) });
+}*@
+@*<script>
+    var files = @Html.Raw(Json.Encode(all));
+</script>*@
+<h4>Plot Details</h4>
+@{
+    if (Model.Any())
+    {
+        int sr1 = 1;
+        <table class="table table-striped table-bordered" cellspacing="0" width="100%">
+            <thead>
+                <tr>
+                    <th>Sr.</th>
+                    <th>Plot Size</th>
+                    <th>Phase</th>
+                    <th>Block</th>
+                    <th>Deal Title</th>
+                    <th>Deal Date</th>
+                    <th>Register</th>
+                    <th>Pending</th>
+                    <th>Total Form</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                @foreach (var item in Model.OrderBy(x => x.Plot_Size).GroupBy(x => new { x.Plot_Size, x.Phase_Name, x.Block_Name, x.DealTitle, x.Deal_Date }))
+                {
+                    <tr>
+                        <td>@sr1</td>
+                        <td>@item.Key.Plot_Size</td>
+                        <td>@item.Key.Phase_Name</td>
+                        <td>@item.Key.Block_Name</td>
+                        <td>@item.Key.DealTitle</td>
+                        <td>@String.Format("{0:MM/dd/yyyy}", item.Key.Deal_Date)</td>
+                        <td>@item.Where(x=> x.STATUS == "Registered").Sum(x => x.Total)</td>
+                        <td>@item.Where(x=> x.STATUS == "Available_For_Sale").Sum(x => x.Total)</td>
+                        <td>@item.Sum(x=> x.Total)</td>
+                    </tr>
+                    sr1++;
+                }
+            </tbody>
+        </table>
+        <table class="table table-striped table-bordered">
+            <tr><th>Total Plots : @Model.Sum(x=> x.Total)</th></tr>
+            <tr>
+                @foreach (var item in Model.GroupBy(x => new { x.Plot_Size }))
+                {
+                    <td>@item.Key.Plot_Size : @item.Sum(x=> x.Total)</td>
+                }
+            </tr>
+        </table>
+    }
+    else
+    {
+        <table class="table table-striped table-bordered">
+            <tr>
+                <td colspan="8" align="center">No Plots to Show</td>
+            </tr>
+        </table>
+    }
+}

@@ -1,0 +1,205 @@
+﻿@{
+    if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+
+}
+<script>
+    var plots = @Html.Raw(Json.Encode(ViewBag.Plots));
+    var plotins = @Html.Raw(Json.Encode(ViewBag.PlotInst));
+    var unipllotdata = [];
+    $(function () {
+        $.each(plots, function (key, value) {
+            var uniplot = { Id: "", Text: "" };
+            var plt = unipllotdata.find(function (e) {  return e.Text == value.Text });
+            if (plt == null) {
+                uniplot.Id = value.Value; uniplot.Text = value.Text;
+                unipllotdata.push(uniplot);
+            }
+        });
+        InitPlots(1);
+    });
+</script>
+<div class="row gap-20 pos-r">
+    <div class="col-md-12">
+        <div class="bgc-white p-20 bd">
+            <h6 class="c-grey-900">Dealer File Form Association</h6>
+            <div class="mT-30">
+                @using (Html.BeginForm("DealerFormAssociation", "Dealership", FormMethod.Post, new { @id = "de-fo-as", @class = "", role = "form" }))
+                {
+                    @Html.AntiForgeryToken()
+                    <div class="form-row">
+                        <div class="form-group col-md-3">
+                            <label>Project</label>
+                            @Html.DropDownList("Projects", null, "Select Project", htmlAttributes: new { @class = "form-control prj-phas" })
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label>Phases</label>
+                            <select class="form-control pha-blk" name="Phase" id="phase">
+                                <option>Select Project</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label>Block</label>
+                            <select class="form-control pha-blk" name="Block" id="block">
+                                <option>Select Phase</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label>Type</label>
+                            <select class="form-control type" name="Type" id="type">
+                                <option value="Residential">Residential</option>
+                                <option value="Commercial">Commercial</option>
+                            </select>
+                        </div>
+                        <div class="form-group  col-md-3">
+                            <label>Dealership</label>
+                            @Html.DropDownList("Dealership", null, "Select Dealership", htmlAttributes: new { @class = "form-control" })
+                        </div>
+                        @*<div class="form-group col-md-3">
+                                <label>Valid Date</label>
+                                <input type="text" id="valid_Date" name="valid_Date" placeholder="MM/DD/YYYY" data-provide="datepicker" class="form-control" />
+                            </div>*@
+                        <div class="form-group col-md-1">
+                            <label>Sector</label>
+                            <select class="form-control type" name="Sector" id="Sector">
+                                <option value="A">A</option>
+                                <option value="B">B</option>
+                                <option value="C">C</option>
+                                <option value="D">D</option>
+                                <option value="E">E</option>
+                            </select>
+                        </div>
+                    </div>
+                    @*<div class="form-row">
+                            <div class="col-md-3">
+                                <h6 class="c-grey-900">Security Fees: </h6>
+                                <label id="sec-fee"></label>
+                            </div>
+                            <div class="form-group col-md-2">
+                                <h6>Total Security: </h6>
+                                <label id="tot-sec"></label>
+                            </div>
+                        </div>*@
+                    <div id="file-form">
+                        <div class="form-row" id="file-asoc-1">
+                            <div class="form-group col-md-1">
+                                <label>Plot Size</label>
+                                <select class="form-control plots">
+                                    <option>Select Plot Size</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-1">
+                                <label>Total Files</label>
+                                <input type="number" min="1" class="form-control total-file" />
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label>-</label>
+                                <select class="form-control dev-char">
+                                    <option>Select Development Charges</option>
+                                    <option value="1">With Development Charges</option>
+                                    <option value="0">Without Development Charges</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label>Commession</label>
+                                <input type="text" class="form-control com" />
+                            </div>
+                            @*<div class="form-group col-md-2">
+                                    <label>Security</label>
+                                    <input type="text" class="form-control sec" readonly />
+                                </div>*@
+                            <div class="form-group col-md-3">
+                                <label>Choose Installment Structure</label>
+                                <select class="form-control plt-ins">
+                                </select>
+                            </div>
+                            <div class="form-group col-md-1">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row py-3">
+                        <a href="javascript:void(0);" class="ad-file-inf"><i class="ti-plus"></i>&nbsp;Add Row</a>
+                    </div>
+                    <button type="submit" class="btn btn-primary" id="del-sub-btn">Assign</button>
+                    <button type="button" class="btn btn-info" id="reset" style="display:none" onclick="window.location.reload()">Reset Page</button>
+                }
+            </div>
+            <hr />
+            <div class="row" id="re-fi-for"></div>
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+
+    // Add the file forms
+    $(document).on("submit", "#de-fo-as", function (e) {
+        e.preventDefault();
+        if (formcontrolToken) {
+            return false;
+        }
+        else {
+            var totalcount = 0;
+            $(".total-file").each(function () {
+                totalcount = totalcount + parseInt($(this).val());
+            });
+            //if (totalcount > 50) {
+            //    alert("Please Enter Total MAX 50 Files");
+            //    return false;
+            //}
+            debugger
+            formcontrolToken = true;
+            var filesformdata = [];
+            for (var i = 1; i <= filealloccounter; i++) {
+                var fillalc = { Phase: "", Block: "", Dealership_Name: "", Dealership_Id: "", valid_Date: "", Sector: "", Plot_Size: "", Filecount: "", Dev_Charges_Id: "", Dev_Charges_Text: "", Sec_NoSec_Id: "", Security: "", Installment_Plan: "" };
+                fillalc.Phase = $('#phase').val();
+                fillalc.Phase_Name = $('#phase option:selected').text();
+                fillalc.Block = $('#block').val();
+                fillalc.Block_Name = $('#block option:selected').text();
+                fillalc.Type = $('#type option:selected').val();
+                fillalc.Dealership_Id = $('#Dealership').val();
+                fillalc.Dealership_Name = $('#Dealership option:selected').text();
+                fillalc.valid_Date = $('#valid_Date').val();
+                fillalc.Sector = $('#Sector').val();
+                fillalc.Plot_Size = $('#file-asoc-' + i + ' .plots').val();
+                fillalc.Commession = $('#file-asoc-' + i + ' .com').val();
+                fillalc.Filecount = $('#file-asoc-' + i + ' .total-file').val();
+                fillalc.Dev_Charges_Id = $('#file-asoc-' + i + ' .dev-char option:selected').val();
+                fillalc.Dev_Charges_Text = $('#file-asoc-' + i + ' .dev-char option:selected').text();
+                fillalc.Sec_NoSec_Id = $('#file-asoc-' + i + ' .sec-cha').val();
+                fillalc.Sec_NoSec_Name = $('#file-asoc-' + i + ' .sec-cha option:selected').text();
+                fillalc.Security = $('#file-asoc-' + i + ' .sec').val();
+                fillalc.Installment_Plan = $('#file-asoc-' + i + ' .plt-ins').val();
+                filesformdata.push(fillalc);
+            }
+            $("#del-sub-btn").attr("disabled", true);
+            $("#reset").show();
+            $.ajax({
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                url: $("#de-fo-as").attr('action'),
+                data: JSON.stringify(filesformdata),
+                success: function (data) {
+                    $('#re-fi-for').load('/FileSystem/ShowFileFormList/', { dealerFileForm: data })
+                    window.open("/Dealership/NewFileDesign?Group_Id=" + data[0].Group_Id, '_blank');
+                }
+                , error: function (xmlhttprequest, textstatus, message) {
+                    if (textstatus === "timeout") {
+                        alert("got timeout");
+                    } else {
+                        alert(textstatus);
+                    }
+                }
+            });
+        }
+    });
+
+</script>

@@ -1,0 +1,41 @@
+﻿@using (Html.BeginForm("UpdatePlotDimension1", "Plots", FormMethod.Post, new { @id = "up-plot-dime", @class = "", role = "form", autocomplete = "off" }))
+{
+    @Html.AntiForgeryToken()
+    string siz = ViewBag.Plotsize;
+    <input type="hidden" name="Id" id="Plotid" />
+    <div class="form-row">
+        <div class="form-group col-md-3">
+            <label>Previous Plot Size</label>
+            <input type="number" class="form-control col-md-6" name="Plot_Size" value="@siz.Split(' ')[0]" /> Marla
+        </div>
+        <div class="form-group col-md-2">
+            <label>Dimension</label>
+            <h5>@ViewBag.LastDimension</h5>
+        </div>
+        <div class="form-group col-md-2">
+            <label>Area</label>
+            <input type="text" class="form-control" name="Area" value="@ViewBag.Area">
+        </div>
+        <div class="form-group col-md-2">
+            <label>Road</label>
+            <input type="text" class="form-control" name="Road" value="@ViewBag.Road">
+        </div>
+        <div class="form-group col-md-3">
+            <label>New Dimension</label>
+            @Html.DropDownList("Dimension", null, "Choose..", new { @class = "form-control" })
+        </div>
+        <div class="form-group col-md-3">
+            <label>Location</label>
+            <input type="text" class="form-control" name="Location" value="@ViewBag.Location">
+        </div>
+    </div>
+   
+}
+<script>
+    $(function () {
+        $('.modal-footer').append('<button class="btn btn-primary" id="up-plt-dim" type="button">Update</button>');
+        $("#Plotid").val($("#plt-id").val());
+
+        $('#Dimension').val($("#plt-dim-id").val())
+    });
+</script>

@@ -1,0 +1,184 @@
+﻿@{
+    if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+
+}
+<input type="hidden" id="ttlamt" value="" />
+<script src="~/Scripts/scanning.js"></script>
+<div class="row gap-20 pos-r">
+    <div class="col-md-12">
+        <div class="bgc-white p-20 bd">
+            <h6 class="c-grey-900">Dealer Payments</h6>
+            <div class="mT-30">
+                <div class="form-row">
+                    <div class="form-group  col-md-3">
+                        <label>Customer</label>
+                        <select class="form-control land-accounts"></select>
+                    </div>
+                    <div class="form-group col-md-5">
+                        <label>Available Balance: <span id="deal-bal" style="font-weight:bold"></span></label>
+                    </div>
+                </div>
+                <div class="form-group col-md-4">
+                    <label>Description</label>
+                    <textarea id="desc" class="form-control"></textarea>
+                </div>
+                <div class="col-md-12">
+                    <input type="hidden" id="trans-id" name="TransactionId" value="@ViewBag.TransactionId" />
+                    <div class="form-row">
+                        <div class="form-group col-md-2">
+                            <label>Amount</label>
+                            <input class="form-control coma" placeholder="12,345" required>
+                            <input type="hidden" id="amt" name="Amount" class="amt" required>
+                        </div>
+                        <div class="col-md-2 form-group">
+                            <label>Tax Account</label>
+                            <select class="form-control tax-accounts"></select>
+                        </div>
+                        <div class="col-md-3 form-group">
+                            <label>Tax Amount</label>
+                            <input type="text" class="form-control coma tax-amt" placeholder="Tax" />
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-2">
+                                <label>Amount</label>
+                                <input class="form-control coma" placeholder="12,345" required>
+                                <input type="hidden" id="amt" name="Amount" class="amt" required>
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label>Payment Type</label>
+                                @Html.DropDownList("BanksList", null, null, new { @class = "form-control BanksList" })
+                            </div>
+                            <div class="row col-md-12 paychqdetails">
+                                <div class="form-group col-md-2">
+                                    <label>Instrument Type</label>
+                                    <select class="form-control vpd-paytype-select" id="cah-chq-bak" name="PaymentType">
+                                        <option value="BankDraft">Bank Draft</option>
+                                        <option value="Cheque">Cheque</option>
+                                        <option value="PayOrder">Pay Order</option>
+                                        <option value="Online_Cheque">Online - Cheque</option>
+                                        <option value="Online_Payorder">Online - PayOrder</option>
+                                        <option value="Online_Bankdraft">Online - BankDraft</option>
+                                    </select>
+                                </div>
+                                <div class="form-group col-md-3 vpdpaymentinfo">
+                                    <label id="vpd-paytypelabel">Bank Draft No.</label>
+                                    <input type="text" class="form-control" id="vpd-paymenttype" name="PayChqNo" placeholder="">
+                                </div>
+                                <div class="form-group col-md-2 vpdpaymentinfo">
+                                    <label>Date</label>
+                                    <input type="text" class="form-control" data-provide="datepicker" id="vpd_Ch_bk_Pay_Date" name="Ch_bk_Pay_Date" placeholder="mm/dd/yyyy" required>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-1 paymentotherinfo">
+                                <label>Scan File </label>
+                                <button class=" btn btn-primary" data-v="1" type="button" id="scanbtn">Scan</button>
+
+                            </div>
+                            <div id="images-1" class="col-md-10"></div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-3">
+                            <button class="btn btn-primary del-sec-fee-ret">Generate Voucher</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(function () {
+        $('#Dealership').select2();
+        $('.tax-accounts').select2({
+            placeholder: "Search for Tax Account",
+            ajax: {
+                url: '/AccountHeads/GetHeadTaxAccounts/',
+                dataType: 'json',
+                params: {
+                    contentType: 'application/json; charset=utf-8'
+                },
+                data: function (params) {
+                    return {
+                        q: params.term// search term
+                        //code: '/1/1/1/%'
+                    };
+                },
+                processResults: function (data) {
+                    // Transforms the top-level key of the response object from 'items' to 'results'
+                    return {
+                        results: $.map(data.items, function (item) {
+                            return {
+
+                                text: item.Parent,
+                                children: [{
+                                    id: item.id,
+                                    text: item.text
+                                }]
+                            }
+                        })
+                    };
+                }
+            }
+        });
+        $('.land-accounts').select2({
+            placeholder: "Search for Account",
+            ajax: {
+                url: '/AccountHeads/GetHeadLandAccounts/',
+                dataType: 'json',
+                params: {
+                    contentType: 'application/json; charset=utf-8'
+                },
+                data: function (params) {
+                    return {
+                        q: params.term// search term
+                        //code: '/1/1/1/%'
+                    };
+                },
+                processResults: function (data) {
+                    // Transforms the top-level key of the response object from 'items' to 'results'
+                    return {
+                        results: $.map(data.items, function (item) {
+                            return {
+
+                                text: item.Parent,
+                                children: [{
+                                    id: item.id,
+                                    text: item.text
+                                }]
+                            }
+                        })
+                    };
+                }
+            }
+        });
+    })
+    $(document).on("change", ".land-accounts", function () {
+        var id = $(this).val();
+        $.ajax({
+            type: "POST",
+            url: '/Finance/HeadBalance/',
+            data: { HeadId: id },
+            success: function (data) {
+                $('#deal-bal').text('Rs. ' + Number(-(data.Balance)).toLocaleString());
+                $('#ttlamt').val(Number(-(data.Balance)));
+            },
+            error: function () {
+                alert("Error Occured");
+            }
+        });
+    });
+
+</script>
+<style>
+    .paymentotherinfo {
+        display: none
+    }
+</style>

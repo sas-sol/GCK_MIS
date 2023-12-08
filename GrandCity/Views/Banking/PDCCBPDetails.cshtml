@@ -1,0 +1,83 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Sp_Get_Cheque_BankDraft_PayOrder_MultiParamter_Result>
+
+<script>
+    var banks = @Html.Raw(Json.Encode(ViewBag.Bank));
+</script>
+
+@using (Html.BeginForm("UpdateInstPDC", "Banking", FormMethod.Post, new { @id = "up-cbp", @class = "", role = "form" }))
+{
+    @Html.AntiForgeryToken()
+
+    foreach (var g in Model.GroupBy(x => new { x.Check_DemandDraft_PayOrder, x.Cheque_BankDraft_Payorder_Number, x.Bank, x.Deposit_Bank_Acc_Number, x.Cheque_DemandDraft_PayOrder_Date, x.Posted_Date, x.Status, x.Clearance_Date, x.Deposit_Bank}))
+    {
+        <input type="hidden" value="@ViewBag.TransactionId" name="TransactionId" />
+        <div class="form-row">
+            <div class="form-group col-md-2">
+                <label>@g.Key.Check_DemandDraft_PayOrder No.</label>
+                <h6> @g.Key.Cheque_BankDraft_Payorder_Number</h6>
+            </div>
+            <div class="form-group col-md-3">
+                <label>Date</label>
+                <h6>@string.Format("{0:D}", g.Key.Cheque_DemandDraft_PayOrder_Date)</h6>
+            </div>
+            <div class="form-group col-md-3">
+                <label>Bank</label>
+                <h6> @g.Key.Bank</h6>
+            </div>
+            <div class="form-group col-md-3">
+                <label>Account Number</label>
+                <h6> @g.Key.Deposit_Bank_Acc_Number</h6>
+            </div>
+            <div class="form-group col-md-1">
+                <label>Amount </label>
+                <h6> @string.Format("{0:n0}", g.Sum(x => x.Amount))</h6>
+            </div>
+        </div>
+        foreach (var item in g)
+        {
+            <input type="hidden" name="Inst_Id" value="@item.Id" />
+        }
+        <div class="form-row">
+            <div class="form-group col-md-2">
+                <label>Status</label>
+                @if (g.Key.Status == "Pending")
+                {
+                    <select class="form-control" id="ch-stat" name="Status">
+                        <option value="Approved">Cleared</option>
+                        <option value="Dishonored">Returned</option>
+                    </select>
+                }
+                else if (g.Key.Status == "Approved")
+                {
+                    <select class="form-control" id="ch-stat" name="Status">
+                        <option value="Approved">Cleared</option>
+                        <option value="Dishonored">Returned</option>
+                    </select>
+                }
+                else if (g.Key.Status == "Dishonored")
+                {
+                    <select class="form-control" id="ch-stat" name="Status">
+                        <option value="Approved">Cleared</option>
+                        <option value="Dishonored">Returned</option>
+                    </select>
+                }
+            </div>
+            <div class="form-group col-md-2">
+                <label>Clearance Date</label>
+                <input type="text" class="form-control" data-provide="datepicker" name="Clearance_Date" />
+            </div>
+        </div>
+       
+    }
+
+}
+<script>
+    $(function () {
+        $('.modal-footer').append('<button class="btn btn-primary" id="up-cbp-btn-pdc" type="button">Update</button>');
+        $(".modal-header").text("Update Information");
+
+        // initialize all comp
+
+
+    });
+</script>

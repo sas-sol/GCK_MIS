@@ -1,0 +1,87 @@
+﻿@model MeherEstateDevelopers.Models.Sp_Get_CurrentOwner_File_Id_Result
+@{
+    var inst = 1 * Model.Installments;
+}
+<style>
+    @@page {
+        margin: 0 !important;
+    }
+
+    body {
+        margin: 0px !important;
+    }
+
+    @@media print {
+        .letterhead {
+            height: 1600px;
+            width: 1186px;
+            margin: 0 !important;
+            background-image: url(../../images/LetterHead.jpg);
+            background-size: 1186px 1600px;
+            font-family: sans-serif;
+            color: black;
+            background-repeat: no-repeat;
+        }
+
+        .let-cont {
+            padding: 15% 5% 0 5%;
+        }
+    }
+
+    .letterhead {
+        height: 1555px;
+        width: 1186px;
+        background-image: url(../../images/LetterHead.jpg);
+        background-size: 1186px 1555px;
+        font-family: sans-serif;
+        color: black;
+        background-repeat: no-repeat;
+    }
+
+    .let-cont {
+        padding: 15% 5% 0 5%;
+    }
+
+    p {
+        color: black !important;
+        font-size: 20px
+    }
+</style>
+<div class="letterhead">
+    <div class="let-cont">
+        <p><span style="font-family: 'Abadi',sans-serif;">&nbsp;</span></p>
+        <p><span style="font-family: 'Abadi',sans-serif;">&nbsp;</span></p>
+        <p><span style="font-family: 'Abadi',sans-serif;">&nbsp;</span></p>
+        <p><span style="font-family: 'Abadi',sans-serif;">&nbsp;</span></p>
+        <p><span style="font-family: 'Abadi',sans-serif;">&nbsp;</span></p>
+
+        <p style="text-align: center;"><strong><u><span style="font-size: 14.0pt; font-family: 'Abadi',sans-serif;">Sher Afghan – Plot Cancellation Letter</span></u></strong></p>
+        <p><strong><span style="font-family: 'Abadi',sans-serif;">Respected Customer,</span></strong></p>
+        <p style="line-height:1"><span style="font-family: 'Abadi',sans-serif;">Hope you are having a great day!</span></p>
+
+        <p style="text-align: justify; text-justify: inter-ideograph;line-height:1.3"><span style="font-family: 'Abadi',sans-serif;">This is to inform you that your plot in Sher Afghan Block, Meher Estate Developers has been cancelled on account of a considerable remaining amount due on your part. @*You have been reminded two times before via written notices dated @string.Format("{0:dd-MMMM-yyyy}", Model.First_Notice) & @string.Format("{0:dd-MMMM-yyyy}", Model.Sec_Notice) followed up by an SMS as well by the society, however, despite these notices,*@ you haven’t paid your remaining amount.</span></p>
+
+        <p style="text-align: justify; text-justify: inter-ideograph;line-height:1"><span style="font-family: 'Abadi',sans-serif;">Name: @Model.Name</span></p>
+        <p style="text-align: justify; text-justify: inter-ideograph;line-height:1"><span style="font-family: 'Abadi',sans-serif;">Plot Number: @Model.FileFormNumber</span></p>
+        <p style="text-align: justify; text-justify: inter-ideograph;line-height:1"><span style="font-family: 'Abadi',sans-serif;">Plot Size: @Model.Plot_Size</span></p>
+        <p style="text-align: justify; text-justify: inter-ideograph;line-height:1"><span style="font-family: 'Abadi',sans-serif;">Balance Amount: @string.Format("{0:n0}", Math.Round(Convert.ToDecimal(-1 * Model.Balance_Amount)))</span></p>
+        <p style="text-align: justify; text-justify: inter-ideograph;line-height:1"><span style="font-family: 'Abadi',sans-serif;">Due Installments: @inst</span></p>
+        <p style="text-align: justify; text-justify: inter-ideograph;line-height:1"><span style="font-family: 'Abadi',sans-serif;">Cancellation Date: @string.Format("{0:dd-MMMM-yyyy}", Model.Cancel_Notice)</span></p>
+
+        <p style="text-align: justify; text-justify: inter-ideograph;line-height:1.3"><span style="font-family: 'Abadi',sans-serif;">Therefore; in accordance with terms and conditions applied by Meher Estate Developers your plot has been cancelled. You are kindly requested to visit out Head Office and submit your complete documents for the processing of your refund.</span></p>
+
+        <p style="line-height:1.3"><strong><span style="font-family: 'Abadi',sans-serif;">Note: If there is any ambiguity in this case, please visit our Head Office along with the complete file and receipts in 7 days’ time for rectification.</span></strong></p>
+
+        <p></p>
+        <p><span style="font-family: 'Abadi',sans-serif;">Regards,</span></p>
+        <p><span style="font-family: 'Abadi',sans-serif;">&nbsp;</span></p>
+        <p style="line-height:1"><span style="font-family: 'Abadi',sans-serif;">_________________</span></p>
+        <p style="line-height:1"><span style="font-family: 'Abadi',sans-serif;">Muhammad Naeem, </span></p>
+        <p style="line-height:1"><span style="font-family: 'Abadi',sans-serif;">Records Manager,</span></p>
+        <p style="line-height:1"><span style="font-family: 'Abadi',sans-serif;">Date: @string.Format("{0:dd-MMMM-yyyy}", DateTime.Now)</span></p>
+    </div>
+</div>
+@*<div style="page-break-after:always"></div>
+@{ 
+    Html.RenderAction("FileStatmentAcc","Reports",new { Token = Model.FileFormNumber });
+}*@

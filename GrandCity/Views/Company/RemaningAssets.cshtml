@@ -1,0 +1,54 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Sp_Get_Remaning_Assets_List_Result>
+<div class="bgc-white bd bdrs-3 p-20 mB-20">
+    <table class="table table-striped table-bordered" cellspacing="0" width="100%">
+        <thead>
+            <tr>
+                <th>Total</th>
+                <th>Selection</th>
+                <th>Asset Name</th>
+                <th>Company</th>
+                <th>Model</th>
+                <th>Registeration</th>
+                <th>Specification</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                int counter = 0;
+
+                if (!Model.Any())
+                {
+                    <tr><td colspan="5" style="text-align:center">No data available</td></tr>
+                }
+                else
+                {
+                    foreach (var item in Model)
+                    {
+
+                        counter++;
+                    <tr class="asset_id" id="@item.Id">
+                        <td><h6>@counter</h6> </td>
+                        <td> <input type="radio" id="AssetSelection" name="AssetSelection" value="@item.Id" class=""></td>
+                        <td><h6>@item.Name</h6> </td>
+                        <td><h6>@item.Vehicle_Company</h6> </td>
+                        <td><h6>@item.Vehicle_Model</h6> </td>
+                        <td><h6>@item.Vehicle_Registration_Number</h6> </td>
+                        <td><h6>@item.Specs</h6></td>
+                    </tr>
+                    }
+                }
+            }
+        </tbody>
+    </table>
+    <div class="row">
+        <div class="from-control col-md-4">
+            <label>Select Employee</label>
+            @Html.DropDownList("EmployeesNames", null, "Choose..", new { @class = "form-control Emp_id_selection" })
+        </div>
+    </div>
+</div>
+<script>
+    $(function () {
+        $('.modal-footer').append('<button class="btn btn-primary" id="Asset_Assining_btn" type="button">Assign</button>');
+    });
+</script>

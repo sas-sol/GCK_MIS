@@ -1,0 +1,58 @@
+﻿
+
+<input type="hidden" id="amt-file-idd" name="Filefromid" />
+<div class="row">
+    <div class="col-md-4">
+        <label>Type</label>
+        <select class="form-control inst-type">
+            <option>Select Installment Type</option>
+            <option value="1">Installment</option>
+            <option value="2">Development Charges</option>
+            <option value="3">Advance</option>
+            <option value="0">Other Charges</option>
+            <option value="5">Special Prefrence Charges</option>
+        </select>
+    </div>
+    <div class="col-md-4">
+        <label>Amount</label>
+        <input type="text" class="coma form-control" id="Amount" />
+    </div>
+    <div class="col-md-4">
+        <label>Due Date</label>
+        <input type="date" id="date" class="form-control" />
+    </div>
+    
+
+</div>
+<button class="btn btn-success" id="ints-add" type="submit">Generate Installment</button>
+
+<script>
+    $(document).ready(function () {
+
+        $("#amt-file-idd").val($("#plt-id").val());
+
+        $("#ints-add").unbind().click(function (e) {
+            e.preventDefault();
+            var amt = RemoveComma($("#Amount").val());
+            var datee = $("#date").val();
+            var type = $(".inst-type option:selected").val();
+            var nam = $(".inst-type option:selected").text();
+            var con = confirm("Are you sure you want to Generate Receipt");
+            if (con) {
+                $.ajax({
+                    type: "POST",
+                    url: "/Plots/AddInstallmentPlann",
+                    data: { Amount: amt, Date: datee, Type: type, id: $("#plt-id").val(), Name: nam },
+                    success: function (data) {
+                        alert("added");
+                        window.location.reload(true);
+                    },
+                    error: function () {
+                        alert("Error Occured");
+                    }
+                });
+            }
+        });
+        
+    });
+</script>

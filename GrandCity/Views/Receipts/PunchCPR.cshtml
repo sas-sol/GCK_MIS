@@ -1,0 +1,99 @@
+﻿@model MeherEstateDevelopers.Models.Receipt
+
+<link href="~/Content/bootstrap-material-datetimepicker.css" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<script src="~/Scripts/bootstrap-material-datetimepicker.min.js"></script>
+
+<div class="col-md-12">
+    @using (Html.BeginForm("", "", FormMethod.Post, new { @id = "cprForm", @class = "", role = "form" }))
+    {
+        <input type="hidden" name="recId" id="recId" value="@Model.Id" />
+        <div class="row">
+            <div class="col-md-3">
+                <label><b>Name : </b></label>
+            </div>
+            <div class="col-md-3">
+                <label><b>@Model.Name </b></label>
+            </div>
+
+            <div class="col-md-3">
+                <label><b>Father's Name : </b></label>
+            </div>
+            <div class="col-md-3">
+                <label><b>@Model.Father_Name </b></label>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-3">
+                <label><b>CNIC : </b></label>
+            </div>
+            <div class="col-md-3">
+                <label><b>@Model.Text </b></label>
+            </div>
+
+            <div class="col-md-3">
+                <label><b>Amount : </b></label>
+            </div>
+            <div class="col-md-3">
+                <label><b>@string.Format("{0:n0}", Model.Amount) </b></label>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-3">
+                <label><b>Paid Date : </b></label>
+            </div>
+            <div class="col-md-3">
+                <input type="text" class="form-control pdDt" name="pdDt" id="pdDt" value="@DateTime.Now.ToString("MM/dd/yyyy")" />
+            </div>
+
+            <div class="col-md-3">
+                <label><b>CPR Image : </b></label>
+            </div>
+            <div class="col-md-3">
+                <input type="file" name="fileInput" id="fileInput" />
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-outline-success"><i class="fa fa-save"></i>&nbsp; Save CPR</button>
+            </div>
+        </div>
+    }
+</div>
+
+<script>
+    $('.pdDt').bootstrapMaterialDatePicker({ weekStart: 0, time: false, format: 'MM/DD/YYYY' });
+    $(document).on("submit", "#cprForm", function (e) {
+        e.preventDefault();
+        var formdata = new FormData(); //FormData object
+        var fileInput = document.getElementById('fileInput');
+        //Iterating through each files selected in fileInput
+        for (i = 0; i < fileInput.files.length; i++) {
+            //Appending each file to FormData object
+            formdata.append(fileInput.files[i].name, fileInput.files[i]);
+        }
+
+        let receiptId = $("#recId").val();
+        formdata.append("recId", receiptId);
+        formdata.append("pdDt", $("#pdDt").val());
+        //Creating an XMLHttpRequest and sending
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', '/Receipts/SaveCPR');
+        xhr.send(formdata);
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                if (xhr.responseText == 'true') {
+                    alert('CPR has been saved successfully');
+                    $('.mrk-pd-btn-' + receiptId).remove();
+                    closeModal();
+                }
+                else {
+                    alert(xhr.responseText);
+                }
+            }
+        }
+    });
+</script>

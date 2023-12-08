@@ -1,0 +1,59 @@
+﻿@{
+    if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+}
+<div class="row">
+    <div class="col-md-12">
+        <div class="bdrs-3 ov-h bgc-white p-10 bd">
+            <div class="form-row">
+                <h5>Leads</h5>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-2">
+                    <label>From</label>
+                    <input type="text" id="from" class="form-control" data-provide="datepicker" />
+                </div>
+                <div class="form-group col-md-2">
+                    <label>To</label>
+                    <input type="text" id="to" class="form-control" data-provide="datepicker" />
+                </div>
+                <div class="form-group col-md-2">
+                    <label style="width:100%">Users</label>
+                    @Html.DropDownList("Users", null, "Choose..", new { @class = "form-control", multiple = "" })
+                </div>
+                <div class="form-group col-md-2">
+                    <button class="btn btn-info Lead-sea-do" style="margin-top:29px">Search</button>
+                </div>
+
+            </div>
+            <div id="report">
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var from = $("#from").val();
+    var to = $("#to").val();
+   // var user = $("#Users").val();
+    $("#report").load("/PropertyDeal/LeadsFollowup_Search/", { From: from, To: to});
+
+    $('.Lead-sea-do').click(function () {
+        var from = $("#from").val();
+        var to = $("#to").val();
+        var user = $("#Users").val();
+        $("#report").load("/PropertyDeal/LeadsFollowup_Search/", { From: from, To: to ,User:user});
+
+    });
+
+
+
+    $(function () {
+        $('#Users').select2();
+    })
+</script>

@@ -1,0 +1,137 @@
+﻿@model MeherEstateDevelopers.Models.Ticket
+@{
+    Layout = "~/Views/Shared/_GuestLayout.cshtml";
+}
+<div class="row">
+    <div class="col-2"></div>
+    <div class="col-8">
+        @using (Html.BeginForm("CreateTicket", "Tickets", FormMethod.Post, new { @id = "c-tik-r", @class = "", role = "form", autocomplete = "off" }))
+        {
+            @Html.AntiForgeryToken()
+            <input type="hidden" name="Department" id="dep-nam" />
+            <input type="hidden" name="Customer" value="true" />
+            <h3 style="text-align:center">FEEDBACK PORTAL</h3>
+            <hr />
+            <div class="row">
+                <div class="form-group col-md-3">
+                    <label>Name</label>
+                    <input class="form-control" id="name" name="Name" required />
+                </div>
+                <div class="form-group col-md-2">
+                    <label>Mobile</label>
+                    <input class="form-control" id="Mobile_No" name="Mobile_No" placeholder="03211234567" required />
+                </div>
+                <div class="form-group col-md-7">
+                    <label>Address</label>
+                    <input class="form-control" id="Address" name="Address" />
+                </div>
+            </div>
+            <hr />
+            <h3 style="text-align:center">DETAILS</h3>
+            <hr />
+            <div class="row">
+                <div class="form-group col-md-6">
+                    <label>Department</label>
+                    <select name="Dep_Id" class="form-control dep-user" id="Department">
+                        <option value="">Choose..</option>
+                        <option value="17">Safety &amp; Security</option>
+                        <option value="22">Admin</option>
+                        <option value="29">Utilities</option>
+                        <option value="192">SA Marketing</option>
+                        <option value="205">Files &amp; Records</option>
+                        <option value="206">Plots &amp; Registry</option>
+                    </select>
+                </div>
+                <div class="form-group col-md-6">
+                    <label>Subject</label>
+                    <input class="form-control" id="title" name="Title" />
+                </div>
+                <div class="form-group col-md-6">
+                    <label>Assigned To</label>
+                    <select class="form-control" id="AssignedTo" name="AssignedTo"></select>
+                    <input class="form-control" id="Deadline" data-provide="datepicker" name="Deadline" style="visibility:hidden" value="@string.Format("{0:mm/dd/yyyy}",DateTime.Now)" />
+                </div>
+                <div class="form-group col-md-6">
+                    <label>Description</label>
+                    <textarea class="form-control" name="Description" rows="4"></textarea>
+                </div>
+                <div class="col-md-12" style="text-align:center">
+                    <button class="btn btn-primary" style="font-size:22px;width:35%" id="c-tick-btn-r" type="button">Generate Ticket</button>
+                </div>
+            </div>
+            <hr />
+            <div class="row">
+                <div class="col-md-12" style="text-align:center">
+                    <h2>Ticket No: <span id="tick-no"><b></b></span></h2>
+                </div>
+            </div>
+
+        }
+
+    </div>
+    <div class="col-2"></div>
+    
+</div>
+<style>
+    .a {
+        color: #592a88;
+    }
+</style>
+<script>
+var closegate = false;
+    $(document).on("click", "#c-tick-btn-r", function (e) {
+    e.preventDefault();
+    if (!closegate) {
+        closegate = true;
+        $("#dep-nam").val($("#Department :selected").text());
+
+        var a = confirm("Are you sure you want to Generate Ticket");
+        if (a) {
+            $.ajax({
+                type: "POST",
+                url: $("#c-tik-r").attr('action'),
+                data: $("#c-tik-r").serialize(),
+                success: function (data) {
+                    if (data == "false") {
+                        alert("Ticket Not Generated")
+                        return false;
+                    }
+                    alert("Ticket Generated");
+                    $("#tick-no").text(data);
+                    $('#c-tick-btn-r').attr("disabled", true);
+                    window.setInterval(function () {
+                        window.location.reload();
+                        /// call your function here
+                    }, 5000);
+                },
+                error: function () {
+                    alert("Please Try Again");
+                    $('#c-tick-btn-r').attr("disabled", false);
+                }
+            });
+        }
+    }
+    else {
+        return false;
+    }
+    });
+    //
+    $(document).on("change", ".dep-user", function (e) {
+        var id = $(this).val();
+        $.ajax({
+            type: "POST",
+            url: '/Home/DepMisUser/',
+            data: { DepId: id },
+            success: function (data) {
+                $('#AssignedTo').empty();
+                $('#AssignedTo').append('<option value="">Select Employee</option>');
+                $.each(data, function (key, value) {
+                    $('#AssignedTo').append('<option value="' + value.Id + '">' + value.Name + '</option>');
+                });
+            },
+            error: function () {
+                alert("Error Occured");
+            }
+        });
+    });
+</script>

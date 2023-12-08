@@ -1,0 +1,42 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Sp_Get_Responsibilities_Result>
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<div class="row gap-20  pos-r">
+    <div class="col-md-6">
+        <div class="bgc-white p-20 bd tst">
+            <h5 class="c-grey-900">Role & Responsilities Management</h5>
+            <div class="mT-30">
+                @using (Html.BeginForm("ResponsibilityAssignment", "RolesAndResponsibilities", FormMethod.Post, new { @id = "role-res-ass", @class = "", role = "form" }))
+                {
+                    <h6 class="c-grey-900">Role</h6>
+                    <div class="form-group col-md-5">
+                        @Html.DropDownList("Roles", null, "Select Role", new { @class = "form-control g-role-respon" })
+                    </div>
+                    <hr />
+                    <h6 class="c-grey-900">Responsilities Assignment</h6>
+                    <div class="nonsel-res"></div>
+                    <button type="submit" class="btn btn-primary">Assign <i class="mR-10 ti-arrow-circle-right"></i> </button>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="bgc-white p-20 bd">
+            <h5 class="c-grey-900">Role & Responsilities</h5>
+            <div class="mT-30">
+                @using (Html.BeginForm("UpdateResponsibilityAssignment", "RolesAndResponsibilities", FormMethod.Post, new { @id = "up-role-res-ass", @class = "", role = "form" }))
+                {
+                    <h6 class="c-grey-900">Role</h6>
+                    <div class="form-group col-md-5">
+                        <div id="sel-role"></div>
+                    </div>
+                    <hr />
+                    <h6 class="c-grey-900">Responsilities Assignment</h6>
+                    <div class="sel-res"></div>
+                    <button type="submit" class="btn btn-primary"><i class="mR-10 ti-arrow-circle-left"></i>Assign</button>
+                }
+            </div>
+        </div>
+    </div>
+</div>

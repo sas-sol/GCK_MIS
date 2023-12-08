@@ -1,0 +1,235 @@
+﻿@model  MeherEstateDevelopers.Models.Sp_Get_JournalEntries_Parameter_All_Result
+@{ if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+    int count = 1;
+
+}
+<div class="bgc-white bd bdrs-3 p-20 mB-20">
+    <h4 style="text-align:center">Temp Account JV</h4>
+    <hr />
+    @if (Model.Status == "Pending")
+    {
+        <input type="hidden" value="@ViewBag.TransactionId" id="trans-id" />
+        <input type="hidden" value="@Model.GroupId" id="ref" />
+        <div class="row" id="ad-iven-stock">
+            <div class="col-md-12 cal" id="add-inv-@count">
+                <div class="form-row">
+                    <span class="add-inven-counter" style="margin-top: 35px;font-size: 15px;width:35px">@count.</span>
+                    <div class="form-group col-md-7">
+                        <label>Description</label>
+                        <input type="text" class="form-control desc" maxlength="250" value="@Model.Naration" name="Name" data-id="@count" required />
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label>Amount</label>
+                        <input type="text" class="form-control coma tra-amt" readonly placeholder="Amount" value="@string.Format("{0:0,0.##}", Model.Debit)">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <span style="width:35px"></span>
+                    <div class="col-md-4"></div>
+                    <div class="col-md-3"><h6>Head</h6></div>
+                    <div class="col-md-1"><h6>Debit</h6></div>
+                    <div class="col-md-1"><h6>Credit</h6></div>
+                </div>
+                <div class="dr-line">
+                    <div class="form-row dr-row dr-row-1">
+                        <span style="width:35px"></span>
+                        <div class="form-group col-md-4"><i class="ti-plus  add-dr-row" style="float:right;margin-top:10px;font-size:12px"></i></div>
+                        <div class="form-group col-md-3">
+                            <select class="form-control acc-head searchbox" data-id="1"></select>
+                        </div>
+                        <div class="form-group col-md-1">
+                            <input type="text" class="form-control coma dr" value="" placeholder="Amount">
+                        </div>
+                    </div>
+                </div>
+                <div class="cr-line">
+                    <div class="form-row cr-row cr-row-1" id="@Model.Id">
+                        <span style="width:35px"></span>
+                        <div class="form-group col-md-4"></div>
+                        <div class="form-group col-md-3">
+                            <select class="form-control acc-head searchbox" disabled data-id="1">
+                                <option value="@Model.Head_Id" >@Model.Head</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-1"></div>
+                        <div class="form-group col-md-1">
+                            <input type="text" class="form-control coma cr" readonly value="@string.Format("{0:0,0.##}",Model.Debit)" placeholder="Amount">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr />
+        <div class="form-row">
+            <span style="width:35px"></span>
+            <div class="form-group col-md-7">
+                <h4 style="padding-top:1%;float:right">Total</h4>
+            </div>
+            <div class="form-group col-md-2">
+                <input class="form-control coma f-amt" value="@string.Format("{0:0,0.##}", Model.Debit)" placeholder="12,345" required readonly>
+            </div>
+            <div class="form-group col-md-1"></div>
+        </div>
+        <div><button class="btn btn-primary pst-jv">Post JV</button></div>
+    }
+    else
+    {
+        <h5>Already Updated the record</h5>
+    }
+</div>
+<script>
+    $(document).ready(function () {
+        $('.searchbox').select2({
+            //dropdownParent: $('#Modal'),
+            placeholder: "Search for Head",
+            ajax: {
+                url: '/AccountHeads/GetHead/',
+                dataType: 'json',
+                params: {
+                    contentType: 'application/json; charset=utf-8'
+                },
+                quietMillis: 100,
+                data: function (params) {
+                    return {
+                        q: params.term// search term
+                    };
+                },
+                processResults: function (data) {
+                    return {
+                        results: $.map(data.items, function (item) {
+                            return {
+
+                                text: item.Parent,
+                                children: [{
+                                    id: item.id,
+                                    text: item.text + ' - ' + item.head
+                                }]
+
+                            }
+                        })
+
+                    };
+
+                }
+            }
+        });
+        InventoryCounter = @count;
+    });
+    //
+    $(document).on("click", ".pst-jv", function (e) {
+        var tran = $("#trans-id").val();
+        var refid = $("#ref").val();
+        for (var i = 1; i <= InventoryCounter; i++) {
+            var dr = 0, cr = 0;
+            $("#add-inv-" + i + " .dr").each(function () {
+                var dr_amt = RemoveComma($(this).val());
+                if (dr_amt > 0) {
+                    dr = dr + parseInt(dr_amt);
+                }
+                else {
+                    alert("You Cannot Submit Empty Fields");
+                    return false;
+                }
+            });
+            $("#add-inv-" + i + " .cr").each(function () {
+                var cr_amt = RemoveComma($(this).val());
+                if (cr_amt > 0) {
+                    cr = cr + parseInt(cr_amt);
+                }
+                else {
+                    alert("You Cannot Submit Empty Fields");
+                    return false;
+                }
+            });
+
+            var t_amt = RemoveComma($("#add-inv-" + i + " .tra-amt").val());
+            if (dr == cr) {
+                if (dr == t_amt) {
+                    continue;
+                }
+                else {
+                    alert("Debit/Credit Values are not Equal to Total Amount at : " + $("#add-inv-" + i + " .Name").text());
+                    return false;
+                }
+            }
+            else {
+                alert("Debit & Credit Values are not Matching at :" + $("#add-inv-" + i + " .Name").text());
+                return false;
+            }
+        }
+        InventoryArray = [];
+        for (var i = 1; i <= InventoryCounter; i++) {
+            var Item_Name = $("#add-inv-" + i + " .desc").val();
+            var Rate = $("#add-inv-" + i + " .inv-rate").val();
+            var Quantity = $("#add-inv-" + i + " .Quantity").val();
+            var UOM = $("#add-inv-" + i + " .Measurement").val();
+            var Amount = $("#add-inv-" + i + " .tra-amt").val(); // Amount
+
+            $("#add-inv-" + i + " .dr-row").each(function () {
+                var dat = $(this).find(".acc-head").select2('data')
+                var dataset =
+                    {
+                        Item_Name: Item_Name,
+                        Rate: Rate,
+                        Quantity: Quantity,
+                        UOM: UOM,
+                        Amount: Amount,
+                        Account_Head: dat[0].text,
+                        Account_Head_Id: dat[0].id,
+                        Debit: RemoveComma( $(this).find(".dr").val()),
+                        Credit: RemoveComma( $(this).find(".cr").val()),
+                        Line: i
+                    };
+                InventoryArray.push(dataset);
+            });
+            $("#add-inv-" + i + " .cr-row").each(function () {
+                var dat = $(this).find(".acc-head").select2('data')
+                var dataset =
+                    {
+                        Item_Name: Item_Name,
+                        Rate: Rate,
+                        Quantity: Quantity,
+                        UOM: UOM,
+                        Amount: Amount,
+                        Account_Head: dat[0].text,
+                        Account_Head_Id: dat[0].id,
+                        Debit: RemoveComma($(this).find(".dr").val()),
+                        Credit: RemoveComma($(this).find(".cr").val()),
+                        Line: i
+                    };
+                InventoryArray.push(dataset);
+            });
+        }
+        if (confirm("Are you sure you want to Record Entries")) {
+            $.ajax({
+                type: "POST",
+                url: '/GeneralEntry/RecordJVEntries/',
+                data: { Details: InventoryArray, TransactionId: tran, Ref: refid },
+                success: function (data) {
+                    if (data) {
+                        alert("Journal Entry Recorded");
+                        window.location.reload();
+                    }
+                    else {
+                        alert("Can not make Transaction at the Moment")
+                    }
+
+                }
+                , error: function (xmlhttprequest, textstatus, message) {
+                    if (textstatus === "timeout") {
+                        alert("got timeout");
+                    } else {
+                        alert(textstatus);
+                    }
+                }
+            });
+        }
+    });
+</script>

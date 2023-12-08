@@ -1,0 +1,119 @@
+﻿@model MeherEstateDevelopers.Models.ServiceChargesPermission
+
+    <div class="col-md-12">
+        <table class="table table-borderless">
+            <thead>
+                <tr class="central-text-align thead-dark">
+                    <th>Requested By</th>
+                    @if (Model.Status == true)
+                    {
+                        <th>Approved By</th>
+                    }
+                    else if (Model.Status == false)
+                    {
+                        <th>Rejected By</th>
+                    }
+                    <th>Date</th>
+                    <th>Phase/Block/Plot</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr class="central-text-align">
+                    <td>@Model.CreatedBy_Name</td>
+                    @if (Model.Status == true)
+                    {
+                        <td>@Model.ApprovingBody_Name</td>
+                    }
+                    else if (Model.Status == false)
+                    {
+                        <td>@Model.ApprovingBody_Name</td>
+                    }
+                    <td>@Model.Created_Date.Value.ToLongDateString()</td>
+                    <td>@Model.For_ModuleName</td>
+                </tr>
+            </tbody>
+        </table>
+        <input type="hidden" class="modid" value="@Model.Id" />
+        <div class="row">
+            <h6>Request Reason</h6>
+        </div>
+        <div class="col-md-12">
+            <pre>@Html.Raw(Model.Permission_Details)</pre>
+        </div>
+
+        @if (Model.Status is null)
+        {
+            <div class="col-md-12">
+                <textarea class="form-control aprvl-rems" rows="7" cols="7" placeholder="Remarks"></textarea>
+            </div>
+        }
+        else if (Model.Status == true)
+        {
+            <div class="row">
+                <h6>Approve Reason</h6>
+            </div>
+            <div class="col-md-12">
+                <pre>@Html.Raw(Model.ApprovingBody_Remarks)</pre>
+            </div>
+        }
+        else if (Model.Status == false)
+        {
+            <div class="row">
+                <h6>Reject Reason</h6>
+            </div>
+            <div class="col-md-12">
+                <pre>@Html.Raw(Model.ApprovingBody_Remarks)</pre>
+            </div>
+        }
+    </div>
+
+@if (Model.Status is null)
+{
+    <div class="col-md-12 mt-md-5 central-text-align">
+        <button class="btn btn-danger kl-tyr-dsf" data-sel="0">Reject</button>
+        <button class="btn btn-success kl-tyr-dsf" data-sel="1">Approve</button>
+    </div>
+}
+
+<script>
+    $('.kl-tyr-dsf').click(function () {
+        let act = parseInt($(this).attr('data-sel'));
+        let remar = $('.aprvl-rems').val();
+        let ms = 'Are you sure you want to ' + ((act == 0) ? 'Reject' : 'Approve') + ' this request?';
+        let conf = confirm(ms);
+        let modId = parseInt($('.modid').val());
+        if (!conf) {
+            return;
+        }
+        showLoader();
+        $.ajax({
+            type: "POST",
+            url: '/ServiceCharges/ChangeManualReadingStatus',
+            data: { Id: modId, stat: act, rems: remar },
+            success: function (data) {
+                alert(data.Msg);
+                hideLoader();
+                if (data.Status) {
+                    closeModal();
+                }
+            },
+            error: function (xmlhttprequest, textstatus, message) {
+                hideLoader();
+                if (textstatus === "timeout") {
+                    alert("got timeout");
+                } else {
+                    alert("got timeout");
+                }
+            }
+        });
+    });
+</script>
+
+<style>
+    pre {
+        font-size: 14px;
+        font-family: inherit;
+        color: inherit;
+    }
+</style>

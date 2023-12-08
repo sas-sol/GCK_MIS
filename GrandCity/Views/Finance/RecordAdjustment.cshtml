@@ -1,0 +1,72 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Sp_Get_ReceiptAdjustReqs_Records_Result>
+@{
+    if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+}
+
+<div class=" bgc-white bd bdrs-3 p-20 mB-20 row">
+    <div class="col-md-6">
+        <h4 class="c-grey-900 mB-20">Receipts Adjustments Requests</h4>
+    </div>
+    <div class="col-md-12">
+        <table id="result" class="table table-striped table-bordered" cellspacing="0" width="100%">
+            <thead>
+                <tr>
+                    <th class="col-date">Sr</th>
+                    <th class="col-name">From</th>
+                    <th class="col-rece">To</th>
+                    <th class="col-file">Name</th>
+                    <th class="col-mod">Receipt Number</th>
+                    <th class="col-mod">Amount</th>
+                    <th class="col-amt">Date</th>
+                    <th class="col-type">Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    if (Model.Any())
+                    {
+                        int sr = 1;
+                        foreach (var item in Model)
+                        {
+                            string col = "";
+                            if (item.Status == "Approved")
+                            {
+                                col = "bgc-green-50";
+                            }
+                            <tr class="pointer @col rec-adj-det" data-toggle="modal" data-target="#Modal" id="@item.Id" data-rece="@item.Receipt_Id">
+                                <td class="col-name">@sr</td>
+                                <td class="col-rece">@item.From_Plot - @item.Block </td>
+                                <td class="col-file">@item.To_Plot - @item.Block</td>
+                                <td class="col-mod">@item.To_Plot_Name</td>
+                                <td class="col-type">@item.ReceiptNo</td>
+                                <td class="col-amt">@string.Format("{0:n0}", item.Amount)</td>
+                                <td class="col-date">@string.Format("{0:MM/dd/yyyy}", item.Requested_Date)</td>
+                                <td class="col-type">
+                                    @item.Status
+                                    @if (item.Status == "Approved")
+                                    {
+                                    <button class="btn btn-primary prnt-prev">Print Receipt</button>
+                                    }
+                                </td>
+                            </tr>
+                            sr++;
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="10">No Record Found</td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

@@ -1,0 +1,45 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.MIS_Reminders>
+
+
+<table class="table table-borderless rems-tbl">
+    <thead>
+        <tr>
+            <th>Sr.</th>
+            <th>Title</th>
+            <th>Reminded At</th>
+            <th>Create Date</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @{ int sr = 1;}
+        @if(Model != null && Model.Any())
+        {
+            foreach(var v in Model)
+            {
+                <tr class="pointer rem-det-ln" data-rem="@v.Id">
+                    <td>@(sr++)</td>
+                    <td>@v.Title</td>
+                    <td>@v.RemindOn</td>
+                    <td>@v.CreatedAt.Value.ToShortDateString()</td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr class="bgc-red-50">
+                <td colspan="4">No Reminders In This Status Yet</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<script>
+    $(document).ready(function () {
+        $('.rem-det-ln').unbind().click(function () {
+            var remId = $(this).attr('data-rem');
+            window.open('/Reminders/ReminderDetails?rem=' + remId);
+        });
+        $('rems-tbl').DataTable();
+    });
+</script>

@@ -1,0 +1,65 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Sp_Get_Receipts_Pending_Result>
+@{ if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+}
+<div class="row">
+    <div class="col-md-12">
+        <div class="bdrs-3 ov-h bgc-white p-10 bd">
+            <h3>Suspense Receipts</h3>
+            <div class="form-row">
+                <button class="btn btn-secondary" style="float:right" id="on-btn-man_un_supr" name="rece-btn-man" data-toggle="modal" data-target="#Modal">Un Identified Receipts</button>
+            </div>
+            <table id="result" class="table table-borderless clickable-rows" cellspacing="0" width="100%">
+                <thead>
+                    <tr class="thead-dark">
+                        <th class="col-date">Date</th>
+                        <th class="col-rece">Receipt No</th>
+                        <th class="col-type">Instrument No</th>
+                        <th class="col-rece">Bank</th>
+                        <th class="col-amt">Amount</th>
+                        <th class="col-mod">Mode</th>
+                        <th class="col-type">Type</th>
+                        <th class="col-type">UserName</th>
+                        <th class="col-size">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        if (Model.Any())
+                        {
+                                foreach (var item in Model)
+                                {
+                                    <tr id="@item.Id">
+                                        <td class="col-date">@string.Format("{0:MM/dd/yyyy}", item.DateTime)</td>
+                                        <td class="col-rece">@item.ReceiptNo</td>
+                                        <td class="col-rece"></td>
+                                        <td class="col-rece">@item.Bank</td>
+                                        <td class="col-amt">@string.Format("{0:n0}", item.Amount)</td>
+                                        <td class="col-mod"></td>
+                                        <td class="col-type">@item.Type</td>
+                                        <td class="col-type">@item.UserName</td>
+                                        <td class="col-deal">
+                                            <i class="ti-pencil rc-up-Unspr-Pnd" data-toggle="modal" data-target="#Modal" style="margin-right:15px" title="Update"></i>
+                                            <i class="ti-pencil-alt2 l rc-up-Unspr-Pnd-multifileplot" data-toggle="modal" data-target="#Modal" style="margin-right:15px" title="Adjust Amounts of receipt"></i>
+                                        </td>
+                                    </tr>
+                                }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="10">No Record Found</td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,62 @@
+﻿@{ Layout = "~/Views/Shared/_AdminLayout.cshtml"; }
+<div class="row gap-20 pos-r">
+    <div class="col-md-12">
+        <div class="bgc-white p-20 bd">
+            <h6 class="c-grey-900">Add Plots</h6>
+            <div class="mT-30">
+                <div class="form-row">
+                    <div class="form-group col-md-2">
+                        <label>Project</label>
+                        @Html.DropDownList("Projects", null, "Select Project", htmlAttributes: new { @class = "form-control prj-ph-blk" })
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label>Block</label>
+                        <select class="form-control" id="blocks"></select>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label>Dimension</label>
+                        @Html.DropDownList("Dimension", null, "Choose..", new { @class = "form-control dime-id" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-2">
+                        <label>Plot No</label>
+                        <input type="text" class="form-control plotno" />
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label>Sector</label>
+                        <input type="text" class="form-control plotsec" />
+                    </div>
+                  
+                    <div class="form-group col-md-2">
+                        <label>Plot Location</label>
+                        <select class="form-control plotlo">
+                            <option value="Normal">Normal</option>
+                            <option value="Corner">Corner</option>
+                            <option value="Park Facing">Park Facing</option>
+                            <option value="Corner & Park Facing">Corner & Park Facing</option>
+                            <option value="Corner & Main Boulevard">Corner & Main Boulevard</option>
+                            <option value="Main Boulevard">Main Boulevard</option>
+                            <option value="Corner & Park Facing & Main Boulevard">Corner & Park Facing & Main Boulevard</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label>Plot Type</label>
+                        <select class="form-control" id="plottype">
+                            <option value="">Choose..</option>
+                            <option value="Residential">Residential</option>
+                            <option value="Commercial">Commercial</option>
+                            <option value="Public Building">Public Building</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label>Road</label>
+                        <input type="text" class="form-control plotroad" />
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary" id="addplot">Add Plot</button>
+            </div>
+        </div>
+    </div>
+</div>
+

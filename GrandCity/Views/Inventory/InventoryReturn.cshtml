@@ -1,0 +1,112 @@
+﻿@{ if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+}
+<script src="~/Scripts/Inv.js"></script>
+<div class="form-row">
+    <div class="col-md-12 bgc-white bd bdrs-3 p-20 mB-20">
+        <div class="col-md-12">
+            <h5 class="text-cen">Inventory Return</h5>
+        </div>
+        <hr />
+        <div class="col-md-12 row">
+            <div class="form-group col-md-2">
+                <label>Return Using</label>
+                <select class="form-control ru">
+                    <option value="Issue_Note">Issue Note</option>
+                    <option value="Prj">Project</option>
+                </select>
+            </div>
+            <div class="form-group in-div col-md-3">
+                <label>Issue Note #</label>
+                @*<input type="text" class="form-control in-num-search" placeholder="Issue Note#">*@ @*Search By Emtering Full Name*@
+                <select class='form-control issue-note-s' name="ins"></select>
+            </div>
+            @*<div class="form-group in-div col-md-2">
+                <button class="btn btn-primary ser-in" style="margin-top:29px">Search</button> /////////Button to Search using Full Issue Note
+            </div>*@
+
+            <div class="form-group prj-div col-md-3">
+                <label>Project</label>
+                @Html.DropDownList("Project", null, "Choose..", new { @class = "form-control Project" })
+
+            </div>
+            <div class="form-group prj-div col-md-2">
+                <button class="btn btn-primary ser-prj" style="margin-top:29px">Search</button>
+            </div>
+        </div>
+        <div class="prj-iss">
+
+        </div>
+        <div class="ret-stck-in-items">
+        </div>
+    </div>
+</div>
+
+<style>
+    .prj-div{
+        display:none;
+    }
+</style>
+<script>
+    $(function () {
+        $('.issue-note-s').select2({
+            minimumInputLength: 4,
+            placeholder: "Search for Issue Note  IN-G20-56",
+            ajax: {
+                url: '/Procurement/GetIssueNote/',
+                dataType: 'json',
+                params: {
+                    contentType: 'application/json; charset=utf-8'
+                },
+                quietMillis: 100,
+                data: function (params) {
+                    return {
+                        q: params.term// search term
+                    };
+                },
+                processResults: function (data) {
+                    return {
+                        results: data.items
+                    };
+                }
+            }
+        });
+        $('.issue-note-s').on('select2:select', function (e) {
+            var s = e.params.data;
+            SASLoad($('.ret-stck-in-items'));
+            $('.ret-stck-in-items').load('/Inventory/InventoryReturnDetail', { issueNum: s.id }, function () {
+                SASUnLoad($(".ret-stck-in-items"));
+            });
+        });
+    });
+    $(document).on("change", ".ru", function () {
+        var va = $(this).val();
+        if (va == "Issue_Note") {
+            $('.in-div').show();
+            $('.prj-div').hide();
+        }
+        else {
+            $('.prj-div').show();
+            $('.in-div').hide();
+        }
+    });
+
+    $(document).ready(function () {
+        $('.Project').select2();
+    });
+    $(document).on("click", ".ser-prj", function () {
+        var id = $('.Project').val();
+        $('.prj-iss').load('/Inventory/Prj_IssuedInventory', { Prj_Id: id });
+    });
+    $('.ser-in').click(function () {
+        $('.prj-iss').empty();
+        let num = $('.in-num-search').val();
+        $('.ret-stck-in-items').load('/Inventory/InventoryReturnDetail', { issueNum: num });
+    });
+</script>

@@ -1,0 +1,22 @@
+﻿<div class="container-fluid default-div-bg">
+    <h4 class=" mT-10 mB-30"></h4>
+    <ul class="nav nav-tabs" id="myTabs">
+        @{ string activeclass = "active";}
+        <li class="nav-item"><a class="nav-link @activeclass" data-toggle="tab" role="tab" data-link="/Banking/Cheques?Status=Pending" href="#cheques">Pending</a></li>
+        @{ activeclass = ""; }
+        <li class="nav-item"><a class="nav-link @activeclass" data-toggle="tab" role="tab" data-link="/Banking/Cheques?Status=Deposited" href="#cheques">Deposited</a></li>
+        @{ activeclass = ""; }
+        <li class="nav-item"><a class="nav-link @activeclass" data-toggle="tab" role="tab" data-link="/Banking/Cheques?Status=Approved" href="#cheques">Approved</a></li>
+        @{ activeclass = ""; }
+        <li class="nav-item"><a class="nav-link @activeclass" data-toggle="tab" role="tab" data-link="/Banking/Cheques?Status=Dishonored" href="#cheques">Dishonored</a></li>
+        @{ activeclass = ""; }
+        <li class="nav-item"><a class="nav-link @activeclass" data-toggle="tab" role="tab" data-link="/Banking/ReturnedCheques" href="#cheques">Returned Cheques</a></li>
+        @{ activeclass = ""; }
+    </ul>
+    <!-- Tab panes -->
+    <div class="tab-content">
+        <div id="cheques" class="tab-pane active">
+            @{ Html.RenderAction("Cheques", "Banking", new { Status = "Pending" });}
+        </div>
+    </div>
+</div>

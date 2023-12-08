@@ -1,0 +1,55 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Dealer>
+@if (Model.Any())
+{
+    foreach (var item in Model)
+    {
+        <div class="form-row" id="@item.Id">
+            <div class="form-group col-md-2">
+                <label>Name</label>
+                <input type="text" class="form-control" id="del-name" value="@item.Name" readonly>
+            </div>
+            <div class="form-group col-md-2">
+                <label>Father Name</label>
+                <input type="text" class="form-control" id="del-fname" value="@item.Father_Name" readonly>
+            </div>
+            <div class="form-group col-md-2">
+                <label>CNIC</label>
+                <input type="text" class="form-control" id="del-cnic" value="@item.CNIC_NICOP" readonly>
+            </div>
+
+            <div class="form-group col-md-2">
+                <label>City</label>
+                <input type="text" class="form-control" id="del-city" value="@item.City" readonly>
+            </div>
+            <div class="form-group col-md-2">
+                <label>Date of Birth</label>
+                <input type="text" class="form-control" placeholder="mm/dd/yyyy" data-provide="datepicker" id="del-dob" value="@string.Format("{0:MM/dd/yyyy}",item.Date_Birth)" readonly>
+            </div>
+            <div class="form-group col-md-2">
+                <label>Mobile 1</label>
+                <input type="text" class="form-control" id="del-mob1" value="@item.Mobile_1" readonly>
+            </div>
+            <div class="form-group col-md-2">
+                <label>Mobile 2</label>
+                <input type="text" class="form-control" id="del-mob2" value="@item.Mobile_2" readonly>
+            </div>
+            <div class="form-group col-md-4">
+                <label>Address</label>
+                <input type="text" class="form-control" id="del-add" value="@item.Address" readonly>
+            </div>
+            <div class="form-group col-md-2">
+                <img id="uploadedimage-@item.Id" class="uploadedimage" src="../../Repository/Dealers/@(item.Id).jpg"  onerror="this.onerror=null;this.src='assets/static/images/def-img.png'"name="UploadImage" style="width:90px;height:100px;border:solid" />
+                <input type="hidden" id="bs64-@item.Id" name="FileImage" />
+            </div>
+            <div class="form-group col-md-2">
+                <input type="button" class="btn btn-primary updat-deal" value="Update">
+                <input style="display:none" type="file" name="file" id="imagesfile" onchange="show(this)" class="del-btn-@item.Id" data-cn="@item.Id" title="Upload Image" />
+                <input type="button" class="btn btn-success sav-deal" style="display:none; margin-top:40px" value="Save">
+            </div>
+        </div>
+    }
+}
+else
+{
+    <h6> No Dealers Info Added </h6>
+}

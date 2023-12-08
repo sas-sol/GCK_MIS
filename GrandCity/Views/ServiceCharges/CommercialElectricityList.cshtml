@@ -1,0 +1,257 @@
+﻿@model MeherEstateDevelopers.Models.PlotElectricDetails
+<style>
+    table tr td, table tr th {
+        padding: 5px !important;
+        font-size: 13px
+    }
+</style>
+<div class="form-row">
+    <div class='col-md-3'>
+        <div class="layers bd bgc-white p-10 mt-2" style="text-align:center">
+            <div class="layer w-100" style="border-bottom:1px solid #ccc">
+                <h5 class="lh-1">@ViewBag.Block </h5>
+            </div>
+            <div class="layer w-100 row p-5">
+                <div class="col-md-6">
+                    <h6 class="lh-1">Receivable</h6>
+                </div>
+                <div class="col-md-6">
+                    <h6 class="lh-1">Received</h6>
+                </div>
+            </div>
+            <div class="layer w-100 row p-5">
+                <div class="col-md-6">
+                    <h6 class="lh-1">@string.Format("{0:n}", Model.Receiable)</h6>
+                </div>
+                <div class="col-md-6">
+                    <h6 class="lh-1">@string.Format("{0:n}", Model.Received)</h6>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class='col-md-3'>
+        <div class="layers bd bgc-white p-10 mt-2" style="text-align:center">
+            <div class="layer w-100" style="border-bottom:1px solid #ccc">
+                <h5 class="lh-1">Shop </h5>
+            </div>
+            <div class="layer w-100 row p-5">
+                <div class="col-md-6">
+                    <h6 class="lh-1">Receivable</h6>
+                </div>
+                <div class="col-md-6">
+                    <h6 class="lh-1">Received</h6>
+                </div>
+            </div>
+            <div class="layer w-100 row p-5">
+                <div class="col-md-6">
+                    <h6 class="lh-1">@string.Format("{0:n}", Model.Resi_Receiable)</h6>
+                </div>
+                <div class="col-md-6">
+                    <h6 class="lh-1">@string.Format("{0:n}", Model.Resi_Received)</h6>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class='col-md-3'>
+        <div class="layers bd bgc-white p-10 mt-2" style="text-align:center">
+            <div class="layer w-100" style="border-bottom:1px solid #ccc">
+                <h5 class="lh-1">Office </h5>
+            </div>
+            <div class="layer w-100 row p-5">
+                <div class="col-md-6">
+                    <h6 class="lh-1">Receivable</h6>
+                </div>
+                <div class="col-md-6">
+                    <h6 class="lh-1">Received</h6>
+                </div>
+            </div>
+            <div class="layer w-100 row p-5">
+                <div class="col-md-6">
+                    <h6 class="lh-1">@string.Format("{0:n}", Model.Com_Receiable)</h6>
+                </div>
+                <div class="col-md-6">
+                    <h6 class="lh-1">@string.Format("{0:n}", Model.Com_Received)</h6>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class='col-md-3'>
+        <div class="layers bd bgc-white p-10 mt-2" style="text-align:center">
+            <div class="layer w-100" style="border-bottom:1px solid #ccc">
+                <h5 class="lh-1">Apartment </h5>
+            </div>
+            <div class="layer w-100 row p-5">
+                <div class="col-md-6">
+                    <h6 class="lh-1">Receivable</h6>
+                </div>
+                <div class="col-md-6">
+                    <h6 class="lh-1">Received</h6>
+                </div>
+            </div>
+            <div class="layer w-100 row p-5">
+                <div class="col-md-6">
+                    <h6 class="lh-1">@string.Format("{0:n}", Model.App_Receiable)</h6>
+                </div>
+                <div class="col-md-6">
+                    <h6 class="lh-1">@string.Format("{0:n}", Model.App_Received)</h6>
+                </div>
+            </div>
+        </div>
+    </div>
+    <button class="btn btn-info pro-elc-bills-com" id="@ViewBag.BlockId">Download Bills</button>
+</div>
+<hr />
+<div class="form-row">
+    <div class="col-md-4">
+        <h5>Shop</h5>
+        <div style="min-height:0px; max-height:500px;overflow:auto" class=" ps--active-y">
+            <table id="result" class="table table-striped table-bordered" cellspacing="0" width="100%">
+                <thead>
+                    <tr>
+                        <th width="80" align="center" class="col-date">Shop No</th>
+                        <th width="100" class="col-name">Name</th>
+                        <th width="120" class="col-rece">Meter No</th>
+                        <th width="120" class="col-rece">Units</th>
+                        <th width="120" class="col-rece">Amount</th>
+                        <th width="120" class="col-rece">Arrears</th>
+                        <th width="120" class="col-rece">Grand Total</th>
+                        <th width="120" class="col-rece">Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        if (Model.CommercialElectricList.Where(x => x.Plot_Type == "Shop").Any())
+                        {
+                            foreach (var item in Model.CommercialElectricList.Where(x => x.Plot_Type == "Shop"))
+                            {
+                                <tr class="pointer" data-id="@item.Plot_Id" id="@item.Id">
+                                    <td align="center" class="col-mod">@item.ShopNo</td>
+                                    <td class="col-type">@item.Name</td>
+                                    <td class="pre-read">@item.Meter_No</td>
+                                    <td class="pre-read">@item.Units</td>
+                                    <td class="pre-read">@String.Format("{0:#,##0.##}", item.Total_Amount) </td>
+                                    <td class="pre-read">@String.Format("{0:#,##0.##}", item.Arrears)</td>
+                                    <td class="pre-read">@String.Format("{0:#,##0.##}", item.Grand_Total)</td>
+                                    <td class="pre-read">@string.Format("{0:MMM yyy}", item.Month)</td>
+                                    <td>
+                                        <i class="ti-eye vie-elec-bill-com" id="@item.Id" data-id="@item.Plot_Id"></i>
+                                        @if (User.IsInRole("Update Electric Bill"))
+                                        {
+                                            <i class="ti-pencil commer-bl-det" data-toggle="modal" data-target="#Modal" id="@item.Id" data-id="@item.Plot_Id"></i>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr><td colspan="6"> No Bills </td></tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <h5>Office</h5>
+        <div style="min-height:0px; max-height:500px;overflow:auto" class=" ps--active-y">
+            <table id="result" class="table table-striped table-bordered" cellspacing="0" width="100%">
+                <thead>
+                    <tr>
+                        <th width="80" align="center" class="col-date">Office No</th>
+                        <th width="100" class="col-name">Name</th>
+                        <th width="120" class="col-rece">Meter No</th>
+                        <th width="120" class="col-rece">Units</th>
+                        <th width="120" class="col-rece">Amount</th>
+                        <th width="120" class="col-rece">Arrears</th>
+                        <th width="120" class="col-rece">Grand Total</th>
+                        <th width="120" class="col-rece">Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        if (Model.CommercialElectricList.Where(x => x.Plot_Type == "Office").Any())
+                        {
+
+                            foreach (var item in Model.CommercialElectricList.Where(x => x.Plot_Type == "Office"))
+                            {
+                                <tr class="pointer " data-id="@item.Plot_Id" id="@item.Id">
+                                    <td align="center" class="col-mod">@item.ShopNo</td>
+                                    <td class="col-type">@item.Name</td>
+                                    <td class="pre-read">@item.Meter_No</td>
+                                    <td class="pre-read">@item.Units</td>
+                                    <td class="pre-read">@String.Format("{0:#,##0.##}", item.Total_Amount) </td>
+                                    <td class="pre-read">@String.Format("{0:#,##0.##}", item.Arrears)</td>
+                                    <td class="pre-read">@String.Format("{0:#,##0.##}", item.Grand_Total)</td>
+                                    <td class="pre-read">@string.Format("{0:MMM yyy}", item.Month)</td>
+                                    <td>
+                                        <i class="ti-eye vie-elec-bill-com" id="@item.Id" data-id="@item.Plot_Id"></i>
+                                        @if (User.IsInRole("Update Electric Bill"))
+                                        {
+                                            <i class="ti-pencil commer-bl-det" data-toggle="modal" data-target="#Modal" id="@item.Id" data-id="@item.Plot_Id"></i>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr><td colspan="6">No Bills</td></tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <h5>Apartment</h5>
+        <div style="min-height:0px; max-height:500px;overflow:auto" class=" ps--active-y">
+            <table id="result" class="table table-striped table-bordered" cellspacing="0" width="100%">
+                <thead>
+                    <tr>
+                        <th width="80" align="center" class="col-date">Apartment No</th>
+                        <th width="100" class="col-name">Name</th>
+                        <th width="120" class="col-rece">Meter No</th>
+                        <th width="120" class="col-rece">Units</th>
+                        <th width="120" class="col-rece">Amount</th>
+                        <th width="120" class="col-rece">Arrears</th>
+                        <th width="120" class="col-rece">Grand Total</th>
+                        <th width="120" class="col-rece">Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        if (Model.CommercialElectricList.Where(x => x.Plot_Type == "Apartment").Any())
+                        {
+
+                            foreach (var item in Model.CommercialElectricList.Where(x => x.Plot_Type == "Apartment"))
+                            {
+                                <tr class="pointer " data-id="@item.Plot_Id" id="@item.Id">
+                                    <td align="center" class="col-mod">@item.ShopNo</td>
+                                    <td class="col-type">@item.Name</td>
+                                    <td class="pre-read">@item.Meter_No</td>
+                                    <td class="pre-read">@item.Units</td>
+                                    <td class="pre-read">@String.Format("{0:#,##0.##}", item.Total_Amount) </td>
+                                    <td class="pre-read">@String.Format("{0:#,##0.##}", item.Arrears)</td>
+                                    <td class="pre-read">@String.Format("{0:#,##0.##}", item.Grand_Total)</td>
+                                    <td class="pre-read">@string.Format("{0:MMM yyy}", item.Month)</td>
+                                    <td>
+                                        <i class="ti-eye vie-elec-bill-com" id="@item.Id" data-id="@item.Plot_Id"></i>
+                                        @if (User.IsInRole("Update Electric Bill"))
+                                        {
+                                            <i class="ti-pencil commer-bl-det" data-toggle="modal" data-target="#Modal" id="@item.Id" data-id="@item.Plot_Id"></i>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr><td colspan="6">No Bills</td></tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

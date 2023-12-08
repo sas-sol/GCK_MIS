@@ -1,0 +1,63 @@
+﻿@{ if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+}
+<div class="row">
+    <div class="col-md-12">
+        <div class="bdrs-3 ov-h bgc-white p-10 bd">
+            <div class="form-row">
+                <h5>SA Refund Report</h5>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-2">
+                    <label style="width:100%">From</label>
+                    <input type="text" id="from" data-provide="datepicker" class="form-control" />
+                </div>
+                <div class="form-group col-md-2">
+                    <label style="width:100%">To</label>
+                    <input type="text" id="to" data-provide="datepicker" class="form-control" />
+                </div>
+                <div class="form-group col-md-3">
+                    <label for="cars">SA Companies</label>
+                    <select class="form-control select2" name="module" id="module" data-let="1">
+                        <option value="FileManagement">File Management</option>
+                        <option value="PlotManagement">Plot Management</option>
+                    </select>
+                </div>
+                <div class="form-group col-md-2">
+                    <label style="width:100%">Size</label>
+                    <input type="text" id="size" class="form-control" />
+                </div>
+                <div class="form-group col-md-2">
+                    <label style="width:100%">Block</label>
+                    <input type="text" id="block" class="form-control" />
+                </div>
+                <div class="form-group col-md-2">
+                    <button class="btn btn-info sea-rfnd-rprt" style="margin-top:29px">Search</button>
+                </div>
+            </div>
+            <div id="report">
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    $('.sea-rfnd-rprt').click(function () {
+        SASLoad($("#report"));
+        var module = $("#module").val();
+        var from = $("#from").val();
+        var block = $("#block").val();
+        var size = $("#size").val();
+        var to = $("#to").val();
+        $("#report").load("/Reports/SARefundReport_Search/", { Module: module, From: from, To: to, Size: size, Block: block }, function () {
+            SASUnLoad($("#report"));
+        });
+    });
+</script>

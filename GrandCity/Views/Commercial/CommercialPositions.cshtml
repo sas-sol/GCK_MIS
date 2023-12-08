@@ -1,0 +1,281 @@
+﻿
+
+@model Management_Information_System.Models.Commercial_Rooms
+
+
+<div class="form-row">
+    @{
+        <script>
+                    $(document).ready(function () {
+                                  var f = "@Model.Front";
+                        $("#frn__slctn__comm").val(f);
+                            });
+        </script>
+        <input type="hidden" value="@Model.Id" class="commid" />
+        <input type="hidden" value="@Model.Com_App_Shop_Number" class="commnm" />
+        if (Model.North != null)
+        {
+            <div class="col-md-1 w-100">
+                <lable>North</lable>
+                <input type="text" class="form-control key__pos__comm North" value="@Model.North" />
+            </div>
+        }
+
+        if (Model.East != null)
+        {
+            <div class="col-md-1 w-100">
+                <lable>East</lable>
+                <input type="text" class="form-control key__pos__comm East" value="@Model.East" />
+            </div>
+        }
+
+
+        if (Model.West != null)
+        {
+            <div class="col-md-1 w-100">
+                <lable>West</lable>
+                <input type="text" value="@Model.West" class="form-control key__pos__comm West" />
+            </div>
+        }
+
+
+        if (Model.South != null)
+        {
+            <div class="col-md-1 w-100">
+                <lable>South</lable>
+                <input type="text" class="form-control key__pos__comm South" value="@Model.South" />
+            </div>
+        }
+
+        if (Model.North_East != null)
+        {
+            <div class="col-md-1 w-100">
+                <lable>N-East</lable>
+                <input type="text" class="form-control key__pos__comm North_East" value="@Model.North_East" />
+            </div>
+        }
+        if (Model.North_West != null)
+        {<div class="col-md-1 w-100">
+                <lable>N-West</lable>
+                <input type="text" class="form-control key__pos__comm North_West" value="@Model.North_West" />
+            </div>
+        }
+
+        if (Model.South_East != null)
+        {
+            <div class="col-md-1 ">
+                <lable>S-East</lable>
+                <input type="text" class="form-control key__pos__comm Souh_East " value="@Model.South_East" />
+            </div>
+        }
+
+        if (Model.South_West != null)
+        {
+            <div class="col-md-1 w-100">
+                <lable>S-West</lable>
+                <input type="text" class="form-control key__pos__comm South_West" value="@Model.South_West" />
+            </div>
+        }
+
+    }
+    <div class="col-md-2">
+        <lable>Select Front</lable>
+        <select id="frn__slctn__comm" class="form-control ">
+            <option value="North">North</option>
+            <option value="South">South</option>
+            <option value="East">East</option>
+            <option value="West">West</option>
+            <option value="North_East">North_East</option>
+            <option value="North_West">North_West</option>
+            <option value="South_East">South_East</option>
+            <option value="South_West">South_West</option>
+        </select>
+    </div>
+</div>
+<hr />
+<h6 class="c-grey-900">Plot Bounded By.</h6>
+<div class="col-md-12">
+    <div id="" class="form-row">
+        <div class="form-group col-md-2">
+            <lable>Bonded to</lable>
+            <select id="bnded_po__sel" class="form-control " style="margin-top:6%">
+                <option value="">Select Option</option>
+                <option value="North">North</option>
+                <option value="South">South</option>
+                <option value="East">East</option>
+                <option value="West">West</option>
+                <option value="North_East">North_East</option>
+                <option value="North_West">North_West</option>
+                <option value="South_East">South_East</option>
+                <option value="South_West">South_West</option>
+            </select>
+        </div>
+        <div class="form-group col-md-2">
+            <label>Project</label>
+            @Html.DropDownList("Block", null, "Choose..", new { @class = "form-control prj-types", required = "" })
+        </div>
+        <div class="form-group col-md-2">
+            <label>Select Floor</label>
+            <select class="form-control prj-phse" id="phse-type"></select>
+        </div>
+        <div class="form-group col-md-2">
+            <label>Shop No</label>
+            <select class="form-control up-shp-det comm__bndng" id="shps-lst"></select>
+        </div>
+    </div>
+</div>
+<h4 class="c-grey-900 mB-20">Bounded Plots List</h4>
+<div class="col-md-12" id="bound-det">
+
+</div>
+<script>
+    $("#bound-det").load('/Commercial/UpdateCommercialBounding/', { id: @Model.Id });
+
+    $(document).ready(function () {
+        $(".key__pos__comm").keyup(function () {
+            var id = $(".commid").attr("id");
+            var North = $('.North').val() || 0;
+            var South = $('.South').val() || 0;
+            var East = $('.East').val() || 0;
+            var West = $('.West').val() || 0;
+            var North_East = $('.North_East').val() || 0;
+            var North_West = $('.North_West').val() || 0;
+            var Souh_East = $(".Souh_East ").val() || 0;
+            var South_West = $('.South_West').val() || 0;
+            var Front = $('#frn__slctn__comm option:selected').val();
+
+            var dataset =
+            {
+                Id: id,
+                North: North,
+                South: South,
+                East: East,
+                West: West,
+                North_East: North_East,
+                North_West: North_West,
+                Souh_East: Souh_East,
+                South_West: South_West,
+                Front: Front
+            };
+            $.post('/Commercial/CommercialPositionUpdation/', { p: dataset }, function () {
+
+            });
+        });
+
+        $("#frn__slctn__comm").change(function () {
+            var id = $(".commid").attr("id");
+            var North = $('.North').val() || 0;
+            var South = $('.South').val() || 0;
+            var East = $('.East').val() || 0;
+            var West = $('.West').val() || 0;
+            var North_East = $('.North_East').val() || 0;
+            var North_West = $('.North_West').val() || 0;
+            var Souh_East = $(".Souh_East ").val() || 0;
+            var South_West = $('.South_West').val() || 0;
+            var Front = $('#frn__slctn__comm option:selected').val();
+
+            var dataset =
+            {
+                Id: id,
+                North: North,
+                South: South,
+                East: East,
+                West: West,
+                North_East: North_East,
+                North_West: North_West,
+                Souh_East: Souh_East,
+                South_West: South_West,
+                Front: Front
+            };
+            $.post('/Commercial/CommercialPositionUpdation/', { p: dataset }, function () {
+
+            });
+        });
+
+        $(".comm__bndng").change(function () {
+            var Pltbndedid = $(".commid").val();
+            var Pltbndednm = $(".commnm").val();
+            var Pltbndedwith = $('#shps-lst option:selected').val();
+            var Pltbndedwithnm = $('#shps-lst option:selected').text();
+            var prjId = $('#Block').val();
+            var prj_name = $('#Block option:selected').text();
+            var Position = $('#bnded_po__sel option:selected').val();
+            var flr = $('#phse-type option:selected').text();
+
+            if (Position == "" || Position == null) {
+                alert('Plese Select Postion');
+                return false;
+            }
+
+            if (Pltbndedwith == "" || Pltbndedwith == null) {
+                return false;
+            }
+
+            if (prjId == "" || prjId == null) {
+                return false;
+            }
+            debugger;
+            var dataset =
+            {
+                RoomId: Pltbndedid,
+                BoundedLocationId: Pltbndedwith,
+                Project_Id: prjId,
+                Project_Name: prj_name,
+                Type: flr,
+                Shop_No: Pltbndednm,
+                BoundedLocationName: Pltbndedwithnm,
+                Position: Position,
+            };
+            $.post('/Commercial/CommercialPositionUpdation/', { p: dataset }, function (data) {
+
+                if (data) {
+                    $("#bound-det-tab").load('/Commercial/CommercialBounding/', { id: Pltbndedid });
+                    $("#bound-det").load('/Commercial/UpdateCommercialBounding/', { id: Pltbndedid });
+                    alert("Bounded Successfully");
+                }
+                else {
+                    alert("Failed to bound");
+                }
+            });
+        });
+
+
+        $(".prj-types").change(function () {
+            var id = $(".prj-types option:selected").val();
+            $('#phse-type').empty();
+            $.ajax({
+                traditional: true,
+                type: "POST",
+                data: { Id: id },
+                url: "/Commercial/GetCommercialFloors/",
+                success: function (data) {
+                    $('#phse-type').append('<option value="">Choose ..</option>');
+                    $.each(data, function (key, value) {
+                        $('#phse-type').append('<option value=' + value.Id + '>' + value.Floor + '</option>');
+                    });
+                },
+                error: function () {
+                }
+            });
+        });
+        //....get shops of phase
+        $('.prj-phse').change(function () {
+            var id = $("#phse-type").val();
+            $('#shps-lst').empty();
+            $.ajax({
+                traditional: true,
+                type: "POST",
+                data: { Id: id },
+                url: "/Commercial/GetCommercial_Rooms/",
+                success: function (data) {
+                    $('#shps-lst').append('<option value="">Select Shop</option>');
+                    $.each(data, function (key, value) {
+                        $('#shps-lst').append('<option value=' + value.Id + '>' + value.Com_App_Shop_Number + '</option>');
+                    });
+                },
+                error: function () {
+                }
+            });
+        });
+    });
+</script>

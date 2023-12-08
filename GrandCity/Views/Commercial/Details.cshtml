@@ -1,0 +1,20 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Sp_Get_CommercialPlotRoom_Result>
+
+@{
+
+    foreach (var item in Model)
+    {
+        <ul class="list grouped-by-category">
+            <li class="list__item" data-level="1" data-category="1" data-space="1.08"><a href="#" class="list__link">@item.shop_no</a></li>
+            <li class="list__item" data-level="1" data-category="1" data-space="1.01"><a href="#" class="list__link">@item.Location</a></li>
+
+        </ul>
+    }
+
+
+}
+
+
+
+
+

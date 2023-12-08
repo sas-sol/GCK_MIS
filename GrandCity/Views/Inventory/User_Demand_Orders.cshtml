@@ -1,0 +1,49 @@
+﻿@{
+    if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+}
+<nav>
+    <div class="nav nav-tabs" id="nav-tab" role="tablist">
+        <a class="nav-item nav-link dems-ordrs active" href="#" role="tab" aria-controls="nav-development" aria-selected="true">Demand Orders</a>
+        <a class="nav-item nav-link arch-dems-ordrs" href="#" role="tab" aria-controls="nav-development" aria-selected="true">Archive</a>
+    </div>
+</nav>
+<div class="tab-content mt-3" id="nav-tabContent">
+    <div class="tab-pane fade show active nav-development data-view" id="nav-development" role="tabpanel">
+    </div>
+</div>
+<script>
+
+    $('.dems-ordrs').click(function () {
+        $('.data-view').load('/Inventory/DemandOrderReq');
+        $('.arch-dems-ordrs').removeClass('active');
+        $(this).addClass('active');
+    });
+
+    $('.arch-dems-ordrs').click(function () {
+        $('.data-view').load('/Inventory/DemandOrder_Archive/');
+        $('.dems-ordrs').removeClass('active');
+        $(this).addClass('active');
+    });
+
+    $(document).ready(function () {
+        $('.data-view').load('/Inventory/DemandOrderReq/');
+        $('.dep-seg-lnk').first().click();
+    });
+
+</script>
+
+<style>
+    .text-col {
+        text-align: center;
+        vertical-align: middle !important;
+    }
+</style>
+
+

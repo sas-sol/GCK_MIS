@@ -1,0 +1,171 @@
+﻿@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.13.5/xlsx.full.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.13.5/jszip.js"></script>
+<script>
+    var AllData;
+    var ExcelToJSON = function () {
+        this.parseExcel = function (file) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                var data = e.target.result;
+                var workbook = XLSX.read(data, {
+                    type: 'binary'
+                });
+                workbook.SheetNames.forEach(function (sheetName) {
+                    var XL_row_object = XLSX.utils.sheet_to_row_object_array(workbook.Sheets[sheetName]);
+                    //AllData = JSON.stringify(XL_row_object);
+                    AllData = XL_row_object;
+                })
+            };
+            reader.onerror = function (ex) {
+                console.log(ex);
+            };
+            reader.readAsBinaryString(file);
+        };
+    };
+    function handleFileSelect(evt) {
+        var xl2json = new ExcelToJSON();
+        xl2json.parseExcel(fileUpload.files[0]);
+    }
+    function Upload() {
+
+        //Reference the FileUpload element.
+        var fileUpload = document.getElementById("fileUpload");
+        handleFileSelect(fileUpload);
+        //Validate whether File is valid Excel file.
+        var regex = /^([a-zA-Z0-9\s_\\.\-:])+(.xls|.xlsx)$/;
+        if (regex.test(fileUpload.value.toLowerCase())) {
+            if (typeof (FileReader) != "undefined") {
+                var reader = new FileReader();
+
+                //For Browsers other than IE.
+                if (reader.readAsBinaryString) {
+                    reader.onload = function (e) {
+                        ProcessExcel(e.target.result);
+                    };
+                    reader.readAsBinaryString(fileUpload.files[0]);
+                } else {
+                    //For IE Browser.
+                    reader.onload = function (e) {
+                        var data = "";
+                        var bytes = new Uint8Array(e.target.result);
+                        for (var i = 0; i < bytes.byteLength; i++) {
+                            data += String.fromCharCode(bytes[i]);
+                        }
+                        ProcessExcel(data);
+                    };
+                    reader.readAsArrayBuffer(fileUpload.files[0]);
+                }
+            } else {
+                alert("This browser does not support HTML5.");
+            }
+        } else {
+            alert("Please upload a valid Excel file.");
+        }
+    };
+    function ProcessExcel(data) {
+        //Read the Excel File data.
+        var workbook = XLSX.read(data, {
+            type: 'binary'
+        });
+
+        //Fetch the name of First Sheet.
+        var firstSheet = workbook.SheetNames[0];
+
+        //Read all rows from First Sheet into an JSON array.
+        var excelRows = XLSX.utils.sheet_to_row_object_array(workbook.Sheets[firstSheet]);
+
+        //Create a HTML Table element.
+        var table = document.createElement("table");
+        table.setAttribute('class', 'table');
+        table.setAttribute('class', 'table-bordered');
+        table.setAttribute('style', 'width:100%');
+        table.border = "1";
+
+        //Add the header row.
+        var row = table.insertRow(-1);
+
+        //Add the header cells.
+        var headerCell = document.createElement("th");
+        headerCell.innerHTML = "Amount";
+        row.appendChild(headerCell);
+
+        var headerCell = document.createElement("th");
+        headerCell.innerHTML = "PlotNo";
+        row.appendChild(headerCell);
+
+        var headerCell = document.createElement("th");
+        headerCell.innerHTML = "Block";
+        row.appendChild(headerCell);
+
+        var headerCell = document.createElement("th");
+        headerCell.innerHTML = "PlotType";
+        row.appendChild(headerCell);
+
+        var headerCell = document.createElement("th");
+        headerCell.innerHTML = "Sector";
+        row.appendChild(headerCell);
+
+
+        //Add the data rows from Excel file.
+        for (var i = 0; i < excelRows.length; i++) {
+            //Add the data row.
+            var row = table.insertRow(-1);
+
+            //Add the data cells.
+            var cell = row.insertCell(-1);
+            cell.innerHTML = (excelRows[i].Amount == "") ? "-" : excelRows[i].Amount;
+
+            cell = row.insertCell(-1);
+            cell.innerHTML = (excelRows[i].PlotNo == undefined) ? "-" : excelRows[i].PlotNo;
+
+            cell = row.insertCell(-1);
+            cell.innerHTML = (excelRows[i].Block == undefined) ? "-" : excelRows[i].Block;
+
+            cell = row.insertCell(-1);
+            cell.innerHTML = (excelRows[i].PlotType == undefined) ? "-" : excelRows[i].PlotType;
+
+            cell = row.insertCell(-1);
+            cell.innerHTML = (excelRows[i].Sector == undefined) ? "-" : excelRows[i].Sector;
+
+        }
+
+        var dvExcel = document.getElementById("dvExcel");
+        dvExcel.innerHTML = "";
+        dvExcel.appendChild(table);
+    };
+    //
+</script>
+<input type="file" id="fileUpload" />
+<input type="button" class="btn btn-info" id="upload" value="Load Excel File" onclick="Upload()" />
+<hr />
+<div id="dvExcel"></div>
+<button class="btn btn-primary" id="up-boq">Upload data</button>
+<script>
+    $(document).on("click", "#up-boq", function (e) {
+        if (confirm("Are you sure you want to Upload the BOQ")) {
+            $.ajax({
+                type: "POST",
+                url: '/Vouchers/RegPlot/',
+                data: { AllData: AllData},
+                success: function (data) {
+                    if (data.Status) {
+                        alert(data.Msg)
+                    }
+                    else {
+                        alert(data.Msg)
+                    }
+                },
+                error: function (xmlhttprequest, textstatus, message) {
+                    if (textstatus === "timeout") {
+                        alert("got timeout");
+                    } else {
+                        alert(textstatus);
+                    }
+                }
+            });
+        }
+    });
+</script>

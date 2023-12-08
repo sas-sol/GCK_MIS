@@ -1,0 +1,68 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Inventory_Demand_Req>
+<div class="form-group col-md-3">
+    <button type="button" class="btn btn-info dem-req" data-toggle="modal" data-target="#Modal"><i class="fas fa-clipboard-list"></i> Demand Requisition</button>
+</div>
+<table class="table table-bordered" id="inv" width="100%">
+    <thead>
+        <tr>
+            <th width="10%">Sr.</th>
+            <th width="50%" style="text-align:center">Required Items</th>
+            <th width="10%">Req By</th>
+            <th width="10%">Req Date</th>
+            <th width="20%">Approval</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{ int i = 1;}
+        @foreach (var g in Model.GroupBy(x => new { x.Group_Id, x.ReqBy_Name, x.ReqBy_Date, x.Type, x.ApprovedBy, x.ApprovedBy_Name }))
+        {
+
+            <tr id="@g.Key.Group_Id">
+                <td>@i</td>
+                <td class="tdscrol">
+                    <table class="table" style="margin-bottom:0px; border:none">
+                        <thead>
+                            <tr>
+                                <th>Item Name</th>
+                                <th>Qty</th>
+                                <th>Details</th>
+                            </tr>
+                        </thead>
+                        @foreach (var item in g)
+                        {
+                            <tr>
+                                <td>@item.Item_Name</td>
+                                <td>@string.Format("{0:n0}", item.Qty)</td>
+                                <td>@item.Details</td>
+                            </tr>
+                        }
+                    </table>
+                </td>
+                <td>@g.Key.ReqBy_Name</td>
+                <td>@string.Format("{0:dd-MMM-yyyy}", g.Key.ReqBy_Date)</td>
+                <td>
+                    @if (g.Key.Type == "Requisition")
+                    {
+                        if (g.Key.ApprovedBy is null)
+                        {
+                            <span class="dem-req-app pointer bgc-green-50" style="display:block;width:50px;float:left;text-align:center"><i class="fas fa-check"></i></span>
+                            <span class="dem-rem-req pointer bgc-red-50" style="display:block;width:50px;float:right;text-align:center" data-id="@g.Key.Group_Id"> <i class="fas fa-trash"></i></span>
+                        }
+                        else
+                        {
+                            <span>@g.Key.ApprovedBy_Name</span>
+                        }
+                    }
+                    else
+                    {
+                        <button type="submit" class="btn btn-primary multi-dems-req" data-req="@g.Key.Group_Id" data-toggle="modal" data-target="#Modal"><i class="fas fa-file-export"></i> Demand Order</button>
+                        <button type="submit" class="btn btn-info prj-req" data-req="@g.Key.Group_Id"><i class="fas fa-clipboard-list"></i> Purchase Requisition</button>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<script>
+    $("#inv").dataTable();
+</script>

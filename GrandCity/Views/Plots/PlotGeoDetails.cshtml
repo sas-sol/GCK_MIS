@@ -1,0 +1,311 @@
+﻿@model Management_Information_System.Models.PlotGeoDetailsModel
+
+<div class="header-underline-top">
+    <h5><span class="plt-card-heading"><b>Plot Information</b></span> &nbsp;&nbsp;&nbsp;<i class="fa fa-pencil-square-o pointer plt-updtn-faskhj"></i>&nbsp;&nbsp;|&nbsp;<i class="fa fa-cogs pointer plt-extra-opts-hjdsfkgl"></i></h5>
+</div>
+
+
+<div class="col-md-12">
+    <span class="line-text-left">Plot No.</span>
+    <b><span class="line-text-right"><label id="plt-no">@Model.PlotData.Plot_Number</label></span></b>
+    <input type="hidden" class="form-control" id="plt-id" name="Plot_Id" value="@Model.PlotData.Id" readonly>
+    <div class="clearfix"></div>
+</div>
+
+<div class="col-md-12">
+    <span class="line-text-left"><label>Plot Size</label></span>
+    <b><span class="line-text-right"><label id="plt-size">@Model.PlotData.Plot_Size</label></span></b>
+    <div class="clearfix"></div>
+
+</div>
+
+<div class="col-md-12">
+    <span class="line-text-left"><label>Block</label></span>
+    <b><span class="line-text-right"><label id="plt-size">@Model.PlotData.Block_Name</label></span></b>
+    <div class="clearfix"></div>
+
+</div>
+
+<div class="col-md-12">
+    <span class="line-text-left">Type</span>
+    <b><span class="line-text-right"><label id="plt-type">@Model.PlotData.Type</label></span></b>
+    <div class="clearfix"></div>
+</div>
+
+<div class="col-md-12">
+    <span class="line-text-left">Dimension</span>
+    <b><span class="line-text-right"><label id="plt-dim">@Model.PlotData.Plot_Size</label></span></b>
+    <div class="clearfix"></div>
+</div>
+
+<div class="col-md-12">
+    <span class="line-text-left">Status</span>
+    <b><span class="line-text-right"><label id="plt-status"> @Model.PlotData.Develop_Status.Replace('_', ' ')</label></span></b>
+    <div class="clearfix"></div>
+</div>
+
+<div class="col-md-12">
+    <span class="line-text-left">Road</span>
+    <b><span class="line-text-right"><label id="plt-road">@Model.PlotData.Road_Type</label></span></b>
+    <div class="clearfix"></div>
+</div>
+
+<div class="col-md-12">
+    <span class="line-text-left">Area</span>
+    <b><span class="line-text-right"><label id="plt-area">@Convert.ToDecimal(Model.PlotData.Area).ToString("0.##") Sq-Ft</label></span></b>
+    <div class="clearfix"></div>
+</div>
+
+<div class="col-md-12">
+    <span class="line-text-left">Location</span>
+    <b><span class="line-text-right"><label id="plt-loc">@Model.PlotData.Plot_Location</label></span></b>
+    <div class="clearfix"></div>
+</div>
+
+<div class="row new-footer pb-md-2 p-5 scrollable" style="height:35%;max-height:35%;overflow-y:scroll;">
+    <div class="badges col-md-12">
+        <div class="header-underline-top">
+            <h5><span style="font-weight:600;"><b>Badges</b></span></h5>
+        </div>
+        <div class="row">
+
+            <div class="col-md-4 mt-md-2">
+                @if (Model.PlotData.Status == "Repurchased")
+                {
+                    <div class="row"><div class="alert alert-info" style="text-align:center" role="alert"><i class="fa fa-refresh"></i>Repurchased</div></div>
+                }
+                else if (Model.PlotData.Status == "Available_For_Sale")
+                {
+                    <div class="row"><div class="alert alert-info" style="text-align:center" role="alert"><i class="fa fa-bell"></i>For Sale</div></div>
+                }
+                else if (Model.PlotData.Status == "Disputed")
+                {
+                    <div class="row"><div class="alert alert-warning" style="text-align:center" role="alert"><i class="fa fa-american-sign-language-interpreting"></i>Disputed </div></div>
+                }
+                else if (Model.PlotData.Status == "Cancelled_Not_Refunded")
+                {
+                    <div class="row"><div class="alert alert-warning" style="text-align:center" role="alert"><i class="fa fa-close"></i>Cancelled Not Refunded</div></div>
+                }
+                else if (Model.PlotData.Status == "CancelledDueAmount")
+                {
+                    <div class="row"><div class="alert alert-danger" style="text-align:center" role="alert"><i class="fa fa-close"></i>Cancelled On Due Amount</div></div>
+                }
+                else if (Model.PlotData.Status == "Cancelled")
+                {
+                    <div class="row"><div class="alert alert-danger" style="text-align:center" role="alert"><i class="fa fa-close"></i>Cancelled By Company</div></div>
+                }
+                else if (Model.PlotData.Status == "Temporary_Cancelled")
+                {
+                    <div class="row"><i class="fa fa-close"></i>&nbsp;&nbsp;Temporary Cancelled</div>
+                }
+                else if (Model.PlotData.Status == "Hold")
+                {
+                    <div class="row"><i class="fa fa-hand-stop-o"></i>&nbsp;&nbsp;Hold</div>
+                }
+                else
+                {
+                    if (Model.PlotData.Verified == true)
+                    {
+                        <div class="row central-text-align">
+                            <div class="col-md-12">
+                                <i class="fa fa-check" style="color:limegreen;"></i>
+                            </div>
+                            <div class="col-md-12">
+                                Verified
+                            </div>
+                        </div>
+
+                        @*if (User.IsInRole("Plots NOC"))
+                            {
+                                <div class="row">
+                                    <button class="btn btn-info" data-id="@Model.PlotData.Id" id="plot_noc">Generate NOC</button>
+                                </div>
+                                var totalamt = Model.PlotInstallments.Sum(x => x.Amount);
+                                string[] Type = { "Booking", "Installments" };
+                                var receamt = Model.PlotReceipts.Where(x => Type.Contains(x.Type)).Sum(x => x.Amount);
+                                if (receamt > totalamt)
+                                {
+                                    <div class="row">
+                                        <button class="btn btn-primary" data-toggle="modal" data-target="#Modal" data-id="@Model.PlotData.Id" data-module="PlotManagement" id="ref-amt">Refund Amount</button>
+                                    </div>
+                                }
+                            }*@
+                    }
+                    else
+                    {
+                        <div class="row">
+                            <h6 style="width: auto;float: left;margin: 7px;">Request For Verifcation</h6>
+                            @if (Model.PlotData.Verification_Req == true)
+                            {
+                                <label class="switch"><input type="checkbox" id="veri-req" checked><span class="slider round"></span></label>
+                            }
+                            else
+                            {
+                                <label class="switch"><input type="checkbox" id="veri-req"><span class="slider round"></span></label>
+                            }
+                        </div>
+                    }
+
+
+
+                }
+            </div>
+
+            @{
+                var allot = Model.PlotOwners.OrderByDescending(x => x.Ownership_DateTime).FirstOrDefault();
+                if (allot.Allotment_Letter == 1)
+                {
+                    <div class="col-md-6 mt-md-2">
+                        <div class="row central-text-align">
+                            <div class="col-md-12">
+                                <i class="fa fa-file"></i>
+                            </div>
+                            <div class="col-md-12">
+                                Allotment Letter Generated
+                            </div>
+                        </div>
+                    </div>
+                }
+                if (allot.Dup_Allotment_Letter == 1)
+                {
+                    <div class="col-md-6 mt-md-2">
+                        <div class="row"><i class="fa fa-file-alt"></i>&nbsp;&nbsp; Duplicate Allotment Letter Generated</div>
+                    </div>
+                }
+            }
+
+
+            <div class="col-md-4 mt-md-2">
+                @if (Model.PlotData.Registry == true)
+                {
+                    <div class="row"><div class="alert alert-danger" style="text-align:center" role="alert">Registry Plot</div></div>
+                }
+            </div>
+        </div>
+    </div>
+
+    <div class="plt-upt-btns no-disp">
+        <div class="row p-3">
+            <div class="col-md-4">
+                <input type="button" class="btn btn-info up-dimen-f" value="Update Dimension" />
+            </div>
+            @if (User.IsInRole("Change Plot Status"))
+            {
+                <div class="col-md-4">
+                    <input type="button" class="btn btn-primary up-stat-f" data-stat="@Model.PlotData.Status" value="Update Plot Status" />
+                </div>
+            }
+
+            <div class="col-md-5 mt-md-3">
+                <div class="checkbox checkbox-circle checkbox-info peers ai-c">
+                    @{
+                        if (Model.PlotData.Registry == true)
+                        {
+                            <input type="checkbox" value="@Model.PlotData.Id" class="peer regis-plt" checked>
+                        }
+                        else
+                        {
+                            <input type="checkbox" value="@Model.PlotData.Id" class="peer regis-plt">
+                        }
+                    }
+                    <label class="peers peer-greed js-sb ai-c">
+                        <span class="peer peer-greed ser-ch-nam" style="font-weight:bold">Registry Plot </span>
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="plt-offr-btns no-disp">
+        <div class="row">
+            @if (User.IsInRole("Request Plot Discount"))
+            {
+                <div class="col-md-4 mt-md-3">
+                    <div class="" style="text-align:center">
+                        <button class="btn btn-danger disc-btn-fsdkhj" data-plot="@Model.PlotData.Id">Request Discount</button>
+                    </div>
+                </div>
+            }
+
+            @if (User.IsInRole("Customer File"))
+            {
+                <div class="col-md-6 pt-md-3">
+                    <button class="btn btn-info" data-id="@Model.PlotData.Id" id="plot_file">Generate Customer File</button>
+                </div>
+            }
+
+            @if (Model.PlotData.Verified == true)
+            {
+                <div class="col-md-4 mt-md-2">
+                    @if (User.IsInRole("Plots NOC"))
+                    {
+                        <button class="btn btn-info" data-id="@Model.PlotData.Id" id="plot_noc">Generate NOC</button>
+                    }
+                </div>
+            }
+            @{
+                var totalamt = Model.PlotInstallments.Sum(x => x.Amount);
+                string[] Type = { "Booking", "Installments" };
+                var receamt = Model.PlotReceipts.Where(x => Type.Contains(x.Type)).Sum(x => x.Amount);
+                if (receamt > totalamt)
+                {
+                    <div class="col-md-4">
+                        <button class="btn btn-primary" data-toggle="modal" data-target="#Modal" data-id="@Model.PlotData.Id" data-module="PlotManagement" id="ref-amt">Refund Amount</button>
+                    </div>
+                }
+            }
+
+            @if ((Model.PlotData.Status == "Temporary_Cancelled" || Model.PlotData.Status == "Cancelled") && (User.IsInRole("Reinstate Plot Status")))
+            {
+                <div class="col-md-4 mt-md-2">
+                    <div class="row">
+                        <button class="btn btn-info" data-id="@Model.PlotData.Id" id="plot_reinstate">Reinstate Plot</button>
+                    </div>
+                </div>
+
+            }
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('.plt-updtn-faskhj').unbind().click(function () {
+            if ($('.plt-upt-btns').hasClass('no-disp')) {
+                $('.plt-upt-btns').removeClass('no-disp');
+                $('.badges').addClass('no-disp');
+                $('.plt-offr-btns').addClass('no-disp');
+                $('.plt-upt-btns').addClass('animate__animated animate__flipInY');
+            }
+            else {
+                $('.plt-upt-btns').addClass('no-disp');
+                $('.plt-upt-btns').removeClass('animate__animated animate__flipInY');
+                $('.badges').removeClass('no-disp');
+            }
+        });
+
+        $('.plt-extra-opts-hjdsfkgl').unbind().click(function () {
+            if ($('.plt-offr-btns').hasClass('no-disp')) {
+                $('.plt-offr-btns').removeClass('no-disp');
+                $('.badges').addClass('no-disp');
+                $('.plt-upt-btns').addClass('no-disp');
+                $('.plt-offr-btns').addClass('animate__animated animate__flipInY');
+            }
+            else {
+                $('.plt-offr-btns').addClass('no-disp');
+                $('.plt-offr-btns').removeClass('animate__animated animate__flipInY');
+                $('.badges').removeClass('no-disp');
+            }
+        });
+
+        $('.disc-btn-fsdkhj').unbind().click(function () {
+            let plt = $(this).attr('data-plot');
+
+            showRightPopup('Discount Request');
+            SASLoad($('.right-pop-body'));
+            $('.right-pop-body').load('/Plots/DiscountRequest/', { Plotid: plt }, function () {
+                SASUnLoad($('.right-pop-body'));
+            });
+        });
+    });
+</script>

@@ -1,0 +1,153 @@
+﻿@model MeherEstateDevelopers.Models.DealershipDealsDetailsModel
+
+<input type="hidden" class="dealershipid" value="@Model.Deals.Select(x=>x.DealerId).FirstOrDefault()" />
+
+    <div class="col-md-12 bgc-white pt-md-3">
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item"><a class="nav-link active" role="tab" data-toggle="tab" aria-controls="home" aria-selected="true" href="#assigned">Deals</a></li>
+            @*<li class="nav-item"><a class="nav-link" role="tab" data-toggle="tab" aria-controls="home" aria-selected="true" href="#created">Received</a></li>*@
+        </ul>
+        <div class="tab-content">
+            <div id="assigned" class="tab-pane active">
+                <div class="row col-md-12 p-20">
+                    <h4 class="col-md-12" style="text-align:center">Deals</h4>
+                    <div class="col-md-1 mt-md-3"></div>
+                    <div class="col-md-10 mt-md-3">
+                        <table class="table table-borderless">
+                            <thead>
+                                <tr>
+                                    <th>Sr#</th>
+                                    <th>Deal</th>
+                                    <th>Dealership</th>
+                                    <th>Amount</th>
+                                    <th>Received</th>
+                                    <th>Balance</th>
+                                    <th>Date</th>
+                                    <th>Details</th>
+                                    @*<th>Receive Payment</th>*@
+                                    <th>Edit Deal</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                @{ int cnt = 1;}
+                                @foreach(var deal in Model.Deals)
+                                { 
+                                    <tr>
+                                        <td>@(cnt++)</td>
+                                        <td>@deal.DealTitle</td>
+                                        <td>@deal.DealerName</td>
+                                        <td>@string.Format("{0:n0}",deal.Amount)</td>
+                                        <td>@string.Format("{0:n0}",deal.Received)</td>
+                                        <td>@string.Format("{0:n0}",deal.BalanceAmount)</td>
+                                        <td>@deal.DateOfEntry.Value.ToShortDateString()</td>
+                                        <td><button class="btn btn-outline-primary deal-dets-btn" data-grp="@deal.GroupTag" title="View Deal Plots"><i class="fa fa-eye"></i></button></td>
+                                       @* <td><button class="btn btn-outline-success rcv-pmt-btn-new" data-grp="@deal.Id"title="Receive Payment"><i class="fa fa-handshake-o"></i></button></td>*@
+                                        <td><button class="btn btn-outline-primary editDeal" data-grp="@deal.GroupTag"title="Edit Deal"><i class="fa fa-pencil-square-o"></i></button></td>
+                                    </tr>
+
+                                    int vcnt = 1;
+                                    <tr class="deal-dets-@deal.GroupTag" style="display:none">
+                                        <td></td>
+                                        <td colspan="8">
+                                            <table class="table table-borderless">
+                                                <thead>
+                                                    <tr>
+                                                        <th></th>
+                                                        <th></th>
+                                                        <th></th>
+                                                        @*<th><button style="float:right;" class="btn btn-primary deal-frm-prnt-btn" data-toggle="modal" data-target="#Modal" data-grp="@deal.GroupTag"><i class="fa fa-print"></i>&nbsp; Print</button></th>*@
+                                                    </tr>
+                                                    <tr>
+                                                        <th>Sr#</th>
+                                                        <th>Plot#</th>
+                                                        <th>Plot Price</th>
+                                                        <th>Total Price</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach(var plts in Model.DealPlots.Where(x=>x.GroupTag == deal.GroupTag).ToList())
+                                                    {
+                                                    <tr>
+                                                        <td>@(vcnt++)</td>
+                                                        <td>@plts.PlotNum</td>
+                                                        <td>@string.Format("{0:n0}", plts.PlotPrice + plts.SpecialPrefAmount)</td>
+                                                        <td>@string.Format("{0:n0}", plts.PlotPrice + plts.SpecialPrefAmount + plts.CommisionAmount)</td>
+                                                    </tr>
+                                                    }
+                                                <tr>
+                                                    <th></th>
+                                                    <th></th>
+                                                    <th>@string.Format("{0:n0}", Model.DealPlots.Where(x => x.GroupTag == deal.GroupTag).Sum( x=> x.PlotPrice) + Model.DealPlots.Where(x => x.GroupTag == deal.GroupTag).Sum(x => x.SpecialPrefAmount))</th>
+                                                    <th>@string.Format("{0:n0}", Model.DealPlots.Where(x => x.GroupTag == deal.GroupTag).Sum(x => x.PlotPrice) + Model.DealPlots.Where(x => x.GroupTag == deal.GroupTag).Sum(x => x.SpecialPrefAmount) + Model.DealPlots.Where(x => x.GroupTag == deal.GroupTag).Sum(x => x.CommisionAmount))</th>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-md-1 mt-md-3"></div>
+                </div>
+            </div>
+
+
+            <div id="created" class="tab-pane">
+                <div class="row col-md-12 p-20">
+                    <h4 class="col-md-12" style="text-align:center">Counter Report</h4>
+                    <div class="col-md-3 mt-md-3"></div>
+                    <div class="col-md-6 mt-md-3">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th colspan="3" style="text-align:center">Counter Summary</th>
+                                </tr>
+                                <tr>
+                                    <th>Operator</th>
+                                    <th>Total Printed Letters</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                               
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-md-3 mt-md-3"></div>
+                    
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+<script>
+    $(document).ready(function () {
+        $('.deal-dets-btn').unbind().click(function () {
+            let grp = $(this).attr('data-grp');
+            $('.deal-dets-' + grp).toggle();
+        });
+
+        $('.rcv-pmt-btn-new').unbind().click(function () {
+            let grp = $(this).attr('data-grp');
+            window.open('/Dealership/DealershipDealSecurity?Id=' + grp, '_blank');
+        });
+        $('.editDeal').unbind().click(function () {
+            let grp = $(this).attr('data-grp');
+            window.open('/Dealership/PlotsAssignmentEdit?GroupTag=' + grp, '_blank');
+        });
+
+        $('.deal-frm-prnt-btn').unbind().click(function () {
+            let grp = $(this).attr('data-grp');
+            EmptyModel();
+            $('#ModalLabel').text("Select Dealer");
+            $('#modalbody').load('/Dealership/DealerListForPrint/', { id: $('.dealershipid').val(), grp: grp });
+            
+            
+        });
+        
+
+    });
+</script>

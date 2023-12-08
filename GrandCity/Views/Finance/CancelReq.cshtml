@@ -1,0 +1,86 @@
+﻿@model MeherEstateDevelopers.Models.Sp_Get_Receipt_Parameter_ById_Result
+
+
+@*@if (ViewBag.issupervised == 1)
+{*@
+    @using (Html.BeginForm("CancelRequest", "Finance", FormMethod.Post, new { @id = "can-re-refrm", @class = "", role = "form" }))
+    {
+        @Html.AntiForgeryToken()
+        <input type="hidden" name="ReceiptId" value="@Model.Id" />
+        @*<input type="hidden" id="issup" value="@ViewBag.issupervised" />*@
+        <div class="form-row">
+            <div class="form-group col-md-2">
+                <label>Name</label>
+                <h6> @Model.Name</h6>
+            </div>
+            <div class="form-group col-md-3">
+                <label>Father Name</label>
+                <h6>@Model.Father_Name</h6>
+            </div>
+            <div class="form-group col-md-3">
+                <label>File / Plot No.</label>
+                <h6> @Model.File_Plot_Number @Model.Block</h6>
+            </div>
+            <div class="form-group col-md-3">
+                <label>Size</label>
+                <h6> @Model.Size</h6>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group col-md-2">
+                <label>Receipt No.</label>
+                <h6> @Model.ReceiptNo</h6>
+            </div>
+            <div class="form-group col-md-2">
+                <label>Amount</label>
+                <h6>@string.Format("{0:n0}", Model.Amount)</h6>
+            </div>
+            <div class="form-group col-md-2">
+                <label>Payment Type</label>
+                <h6> @Model.PaymentType</h6>
+            </div>
+            @{
+                if (Model.PaymentType != "Cash")
+                {
+                    <div class="form-group col-md-2">
+                        <label>Bank</label>
+                        <h6> @Model.Bank</h6>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label>@Model.PaymentType No</label>
+                        <h6> @Model.Ch_Pay_Draft_No</h6>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label>@Model.PaymentType Date</label>
+                        <h6> @string.Format("{0:D}", Model.Ch_Pay_Draft_Date)</h6>
+                    </div>
+                }
+            }
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-5">
+                <label>Reason</label>
+                <textarea name="Description" rows="6" class="form-control"></textarea>
+            </div>
+        </div>
+    }
+@*}
+else
+{
+    <div class="form-row">
+        <div class="form-control col-md-12">
+            <input type="hidden" id="issup" value="@ViewBag.issupervised" />
+            <h5>This receipt cannot be cancelled.</h5>
+        </div>
+    </div>
+}*@
+<script>
+    $(function () {
+        //var issu = $('#issup').val();
+        //if (issu == 1) {
+            $('.modal-footer').append('<button class="btn btn-primary" id="can-req-rece" type="button">Request</button>');
+        //}
+        $(".modal-header").text("Cancelation Request");
+    });
+</script>

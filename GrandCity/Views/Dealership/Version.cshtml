@@ -1,0 +1,107 @@
+﻿@{
+    if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+  }
+
+<div class="row gap-20 pos-r">
+    <div class="col-md-12">
+        <div class="bgc-white p-20 bd">
+            <h6 class="c-grey-900">Dealer File Form Association</h6>
+            <div class="mT-30">
+                <div class="row" style="margin-left:18%">
+                    <h5>Deal Id</h5>  &nbsp;&nbsp;: &nbsp;&nbsp;&nbsp;
+                    <input type="text" class="form-control" id="deal-grp-id" style="width:50%" />
+                    &nbsp;&nbsp;&nbsp;<button type="button" class="btn btn-info" id="ser-deal">Search</button>
+                </div>
+                <hr />
+                <div class="form-row">
+                    <div class="form-group col-md-3">
+                        <label>Project</label>
+                        @Html.DropDownList("Projects", null, "Select Project", htmlAttributes: new { @class = "form-control prj-phas" })
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label>Phases</label>
+                        <select class="form-control pha-blk" name="Phase" id="phase">
+                            <option>Select Project</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label>Block</label>
+                        <select class="form-control pha-blk" name="Block" id="block">
+                            <option>Select Phase</option>
+                        </select>
+                    </div>
+                    <div class="form-group  col-md-3">
+                        <label>Dealership</label>
+                        @Html.DropDownList("Dealership", null, "Select Dealership", htmlAttributes: new { @class = "form-control" })
+                    </div>
+                </div>
+         <div id="full_deal">
+
+         </div>
+
+
+
+
+
+
+                @*<div id="file-form">
+                    <div class="form-row" id="file-asoc-1">
+                        <div class="form-group col-md-1">
+                            <label>Plot Size</label>
+                            <select class="form-control plots">
+                                <option>Select Plot Size</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-1">
+                            <label>Total Files</label>
+                            <input type="number" min="1" class="form-control total-file" />
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label>-</label>
+                            <select class="form-control dev-char">
+                                <option>Select Development Charges</option>
+                                <option value="1">With Development Charges</option>
+                                <option value="0">Without Development Charges</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label>-</label>
+                            <select class="form-control sec-cha">
+                                <option>Select Security</option>
+                                <option value="1">With Security</option>
+                                <option value="0">Without Security</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label>Security</label>
+                            <input type="text" class="form-control sec" readonly />
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label>Choose Installment Structure</label>
+                            <select class="form-control plt-ins"></select>
+                        </div>
+                        <div class="form-group col-md-1">
+                        </div>
+                    </div>
+                </div>*@
+                @*<div class="row py-3">
+                    <a href="javascript:void(0);" class="ad-file-inf"><i class="ti-plus"></i>&nbsp;Add Row</a>
+                </div>*@
+                @*<button type="submit" class="btn btn-primary" id="del-sub-btn">Assign</button>
+                <button type="button" class="btn btn-info" id="reset" style="display:none" onclick="window.location.reload()">Reset Page</button>*@
+
+            </div>
+            <hr />
+            <div class="row" id="re-fi-for">
+            </div>
+        </div>
+    </div>
+</div>
+

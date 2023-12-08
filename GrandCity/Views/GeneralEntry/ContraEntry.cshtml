@@ -1,0 +1,425 @@
+﻿@{ if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+}
+<style>
+    .paymentotherinfo {
+        display: none;
+    }
+
+    #inst-stat {
+        height: 1245px;
+        overflow-y: scroll;
+    }
+
+    img.scanned {
+        height: 200px; /** Sets the display size */
+        /*margin-right: 12px;*/
+        float: left;
+    }
+
+    div#images {
+        margin-top: 20px;
+        text-align: center;
+    }
+</style>
+@*<script>
+            var AccHead = @Html.Raw(Json.Encode(ViewBag.Type));
+    </script>*@
+<div class="bgc-white bd bdrs-3 p-20 mB-20">
+    <input type="hidden" value="@ViewBag.TransactionId" id="trans-id" />
+    <h4 style="text-align:center">Contra Entry</h4>
+    <hr />
+    <div class="row" id="ad-iven-stock">
+        <div class="col-md-12 cal" id="add-inv-1">
+            <div class="form-row">
+                <span class="add-inven-counter" style="margin-top: 35px;font-size: 15px;width:35px">1.</span>
+                <div class="form-group col-md-9">
+                    <label>Description</label>
+                    <input type="text" class="form-control Name" maxlength="250" name="Name" data-id="1" required />
+                </div>
+                @*<div class="form-group col-md-1">
+                <label>Quantity</label>
+                <input class="form-control coma" placeholder="12,345" required>
+                <input type="hidden" id="" name="Quantity" class="amt Quantity rate-calc" data-id="1" required>
+            </div>
+            <div class="form-group col-md-1">
+                <label>UOM</label>
+                <select style="padding:5px" class="form-control Measurement meas-che" name="Measurement" data-id="1">
+                    <option value="-">N/A</option>
+                    <option value="Kg">Kg</option>
+                    <option value="Piece">Piece</option>
+                    <option value="Bag">Bag</option>
+                    <option value="Liter">Liter</option>
+                </select>
+            </div>
+            <div class="form-group col-md-1">
+                <label>Rate</label>
+                <input type="text" class="form-control Rate inv-rate rate-calc" name="Rate" data-id="1" placeholder="Rate">
+            </div>
+            <div class="form-group col-md-2">
+                <label>Amount</label>
+                <input type="text" class="form-control coma p-r-c rate-calc" placeholder="Amount">
+                <input type="hidden" id="" name="Quantity" class="amt Rate Purchase_Rate" data-id="1" required>
+            </div
+            <i class="ti-plus pointer add-con-pay-de" style="margin-top: 35px;font-size: 20px;font-weight: bold;margin-left: 2%;"></i>>*@
+            </div>
+
+            <div class="form-row">
+                <span style="width:35px"></span>
+                <div class="col-md-4"></div>
+                <div class="col-md-3"><h6>Head</h6></div>
+                <div class="col-md-1"><h6>Debit</h6></div>
+                <div class="col-md-1"><h6>Credit</h6></div>
+            </div>
+            <div class="dr-line">
+                <div class="form-row dr-row dr-row-1">
+                    <span style="width:35px"></span>
+                    <div class="form-group col-md-4">@*<i class="ti-plus  add-dr-row" style="float:right;margin-top:10px;font-size:12px"></i>*@</div>
+                    <div class="form-group col-md-3">
+                        <select class="form-control acc-head searchbox drhead" data-id="1"></select>
+                    </div>
+                    <div class="form-group col-md-1">
+                        <input type="text" class="form-control coma " placeholder="Amount">
+                        <input type="hidden" id="" class="amt Rate dr" data-id="1" required>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="cr-line">
+                <div class="form-row cr-row cr-row-1">
+                    <span style="width:35px"></span>
+                    <div class="form-group col-md-4">@*<i class="ti-plus add-cr-row" style="float:right;margin-top:10px;font-size:12px"></i>*@</div>
+                    <div class="form-group col-md-3">
+                        <select class="form-control acc-head searchbox crhead" data-id="1"></select>
+                    </div>
+                    <div class="form-group col-md-1"></div>
+                    <div class="form-group col-md-1">
+                        <input type="text" class="form-control coma " placeholder="Amount">
+                        <input type="hidden" id="" class="amt Rate cr" data-id="1" required>
+                    </div>
+                </div>
+            </div>
+            <div class="form-row contdetails" style="display:none;">
+
+                <div class="form-group col-md-2">
+                    <label>Instrument Type</label>
+                    <select class="form-control contdetails-test" id="cah-chq-bak" name="PaymentType">
+                        <option value="BankDraft">Bank Draft</option>
+                        <option value="Cheque">Cheque</option>
+                        <option value="PayOrder">Pay Order</option>
+                        <option value="Online_Cash">Online - Cash</option>
+                        <option value="Online_Cheque">Online - Cheque</option>
+                        <option value="Online_Payorder">Online - PayOrder</option>
+                        <option value="Online_Bankdraft">Online - BankDraft</option>
+                    </select>
+                </div>
+                <div class="form-group col-md-2 contdetailsinfo">
+                    <label id="contdetailslabel">Bank Draft</label>
+                    <input type="text" class="form-control" id="paymenttypecont" name="PayChqNo" placeholder="" >
+                </div>
+                <div class="form-group col-md-2 contdetailsinfo">
+                    <label>Branch </label>
+                    <input type="text" class="form-control" id="Branch" name="Branch" placeholder="Mall Rd" >
+                </div>
+                <div class="form-group col-md-2 contdetailsinfo">
+                    <label>Date</label>
+                    <input type="text" class="form-control" id="cbp-date" data-provide="datepicker" name="Ch_bk_Pay_Date" placeholder="mm/dd/yyyy"  required>
+                </div>
+                @*<div class="form-group col-md-1 contdetailsinfo">
+                    <label>Scan File </label>
+                    <div><button class=" btn btn-primary" data-v="1" type="button" id="scanbtn">Scan</button></div>
+                </div>*@
+                @*<div id="images-1" class="col-md-10"></div>*@
+            </div>
+        </div>
+    </div>
+    <hr />
+    @*<div class="form-row">
+        <span style="width:35px"></span>
+        <div class="form-group col-md-7">
+            <h4 style="padding-top:1%;float:right">Total</h4>
+        </div>
+        <div class="form-group col-md-2">
+            <input class="form-control coma f-amt" placeholder="12,345" required readonly>
+            <input type="hidden" id="amt" name="Amount" class="amt" required readonly>
+        </div>
+        <div class="form-group col-md-1"></div>
+    </div>*@
+    <div><button class="btn btn-primary rec-con-ent">Record Entries</button></div>
+</div>
+
+<script>
+    $(document).ready(function () {
+
+        $('.searchbox').select2({
+            //dropdownParent: $('#Modal'),
+            placeholder: "Search for Head",
+            ajax: {
+                url: '/AccountHeads/GetHeadCashBanks/',
+                dataType: 'json',
+                params: {
+                    contentType: 'application/json; charset=utf-8'
+                },
+                quietMillis: 100,
+                data: function (params) {
+                    return {
+                        q: params.term// search term
+                    };
+                },
+                processResults: function (data) {
+                    return {
+                        results: $.map(data.items, function (item) {
+                            return {
+
+                                text: item.Parent,
+                                children: [{
+                                    id: item.id,
+                                    text: item.text + ' - ' + item.head
+                                }]
+
+                            }
+                        })
+
+                    };
+
+                }
+            }
+        });
+
+    });
+    $('.hidn_member_trm_pay').hide();
+    $(document).on("click", ".rec-con-ent", function (e) {
+        var dracc = $('.drhead option:selected').text();
+        var cracc = $('.crhead option:selected').text();
+        if (dracc == cracc) {
+            alert("Cannot make transaction in the same account");
+            return false;
+        }
+        var tran = $("#trans-id").val();
+        for (var i = 1; i <= InventoryCounter; i++) {
+            var dr = 0, cr = 0;
+
+            $("#add-inv-" + i + " .dr").each(function () {
+                var dr_amt = RemoveComma($(this).val());
+                if (dr_amt > 0) {
+                    dr = dr + parseInt(dr_amt);
+                }
+                else {
+                    alert("You Cannot Submit Empty Fields");
+                    return false;
+                }
+            });
+            $("#add-inv-" + i + " .cr").each(function () {
+                var cr_amt = RemoveComma($(this).val());
+                if (cr_amt > 0) {
+                    cr = cr + parseInt(cr_amt);
+                }
+                else {
+                    alert("You Cannot Submit Empty Fields");
+                    return false;
+                }
+            });
+
+            //var t_amt = RemoveComma($("#add-inv-" + i + " .Purchase_Rate").val());
+            if (dr == cr) {
+                //if (dr == t_amt) {
+                //    continue;
+                //}
+                //else {
+                //    alert("Debit/Credit Values are not Equal to Total Amount at : " + $("#add-inv-" + i + " .Name").text());
+                //    return false;
+                //}
+                continue;
+            }
+            else {
+                alert("Debit & Credit Values are not Matching at :" + $("#add-inv-" + i + " .Name").text());
+                return false;
+            }
+        }
+
+        var des = $("#Description").val();
+        //var Amt = $("#amt").val();
+        var paytype = $('#cah-chq-bak').val();
+        var instNo = $('#paymenttypecont').val();
+        var branch = $('#Branch').val();
+        var instDate = $('#cbp-date').val();
+        if (dracc != "/1/1/3/ - Cash") {
+            if (instNo == "" || instNo == null) {
+                alert("Please Enter Instrument No.");
+                return false;
+            }
+            if (branch == null || branch == "") {
+                alert("Please Enter Bank branch");
+                return false;
+            }
+            if (instDate == "" || instDate == null) {
+                alert("Please Select Instrument Date");
+                return false;
+            }
+        }
+        else {
+            paytype = "Cash";
+        }
+
+        InventoryArray = [];
+        for (var i = 1; i <= InventoryCounter; i++) {
+            var Item_Name = $("#add-inv-" + i + " .Name").val();
+            //var Rate = $("#add-inv-" + i + " .inv-rate").val();
+            //var Quantity = $("#add-inv-" + i + " .Quantity").val();
+            //var UOM = $("#add-inv-" + i + " .Measurement").val();
+            //var Amount = $("#add-inv-" + i + " .Purchase_Rate").val(); // Amount
+
+            $("#add-inv-" + i + " .dr-row").each(function () {
+                var dat = $(this).find(".acc-head").select2('data')
+                var dataset =
+                {
+                    Item_Name: Item_Name,
+                    Rate: 0,
+                    Quantity: 0,
+                    UOM: "",
+                    Amount: 0,
+                    Account_Head: dat[0].text,
+                    Account_Head_Id: dat[0].id,
+                    Debit: $(this).find(".dr").val(),
+                    Credit: $(this).find(".cr").val(),
+                    Line: i
+                };
+                InventoryArray.push(dataset);
+            });
+            $("#add-inv-" + i + " .cr-row").each(function () {
+                var dat = $(this).find(".acc-head").select2('data')
+                var dataset =
+                {
+                    Item_Name: Item_Name,
+                    Rate: 0,
+                    Quantity: 0,
+                    UOM: "",
+                    Amount: 0,
+                    Account_Head: dat[0].text,
+                    Account_Head_Id: dat[0].id,
+                    Debit: $(this).find(".dr").val(),
+                    Credit: $(this).find(".cr").val(),
+                    Line: i
+                };
+                InventoryArray.push(dataset);
+            });
+        }
+        if (confirm("Are you sure you want to Record Entries")) {
+            $.ajax({
+                type: "POST",
+                url: '/GeneralEntry/RecordContraEntries/',
+                data: { Details: InventoryArray, TransactionId: tran, paytype: paytype, instnumber: instNo, branch: branch, instDate: instDate, drAcc: dracc, crAcc: cracc },
+                success: function (data) {
+                    if (data) {
+                        alert("Contra Entry Recorded");
+                        window.location.reload();
+                    }
+                    else {
+                        alert("Can not make Transaction at the Moment")
+                    }
+                }
+                , error: function (xmlhttprequest, textstatus, message) {
+                    if (textstatus === "timeout") {
+                        alert("got timeout");
+                    } else {
+                        alert(textstatus);
+                    }
+                }
+            });
+        }
+    });
+    $(document).on("click", ".add-con-pay-de", function () {
+        InventoryCounter++;
+        var html = '<div class="col-md-12 cal" id="add-inv-' + InventoryCounter + '"><div><hr></div>' +
+            '<div class="form-row"><span class="add-inven-counter" style="margin-top: 35px;font-size: 15px;width:35px">' + InventoryCounter + '.</span>' +
+            '<div class="form-group col-md-9"><label>Description</label><input type="text" class="form-control Name" name="Name"  required /></div>' +
+            '<i class="ti-minus rm-add-inven pointer" style="margin-top: 35px;font-size: 20px;font-weight: bold;margin-left: 2%;"></i></div>' +
+            '<div class="form-row"><span style="width:35px"></span><div class="col-md-4"></div><div class="col-md-3"><h6>Head</h6></div><div class="col-md-1"><h6>Debit</h6></div><div class="col-md-1"><h6>Credit</h6></div></div>' +
+            '<div class="dr-line"><div class="form-row dr-row"><span style="width:35px"></span><div class="form-group col-md-4"><i class="ti-plus  add-dr-row" style="float:right;margin-top:10px;font-size:12px"></i></div>' +
+            '<div class="form-group col-md-3"><select class="form-control acc-head searchbox" ></select></div>' +
+            '<div class="form-group col-md-1"><input type="text" class="form-control coma " placeholder="Amount"><input type="hidden" id="" class="amt Rate dr"  required></div></div></div>' +
+            '<div class="cr-line"><div class="form-row cr-row"><span style="width:35px"></span>' +
+            '<div class="form-group col-md-4"><i class="ti-plus add-cr-row" style="float:right;margin-top:10px;font-size:12px"></i></div>' +
+            '<div class="form-group col-md-3"><select class="form-control acc-head searchbox" ></select></div>' +
+            '<div class="form-group col-md-1"></div>' +
+            '<div class="form-group col-md-1"><input type="text" class="form-control coma " placeholder="Amount"><input type="hidden" id="" class="amt Rate cr"  required></div></div></div>' +
+            '</div>';
+        ////
+        //'<div class="form-group col-md-1"><label>Quantity</label><input class="form-control coma" placeholder="12,345" required><input type="hidden" id="" name="Quantity" class="amt Quantity inv-rate rate-calc"  required></div>' +
+        //    '<div class="form-group col-md-1"><label>UOM</label><select style="padding:5px" class="form-control Measurement meas-che" name="Measurement" ><option value="-">N/A</option><option value="Kg">Kg</option><option value="Piece">Piece</option><option value="Bag">Bag</option><option value="Liter">Liter</option></select></div>' +
+        //    '<div class="form-group col-md-1"><label>Rate</label><input type="text" class="form-control Rate inv-rate rate-calc" name="Rate"  placeholder="Rate"></div>' +
+        //    '<div class="form-group col-md-2"><label>Amount</label><input type="text" class="form-control coma p-r-c rate-calc" placeholder="Amount"><input type="hidden" id="" name="Quantity" class="amt Rate Purchase_Rate"  required></div>' +
+
+        $('#ad-iven-stock').append(html);
+        $('#add-inv-' + InventoryCounter + ' .searchbox').select2({
+            //dropdownParent: $('#Modal'),
+            placeholder: "Search for Head",
+            ajax: {
+                url: '/AccountHeads/GetHeadCashBanks/',
+                dataType: 'json',
+                params: {
+                    contentType: 'application/json; charset=utf-8'
+                },
+                quietMillis: 100,
+                data: function (params) {
+                    return {
+                        q: params.term// search term
+                    };
+                },
+                processResults: function (data) {
+                    return {
+                        results: $.map(data.items, function (item) {
+                            return {
+
+                                text: item.Parent,
+                                children: [{
+                                    id: item.id,
+                                    text: item.text + ' - ' + item.head
+                                }]
+
+                            }
+                        })
+
+                    };
+
+                }
+            }
+        });
+        //InitHeads(InventoryCounter);
+    });
+
+    $('.drhead').change(function () {
+        var acc = $('.drhead option:selected').text();
+        if (acc != "/1/1/3/ - Cash") {
+            $('.contdetails').show();
+        }
+        else {
+            $('.contdetails').hide();
+        }
+
+    });
+
+    $(document).on("change", ".contdetails-test", function () {
+        var res = $(this).val();
+        var text = $("option:selected", this).text();
+        if (res !== "Online") {
+            $(" .contdetailsinfo").css("display", "block");
+            $(" .contdetailsinfo :input").attr("disabled", false);
+            $("#contdetailslabel").text(text + " No.");
+            $(" #paymenttypecont").attr("placeholder", text);
+        }
+        else if (res == "Online") {
+            $(" .contdetailsinfo").css("display", "block");
+            $(" .contdetailsinfo :input").attr("disabled", false);
+            $("#contdetailslabel").text("Bank Acc No.");
+            $(" #paymenttypecont").attr("placeholder", "Account No.");
+        }
+    });
+</script>

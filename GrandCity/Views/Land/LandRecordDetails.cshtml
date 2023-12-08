@@ -1,0 +1,182 @@
+﻿@model MeherEstateDevelopers.Models.LandRecordDetails
+@{ if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+}
+<style>
+    fieldset.scheduler-border {
+        border: 1px groove #ddd !important;
+        padding: 0 1.4em 1.4em 1.4em !important;
+        margin: 0 0 1.5em 0 !important;
+        -webkit-box-shadow: 0px 0px 0px 0px #000;
+        box-shadow: 0px 0px 0px 0px #000;
+    }
+
+    legend.scheduler-border {
+        font-size: 1.2em !important;
+        font-weight: bold !important;
+        text-align: left !important;
+        width: auto;
+        padding: 0 10px;
+        border-bottom: none;
+    }
+
+    .add-form-row {
+        padding-top: 4%;
+        padding-left: 2%;
+    }
+
+    .add-seller-btn {
+        float: right;
+        margin-top: 2%;
+    }
+</style>
+<div class="col-md-12 bgc-white">
+    <hr />
+    <h5 class="central-text-align">Add Land Record</h5>
+    <hr />
+
+    <div class="row mt-md-3">
+        <div class="col-md-1">
+            <label>Seller :</label>
+        </div>
+        <div class="col-md-4">
+            <input type="text" class="form-control seller_Name" value="@Model.LandRecords.Select(x => x.Party_Name).FirstOrDefault()" readonly />
+            <input type="hidden" class="form-control seller_id" value="@Model.LandRecords.Select(x => x.Party_Id).FirstOrDefault()" />
+        </div>
+        <div class="col-md-1"></div>
+        <div class="col-md-1">
+            <label>Deal No :</label>
+        </div>
+        <div class="col-md-4">
+            <input type="text" class="form-control del-no" placeholder="Deal No" value="@Model.LandRecords.Select(x => x.Deal_No).FirstOrDefault() " readonly />
+            <input type="hidden" class="form-control del-id" placeholder="Deal No" value="@Model.LandRecords.Select(x => x.Deal_Id).FirstOrDefault() " readonly />
+
+        </div>
+    </div>
+    @foreach (var val in Model.LandRecords)
+    {
+        
+
+        <div class="row mt-4 add-for-append">
+
+            <div class="col-md-2"></div>
+            <div class="col-md-8 add-land-info">
+                <fieldset class="scheduler-border">
+                    <legend class="scheduler-border">Land Info</legend>
+                    <div class="row mt-md-2">
+                        <div class="col-md-4">
+                            <label>Moza No.</label>
+                            <input type="text" class="form-control moza" value="@val.Moza_No" />
+                        </div>
+                        <div class="col-md-4 ">
+                            <label>Marraba No.</label>
+                            <input type="text" class="form-control mar" value="@val.Marraba_No" />
+                        </div>
+                        <div class="col-md-4">
+                            <label>Khasra No.</label>
+                            <input type="text" class="form-control khasra" value="@val.Khasra_No" />
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="row">
+                        <div class="col-md-3">
+                            <h4 style="margin-top:29px">Area Bought</h4>
+                        </div>
+                        <div class="col-md-3">
+                            <label>Kanal</label>
+                            <input type="text" class="form-control kanal" value="@val.Kannal" />
+                        </div>
+                        <div class="col-md-3">
+                            <label>Marla</label>
+                            <input type="text" class="form-control marla" value="@val.Marla" />
+                        </div>
+                        <div class="col-md-3">
+                            <label>SFT.</label>
+                            <input type="text" class="form-control squareft" value="@val.SFT" />
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="row">
+                        <div class="col-md-3">
+                            <h6>Khewat</h6>
+                            <input type="text" class="form-control khewat" value="@val.Khewat" />
+                        </div>
+                        <div class="col-md-3">
+                            <h6>Khatoni</h6>
+                            <input type="text" class="form-control khatooni" value="@val.Khatoni" />
+                        </div>
+                        <div class="col-md-2 add-form-row">
+                            <i class="fas fa-plus-circle">Add</i>
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+            <div class="col-md-2"></div>
+        </div>
+        }
+
+    <div class="col-md-12 plts-asgnmnt-area mt-md-3">
+    </div>
+    <div class="col-md-12">
+        <div class="row">
+            <div class="col-md-7">
+                <h6>Possession status: </h6>
+                <input type="text" class="form-control col-md-6 poss" />
+            </div>
+            <div class="col-md-7">
+                <h6>Purchase Price / Acre: </h6>
+                <input type="text" class="form-control col-md-6 pur coma pur-price" value="@Model.LandDeals.Select(x => x.Price_Per_Acer).FirstOrDefault()" />
+            </div>
+            <div class="col-md-7">
+                <h6>Payment schedule: </h6>
+                @foreach (var a in Model.LandPayments)
+                {
+                    <div class="for-append">
+                        <div class="row due-amt">
+                            <div class="col-3">
+                                <input type="text" class="form-control date due-date" placeholder="Due Date" data-provide="datepicker" value="@String.Format("{0:MM/dd/yyyy}",a.Due_Date)" />
+                            </div>
+                            <div class="col-3">
+                                <input type="text" class="form-control amt coma" placeholder="Amount" value="@a.Amount" />
+                            </div>
+                            <div class="col-3">
+                                <i class="fas fa-plus-circle pointer add-dt-amt" style="margin-left: -12%;padding-top: 7%;">Add</i>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+
+            <div class="col-md-7">
+                <h6>Any Litigation</h6>
+                <textarea class="form-control lit" rows="5" cols="6">@Model.LandRecords.Select(x => x.Litigation).FirstOrDefault()</textarea>
+            </div>
+            <div class="col-md-7">
+                <h6>Remarks</h6>
+                <textarea class="form-control rem" rows="5" cols="6">@Model.LandRecords.Select(x => x.Remarks).FirstOrDefault()</textarea>
+            </div>
+
+            <div class="col-md-7">
+                <h6>Attachements</h6>
+                <input type="file" />
+            </div>
+
+        </div>
+    </div>
+    <hr />
+    <hr />
+
+    <div class="row" style="justify-content:flex-end; align-items:center;">
+        <div class="col-md-2">
+            <button class="btn btn-outline-success Update-deal-wth-dtl"><i class="fa fa-save"></i>&nbsp;Update Deal</button>
+        </div>
+
+    </div>
+
+</div>

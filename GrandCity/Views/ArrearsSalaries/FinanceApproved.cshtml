@@ -1,0 +1,122 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Sp_Get_Arrears_Result>
+@*@{ Layout = "~/Views/Shared/_StaffLayout.cshtml"; }*@
+<style>
+    table thead tr th, table tbody tr td {
+        font-size: 12px;
+    }
+
+    .scrolling-box {
+        height: 740px;
+        overflow-y: scroll;
+        overflow-x: scroll;
+        width: 100%;
+    }
+</style>
+<div class="scrolling-box">
+    <div class="bgc-white bdrs-3  mB-20">
+        <button type="submit" class="btn btn-primary Arrears_Salary_Status" value="Approved">Approve</button>
+        <h4 class="c-grey-900 mB-20">Employee salaries</h4>
+
+        <table id="salary-dat" class="table table-striped table-bordered " cellspacing="0" width="100%">
+            @{
+                foreach (var g in Model.GroupBy(x => new { x.Name,x.depid }))
+                {
+                    int? g_dep = (g.Key.depid is null) ? 0 : g.Key.depid;
+                    <thead class="">
+                        <tr>
+                            <th colspan="14" style="font-size:21px;text-align:center"> @g.Key.Name</th>
+                        </tr>
+                        <tr>
+                            <th>Department</th>
+                            <th>Code</th>
+                            <th>Name</th>
+                            <th>Designation</th>
+                            <th>CNIC</th>
+                            <th>Basic Salary</th>
+                            <th>Per Day Wage</th>
+                            <th>Date Of Joining</th>
+                            <th>Description</th>
+                            <th>Deduction</th>
+                            <th>Allownces</th>
+                            <th>Arrear Amount</th>
+                            <th>Grand Total</th>
+                            <th>Forward</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+
+                        @foreach (var item in g)
+                        {
+                        <tr id="@item.Id" class="fin-up-arre pointer">
+                            <td>@item.Name</td>
+                            <td>@item.Employee_code</td>
+                            <td>@item.Employee_Name</td>
+                            <td>@item.Employee_Designation</td>
+                            <td>@item.CNIC</td>
+                            <td class="basic_salary">@String.Format("{0:n0}", item.Basic_salary)</td>
+                            <td>@( Math.Round(Convert.ToDecimal(item.Basic_salary / 30)) )</td>
+                            <td>@string.Format("{0: dd-MMM-yyyy}", item.Emp_Date_Of_Joining)</td>
+                            <td>@item.Description</td>
+                            <td class="deduction  @g_dep-deduction arr-ded-1">@String.Format("{0:n0}", item.Deductions*(-1))</td>
+                            <td class="allownces  @g_dep-allownces  arr-all-1">@String.Format("{0:n0}", item.Allownces)</td>
+                            <td>@String.Format("{0:n0}", item.Arrears_Amount)</td>
+                            <td class="arr-grn grnd_sum @g_dep-1" id="@g_dep">@String.Format("{0:n0}", item.Grand_Total)</td>
+                            <td>
+                                <a class="ti-pencil arr-edt" id="@item.Id" data-toggle="modal" data-target="#Modal" data-m></a>
+                                <ul style="list-style:none;margin-left:0px;">
+                                    <li class="dropdown">
+                                        <a href="" class="dropdown-toggle no-after peers " data-toggle="dropdown">
+                                            <i class="ti-more-alt  c-grey-900" style="transform:rotate(90deg);"></i>
+                                        </a>
+                                        <ul class="dropdown-menu">
+                                            <li><a id="Approved" class="pointer reverse_arrears_salary"><span>Forward</span></a></li>
+                                            <li role="separator" class="divider"></li>
+                                            <li><a id="Inprocess" class="pointer reverse_arrears_salary"><span>Reverse</span></a></li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </td>
+                        </tr>
+                        }
+                        <tr>
+                            <td style="font-size:20px">Gross Total</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td>@String.Format("{0:n0}", Math.Round(Convert.ToDecimal(g.Select(x => x.Basic_salary).Sum())))</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td class="@g_dep-ded">@String.Format("{0:n0}", Math.Round(Convert.ToDecimal(g.Select(x => x.Deductions * (-1)).Sum())))</td>
+                            <td class="@g_dep-all" >@String.Format("{0:n0}", Math.Round(Convert.ToDecimal(g.Select(x => x.Allownces).Sum())))</td>
+                            <td>@String.Format("{0:n0}", Math.Round(Convert.ToDecimal(g.Select(x => x.Arrears_Amount).Sum())))</td>
+                            <td class="@g_dep-11">@String.Format("{0:n0}", Math.Round(Convert.ToDecimal(g.Select(x => x.Grand_Total).Sum())))</td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                }
+
+            }
+            <tfoot>
+                <tr>
+                    <td style="font-size:20px">Total</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>@String.Format("{0:n0}", Math.Round(Convert.ToDecimal(Model.Sum(x => x.Basic_salary))))</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td class="arr-ded">@String.Format("{0:n0}", Math.Round(Convert.ToDecimal(Model.Sum(x => x.Deductions * (-1)))))</td>
+                    <td class="arr-all">@String.Format("{0:n0}", Math.Round(Convert.ToDecimal(Model.Sum(x => x.Allownces))))</td>
+                    <td>@String.Format("{0:n0}", Math.Round(Convert.ToDecimal(Model.Sum(x => x.Arrears_Amount))))</td>
+                    <td class="ArNetPaySum">@String.Format("{0:n0}", Math.Round(Convert.ToDecimal(Model.Sum(x => x.Grand_Total))))</td>
+                    <td></td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>

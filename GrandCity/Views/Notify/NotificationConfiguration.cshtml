@@ -1,0 +1,132 @@
+﻿@model Management_Information_System.Models.NotificationConfig
+
+@if (Model != null)
+{
+    <input type="hidden" class="emp-id" value="@Model.Employee_Id" />
+    <div class="col-md-12">
+        <div class="row">
+            <div class="col-md-3">
+                <label><b>Mobile 1 :</b></label>
+            </div>
+            <div class="col-md-1"></div>
+            <div class="col-md-2">
+                <label class="switch"><input type="checkbox" id="frst-mob" @((Model.Deliver_On_First_Mobile == true)?"checked":string.Empty)><span class="slider round"></span></label>
+            </div>
+        </div>
+
+        <hr />
+
+        <div class="row">
+            <div class="col-md-3">
+                <label><b>Mobile 2 :</b></label>
+            </div>
+            <div class="col-md-1"></div>
+            <div class="col-md-2">
+                <label class="switch"><input type="checkbox" id="sec-mob" @((Model.Deliver_On_Second_Mobile == true)?"checked":string.Empty)><span class="slider round"></span></label>
+            </div>
+        </div>
+
+        <hr />
+
+        <div class="row">
+            <div class="col-md-3">
+                <label><b>Email 1 :</b></label>
+            </div>
+            <div class="col-md-1"></div>
+            <div class="col-md-2">
+                <label class="switch"><input type="checkbox" id="frst-eml" @((Model.Deliver_On_First_Email == true)?"checked":string.Empty)><span class="slider round"></span></label>
+            </div>
+        </div>
+
+        <hr />
+
+        <div class="row">
+            <div class="col-md-3">
+                <label><b>Email 2 :</b></label>
+            </div>
+            <div class="col-md-1"></div>
+            <div class="col-md-2">
+                <label class="switch"><input type="checkbox" id="sec-eml" @((Model.Deliver_On_Second_Email == true)?"checked":string.Empty)><span class="slider round"></span></label>
+            </div>
+        </div>
+
+        <hr />
+
+        <div class="row">
+            <div class="col-md-3">
+                <label><b>Mute All :</b></label>
+            </div>
+            <div class="col-md-1"></div>
+            <div class="col-md-2">
+                <label class="switch"><input type="checkbox" id="mt-all" @((Model.Silent_Delivery == 1)?"checked":string.Empty)><span class="slider round"></span></label>
+            </div>
+        </div>
+
+        <hr />
+
+
+        <div class="row">
+            <button class="btn btn-success sv-conf-noti-flsad"><i class="fa fa-save"></i>&nbsp; Save Configuration</button>
+        </div>
+    </div>
+}
+
+<script>
+    $(document).ready(function () {
+        var element = document.querySelector('.right-pop-body');
+        if ((element.offsetHeight < element.scrollHeight) || (element.offsetWidth < element.scrollWidth)) {
+            // your element have overflow
+            let el = `<span class="scroll-informer animate__animated animate__infinite animate__slower animate__shakeY">
+                    <img style="width:100%; height:100%;" src="/assets/static/images/scroll-arrow.png" />
+                </span>`;
+            $('.right-pop-body').append(el);
+            $('.right-pop-body').on('scroll', chk_scroll);
+        }
+    });
+
+    function chk_scroll(e) {
+        $('.scroll-informer').remove();
+    }
+
+    $('.sv-conf-noti-flsad').unbind().click(function () {
+        //Collect all the data first
+        let frst_mob = $('#frst-mob').is(':checked');
+        let sec_mob = $('#sec-mob').is(':checked');
+        let frst_eml = $('#frst-eml').is(':checked');
+        let sec_eml = $('#sec-eml').is(':checked');
+        let mt_all = ($('#mt-all').is(':checked') == true) ? 1 : 0;
+        let empId = $('.emp-id').val();
+
+        $.ajax({
+            type: "POST",
+            url: '/Notify/SaveConfiguration/',
+            data: { Deliver_On_First_Mobile: frst_mob, Deliver_On_Second_Mobile: sec_mob, Deliver_On_First_Email: frst_eml, Deliver_On_Second_Email: sec_eml, Silent_Delivery: mt_all, Notify_For_Only: '', Employee_Id: empId },
+            success: function (data) {
+                if (data == true) {
+                    alert('Configuration has been updated successfuly');
+                }
+                else {
+                    alert('Failed to update configuration');
+                }
+            }
+            , error: function (xmlhttprequest, textstatus, message) {
+                if (textstatus === "timeout") {
+                    alert("got timeout");
+                } else {
+                    alert(textstatus);
+                }
+            }
+        });
+    });
+</script>
+
+<style>
+    .scroll-informer {
+        max-height: 35px;
+        max-width: 35px;
+        position: fixed;
+        top: calc(100% - 150px);
+        right: 1%;
+        /*box-shadow: 2px 2px 2px 2px #888888;*/
+    }
+</style>

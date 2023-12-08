@@ -1,0 +1,188 @@
+﻿@{
+    if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+}
+<script src="~/Scripts/hoh.js"></script>
+<div class="bgc-white p-20 bd">
+    <div style="text-align:center">
+        <h3>Record Sales</h3>
+    </div>
+    <hr />
+    <input type="hidden" class="grpId" value="@ViewBag.Group_Id" />
+    <input type="hidden" class="shop_id" value="@ViewBag.Shop_Id" />
+    <div class="col-md-12 " id="ad-demand">
+        <div class="cal item-pur-req-row">
+            <div class="form-row">
+                <span class="sr" style=" margin: 3% 10px 0 0;">1</span>
+                <div class="form-group col-md-1">
+                    <label> Code</label>
+                    <input class="form-control item-code" readonly>
+                </div>
+                <div class="form-group col-md-4">
+                    <label>Item</label>
+                    <select class="form-control product"></select>
+                </div>
+                <div class="form-group col-md-1">
+                    <label>UOM</label>
+                    <input class="form-control item-uom" name="UOM" readonly>
+                </div>
+                <div class="form-group col-md-1">
+                    <label>Available Qty</label>
+                    <input class="form-control av-qty" readonly>
+                </div>
+                <div class="form-group col-md-1">
+                    <label>Qty</label>
+                    <input class="form-control coma ratcal qty" name="Quantity" placeholder="12,345" required>
+                </div>
+                <div class="form-group col-md-1">
+                    <label>Sale Price</label>
+                    <input class="form-control coma ratcal rate" name="Rate" placeholder="12,345" required>
+                </div>
+                <div class="form-group col-md-1">
+                    <label>Amount</label>
+                    <input class="form-control coma amt" name="Amount" placeholder="12,345" readonly>
+                </div>
+                <div class="form-group col-md-1">
+                    <label>Sale Date</label>
+                    <input class="form-control date" style="padding:6px 5px" data-provide="datepicker" placeholder="mm/dd/yyyy" readonly>
+                </div>
+                <i class="ti-trash rmv-pur-req-row rmv" style="margin: 3% 0 0 2%;"></i>
+            </div>
+        </div>
+    </div>
+    <hr />
+    <div class="row">
+        <div class="col-md-10">
+            <h5 style="text-align:right">Grand Total</h5>
+        </div>
+        <div class="col-md-2">
+            <h5 class="total-amt"></h5>
+        </div>
+    </div>
+    <hr />
+    <div class="row">
+        <div class="col-md-2">
+            <button type="button" id="add-new-pr-row" class="btn btn-success">Add Another Product</button>
+        </div>
+        <div class="col-md-2">
+            <button type="submit" id="reg-sale" class="btn btn-primary">Submit</button>
+        </div>
+    </div>
+</div>
+<script>
+
+    $(document).ready(function () {
+        var prdctThat = $(".product").first();
+        var sid = $('.shop_id').val();
+        $(prdctThat).select2({
+            minimumInputLength: 3,
+            dropdownParent: $(prdctThat).parent(),
+            placeholder: "Search for Inventory",
+            ajax: {
+                url: '/HOH/GetInventoryItem/',
+                dataType: 'json',
+                params: {
+                    contentType: 'application/json; charset=utf-8'
+                },
+                quietMillis: 100,
+                data: function (params) {
+                    return {
+                        q: params.term, Shop_Id: sid// search term
+                    };
+                },
+                processResults: function (data) {
+                    return {
+                        results: data.items
+                    };
+                }
+            }
+        });
+        $(prdctThat).on('select2:select', function (e) {
+            var s = e.params.data;
+            var sid = $('.shop_id').val();
+            $.ajax({
+                type: "POST",
+                url: '/HOH/GetInventoryItemById/',
+                data: { Id: s.id, Shop_Id: sid },
+                success: function (data) {
+                    $(prdctThat).closest('.item-pur-req-row').find('.item-code').val('');
+                    $(prdctThat).closest('.item-pur-req-row').find('.item-uom').val('');
+                    $(prdctThat).closest('.item-pur-req-row').find('.rate').val('');
+                    $(prdctThat).closest('.item-pur-req-row').find('.av-qty').val('');
+
+                    $(prdctThat).closest('.item-pur-req-row').find('.item-code').val(data.Inventory.SKU);
+                    $(prdctThat).closest('.item-pur-req-row').find('.item-uom').val(data.Inventory.UOM);
+                    $(prdctThat).closest('.item-pur-req-row').find('.rate').val(data.Inventory.Sale_Rate);
+                    $(prdctThat).closest('.item-pur-req-row').find('.av-qty').val(Number(data.Inventory.Total_In_Qty - data.Inventory.Total_Out_Qty));
+                }
+                , error: function (xmlhttprequest, textstatus, message) {
+                    if (textstatus === "timeout") {
+                        alert("got timeout");
+                    } else {
+                        alert(textstatus);
+                    }
+                }
+            });
+        });
+    });
+    //
+    $(document).on('change', '.qty', function () {
+        var av_qt = Number(RemoveComma($(this).closest(".item-pur-req-row").find('.av-qty').val()));
+        var qty = Number(RemoveComma($(this).val()));
+        if (qty <= 0) {
+            $(this).closest(".item-pur-req-row").find('.qty').val("");
+        }
+        if (av_qt < qty) {
+             Number(RemoveComma($(this).closest(".item-pur-req-row").find('.qty').val("")));
+        }
+        
+    });
+</script>
+<style>
+
+    .rmv-pur-req-row:hover {
+        color: #d0232A;
+        cursor: pointer;
+    }
+
+    .left-mar-temp {
+        margin-left: 6rem !important;
+    }
+
+    .sr {
+        text-align: center;
+        font-weight: bold;
+    }
+
+    .rounded {
+        height: 30px;
+        border-radius: 4px;
+        padding: 4px;
+    }
+
+    .in1 {
+        width: 120px;
+    }
+
+    .in2 {
+        width: 350px;
+    }
+
+    i {
+        margin: 0 8px;
+    }
+
+    .dem-div {
+        width: auto;
+        margin: 10px 0;
+        padding: 10px;
+        background: lightgoldenrodyellow;
+    }
+</style>
+

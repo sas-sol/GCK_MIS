@@ -1,0 +1,61 @@
+﻿
+@model IEnumerable<MeherEstateDevelopers.Models.Sp_Get_Salary_Details_Result>
+
+
+<h5>Allownces </h5>
+
+<div class="col-md-12">
+    <div id="Allownces_And_bonus">
+        @if (Model.Any())
+        {
+            foreach (var item in Model.Where(x => x.Type == "AllowncesAndBonus"))
+            {
+                <input type="hidden" class="AllowncesAndBonusSalaries" value="@item.Salaries_id" />
+                <div class="from-row row">
+
+                    <div class="form-group col-md-3">
+                        <label>@item.Description</label>
+                    </div>
+                    <div class="form-group col-md-3">
+
+                        <label>@String.Format("{0:n0}", item.Amount)</label>
+                    </div>
+                    @if (item.Userid == ViewBag.userid)
+                    {
+                        <div class="form-group">
+                            <i class="ti-trash allownces-bonus-rmv  pointer" id="@item.Id"></i>
+                        </div>
+                    }
+                    //Temporary
+                    else
+                    {
+                <div class="form-group">
+                    <i class="ti-trash allownces-bonus-rmv  pointer" id="@item.Id"></i>
+                </div>
+                    }
+                </div>
+
+            }
+        }
+    </div>
+    <div class="form-row row">
+        <div class="col-md-8">
+            <hr />
+        </div>
+    </div>
+    <div class="from-row row">
+        <div class="form-group col-md-5">
+            <label>Description</label>
+            <input class="form-control detail_descrip" id="" />
+        </div>
+        <div class="form-group col-md-3">
+            <label>Amount</label>
+            <input class="form-control coma" placeholder="12,345" required>
+            <input type="hidden" id="" name="Amount" class="amt sala_amt" required>
+        </div>
+        <div class="form-group col-md-1">
+
+            <button class="btn btn-primary" type="submit" id="save_allownces_and_bonus" style="margin-top:29px" value="">Add</button>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,159 @@
+﻿@{
+    if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+}
+<div class="row">
+    <div class="col-md-12">
+        <div class="mB-20">
+            <h4 class=" mB-20">Overdue Plots</h4>
+            <div id="overdue-plts">
+            </div>
+            <ul class="nav nav-tabs" id="myTabs">
+                <li class="nav-item"><a class="nav-link" data-toggle="tab" role="tab" data-link="/Plots/QualifyingPlots" id="qsplot" href="#over">Qualifying Plots</a></li>
+                <li class="nav-item"><a class="nav-link" data-toggle="tab" role="tab" data-link="/Plots/FirstWarning" id="Fwplot" href="#over">1st Warning</a></li>
+                <li class="nav-item"><a class="nav-link" data-toggle="tab" role="tab" data-link="/Plots/SecWarning" id="swplt" href="#over">2nd Warning</a></li>
+                <li class="nav-item"><a class="nav-link" data-toggle="tab" role="tab" data-link="/Plots/CancelledPlotsLetter" id="clplot" href="#over">Cancelled</a></li>
+            </ul>
+            <!-- Tab panes -->
+            <div class="tab-content">
+                <div id="over" class="tab-pane active bd bdrs-3 p-20">
+                    @{ Html.RenderAction("QualifyingPlots", "Plots");}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+    table tr th, table tr td {
+        padding: 5px !important;
+        font-size: 12px;
+    }
+</style>
+
+<script>
+
+
+
+    // Second warning to File owner
+    $(document).on("change", ".Qualify-war-com-plot", function () {
+        debugger
+        var id = $(this).data("id");
+        var ownid = $(this).data("ownid");
+        var type = $(this).val();
+        if (type == null || type == '')
+        {
+            alert('Select type');
+            return false;
+        }
+        var con = confirm("Are you sure you want to Move this Letter");
+        if (con) {
+            $.ajax({
+                type: "POST",
+                url: '/Plots/WarningIssuesPlotsMove/',
+                data: { Id: id, OwnerId: ownid, Type: type },
+                success: function (data) {
+                    $('#over').load('/Plots/QualifyingPlots/');
+                    return false;
+                },
+                error: function () {
+                    alert("Error Occured");
+                }
+            });
+        }
+    });
+
+
+    // Second warning to File owner
+    $(document).on("change", ".first-war-com-plot", function () {
+        debugger
+        var id = $(this).data("id");
+        var ownid = $(this).data("ownid");
+        var type = $(this).val();
+        if (type == null || type == '') {
+            alert('Select type');
+            return false;
+        }
+        var con = confirm("Are you sure you want to Move this Letter");
+        if (con) {
+            $.ajax({
+                type: "POST",
+                url: '/Plots/WarningIssuesPlotsMove/',
+                data: { Id: id, OwnerId: ownid, Type: type },
+                success: function (data) {
+                    $('#over').load('/Plots/FirstWarning/');
+                    return false;
+                },
+                error: function () {
+                    alert("Error Occured");
+                }
+            });
+        }
+    });
+
+
+
+
+    // Second warning to File owner
+    $(document).on("change", ".sec-war-com-plot", function () {
+        debugger
+        var id = $(this).data("id");
+        var ownid = $(this).data("ownid");
+        var type = $(this).val();
+        if (type == null || type == '') {
+            alert('Select type');
+            return false;
+        }
+        var con = confirm("Are you sure you want to Move this Letter");
+        if (con) {
+            $.ajax({
+                type: "POST",
+                url: '/Plots/WarningIssuesPlotsMove/',
+                data: { Id: id, OwnerId: ownid, Type: type },
+                success: function (data) {
+                    $('#over').load('/Plots/SecWarning/');
+                    return false;
+                },
+                error: function () {
+                    alert("Error Occured");
+                }
+            });
+        }
+    });
+
+
+
+    // Second warning to File owner
+    $(document).on("change", ".cancel-war-com-plot", function () {
+        debugger
+        var id = $(this).data("id");
+        var ownid = $(this).data("ownid");
+        var type = $(this).val();
+        if (type == null || type == '') {
+            alert('Select type');
+            return false;
+        }
+        var con = confirm("Are you sure you want to Move this Letter");
+        if (con) {
+            $.ajax({
+                type: "POST",
+                url: '/Plots/WarningIssuesPlotsMove/',
+                data: { Id: id, OwnerId: ownid, Type: type },
+                success: function (data) {
+                    $('#over').load('/Plots/CancelledPlotsLetter/');
+                    return false;
+                },
+                error: function () {
+                    alert("Error Occured");
+                }
+            });
+        }
+    });
+    //$('#overdue-plts').load('/FileSystem/OverDueFilesReport/')
+    $('#overdue-plts').load('/Plots/OverDuePlotsReport/')
+</script>

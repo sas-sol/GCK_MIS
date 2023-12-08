@@ -1,0 +1,78 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.PlotSigned>
+@if (Model.Any())
+{
+    foreach (var item in Model)
+    {
+<div style="page-break-before:always;color:black">
+    <p style="margin-top:0pt; margin-bottom:0pt; font-size:12pt"><span style="font-family:Calibri">&#xa0;</span></p>
+    <p style="margin-top:0pt; margin-bottom:0pt; font-size:12pt"><span style="font-family:Calibri">&#xa0;</span></p>
+    <p style="margin-top:0pt; margin-bottom:0pt; font-size:12pt"><span style="font-family:Calibri">&#xa0;</span></p>
+    <p style="margin-top:0pt; margin-bottom:0pt; font-size:12pt"><span style="font-family:Calibri">&#xa0;</span></p>
+    <p style="margin-top:0pt; margin-bottom:0pt; font-size:12pt"><span style="font-family:Calibri">&#xa0;</span></p>
+    <p style="margin-top:0pt; margin-bottom:0pt; font-size:14pt"><strong><span style="font-family:Calibri; ">&#xa0;</span></strong></p>
+    <p style="margin-top:0pt; margin-bottom:0pt; font-size:14pt"><strong><span style="font-family:Calibri; ">&#xa0;</span></strong></p>
+    <p style="margin-top:0pt; margin-bottom:0pt; font-size:14pt"><strong><span style="font-family:Calibri; ">Badar Block – Plot Number Change </span></strong></p>
+    <p style="margin-top:0pt; margin-bottom:0pt; font-size:12pt"><span style="font-family:Calibri">&#xa0;</span></p>
+    <p style="margin-top:0pt; margin-bottom:0pt; font-size:12pt"><span style="font-family:Calibri">Respected Customer,</span></p>
+    <p style="margin-top:0pt; margin-bottom:0pt; font-size:10pt"><span style="font-family:Calibri">&#xa0;</span></p>
+    <p style="margin-top:0pt; margin-bottom:0pt; font-size:12pt"><span style="font-family:Calibri">Hope this letter finds you in great health!</span></p>
+    <p style="margin-top:0pt; margin-bottom:0pt; font-size:12pt"><span style="font-family:Calibri">&#xa0;</span></p>
+    <p style="margin-top:0pt; margin-bottom:0pt; font-size:12pt"><span style="font-family:Calibri">We would like to bring into your notice that due to the change in layout plan in Badar Block (Phase 2) - S A Gardens, Plot numbers have been changed accordingly.</span></p>
+    <p style="margin-top:0pt; margin-bottom:0pt; font-size:12pt"><span style="font-family:Calibri">&#xa0;</span></p>
+    <table cellspacing="0" cellpadding="0" style="border:0.75pt solid #000000; border-collapse:collapse">
+        <tr style="height:16.25pt">
+            <td style="width:101.8pt; border-right-style:solid; border-right-width:0.75pt; border-bottom-style:solid; border-bottom-width:0.75pt; padding-right:5.03pt; padding-left:5.03pt; vertical-align:top">
+                <p style="margin-top:0pt; margin-bottom:0pt; font-size:12pt">        <strong><span style="font-family:Calibri; ">Plot Size</span></strong>    </p>
+            </td>
+            <td style="width:74.8pt; border-right-style:solid; border-right-width:0.75pt; border-left-style:solid; border-left-width:0.75pt; border-bottom-style:solid; border-bottom-width:0.75pt; padding-right:5.03pt; padding-left:5.03pt; vertical-align:top">
+                <p style="margin-top:0pt; margin-bottom:0pt; font-size:12pt">
+                    <strong><span style="font-family:Calibri; ">Block</span></strong>
+                </p>
+            </td>
+            <td style="width:128.85pt; border-right-style:solid; border-right-width:0.75pt; border-left-style:solid; border-left-width:0.75pt; border-bottom-style:solid; border-bottom-width:0.75pt; padding-right:5.03pt; padding-left:5.03pt; vertical-align:top">
+                <p style="margin-top:0pt; margin-bottom:0pt; font-size:12pt">
+                    <strong><span style="font-family:Calibri; ">Old Plot Number</span></strong>
+                </p>
+            </td>
+            <td style="width:101.85pt; border-left-style:solid; border-left-width:0.75pt; border-bottom-style:solid; border-bottom-width:0.75pt; padding-right:5.03pt; padding-left:5.03pt; vertical-align:top">
+                <p style="margin-top:0pt; margin-bottom:0pt; font-size:12pt">
+                    <strong><span style="font-family:Calibri; ">New Plot Number</span></strong>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td style="width:101.8pt; border-top-style:solid; border-top-width:0.75pt; border-right-style:solid; border-right-width:0.75pt; padding-right:5.03pt; padding-left:5.03pt; vertical-align:top">
+                <p style="margin-top:0pt; margin-bottom:0pt; font-size:12pt">
+                    <span style="font-family:Calibri">&#xa0;@item.Plot_Size</span>
+                </p>
+            </td>
+            <td style="width:74.8pt; border-top-style:solid; border-top-width:0.75pt; border-right-style:solid; border-right-width:0.75pt; border-left-style:solid; border-left-width:0.75pt; padding-right:5.03pt; padding-left:5.03pt; vertical-align:top">
+                <p style="margin-top:0pt; margin-bottom:0pt; font-size:12pt">
+                    <span style="font-family:Calibri">&#xa0;Badar</span>
+                </p>
+            </td>
+            <td style="width:128.85pt; border-top-style:solid; border-top-width:0.75pt; border-right-style:solid; border-right-width:0.75pt; border-left-style:solid; border-left-width:0.75pt; padding-right:5.03pt; padding-left:5.03pt; vertical-align:top">
+                <p style="margin-top:0pt; margin-bottom:0pt; font-size:12pt">
+                    <span style="font-family:Calibri">&#xa0;@item.Old_PlotNumber</span>
+                </p>
+            </td>
+            <td style="width:101.85pt; border-top-style:solid; border-top-width:0.75pt; border-left-style:solid; border-left-width:0.75pt; padding-right:5.03pt; padding-left:5.03pt; vertical-align:top">
+                <p style="margin-top:0pt; margin-bottom:0pt; font-size:12pt">
+                    <span style="font-family:Calibri">&#xa0;@item.PlotNumber</span>
+                </p>
+            </td>
+        </tr>
+    </table>
+    <p style="margin-top:0pt; margin-bottom:0pt; font-size:12pt"><span style="font-family:Calibri">&#xa0;</span></p>
+    <p style="margin-top:0pt; margin-bottom:0pt; font-size:12pt"><span style="font-family:Calibri">You are kindly requested to visit our office and submit your complete file and documents, so that we could Reissue the New File once it gets updated</span></p>
+    <p style="margin-top:0pt; margin-bottom:0pt; font-size:12pt"><span style="font-family:Calibri">&#xa0;</span></p>
+    <p style="margin-top:0pt; margin-bottom:0pt; font-size:12pt"><span style="font-family:Calibri">Please feel free to contact for any other information.</span></p>
+    <p style="margin-top:0pt; margin-bottom:0pt; font-size:12pt"><span style="font-family:Calibri">&#xa0;</span></p>
+    <p style="margin-top:0pt; margin-bottom:0pt; font-size:12pt"><span style="font-family:Calibri">&#xa0;</span></p>
+    <p style="margin-top:0pt; margin-bottom:0pt; font-size:12pt"><span style="font-family:Calibri">_____________________</span></p>
+    <p style="margin-top:0pt; margin-bottom:0pt; font-size:12pt"><strong><span style="font-family:Calibri; ">Mr. Ans Malik</span></strong></p>
+    <p style="margin-top:0pt; margin-bottom:0pt; font-size:12pt"><span style="font-family:Calibri">Communication Manager</span></p>
+    <p style="margin-top:0pt; margin-bottom:0pt; font-size:12pt"><span style="font-family:Calibri">Date: 15</span><span style="font-family:Calibri; font-size:8pt; "><sup>th</sup></span><span style="font-family:Calibri"> October, 2019</span></p>
+</div>
+    }
+}

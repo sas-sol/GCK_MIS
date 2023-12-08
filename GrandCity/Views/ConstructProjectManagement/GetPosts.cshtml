@@ -1,0 +1,141 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Discussion_Post>
+
+@foreach (var item in Model.OrderByDescending(x => x.DateTime))
+{
+    <div class="col-md-12 row py-2">
+        <div class="col-md-12 col-sm-12 pt-4 postsView ml-3">
+            <div class="media pb-2">
+                <div class="media-left media-middle">
+                    <a href="">
+                        <img src="~/assets/static/images/def-img.png" class="mx-auto d-block img-fluid rounded-circle img-thumbnail" alt="@item.CreatedBy_Name" style="height: 70px; width: 70px;">
+                    </a>
+                </div>
+                <div class="media-body">
+                    <p class="pl-2 pt-3 mb-0">@item.CreatedBy_Name</p>
+                    <p class="timepost pl-2">@string.Format("{0:dd-MMM-yyyy}",item.DateTime)</p>
+                </div>
+                <div class="btn-group">
+                    <i class="fas fa-ellipsis-h align-content-end" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></i>
+                    <div class="dropdown-menu">
+                        <a href="javascript:void(0)" class="ed-post" data-toggle="modal" data-target="#Modal" data-postid="@item.Id" ><i class="far fa-edit  col-md-12 py-2">&nbsp;&nbsp;&nbsp;&nbsp;Edit</i></a>
+                        <a href="javascript:void(0)"><i class="far fa-trash-alt col-md-12 deletePost" data-postid="@item.Id">&nbsp;&nbsp;&nbsp;&nbsp;Delete</i></a>
+                        @*<a href="javascript:void(0)"><i class="fa fa-lock col-md-12">&nbsp;&nbsp;&nbsp;&nbsp;Private</i></a>*@
+                    </div>
+                </div>
+            </div>
+            <div class="p-0">
+                <div class="container pl-0 pr-0 ml-0">
+                    <div class="row">
+                        <div class="col-md-11">
+                            @Html.Raw(item.Post)
+                        </div>
+                        <div class="col-md-11">
+                            <form id="fileupload_@item.Id" method="POST" data-url="@Url.Action("PostFiles", "ConstructProjectManagement" ,new{Prj_Id = item.Project_Id, Post_Id=item.Id})" enctype="multipart/form-data" class="py-0 my-0">
+                                <table role="presentation" class="table" style="width:100% !important; max-width:100% !important"><tbody class="files"></tbody></table>
+                            </form>
+                            <script>
+                                $(function () {
+                                    setupFileUpload(80,@item.Id);
+                                });
+                            </script>
+                            <script id="template-download_@item.Id" type="text/x-tmpl">
+                                {% for (var i=0, file; file=o.files[i]; i++) { %}
+                                <tr class="template-download">
+                                    <td width="20%">
+                                        <span class="preview">
+                                            {% if (file.thumbnailUrl) { %}
+                                            <a href="{%=file.url%}" title="{%=file.name%}" download="{%=file.name%}" data-gallery><img src="{%=file.thumbnailUrl%}"></a>
+                                            {% } %}
+                                        </span>
+                                    </td>
+                                    <td width="70%">
+                                        <table class="file-cont">
+                                            <tr>
+                                                <td>
+                                                    <p class="name">
+                                                        {% if (file.url) { %}
+                                                        <a href="{%=file.url%}" title="{%=file.name%}" download="{%=file.name%}" {%=file.thumbnailUrl?'data-gallery':''%}>{%=file.name%}</a>
+                                                        {% } else { %}
+                                                        <span>{%=file.name%}</span>
+                                                        {% } %}
+                                                    </p>
+                                                    {% if (file.error) { %}
+                                                    <div><span class="label label-danger">Error</span> {%=file.error%}</div>
+                                                    {% } %}
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <span class="size">{%=o.formatFileSize(file.size)%}</span>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                    <td width="10%">
+                                        <button class="btn btn-danger download" data-url="{%=file.downUrl%}">
+                                            <a class="fa fa-download" href="{%=file.downUrl%}"></a>
+                                        </button>
+
+                                        {% if (file.deleteUrl) { %}
+                                        @if (item.CreatedBy == ViewBag.UserId)
+                                        {
+                                            <button class="btn btn-danger delete" data-type="{%=file.deleteType%}" data-url="{%=file.deleteUrl%}" {% if (file.deleteWithCredentials) { %} data-xhr-fields='{"withCredentials":true}' {% } %}>
+                                                <i class="fa fa-trash"></i>
+                                            </button>
+
+                                        }
+                                        {% } %}
+                                        <button class="btn btn-danger download" data-url="{%=file.downUrl%}">
+                                            <a class="fa fa-code-branch" href="{%=file.downUrl%}"></a>
+                                        </button>
+
+                                    </td>
+                                </tr>
+                                {% } %}
+                            </script>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-0 pt-0 pl-0">
+                <div class="col-sm-3 media p-0 justify-content-center">
+                    <div class="media-left media-middle">
+                        <div>
+                            <img src="~/assets/static/images/def-img.png" class="rounded-circle mx-auto d-block" alt="Cinque Terre" style="height: 60px !important; width: 60px !important;">
+                        </div>
+                        <p class="text-center user-name" ></p>
+                    </div>
+                </div>
+                <div class="col-sm-9 pl-0 pt-2 mt-0 ml-0">
+                    <div class="form-group pl-0 ml-0 ">
+                        <input type="hidden" value="@item.Id" id="Post_Id" name="Post_Id" />
+                        <input type="text" class="form-control col-md-12" placeholder="Reply Comment" id="commentReplay-@item.Id" name="Comment" autocomplete="off">
+                        <button class="btn btn-primary mt-2 postComment" data-postid="@item.Id" type="button">Post</button>
+                    </div>
+                </div>
+            </div>
+            <hr />
+            @{ Html.RenderAction("GetPostsComments", "ConstructProjectManagement", new { Post_Id = item.Id });}
+        </div>
+    </div>
+}
+
+
+
+
+
+
+
+<style>
+    .file-cont tr td{
+        padding: 2px !important
+    }
+    .file-cont tr  {
+        height: auto !important
+    }
+</style>
+<script>
+    $(document).ready(function () {
+        $('.user-name').text($("#user-name").text());
+    });
+</script>

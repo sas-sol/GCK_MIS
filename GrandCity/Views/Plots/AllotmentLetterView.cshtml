@@ -1,0 +1,317 @@
+﻿
+@model MeherEstateDevelopers.Models.Sp_Get_AllotmentLetter_Result
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <style>
+        body {
+            font-family: Roboto,-apple-system,system-ui,BlinkMacSystemFont,Segoe UI,Oxygen,Ubuntu,Cantarell,Fira Sans,Droid Sans,Helvetica Neue,Arial,sans-serif;
+        }
+
+        @@page {
+            size: legal;
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+
+        @@media all {
+            body {
+                -webkit-print-color-adjust: exact;
+            }
+
+            .watermark {
+                background-image: url(/images/watermark_view.jpg);
+                background-repeat: no-repeat;
+                background-size: 100%;
+                background-position: 50% 50%;
+                width: 1000px;
+                position: absolute;
+                height: 800px;
+                opacity: 0.1;
+                margin-top: 32%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="watermark"></div>
+    <table cellspacing="0" border="0" style="width:1000px">
+        <tr>
+            <td width="200px" align="center" valign=bottom style="font-weight:bold"><img src="~/assets/static/images/sag scheme logo.jpg" width=160 height=110></td>
+            <td width="650px" align="right" valign="top" style="font-weight:bold">
+                <table style="margin-top:1px;font-size:20px">
+                    <tbody>
+                        <tr><td align="right" valign="top">For View Only</td></tr>
+                        <tr><td align="right" valign="top">Ref No: @Model.Ref_No</td></tr>
+                        <tr><td align="right" valign="top">@string.Format("{0:MMMM dd, yyyy}", Model.Datetime) </td></tr>
+                    </tbody>
+                </table>
+            </td>
+            @{
+                string img = "";
+                string plt = Model.Plot_No.Replace(" ", "_");
+                var name = Model.Name.Replace("/", "-");
+                img = Model.Phase + "_" + Model.Plot_No + "_" + name + ".png";
+            }
+            <td width="150px" align="center" valign=bottom style="font-weight:bold"><img src="~/QR Codes/@img" width=120 height=125></td>
+        </tr>
+    </table>
+    <table cellspacing="0" border="0" style="width:1000px">
+        <tr style="background-color: red;color: white;">
+            <td width="1000px" align="center" style="padding:11px" valign=bottom><font size="6"><b>Allotment Letter</b></font></td>
+        </tr>
+    </table>
+    <table cellspacing="0" border="0" style="width:1000px;font-size: 21px;margin-top: 7px;">
+
+        @if (Model.Own_Img != null && Model.Owner_Img2 == null && Model.Owner_Img3 == null && Model.Owner_Img4 == null)
+        {
+            <tr>
+                <td width="800px" valign="top">
+                    <table style="margin-top:10px">
+                        <tbody>
+                            <tr><td width="800px" align="left" valign="bottom">After having received full payment of the plot mentioned below,</td></tr>
+                        </tbody>
+                    </table>
+                    <table style="margin-top:20px">
+                        <tbody>
+                            <tr>
+                                <td align="left" valign="bottom" style="line-height:40px">
+                                    Plot alloted to&nbsp;<u>&nbsp;&nbsp;&nbsp;<b>@Model.Name</b>&nbsp;&nbsp;&nbsp;</u>
+                                    &nbsp;S/O, D/O, W/O&nbsp;<u>&nbsp;&nbsp;&nbsp;<b>@Model.Father_Name</b>&nbsp;&nbsp;&nbsp;</u>
+                                    &nbsp;CNIC<u>&nbsp;&nbsp;&nbsp;<b>&nbsp;@Model.CNIC&nbsp;</b>&nbsp;&nbsp;&nbsp;</u>&nbsp;
+                                    Address&nbsp;<u>&nbsp;&nbsp;&nbsp;<b>@Model.Address</b>&nbsp;&nbsp;&nbsp;</u>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+                <td width="200px" align="center" valign=top><img style="border: 1px solid;padding: 5px;" src="~/Repository/AllotmentLetterCustomers/@Model.Id/@Model.Own_Img" width=170 height=200></td>
+            </tr>
+        }
+        else if (Model.Own_Img != null && Model.Owner_Img2 != null && Model.Owner_Img3 == null && Model.Owner_Img4 == null)
+        {
+            <tr>
+                <td width="1000px" valign="top">
+                    <p style="line-height:39px">
+                        <img style="border: 1px solid;padding: 5px;float:right" src="~/Repository/AllotmentLetterCustomers/@Model.Id/@Model.Own_Img" width=150 height=180>
+                        <img style="border: 1px solid;padding: 5px;float:right" src="~/Repository/AllotmentLetterCustomers/@Model.Id/@Model.Owner_Img2" width=150 height=180>
+                        <span>After having received full payment of the plot mentioned below,<br /></span>
+                        <span>
+                            Plot alloted to&nbsp;<u>&nbsp;&nbsp;&nbsp;<b>@Model.Name</b>&nbsp;&nbsp;&nbsp;</u><br />
+                            S/O, D/O, W/O&nbsp;<u>&nbsp;&nbsp;&nbsp;<b>@Model.Father_Name</b>&nbsp;&nbsp;&nbsp;</u><br />
+                            CNIC<u>&nbsp;&nbsp;&nbsp;<b>&nbsp;@Model.CNIC&nbsp;</b>&nbsp;&nbsp;&nbsp;</u>&nbsp;<br />
+                            Address&nbsp;<u>&nbsp;&nbsp;&nbsp;<b>@Model.Address</b>&nbsp;&nbsp;&nbsp;</u>
+                        </span>
+                    </p>
+                </td>
+            </tr>
+        }
+        else if (Model.Own_Img != null && Model.Owner_Img2 != null && Model.Owner_Img3 != null && Model.Owner_Img4 == null)
+        {
+            <tr>
+                <td width="1000px" valign="top">
+                    <p style="line-height:39px">
+                        <span style="border: 1px solid;padding: 5px;float:right;width: 200px;margin-top: 25px;">
+                            Pictures of 3 Allottees Printed on Back
+                        </span>
+                        <span>After having received full payment of the plot mentioned below,<br /></span>
+                        <span>
+                            Plot alloted to&nbsp;<u>&nbsp;&nbsp;&nbsp;<b>@Model.Name</b>&nbsp;&nbsp;&nbsp;</u><br />
+                            S/O, D/O, W/O&nbsp;<u>&nbsp;&nbsp;&nbsp;<b>@Model.Father_Name</b>&nbsp;&nbsp;&nbsp;</u><br />
+                            CNIC<u>&nbsp;&nbsp;&nbsp;<b>&nbsp;@Model.CNIC&nbsp;</b>&nbsp;&nbsp;&nbsp;</u>&nbsp;<br />
+                            Address&nbsp;<u>&nbsp;&nbsp;&nbsp;<b>@Model.Address</b>&nbsp;&nbsp;&nbsp;</u>
+                        </span>
+                    </p>
+                </td>
+            </tr>
+        }
+        else if (Model.Own_Img != null && Model.Owner_Img2 != null && Model.Owner_Img3 != null && Model.Owner_Img4 != null)
+        {
+            <tr>
+                <td width="1000px" valign="top">
+                    <p style="line-height:39px">
+                        <span style="border: 1px solid;padding: 5px;float:right;width: 200px;margin-top: 25px;">
+                            Pictures of 4 Allottees Printed on Back
+                        </span>
+                        <span>After having received full payment of the plot mentioned below,<br /></span>
+                        <span>
+                            Plot alloted to&nbsp;<u>&nbsp;&nbsp;&nbsp;<b>@Model.Name</b>&nbsp;&nbsp;&nbsp;</u><br />
+                            S/O, D/O, W/O&nbsp;<u>&nbsp;&nbsp;&nbsp;<b>@Model.Father_Name</b>&nbsp;&nbsp;&nbsp;</u><br />
+                            CNIC<u>&nbsp;&nbsp;&nbsp;<b>&nbsp;@Model.CNIC&nbsp;</b>&nbsp;&nbsp;&nbsp;</u>&nbsp;<br />
+                            Address&nbsp;<u>&nbsp;&nbsp;&nbsp;<b>@Model.Address</b>&nbsp;&nbsp;&nbsp;</u>
+                        </span>
+                    </p>
+                </td>
+            </tr>
+        }
+    </table>
+    <table cellspacing="0" border="0" style="width:1000px;font-size: 20px;margin-top:15px">
+        <tr>
+            <td width="70px" align="left" valign="middle" style="font-weight:bold"><img width="45" height="40" src="~/assets/static/images/twoarrows.png" /></td>
+            <td width="930px" align="left" valign="middle" style="font-weight:bold">Allotment Details</td>
+        </tr>
+    </table>
+    <table cellspacing="0" border="0" style="width:1000px;font-size: 20px;margin-top:15px">
+        <tr>
+            <td width="75px" align="left" valign=bottom>Location</td>
+            <td width="190px" align="center" valign=bottom style="border-bottom:1px solid"><b>@Model.Phase @Model.Project</b></td>
+            <td width="70px" align="center" valign=bottom>Plot No.</td>
+            <td width="70px" align="center" valign=bottom style="border-bottom:1px solid"><b>@Model.Plot_No</b></td>
+            <td width="70px" align="center" valign=bottom>Block</td>
+            <td width="130px" align="center" valign=bottom style="border-bottom:1px solid"><b>@Model.Block</b></td>
+            <td width="90px" align="center" valign=bottom>Category</td>
+            <td width="250px" align="center" valign=bottom style="border-bottom:1px solid"><b>@Model.Plot_Size @Model.Plot_Type Plot</b></td>
+        </tr>
+    </table>
+    <table cellspacing="0" border="0" style="width:1000px;font-size: 20px;margin-top: 35px;">
+        <tr>
+            <td width="50px" align="left" valign="bottom">Area</td>
+            @{ string area = Model.Area.Split('.')[0]; }
+            <td width="150px" align="center" valign="bottom" style="border-bottom:1px solid"><b>@area Sq-Ft</b></td>
+            <td width="100px" align="left" valign="bottom">Measurements</td>
+            <td width="700px" align="center" valign="bottom" style="border-bottom:1px solid"><b>@Model.Diemensions</b></td>
+        </tr>
+    </table>
+    <table cellspacing="0" border="0" style="width:1000px;font-size: 21px;margin-top: 35px;">
+        <tr>
+            <td width="50px" align="left" valign="middle" style="font-weight:bold"><img width="50" src="~/assets/static/images/termscond.png" /></td>
+            <td width="950px" align="left" valign="middle"><b>Terms & Conditions</b></td>
+        </tr>
+    </table>
+    <table cellspacing="0" border="0" style="width:1000px;font-size: 11.5pt;">
+        <tr>
+            <td width="1000px" align="left" valign=bottom>
+                <ol>
+                    <li>The plot shall be used for the sole purpose of erecting a @Model.Plot_Type building.</li>
+                    <li>You shall abide by all the bye-laws, rules and regulations of the Meher Estate Developers Housing Scheme in full letter and spirit.</li>
+                    <li>You shall make timely payment of all maintenance charges or any dues imposed by the Management of the Housing Scheme</li>
+                    <li>You may take Possession of the plot within 60 days from the issue of notice by the Housing Scheme: a formal Possession Letter will be issued in your favour</li>
+                    <li>You shall bear all Registeration/Mutation charges, stamp paper duty, property tax or any other charges levied by the government from time to time.</li>
+                    <li>This allotment letter is non-transferable except to your legal and natural heirs or to a person whose application for transfer is accepted by the management of the housing scheme. Such transfer shall be subject to payment of a fee to the housing scheme apart from any either dues required to be paid. You shall not sub divide, or part with the possession, or mortgage the plot or any part thereof without prior approval of the housing scheme.</li>
+                    <li>You shall intimate change of address to the housing scheme office at the earliest in order to avoid any inconvenience at a later stage.</li>
+                    <li>You required to construct the building on your plot within three years from the date the plot is initially offered for possession. The building should strictly be according to @Model.Plot_Type building bye-laws of the housing scheme and the TMA. If the construction is not completed within the prescribed period the housing scheme shall charge fees for non construction at the rates to be decided by the management. Any activity of construction(Either that is foundation of vicinity) could not be initiated before submitting the construction drawing to the society office.</li>
+                    <li>The area of plot mentioned is approximate. If Actual measurement of the area found more or less the buyer shall be charged more on the actual allocated area on proportionate basis. Moreover the society has the right to change the location and the size of the plot.</li>
+                </ol>
+            </td>
+        </tr>
+    </table>
+    <table cellspacing="0" border="0" style="width:1000px;font-size: 11.5pt;margin-top:10px">
+        <tr>
+            <td width="1000px" align="left" valign=bottom><b>Ensuring our best co-operation at all times,</b></td>
+        </tr>
+    </table>
+    <table cellspacing="0" border="0" style="width:1000px;margin-top:15px;font-size:21px">
+        <tr>
+            <td width="50px" align="left" valign="middle" style="font-weight:bold"><img width="30" src="~/assets/static/images/hands.png" /></td>
+            <td width="950px" align="left" valign="middle"><b>Memorandum of Acceptance</b></td>
+        </tr>
+    </table>
+    <table cellspacing="0" border="0" style="width:1000px;margin-top:15px;font-size:21px">
+        <tbody>
+            <tr>
+                <td width="10px" align="left" valign="bottom" style="line-height:40px">
+                    I&nbsp;<u>&nbsp;&nbsp;&nbsp;<b>@Model.Name</b>&nbsp;&nbsp;&nbsp;</u>
+                    &nbsp;S/O, D/O, W/O&nbsp;&nbsp;<u>&nbsp;&nbsp;&nbsp;<b>@Model.Father_Name</b>&nbsp;&nbsp;&nbsp;</u>&nbsp;
+                    do Hereby accept the allotment with conditions embodied in the above allotment letter
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table cellspacing="0" border="0" style="width:1000px;margin-top:120px">
+        <tr>
+            <td width="300px" align="left" valign=bottom>
+                <table>
+                    <tbody>
+                        <tr><td><b><font size="4">@Model.Witness1</font></b></td></tr>
+                        <tr><td>Witness</td></tr>
+                    </tbody>
+                </table>
+            </td>
+            <td width="300px" align="left" valign=bottom>
+                <table>
+                    <tbody>
+                        <tr><td><b><font size="4">@Model.Witness2</font></b></td></tr>
+                        <tr><td>Witness</td></tr>
+                    </tbody>
+                </table>
+            </td>
+            <td width="50px" align="center" valign=bottom style="border-right:1px solid #ccc"></td>
+            <td width="350px" align="center" valign=bottom>
+                <table>
+                    <tbody>
+                        <tr><td><b><font size="4">@Model.Name</font></b></td></tr>
+                        <tr><td>Owner</td></tr>
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+    </table>
+    <table cellspacing="0" border="0" style="width:1000px;margin-top:20px;border-top:1px solid #ccc">
+        <tr>
+            <td align="left" valign=bottom></td>
+        </tr>
+    </table>
+    <table cellspacing="0" border="0" style="width:1000px;margin-top:80px;font-size:21px">
+        <tr>
+            <td width="500px" align="center" valign=bottom></td>
+            <td width="300px" align="center" valign=bottom style="border-left:1px solid #ccc">
+                <table>
+                    <tbody>
+                        <tr><td><b>@Model.Head_Name</b></td></tr>
+                        <tr><td align="left" style="color:red">@Model.Designation</td></tr>
+                    </tbody>
+                </table>
+            </td>
+            <td width="200px" align="center" valign=bottom></td>
+        </tr>
+    </table>
+    <table cellspacing="0" border="0" style="width:1000px;margin-top:55px;font-size:22px">
+        <tr>
+            <td width="500px" align="left" valign="middle">
+                <table>
+                    <tbody>
+                        <tr><td><b>TMA APPROVED</b></td></tr>
+                        <tr><td><b>REF NO. </b></td></tr>
+                    </tbody>
+                </table>
+            </td>
+            <td width="500px" align="right" valign=bottom>
+                <img src="~/assets/static/images/whitesaprj.png" width=185 height=100>
+            </td>
+
+        </tr>
+    </table>
+    @if (Model.Own_Img != null && Model.Owner_Img2 != null && Model.Owner_Img3 != null && Model.Owner_Img4 == null)
+    {
+        <table cellspacing="0" border="0" style="width:1000px;font-size: 21px;margin-top: 30px;">
+            <tr>
+                <td width="1000px" valign="top">
+                    <p style="line-height:39px">
+                        <img style="border: 1px solid;padding: 5px;" src="@Model.Own_Img" width=180 height=190>
+                        <img style="border: 1px solid;padding: 5px;" src="@Model.Owner_Img2" width=180 height=190>
+                        <img style="border: 1px solid;padding: 5px;" src="@Model.Owner_Img3" width=180 height=190>
+                    </p>
+                </td>
+            </tr>
+        </table>
+    }
+    else if (Model.Own_Img != null && Model.Owner_Img2 != null && Model.Owner_Img3 != null && Model.Owner_Img4 != null)
+    {
+        <table cellspacing="0" border="0" style="width:1000px;font-size: 21px;margin-top: 30px;">
+            <tr>
+                <td width="1000px" valign="top">
+                    <p style="line-height:39px">
+                        <img style="border: 1px solid;padding: 5px;" src="@Model.Own_Img" width=180 height=190>
+                        <img style="border: 1px solid;padding: 5px;" src="@Model.Owner_Img2" width=180 height=190>
+                        <img style="border: 1px solid;padding: 5px;" src="@Model.Owner_Img3" width=180 height=190>
+                        <img style="border: 1px solid;padding: 5px;" src="@Model.Owner_Img4" width=180 height=190>
+                    </p>
+                </td>
+            </tr>
+        </table>
+    }
+</body>
+</html>

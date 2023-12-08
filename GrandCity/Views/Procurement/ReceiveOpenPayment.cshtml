@@ -1,0 +1,428 @@
+﻿
+@{ if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+}
+
+<div class="col-md-12 bgc-white p-20">
+    <div class="row">
+        <div class="acc-pg-head col-md-12">
+            <div class="col-md-4 acc-pg-title"><h4>Invoice Receivable</h4></div>
+        </div>
+    </div>
+    <div class="row col-md-12" style="margin-top:4px">
+        <div class="col-md-3">
+            <select class="form-control vendor-eml"></select>
+        </div>
+        <div class="form-group col-md-3">
+            
+            <select class="form-control paytypesel-rop" id="cah-chq-bak" name="PaymentType">
+                <option value="Cash">Cash</option>
+                <option value="BankDraft">Bank Draft</option>
+                <option value="Cheque">Cheque</option>
+                <option value="PayOrder">Pay Order</option>
+                <option value="Online_Cash">Online - Cash</option>
+                <option value="Online_Cheque">Online - Cheque</option>
+                <option value="Online_Payorder">Online - PayOrder</option>
+                <option value="Online_Bankdraft">Online - BankDraft</option>
+            </select>
+        </div>
+        <div class="col-md-3"></div>
+        <div class="col-md-3">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="row">
+                        <label class="big-head-info-lbl">AMOUNT DUE</label>
+                    </div>
+                    <div class="row">
+                        <label class="pmnt-big-font amnt-due">Rs. 0.00</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-3 paymentotherinfo-rop">
+            <label id="paytypelabel-rop"></label>
+            <input type="text" class="form-control" id="instNo" name="PayChqNo" placeholder="" disabled>
+        </div>
+        <div class="form-group col-md-3 paymentotherinfo-rop">
+            <label>Bank</label>
+            @Html.DropDownList("Bank", null, "Choose..", new { @class = "form-control", disabled = "" })
+        </div>
+        <div class="form-group col-md-2 paymentotherinfo-rop">
+            <label>Branch </label>
+            <input type="text" class="form-control" id="Branch" name="Branch" placeholder="Mall Rd" disabled>
+        </div>
+        <div class="form-group col-md-2 paymentotherinfo-rop">
+            <label>Date</label>
+            <input type="text" class="form-control" data-provide="datepicker" id="Ch_bk_Pay_Date" placeholder="mm/dd/yyyy" disabled required>
+        </div>
+    </div>
+    
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="row">
+                <div class="col-md-5 form-group">
+                    <label>Mailing address</label>
+                    <textarea class="form-control" id="mail-address" rows="5" style="resize:none;"></textarea>
+                </div>
+                <div class="col-md-5 form-group">
+                    <label>Amount Paid By</label>
+                    <input type="text" class="form-control" id="amount-paid-by" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <h5>Description</h5>
+        <table class="table table-borderless">
+            <thead>
+                <tr>
+                    <th>DESCRIPTION</th>
+                    <th>AMOUNT</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="it-lin-item">
+                    <td><input type="text" class="form-control desc_item" /></td>
+                    <td><input type="text" class="form-control coma amt" /></td>
+                </tr>
+
+            </tbody>
+        </table>
+    </div>
+
+    <div class="row mt-md-5">
+
+        <div class="col-md-2">
+        </div>
+        <div class="col-md-7"></div>
+        <div class="col-md-3">
+            <div class="btn-group float-right">
+                <button type="button" class="btn btn-primary rec-inv-ent">Receive Now</button>
+            </div>
+        </div>
+
+        <div class="clearfix"></div>
+    </div>
+</div>
+
+
+<style>
+    .paymentotherinfo {
+        display: none;
+    }
+
+    .acc-pg-head {
+        background-color: #466a93;
+        color: white;
+    }
+
+    .pmnt-big-font {
+        font-size: 40px;
+        font-weight: bolder;
+        color: #000;
+        text-align: right;
+        width: 100%;
+    }
+
+    .big-head-info-lbl {
+        color: #c2c3c7;
+        font-size: 13px;
+        text-align: right;
+        width: 100%;
+        margin-bottom: 0px;
+    }
+</style>
+
+<script>
+    $(document).ready(function () {
+        $('.paymentotherinfo-rop').hide();
+        $('.vendor-eml').select2({
+            placeholder: "Search for Receivable Account",
+            ajax: {
+                url: '/AccountHeads/GetHead/',
+                dataType: 'json',
+                params: {
+                    contentType: 'application/json; charset=utf-8'
+                },
+                data: function (params) {
+                    return {
+                        q: params.term// search term
+                        //code: '/1/1/1/%'
+                    };
+                },
+                processResults: function (data) {
+                    // Transforms the top-level key of the response object from 'items' to 'results'
+                    return {
+                        results: $.map(data.items, function (item) {
+                            return {
+
+                                text: item.Parent,
+                                children: [{
+                                    id: item.id,
+                                    text: item.text
+                                }]
+                            }
+                        })
+                    };
+                }
+            }
+        });
+
+    });
+
+    $('.vendor-eml').change(function () {
+        $.ajax({
+            type: "POST",
+            url: '/GeneralEntry/GetReceivableBalance/',
+            data: { HeadId: $('.vendor-eml').val() },
+            success: function (data) {
+                $('.amnt-due').text('Rs. ' + data.toLocaleString());
+            },
+            error: function () {
+            }
+        });
+    });
+    $('.rec-inv-ent').click(function () {
+        //Receivable
+        var payee_name = "";
+        var payee_id = $('.vendor-eml option:selected').val();
+        if (payee_id != "" && payee_id != null) {
+            payee_name = $('.vendor-eml option:selected').text();
+        }
+        else {
+            alert("Please select Payee Account");
+            return false;
+        }
+        //Cash-Bank
+        var paytype = $('.paytypesel-rop option:selected').val();
+        var instNo = $('#instNo').val();
+        var instBank = $('#Bank option:selected').val();
+        var instBranch = $('#Branch').val();
+        var instDate = $('#Ch_bk_Pay_Date').val();
+        if (paytype != 'Cash') {
+            if (instNo == null || instNo == "") {
+                alert("Enter Instrument Number");
+                return false;
+            }
+            if (instBank == null || instBank == "") {
+                alert("Select Instrument Bank");
+                return false;
+            }
+            if (instBranch == "" || instBranch == null) {
+                alert("Enter Branch Name");
+                return false;
+            }
+            if (instDate == null || instDate == "") {
+                alert("Select Instrument Date");
+                return false;
+            }
+        }
+        var mailAddr = $('#mail-address').val();
+        var amntpaidby = $('#amount-paid-by').val();
+        if (amntpaidby == "" || amntpaidby == null) {
+            alert("Enter Payee Name");
+            return false;
+        }
+        var narration = $('.desc_item').val();
+        if (narration == "" || narration == null) {
+            alert("Enter Description for Invoice");
+            return false;
+        }
+        var amount = RemoveComma($('.amt').val());
+        if (amount == "" || amount == null || amount <= 0) {
+            alert("Enter Invoice Amount");
+            return false;
+        }
+        //var totAmt = RemoveComma($('.amnt-due').val());
+        //if (amount > totAmt) {
+        //    alert("Amount Cannot Exceed Total Due Amount");
+        //    return false;
+        //}
+        var conf = confirm("Are you Sure You want to Add this Receivable Entry")
+        if (conf) {
+            $.ajax({
+                type: "POST",
+                url: '/Procurement/OpenReceivableEntry/',
+                data: { payAccId: payee_id, paidBy: amntpaidby, instNo: instNo, InstBank: instBank, instDate: instDate, branch: instBranch, payType: paytype, Amount: amount, Description: narration },
+                success: function (data) {
+                    if (data.Status) {
+                        alert(data.Msg);
+                        window.close();
+                        window.open("/Receipts/InvoiceReceipt?Id=" + data.VoucherId + "&&Token=" + data.Token, '_blank');
+                    }
+                    else {
+                        alert(data.Msg);
+                    }
+                },
+                error: function () {
+                    alert("Error Occured");
+                    $('#gen-rec').attr("disabled", false);
+                }
+            });
+        }
+    });
+    $(document).on("change", ".paytypesel-rop", function () {
+        var res = $(this).val();
+        var text = $("option:selected", this).text();
+        if (res !== "Cash" && res !== "Online") {
+            $(" .paymentotherinfo-rop").css("display", "block");
+            $(" .paymentotherinfo-rop :input").attr("disabled", false);
+            $("#paytypelabel-rop").text(text + "No.");
+            $(" #instNo").attr("placeholder", text);
+        }
+        else if (res == "Online") {
+            $(" .paymentotherinfo-rop").css("display", "block");
+            $(" .paymentotherinfo-rop :input").attr("disabled", false);
+            $("#paytypelabel-rop").text("Bank Acc No.");
+            $(" #instNo").attr("placeholder", "Account No.");
+        }
+        else {
+            $(" .paymentotherinfo-rop").hide();
+            $(" .paymentotherinfo-rop :input").attr("disabled", true);
+        }
+    });
+
+
+
+
+
+
+
+    $('.rec-rec-entry').click(function () {
+        //var payee_name = "";
+        //var payee_id = $('.vendor-eml option:selected').val();
+        //if (payee_id != "" && payee_id != null) {
+        //    payee_name = $('.vendor-eml option:selected').text();
+        //}
+        //else {
+        //    alert("Please select Payee Account");
+        //    return false;
+        //}
+        var billcount = 0;
+        $('.cb-item-payable').each(function () {
+            if ($(this).is(':checked')) {
+                billcount++;
+            }
+        });
+        if (billcount <= 0) {
+            alert("Please select Invoice(s) to receive Payment");
+            return false;
+        }
+        var accountname = "";
+        var accountId = $('.bank-heads-slcxn option:selected').val();
+        if (accountId == "" || accountId == null) {
+            alert("Please select Receiving Account");
+            return false;
+        }
+        else {
+            accountname = $('.bank-heads-slcxn option:selected').text();
+        }
+        var mailAddr = $('#mail-address').val();
+        var paydate = $('.payable-payment-date').val();
+        //if (paydate == "" || paydate == null) {
+        //    alert("Please Select Payment Date");
+        //    return false;
+        //}
+        var amountreceivedby = $('#amount-paid-by').val();
+        if (amountreceivedby == null) {
+            alert("Please Enter Receiver's Name");
+            return false;
+        }
+        var instType = $('#cah-chq-bak option:selected').val();
+        var instrumentNo = $('#vpd-paymenttype').val();
+        var paychqDate = $('#vpd_Ch_bk_Pay_Date').val();
+        var branch = $('#vpd_Branch').val();
+        var payableAmnt = RemoveComma($('#total-payable-amount').val());
+        if (payableAmnt == 0 || payableAmnt == null) {
+            alert("Please select items to Pay");
+            return false;
+        }
+        var allpayables = [];
+        $('.cb-item-payable').each(function () {
+            var payableitems = { HeadId: "", GroupId: "", Narration: "" };
+            if ($(this).is(':checked')) {
+                allpayables.push({
+                    HeadId: $(this).closest('tr').attr('data-head'),
+                    GroupId: $(this).closest('tr').attr('data-grpid'),
+                    Narration: $(this).closest('tr').find('.narration').text(),
+                });
+            }
+        });
+        var conf = confirm("Are you Sure You want to Add this Receivable Entry")
+        if (conf) {
+            $.ajax({
+                type: "POST",
+                url: '/Procurement/AddNewReceivable/',
+                data: { vpi: allpayables, payAccId: accountId, receivedBy: amountreceivedby, instNo: instrumentNo, instDate: paychqDate, branch: branch, payType: instType, Amount: payableAmnt },
+                success: function (data) {
+                    if (data.Status) {
+                        alert(data.Msg);
+                        window.close();
+                        window.open("/Receipts/InvoiceReceipt?Id=" + data.VoucherId + "&&Token=" + data.Token, '_blank');
+                    }
+                    else {
+                        alert(data.Msg);
+                    }
+                },
+                error: function () {
+                    alert("Error Occured");
+                    $('#gen-rec').attr("disabled", false);
+                }
+            });
+        }
+    });
+    $(document).on("change", ".vpd-paytype-select", function () {
+        if ($('.bank-heads-slcxn option:selected').val() != 'Cash') {
+            $('.paychqdetails').show();
+            var res = $(this).val();
+            var text = $("option:selected", this).text();
+            $(" .vpdpaymentinfo").css("display", "block");
+            $(" .vpdpaymentinfo :input").attr("disabled", false);
+            $("#vpd-paytypelabel").text(text + " No.");
+            $(" #paymenttype").attr("placeholder", text);
+        }
+        else {
+            $('.paychqdetails').hide();
+        }
+        
+    });
+    //$('.vpd-paytype-select').on('change', function (e) {
+    //    if ($('.bank-heads-slcxn option:selected').val() != 'Cash') {
+    //        $('.paychqdetails').show();
+    //    }
+    //    else {
+    //        $('.paychqdetails').hide();
+    //    }
+    //});
+    $(document).on("click", ".rm-row-item", function () {
+        $(this).closest('tr').remove();
+        resetsritem();
+        var sum1 = 0;
+
+        $(".ptc-line-item tr").not(':first').not(':last').each(function () {
+            if (!isNaN(parseFloat(RemoveComma($(this).find('.amt').val()))))
+                sum1 += parseFloat(RemoveComma($(this).find('.amt').val()));
+        });
+        sum1 = parseFloat(sum1);
+        $("#total_amt").text('Total RS. ' + sum1.toLocaleString());
+    });
+
+    function resetsritem() {
+        sritem = 1;
+        $('.sr-item').each(function () {
+            $(this).text(sritem);
+            sritem++;
+        });
+        sritem--;
+    };
+</script>

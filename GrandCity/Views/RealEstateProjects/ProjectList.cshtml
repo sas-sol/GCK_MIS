@@ -1,0 +1,91 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.RealEstateHierarichalViewModel>
+<div class="row gap-20">
+    <div class="col-md-12">
+        <div class="bgc-white p-20 bd">
+            <h6 class="c-grey-900">All Projects</h6>
+            <div class="mT-30">
+                <ul id="">
+                    <li>
+                        <span> ME Developers</span>
+                        <ul class="myUL">
+                            @foreach (var Project in Model)
+                            {
+                                <li>
+                                    <span class="caret">@Project.Name</span>
+                                    <ul class="nested">
+                                        @foreach (var phase in @Project.Children)
+                                        {
+                                            <li>
+                                                <span class="caret">@phase.Name</span>
+                                                <ul class="nested">
+                                                    @foreach (var block in @phase.Children)
+                                                    {
+                                                        <li>
+                                                            <span>@block.Name</span>
+                                                        </li>
+                                                    }
+                                                </ul>
+                                            </li>
+                                        }
+                                    </ul>
+                                </li>
+                            }
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+    /* Remove default bullets */
+    ul, #myUL {
+        list-style-type: none;
+    }
+
+    /* Remove margins and padding from the parent ul */
+    #myUL {
+        margin: 0;
+        padding: 0;
+    }
+
+    /* Style the caret/arrow */
+    .caret {
+        cursor: pointer;
+        user-select: none; /* Prevent text selection */
+    }
+
+        /* Create the caret/arrow with a unicode, and style it */
+        .caret::before {
+            content: "\25B6";
+            color: black;
+            display: inline-block;
+            margin-right: 6px;
+        }
+
+    /* Rotate the caret/arrow icon when clicked on (using JavaScript) */
+    .caret-down::before {
+        transform: rotate(90deg);
+    }
+
+    /* Hide the nested list */
+    .nested {
+        display: none;
+    }
+
+    /* Show the nested list when the user clicks on the caret/arrow (with JavaScript) */
+    .active {
+        display: block;
+    }
+</style>
+<script>
+    var toggler = document.getElementsByClassName("caret");
+    var i;
+
+    for (i = 0; i < toggler.length; i++) {
+        toggler[i].addEventListener("click", function () {
+            this.parentElement.querySelector(".nested").classList.toggle("active");
+            this.classList.toggle("caret-down");
+        });
+    }
+</script>

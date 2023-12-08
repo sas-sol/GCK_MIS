@@ -1,0 +1,123 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Sp_Get_CommercialOwnerDetail_Result>
+
+<div class="mT-30">
+    <div class="panel-group" id="accordion">
+        @{ int ownercount = 1;
+
+
+            foreach (var item in Model.OrderByDescending(x => x.Id))
+            {
+
+                string show = "";
+                <div class=" panel panel-default " id="@ownercount">
+                    <div class="panel-heading">
+                        <h5 class="panel-title">
+                            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#@item.Id" aria-expanded="true">
+                                @item.Name - @item.Ownership_Status - @string.Format("{0: dd-MMM-yyyy}", item.DateTime)
+                            </a>
+                        </h5>
+                    </div>
+                    <input type="hidden" id="@item.Id" class="filetransid" />
+                    <div id="@item.Id" class="panel-collapse collapse in @show" aria-expanded="true" style="">
+                        <div class="panel-body">
+                            <div class="own-det row up-info" id="@ownercount">
+                                <input type="hidden" id="@item.Id" class="File-trans-id" value="" />
+                              
+                                    <div class="form-row col-md-12" id="oc-@ownercount">
+                                        <input type="hidden" id="countertrans" value="@ownercount" />
+                                        <div class="form-group col-md-4">
+                                            <label>Name</label>
+                                            <input type="text" class="form-control" id="Name" value="@item.Name" readonly>
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label>Father's/Husband's Name</label>
+                                            <input type="text" class="form-control" id="Father_Husband" value="@item.Father_Husband" readonly>
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label>CNIC / NICOP</label>
+                                            <input type="text" class="form-control" id="CNIC_NICOP" value="@item.CNIC_NICOP" placeholder="12345-1234567-1   or   123456-123456-1" readonly>
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label>Date Of Birth</label>
+                                            <input type="text" class="form-control" id="Date_Of_Birth" value="@item.Date_Of_Birth" readonly>
+                                        </div>
+                                        <div class="form-group col-md-7">
+                                            <label>Postal Address</label>
+                                            <input type="text" class="form-control" id="Postal_Address" value="@item.Postal_Address" placeholder="1234 Main St" readonly>
+                                        </div>
+                                        <div class="form-group col-md-7">
+                                            <label>Residential Address</label>
+                                            <input type="text" class="form-control" id="Residential_Address" value="@item.Residential_Address" placeholder="Apartment, Plot, or floor" readonly>
+                                        </div>
+                                        <div class="form-group col-md-3">
+                                            <label>City</label>
+                                            <input type="text" class="form-control" id="City" value="@item.City" readonly>
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label>Occupation</label>
+                                            <input type="text" class="form-control" value="@item.Occupation" id="Occupation" readonly>
+                                        </div>
+                                        <div class="form-group col-md-3">
+                                            <label>Nationality</label>
+                                            <input type="text" class="form-control" value="@item.Nationality" id="Nationality" readonly>
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label>Email</label>
+                                            <input type="text" class="form-control" value="@item.Email" id="Email" readonly>
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label>Phone Office</label>
+                                            <input type="text" class="form-control" value="@item.Phone_Office" id="Phone_Office" readonly>
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label>Residential</label>
+                                            <input type="text" class="form-control" value="@item.Residential" id="Residential" readonly>
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label>Mobile 1</label>
+                                            <input type="text" class="form-control" value="@item.Mobile_1" placeholder="03121234567" id="Mobile_1" readonly>
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label>Mobile 2</label>
+                                            <input type="text" class="form-control" value="@item.Mobile_1" pattern="^0\d{10}" placeholder="03121234567" id="Mobile_2" readonly>
+                                        </div>
+                                        <h6 class="c-grey-900" style="width:100%">Nominee</h6>
+                                        <div class="form-row">
+                                            <div class="form-group col-md-4">
+                                                <label>Name</label>
+                                                <input type="text" class="form-control" value="@item.Nominee_Name" id="Nominee_Name" readonly>
+                                            </div>
+                                            <div class="form-group col-md-4">
+                                                <label>CNIC / NICOP</label>
+                                                <input type="text" class="form-control" value="@item.Nominee_CNIC_NICOP" placeholder="12345-1234567-1 or 123456-123456-1" id="Nominee_CNIC_NICOP" readonly>
+                                            </div>
+                                            <div class="form-group col-md-3">
+                                                <label>Relation</label>
+                                                <input class="form-control" value="@item.Nominee_Relation" id="Nominee_Relation" placeholder="" readonly>
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label>Address</label>
+                                                <input type="text" class="form-control" value="@item.Nominee_Address" id="Nominee_Address" placeholder="1234 Main St" readonly>
+                                            </div>
+                                        </div>
+                                    </div>
+                                
+                                <div class="form-row">
+                                    <div class="col-md-2">
+                                        <button class="btn btn-info com-upd-info" style="margin-top:5px" id="">Update Information</button>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <button class="btn btn-success sav-com-info" style="margin-top:5px;display:none" id="">Save</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                ownercount++;
+            }
+        }
+    </div>
+</div>
+
+

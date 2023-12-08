@@ -1,0 +1,50 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Sp_Get_All_AssetList_Result>
+
+    <div class="col-md-12">
+        <div class="bgc-white bd bdrs-3 p-20 mB-20">
+            <h4 class="c-grey-900 mB-20">Asset List</h4>
+            <table id="asset-dat" class="table table-striped table-bordered asset-dat" cellspacing="0" width="100%">
+                <thead class="">
+                    <tr>
+                        <th>Asset Name</th>
+                        <th>Type</th>
+                        <th>Total</th>
+                        <th>Assigned</th>
+                        <th>Available</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        if (Model.Any())
+                        {
+                            foreach (var g in Model.GroupBy(x => new { x.AssetParent, x.AssetName }))
+                            {
+                                <tr class="pointer " id="">
+                                    <td class="ti-eye comp-assets_details" id="@g.Key.AssetName" data-toggle="modal" data-target="#Modal"> @g.Key.AssetName</td>
+                                    <td>@g.Key.AssetParent</td>
+                                    <td class="">@g.Count()</td>
+                                    <td>
+                                        @foreach (var item in g)
+                                        {
+                                            <span class="">@item.EmpName</span><span class=""> | </span><span class="">@item.qrnumber</span><br>
+                                        }
+                                    </td>
+                                    <td class="comp-assets_pop_up" data-toggle="modal" data-target="#Modal" id="@g.Key.AssetName">@g.Where(x => x.EmpName == null).Count()</td>
+                                </tr>
+                            }
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+<script>
+    $(document).ready(function () {
+        $('#asset-dat').DataTable({
+            dom: 'Bfrtip',
+            buttons: [
+                'copy', 'csv', 'excel', 'pdf', 'print'
+            ]
+        });
+    });
+</script>

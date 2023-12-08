@@ -1,0 +1,107 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Sp_Get_Inventory_Result>
+<script src="~/Scripts/Inv.js"></script>
+@{ if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+}
+<div class="bgc-white bd bdrs-3 p-20 mB-20">
+    <div class="row">
+        <div class="col-md-3">
+            <h4 class="c-grey-900 mB-20">Inventory List</h4>
+        </div>
+        <div class="col-md-3">
+            <button title="Update" data-toggle="modal" data-target="#Modal" id="add-invent-popup" class="btn btn-primary">Add Inventory Item</button>
+        </div>
+
+    </div>
+    <div class="row">
+        <div class="tableFixHead mt-1">
+            <table class="table table-bordered att-tbl-fjkdhs inv-tbl table-development" cellspacing="0" width="100%">
+                <thead class="thead-dark ka">
+                    <tr>
+                        <th>Sr.</th>
+                        <th>Category</th>
+                        <th>Company</th>
+                        <th>Item Code</th>
+                        <th>Name</th>
+                        <th>UOM</th>
+                        <th>Size</th>
+                        <th>Length</th>
+                        <th>Width</th>
+                        <th>Heigth</th>
+                        <th>Diameter</th>
+                        <th>Department</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+
+                        foreach (var gg in Model.GroupBy(x => x.Category_Name))
+                        {
+                            <tr>
+                                <th colspan="11" style="text-align:center">@gg.Key</th>
+                            </tr>
+                            foreach (var ggg in gg.GroupBy(x => x.Item_Name))
+                            {
+                                <tr class="tableheader">
+                                    <th colspan="11">@ggg.Key</th>
+                                </tr>
+                                int sr = 1;
+                                foreach (var item in ggg.GroupBy(x => new { x.Id, x.Name, x.Company, x.Complete_Name, x.SKU, x.UOM, x.Size, x.Size_UOM, x.Length, x.L_UOM, x.Width, x.W_UOM, x.Heigth, x.H_UOM, x.Diameter, x.D_UOM, x.Minimum_Qty }).OrderBy(x => x.Key.Name))
+                                {
+                                    <tr class="main-info info-row" data-pid="@item.Key.Id" id="@item.Key.Id">
+                                        <td>@sr</td>
+                                        <td>@item.Key.Name</td>
+                                        <td>@item.Key.Company</td>
+                                        <td class="item-name-">@item.Key.SKU</td>
+                                        <td class="item-name-">@item.Key.Complete_Name</td>
+                                        <td class="item-uom-">@item.Key.UOM</td>
+                                        <td>@item.Key.Size - @item.Key.Size_UOM </td>
+                                        <td>@item.Key.Length - @item.Key.L_UOM </td>
+                                        <td>@item.Key.Width - @item.Key.W_UOM</td>
+                                        <td>@item.Key.Heigth - @item.Key.H_UOM</td>
+                                        <td>@item.Key.Diameter - @item.Key.D_UOM</td>
+                                        <td>
+                                            @foreach (var a in item)
+                                            {
+                                                <span>@a.Dep_Name</span>
+                                                <hr />
+                                            }
+                                        </td>
+                                        <td>
+                                            <i class="ti-pencil pointer inven-crud-popup" title="Update" data-toggle="modal" data-target="#Modal"></i><span>&nbsp;&nbsp;&nbsp;</span>
+                                            <i class="fa fa-clipboard pointer isu-det" title="Details" data-toggle="modal" data-target="#Modal"></i><span>&nbsp;&nbsp;&nbsp;</span>
+                                            <i class="fas fa-tasks pointer cha-code" title="New Code" data-toggle="modal" data-target="#Modal"></i><span>&nbsp;&nbsp;&nbsp;</span>
+                                        </td>
+                                    </tr>
+                                    sr++;
+                                }
+                            }
+
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<script>
+    $('.tableheader').click(function () {
+        $(this).find('span').text(function (_, value) { return value == '-' ? '+' : '-' });
+        $(this).nextUntil('tr.tableheader').slideToggle(100, function () {
+        });
+    });
+</script>
+<style>
+    .dtrg-level-0 {
+        font-size: 20px;
+        text-align: left;
+        font-weight: bold;
+    }
+</style>

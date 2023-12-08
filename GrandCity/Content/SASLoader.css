@@ -1,0 +1,25 @@
+﻿.loader-img-style {
+    height: 50%;
+    display: block;
+    margin: auto;
+    position: absolute;
+    top: 30%;
+    left: 40%;
+    max-height: 20%;
+}
+
+
+.loader-parent {
+    position: relative;
+}
+
+.loader-box{
+    max-height:100%;
+    max-width:100%;
+
+    height:70%;
+    width:70%;
+
+    min-height:100px;
+    min-width:100px;
+}

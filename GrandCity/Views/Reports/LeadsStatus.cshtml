@@ -1,0 +1,41 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Booking_Report>
+
+<div id="stat-cont" style="min-width: 310px; height: 400px; max-width: 600px; margin: 0 auto"></div>
+
+<script>
+
+// Build the chart
+    Highcharts.chart('stat-cont', {
+    chart: {
+        plotBackgroundColor: null,
+        plotBorderWidth: null,
+        plotShadow: false,
+        type: 'pie'
+    },
+    title: {
+        text: 'Leads By Status'
+    },
+    tooltip: {
+        pointFormat: '{series.name}: <b>{point.y:1f}</b>'
+    },
+    plotOptions: {
+        pie: {
+            allowPointSelect: true,
+            cursor: 'pointer',
+            dataLabels: {
+                enabled: true,
+                format: '<b>{point.name}</b>: {point.y:1f}',
+                style: {
+                    color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                },
+                connectorColor: 'silver'
+            }
+        }
+    },
+    series: [{
+        name: 'Status',
+        data: @Html.Raw(Json.Encode(Model))
+    }]
+    });
+
+</script>

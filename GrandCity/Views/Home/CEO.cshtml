@@ -1,0 +1,108 @@
+﻿@{
+    Layout = "~/Views/Shared/_CEOLayout.cshtml";
+}
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+<script src="https://code.highcharts.com/modules/export-data.js"></script>
+
+<div class="row gap-20 pos-r">
+    <div class="w-100">
+        <div class="row gap-20">
+            @{ Html.RenderAction("AuditorsHome", "Home"); }
+        </div>
+        <div class="bgc-white bd bdrs-3 p-20 mB-20">
+            @{ Html.RenderAction("ServiceChargesBills_Short", "Reports"); }
+        </div>
+        <div class="bgc-white bd bdrs-3 p-20 mB-20">
+            @{ Html.RenderAction("ElectricityChargesBill_Short", "Reports"); }
+        </div>
+        <div class="bgc-white bd bdrs-3 p-20 mB-20">
+            <div class="form-row">
+                <div class="form-group col-md-3">
+                    <label>Start Date</label>
+                    <input type="text" class="form-control" data-provide="datepicker" onchange="getbookingdata();" id="startdate" name="startdate" placeholder="mm/dd/yyyy" required>
+                </div>
+                <div class="form-group col-md-3">
+                    <label>End Date</label>
+                    <input type="text" class="form-control" data-provide="datepicker" onchange="getbookingdata();" id="enddate" name="enddate" placeholder="mm/dd/yyyy" required>
+                </div>
+                <div class="form-group col-md-3">
+                    <label>Choose Last Booking Records</label>
+                    <select class="form-control" id="opt" onchange="getoptions();">
+                        <option selected disabled>Choose...</option>
+                        <option value="weekly">Weekly</option>
+                        <option value="monthly">Monthly</option>
+                        <option value="6months">6 Month</option>
+                        <option value="yearly">Yearly</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="col-md-6" id="bookin">
+                    @{Html.RenderAction("PlotBooking", "Reports", new { Startdate = DateTime.Now, Enddate = DateTime.Now });}
+                </div>
+                <div class="col-md-6" id="bookingplot">
+                    @{Html.RenderAction("PlotBookingBarGraph", "Reports", new { Startdate = DateTime.Now, Enddate = DateTime.Now });}
+                </div>
+            </div>
+            <hr />
+            <div class="form-row">
+                <div class="form-group col-md-3">
+                    <label>Start Date</label>
+                    <input type="text" class="form-control" data-provide="datepicker" onchange="gettransferdata();" id="transferstartdate" name="transferstartdate" placeholder="mm/dd/yyyy" required>
+                </div>
+                <div class="form-group col-md-3">
+                    <label>End Date</label>
+                    <input type="text" class="form-control" data-provide="datepicker" onchange="gettransferdata();" id="transferenddate" name="transferenddate" placeholder="mm/dd/yyyy" required>
+                </div>
+                <div class="form-group col-md-3">
+                    <label>Choose Last Transfer Records</label>
+                    <select class="form-control" id="opttransfer" onchange="gettransferoptions();">
+                        <option selected disabled>Choose...</option>
+                        <option value="weekly">Weekly</option>
+                        <option value="monthly">Monthly</option>
+                        <option value="6months">6 Month</option>
+                        <option value="yearly">Yearly</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="col-md-6" id="transferplot">
+                    @{Html.RenderAction("PlotTranfer", "Reports", new { Startdate = DateTime.Now, Enddate = DateTime.Now });}
+                </div>
+                <div class="col-md-6" id="transferbarplot">
+                    @{Html.RenderAction("PlotTransferBarGraph", "Reports", new { Startdate = DateTime.Now, Enddate = DateTime.Now });}
+                </div>
+            </div>
+            <hr />
+            <div class="form-row">
+                <div class="form-group col-md-3">
+                    <label>Start Date</label>
+                    <input type="text" class="form-control" data-provide="datepicker" onchange="getrevenuedata();" id="revenuestartdate" name="revenuestartdate" placeholder="mm/dd/yyyy" required>
+                </div>
+                <div class="form-group col-md-3">
+                    <label>End Date</label>
+                    <input type="text" class="form-control" data-provide="datepicker" onchange="getrevenuedata();" id="revenueenddate" name="revenueenddate" placeholder="mm/dd/yyyy" required>
+                </div>
+
+            </div>
+            <div class="form-row">
+                <div class="col-md-6" id="paymentreport">
+                    @{Html.RenderAction("PaymentTypes", "Reports", new { Startdate = DateTime.Now, Enddate = DateTime.Now });}
+                </div>
+            </div>
+            <hr />
+            <div class="form-row">
+                <div class="form-group col-md-3">
+                    <label>Month</label>
+                    <input type="text" class="form-control" data-provide="datepicker" onchange="getmonthdata();" id="monthdate" placeholder="mm/dd/yyyy">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="col-md-12" id="instrep">
+                    @{Html.RenderAction("MonthlyInstallment", "Reports", new { From = DateTime.Now, To = DateTime.Now });}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

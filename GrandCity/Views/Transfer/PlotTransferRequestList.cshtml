@@ -1,0 +1,97 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Sp_Get_TransferRequestList_Plot_Result>
+@{
+    if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else if (User.IsInRole("Staff"))
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+}
+<div class="col-md-12">
+    <div class="bgc-white bd bdrs-3 p-20 mB-20">
+        <h4 class="c-grey-900 mB-20">Plots Transfer Requests</h4>
+        <table class="translst table table-striped table-bordered" cellspacing="0" style="width:100%">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Sr.</th>
+                    <th>Plot No.</th>
+                    <th>Block</th>
+                    <th>Plot Size</th>
+                    <th>Request Serial No</th>
+                    <th>From Name</th>
+                    <th>To</th>
+                    <th>Request Date</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    if (Model.Any())
+                    {
+                        int srcounter = 1;
+
+
+
+                        foreach (var item in Model.Where(x => x.identifire == 1).OrderByDescending(x => x.Requestdate))
+                        {
+                            MeherEstateDevelopers.Models.Status filestat = ((MeherEstateDevelopers.Models.Status)item.Plot_File_status);
+                            string status = filestat.ToString();
+                            string statuscolor = "";
+                            string Classchanger = "";
+                            if (status == "Approved")
+                            {
+                                statuscolor = "bgc-green-50";
+
+                            }
+                            Classchanger = "trans-det";
+                            <tr class="pointer @statuscolor @Classchanger" id="@item.File_Plot_Id">
+                                <td>@srcounter</td>
+                                <td>@item.Plot_File_Number</td>
+                                <td>@item.BlockName</td>
+                                <td>@item.Plot_File_Size</td>
+                                <td>@item.ndc_serial</td>
+                                <td>@item.From_Name</td>
+                                <td>@item.To_Name</td>
+                                <td>@item.Requestdate</td>
+                                <td>@status</td>
+                            </tr>
+                            srcounter++;
+                        }
+                        foreach (var item in Model.Where(x => x.identifire == 2).OrderByDescending(x => x.Requestdate).GroupBy(x => x.GroupTag))
+                        {
+                            MeherEstateDevelopers.Models.Status filestat = (MeherEstateDevelopers.Models.Status)item.Select(x => x.Plot_File_status).FirstOrDefault();
+                            string status = filestat.ToString();
+                            string statuscolor = "";
+                            string Classchanger = "";
+                            if (status == "Approved")
+                            {
+                                statuscolor = "bgc-green-50";
+
+                            }
+                            Classchanger = "plt-trans-det";
+                            <tr class="pointer @statuscolor @Classchanger" id="@item.Select(x=>x.File_Plot_Id).FirstOrDefault()">
+                                <td>@srcounter</td>
+                                <td>@item.Select(x => x.Plot_File_Number).FirstOrDefault()</td>
+                                <td>@item.Select(x => x.BlockName).FirstOrDefault()</td>
+                                <td>@item.Select(x => x.Plot_File_Size).FirstOrDefault()</td>
+                                <td>@item.Select(x => x.ndc_serial).FirstOrDefault()</td>
+                                <td>@string.Join(",", item.Select(x => x.From_Name))</td>
+                                <td>@string.Join(",", item.Select(x => x.To_Name))</td>
+                                <td>@string.Format("{0:dd-MMM-yyyy}", item.Select(x => x.Requestdate).FirstOrDefault())</td>
+                                <td>@status</td>
+                            </tr>
+                            srcounter++;
+                        }
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+<script>
+    $(function () {
+        $('.translst').dataTable();
+    })
+</script>

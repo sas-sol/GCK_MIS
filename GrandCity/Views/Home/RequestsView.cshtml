@@ -1,0 +1,677 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Sp_Get_MIS_Requests_Result>
+
+<div class="col-md-12">
+    <div class="peer peer-greed">
+        <nav>
+            <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                @foreach (var v in Model.GroupBy(x => x.ModuleType))
+                {
+                    <a class="nav-item nav-link" data-refID="@v.Key.Replace(' ','_')" href="javascript:void(0);" role="tab" aria-controls="nav-development" aria-selected="true">@v.Key <div style="width:30px;height:30px; background-color:#d0232a;color:white;border-radius:50%; display:inline-flex;justify-content:center;align-items:center;font-size:10px;">@v.Where(x => x.Status == "Pending").Count()</div></a>
+                }
+            </div>
+        </nav>
+        <div class="tab-content mt-3" id="nav-tabContent">
+            @{ bool isFirst = true;}
+            @foreach (var v in Model.GroupBy(x => x.ModuleType))
+            {
+                if (v.Key == "Plot_Discount")
+                {
+                    <div class="tab-pane fade show active nav-development @v.Key.Replace(' ','_')" id="nav-development" role="tabpanel">
+                        <table class="table table-borderless table-responsive table-responsive-sm">
+                            <thead>
+                                <tr>
+                                    <th>Sr#</th>
+                                    <th>Info</th>
+                                    <th>Details</th>
+                                    <th>Plot</th>
+                                    <th>Amount</th>
+                                    <th>Urgency</th>
+                                    <th>Status</th>
+                                    <th>Requested By</th>
+                                    <th>Date</th>
+                                    @if (User.IsInRole("Administrator") || User.IsInRole("Admin_Auth"))
+                                    {
+                                        <th>Action</th>
+                                    }
+                                    else
+                                    {
+                                        <th>Status</th>
+                                    }
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                @{int count = 1;}
+                                @if (v.Where(x => x.Status == "Pending").Count() > 0)
+                                {
+                                    foreach (var item in v.Where(x => x.Status == "Pending").ToList())
+                                    {
+                                        <tr>
+                                            <td>@(count++)</td>
+                                            <td><i class="pointer fa fa-eye dt-testing" data-vid="@item.ModuleId" data-toggle="modal" data-target="#Modal"></i></td>
+                                            <td>@item.RequestDetails.DescriptionText</td>
+                                            <td>@item.RequestDetails.PlotNo</td>
+                                            <td>@string.Format("{0:n0}", item.RequestDetails.DiscountAmount)</td>
+                                            <td>@(((MeherEstateDevelopers.Models.UrgencyStatus)item.RequestDetails.Urgency).ToString().Replace('_', ' '))</td>
+                                            <td>@item.Status.Replace('_', ' ')</td>
+                                            <td>@item.CreatedBy_Name</td>
+                                            <td>@item.CreatedAt.Value.ToShortDateString()</td>
+                                            @if (item.Status == "Pending")
+                                            {
+                                                if (User.IsInRole("Administrator") || User.IsInRole("Admin_Auth"))
+                                                    //if (User.IsInRole("Administrator") || User.IsInRole("Admin_Auth"))
+
+                                                    {
+                                                    <td><i class="fa fa-check aprv-btn-jdh pointer" data-vid="@item.Id" style="color:green" title="Approve"></i></td>
+                                                    <td><i class="fa fa-times rjct-btn-jdh pointer" data-vid="@item.Id" style="color:red" title="Reject"></i></td>
+                                                }
+                                                else
+                                                {
+                                                    <td>Pending</td>
+                                                }
+                                            }
+                                            else if (item.Status == "Approved")
+                                            {
+                                                <td class="bgc-green-50">Approved by @item.RequestDetails.ManagerName On @item.RequestDetails.StatusChangedAt.ToShortDateString()</td>
+                                            }
+                                            else if (item.Status == "Rejected")
+                                            {
+                                                <td class="bgc-red-50">Rejected</td>
+                                            }
+                                        </tr>
+
+                                    }
+                                }
+                                else
+                                {
+                                    <tr class="bgc-red-50" style="text-align:center">
+                                        <td colspan="10">No Requests Yet</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+                else if (v.Key == "PlotSwap")
+                {
+                    <div class="tab-pane fade nav-development show @v.Key.Replace(' ','_')" id="nav-development" role="tabpanel">
+                        <table class="table table-borderless table-responsive table-responsive-sm">
+                            <thead>
+                                <tr>
+                                    <th>Sr#</th>
+                                    <th>Employee Name</th>
+                                    <th>View</th>
+                                    <th>Urgency</th>
+                                    <th>Requested By</th>
+                                    <th>Date</th>
+                                    @if (User.IsInRole("Administrator") || User.IsInRole("Admin_Auth"))
+                                    {
+                                        <th>Action</th>
+                                    }
+                                    else
+                                    {
+                                        <th>Status</th>
+                                    }
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                @{int count = 1;}
+                                @if (v.Where(x => x.Status == "Pending").Count() > 0)
+                                {
+                                    foreach (var item in v.Where(x => x.Status == "Pending").ToList())
+                                    {
+                                        <tr>
+                                            <td>@(count++)</td>
+                                            <td>@item.PlotSwapsRequests.DescriptionText</td>
+                                            <td><i class="fa fa-eye pointer plt-swp-updt-tag-vw" data-toggle="modal" data-target="#Modal" data-reqId="@item.Id"></i></td>
+                                            <td>@(((MeherEstateDevelopers.Models.UrgencyStatus)item.PlotSwapsRequests.Urgency).ToString().Replace('_', ' '))</td>
+                                            <td>@item.CreatedBy_Name</td>
+                                            <td>@item.CreatedAt.Value.ToShortDateString()</td>
+                                            @if (item.Status == "Pending")
+                                            {
+                                                if (User.IsInRole("Administrator") || User.IsInRole("Admin_Auth"))
+                                                {
+                                                    <td><i class="fa fa-check aprv-btn-swp-updtn-jdh pointer" data-vid="@item.Id" style="color:green" title="Approve"></i></td>
+                                                    <td><i class="fa fa-times rjct-btn-emp-updtn-jdh pointer" data-vid="@item.Id" style="color:red" title="Reject"></i></td>
+                                                }
+                                                else
+                                                {
+                                                    @*<th>Pending &nbsp; | &nbsp; <i class="fa fa-times pointer del-rqst-btn" style="color:red" title="Delete Request"></i></th>*@
+                                                    <td><i class="fa fa-check aprv-btn-swp-updtn-jdh pointer" data-vid="@item.Id" style="color:green" title="Approve"></i></td>
+                                                }
+                                            }
+                                            else if (item.Status == "Approved")
+                                            {
+                                                <td class="bgc-green-50">Approved by @item.RequestDetails.ManagerName On @item.RequestDetails.StatusChangedAt.ToShortDateString()</td>
+                                            }
+                                            else if (item.Status == "Rejected")
+                                            {
+                                                <td class="bgc-red-50">Rejected</td>
+                                            }
+                                        </tr>
+                                    }
+                                }
+                                else
+                                {
+                                    <tr class="bgc-red-50" style="text-align:center">
+                                        <td colspan="10">No Requests Yet</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+                else if (v.Key == "PlotAdjustment")
+                {
+                    <div class="tab-pane fade nav-development show @v.Key.Replace(' ','_')" id="nav-development" role="tabpanel">
+                        <table class="table table-borderless table-responsive table-responsive-sm">
+                            <thead>
+                                <tr>
+                                    <th>Sr#</th>
+                                    <th>Employee Name</th>
+                                    <th>View</th>
+                                    <th>Urgency</th>
+                                    <th>Requested By</th>
+                                    <th>Date</th>
+                                    @if (User.IsInRole("Administrator") || User.IsInRole("Admin_Auth"))
+                                    {
+                                        <th>Action</th>
+                                    }
+                                    else
+                                    {
+                                        <th>Status</th>
+                                    }
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                @{int count = 1;}
+                                @if (v.Where(x => x.Status == "Pending").Count() > 0)
+                                {
+                                    foreach (var item in v.Where(x => x.Status == "Pending").ToList())
+                                    {
+                                        <tr>
+                                            <td>@(count++)</td>
+                                            <td>@item.PlotAdjRequests.DescriptionText</td>
+                                            <td><i class="fa fa-eye pointer plt-adj-updt-tag-vw" data-toggle="modal" data-target="#Modal" data-reqId="@item.Id"></i></td>
+                                            <td>@(((MeherEstateDevelopers.Models.UrgencyStatus)item.PlotAdjRequests.Urgency).ToString().Replace('_', ' '))</td>
+                                            <td>@item.CreatedBy_Name</td>
+                                            <td>@item.CreatedAt.Value.ToShortDateString()</td>
+                                            @if (item.Status == "Pending")
+                                            {
+                                                if (User.IsInRole("Administrator") || User.IsInRole("Admin_Auth"))
+                                                {
+                                                    <td><i class="fa fa-check aprv-btn-adj-updtn-jdh pointer" data-vid="@item.Id" style="color:green" title="Approve"></i></td>
+                                                    <td><i class="fa fa-times rjct-btn-adj-updtn-jdh pointer" data-vid="@item.Id" style="color:red" title="Reject"></i></td>
+                                                }
+                                                else
+                                                {
+                                                    @*<th>Pending &nbsp; | &nbsp; <i class="fa fa-times pointer del-rqst-btn" style="color:red" title="Delete Request"></i></th>*@
+                                                    <td><i class="fa fa-check aprv-btn-adj-updtn-jdh pointer" data-vid="@item.Id" style="color:green" title="Approve"></i></td>
+                                                }
+                                            }
+                                            else if (item.Status == "Approved")
+                                            {
+                                                <td class="bgc-green-50">Approved by @item.RequestDetails.ManagerName On @item.RequestDetails.StatusChangedAt.ToShortDateString()</td>
+                                            }
+                                            else if (item.Status == "Rejected")
+                                            {
+                                                <td class="bgc-red-50">Rejected</td>
+                                            }
+                                        </tr>
+                                    }
+                                }
+                                else
+                                {
+                                    <tr class="bgc-red-50" style="text-align:center">
+                                        <td colspan="10">No Requests Yet</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+                else if (v.Key == MeherEstateDevelopers.Models.RequestType.Reinstate_With_Fine.ToString())
+                {
+                    <div class="tab-pane fade nav-development show @v.Key.Replace(' ','_')" id="nav-development" role="tabpanel">
+                        <table class="table table-borderless table-responsive table-responsive-sm">
+                            <thead>
+                                <tr>
+                                    <th>Sr#</th>
+                                    <th>Plot Number</th>
+                                    <th>View</th>
+                                    <th>Urgency</th>
+                                    <th>Status</th>
+                                    <th>Requested By</th>
+                                    <th>Date</th>
+                                    @if (User.IsInRole("MIS Request Responder") || User.IsInRole("Administrator"))
+                                    {
+                                        <th>Action</th>
+                                    }
+                                    else
+                                    {
+                                        <th>Status</th>
+                                    }
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                @{int count = 1;}
+                                @foreach (var item in v.Where(x => x.Status == "Pending").ToList())
+                                {
+                                    <tr>
+                                        <td>@(count++)</td>
+                                        <td>@item.FileReinstate.DescriptionText</td>
+                                        <td>
+                                            @*<i class="fa fa-eye pointer" data-toggle="modal" data-target="#Modal" data-reqId="@item.Id"></i>*@
+
+                                        </td>
+                                        <td>@(((MeherEstateDevelopers.Models.UrgencyStatus)item.FileReinstate.Urgency).ToString().Replace('_', ' '))</td>
+                                        <td>@item.Status.Replace('_', ' ')</td>
+                                        <td>@item.CreatedBy_Name</td>
+                                        <td>@item.CreatedAt.Value.ToShortDateString()</td>
+                                        @if (item.Status == "Pending")
+                                        {
+                                            if (User.IsInRole("MIS Request Responder") || User.IsInRole("Administrator"))
+                                            {
+                                                <td><i class="fa fa-check aprv-btn-reinst-plt-fine pointer" data-toggle="modal" data-target="#Modal" data-vid="@item.Id" style="color:green" title="Approve"></i></td>
+                                                <td>@*<i class="fa fa-times rjct-btn-emp-updtn-jdh pointer" data-vid="@item.Id" style="color:red" title="Reject"></i>*@</td>
+                                            }
+                                            else
+                                            {
+                                                <th>Pending &nbsp; | &nbsp; <i class="fa fa-times pointer del-rqst-btn" style="color:red" title="Delete Request"></i></th>
+                                            }
+                                        }
+                                        else if (item.Status == "Approved")
+                                        {
+                                            <td class="bgc-green-50">Approved by @item.RequestDetails.ManagerName On @item.RequestDetails.StatusChangedAt.ToShortDateString()</td>
+                                        }
+                                        else if (item.Status == "Rejected")
+                                        {
+                                            <td class="bgc-red-50">Rejected</td>
+                                        }
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+
+</div>
+
+
+<script>
+    $('.nav-item').click(function () {
+        let refer = $(this).attr('data-refID');
+        $(this).prevAll('.nav-item').removeClass('active');
+        $(this).nextAll('.nav-item').removeClass('active');
+        $(this).addClass('active');
+        $('.tab-pane').removeClass('active');
+        $('.' + refer).addClass('active');
+    });
+
+    $(document).ready(function () {
+        $('.dt-testing').unbind().click(function () {
+            EmptyModel();
+            let plt = $(this).attr('data-vid');
+            $('#ModalLabel').text("Plot Information");
+            $('#modalbody').load('/Plots/PlotDetails/', { Plotid: plt });
+        });
+        $('.aprv-btn-jdh').click(function () {
+            let confi = confirm('Are you sure you want to apporve?');
+            if (!confi) {
+                return;
+            }
+            let reqId = $(this).attr('data-vid');
+            let that = $(this);
+            $.ajax({
+                type: "POST",
+                url: '/Home/ApproveRequest/',
+                data: { req: reqId },
+                success: function (data) {
+                    alert('Approved Successfuly');
+                    $(that).closest('tr').remove();
+                }
+                , error: function (xmlhttprequest, textstatus, message) {
+                    if (textstatus === "timeout") {
+                        alert("got timeout");
+                    } else {
+                        alert(textstatus);
+                    }
+                }
+            });
+
+        });
+
+        $('.aprv-btn-emp-updtn-jdh').click(function () {
+            let confi = confirm('Are you sure you want to apporve this request?');
+            if (!confi) {
+                return;
+            }
+            let reqId = $(this).attr('data-vid');
+            let that = $(this);
+            $.ajax({
+                type: "POST",
+                url: '/HumanResource/ApproveUpdationRequest/',
+                data: { reqId: reqId },
+                success: function (data) {
+                    alert('Request has been approved Successfuly');
+                    $(that).closest('tr').remove();
+                }
+                , error: function (xmlhttprequest, textstatus, message) {
+                    if (textstatus === "timeout") {
+                        alert("got timeout");
+                    } else {
+                        alert(textstatus);
+                    }
+                }
+            });
+
+        });
+
+        $('.rjct-btn-jdh').click(function () {
+            //EmptyModel();
+            //alert('jkhfsdjfkshd');
+            //$('#ModalLabel').text("Testing View");
+            //$('#modalbody').load('/Home/ReqfghdsTest/');
+            if (!confirm('Are you sure you want to reject this request?')) {
+                return;
+            }
+            let reqId = $(this).attr('data-vid');
+            let that = $(this);
+            $.ajax({
+                type: "POST",
+                url: '/Home/RejectRequest/',
+                data: { req: reqId },
+                success: function (data) {
+                    alert('Applcation status has been set to rejected.');
+                    $(that).closest('tr').remove();
+                }
+                , error: function (xmlhttprequest, textstatus, message) {
+                    if (textstatus === "timeout") {
+                        alert("got timeout");
+                    } else {
+                        alert(textstatus);
+                    }
+                }
+            });
+
+        });
+
+        $('.rjct-btn-emp-updtn-jdh').click(function () {
+            //EmptyModel();
+            //alert('jkhfsdjfkshd');
+            //$('#ModalLabel').text("Testing View");
+            //$('#modalbody').load('/Home/ReqfghdsTest/');
+            if (!confirm('Are you sure you want to reject this request?')) {
+                return;
+            }
+            let reqId = $(this).attr('data-vid');
+            let that = $(this);
+            $.ajax({
+                type: "POST",
+                url: '/HumanResource/RejectUpdationRequest/',
+                data: { reqId: reqId },
+                success: function (data) {
+                    alert('Applcation status has been set to rejected.');
+                    $(that).closest('tr').remove();
+                }
+                , error: function (xmlhttprequest, textstatus, message) {
+                    if (textstatus === "timeout") {
+                        alert("got timeout");
+                    } else {
+                        alert(textstatus);
+                    }
+                }
+            });
+
+        });
+
+        $('.rjct-btn-swp-req').unbind().click(function () {
+            if (!confirm('Are you sure you want to reject this request?')) {
+                return;
+            }
+            let reqId = $(this).attr('data-vid');
+            let that = $(this);
+            $.ajax({
+                type: "POST",
+                url: '/Plots/RejectSwapRequest/',
+                data: { reqId: reqId },
+                success: function (data) {
+                    alert('Applcation status has been set to rejected.');
+                    $(that).closest('tr').remove();
+                }
+                , error: function (xmlhttprequest, textstatus, message) {
+                    if (textstatus === "timeout") {
+                        alert("got timeout");
+                    } else {
+                        alert(textstatus);
+                    }
+                }
+            });
+        });
+
+        $('.rjct-btn-adj-req').unbind().click(function () {
+            if (!confirm('Are you sure you want to reject this request?')) {
+                return;
+            }
+            let reqId = $(this).attr('data-vid');
+            let that = $(this);
+            $.ajax({
+                type: "POST",
+                url: '/Plots/RejectAdjustRequest/',
+                data: { reqId: reqId },
+                success: function (data) {
+                    alert('Applcation status has been set to rejected.');
+                    $(that).closest('tr').remove();
+                }
+                , error: function (xmlhttprequest, textstatus, message) {
+                    if (textstatus === "timeout") {
+                        alert("got timeout");
+                    } else {
+                        alert(textstatus);
+                    }
+                }
+            });
+
+        });
+
+
+        $('.emp-updt-tag-vw').unbind().click(function () {
+            let rq = parseInt($(this).attr('data-reqId'));
+            EmptyModel();
+            $('#ModalLabel').text("Employee Updation Review");
+            $('#modalbody').load('/HumanResource/EmployeeUpdationReview/', { reqId: rq });
+        });
+
+        $('.del-rqst-btn').unbind().click(function () {
+            if (!confirm('Are you sure you want to delete this request?')) {
+                return;
+            }
+            let reqId = $(this).attr('data-vid');
+            let that = $(this);
+            $.ajax({
+                type: "POST",
+                url: '/Home/DeleteRequest/',
+                data: { req: reqId },
+                success: function (data) {
+                    alert('Applcation has been deleted successfully.');
+                    $(that).closest('tr').remove();
+                }
+                , error: function (xmlhttprequest, textstatus, message) {
+                    if (textstatus === "timeout") {
+                        alert("got timeout");
+                    } else {
+                        alert(textstatus);
+                    }
+                }
+            });
+        });
+
+        $('.plt-swp-updt-tag-vw').unbind().click(function () {
+            let rq = parseInt($(this).attr('data-reqId'));
+            EmptyModel();
+            $('#ModalLabel').text("Plot Swap Request");
+            $('#modalbody').load('/Plots/PlotSwapPartial/', { id: rq });
+        });
+
+        $('.plt-adj-updt-tag-vw').unbind().click(function () {
+            let rq = parseInt($(this).attr('data-reqId'));
+            EmptyModel();
+            $('#ModalLabel').text("Plot Adjustment Request");
+            $('#modalbody').load('/Plots/PlotAdjustPartial/', { id: rq });
+        });
+
+
+        $('.aprv-btn-swp-updtn-jdh').unbind().click(function () {
+            let confi = confirm('Are you sure you want to apporve this request?');
+            if (!confi) {
+                return;
+            }
+            let reqId = $(this).attr('data-vid');
+            let that = $(this);
+            $.ajax({
+                type: "POST",
+                url: '/Plots/ApproveSwapRequest/',
+                data: { req: reqId },
+                success: function (data) {
+                    if (data) {
+                        alert('Request has been approved Successfuly');
+                        $(that).closest('tr').remove();
+                    }
+                    else {
+                        alert('Error Occured');
+                    }
+
+                }
+                , error: function (xmlhttprequest, textstatus, message) {
+                    if (textstatus === "timeout") {
+                        alert("got timeout");
+                    } else {
+                        alert(textstatus);
+                    }
+                }
+            });
+        });
+
+        $('.aprv-btn-adj-updtn-jdh').unbind().click(function () {
+            let confi = confirm('Are you sure you want to apporve this request?');
+            if (!confi) {
+                return;
+            }
+            let reqId = $(this).attr('data-vid');
+            let that = $(this);
+            $.ajax({
+                type: "POST",
+                url: '/Plots/ApproveAdjRequest/',
+                data: { req: reqId },
+                success: function (data) {
+                    alert('Request has been approved Successfuly');
+                    $(that).closest('tr').remove();
+                }
+                , error: function (xmlhttprequest, textstatus, message) {
+                    if (textstatus === "timeout") {
+                        alert("got timeout");
+                    } else {
+                        alert(textstatus);
+                    }
+                }
+            });
+        });
+        $('.wv-off-btnr').unbind().click(function () {
+            let instId = $(this).attr('inst-id');
+            EmptyModel();
+            $('#ModalLabel').text("Installment Waive Off");
+            $('#modalbody').load('/Loan/LoanWaiveOff/', { instId: instId, display: 0 });
+        });
+
+        $('.aprv-btn-loan-updtn-jdh').click(function () {
+            let confi = confirm('Are you sure you want to apporve this request?');
+            if (!confi) {
+                return;
+            }
+            let reqId = $(this).attr('data-vid');
+            let that = $(this);
+            $.ajax({
+                type: "POST",
+                url: '/Loan/ApproveRequest/',
+                data: { reqId: reqId },
+                success: function (data) {
+                    alert('Request has been approved Successfuly');
+                    $(that).closest('tr').remove();
+                }
+                , error: function (xmlhttprequest, textstatus, message) {
+                    if (textstatus === "timeout") {
+                        alert("got timeout");
+                    } else {
+                        alert(textstatus);
+                    }
+                }
+            });
+
+        });
+
+        $('.rjct-btn-loan-updtn-jdh').click(function () {
+            //EmptyModel();
+            //alert('jkhfsdjfkshd');
+            //$('#ModalLabel').text("Testing View");
+            //$('#modalbody').load('/Home/ReqfghdsTest/');
+            let reqId = $(this).attr('data-vid');
+            let that = $(this);
+            $.ajax({
+                type: "POST",
+                url: '/Loan/RejectRequest/',
+                data: { reqId: reqId },
+                success: function (data) {
+                    alert('Applcation status has been set to rejected.');
+                    $(that).closest('tr').remove();
+                }
+                , error: function (xmlhttprequest, textstatus, message) {
+                    if (textstatus === "timeout") {
+                        alert("got timeout");
+                    } else {
+                        alert(textstatus);
+                    }
+                }
+            });
+
+        });
+    });
+
+    //
+    $(document).on('click', '.aprv-btn-reinst-plt-fine', function () {
+        EmptyModel();
+        $('#ModalLabel').text("Pay Fine Charges");
+        let reqId = $(this).attr('data-vid');
+        $('#modalbody').load('/Installments/PayReinstateFineCharges/', { Req_Id: reqId });
+
+        //let confi = confirm('Are you sure you want to apporve this request?');
+        //if (!confi) {
+        //    return;
+        //}
+        //let reqId = $(this).attr('data-vid');
+        //let that = $(this);
+        //$.ajax({
+        //    type: "POST",
+        //    url: '/Installments/PayReinstateFineCharges/',
+        //    data: { reqId: reqId },
+        //    success: function (data) {
+        //        //alert('Request has been approved Successfuly');
+        //        //$(that).closest('tr').remove();
+        //    }
+        //    , error: function (xmlhttprequest, textstatus, message) {
+        //        if (textstatus === "timeout") {
+        //            alert("got timeout");
+        //        } else {
+        //            alert(textstatus);
+        //        }
+        //    }
+        //});
+
+    });
+
+</script>

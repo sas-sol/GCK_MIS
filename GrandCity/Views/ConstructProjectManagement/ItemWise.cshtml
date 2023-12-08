@@ -1,0 +1,74 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Sp_Get_Stockout_Prj_Result>
+
+<table class="table table-striped table-bordered " cellspacing="0" width="100%" style="margin-left:0%; overflow-y: scroll; ">
+    <thead>
+        <tr>
+            <th>Item Name</th>
+            <th>Qty</th>
+            <th>UOM</th>
+            <th>Unit Price</th>
+            <th>Total Cost</th>
+            <th>Issue Date</th>
+            <th>Issue Note No.</th>
+
+        </tr>
+    </thead>
+
+    @foreach (var j in Model.GroupBy(x => new { x.Complete_Name, x.Item_Id }))
+    {
+        <tbody>
+            <tr>
+                <th colspan="7">@j.Key.Complete_Name</th>
+            </tr>
+            @foreach (var k in j)
+            {
+            var totalCost = k.AVCO * k.Qty;
+            <tr >
+                <td></td>
+                <td>@string.Format("{0:0,0.##}", k.Qty)</td>
+                <td>@k.UOM</td>
+                @if (k.AVCO == null)
+                {
+                    <td>-</td>
+                }
+                else
+                {
+                    <td>@string.Format("{0:0,0.##}", k.AVCO)</td>
+
+                }
+                @if (k.AVCO == null)
+                {
+                    <td>-</td>
+                }
+                else
+                {
+                    <td>@string.Format("{0:0,0.##}", totalCost)</td>
+
+                }
+                <td>@string.Format("{0:dd-MMM-yyyy}", k.IssuedTo_Date)</td>
+                <td>@k.IssueNote_No</td>
+            </tr>
+
+
+            }
+            <tr>
+                <td></td>
+                @{
+                    var qty = j.Select(x => x.Qty).Sum();
+                }
+                <th colspan="6">Total Qty: @string.Format("{0:0,0.##}", qty) </th>
+            </tr>
+        </tbody>
+
+    }
+</table>
+
+<style>
+    tr td{
+        padding: 2px !important;
+    }
+    div table tbody tr{
+        
+        overflow-y: scroll !important;
+    }
+</style>

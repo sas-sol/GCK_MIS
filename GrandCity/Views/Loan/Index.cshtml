@@ -1,0 +1,195 @@
+﻿@*@model MeherEstateDevelopers.Models.Sp_Get_Employee_UserId_Result
+@{
+    if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+}
+<style>
+    #loanreason {
+        resize: none;
+    }
+</style>
+<div class="full-container">
+    <div class="email-app">
+        <div class="email-side-nav ov-h">
+            <div class="h-100 layers">
+                <div class="p-20 bgc-grey-100 layer w-100 text-white">
+                    <h6>Loan Requisition</h6>
+                    <a href="javascript:void(0)" onclick="loanrequsition('/Loan/Create?EmpId=@Model.Id')" id="link" class="btn btn-danger btn-block">Create</a>
+                </div>
+                <div class=" pos-r bdT layer w-100 fxg-1 scrollable  " style="max-height:490px;">
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a href="javascript:void(0)" onclick="loanrequsition('/Loan/EmployeeApproved?EmpId=@Model.Id')" class="nav-link c-grey-800 cH-blue-500 active">
+                                <div class="peers ai-c jc-sb">
+                                    <div class="peer peer-greed">
+                                        <i class="mR-10 ti-email"></i>
+                                        <span>Approved</span>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="javascript:void(0)" onclick="loanrequsition('/Loan/EmployeePending?EmpId=@Model.Id')" class="nav-link c-grey-800 cH-blue-500">
+                                <div class="peers ai-c jc-sb">
+                                    <div class="peer peer-greed">
+                                        <i class="mR-10 ti-share"></i>
+                                        <span>Pending</span>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="javascript:void(0)" onclick="loanrequsition('/Loan/EmployeeRejected?EmpId=@Model.Id')" class="nav-link c-grey-800 cH-blue-500">
+                                <div class="peers ai-c jc-sb">
+                                    <div class="peer peer-greed">
+                                        <i class="mR-10 ti-trash"></i>
+                                        <span>Rejected</span>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                    </ul>
+                    @if (ViewBag.IsManager == true)
+                    {
+                        <hr />
+                        <h6>Manager</h6>
+                        <ul class="nav flex-column">
+                            <li class="nav-item">
+                                <a href="javascript:void(0)" onclick="loanrequsition('/Loan/ManagerApproved/')" class="nav-link c-grey-800 cH-blue-500 active">
+                                    <div class="peers ai-c jc-sb">
+                                        <div class="peer peer-greed">
+                                            <i class="mR-10 ti-email"></i>
+                                            <span>Approved </span>
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="javascript:void(0)" onclick=" loanrequsition('/Loan/ManagerPending/')" class="nav-link c-grey-800 cH-blue-500">
+                                    <div class="peers ai-c jc-sb">
+                                        <div class="peer peer-greed">
+                                            <i class="mR-10 ti-share"></i>
+                                            <span>Pending </span>
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="javascript:void(0)" onclick="loanrequsition('/Loan/ManagerRejected/')" class="nav-link c-grey-800 cH-blue-500">
+                                    <div class="peers ai-c jc-sb">
+                                        <div class="peer peer-greed">
+                                            <i class="mR-10 ti-trash"></i>
+                                            <span>Rejected </span>
+                                        </div>
+
+                                    </div>
+                                </a>
+                            </li>
+                        </ul>
+                    }
+
+
+                    @if (User.IsInRole("HR Loan Approval") || User.IsInRole("Administrator"))
+                    {
+                        <hr />
+                        <h6>HR Manager</h6>
+                        <ul class="nav flex-column">
+                            <li class="nav-item">
+                                <a href="javascript:void(0)" onclick="loanrequsition('/Loan/HRApproved/')" class="nav-link c-grey-800 cH-blue-500 active">
+                                    <div class="peers ai-c jc-sb">
+                                        <div class="peer peer-greed">
+                                            <i class="mR-10 ti-email"></i>
+                                            <span>Approved </span>
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="javascript:void(0)" onclick=" loanrequsition('/Loan/HRPending/')" class="nav-link  c-grey-800 cH-blue-500">
+                                    <div class="peers ai-c jc-sb">
+                                        <div class="peer peer-greed">
+                                            <i class="mR-10 ti-share"></i>
+                                            <span>Pending </span>
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="javascript:void(0)" onclick="loanrequsition('/Loan/HRRejected/')" class="nav-link c-grey-800 cH-blue-500">
+                                    <div class="peers ai-c jc-sb">
+                                        <div class="peer peer-greed">
+                                            <i class="mR-10 ti-trash"></i>
+                                            <span>Rejected </span>
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+                        </ul>
+                    }
+                    <hr />
+                    @if (User.IsInRole("Loan Application For Others") || User.IsInRole("Administrator"))
+                    {
+                        <div class="p-20 bgc-grey-100 layer w-100 text-white">
+                            <a href="javascript:void(0)" onclick="loanrequsition('/Loan/LoanForOther/')" id="link" class="btn btn-danger btn-block">Apply For Others</a>
+                        </div>
+                    }
+                    @if (User.IsInRole("HR Loan Approval") || User.IsInRole("Administrator"))
+                    {
+                        <h6>Loan For Others</h6>
+                        <ul class="nav flex-column">
+                            <li class="nav-item">
+                                <a href="javascript:void(0)" onclick="loanrequsition('/Loan/OtherPending/')" class="nav-link c-grey-800 cH-blue-500 active">
+                                    <div class="peers ai-c jc-sb">
+                                        <div class="peer peer-greed">
+                                            <i class="mR-10 ti-email"></i>
+                                            <span>Pending</span>
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="javascript:void(0)" onclick="loanrequsition('/Loan/OtherRejected/')" class="nav-link c-grey-800 cH-blue-500">
+                                    <div class="peers ai-c jc-sb">
+                                        <div class="peer peer-greed">
+                                            <i class="mR-10 ti-trash"></i>
+                                            <span>Rejected</span>
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="javascript:void(0)" onclick="loanrequsition('/Loan/OtherApproved/')" class="nav-link c-grey-800 cH-blue-500">
+                                    <div class="peers ai-c jc-sb">
+                                        <div class="peer peer-greed">
+                                            <i class="mR-10 ti-share"></i>
+                                            <span>Approved</span>
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+                        </ul>
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="email-wrapper row pos-r bgc-white" id="loan_table_append">
+            <div class="email-compose">
+                <div class="d-n@md+ p-20">
+                    <a class="email-side-toggle c-grey-900 cH-blue-500 td-n" href="javascript:void(0)"><i class="ti-menu"></i></a>
+                </div>
+                <div class="email-compose-body">
+                    @{ Html.RenderAction("Create", "Loan", new { EmpId = Model.Id });}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $('.hidden-mem').hide();
+</script>*@

@@ -1,0 +1,114 @@
+﻿@model MeherEstateDevelopers.Models.LoanApprovalView
+<input type="hidden" class="loan_apprvl_id" value="@Model.LoanoverView.Id">
+<div class="form-row">
+    <div class="form-group col-md-3">
+        <label>Employee Name</label>
+        <h5> @Model.LoanoverView.Employee_Name</h5>
+    </div>
+    <div class="form-group col-md-2">
+        <label>Created At</label>
+        <h5> @string.Format("{0:dd-MMM-yyyy}", Model.LoanoverView.CreatedAt)</h5>
+    </div>
+    <div class="form-group col-md-2">
+        <label>Installments</label>
+        <h5> @Model.LoanoverView.Installments</h5>
+    </div>
+    <div class="form-group col-md-2">
+        <label>Loan Amount</label>
+        <h5> @string.Format("{0:0,0.##}", Model.LoanoverView.Amount)</h5>
+    </div>
+    <div class="form-group col-md-6">
+        <label>Reason</label>
+        <h5> @Model.LoanoverView.Reason</h5>
+    </div>
+</div>
+
+<div class="col-md-12">
+    <table class="table table-borderless">
+        <thead>
+            <tr class="central-text-align thead-dark toggler-jkfhsda pointer">
+                <th colspan="3">Installments Structure</th>
+            </tr>
+            <tr class="central-text-align">
+                <th>Sr#</th>
+                <th>Installment Month</th>
+                <th>Amount</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{ int count = 1;}
+            @foreach (var v in Model.InstallmentsStructure)
+            {
+                <tr class="central-text-align">
+                    <td>@(count++)</td>
+                    <td>@v.Date.Value.ToString("MMM/yyyy")</td>
+                    <td>@string.Format("{0:0,0.##}", v.Loan_Amt)</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<div class="form-row">
+    <div class="col-md-6">
+        <div class="form-group col-md-12">
+            <label>HR Remarks</label>
+            @if (string.IsNullOrEmpty(Model.LoanoverView.HrRemarks))
+            {
+                <h5>No Remarks were Added</h5>
+            }
+            else
+            {
+                <h5>@Model.LoanoverView.HrRemarks</h5>
+            }
+        </div>
+        <div class="form-group col-md-12">
+            <label>Approval Status <b>@Model.LoanoverView.HrApproval</b></label>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group col-md-12">
+            <label>Manager Remarks</label>
+            <textarea type="text" class="form-control" id="mang-remarks" style="resize:none;" rows="2">@Model.LoanoverView.ManagerRemarks</textarea>
+        </div>
+        @if (Model.LoanoverView.ManagerApproval == "Pending")
+        {
+            <div class="form-group col-md-6">
+                <select class="form-control" id="manager-stat">
+                    <option value="">Select Option</option>
+                    <option value="Approved">Approve</option>
+                    <option value="Rejected">Reject</option>
+                </select>
+            </div>
+        }
+        else
+        {
+            <div class="col-md-6"></div>
+        }
+
+    </div>
+</div>
+<script>
+    $('.modal-footer').append('<button class="btn btn-primary" id="up-loan-stat-btn-new" type="button">Update</button>');
+    $("#up-loan-stat-btn-new").click(function () {
+        var id = $('.loan_apprvl_id').val();
+        var mang_r = $("#mang-remarks").val();
+        var mang_stat = $("#manager-stat").val();
+
+        if (mang_stat == "") {
+            alert("Please select status First");
+            return false;
+        }
+        $.ajax({
+            type: "POST",
+            url: "/Loan/MangUpdateStatus/",
+            data: { Id: id, Manger_Remarks: mang_r, Manger_Status: mang_stat},
+            success: function (data) {
+                alert("Updated");
+                closeModal();
+                loanrequsition('/Loan/ManagerPending/');
+            },
+            error: function (xmlhttprequest, textstatus, message) {
+            }
+        });
+    });
+</script>

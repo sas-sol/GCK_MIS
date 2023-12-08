@@ -1,0 +1,69 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Sp_Get_PlotReceiptRefund_Req_Result>
+@{ Layout = "~/Views/Shared/_StaffLayout.cshtml"; }
+<div class="col-md-12">
+    <div class="default-div-bg bd bdrs-3 p-20 mB-20">
+        <h4 class="heading-lgt-onDark mB-20">Plot Cancellation Request</h4>
+        <table id="dataTable" class="table table-borderless clickable-rows" cellspacing="0" width="100%">
+            <thead class="thead-new-dark">
+                <tr>
+                    <th>Plot No</th>
+                    <th>Block</th>
+                    <th>Size</th>
+                    <th>Name</th>
+                    <th>Date</th>
+                    <th>Requested By</th>
+                    <th>Plot Manager</th>
+                    <th>Finance Manager</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    if (Model.Any())
+                    {
+                        foreach (var item in Model)
+                        {
+                            string rol = "";
+                            if (User.IsInRole("Finance Manager") || User.IsInRole("Plots Manager") && !(User.IsInRole("ReadOnly")))
+                            {
+                                rol = "plot-ref-det";
+                            }
+                            <tr class="pointer @rol" data-pltid="@item.PlotId" id="@item.Id">
+                                <td>@item.Plot_No</td>
+                                <td>@item.Block</td>
+                                <td>@item.Size</td>
+                                <td>@item.Name</td>
+                                <td>@string.Format("{0:dd MMM yyyy}", item.DATE)</td>
+                                <td>@item.RequestedBy</td>
+                                @if (item.Manager_Approval == "Approve")
+                                {
+                                    <td><i class="ti-check" style="color:green"></i></td>
+                                }
+                                else if (item.Manager_Approval == "Reject")
+                                {
+                                    <td><i class="ti-close" style="color:red"></i></td>
+                                }
+                                else
+                                {
+                                    <td>-</td>
+                                }
+                                @if (item.Finance_Approval == "Approve")
+                                {
+                                    <td><i class="ti-check" style="color:green"></i></td>
+                                }
+                                else if (item.Finance_Approval == "Reject")
+                                {
+                                    <td><i class="ti-close" style="color:red"></i></td>
+                                }
+                                else
+                                {
+                                    <td>-</td>
+                                }
+                               
+                            </tr>
+                        }
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

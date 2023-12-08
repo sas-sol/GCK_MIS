@@ -1,0 +1,105 @@
+﻿@model IEnumerable<Management_Information_System.Models.QuickLink>
+
+@if (Model.Any())
+{
+    <script src="~/Scripts/flex-slider-js/jquery.flexslider.js"></script>
+    <link href="~/Content/flex-slider-css/flexslider.css" rel="stylesheet" />
+
+    <div class="row" style="justify-content:space-evenly; position:relative; align-items:center;">
+        @*<div class="col-md-12">
+            <h4 class="heading-lgt-onDark">Quick Links</h4>
+        </div>*@
+        <div class="col-md-1"></div>
+
+        <div class="col-md-10 frame">
+            <div class="row quick-links-wrapper js_frame">
+                <ul class="slides js_slides">
+                    @foreach (var v in Model)
+                    {
+                        <li class="js_slide">
+                            @{
+                                v.TileImg = v.TileImg.Replace("fa-3x", string.Empty);
+                            }
+                            <a href="@v.Link" class="quick-link-jhkfdas">
+                                <div class="q-hexy-tile">
+                                    <div class="q-hexy-items">
+                                        <i class="@v.TileImg" style="font-size:0.8vw;"></i>
+                                    </div>
+                                </div>
+                                <label class="q-nice-font"><b>@v.TileNarration</b></label>
+                            </a>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+        <div class="col-md-1"></div>
+    </div>
+
+
+    <style>
+
+        /*.quick-links-wrapper a{
+            width:100px;
+            height:80px;
+        }*/
+        .q-hexy-tile {
+            background: url('../../assets/static/images/hexagon.png') no-repeat;
+            height: 35px;
+            width: 30px;
+            background-size: contain;
+            margin: auto;
+            transition: 0.3s linear;
+        }
+
+        .q-hexy-items {
+            height: 80%;
+            justify-content: center;
+            align-items: center;
+            display: flex;
+        }
+
+        .q-nice-font {
+            font-family: RobotoRegular;
+            font-size: 10px;
+            /*visibility: hidden;*/
+            width: 100%;
+            text-align: center;
+            transition: 0.3s linear;
+            word-break: break-word;
+            color: white;
+        }
+
+        .quick-link-jhkfdas:hover .q-hexy-tile {
+            transform: rotate3d(0, 1, 0, 360deg) scale(1.3) translateY(5px);
+            transition: 0.6s linear;
+            /*box-shadow: 1px 1px #000;*/
+            /*background-color: rgba(0,0,0,0.2);*/
+        }
+
+        .quick-link-jhkfdas:hover .q-nice-font {
+            transform: rotate3d(0, 1, 0, 360deg) scale(1.3) translate(5px,-5px);
+            transition: 0.6s linear;
+            z-index: 2;
+            color: white;
+        }
+
+        .qk-lnks-spc {
+            min-height: 110px;
+        }
+    </style>
+
+    <script>
+        $(document).ready(function () {
+            $('.frame').flexslider({
+                animation: "slide",
+                animationLoop: false,
+                itemWidth: 100,
+                itemMargin: 5,
+                minItems: 2,
+                maxItems: 6,
+                slideshow: false
+            });
+        });
+    </script>
+}

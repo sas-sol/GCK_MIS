@@ -1,0 +1,225 @@
+﻿
+@model IEnumerable<MeherEstateDevelopers.Models.ServiceChargesPermission>
+
+@if (Model.Any())
+{
+    <table class="table reqs-tbl">
+        <thead>
+            <tr class="central-text-align">
+                <th scope="col">Sr.</th>
+                <th scope="col">View</th>
+                <th scope="col">Date</th>
+                <th scope="col">Requested By</th>
+                <th scope="col">Bill Type</th>
+                <th scope="col">Request Type</th>
+                <th scope="col">Details</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{ int i = 1;}
+            @foreach (var item in Model.OrderByDescending(x=>x.Created_Date).GroupBy(x => x.GroupId))
+            {
+                if (item.Count() > 0)
+                {
+            <tr class="central-text-align">
+                @{
+                    string tp = item.Select(x => x.ForModuleType).FirstOrDefault();
+                    string str = item.Select(x => x.ModuleType).FirstOrDefault();
+                    if (str == "Fine_Waiver")
+                    {
+                        str = "Fine Waiver";
+                    }
+                    else if (str == "Arrears_Removal")
+                    {
+                        str = "Arrears Waiver";
+                    }
+                    else if (str == "Bill_Waiver")
+                    {
+                        str = "Bill Waiver";
+                    }
+                    else if (str == "Manual_Meter_Reading")
+                    {
+                        str = "Manual Meter Reading";
+                    }
+                    else if (str == "Trail_Balance")
+                    {
+                        str = "Trail Balance";
+                    }
+                }
+                <td>@(i++)</td>
+                <td class="pointer jhk-fg-j" data-toggle="modal" data-target="#Modal" data-trg="@item.Key.Value"><i class="ti-eye"></i></td>
+                <td>@item.Select(x => x.Created_Date).FirstOrDefault().Value.ToLongDateString()</td>
+                <td>@item.Select(x => x.CreatedBy_Name).FirstOrDefault()</td>
+                <td>@item.Select(x => x.ServiceType).FirstOrDefault()</td>
+                <td>@str</td>
+                @if (tp == "Plot")
+                {
+                    <td>
+                        <table style="width:100%;">
+                            <thead>
+                                <tr class="thead-light central-text-align det-hd">
+                                    <th colspan="3">Click To Expand Plots Details</th>
+                                </tr>
+                                <tr class="central-text-align" style="display:none;">
+                                    <th>Sr#</th>
+                                    <th>Plot #</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody style="display:none">
+                                @{ int count = 1;}
+                                @foreach (var v in item)
+                                {
+                                    <tr data-toggle="modal" data-target="#Modal" class="pointer central-text-align">
+                                        <td>@(count++)</td>
+                                        <td>@v.For_ModuleName</td>
+                                        <td><i class="ti-eye hist pointer" data-toggle="modal" data-target="#Modal" data-trid="@v.For_ModuleId" data-trtype="@v.ServiceType"></i></td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </td>
+                }
+                else if (tp == "Block")
+                {
+                    string plts = string.Empty;
+                    foreach (var p in item)
+                    {
+                        plts += p.For_ModuleName + " , ";
+                    }
+                    <td>
+                        <table style="width:100%;">
+                            <thead>
+                                <tr class="thead-light central-text-align det-hd">
+                                    <th colspan="3">Click To Expand Blocks Details</th>
+                                </tr>
+                                <tr class="central-text-align" style="display:none;">
+                                    <th>Sr#</th>
+                                    <th>Plot #</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody style="display:none">
+                                @{ int count = 1;}
+                                @foreach (var v in item)
+                                {
+                                    <tr data-toggle="modal" data-target="#Modal" class="pointer central-text-align">
+                                        <td>@(count++)</td>
+                                        <td>@v.For_ModuleName</td>
+                                        <td><i class="ti-eye hist pointer" data-toggle="modal" data-target="#Modal" data-trid="@v.For_ModuleId" data-trtype="@v.ServiceType"></i></td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </td>
+                }
+                else if (tp == "Phase")
+                {
+                    <td>
+                        <table style="width:100%;">
+                            <thead>
+                                <tr class="thead-light central-text-align det-hd">
+                                    <th colspan="3">Click To Expand Phase Details</th>
+                                </tr>
+                                <tr class="central-text-align" style="display:none;">
+                                    <th>Sr#</th>
+                                    <th>Plot #</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody style="display:none">
+                                @{ int count = 1;}
+                                @foreach (var v in item)
+                                {
+                                    <tr data-toggle="modal" data-target="#Modal" class="pointer central-text-align">
+                                        <td>@(count++)</td>
+                                        <td>@v.For_ModuleName</td>
+                                        <td><i class="ti-eye hist pointer" data-toggle="modal" data-target="#Modal" data-trid="@v.For_ModuleId" data-trtype="@v.ServiceType"></i></td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </td>
+                }
+            </tr>
+                }
+
+            }
+        </tbody>
+    </table>
+}
+
+else
+{
+    <table class="table table-bordered">
+        <thead>
+            <tr class="bgc-red-50">
+                <th colspan="6" class="central-text-align">
+                    No Record Found
+                </th>
+            </tr>
+        </thead>
+    </table>
+}
+
+<script>
+    $(document).ready(function () {
+        $('.reqs-tbl').DataTable({
+            dom: 'Bfrtip',
+            buttons: [
+            ]
+        });
+
+        $('.det-hd').unbind().click(function () {
+
+            if (!$(this).hasClass('shown')) {
+                $(this).addClass('shown');
+                $(this).next('tr').fadeIn("slow");
+                $(this).parent().next('tbody').fadeIn("slow");
+            }
+            else {
+                $(this).removeClass('shown');
+                $(this).next('tr').fadeOut("slow");
+                $(this).parent().next('tbody').fadeOut("slow");
+            }
+        });
+
+        $('.hist').unbind().click(function () {
+            let a = parseInt($(this).attr('data-trid'));
+            let b = $(this).attr('data-trtype');
+            showLoader();
+            EmptyModel();
+            $('#ModalLabel').text("History");
+            if (b == 'Electricity') {
+                $('#modalbody').load('/ServiceCharges/BillHistory/', { PlotId: a }, function () {
+                    hideLoader();
+                });
+            }
+            else if (b == 'ServiceCharges') {
+                $('#modalbody').load('/ServiceCharges/ServiceChargesBills/', { Id: a }, function () {
+                    hideLoader();
+                });
+            }
+        });
+
+        $('.jhk-fg-j').unbind().click(function () {
+            //yahan pe popup view se usko data dikhana hai
+            let a = $(this).attr('data-trg');
+            EmptyModel();
+            showLoader();
+            $('#ModalLabel').text("Details");
+            $('#modalbody').load('/ServiceCharges/PermissionDetails/', { group: a }, function () {
+                hideLoader();
+            });
+        });
+
+        $('.gh-ty-fg').unbind().click(function () {
+
+            let a = parseInt($(this).attr('data-trid'));
+            EmptyModel();
+            $('#ModalLabel').text("Installment");
+            $('#modalbody').load('/ServiceCharges/ManualMeterReadingDetail/', { Id: a });
+        });
+
+    });
+</script>

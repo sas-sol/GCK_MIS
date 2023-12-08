@@ -1,0 +1,145 @@
+﻿@{ if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+}
+<div class="row gap-20 pos-r">
+    <div class="col-md-12">
+        <div class="bgc-white p-20 bd">
+            <h4 style="text-align:center"><u>New Installment Structure</u></h4>
+            <div class="mT-30">
+                @using (Html.BeginForm("CreateInstallmentStructure", "Installments", FormMethod.Post, new { @id = "cr-inst-str", @class = "", role = "form", autocomplete = "off" }))
+                {
+                    @Html.AntiForgeryToken()
+                    <div class="form-row">
+                        <div class="form-group col-md-2">
+                            <label>Project</label>
+                            @Html.DropDownList("Projects", null, "Select Project", htmlAttributes: new { @class = "form-control prj-ph-blk" })
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label>Block</label>
+                            <select class="form-control" id="blocks"></select>
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label>Plot Size / Marla</label>
+                            <input class="form-control" id="Plots" />
+                        </div>
+                    </div>
+                    <h6 class="c-grey-900">Installment Structure</h6>
+                    <div class="form-group row">
+                        <div class="form-group col-md-3">
+                            <label>Rate /Marla</label>
+                            <input type="text" class="form-control coma" id="rate-marla" required>
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label>Plot Price</label>
+                            <input type="text" class="form-control" id="f-p-pric" readonly>
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label>Grand Total</label>
+                            <input type="text" class="form-control" id="gr-tlt" readonly />
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label>Remaining</label>
+                            <input type="text" class="form-control" id="remain" readonly>
+                        </div>
+                    </div>
+                    <div class="form-row" style="margin-left:33%;">
+                        <a class="btn btn-success" href="/images/Installment plan guide.docx" rel="nofollow">Download Guide to Create Installment Plan Here</a>
+                    </div>
+                    <br/>
+                    <div class="instal-str bdT pT-10">
+                        <div class="form-row">
+                            <div class="form-group col-md-12">
+                                <button type="button" class="btn btn-primary cal-ins" style="float:right">Calculate</button>
+                            </div>
+                        </div>
+                        <div class="form-row in-st" id="inst-strc-1">
+                            <div class="form-group col-md-2">
+                                <label>Name</label>
+                                <input type="text" class="form-control inst-name" />
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label>Type</label>
+                                <select class="form-control inst-type">
+                                    <option>Select Installment Type</option>
+                                    <option value="3">Advance</option>
+                                    <option value="1">Installments</option>
+                                    <option value="6">Confirmation</option>
+                                    <option value="4">Possession</option>
+                                    <option value="2">Development Charges</option>
+                                    <option value="5">After Time</option>
+                                    <option value="0">Other Charges</option>
+
+                                    @*//Installment Types
+                            //0 Other Charges
+                            //1 Installment
+                            //2 Development Charges
+                            //3 Advance / Down Payment
+                            //4 Possession
+                            //5 After Time (To add Half Yearly)
+                            //6 Confirmation*@
+                                </select>
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label>Calculation Type</label>
+                                <select class="form-control ra-type">
+                                    <option>Select Calculation Type</option>
+                                    <option value="%">Percentage</option>
+                                    <option value="/">Remaining Figures</option>
+                                    @* <option value="*">Per Marla</option>*@
+                                    <option value="^">Multiple</option>
+                                    <option value="+">Fixed Charges</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-2 ra-grp">
+                                <label>Rate</label>
+                                <input type="text" class="form-control rate hide-rate" data-sym="" data-rate="" />
+                                <input type="hidden" class="hid-rate" />
+                            </div>
+                            <div class="form-group col-md-1 ">
+                                <label>After Time</label>
+                                <input type="text" class="form-control af-tim" placeholder="Months" />
+                            </div>
+                            <div class="form-group col-md-1 ">
+                                <label>Interval</label>
+                                <input type="text" class="form-control interval" placeholder="Months" />
+                            </div>
+                            <div class="form-group col-md-1">
+                                <label>Value</label>
+                                <input type="text" class="form-control value" readonly />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row py-2">
+                        <a href="javascript:void(0);" class="add-inst-type"><i class="ti-plus"></i>&nbsp;Add</a>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Create Structure</button>
+                }
+            </div>
+        </div>
+    </div>
+    @*<div class="row col-md-12" id="all-inst-strc">
+
+    </div>*@
+</div>
+<script>
+    $(document).ready(function () {
+        $('#all-inst-strc').load('/Installments/InstallmentDetails/');
+    });
+    $(document).ready(function () {
+        $('#Plots').on('change', function () {
+            var value = $(this).val();
+
+            // Check if the value contains a decimal point
+            if (value.indexOf('.') === -1) {
+                var formattedValue = parseFloat(value).toFixed(2);
+                $(this).val(formattedValue);
+            }
+        });
+    });
+</script>

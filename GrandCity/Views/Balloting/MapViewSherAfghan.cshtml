@@ -1,0 +1,66 @@
+﻿@{ if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+}
+<div class="col-md-12">
+
+    <div id="map"></div>
+    <div id="capture"></div>
+
+</div>
+<style>
+    #map {
+        height: 100vh;
+        width: 100%;
+        overflow: hidden;
+        float: left;
+        border: thin solid #333;
+    }
+
+    #capture {
+        height: 360px;
+        width: 480px;
+        overflow: hidden;
+        float: left;
+        background-color: #ECECFB;
+        border: thin solid #333;
+        border-left: none;
+    }
+</style>
+
+<script>
+    var map;
+    var src = 'https://www.meharestate.com/assets/utput_.kml';
+
+    function initMap() {
+        map = new google.maps.Map(document.getElementById('map'), {
+            center: new google.maps.LatLng(31.7311947, 74.2659021),
+            zoom: 18.25,
+            mapTypeId: 'terrain'
+        });
+
+        var kmlLayer = new google.maps.KmlLayer('https://file.io/edJWtIcp1XZQ', {
+            suppressInfoWindows: true,
+            preserveViewport: false,
+            map: map
+        });
+
+        google.maps.event.addListener(kmlLayer, "metadata_changed", function () {
+            console.debug("metadata_changed");
+        });
+        //kmlLayer.addListener('click', function(event) {
+        //  var content = event.featureData.infoWindowHtml;
+        //    var testimonial = document.getElementById('capture');
+        //    console.log(content);
+        //  testimonial.innerHTML = content;
+        //});
+    }
+</script>
+<script defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBxkJhmqW00q6G5j5H0ZDc7t3czfqiiJZQ&callback=initMap">
+</script>

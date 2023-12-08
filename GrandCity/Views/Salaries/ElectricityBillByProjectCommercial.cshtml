@@ -1,0 +1,192 @@
+﻿@model IEnumerable<Management_Information_System.Models.Sp_Get_CommercialElectricCharges_ByProject_Result>
+
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        @@Page {
+            margin: 0;
+            size: A4;
+        }
+
+        .bg {
+            height: 1500px;
+            width: 1175px;
+            margin-left: 0;
+            background-image: url('../../assets/static/images/EB.jpg');
+            background-repeat: no-repeat;
+            background-size: 1175px 1500px;
+            font-family: sans-serif;
+        }
+
+        .info {
+            width: 40%;
+            line-height: 18px;
+            font-size: 20px;
+            margin-left: 65%;
+            padding-top: 100px;
+        }
+
+            .info td {
+                padding: 5px
+            }
+
+        .cust-info {
+            width: 100%;
+            line-height: 20px;
+            font-size: 19px;
+            margin-left: 2%;
+            padding-top: 7%;
+        }
+
+            .cust-info td {
+                padding: 5px
+            }
+
+        .cost-cal {
+            width: 85%;
+            line-height: 4;
+            font-size: 21px;
+            margin-left: 2.5%;
+            padding-top: 7%;
+        }
+
+        .last-info {
+            width: 100%;
+            line-height: 24px;
+            font-size: 20px;
+            margin-left: 2%;
+            padding-top: 52%;
+        }
+
+        .last-cust-bill {
+            margin-top: 45px;
+            width: 40%
+        }
+
+        @@media print {
+            .bg {
+                height: 1500px;
+                width: 1200px;
+                margin-left: 0;
+                background-image: url('../../assets/static/images/EB.jpg');
+                background-repeat: no-repeat;
+                background-size: 1175px 1500px;
+                font-family: sans-serif;
+                margin-bottom: 250px;
+            }
+
+            .info {
+                width: 40%;
+                line-height: 18px;
+                font-size: 20px;
+                margin-left: 65%;
+                padding-top: 100px;
+            }
+
+                .info td {
+                    padding: 5px
+                }
+
+            .cust-info {
+                width: 100%;
+                line-height: 20px;
+                font-size: 19px;
+                margin-left: 2%;
+                padding-top: 8%;
+            }
+
+                .cust-info td {
+                    padding: 5px
+                }
+
+            .cost-cal {
+                width: 85%;
+                line-height: 4;
+                font-size: 21px;
+                margin-left: 2.5%;
+                padding-top: 6%;
+            }
+
+            .last-info {
+                width: 100%;
+                line-height: 24px;
+                font-size: 20px;
+                margin-left: 2%;
+                padding-top: 52%;
+            }
+
+            .last-cust-bill {
+                margin-top: 45px;
+                width: 40%
+            }
+        }
+    </style>
+</head>
+<body>
+    @foreach (var item in Model)
+    {
+        var gtotal = item.Arrears + item.Total_Amount;
+        var grandtotal = gtotal - item.Amount_Paid;
+        <div class="bg">
+            <div class="info">
+                <table>
+                    <tr>
+                        <td width="160" align="center">@string.Format("{0:MMM dd,yyyy}", DateTime.UtcNow.AddDays(7))</td>
+                        <td width="160" align="center">Rs. @string.Format("{0:n}", grandtotal)</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="cust-info">
+                <div style="width: 50%;float: left;">
+                    <table>
+                        <tr><td><b>Service To:</b></td></tr>
+                        <tr><td>@item.Name</td></tr>
+                        <tr><td>@item.ShopNo @item.Block_Name  @item.Plot_Type</td></tr>
+                        <tr><td>Meter: @item.Meter_No</td></tr>
+                    </table>
+                </div>
+                <div>
+                    <table>
+                        <tr><td><b>Meter No:</b></td><td><b>@item.Meter_No</b></td></tr>
+                        <tr><td><b>Previous Reading</b></td><td>@item.Previous_Reading</td></tr>
+                        <tr><td><b>Current Reading</b></td><td>@item.Current_Reading</td></tr>
+                        <tr><td><b>Units Consumed</b></td><td>@item.Units</td></tr>
+                    </table>
+                </div>
+            </div>
+            <div class="cost-cal">
+                <table>
+                    <tr>
+                        <td width="123" align="center">@item.Rate</td>
+                        <td width="180" style="line-height:25px" align="center">@item.Units x @item.Rate = @item.Total_Amount</td>
+                        <td width="160" align="center">@item.Arrears</td>
+                        <td width="157" align="center">@Convert.ToDecimal(gtotal).ToString("0.##")</td>
+                        <td width="140" align="center">@Convert.ToDecimal(item.Amount_Paid).ToString("0.##")</td>
+                        <td width="180" align="center">@Convert.ToDecimal(grandtotal).ToString("0.##")</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="last-info">
+                <div style="width: 59%;float: left;">
+                    <table>
+                        <tr><td><b>Service To:</b></td></tr>
+                        <tr><td>@item.Name</td></tr>
+                        <tr><td>@item.ShopNo @item.Block_Name  @item.Plot_Type</td></tr>
+                        <tr><td>Meter: @item.Meter_No</td></tr>
+                    </table>
+                </div>
+                <div>
+                    <table class="last-cust-bill">
+                        <tr><td width="180"><b>@string.Format("{0:MMM dd,yyyy}", DateTime.UtcNow.AddDays(7))</b></td><td><b>Rs. @string.Format("{0:n}", grandtotal)</b></td></tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    }
+</body>
+</html>

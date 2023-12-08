@@ -1,0 +1,202 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Sp_Get_InventoryList_Dep_Result>
+@{
+    int i = 1;
+    if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+}
+<style>
+    .tableFixHead {
+        overflow: auto;
+        min-height: 100px;
+        height: 500px;
+    }
+
+        .tableFixHead .ka th {
+            position: sticky;
+            top: 0;
+        }
+
+    tr.tableheader {
+        cursor: pointer;
+    }
+</style>
+<script src="~/Scripts/Inv.js"></script>
+<div class="row">
+    <div class="col-md-3 mt-md-3 mb-md-3">
+        <button class="btn btn-primary prj-req"><i class="fas fa-file-export"></i> Purchase Request</button>
+    </div>
+</div>
+@if (!Model.Any())
+{
+    <h5 style="text-align:center">You have no Departmental Inventory</h5>
+}
+else
+{
+    <nav>
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+            @foreach (var v in Model.GroupBy(x => new { x.Dep_Name, x.Dep_Id }).ToList())
+            {
+                string active = "";
+                if (i == 1)
+                {
+                    active = "active";
+                }
+                <li class="nav-item"><a class="nav-link @active" role="tab" data-toggle="tab" aria-controls="home" aria-selected="true" href="#@v.Key.Dep_Id">@v.Key.Dep_Name</a></li>
+                i++;
+            }
+        </ul>
+    </nav>
+    <div class="tab-content mt-3">
+        @{ i = 1; }
+        @foreach (var g in Model.GroupBy(x => new { x.Dep_Name, x.Dep_Id }))
+        {
+            string active = "";
+            if (i == 1)
+            {
+                active = "active";
+            }
+            <div class="tab-pane @active" id="@g.Key.Dep_Id">
+                <h4 style="text-align:center">Available Inventory</h4>
+                <div class="tableFixHead mt-1">
+                    <table class="table table-bordered inv-tbl table-development" cellspacing="0" width="100%">
+                        <thead class="thead-dark ka">
+                            <tr>
+                                <th>Category</th>
+                                <th>Company</th>
+                                <th>Name</th>
+                                <th>UOM</th>
+                                <th>Size</th>
+                                <th>Length</th>
+                                <th>Width</th>
+                                <th>Heigth</th>
+                                <th>Diameter</th>
+                                <th>Available Stock</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+
+                                foreach (var gg in g.GroupBy(x => x.Category_Name))
+                                {
+                                    <tr>
+                                        <th colspan="11" style="text-align:center">@gg.Key</th>
+                                    </tr>
+                                    foreach (var ggg in gg.Where(x => x.Remaining > 0).GroupBy(x => x.Item_Name))
+                                    {
+                                        <tr class="tableheader">
+                                            <th colspan="11">@ggg.Key - @(ggg.Count()) <span>-</span></th>
+                                        </tr>
+                                        foreach (var item in ggg.Where(x => x.Remaining > 0).OrderBy(x => x.Category_Name).ThenBy(x => x.Remaining))
+                                        {
+                                            var res = item.Total_In_Qty - item.Total_Out_Qty;
+                                            <tr class="main-info info-row-@i rec-of-@item.Dep_Name" data-pid="@item.Id" id="@item.Id" style="display:none">
+                                                <td>@item.Category_Name</td>
+                                                <td>@item.Company</td>
+                                                <td class="item-name-@i">@item.Item_Name</td>
+                                                <td class="item-uom-@i">@item.UOM</td>
+                                                <td>@item.Size </td>
+                                                <td>@item.Length </td>
+                                                <td>@item.Width</td>
+                                                <td>@item.Heigth</td>
+                                                <td>@item.Diameter</td>
+                                                <td class="item-qty-@i">@string.Format("{0:0,0.##}", item.Remaining)</td>
+                                                <td>
+                                                    <i class="ti-pencil pointer inven-crud-popup" title="Update" data-toggle="modal" data-target="#Modal"></i><span>&nbsp;&nbsp;&nbsp;</span>
+                                                    <i class="fa fa-clipboard pointer isu-det" title="Details" data-toggle="modal" data-target="#Modal"></i><span>&nbsp;&nbsp;&nbsp;</span>
+                                                    @*<button type="submit" class="btn btn-primary inv-issue_rqst" data-trgt="@i" data-toggle="modal" data-target="#Modal"><i class="fas fa-file-invoice"></i>Demand Order</button>*@
+                                                </td>
+                                            </tr>
+                                            i++;
+                                        }
+                                    }
+
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                <hr />
+                <h4 style="text-align:center">Not Available Inventory</h4>
+                <div class="tableFixHead mt-1">
+                    <table class="table table-bordered inv-tbl table-development" cellspacing="0" width="100%">
+                        <thead class="thead-dark ka">
+                            <tr>
+                                <th>Category</th>
+                                <th>Company</th>
+                                <th>Name</th>
+                                <th>UOM</th>
+                                <th>Size</th>
+                                <th>Length</th>
+                                <th>Width</th>
+                                <th>Heigth</th>
+                                <th>Diameter</th>
+                                <th>Available Stock</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                foreach (var gg in g.GroupBy(x => x.Category_Name))
+                                {
+                                    <tr>
+                                        <th colspan="11" style="text-align:center">@gg.Key</th>
+                                    </tr>
+                                    foreach (var ggg in gg.Where(x => x.Remaining <= 0).GroupBy(x => x.Item_Name))
+                                    {
+                                        <tr class="tableheader">
+                                            <th colspan="11">@ggg.Key - @(ggg.Count()) <span>-</span></th>
+                                        </tr>
+                                        foreach (var item in ggg.Where(x => x.Remaining <= 0).OrderBy(x => x.Remaining))
+                                        {
+                                            <tr class="main-info info-row-@i rec-of-@item.Dep_Name" data-pid="@item.Id" id="@item.Id" style="display:none">
+                                                <td>@item.Category_Name</td>
+                                                <td>@item.Company</td>
+                                                <td class="item-name-@i">@item.Item_Name</td>
+                                                <td class="item-uom-@i">@item.UOM</td>
+                                                <td>@item.Size </td>
+                                                <td>@item.Length </td>
+                                                <td>@item.Width</td>
+                                                <td>@item.Heigth</td>
+                                                <td>@item.Diameter</td>
+                                                <td class="item-qty-@i">@string.Format("{0:0,0.##}", item.Remaining)</td>
+                                                <td>
+                                                    <i class="ti-pencil pointer inven-crud-popup" title="Update" data-toggle="modal" data-target="#Modal"></i><span>&nbsp;&nbsp;&nbsp;</span>
+                                                    <i class="fa fa-clipboard pointer isu-det" title="Update" data-toggle="modal" data-target="#Modal"></i><span>&nbsp;&nbsp;&nbsp;</span>
+                                                    @*<button type="submit" class="btn btn-primary inv-issue_rqst" data-trgt="@i" data-toggle="modal" data-target="#Modal"><i class="fas fa-file-invoice"></i>Demand Order</button>*@
+                                                </td>
+                                            </tr>
+                                            i++;
+                                        }
+                                    }
+
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            i++;
+        }
+    </div>
+}
+<script>
+    $('.tableheader').click(function () {
+        $(this).find('span').text(function (_, value) { return value == '-' ? '+' : '-' });
+        $(this).nextUntil('tr.tableheader').slideToggle(100, function () {
+        });
+    });
+</script>
+
+<style>
+    .text-col {
+        text-align: center;
+        vertical-align: middle !important;
+    }
+</style>

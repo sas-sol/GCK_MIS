@@ -1,0 +1,44 @@
+﻿@model MeherEstateDevelopers.Models.BallotPlot
+<button class="btn btn-danger dealoc">Deallocate</button>
+<div class="col-md-12 bgc-white pt-md-3">
+    <div class="mt-md-3 mb-md-5">
+        <div class="row mt-md-3">
+            <div class="col-md-3">
+                <input type="hidden" id="preval" value="@Model.Id" />
+                <label>File Number</label>
+                <h6 id="filenum">@Model.BallotFile</h6>
+            </div>
+            <div class="col-md-2">
+                <label>Plot No.</label>
+                <h6 id="Plot Number">@Model.PlotNo</h6>
+            </div>
+            <div class="col-md-2">
+                <label>Block</label>
+                <h6 id="blk">@Model.Block</h6>
+            </div>
+            <div class="col-md-2">
+                <label>Type</label>
+                <h6 id="plt-type">@Model.Plot_Type</h6>
+            </div>
+        </div>
+        <hr />
+        <h5>New Number</h5>
+        <div class="row mt-md-3">
+            <div class="col-md-3">
+                <label>Block</label>
+                <select class="form-control n-blk">
+                    <option>Select Block</option>
+                    <option value="A">A</option>
+                    <option value="B">B</option>
+                    <option value="C">C</option>
+                    <option value="D">D</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label>Plot No.</label>
+                <select class="form-control" id="n-pltnos"></select>
+            </div>
+        </div>
+    </div>
+</div>
+

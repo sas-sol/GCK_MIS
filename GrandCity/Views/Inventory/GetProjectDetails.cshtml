@@ -1,0 +1,49 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Sp_Get_Inventory_Details_Result>
+<div>
+  <br /><br /><br /><br /><br /><br />
+</div>
+<div>
+    <div class="row">
+        <div class="col-md-12">
+            <table class="table">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>SKU</th>
+                        <th>Item Name</th>
+                        <th>UOM</th>
+                        <th>Qty</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var a in Model)
+                    {
+                        if (a.Qty >= 0)
+                        {
+                            <tr class="newitem">
+                                <td class="skuo">@a.SKU</td>
+                                <td><input type="hidden" class="itemId" value="@a.Item_Id" /> @a.Complete_Name</td>
+
+                                @if (a.UOM == null)
+                                {
+                                    <td>-</td>
+                                }
+                                else
+                                {
+                                    <td>@a.UOM</td>
+                                }
+                                <td><input type="text" class="form-control qty_one" placeholder="Qty" /></td>
+                            </tr>
+
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-9"></div>
+        <div class="col-md-3">
+            <button class="btn btn-success btn-submit">Submit</button>
+        </div>
+    </div>
+</div>

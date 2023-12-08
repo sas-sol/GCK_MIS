@@ -1,0 +1,80 @@
+﻿@{
+    if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+}
+
+<h2>Files Plots Report</h2>
+<style>
+    table thead tr th, table tbody tr td {
+        font-size: 12px;
+    }
+
+    .columnSummary {
+        float: left;
+        width: 30%;
+        padding: 5px;
+    }
+
+    .columnright {
+        float: right;
+        width: 60%;
+        padding: 5px;
+    }
+
+    .columnBlock {
+        float: left;
+        width: 100%;
+        padding: 5px;
+    }
+    /* Clearfix (clear floats) */
+    .row::after {
+        content: "";
+        clear: both;
+        display: table;
+    }
+</style>
+<div class="row">
+    <div class="row col-md-12">
+        <div class="col-md-5">
+            <label style="width:100%">BLock</label>
+            @Html.DropDownList("Block", null, "Select Block..", new { Name = "Id", @class = "form-control select2" })
+        </div>
+        <div class="col-md-2" style="margin-top:2%">
+            <button class="btn btn-primary srch-fileplot-block">Search</button>
+        </div>
+    </div>
+    <div class="tab-content col-md-12">
+        <div role="tabpanel" id="ndcwdctba" class="tab-pane active p-20 table-responsive">
+
+        </div>
+    </div>
+</div>
+<script>
+    $(document).on("click", ".srch-fileplot-block", function (e) {
+        var block = $("#Block").val();
+        if (block == '') {
+            alert("Please Select block");
+            return false;
+        }
+        SASLoad($('#ndcwdctba'));
+        $('#ndcwdctba').load('/FileSystem/FilesPlotsReportSearchBlock?type=0', { Block: block }, function () {
+            SASUnLoad($('#ndcwdctba'));
+        });
+    });
+    $(document).on("click", ".FilePlotStatusReport", function () {
+        var id = $(this).attr('id');
+        var block = $('#block').val();
+        if (block == '') {
+            alert("Error");
+            return false;
+        }
+        window.open("/FileSystem/FilesPlotsReportDetails?Id=" + id + "&Token=" + "&block=" + block, '_blank');
+    });
+
+</script>

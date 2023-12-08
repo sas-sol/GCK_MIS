@@ -1,0 +1,98 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.GeneralType1>
+<div id="dail-rec-sh" style="height:600px"></div>
+<script>
+    salModelDataa = @Html.Raw(Json.Encode(Model));
+    $(document).ready(function () {
+          let salModelData = @Html.Raw(Json.Encode(Model));
+          xVals = [];
+          yVals = [];
+        let xIdents = salModelData.reduce((r, a) => {
+            r[a.Prop1] = [...r[a.Prop1] || [], a.Prop1];
+              return r;
+          }, {});
+
+        let idents = salModelData.reduce((r, a) => {
+            r[a.Prop2] = [...r[a.Prop2] || [], a];
+            return r;
+        }, {});
+
+          $.each(xIdents, function (ind, val) {
+              let monthName = val[0];
+            xVals.push(monthName);
+        });
+
+        $.each(idents, function (ind, val) {
+            let name = val[0].Prop2;
+              let data = [];
+              $.each(xIdents, function (i, v) {
+                  //name = v.Prop2;
+                  let found = salModelData.find(x => x.Prop2 == val[0].Prop2 && x.Prop1 == v[0]);
+                  if (typeof (found) !== 'undefined') {
+                      data.push(found.Prop3);
+                  }
+                  else {
+                      data.push(0);
+                  }
+            });
+            yVals.push({
+                name: name,
+                data: data
+            });
+        });
+
+          Highcharts.chart('dail-rec-sh', {
+              chart: {
+                  type: 'column'
+              },
+              title: {
+                  text: 'Recovery Report'
+              },
+              xAxis: {
+                  categories: xVals
+              },
+              yAxis: {
+                  min: 0,
+                  title: {
+                      text: 'Total Collection'
+                  },
+                  stackLabels: {
+                      enabled: true,
+                      style: {
+                          fontWeight: 'bold',
+                          color: ( // theme
+                              Highcharts.defaultOptions.title.style &&
+                              Highcharts.defaultOptions.title.style.color
+                          ) || 'gray'
+                      }
+                  }
+              },
+              //legend: {
+              //    align: 'right',
+              //    x: -30,
+              //    verticalAlign: 'top',
+              //    y: 25,
+              //    floating: true,
+              //    backgroundColor:
+              //        Highcharts.defaultOptions.legend.backgroundColor || 'white',
+              //    borderColor: '#CCC',
+              //    borderWidth: 1,
+              //    shadow: false
+              //},
+              tooltip: {
+                  headerFormat: '<b>{point.x}</b><br/>',
+                  pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}'
+              },
+              plotOptions: {
+                  column: {
+				        maxPointWidth: 50,
+                      stacking: 'normal',
+                      dataLabels: {
+                          enabled: true
+                      }
+                  }
+              },
+              series: yVals
+          });
+    });
+
+</script>

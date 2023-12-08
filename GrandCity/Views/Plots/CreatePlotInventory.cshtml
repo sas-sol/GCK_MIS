@@ -1,0 +1,258 @@
+﻿@model MeherEstateDevelopers.Models.RealEstate_Blocks
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.13.5/xlsx.full.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.13.5/jszip.js"></script>
+<div class="row gap-20">
+    <div class="col-md-12">
+        <div class="bgc-white p-20 bd">
+            <h6 class="c-grey-900">Create Plot Inventory</h6>
+            <div class="mT-30">
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label>Project</label>
+                        @Html.DropDownList("Projects", null, "Select Project", htmlAttributes: new { @class = "form-control prj-ph-blk" })
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Block</label>
+                        <select class="form-control" id="blocks"></select>
+                    </div>
+                </div>
+                <hr />
+                <div class="form-row">
+                    <input type="file" id="fileUpload" />
+
+                    <a class="btn btn-success" href="/images/Plot Inventory Format.xls" rel="nofollow">Download Sample Excel File Here</a>
+                </div>
+                <hr />
+                <div class="form-row">
+                    <div class="col-md-6">
+                        <input type="button" class="btn btn-info" id="upload" style="display:none;" value="Verify File Data" onclick="Upload()" />
+                    </div>
+                    <div class="col-md-6">
+                        <input type="button" class="btn btn-success upld-plts-inventroy-btn" style="display:none;" value="Upload Inventory" />
+                    </div>
+                </div>
+                <hr />
+                <div class="form-row">
+                    <div id="dvExcel" style="display:none; height:500px;overflow-y:scroll">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+     
+</div>
+<script>
+    var AllData;
+    var dataForUpload = [];
+    var ExcelToJSON = function () {
+        this.parseExcel = function (file) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                var data = e.target.result;
+                var workbook = XLSX.read(data, {
+                    type: 'binary'
+                });
+                workbook.SheetNames.forEach(function (sheetName) {
+                    var XL_row_object = XLSX.utils.sheet_to_row_object_array(workbook.Sheets[sheetName]);
+                    //AllData = JSON.stringify(XL_row_object);
+                    AllData = XL_row_object;
+                })
+            };
+            reader.onerror = function (ex) {
+                console.log(ex);
+            };
+            reader.readAsBinaryString(file);
+        };
+    };
+    function handleFileSelect(evt) {
+        var xl2json = new ExcelToJSON();
+        xl2json.parseExcel(fileUpload.files[0]);
+    }
+    function Upload() {
+        //Reference the FileUpload element.
+        var fileUpload = document.getElementById("fileUpload");
+        handleFileSelect(fileUpload);
+        //Validate whether File is valid Excel file.
+        var regex = /^([a-zA-Z0-9\s_\\.\-:])+(.xls|.xlsx)$/;
+        if (regex.test(fileUpload.value.toLowerCase())) {
+            if (typeof (FileReader) != "undefined") {
+                var reader = new FileReader();
+
+                //For Browsers other than IE.
+                if (reader.readAsBinaryString) {
+                    reader.onload = function (e) {
+                        ProcessExcel(e.target.result);
+                    };
+                    reader.readAsBinaryString(fileUpload.files[0]);
+                } else {
+                    //For IE Browser.
+                    reader.onload = function (e) {
+                        var data = "";
+                        var bytes = new Uint8Array(e.target.result);
+                        for (var i = 0; i < bytes.byteLength; i++) {
+                            data += String.fromCharCode(bytes[i]);
+                        }
+                        ProcessExcel(data);
+                    };
+                    reader.readAsArrayBuffer(fileUpload.files[0]);
+                }
+            } else {
+                alert("This browser does not support HTML5.");
+            }
+        } else {
+            alert("Please upload a valid Excel file.");
+        }
+    };
+    function ProcessExcel(data) {
+        $('#dvExcel').show();
+        //Read the Excel File data.
+        var workbook = XLSX.read(data, {
+            type: 'binary'
+        });
+
+        //Fetch the name of First Sheet.
+        var table = document.createElement("table");
+        table.setAttribute('class', 'table');
+        table.setAttribute('class', 'table-bordered');
+        table.setAttribute('style', 'width:100%');
+        table.border = "1";
+
+        //Add the header row.
+        var row = table.insertRow(-1);
+
+        //Add the header cells.
+        var headerCell = document.createElement("th");
+        headerCell.innerHTML = "Sr";
+        row.appendChild(headerCell);
+
+        var headerCell = document.createElement("th");
+        headerCell.innerHTML = "Plot";
+        row.appendChild(headerCell);
+
+        var headerCell = document.createElement("th");
+        headerCell.innerHTML = "Sector";
+        row.appendChild(headerCell);
+
+        headerCell = document.createElement("th");
+        headerCell.innerHTML = "Location";
+        row.appendChild(headerCell);
+
+        headerCell = document.createElement("th");
+        headerCell.innerHTML = "Size";
+        row.appendChild(headerCell);
+        
+        headerCell = document.createElement("th");
+        headerCell.innerHTML = "Area";
+        row.appendChild(headerCell);
+
+        headerCell = document.createElement("th");
+        headerCell.innerHTML = "Dimension";
+        row.appendChild(headerCell);
+
+        headerCell = document.createElement("th");
+        headerCell.innerHTML = "Road";
+        row.appendChild(headerCell);
+
+        headerCell = document.createElement("th");
+        headerCell.innerHTML = "Status";
+        row.appendChild(headerCell);
+
+        headerCell = document.createElement("th");
+        headerCell.innerHTML = "Type";
+        row.appendChild(headerCell);
+
+        let ind = 0;
+        for (ind = 0; ind < workbook.SheetNames.length; ind++) {
+            var firstSheet = workbook.SheetNames[ind];
+            var excelRows = XLSX.utils.sheet_to_row_object_array(workbook.Sheets[firstSheet]);
+            console.log(dataForUpload);
+            $.each(excelRows, function (t_index, t_value) {
+                dataForUpload.push(t_value);
+            });
+
+            console.log(dataForUpload);
+
+            for (var i = 0; i < excelRows.length; i++) {
+                var row = table.insertRow(-1);
+                var cell = row.insertCell(-1);
+                cell.innerHTML = (excelRows[i].Sr == "") ? "-" : excelRows[i].Sr;
+
+                cell = row.insertCell(-1);
+                cell.innerHTML = (excelRows[i].Plot == undefined) ? "-" : excelRows[i].Plot;
+
+                cell = row.insertCell(-1);
+                cell.innerHTML = (excelRows[i].Sector == undefined) ? "-" : excelRows[i].Sector;
+
+                cell = row.insertCell(-1);
+                cell.innerHTML = (excelRows[i].Location == undefined) ? "-" : excelRows[i].Location;
+
+                cell = row.insertCell(-1);
+                cell.innerHTML = (excelRows[i].Size == undefined) ? "-" : excelRows[i].Size;
+                
+                cell = row.insertCell(-1);
+                cell.innerHTML = (excelRows[i].Area == undefined) ? "-" : excelRows[i].Area;
+
+                cell = row.insertCell(-1);
+                cell.innerHTML = (excelRows[i].Dimension == undefined) ? "-" : excelRows[i].Dimension;
+
+                cell = row.insertCell(-1);
+                cell.innerHTML = (excelRows[i].Road == undefined) ? "-" : excelRows[i].Road;
+
+                cell = row.insertCell(-1);
+                cell.innerHTML = (excelRows[i].Status == undefined) ? "-" : excelRows[i].Status;
+
+                cell = row.insertCell(-1);
+                cell.innerHTML = (excelRows[i].Type == undefined) ? "No Type Selected!" : excelRows[i].Type;
+            }
+        }
+
+        var dvExcel = document.getElementById("dvExcel");
+        dvExcel.innerHTML = "";
+        dvExcel.appendChild(table);
+    };
+    $('.upld-plts-inventroy-btn').unbind().click(function () {
+        let conf = confirm('Are you sure you want to upload this plot inventory?');
+        if (!conf) {
+            return;
+        }
+        var block = $('#blocks').val();
+        debugger;
+        $.ajax({
+            type: "POST",
+            url: "/Plots/CreatePlotsInventory/",
+            contentType: "application/json",
+            traditional: true,
+            beforeSend: function () {
+
+            },
+            complete: function () {
+
+            },
+            data: JSON.stringify({ plotsData: dataForUpload, Block:block }),
+        }).done(function (data) {
+            if (data == true) {
+                alert('Plots inventory has been added.');
+                closeRightPopup();
+                window.location.reload();
+            }
+            else {
+                alert('Failed to save this plots inventory.');
+            }
+        });
+
+    });
+    $(document).on("change", "#fileUpload", function (e) {
+        
+        e.preventDefault();
+        var $this = $(this);
+        var data = new FormData();
+        var files = $(this).get(0).files;
+        if (files.length == 0) {
+            return;
+        }
+        else {
+            $('#upload').show();
+            $('.upld-plts-inventroy-btn').show();
+        }
+    });
+</script>

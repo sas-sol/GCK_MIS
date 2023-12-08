@@ -1,0 +1,343 @@
+﻿@model MeherEstateDevelopers.Models.Project_And_Service_Purchase_Req
+@{
+    if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+}
+<script src="~/Scripts/Inv.js"></script>
+<script src="~/Scripts/Prj.js"></script>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script>
+    var milesList = @Html.Raw(Json.Encode(ViewBag.Milestones));
+</script>
+<div class="bgc-white p-20 bd">
+    <div style="text-align:center">
+        <h3>Services Requisition</h3>
+    </div>
+    <input type="hidden" class="grpId" value="@ViewBag.Group_Id" />
+    <div class="row col-md-12 mt-md-3">
+        <div class="form-group col-md-3">
+            <label>Project Name</label>
+            <h4>@Model.Project.Select(x => x.Name).FirstOrDefault()</h4>
+            <input type="hidden" value="@Model.Project.Select(x => x.Id).FirstOrDefault()" id="Prj_Id" />
+        </div>
+    </div>
+    <hr />
+    <div class="col-md-12 " id="ad-demand">
+        <div class="cal ">
+            <div class="item-pur-req-row">
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label>Milestone</label>
+                        <select class="form-control mil-st"></select>
+                    </div>
+                </div>
+                <div class="form-control item-services-row">
+                    <div class="form-row">
+                        <div class="col-md-1">
+                            <div class="sr">1</div>
+                        </div>
+                        <div class="form-group col-md-5">
+                            <label>Name</label>
+                            <input type="text" class="form-control Product" id="Product" required placeholder="Services Name" />
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label>Details</label>
+                            <textarea class="form-control descr" rows="1" cols="5" placeholder="Services Details"></textarea>
+                        </div>
+                        <div class="col-md-2" style="padding-top:2%">
+                            @*<i class="fa fa-trash rmv-pur-req-ser-row "></i>*@
+                            @*&nbsp;&nbsp;&nbsp;*@
+                            <i class="fa fa-plus-circle add-new-ser-con-row"></i>
+                        </div>
+                    </div>
+                    <div class="add-row-for-specification">
+                        <h6>Specifications</h6>
+                        <div class="form-row rem-spec-row">
+                            <div class="form-group col-md-1">
+                                <label>UOM</label>
+                                <select class="form-control len-uom wid-uom hei-uom b-uom isuom" name="UOM" data-id="1">
+                                    <option value="Sq Ft">Sq Ft</option>
+                                    <option value="Sq Metre">Sq Metre</option>
+                                    <option value="Kilometre">Kilometre</option>
+                                    <option value="Meter">Metre</option>
+                                    <option value="Centimetre">Centimetre</option>
+                                    <option value="Millimetre">Millimetre</option>
+                                    <option value="Mile">Mile</option>
+                                    <option value="Yard">Yard</option>
+                                    <option value="Foot">Foot</option>
+                                    <option value="Inch">Inch</option>
+                                    <option value="Sooter">Sooter</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-1">
+                                <label>Length</label>
+                                <input type="text" class="form-control len" placeholder="0" required>
+                            </div>
+
+                            <div class="form-group col-md-1">
+                                <label>Width</label>
+                                <input type="text" class="form-control wid" placeholder="0" required>
+                            </div>
+
+                            <div class="form-group col-md-1">
+                                <label>Height</label>
+                                <input type="text" class="form-control hei" placeholder="0" required>
+                            </div>
+
+                            <div class="form-group col-md-1">
+                                <label>Breadth</label>
+                                <input type="text" class="form-control bre" placeholder="0" required>
+                            </div>
+                            <div class="form-group col-md-1">
+                                <label>No of Services</label>
+                                <input type="number" placeholder="NO." autocomplete="off" maxlength="5" class="No-of-service form-control" />
+                            </div>
+                            <div class="form-group col-md-1">
+                                <label>Quantity</label>
+                                <input type="number" placeholder="Quantity" autocomplete="off" maxlength="5" class="Qty-of-service form-control" readonly />
+                            </div>
+                            <div class="form-group col-md-1" style="padding-top:2%;">
+                                <label> </label>
+                                <i class="fas fa-plus-square fa-lg pointer add-service-pr-row"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr />
+    <div class="row">
+        <div class="col-md-2">
+            <button type="button" id="add-new-serv-dev-row" class="btn btn-success">Add Another Line</button>
+        </div>
+        <div class="col-md-2">
+            <button type="submit" id="reg-Ser-dev-Req" class="btn btn-primary">Submit</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        InitMileByEle($('.mil-st').first(), milesList)
+
+        
+    });
+    $(document).on("change", '.len', function () {
+        var length = $(this).closest('.rem-spec-row').find('.len').val();
+        var width = $(this).closest('.rem-spec-row').find('.wid').val();
+        var height = $(this).closest('.rem-spec-row').find('.hei').val();
+        var breadth = $(this).closest('.rem-spec-row').find('.bre').val();
+        var Nos = $(this).closest('.rem-spec-row').find('.No-of-service').val();
+        $(this).closest('.rem-spec-row').find('.Qty-of-service').val(calculateQty(length, width, height, breadth, Nos).toFixed(2));
+    });
+    $(document).on("change", '.wid', function () {
+        var length = $(this).closest('.rem-spec-row').find('.len').val();
+        var width = $(this).closest('.rem-spec-row').find('.wid').val();
+        var height = $(this).closest('.rem-spec-row').find('.hei').val();
+        var breadth = $(this).closest('.rem-spec-row').find('.bre').val();
+        var Nos = $(this).closest('.rem-spec-row').find('.No-of-service').val();
+        $(this).closest('.rem-spec-row').find('.Qty-of-service').val(calculateQty(length, width, height, breadth, Nos).toFixed(2));
+    });
+    $(document).on("change", '.hei', function () {
+        var length = $(this).closest('.rem-spec-row').find('.len').val();
+        var width = $(this).closest('.rem-spec-row').find('.wid').val();
+        var height = $(this).closest('.rem-spec-row').find('.hei').val();
+        var breadth = $(this).closest('.rem-spec-row').find('.bre').val();
+        var Nos = $(this).closest('.rem-spec-row').find('.No-of-service').val();
+        $(this).closest('.rem-spec-row').find('.Qty-of-service').val(calculateQty(length, width, height, breadth, Nos).toFixed(2));
+    });
+    $(document).on("change", '.bre', function () {
+        var length = $(this).closest('.rem-spec-row').find('.len').val();
+        var width = $(this).closest('.rem-spec-row').find('.wid').val();
+        var height = $(this).closest('.rem-spec-row').find('.hei').val();
+        var breadth = $(this).closest('.rem-spec-row').find('.bre').val();
+        var Nos = $(this).closest('.rem-spec-row').find('.No-of-service').val();
+        $(this).closest('.rem-spec-row').find('.Qty-of-service').val(calculateQty(length, width, height, breadth, Nos).toFixed(2));
+    });
+    $(document).on("change", '.No-of-service', function () {
+        var length = $(this).closest('.rem-spec-row').find('.len').val();
+        var width = $(this).closest('.rem-spec-row').find('.wid').val();
+        var height = $(this).closest('.rem-spec-row').find('.hei').val();
+        var breadth = $(this).closest('.rem-spec-row').find('.bre').val();
+        var Nos = $(this).closest('.rem-spec-row').find('.No-of-service').val();
+        $(this).closest('.rem-spec-row').find('.Qty-of-service').val(calculateQty(length, width, height, breadth, Nos).toFixed(2));
+    });
+    function calculateQty(len, wid, hei, bre, nos)
+    {
+        if (len == null || len == "") {
+            len = 1;
+        }
+        if (wid == null || wid == "") {
+            wid = 1;
+        }
+        if (hei == null || hei == "") {
+            hei = 1;
+        }
+        if (bre == null || bre == "") {
+            bre = 1;
+        }
+        if (nos == null || nos == "") {
+            nos = 1;
+        }
+        return len * wid * hei * bre * nos;
+    }
+    //Remove Service Row
+    $(document).on("click", '.remove-service-pr-row', function () {
+        $(this).closest('.rem-spec-row').remove();
+    });
+    $(document).on('click', '#reg-Ser-dev-Req', function () {
+        InventoryArray = [];
+        
+        var Project_Id = $("#Prj_Id").val();
+        var groupId = $('.grpId').val();
+        var uname = $('#user-name').text();
+        var notok = false;
+        //var mileid;
+        //var milenam;
+        $('.mil-st').each(function () {
+            var mi = $(this).val();
+            if (mi == null || mi == '') {
+                alert("Please Select a Milestone");
+                notok = true;
+                return false;
+            }
+        });
+
+        $('.Product').each(function () {
+            var servName = $(this).val();
+            if (servName == null || servName == '') {
+                alert("Please Enter All Service Names");
+                notok = true;
+                return false;
+            }
+        });
+        $('.Qty-of-service').each(function () {
+            var qty = $(this).val();
+            if (qty == null || qty == '' || qty <= 0) {
+                alert("Please Enter All Specifications");
+                notok = true;
+                return false;
+            }
+        });
+
+        $('.item-pur-req-row').each(function () {
+            
+            QtyServiceArray = [];
+            var milid = $(this).find('.mil-st option:selected').val();
+            var milnam = $(this).find('.mil-st option:selected').text();
+
+            if (milid != null || milid != '') {
+                mileid = milid
+                milenam = milnam
+            }
+            $(this).find('.item-services-row').each(function () {
+                
+                var Product = $(this).find(".Product").val();
+                var Measurement = $(this).find(".Measurement option:selected").text();
+                var Description = $(this).find(".descr").val();
+                $(this).find('.rem-spec-row').each(function () {
+                    var Len = $(this).find('.len').val();
+                    var len_uom = $(this).find('.len-uom option:selected').val();
+                    var wid = $(this).find('.wid').val();
+                    var wid_uom = $(this).find('.wid-uom option:selected').val();
+                    var hei = $(this).find('.hei').val();
+                    var hei_uom = $(this).find('.hei-uom option:selected').val();
+                    var b = $(this).find('.bre').val();
+                    var b_uom = $(this).find('.b-uom option:selected').val();
+                    var SerQty = $(this).find('.Qty-of-service').val();
+                    var SrvNo = $(this).find('.No-of-service').val();
+
+                    InventoryArray.push({
+                        Item_Name: Product,
+                        UOM: Measurement,
+                        Description: Description,
+                        Group_Id: groupId,
+                        Qty: SerQty,
+                        Length: Len,
+                        Width: wid,
+                        Heigth: hei,
+                        Breadth: b,
+                        Len_UOM: len_uom,
+                        Wid_UOM: wid_uom,
+                        Hei_UOM: hei_uom,
+                        B_UOM: b_uom,
+                        Milestone_Id: mileid,
+                        Milestone_Name: milenam,
+                        NO: SrvNo,
+                        UOM: len_uom
+                    });
+                });
+            });
+        });
+        if (notok) {
+            return false;
+        }
+        if (confirm("Are you sure you want to Generate the Service Requisition")) {
+            $.ajax({
+                type: "POST",
+                url: '/Services/NewServiceRequisition_SC/',
+                data: { demand: InventoryArray, prj: Project_Id },
+                success: function (data) {
+                    if (data.Status == false) {
+                        alert(data.Msg);
+                    }
+                    else {
+                        $('#reg-DemndOrdr').prop('disabled', true);
+                        alert(data.Msg);
+                        window.location.reload();
+                    }
+                },
+                error: function (xmlhttprequest, textstatus, message) {
+                    if (textstatus === "timeout") {
+                        alert("got timeout");
+                    } else {
+                        alert(textstatus);
+                    }
+                }
+            });
+        }
+    });
+</script>
+
+<style>
+    .rmv-pur-req-row, .add-new-ser-row {
+        text-align: center;
+        margin: auto;
+        font-size: 20px;
+    }
+
+        .rmv-pur-req-row:hover, .add-new-ser-row:hover {
+            color: #d0232A;
+            cursor: pointer;
+        }
+
+    .add-service-pr-row:hover, .remove-service-pr-row:hover {
+        color: #d0232A;
+        cursor: pointer;
+    }
+
+    .left-mar-temp {
+        margin-left: 6rem !important;
+    }
+
+    .sr {
+        text-align: center;
+        margin-top: 35px;
+    }
+
+    .Ser-Qty-No {
+        line-height: 1.9;
+    }
+
+    .ser-just-styling {
+        margin-top: 2%;
+    }
+</style>

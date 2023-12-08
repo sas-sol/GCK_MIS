@@ -1,0 +1,918 @@
+﻿@model MeherEstateDevelopers.Models.PurchaseOrderPrintView
+
+<style type="text/css">
+    .ritz .waffle a {
+        color: inherit;
+    }
+
+    .ritz .waffle .s48 {
+        text-align: right;
+        font-weight: bold;
+        color: #333f4f;
+        font-family: 'docs-Roboto',Arial;
+        font-size: 12pt;
+        vertical-align: middle;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s4 {
+        text-align: right;
+        font-weight: bold;
+        color: #4472c4;
+        font-family: 'docs-Roboto',Arial;
+        font-size: 22pt;
+        vertical-align: middle;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s2 {
+        text-align: left;
+        font-weight: bold;
+        color: #a5a5a5;
+        font-family: 'docs-Roboto',Arial;
+        font-size: 20pt;
+        vertical-align: middle;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s35 {
+        border-bottom: 1px SOLID #bfbfbf;
+        border-right: 1px SOLID #bfbfbf;
+        background-color: #f3f3f3;
+        text-align: right;
+        color: #000000;
+        font-family: 'docs-Roboto',Arial;
+        font-size: 9pt;
+        vertical-align: middle;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s9 {
+        text-align: center;
+        color: #000000;
+        font-family: 'docs-Roboto',Arial;
+        font-size: 10pt;
+        vertical-align: middle;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s31 {
+        border-bottom: 1px SOLID #bfbfbf;
+        border-right: 1px SOLID #bfbfbf;
+        text-align: center;
+        color: #000000;
+        font-family: 'docs-Roboto',Arial;
+        font-size: 9pt;
+        vertical-align: middle;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s28 {
+        border: 1px SOLID;
+        text-align: center;
+        font-weight: bold;
+        color: #434343;
+        font-family: 'docs-Roboto',Arial;
+        font-size: 9pt;
+        vertical-align: middle;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s11 {
+        text-align: left;
+        color: #333f4f;
+        font-family: 'docs-Roboto',Arial;
+        font-size: 11pt;
+        vertical-align: middle;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s5 {
+        text-align: left;
+        color: #434343;
+        font-family: 'docs-Roboto',Arial;
+        font-size: 18pt;
+        vertical-align: middle;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s27 {
+        border: 1px SOLID;
+        text-align: center;
+        font-weight: bold;
+        color: #434343;
+        font-family: 'docs-Roboto',Arial;
+        font-size: 9pt;
+        vertical-align: middle;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s36 {
+        text-align: left;
+        color: #000000;
+        font-family: 'docs-Roboto',Arial;
+        font-size: 9pt;
+        vertical-align: middle;
+        white-space: normal;
+        overflow: hidden;
+        word-wrap: break-word;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s0 {
+        background-color: #fff2cc;
+        text-align: left;
+        color: #000000;
+        font-family: 'docs-Roboto',Arial;
+        font-size: 12pt;
+        vertical-align: bottom;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s44 {
+        border-left: none;
+        text-align: right;
+        color: #000000;
+        font-family: 'docs-Roboto',Arial;
+        font-size: 9pt;
+        vertical-align: middle;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s14 {
+        text-align: center;
+        font-weight: bold;
+        color: #1f3864;
+        font-family: 'docs-Roboto',Arial;
+        font-size: 9pt;
+        vertical-align: middle;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s19 {
+        text-align: right;
+        font-weight: bold;
+        color: #000000;
+        font-family: 'docs-Roboto',Arial;
+        font-size: 9pt;
+        vertical-align: top;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s20 {
+        text-align: left;
+        color: #000000;
+        font-family: 'docs-Roboto',Arial;
+        font-size: 9pt;
+        vertical-align: top;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s54 {
+        text-align: center;
+        font-style: italic;
+        color: #333f4f;
+        font-family: 'docs-Roboto',Arial;
+        font-size: 9pt;
+        vertical-align: middle;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s7 {
+        text-align: left;
+        color: #000000;
+        font-family: 'docs-Roboto',Arial;
+        font-size: 10pt;
+        vertical-align: bottom;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s3 {
+        text-align: left;
+        font-weight: bold;
+        color: #4472c4;
+        font-family: 'docs-Roboto',Arial;
+        font-size: 22pt;
+        vertical-align: middle;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s8 {
+        text-align: left;
+        color: #434343;
+        font-family: 'docs-Roboto',Arial;
+        font-size: 11pt;
+        vertical-align: middle;
+        white-space: normal;
+        overflow: hidden;
+        word-wrap: break-word;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s33 {
+        border-bottom: 1px SOLID #bfbfbf;
+        border-right: 1px SOLID #bfbfbf;
+        background-color: #f3f3f3;
+        text-align: left;
+        color: #000000;
+        font-family: 'docs-Roboto',Arial;
+        font-size: 9pt;
+        vertical-align: middle;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s38 {
+        text-align: right;
+        font-weight: bold;
+        color: #333f4f;
+        font-family: 'docs-Roboto',Arial;
+        font-size: 12pt;
+        vertical-align: bottom;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s50 {
+        text-align: left;
+        font-weight: bold;
+        color: #000000;
+        font-family: 'docs-Roboto',Arial;
+        font-size: 9pt;
+        vertical-align: middle;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s12 {
+        text-align: left;
+        color: #000000;
+        font-family: 'Arial';
+        font-size: 10pt;
+        vertical-align: bottom;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s21 {
+        text-align: right;
+        font-style: italic;
+        color: #333f4f;
+        font-family: 'docs-Roboto',Arial;
+        font-size: 9pt;
+        vertical-align: top;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s52 {
+        border-bottom: 1px SOLID #999999;
+        text-align: left;
+        font-weight: bold;
+        color: #000000;
+        font-family: 'docs-Roboto',Arial;
+        font-size: 9pt;
+        vertical-align: middle;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s6 {
+        text-align: right;
+        font-weight: bold;
+        color: #666666;
+        font-family: 'docs-Roboto',Arial;
+        font-size: 19pt;
+        vertical-align: middle;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s30 {
+        border: 1px SOLID;
+        text-align: center;
+        color: #000000;
+        font-family: 'docs-Roboto',Arial;
+        font-size: 10pt;
+        vertical-align: middle;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s41 {
+        text-align: left;
+        color: #000000;
+        font-family: 'docs-Roboto',Arial;
+        font-size: 10pt;
+        vertical-align: middle;
+        white-space: normal;
+        overflow: hidden;
+        word-wrap: break-word;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s43 {
+        border-left: none;
+        text-align: right;
+        font-weight: bold;
+        color: #333f4f;
+        font-family: 'docs-Roboto',Arial;
+        font-size: 8pt;
+        vertical-align: middle;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s29 {
+        border-right: 1px SOLID #bfbfbf;
+        text-align: left;
+        color: #000000;
+        font-family: 'docs-Roboto',Arial;
+        font-size: 10pt;
+        vertical-align: bottom;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s57 {
+        text-align: center;
+        color: #333f4f;
+        font-family: 'docs-Roboto',Arial;
+        font-size: 10pt;
+        vertical-align: bottom;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s26 {
+        border-right: 1px SOLID #999999;
+        text-align: left;
+        color: #000000;
+        font-family: 'docs-Roboto',Arial;
+        font-size: 10pt;
+        vertical-align: bottom;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s1 {
+        text-align: left;
+        color: #000000;
+        font-family: 'docs-Roboto',Arial;
+        font-size: 12pt;
+        vertical-align: middle;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s34 {
+        border-bottom: 1px SOLID #bfbfbf;
+        border-right: 1px SOLID #bfbfbf;
+        background-color: #f3f3f3;
+        text-align: center;
+        color: #000000;
+        font-family: 'docs-Roboto',Arial;
+        font-size: 9pt;
+        vertical-align: middle;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s39 {
+        text-align: right;
+        font-weight: bold;
+        color: #333f4f;
+        font-family: 'docs-Roboto',Arial;
+        font-size: 8pt;
+        vertical-align: middle;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s24 {
+        border-bottom: 1px SOLID #999999;
+        text-align: left;
+        color: #000000;
+        font-family: 'docs-Roboto',Arial;
+        font-size: 10pt;
+        vertical-align: middle;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s49 {
+        border-bottom: 1px SOLID #000000;
+        text-align: right;
+        font-weight: bold;
+        color: #000000;
+        font-family: 'docs-Roboto',Arial;
+        font-size: 12pt;
+        vertical-align: middle;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s40 {
+        border-bottom: 1px SOLID #bfbfbf;
+        text-align: right;
+        color: #000000;
+        font-family: 'docs-Roboto',Arial;
+        font-size: 9pt;
+        vertical-align: middle;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s37 {
+        text-align: left;
+        color: #000000;
+        font-family: 'docs-Roboto',Arial;
+        font-size: 10pt;
+        vertical-align: middle;
+        white-space: normal;
+        overflow: hidden;
+        word-wrap: break-word;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s46 {
+        border-bottom: 1px SOLID #000000;
+        text-align: right;
+        color: #000000;
+        font-family: 'docs-Roboto',Arial;
+        font-size: 9pt;
+        vertical-align: middle;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s18 {
+        text-align: left;
+        color: #000000;
+        font-family: 'docs-Roboto',Arial;
+        font-size: 10pt;
+        vertical-align: middle;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s56 {
+        text-align: left;
+        color: #000000;
+        font-family: 'docs-Roboto',Arial;
+        font-size: 12pt;
+        vertical-align: bottom;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s22 {
+        text-align: right;
+        color: #000000;
+        font-family: 'docs-Roboto',Arial;
+        font-size: 9pt;
+        vertical-align: middle;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s53 {
+        text-align: left;
+        color: #333f4f;
+        font-family: 'docs-Roboto',Arial;
+        font-size: 9pt;
+        vertical-align: middle;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s47 {
+        text-align: center;
+        color: #333f4f;
+        font-family: 'docs-Roboto',Arial;
+        font-size: 18pt;
+        vertical-align: middle;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s15 {
+        border-bottom: 1px SOLID #bfbfbf;
+        text-align: left;
+        font-weight: bold;
+        color: #1f3864;
+        font-family: 'docs-Roboto',Arial;
+        font-size: 9pt;
+        vertical-align: middle;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s17 {
+        text-align: left;
+        color: #000000;
+        font-family: 'docs-Roboto',Arial;
+        font-size: 11pt;
+        vertical-align: middle;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s25 {
+        border-bottom: 1px SOLID #999999;
+    }
+
+    .ritz .waffle .s10 {
+        text-align: right;
+        color: #7f7f7f;
+        font-family: 'docs-Roboto',Arial;
+        font-size: 18pt;
+        vertical-align: middle;
+        white-space: normal;
+        overflow: hidden;
+        word-wrap: break-word;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s23 {
+        text-align: left;
+        color: #1f3864;
+        font-family: 'docs-Roboto',Arial;
+        font-size: 11pt;
+        vertical-align: middle;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s51 {
+        text-align: center;
+        color: #000000;
+        font-family: 'docs-Roboto',Arial;
+        font-size: 12pt;
+        vertical-align: middle;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s45 {
+        border-bottom: 1px SOLID #000000;
+        text-align: right;
+        font-weight: bold;
+        color: #333f4f;
+        font-family: 'docs-Roboto',Arial;
+        font-size: 8pt;
+        vertical-align: middle;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s42 {
+        border-right: none;
+        text-align: right;
+        font-weight: bold;
+        color: #333f4f;
+        font-family: 'docs-Roboto',Arial;
+        font-size: 12pt;
+        vertical-align: bottom;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s13 {
+        text-align: center;
+        color: #ffffff;
+        font-family: 'docs-Roboto',Arial;
+        font-size: 11pt;
+        vertical-align: middle;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s55 {
+        text-align: center;
+        color: #333f4f;
+        font-family: 'docs-Roboto',Arial;
+        font-size: 10pt;
+        vertical-align: middle;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    .ritz .waffle .s16 {
+        text-align: right;
+        font-weight: bold;
+        color: #000000;
+        font-family: 'docs-Roboto',Arial;
+        font-size: 9pt;
+        vertical-align: middle;
+        white-space: nowrap;
+        direction: ltr;
+        padding: 0px 3px 0px 3px;
+    }
+
+    table {
+        table-layout: fixed;
+    }
+
+    td {
+        word-wrap: break-word;
+    }
+
+    @@media print {
+        @@Page {
+            size: A4
+        }
+
+        tfoot {
+            position: fixed;
+            bottom: 0;
+        }
+    }
+</style>
+
+<div class="ritz grid-container" dir="ltr">
+    <table class="waffle no-grid" cellspacing="0" cellpadding="0">
+        <thead>
+            <tr>
+                <th width="20px"></th>
+                <th width="50px"></th>
+                <th width="50px"></th>
+                <th width="50px"></th>
+                <th width="50px"></th>
+                <th width="50px"></th>
+                <th width="50px"></th>
+                <th width="50px"></th>
+                <th width="50px"></th>
+                <th width="50px"></th>
+                <th width="50px"></th>
+                <th width="50px"></th>
+                <th width="50px"></th>
+                <th width="50px"></th>
+                <th width="50px"></th>
+                <th width="50px"></th>
+                <th width="50px"></th>
+                <th width="50px"></th>
+                <th width="50px"></th>
+                <th width="50px"></th>
+                <th width="50px"></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr style='height:18px;'>
+                <td colspan="21" style="text-align:center">
+                    <img width="200" height="100" src="~/assets/static/images/SagVoucher/customer.jpg" />
+                </td>
+            </tr>
+            <tr style='height:18px;'>
+                <td colspan="21" style="text-align:center" class="s6">PURCHASE ORDER</td>
+            </tr>
+            <tr style='height:18px;'>
+                @{
+                    var tex = Model.PO_Data.Select(x => x.Prj_Offsite).FirstOrDefault();
+                    string text = (tex == null || tex == false) ? "" : " - Offsite";
+                }
+                <td class="s12" colspan="21" style="text-align:center">@(Model.PO_Data.FirstOrDefault().Prj_Name) @(text)  </td>
+            </tr>
+            <tr style='height:18px;'>
+                <td class="s12" colspan="11">Supplier:</td>
+            </tr>
+            <tr style='height:18px;'>
+                <td class="s5" colspan="11">@Model.Vendor_Data.Company</td>
+            </tr>
+            <tr style='height:18px;'>
+                <td class="s8" colspan="11">@Model.Vendor_Data.Address</td>
+                <td class="s17" colspan="10" style="text-align:right">PO # @Model.PO_Data.Select(x => x.PO_Number).FirstOrDefault()</td>
+            </tr>
+            <tr style='height:18px;'>
+                <td class="s12" colspan="11">
+                    <b>@Model.Vendor_Data.Name</b>
+                    <br />
+                     @Model.Vendor_Data.Office_Mobile
+                </td>
+                <td class="s17" colspan="10" style="text-align:right">Date: @string.Format("{0:dd-MMM-yyyy}", Model.PO_Data.Select(x => x.DateTime).FirstOrDefault())</td>
+            </tr>
+            <tr style='height:18px;'>
+                <td colspan="21"></td>
+            </tr>
+            <tr style='height:23px;'>
+                <td colspan="21"></td>
+            </tr>
+            <tr style='height:23px;'>
+                <th colspan="5">Requisitioner</th>
+                <th colspan="5">PRF. No:</th>
+                <th colspan="5">Payment Terms</th>
+                <th colspan="5">Requested By</th>
+            </tr>
+            <tr style='height:23px;'>
+                <td colspan="5">@Model.PO_Data.Select(x=> x.Dep_Name).FirstOrDefault()</td>
+                <td colspan="5">@ViewBag.Reqno</td>
+                <td colspan="5">@Model.PO_Data.FirstOrDefault().PaymentTime</td>
+                <td colspan="5">@ViewBag.ApprovedBy</td>
+            </tr>
+            <tr style='height:30px;'>
+                <td class="s27">Sr.</td>
+                <td class="s27">Code</td>
+                <td class="s27" colspan="9">Item</td>
+                <td class="s28" colspan="2">Qty</td>
+                <td class="s28" colspan="2">Rate</td>
+                <td class="s28" colspan="2">UOM</td>
+                <td class="s28" colspan="2">Gst</td>
+                <td class="s28" colspan="2">Total</td>
+            </tr>
+            <tr style='height:30px;'><td class="s30"></td><td class="s30"></td><td class="s30" colspan="9"></td><td class="s30" colspan="2"></td><td class="s30" colspan="2"></td><td class="s30" colspan="2"><td class="s30" colspan="2"><td class="s30" colspan="2"></td></tr>
+            @{ int count = 1;
+                double TotalAmountMade = 0;
+            }
+            @foreach (var item in Model.PO_Data.Where(x => x.OtherCharges == null))
+            {
+                string dims = string.Empty;
+                TotalAmountMade += (double)item.Qty * (double)item.Purchase_Rate + (double)item.Tax;
+                <tr style='height:30px;'><td class="s30">@(count++).</td><td class="s30">@(string.IsNullOrEmpty(item.SKU)?"-":item.SKU)</td><td class="s30" colspan="9">@item.Item_Name</td><td class="s30" colspan="2">@string.Format("{0:0,0.##}", item.Qty)</td><td class="s30" colspan="2">@string.Format("{0:0,0.##}", item.Purchase_Rate) </td><td class="s30" colspan="2">@item.UOM</td><td class="s30" colspan="2">@string.Format("{0:0,0.##}", item.Tax)</td><td class="s30" colspan="2">@string.Format("{0:0,0.##}", item.Purchase_Rate * item.Qty + item.Tax)</td></tr>
+                var res1 = item.Description.Split(' ');
+                var res2 = res1.Count();
+
+                if (res2 < 10)
+                {
+                    if (item.Description != " ------ Reason: ")
+                    {
+                        <tr style='height:30px;'><td class="s30"></td><td class="s30"></td><td class="s30" colspan="9">@item.Description</td><td class="s30" colspan="2"></td><td class="s30" colspan="2"></td><td class="s30" colspan="2"></td><td class="s30" colspan="2"></td><td class="s30" colspan="2"></td></tr>
+                    }
+                }
+                else
+                {
+                    string line1 = "", line2 = "", line3 = "", line4 = "", line5 = "";
+                    for (int i = 0; i < res1.Count(); i++)
+                    {
+                        if (i <= 15)
+                        {
+                            line1 = line1 + " " + res1[i];
+                        }
+                        else if (15 <= i && i <= 30)
+                        {
+                            line2 = line2 + " " + res1[i];
+                        }
+                        else if (30 <= i && i <= 45)
+                        {
+                            line3 = line3 + " " + res1[i];
+                        }
+                        else if (45 <= i && i <= 60)
+                        {
+                            line4 = line4 + " " + res1[i];
+                        }
+                        else if (60 <= i && i <= 75)
+                        {
+                            line5 = line5 + " " + res1[i];
+                        }
+                    }
+
+                    if (line1.Length > 1)
+                    {
+                        <tr style='height:30px;'><td class="s30"></td><td class="s30"></td><td class="s30" colspan="9">@line1</td><td class="s30" colspan="2"></td><td class="s30" colspan="2"></td><td class="s30" colspan="2"></td><td class="s30" colspan="2"></td><td class="s30" colspan="2"></td></tr>
+                    }
+                    if (line2.Length > 1)
+                    {
+                        <tr style='height:30px;'><td class="s30"></td><td class="s30"></td><td class="s30" colspan="9">@line2</td><td class="s30" colspan="2"></td><td class="s30" colspan="2"></td><td class="s30" colspan="2"></td><td class="s30" colspan="2"></td><td class="s30" colspan="2"></td></tr>
+                    }
+                    if (line3.Length > 1)
+                    {
+                        <tr style='height:30px;'><td class="s30"></td><td class="s30"></td><td class="s30" colspan="9">@line3</td><td class="s30" colspan="2"></td><td class="s30" colspan="2"></td><td class="s30" colspan="2"></td><td class="s30" colspan="2"></td><td class="s30" colspan="2"></td></tr>
+                    }
+                    if (line4.Length > 1)
+                    {
+                        <tr style='height:30px;'><td class="s30"></td><td class="s30"></td><td class="s30" colspan="9">@line4</td><td class="s30" colspan="2"></td><td class="s30" colspan="2"></td><td class="s30" colspan="2"></td><td class="s30" colspan="2"></td><td class="s30" colspan="2"></td></tr>
+                    }
+                    if (line5.Length > 1)
+                    {
+                        <tr style='height:30px;'><td class="s30"></td><td class="s30"></td><td class="s30" colspan="9">@line5</td><td class="s30" colspan="2"></td><td class="s30" colspan="2"></td><td class="s30" colspan="2"></td><td class="s30" colspan="2"></td><td class="s30" colspan="2"></td></tr>
+                    }
+
+                }
+
+            }
+            @foreach (var item in Model.PO_Data.Where(x => x.OtherCharges == true))
+            {
+                string dims = string.Empty;
+                TotalAmountMade += (double)item.Qty * (double)item.Purchase_Rate + (double)item.Tax;
+                <tr style='height:30px;'><td class="s30">@(count++).</td><td class="s30" colspan="10">@item.Item_Name</td><td class="s30" colspan="2"></td><td class="s30" colspan="2"> </td><td class="s30" colspan="2"><td class="s30" colspan="2"></td><td class="s30" colspan="2">@string.Format("{0:0,0.##}", item.Purchase_Rate * item.Qty)</td></tr>
+            }
+            <tr style='height:30px;'><td class="s30"></td><td class="s30"></td><td class="s30" colspan="9"></td><td class="s30" colspan="2"></td><td class="s30" colspan="2"><td class="s30" colspan="2"></td><td class="s30" colspan="2"><td class="s30" colspan="2"></td></tr>
+            <tr style='height:30px;'><td class="s30"></td><td class="s30" colspan="10" style="text-align:left"><b>Amount in Words: @Model.PO_Data.Select(x => x.Currency).FirstOrDefault() - </b>@(MeherEstateDevelopers.Models.GeneralMethods.NumberToWords((int)TotalAmountMade)) </td><td class="s30" colspan="2"></td><td class="s30" colspan="2"><td class="s30" colspan="2"></td><td class="s30" colspan="2"></td><td class="s30" colspan="2"></td></tr>
+            <tr style='height:44px;'>
+                <td class="s41" colspan="16"></td>
+                <td class="s48" colspan="2">Total Amount</td>
+                <td class="s49" colspan="3"> @Model.PO_Data.Select(x => x.Currency).FirstOrDefault() = @string.Format("{0:0,0.##}", TotalAmountMade)/-  </td>
+            </tr>
+            <tr style='height:60px;'>
+                <td colspan="21">
+                    <b>Terms & Conditions</b>
+                    <br />
+                    <span>- Goods not fully upto the mark will be rejected.</span>
+                    <br />
+                    <span>- Goods are subject to our inspection on arrival at destination.</span>
+                    <br />
+                    <span>- Deliver this order in accordance with the price, terms, and delivery method, and specifications listed above.</span>
+                    <br />
+                    <span>- Notify us immediatly if you are unable to ship as specified.</span>
+                    <br />
+                    <span>- Meher Estate Developers reserves the rights to accept/reject any item found defected.</span>
+                    <br />
+                    <span>- Failure to deliver an item above will automatically authorized Meher Estate Developers to purchase the undelivered item on risk & cost of Supplier.</span>
+                    <br />
+                    @*@foreach (var item in Model.PO_Terms)
+                {
+                    var date = (item.Date is null) ? null : " - " + string.Format("{0:dd-MMM-yyyy}", item.Date);
+                    <span>- @item.Terms  @date</span>
+                }*@
+                </td>
+            </tr>
+            <tr style='height:18px;'>
+                <td colspan="21"></td>
+            </tr>
+            <tr style='height:18px;'>
+                <td colspan="21"></td>
+            </tr>
+        </tbody>
+            <tr>
+                <th colspan="4" style="text-align:center;width:250px">Prepared By<br />@Model.PO_Data.Select(x => x.CreatedBy_Name).FirstOrDefault()</th>
+                <th colspan="4" style="text-align:center;width:250px"></th>
+                <th colspan="4" style="text-align:center;width:250px"></th>
+                <th colspan="4" style="text-align:center;width:250px"></th>
+                <th colspan="4" style="text-align:center;width:250px"></th>
+                <th colspan="4" style="text-align:center;width:250px"></th>
+                <th colspan="4" style="text-align:center;width:250px">Approved By<br /></th>
+            </tr>
+    </table>
+</div>

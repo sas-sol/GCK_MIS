@@ -1,0 +1,320 @@
+﻿
+@model IEnumerable<MeherEstateDevelopers.Models.Inventory_Purchase_Req>
+
+<table cellspacing="0" border="0">
+    <colgroup width="12"></colgroup>
+    <colgroup width="57"></colgroup>
+    <colgroup width="86"></colgroup>
+    <colgroup width="131"></colgroup>
+    <colgroup width="225"></colgroup>
+    <colgroup width="75"></colgroup>
+    <colgroup width="71"></colgroup>
+    <colgroup span="2" width="123"></colgroup>
+    <colgroup width="106"></colgroup>
+    <colgroup width="67"></colgroup>
+    <colgroup width="82"></colgroup>
+    <colgroup width="67"></colgroup>
+
+    <tbody>
+        <tr>
+            <td colspan="21" style="text-align:center">
+                <img width="100" height="50" src="~/assets/static/images/SagVoucher/customer.jpg" />
+            </td>
+        </tr>
+        <tr style='height:18px;'>
+            <td colspan="21" style="text-align:center">
+                <b><font face="Arial" size="5">                Request For Quotation </font></b>
+
+            </td>
+        </tr>
+
+        <tr>
+            <td align="left" valign="bottom"><font face="Arial"><br></font></td>
+
+            <td colspan="6" align="left" valign="middle"><b><font face="Arial">Requisition No: @Model.Select(x => x.Requisition_No).FirstOrDefault()</font></b></td>
+            <td colspan="3" align="left" valign="middle"><b><font face="Arial">Quotation No: </font></b></td>
+            <td align="left" valign="bottom"><font face="Arial"><br></font></td>
+            <td align="left" valign="bottom"><font face="Arial"><br></font></td>
+            <td align="left" valign="bottom"><font face="Arial"><br></font></td>
+        </tr>
+        <tr>
+            <td align="left" valign="bottom"><font face="Arial"><br></font></td>
+            <td colspan="6" align="left" valign="middle"><b><font face="Arial">Requisition date: @Model.Select(x => x.DateTime.Value.ToShortDateString()).FirstOrDefault()</font></b></td>
+            <td colspan="5" align="left" valign="middle"><b><font face="Arial">Quotation date: </font></b></td>
+            <td align="left" valign="bottom"><font face="Arial"><br></font></td>
+            <td align="left" valign="bottom"><font face="Arial"><br></font></td>
+        </tr>
+        <tr>
+            <td align="left" valign="bottom"><font face="Arial"><br></font></td>
+
+            <td colspan="13" align="left" valign="bottom"><b><font face="Arial">Project: @Model.Select(x => x.Prj_Name).FirstOrDefault()</font></b></td>
+        </tr>
+        <tr>
+            <td align="left" valign="bottom"><font face="Arial"><br></font></td>
+
+            <td colspan="13" align="left" valign="bottom"><b><font face="Arial">Department: @Model.Select(x => x.Project_Department).FirstOrDefault()</font></b></td>
+        </tr>
+        <tr>
+            <td align="left" valign="bottom"><font face="Arial"><br></font></td>
+            <td align="left" colspan="2" valign="middle"><b><font face="Arial"> </font></b></td>
+            <td align="left" valign="bottom"><font face="Arial"><br></font></td>
+            <td align="left" valign="middle"><b><font face="Arial"><br></font></b></td>
+            <td align="left" valign="middle"><b><font face="Arial"><br></font></b></td>
+            <td align="left" valign="bottom"><font face="Arial"><br></font></td>
+            <td align="left" colspan="2" valign="bottom"><b><font face="Arial"> </font></b></td>
+            <td align="left" valign="bottom"><font face="Arial"><br></font></td>
+            <td align="left" valign="bottom"><font face="Arial"><br></font></td>
+
+
+        </tr>
+        <tr>
+            <td align="left" valign="bottom"><font face="Arial"><br></font></td>
+            <td align="left" colspan="2" valign="middle"><b><font face="Arial">SUPPLIER DETAILS:</font></b></td>
+            <td align="left" valign="bottom"><font face="Arial"><br></font></td>
+            <td align="left" valign="middle"><b><font face="Arial"><br></font></b></td>
+            <td align="left" valign="middle"><b><font face="Arial"><br></font></b></td>
+            <td align="left" valign="bottom"><font face="Arial"><br></font></td>
+            <td align="left" colspan="2" valign="bottom"><b><font face="Arial">REQUESTER DETAILS:</font></b></td>
+            <td align="left" valign="bottom"><font face="Arial"><br></font></td>
+            <td align="left" valign="bottom"><font face="Arial"><br></font></td>
+
+
+        </tr>
+        <tr>
+            <td align="left" valign="bottom"><font face="Arial"><br></font></td>
+            <td style="border-top: 1px solid #000000; border-left: 1px solid #000000" colspan="3" align="left" valign="bottom"><b><font face="Arial" color="#FF0000">Supplier Name &amp; Address:</font></b></td>
+            <td style="border-top: 1px solid #000000; border-right: 1px solid #000000" align="left" valign="bottom"><font face="Arial"><br></font></td>
+            <td align="left" valign="bottom"><font face="Arial"><br></font></td>
+            <td align="left" valign="bottom"><font face="Arial"><br></font></td>
+            <td style="border-top: 1px solid #000000; border-left: 1px solid #000000" align="left" valign="bottom"><b><font face="Arial">C0</font></b></td>
+            <td style="border-top: 1px solid #000000" align="left" valign="bottom"><b><font face="Arial"> Grand City </font></b></td>
+            <td style="border-top: 1px solid #000000; border-right: 1px solid #000000" align="left" valign="bottom"><font face="Arial"><br></font></td>
+            <td align="left" valign="bottom"><font face="Arial"><br></font></td>
+            <td align="left" valign="bottom"><font face="Arial"><br></font></td>
+            <td align="left" valign="bottom"><font face="Arial"><br></font></td>
+        </tr>
+
+
+        <tr>
+            <td align="left" valign="bottom"><font face="Arial"><br></font></td>
+            <td style="border-left: 1px solid #000000" align="left" valign="bottom" colspan="3" name="address_vendor" id="ven_name"><font face="Arial">@ViewBag.Name  </font></td>
+
+
+            <td style="border-right: 1px solid #000000" align="left" valign="bottom"><font face="Arial"><br></font></td>
+            <td align="left" valign="bottom"><font face="Arial"><br></font></td>
+            <td align="left" valign="bottom"><font face="Arial"><br></font></td>
+            <td style="border-left: 1px solid #000000" align="left" valign="bottom"><b><font face="Arial">POC:</font></b></td>
+            <td align="left" valign="bottom"><font face="Arial" color="#FF0000"> @ViewBag.user </font></td>
+            <td style="border-right: 1px solid #000000" align="left" valign="bottom"><font face="Arial"><br></font></td>
+
+            <td align="left" valign="bottom"></td>
+            <td align="left" valign="bottom"><font face="Arial"><br></font></td>
+        </tr>
+        <tr>
+            <td align="left" valign="bottom"><font face="Arial"><br></font></td>
+            <td style="border-left: 1px solid #000000" align="left" valign="bottom" colspan="3" id="ven_addrs"><font face="Arial">@ViewBag.address</font></td>
+           
+            <td style="border-right: 1px solid #000000" align="left" valign="bottom"><font face="Arial"><br></font></td>
+            <td align="left" valign="bottom"><font face="Arial"><br></font></td>
+            <td align="left" valign="bottom"><font face="Arial"><br></font></td>
+            <td style="border-left: 1px solid #000000" align="left" valign="bottom"><b><font face="Arial">Phone:</font></b></td>
+            <td align="left" valign="bottom"><font face="Arial" color="#FF0000">@ViewBag.Phonenum</font></td>
+            <td style="border-right: 1px solid #000000" align="left" valign="bottom"><font face="Arial"><br></font></td>
+            <td align="left" valign="bottom"><font face="Arial"><br></font></td>
+            <td align="left" valign="bottom"><font face="Arial"><br></font></td>
+            <td align="left" valign="bottom"><font face="Arial"><br></font></td>
+        </tr>
+        <tr>
+            <td align="left" valign="bottom"><font face="Arial"><br></font></td>
+            <td style="border-left: 1px solid #000000" align="left" valign="bottom" id="ven_phone"><font face="Arial">@ViewBag.Phone </font></td>
+
+            <td align="left" valign="bottom"><font face="Arial"><br></font></td>
+            <td align="left" valign="bottom"><font face="Arial"><br></font></td>
+            <td style="border-right: 1px solid #000000" align="left" valign="bottom"><font face="Arial"><br></font></td>
+            <td align="left" valign="bottom"><font face="Arial"><br></font></td>
+            <td align="left" valign="bottom"><font face="Arial"><br></font></td>
+            <td style="border-left: 1px solid #000000" align="left" valign="bottom"><b><font face="Arial">Fax:</font></b></td>
+            <td align="left" valign="bottom"><font face="Arial"><br></font></td>
+            <td style="border-right: 1px solid #000000" align="left" valign="bottom"><font face="Arial"><br></font></td>
+            <td align="left" valign="bottom"><font face="Arial"><br></font></td>
+            <td align="left" valign="bottom"><font face="Arial"><br></font></td>
+            <td align="left" valign="bottom"><font face="Arial"><br></font></td>
+        </tr>
+        <tr>
+            <td align="left" valign="bottom"><font face="Arial"><br></font></td>
+            <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000" align="left" valign="bottom"><font face="Arial"><br></font></td>
+            <td style="border-bottom: 1px solid #000000" align="left" valign="bottom"><font face="Arial"><br></font></td>
+            <td style="border-bottom: 1px solid #000000" align="left" valign="bottom"><font face="Arial"><br></font></td>
+            <td style="border-bottom: 1px solid #000000; border-right: 1px solid #000000" align="left" valign="bottom"><font face="Arial"><br></font></td>
+            <td align="left" valign="bottom"><font face="Arial"><br></font></td>
+            <td align="left" valign="bottom"><font face="Arial"><br></font></td>
+            <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000" align="left" valign="bottom"><u><font face="Arial" color="#0000FF"><br></font></u></td>
+            <td style="border-bottom: 1px solid #000000" align="left" valign="bottom"><font face="Arial"><br></font></td>
+            <td style="border-bottom: 1px solid #000000; border-right: 1px solid #000000" align="left" valign="bottom"><font face="Arial"><br></font></td>
+            <td align="left" valign="bottom"><font face="Arial"><br></font></td>
+            <td align="left" valign="bottom"><font face="Arial"><br></font></td>
+            <td align="left" valign="bottom"><font face="Arial"><br></font></td>
+        </tr>
+        <tr>
+            <td align="left" valign="bottom"><font face="Arial"><br></font></td>
+            <td align="left" colspan="2" valign="middle"><b><font face="Arial"> </font></b></td>
+            <td align="left" valign="bottom"><font face="Arial"><br></font></td>
+            <td align="left" valign="middle"><b><font face="Arial"><br></font></b></td>
+            <td align="left" valign="middle"><b><font face="Arial"><br></font></b></td>
+            <td align="left" valign="bottom"><font face="Arial"><br></font></td>
+            <td align="left" colspan="2" valign="bottom"><b><font face="Arial"> </font></b></td>
+            <td align="left" valign="bottom"><font face="Arial"><br></font></td>
+            <td align="left" valign="bottom"><font face="Arial"><br></font></td>
+
+
+        </tr>
+
+        <tr>
+            <td align="left" valign="middle"><font face="Arial"><br></font></td>
+            <td align="left" valign="middle"><b><font face="Arial">REQUIREMENTS:</font></b></td>
+
+        </tr>
+        <tr>
+            <td align="left" valign="middle"><font face="Arial"><br></font></td>
+            <td style="border-top: 1px solid #000000; border-left: 1px solid #000000" align="left" valign="middle"><b><font face="Arial">Payment Terms:</font></b></td>
+            <td style="border-top: 1px solid #000000" align="left" valign="middle"><font face="Arial"><br></font></td>
+            <td style="border-top: 1px solid #000000; " colspan="1" align="center" valign="middle"><font face="Arial"><br></font></td>
+            <td style="border-top: 1px solid #000000;  " colspan="1" align="center" valign="middle"><font face="Arial"><br></font></td>
+            <td style="border-top: 1px solid #000000;  " colspan="1" align="center" valign="middle"><font face="Arial"><br></font></td>
+            <td style="border-top: 1px solid #000000;  " colspan="2" align="center" valign="middle"><font face="Arial"><br></font></td>
+            <td style="border-top: 1px solid #000000; border-right: 1px solid #000000" colspan="2" align="center" valign="middle"><font face="Arial"><br></font></td>
+
+
+        </tr>
+        <tr>
+            <td align="left" valign="middle"><font face="Arial"><br></font></td>
+            <td style="border-left: 1px solid #000000" align="left" valign="middle"><b><font face="Arial">Delivery Time:</font></b></td>
+            <td align="left" valign="middle"><font face="Arial"><br></font></td>
+            <td colspan="2" align="center" valign="middle"><font face="Arial"><br></font></td>
+            <td colspan="1" align="center" valign="middle"><font face="Arial"><br></font></td>
+            <td colspan="1" align="center" valign="middle"><font face="Arial"><br></font></td>
+            <td colspan="1" align="center" valign="middle"><font face="Arial"><br></font></td>
+            <td style="border-right: 1px solid #000000" colspan="2" align="center" valign="middle"><font face="Arial"><br></font></td>
+
+        </tr>
+        <tr>
+            <td align="left" valign="middle"><font face="Arial"><br></font></td>
+            <td style="border-left: 1px solid #000000" align="left" valign="middle"><b><font face="Arial">Delivery Mode:</font></b></td>
+            <td align="left" valign="middle"><font face="Arial"><br></font></td>
+            <td colspan="1" align="center" valign="middle"><font face="Arial"><br></font></td>
+            <td colspan="1" align="center" valign="middle"><font face="Arial"><br></font></td>
+            <td colspan="1" align="center" valign="middle"><font face="Arial"><br></font></td>
+            <td colspan="2" align="center" valign="middle"><font face="Arial"><br></font></td>
+            <td style="border-right: 1px solid #000000" colspan="2" align="center" valign="middle"><font face="Arial"><br></font></td>
+
+        </tr>
+        <tr>
+            <td align="left" valign="middle"><font face="Arial"><br></font></td>
+            <td style="border-left: 1px solid #000000" align="left" valign="middle"><b><font face="Arial">Warranty: </font></b></td>
+            <td align="left" valign="middle"><font face="Arial"><br></font></td>
+            <td colspan="1" align="center" valign="middle"><font face="Arial"><br></font></td>
+            <td colspan="1" align="center" valign="middle"><font face="Arial"><br></font></td>
+            <td colspan="1" align="center" valign="middle"><font face="Arial"><br></font></td>
+            <td colspan="2" align="center" valign="middle"><font face="Arial"><br></font></td>
+            <td style="border-right: 1px solid #000000" colspan="2" align="center" valign="middle"><font face="Arial"><br></font></td>
+
+        </tr>
+        <tr>
+            <td align="left" valign="middle"><font face="Arial"><br></font></td>
+            <td style="border-left: 1px solid #000000" align="left" valign="middle"><b><font face="Arial">Validity:</font></b></td>
+            <td align="left" valign="middle"><font face="Arial"><br></font></td>
+            <td colspan="1" align="center" valign="middle"><font face="Arial"><br></font></td>
+            <td colspan="1" align="center" valign="middle"><font face="Arial"><br></font></td>
+            <td colspan="1" align="center" valign="middle"><font face="Arial"><br></font></td>
+            <td colspan="2" align="center" valign="middle"><font face="Arial"><br></font></td>
+            <td style="border-right: 1px solid #000000" colspan="2" align="center" valign="middle"><font face="Arial"><br></font></td>
+
+        </tr>
+
+        <tr>
+            <td align="left" valign="middle"><font face="Arial"><br></font></td>
+            <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000" align="left" valign="middle"><font face="Arial"><br></font></td>
+            <td style="border-bottom: 1px solid #000000" align="left" valign="middle"><font face="Arial"><br></font></td>
+            <td style="border-bottom: 1px solid #000000" align="left" valign="middle"><font face="Arial"><br></font></td>
+            <td style="border-bottom: 1px solid #000000;  " align="left" valign="middle"><font face="Arial"><br></font></td>
+            <td style="border-bottom: 1px solid #000000;  " align="left" valign="middle"><font face="Arial"><br></font></td>
+            <td style="border-bottom: 1px solid #000000;  " align="left" valign="middle"><font face="Arial"><br></font></td>
+            <td style="border-bottom: 1px solid #000000;  " align="left" valign="middle"><font face="Arial"><br></font></td>
+            <td style="border-bottom: 1px solid #000000;  " align="left" valign="middle"><font face="Arial"><br></font></td>
+            <td style="border-bottom: 1px solid #000000; border-right: 1px solid #000000" align="left" valign="middle"><font face="Arial"><br></font></td>
+
+        </tr>
+        <tr>
+            <td align="left" valign="bottom"><font face="Arial"><br></font></td>
+            <td align="left" colspan="2" valign="middle"><b><font face="Arial"> </font></b></td>
+            <td align="left" valign="bottom"><font face="Arial"><br></font></td>
+            <td align="left" valign="middle"><b><font face="Arial"><br></font></b></td>
+            <td align="left" valign="middle"><b><font face="Arial"><br></font></b></td>
+            <td align="left" valign="bottom"><font face="Arial"><br></font></td>
+            <td align="left" colspan="2" valign="bottom"><b><font face="Arial"> </font></b></td>
+            <td align="left" valign="bottom"><font face="Arial"><br></font></td>
+            <td align="left" valign="bottom"><font face="Arial"><br></font></td>
+
+
+        </tr>
+
+        <tr>
+            <td align="left" valign="bottom"><font face="Arial"><br></font></td>
+            <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="center" valign="middle" bgcolor="#FFCC99"><b><font face="Arial" size="1">ITEM</font></b></td>
+            <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan="3" align="center" valign="middle" bgcolor="#FFCC99"><b><font face="Arial" size="1">DESCRIPTION</font></b></td>
+            <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="center" valign="middle" bgcolor="#FFCC99"><b><font face="Arial" size="1">QTY</font></b></td>
+            <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="center" valign="bottom" bgcolor="#FFCC99"><b><font face="Arial" size="1">UoM</font></b></td>
+            <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="left" valign="middle" bgcolor="#FFCC99"><b><font face="Arial" size="1">Unit Price</font></b></td>
+            <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="left" valign="middle" bgcolor="#FFCC99"><b><font face="Arial" size="1">Amount</font></b></td>
+            <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="left" valign="middle" bgcolor="#FFCC99"><b><font face="Arial" size="1">COMMENT</font></b></td>
+            <td align="left" valign="bottom"><font face="Arial"><br></font></td>
+            <td align="left" valign="bottom"><font face="Arial"><br></font></td>
+            <td align="left" valign="bottom"><font face="Arial"><br></font></td>
+        </tr>
+        @{ int i = 1; }
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td height="36" align="left" valign="bottom"><font face="Arial"><br></font></td>
+                <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="center" valign="middle" sdval="1" sdnum="1033;"><b><font face="Arial" size="1">@i</font></b></td>
+                <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan="3" align="left" valign="middle">@item.Item_Name - @item.Description</td>
+                <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000" align="center" valign="middle"><font face="Calibr"><br></font></td>
+                <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="center" valign="bottom"><font face="Calibr">@item.Qty</font></td>
+                <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="left" valign="middle"><b><font face="Arial" size="1">@item.UOM</font></b></td>
+                <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="left" valign="middle"><b><font face="Arial" size="1"></font></b></td>
+                <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="left" valign="middle"><b><font face="Arial" size="1"><br></font></b></td>
+                <td align="left" valign="bottom"><font face="Arial"><br></font></td>
+                <td align="left" valign="bottom"><font face="Arial"><br></font></td>
+                <td align="left" valign="bottom"><font face="Arial"><br></font></td>
+            </tr>
+            i++;
+        }
+
+
+    <tr>
+        <td height="61" align="left" valign="bottom"><font face="Arial"><br></font></td>
+        <td align="left" valign="bottom"><font face="Arial"><br></font></td>
+
+        <td align="left" valign="bottom"><font face="Arial"><br></font></td>
+        <td align="left" valign="bottom"><font face="Arial"><br></font></td>
+        <td align="left" valign="bottom"><font face="Arial"><br></font></td>
+        <td align="left" valign="bottom"><font face="Arial"><br></font></td>
+        <td align="left" valign="bottom"><font face="Arial"><br></font></td>
+        
+        <td align="left" valign="bottom"><font face="Arial"><br></font></td>
+        <td style="border-bottom: 1px solid #000000" align="left" valign="bottom"><font face="Arial"><br></font></td>
+        <td style="border-bottom: 1px solid #000000" align="center" valign="bottom"><font face="Arial"></font></td>
+        <td style="border-bottom: 1px solid #000000" align="left" valign="bottom"><font face="Arial"><br></font></td>
+
+    </tr>
+        <tr>
+           
+            
+            <td align="right" valign="bottom" colspan="11"><font face="Arial">RFQ Sender Signature</font></td>
+           
+           
+         
+        </tr>
+    </tbody>
+</table>
+

@@ -1,0 +1,40 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Sp_Get_Assign_List_Details_Result>
+<div class="bgc-white bd bdrs-3 p-20 mB-20">
+    <table class="table table-striped table-bordered" cellspacing="0" width="100%">
+        <thead>
+            <tr>
+                <th>Number</th>
+                <th>Asset Name</th>
+                <th>Employee Name</th>
+                <th>Specification</th>
+                <th>Qr Code</th>
+                <th>Returning</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                int counter = 0;
+
+                if (!Model.Any())
+                {
+                    <tr><td colspan="7" style="text-align:center">No data available</td></tr>
+                }
+                else
+                {
+                    foreach (var item in Model)
+                    {
+                        counter++;
+                    <tr class=" " id="@item.Id">
+                        <td><h6>@counter</h6> </td>
+                        <td><h6>@item.Name</h6> </td>
+                        <td><h6>@item.EmpName</h6> </td>
+                        <td><h6>@item.Specs</h6></td>
+                        <td><h6>@item.qrnumber</h6></td>
+                        <td><input type="button" value="Return" class="form-control btn btn-primary" id="returning_asset" /></td>
+                    </tr>
+                    }
+                }
+            }
+        </tbody>
+    </table>    
+</div>

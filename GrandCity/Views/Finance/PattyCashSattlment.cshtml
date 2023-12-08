@@ -1,0 +1,172 @@
+﻿@using Microsoft.AspNet.Identity;
+@{ if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+}
+<input type="hidden" value="@ViewBag.Transaction_Id" id="tran-id" />
+<input type="hidden" value="@User.Identity.GetUserId()" id="user-id" />
+<div class="bgc-white bd bdrs-3 p-20 mB-20">
+    <div class="col-md-12">
+        <div class="form-row">
+            <div class="form-group col-md-12">
+                <h5>Petty Cash Settlement</h5>
+            </div>
+        </div>
+    </div>
+    <table class="table table-bordered ptc-line">
+        <thead>
+            <tr>
+                <th width="5%">Sr</th>
+                <th>Description</th>
+                <th width="10%">Amount</th>
+                <th width="10%">Date</th>
+                <th width="10%">Is Food</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="it-lin"><td class="sr">1</td><td><input type="text" class="text-box tex" /></td><td><input type="text" class="text-box coma" /></td><td><input type="text" class="text-box date" data-provide="datepicker" /></td><td><input type="checkbox" class="is-food" />   <i class="rm-row fa fa-times"></i></td></tr>
+            <tr class="it-lin"><td class="sr">2</td><td><input type="text" class="text-box tex" /></td><td><input type="text" class="text-box coma" /></td><td><input type="text" class="text-box date" data-provide="datepicker" /></td><td><input type="checkbox" class="is-food" />   <i class="rm-row fa fa-times"></i></td></tr>
+            <tr class="it-lin"><td class="sr">3</td><td><input type="text" class="text-box tex" /></td><td><input type="text" class="text-box coma" /></td><td><input type="text" class="text-box date" data-provide="datepicker" /></td><td><input type="checkbox" class="is-food" />   <i class="rm-row fa fa-times"></i></td></tr>
+            <tr class="it-lin"><td class="sr">4</td><td><input type="text" class="text-box tex" /></td><td><input type="text" class="text-box coma" /></td><td><input type="text" class="text-box date" data-provide="datepicker" /></td><td><input type="checkbox" class="is-food" />   <i class="rm-row fa fa-times"></i></td></tr>
+            <tr class="it-lin"><td class="sr">5</td><td><input type="text" class="text-box tex" /></td><td><input type="text" class="text-box coma" /></td><td><input type="text" class="text-box date" data-provide="datepicker" /></td><td><input type="checkbox" class="is-food" />   <i class="rm-row fa fa-times"></i></td></tr>
+
+        </tbody>
+        <tfoot>
+            <tr>
+                <th colspan="2"><span class="add-row"><i class="fa fa-plus-circle "></i> Add Row </span> <span style="float:right;margin-right:5px">Grand Total</span></th>
+                <th colspan="3" id="total-amt"></th>
+            </tr>
+        </tfoot>
+    </table>
+    <div class="foot-row row">
+        <div class="col-md-12 mt-md-2">
+            <div class="col-md-2 righty">
+                <button class="btn btn-success sv-ptc">Submit</button>
+            </div>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+</div>
+<script>
+    $(document).on("click", ".add-row", function () {
+        var html = `<tr class="it-lin"><td class="sr">5</td><td><input type="text" class="text-box tex" /></td><td><input type="text" class="text-box coma" /></td><td><input type="text" class="text-box date" data-provide="datepicker" /></td><td><input type="checkbox" class="is-food" /> <i class="rm-row fa fa-times"></i></td></tr>`;
+        $('.ptc-line tbody').append(html);
+        resetsr();
+    });
+    $(document).on("click", ".rm-row", function () {
+        $(this).closest('tr').remove();
+        resetsr();
+    });
+    $(document).on("click", ".sv-ptc", function () {
+        let tran = $('#tran-id').val();
+        var newline = []
+        var nook = false;
+        var userid = $("#user-id").val();
+        $('.it-lin').each(function () {
+            var text = $(this).find(".tex").val();
+            var date = $(this).find(".date").val();
+            var food = $(this).find(".is-food").is(":checked");
+            var val = Number(RemoveComma($(this).find(".coma").val()));
+            if (userid == 20136 ) {
+                if (val > 5000) {
+                    if (!food) {
+                        nook = true;
+                        return false;
+                    }
+                }
+            }
+            else if (userid == 20120) {
+                if (val > 10000) {
+                    if (!food) {
+                        nook = true;
+                        return false;
+                    }
+                }
+            }
+            else {
+                if (val > 2500) {
+                    if (!food) {
+                        nook = true;
+                        return false;
+                    }
+                }
+            }
+            if (isBlank(text) || isEmpty(text) || isNaN(val) || val == 0) {
+                nook = true;
+                alert("Please Review highlighted Entry");
+                $(this).closest('tr').addClass('highlight_row');
+            }
+            var line = { Description: text, Amount: val, Date: date, IsFood: food };
+            newline.push(line);
+        });
+        if (nook) {
+            alert("Item's Value Limit Exceeded");
+            return false;
+        }
+        if (confirm("Are you sure you want to Submit this Settlement")) {
+            $.ajax({
+                type: "POST",
+                url: "/Finance/PattyCashEntry/",
+                dataType: 'json',
+                beforeSend: function () { },
+                complete: function () { },
+                data: { items: newline, Transaction_Id: tran },
+                success: function (data) {
+                    if (data.Status == true) {
+                        alert(data.Msg);
+                        window.location.reload();
+                    }
+                    else {
+                        alert(data.Msg);
+                    }
+                }
+            });
+        }
+    });
+    $('.tex,.coma,.date').focus(function () {
+        $(this).closest('tr').addClass('highlight_row');
+    });
+    $('.tex,.coma,.date').blur(function () {
+        $(this).closest('tr').removeClass('highlight_row');
+    });
+    $(document).on("keyup", ".coma", function () {
+        calttl();
+    })
+    function calttl() {
+        var ttl = 0
+        $('.coma').each(function () {
+            ttl += Number(RemoveComma($(this).val()))
+        });
+        $('#total-amt').text(ttl.toLocaleString());
+    }
+    function resetsr() {
+        var sr = 1;
+        $('.sr').each(function () {
+            $(this).text(sr);
+            sr++;
+        });
+    }
+</script>
+<style>
+    .text-box {
+        width: 100%;
+        border: none;
+        height: 40px;
+    }
+
+    td {
+        padding: 1px !important;
+        text-align: center;
+        vertical-align: middle !important;
+    }
+
+    .highlight_row {
+        background-color: #CCC;
+        color: #000;
+    }
+</style>

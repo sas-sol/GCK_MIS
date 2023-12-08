@@ -1,0 +1,226 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.ServiceChargesBill>
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        @@page {
+            margin: 0;
+            size: A4
+        }
+
+        .bg {
+            height: 1060px;
+            width: 595px;
+            margin-left: 0;
+            background-image: url('../../assets/static/images/SC1.jpg');
+            background-size: 595px 1060px;
+            font-family: sans-serif;
+            margin-bottom: 70px
+        }
+
+        .detailtable {
+            margin-top: 4%;
+            border: 2px solid #000;
+            margin-left: 20%;
+            width: 100%;
+            background-color: #fff
+        }
+
+            .detailtable table {
+                border-collapse: collapse;
+                width: 100%
+            }
+
+            .detailtable td, th {
+                border: 0;
+                text-align: left;
+                padding: 12px;
+                font-size: 14px
+            }
+
+            .detailtable tr:nth-child(odd) {
+                background-color: #ddd
+            }
+
+            .detailtable th {
+                background-color: #000;
+                color: #fff
+            }
+
+        .info {
+            width: 45%;
+            line-height: 18px;
+            font-size: 14px;
+            margin-left: 85%;
+            padding-top: 17%
+        }
+
+            .info td {
+                padding: 5px
+            }
+
+        .subtotal {
+            width: 40%;
+            line-height: 18px;
+            font-size: 14px;
+            margin-left: 85%;
+            margin-top: 3%
+        }
+
+            .subtotal td {
+                padding: 5px
+            }
+
+        @@media print {
+            .bg {
+                height: 1060px;
+                width: 595px;
+                margin-left: 0;
+                background-image: url('../../assets/static/images/SC1.jpg');
+                background-size: 595px 1060px;
+                font-family: sans-serif;
+                margin-bottom: 70px
+            }
+
+            .detailtable {
+                margin-top: 4%;
+                border: 2px solid #000;
+                margin-left: 20%;
+                width: 100%;
+                background-color: #fff
+            }
+
+                .detailtable table {
+                    border-collapse: collapse;
+                    width: 100%
+                }
+
+                .detailtable td, th {
+                    border: 0;
+                    text-align: left;
+                    padding: 12px;
+                    font-size: 14px
+                }
+
+                .detailtable tr:nth-child(odd) {
+                    background-color: #ddd
+                }
+
+                .detailtable th {
+                    background-color: #000;
+                    color: #fff
+                }
+
+            .info {
+                width: 45%;
+                line-height: 18px;
+                font-size: 14px;
+                margin-left: 85%;
+                padding-top: 17%
+            }
+
+                .info td {
+                    padding: 5px
+                }
+
+            .subtotal {
+                width: 40%;
+                line-height: 18px;
+                font-size: 14px;
+                margin-left: 83%;
+                margin-top: 3%
+            }
+
+                .subtotal td {
+                    padding: 5px
+                }
+        }
+    </style>
+</head>
+<body>
+    @{
+        foreach (var item in Model)
+        {
+            <div class="bg">
+                <div class="info">
+                    <table>
+                        <tr>
+                            <td width="250"><b>Invoice to</b></td>
+                        </tr>
+                        <tr>
+                            <td style="font-size:18px"><b>@item.Name</b></td>
+                        </tr>
+                        <tr>
+                            <td width=""><b>@item.Address</b></td>
+                        </tr>
+                        <tr>
+                            <td width=""><b>Last Date: &nbsp;&nbsp;&nbsp; <span style="color:red">@string.Format("{0:dd MMM yyyy}", DateTime.UtcNow.AddDays(10))</span></b></td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="detailtable">
+                    <table>
+                        <tr>
+                            <th>Sr #</th>
+                            <th>Detail of Dues</th>
+                            <th>Price</th>
+                            <th>Total</th>
+                        </tr>
+                        @{
+                            int sr = 1;
+                            decimal total = 0;
+                        }
+
+                        @foreach (var a in item.BillDeta)
+                        {
+                            <tr>
+                                <td>@sr</td>
+                                <td>@a.Service_Charges</td>
+                                <td>@Convert.ToDecimal(a.Charges).ToString("0.##")</td>
+                                <td><strong>@Convert.ToDecimal(a.Charges).ToString("0.##")</strong></td>
+                            </tr>
+                            total += a.Charges;
+                            sr++;
+                        }
+
+                    </table>
+                </div>
+                <div class="subtotal">
+                    <table>
+                        <tr>
+                            <td width="150"><b>Sub Total:</b></td>
+                            <td width="150"><b>Rs. @Convert.ToDecimal(total).ToString("0.##")</b></td>
+                        </tr>
+                        <tr>
+                            <td><b>Arrears:</b></td>
+                            <td><b>Rs. @Convert.ToDecimal(item.Arrears).ToString("0.##")</b></td>
+                        </tr>
+                        @{var gtotal = total + item.Arrears;}
+                        <tr>
+                            <td><b>Total:</b></td>
+                            <td><b>Rs. @Convert.ToDecimal(gtotal).ToString("0.##")</b></td>
+                        </tr>
+                        @if (item.Amount_Paid != null && item.Amount_Paid != 0)
+                        {
+                            <tr>
+                                <td><b>Amount Paid:</b></td>
+                                <td><b>Rs. @Convert.ToDecimal(item.Amount_Paid).ToString("0.##")</b></td>
+                            </tr>
+                            <tr><td><hr /></td></tr>
+                            var grandtotal = gtotal - item.Amount_Paid;
+                            <tr>
+                                <td><b>Grand Total:</b></td>
+                                <td><b>Rs. @Convert.ToDecimal(grandtotal).ToString("0.##")</b></td>
+                            </tr>
+                        }
+                    </table>
+                </div>
+                <div style="clear:both"></div>
+            </div>
+        }
+    }
+</body>
+</html>

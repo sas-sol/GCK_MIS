@@ -1,0 +1,1427 @@
+﻿@model List<MeherEstateDevelopers.Models.DailyCashierUser_Report>
+@using MeherEstateDevelopers.Models
+<div id="result">
+    @{
+        DailyCashRep Fresult = new DailyCashRep();
+        string[] Types = { ReceiptTypes.Booking.ToString(), ReceiptTypes.Installment.ToString(), ReceiptTypes.BookingToken.ToString(), ReceiptTypes.Cancellation.ToString(), ReceiptTypes.DealershipRegisteration.ToString(), ReceiptTypes.Confirmation.ToString() };
+        string[] Type2 = { ReceiptTypes.ServiceCharges.ToString(), ReceiptTypes.Electricity_Charges.ToString(), ReceiptTypes.New_Connection_Charges.ToString() };
+        string[] Type3 = { ReceiptTypes.Transfer.ToString() };
+        string[] Type4 = { ReceiptTypes.Membership_Fee.ToString(), ReceiptTypes.Membership_Monthly_Fee.ToString(), ReceiptTypes.Fines_And_Penalties.ToString(), ReceiptTypes.Duplicate_Allotment_Letter.ToString(), ReceiptTypes.Duplicate_Customer_File.ToString(), ReceiptTypes.Power_Of_Attorney.ToString(), ReceiptTypes.Other_Recovery.ToString(), ReceiptTypes.Out_Station_Charges.ToString(), ReceiptTypes.Other_Transfer_Charges.ToString(), ReceiptTypes.Dealership_Security.ToString(), ReceiptTypes.DealerAdvance.ToString(), ReceiptTypes.Subsidiary_Recovery.ToString(), ReceiptTypes.Posession_Charges.ToString(), ReceiptTypes.Receivable_Receipt.ToString(), ReceiptTypes.LoanSettlement.ToString() };
+        string[] Type5 = { ReceiptTypes.Advance_Tax_236_C.ToString() };
+        string[] Type6 = { ReceiptTypes.Advance_Tax_236_K.ToString() };
+        string[] Type7 = { ReceiptTypes.Architecture_Fees.ToString() };
+
+        Fresult.FileCollection = Model.Where(x => x.VoucherType == "Receipts" && x.Block == "Sher Afghan" && Types.Contains(x.Type) && (x.Cancel == null || x.ReportType == "Reversal")).ToList();
+        Fresult.PlotCollection = Model.Where(x => x.VoucherType == "Receipts" && x.Block != "Sher Afghan" && x.Module != Modules.CommercialManagement.ToString() && Types.Contains(x.Type) && (x.Cancel == null || x.ReportType == "Reversal")).ToList();
+        Fresult.CommercialCollection = Model.Where(x => x.VoucherType == "Receipts" && x.Module == Modules.CommercialManagement.ToString() && Types.Contains(x.Type) && (x.Cancel == null || x.ReportType == "Reversal")).ToList();
+        Fresult.ServiceChargesCollection = Model.Where(x => x.VoucherType == "Receipts" && x.Block != "Sher Afghan" && Type2.Contains(x.Type) && (x.Cancel == null || x.ReportType == "Reversal")).ToList();
+        Fresult.OtherCollection = Model.Where(x => x.VoucherType == "Receipts" && Type4.Contains(x.Type) && (x.Cancel == null || x.ReportType == "Reversal")).ToList();
+        Fresult.FileTransferCollection = Model.Where(x => x.VoucherType == "Receipts" && x.Block == "Sher Afghan" && Type3.Contains(x.Type) && (x.Cancel == null || x.ReportType == "Reversal")).ToList();
+        Fresult.PlotsTransferCollection = Model.Where(x => x.VoucherType == "Receipts" && x.Block != "Sher Afghan" && x.Module != Modules.CommercialManagement.ToString() && Type3.Contains(x.Type) && (x.Cancel == null || x.ReportType == "Reversal")).ToList();
+        Fresult.CommercialTransferCollection = Model.Where(x => x.VoucherType == "Receipts" && x.Module == Modules.CommercialManagement.ToString() && Type3.Contains(x.Type) && (x.Cancel == null || x.ReportType == "Reversal")).ToList();
+        Fresult.Advance_236_C_Collection = Model.Where(x => x.VoucherType == "Receipts" && x.Block != "Sher Afghan" && Type5.Contains(x.Type) && (x.Cancel == null)).ToList();
+        Fresult.Advance_236_K_Collection = Model.Where(x => x.VoucherType == "Receipts" && x.Block != "Sher Afghan" && Type6.Contains(x.Type) && (x.Cancel == null)).ToList();
+        Fresult.ArchiFees = Model.Where(x => x.VoucherType == "Receipts" && x.Block != "Sher Afghan" && Type7.Contains(x.Type) && (x.Cancel == null)).ToList();
+
+        Fresult.Payments = Model.Where(x => x.VoucherType == "Payments" && (x.Cancel == null)).ToList();
+
+        {
+            Fresult.File_Cash = Fresult.FileCollection.Where(x => x.PaymentType == "Cash" && x.Cancel == null).Sum(x => x.Amount);
+            Fresult.File_Cheque = Fresult.FileCollection.Where(x => x.PaymentType == "Cheque" && x.Cancel == null).Sum(x => x.Amount);
+            Fresult.File_PayOrder = Fresult.FileCollection.Where(x => x.PaymentType == "PayOrder" && x.Cancel == null).Sum(x => x.Amount);
+            Fresult.File_BankDraft = Fresult.FileCollection.Where(x => x.PaymentType == "BankDraft" && x.Cancel == null).Sum(x => x.Amount);
+            Fresult.File_Online = Fresult.FileCollection.Where(x => x.PaymentType.Contains("Online") && x.Cancel == null).Sum(x => x.Amount);
+            Fresult.File_Total = Fresult.FileCollection.Where(x => x.Cancel == null).Sum(x => x.Amount);
+        }
+        {
+            Fresult.Plot_Cash = Fresult.PlotCollection.Where(x => x.PaymentType == "Cash").Sum(x => x.Amount);
+            Fresult.Plot_Cheque = Fresult.PlotCollection.Where(x => x.PaymentType == "Cheque").Sum(x => x.Amount);
+            Fresult.Plot_PayOrder = Fresult.PlotCollection.Where(x => x.PaymentType == "PayOrder").Sum(x => x.Amount);
+            Fresult.Plot_BankDraft = Fresult.PlotCollection.Where(x => x.PaymentType == "BankDraft").Sum(x => x.Amount);
+            Fresult.Plot_Online = Fresult.PlotCollection.Where(x => x.PaymentType.Contains("Online")).Sum(x => x.Amount);
+            Fresult.Plot_Total = Fresult.PlotCollection.Sum(x => x.Amount);
+        }
+        {
+            Fresult.Com_Cash = Fresult.CommercialCollection.Where(x => x.PaymentType == "Cash").Sum(x => x.Amount);
+            Fresult.Com_Cheque = Fresult.CommercialCollection.Where(x => x.PaymentType == "Cheque").Sum(x => x.Amount);
+            Fresult.Com_PayOrder = Fresult.CommercialCollection.Where(x => x.PaymentType == "PayOrder").Sum(x => x.Amount);
+            Fresult.Com_BankDraft = Fresult.CommercialCollection.Where(x => x.PaymentType == "BankDraft").Sum(x => x.Amount);
+            Fresult.Com_Online = Fresult.CommercialCollection.Where(x => x.PaymentType.Contains("Online")).Sum(x => x.Amount);
+            Fresult.Com_Total = Fresult.CommercialCollection.Sum(x => x.Amount);
+        }
+        {
+            Fresult.Ser_Cash = Fresult.ServiceChargesCollection.Where(x => x.PaymentType == "Cash").Sum(x => x.Amount);
+            Fresult.Ser_Cheque = Fresult.ServiceChargesCollection.Where(x => x.PaymentType == "Cheque").Sum(x => x.Amount);
+            Fresult.Ser_PayOrder = Fresult.ServiceChargesCollection.Where(x => x.PaymentType == "PayOrder").Sum(x => x.Amount);
+            Fresult.Ser_BankDraft = Fresult.ServiceChargesCollection.Where(x => x.PaymentType == "BankDraft").Sum(x => x.Amount);
+            Fresult.Ser_Online = Fresult.ServiceChargesCollection.Where(x => x.PaymentType.Contains("Online")).Sum(x => x.Amount);
+            Fresult.Ser_Total = Fresult.ServiceChargesCollection.Sum(x => x.Amount);
+        }
+        {
+            Fresult.Ft_Cash = Fresult.FileTransferCollection.Where(x => x.PaymentType == "Cash").Sum(x => x.Amount);
+            Fresult.Ft_Cheque = Fresult.FileTransferCollection.Where(x => x.PaymentType == "Cheque").Sum(x => x.Amount);
+            Fresult.Ft_PayOrder = Fresult.FileTransferCollection.Where(x => x.PaymentType == "PayOrder").Sum(x => x.Amount);
+            Fresult.Ft_BankDraft = Fresult.FileTransferCollection.Where(x => x.PaymentType == "BankDraft").Sum(x => x.Amount);
+            Fresult.Ft_Online = Fresult.FileTransferCollection.Where(x => x.PaymentType.Contains("Online")).Sum(x => x.Amount);
+            Fresult.Ft_Total = Fresult.FileTransferCollection.Sum(x => x.Amount);
+        }
+        {
+            Fresult.Other_Cash = Fresult.OtherCollection.Where(x => x.PaymentType == "Cash").Sum(x => x.Amount);
+            Fresult.Other_Cheque = Fresult.OtherCollection.Where(x => x.PaymentType == "Cheque").Sum(x => x.Amount);
+            Fresult.Other_PayOrder = Fresult.OtherCollection.Where(x => x.PaymentType == "PayOrder").Sum(x => x.Amount);
+            Fresult.Other_BankDraft = Fresult.OtherCollection.Where(x => x.PaymentType == "BankDraft").Sum(x => x.Amount);
+            Fresult.Other_Online = Fresult.OtherCollection.Where(x => x.PaymentType.Contains("Online")).Sum(x => x.Amount);
+            Fresult.Other_Total = Fresult.OtherCollection.Sum(x => x.Amount);
+        }
+        {
+            Fresult.Ad_C_Cash = Fresult.Advance_236_C_Collection.Where(x => x.PaymentType == "Cash").Sum(x => x.Amount);
+            Fresult.Ad_C_Cheque = Fresult.Advance_236_C_Collection.Where(x => x.PaymentType == "Cheque").Sum(x => x.Amount);
+            Fresult.Ad_C_PayOrder = Fresult.Advance_236_C_Collection.Where(x => x.PaymentType == "PayOrder").Sum(x => x.Amount);
+            Fresult.Ad_C_BankDraft = Fresult.Advance_236_C_Collection.Where(x => x.PaymentType == "BankDraft").Sum(x => x.Amount);
+            Fresult.Ad_C_Online = Fresult.Advance_236_C_Collection.Where(x => x.PaymentType.Contains("Online")).Sum(x => x.Amount);
+            Fresult.Ad_C_Total = Fresult.Advance_236_C_Collection.Sum(x => x.Amount);
+        }
+        {
+            Fresult.Ad_K_Cash = Fresult.Advance_236_K_Collection.Where(x => x.PaymentType == "Cash").Sum(x => x.Amount);
+            Fresult.Ad_K_Cheque = Fresult.Advance_236_K_Collection.Where(x => x.PaymentType == "Cheque").Sum(x => x.Amount);
+            Fresult.Ad_K_PayOrder = Fresult.Advance_236_K_Collection.Where(x => x.PaymentType == "PayOrder").Sum(x => x.Amount);
+            Fresult.Ad_K_BankDraft = Fresult.Advance_236_K_Collection.Where(x => x.PaymentType == "BankDraft").Sum(x => x.Amount);
+            Fresult.Ad_K_Online = Fresult.Advance_236_K_Collection.Where(x => x.PaymentType.Contains("Online")).Sum(x => x.Amount);
+            Fresult.Ad_K_Total = Fresult.Advance_236_K_Collection.Sum(x => x.Amount);
+        }
+        {
+            Fresult.Pt_Cash = Fresult.PlotsTransferCollection.Where(x => x.PaymentType == "Cash").Sum(x => x.Amount);
+            Fresult.Pt_Cheque = Fresult.PlotsTransferCollection.Where(x => x.PaymentType == "Cheque").Sum(x => x.Amount);
+            Fresult.Pt_PayOrder = Fresult.PlotsTransferCollection.Where(x => x.PaymentType == "PayOrder").Sum(x => x.Amount);
+            Fresult.Pt_BankDraft = Fresult.PlotsTransferCollection.Where(x => x.PaymentType == "BankDraft").Sum(x => x.Amount);
+            Fresult.Pt_Online = Fresult.PlotsTransferCollection.Where(x => x.PaymentType.Contains("Online")).Sum(x => x.Amount);
+            Fresult.Pt_Total = Fresult.PlotsTransferCollection.Sum(x => x.Amount);
+        }
+        {
+            Fresult.Ct_Cash = Fresult.CommercialTransferCollection.Where(x => x.PaymentType == "Cash").Sum(x => x.Amount);
+            Fresult.Ct_Cheque = Fresult.CommercialTransferCollection.Where(x => x.PaymentType == "Cheque").Sum(x => x.Amount);
+            Fresult.Ct_PayOrder = Fresult.CommercialTransferCollection.Where(x => x.PaymentType == "PayOrder").Sum(x => x.Amount);
+            Fresult.Ct_BankDraft = Fresult.CommercialTransferCollection.Where(x => x.PaymentType == "BankDraft").Sum(x => x.Amount);
+            Fresult.Ct_Online = Fresult.CommercialTransferCollection.Where(x => x.PaymentType.Contains("Online")).Sum(x => x.Amount);
+            Fresult.Ct_Total = Fresult.CommercialTransferCollection.Sum(x => x.Amount);
+        }
+        {
+            Fresult.Pay_Cash = Fresult.Payments.Where(x => x.PaymentType == "Cash").Sum(x => x.Amount);
+            Fresult.Pay_Cheque = Fresult.Payments.Where(x => x.PaymentType == "Cheque").Sum(x => x.Amount);
+            Fresult.Pay_PayOrder = Fresult.Payments.Where(x => x.PaymentType == "PayOrder").Sum(x => x.Amount);
+            Fresult.Pay_BankDraft = Fresult.Payments.Where(x => x.PaymentType == "BankDraft").Sum(x => x.Amount);
+            Fresult.Pay_Online = Fresult.Payments.Where(x => x.PaymentType.Contains("Online")).Sum(x => x.Amount);
+            Fresult.Pay_Total = Fresult.Payments.Sum(x => x.Amount);
+        }
+
+        Fresult.Cash = Model.Where(x => x.VoucherType == "Receipts" && x.PaymentType == "Cash" && x.Cancel == null).Sum(x => x.Amount);
+        Fresult.Cheque = Model.Where(x => x.VoucherType == "Receipts" && x.PaymentType == "Cheque" && x.Cancel == null).Sum(x => x.Amount);
+        Fresult.PayOrder = Model.Where(x => x.VoucherType == "Receipts" && x.PaymentType == "PayOrder" && x.Cancel == null).Sum(x => x.Amount);
+        Fresult.BankDraft = Model.Where(x => x.VoucherType == "Receipts" && x.PaymentType == "BankDraft" && x.Cancel == null).Sum(x => x.Amount);
+        Fresult.Online = Model.Where(x => x.VoucherType == "Receipts" && x.PaymentType.Contains("Online") && x.Cancel == null).Sum(x => x.Amount);
+        Fresult.Total = Model.Where(x => x.VoucherType == "Receipts" && x.Cancel == null).Sum(x => x.Amount);
+
+        Fresult.Grand_Cash = Model.Where(x => x.PaymentType == "Cash" && x.Cancel == null).Sum(x => x.Amount);
+        Fresult.Grand_Cheque = Model.Where(x => x.PaymentType == "Cheque" && x.Cancel == null).Sum(x => x.Amount);
+        Fresult.Grand_PayOrder = Model.Where(x => x.PaymentType == "PayOrder" && x.Cancel == null).Sum(x => x.Amount);
+        Fresult.Grand_BankDraft = Model.Where(x => x.PaymentType == "BankDraft" && x.Cancel == null).Sum(x => x.Amount);
+        Fresult.Grand_Online = Model.Where(x => x.PaymentType.Contains("Online") && x.Cancel == null).Sum(x => x.Amount);
+        Fresult.Grand_Total = Model.Where(x => x.Cancel == null).Sum(x => x.Amount);
+
+        Fresult.CancelledReceipts = Model.Where(x => x.Cancel == true && x.ReportType is null).ToList();
+
+        if (ViewBag.From == ViewBag.To)
+        {
+            <table class="table table-striped table-bordered" cellspacing="0" width="100%">
+                <thead>
+                    <tr>
+                        <td colspan="5" style="font-size:16px"><b>@String.Format("{0:D}", ViewBag.From)</b></td>
+                    </tr>
+                </thead>
+            </table>
+        }
+        else
+        {
+            <table class="table table-striped table-bordered" cellspacing="0" width="100%">
+                <thead>
+                    <tr>
+                        <td colspan="5" style="font-size:16px"><b>@String.Format("{0:D}", ViewBag.From) - @String.Format("{0:D}", ViewBag.To)</b></td>
+                    </tr>
+                </thead>
+            </table>
+        }
+
+        if (Fresult.FileCollection.Any())
+        {
+            <table class="table table-striped table-bordered" cellspacing="0" width="100%">
+                <thead>
+                    <tr>
+                        <td colspan="19">Sher Afghan Recovery</td>
+                    </tr>
+                    <tr>
+                        <th>Sr.</th>
+                        <th>Amount</th>
+                        <th>Receipt No.</th>
+                        <th>File</th>
+                        <th>Block</th>
+                        <th>Plot Type</th>
+                        <th>Size</th>
+                        <th>Dealership</th>
+                        <th>Cash/Bank</th>
+                        <th>Bank</th>
+                        <th>No.</th>
+                        <th>Inst Date</th>
+                        <th>Name</th>
+                        <th>Contact</th>
+                        <th>Type</th>
+                        <th>Project</th>
+                        <th>Time</th>
+                        <th>Cashier Name</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        int srcount = 1;
+                        foreach (var item in Fresult.FileCollection)
+                        {
+                            string col = "";
+                            if (item.Amount < 0)
+                            {
+                                col = "bgc-yellow-50";
+                                var hold = item.DateTime;
+                                item.DateTime = item.ReversalDate;
+                                item.ReversalDate = hold;
+                            }
+                            <tr class="@col">
+                                <td>@srcount</td>
+                                <td>@string.Format("{0:n0}", item.Amount)</td>
+                                <td>@item.ReceiptNo</td>
+                                <td>@item.File_Plot_Number</td>
+                                <td>@item.Block</td>
+                                <td>@item.Plot_Type</td>
+                                <td>@item.Size</td>
+                                <td>@item.Dealership_Name</td>
+                                <td>@item.PaymentType</td>
+                                <td>@item.Bank</td>
+                                <td>@item.Ch_Pay_Draft_No</td>
+                                <td>@item.Ch_Pay_Draft_Date</td>
+                                <td>@item.Name</td>
+                                <td>@item.Contact</td>
+                                <td>@item.Type</td>
+                                <td>@item.Project</td>
+                                <td>@string.Format("{0:MM-dd-yyy}", item.DateTime)</td>
+                                <td>@item.Cashier_Name</td>
+                                @if (User.IsInRole("Print Duplicate Receipt") || User.IsInRole("Administrator"))
+                                {
+                                    <td>
+                                        <ul style="list-style:none;margin-left:0px;">
+                                            <li class="dropdown">
+                                                <a href="" class="dropdown-toggle no-after peers " data-toggle="dropdown">
+                                                    <i class="ti-more-alt  c-grey-900" style="transform:rotate(90deg);"></i>
+                                                </a>
+                                                <ul class="dropdown-menu">
+                                                    <li><a class="pointer orig-rece" id="@item.Id"><span>Original</span></a></li>
+                                                    <li><a class="pointer dup-rece" id="@item.Id"><span>Duplicate</span></a></li>
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                    </td>
+
+                                }
+                            </tr>
+                            srcount++;
+                        }
+                    }
+                    <tr>
+                        <th>Total</th>
+                        <td>@string.Format("{0:n0}", Fresult.File_Total)</td>
+                        <th>Cash</th>
+                        <td>@string.Format("{0:n0}", Fresult.File_Cash)</td>
+                        <th>Cheques</th>
+                        <td>@string.Format("{0:n0}", Fresult.File_Cheque)</td>
+                        <th>Payorders</th>
+                        <td>@string.Format("{0:n0}", Fresult.File_PayOrder)</td>
+                        <th>Bank Draft</th>
+                        <td>@string.Format("{0:n0}", Fresult.File_BankDraft)</td>
+                        <th>Online</th>
+                        <td>@string.Format("{0:n0}", Fresult.File_Online)</td>
+                        <td colspan="2"></td>
+                    </tr>
+                </tbody>
+            </table>
+        }
+        if (Fresult.FileTransferCollection.Any())
+        {
+            <table class="table table-striped table-bordered" cellspacing="0" width="100%">
+                <thead>
+                    <tr>
+                        <th>Name: </th>
+                        <td colspan="19">Sher Afghan Transfer Collection</td>
+                    </tr>
+                    <tr>
+                        <th>Sr.</th>
+                        <th>Amount</th>
+                        <th>Receipt No.</th>
+                        <th>Plot No.</th>
+                        <th>Block</th>
+                        <th>Plot Type</th>
+                        <th>Size</th>
+                        <th>Dealership</th>
+                        <th>Cash/Bank</th>
+                        <th>Bank</th>
+                        <th>No.</th>
+                        <th>inst Date</th>
+                        <th>Name</th>
+                        <th>Contact</th>
+                        <th>Type</th>
+                        <th>Project</th>
+                        <th>Time</th>
+                        <th>Cashier Name</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        int srcount = 1;
+                        foreach (var item in Fresult.FileTransferCollection)
+                        {
+                            <tr>
+                                <td>@srcount</td>
+                                <td>@string.Format("{0:n0}", item.Amount)</td>
+                                <td>@item.ReceiptNo</td>
+                                <td>@item.File_Plot_Number</td>
+                                <td>@item.Block</td>
+                                <td>@item.Plot_Type</td>
+                                <td>@item.Size</td>
+                                <td>@item.Dealership_Name</td>
+                                <td>@item.PaymentType</td>
+                                <td>@item.Bank</td>
+                                <td>@item.Ch_Pay_Draft_No</td>
+                                <td>@item.Ch_Pay_Draft_Date</td>
+                                <td>@item.Name</td>
+                                <td>@item.Contact</td>
+                                <td>@item.Type</td>
+                                <td>@item.Project</td>
+                                <td>@string.Format("{0:t}", item.DateTime)</td>
+                                <td>@item.Cashier_Name</td>
+                                @if (User.IsInRole("Print Duplicate Receipt") || User.IsInRole("Administrator"))
+                                {
+                                    <td>
+                                        <ul style="list-style:none;margin-left:0px;">
+                                            <li class="dropdown">
+                                                <a href="" class="dropdown-toggle no-after peers " data-toggle="dropdown">
+                                                    <i class="ti-more-alt  c-grey-900" style="transform:rotate(90deg);"></i>
+                                                </a>
+                                                <ul class="dropdown-menu">
+                                                    <li><a class="pointer orig-rece" id="@item.Id"><span>Original</span></a></li>
+                                                    <li><a class="pointer dup-rece" id="@item.Id"><span>Duplicate</span></a></li>
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                    </td>
+
+                                }
+                            </tr>
+                            srcount++;
+                        }
+                    }
+                    <tr>
+                        <th>Total</th>
+                        <td>@string.Format("{0:n0}", Fresult.Ft_Total)</td>
+                        <th>Cash</th>
+                        <td>@string.Format("{0:n0}", Fresult.Ft_Cash)</td>
+                        <th>Cheques</th>
+                        <td>@string.Format("{0:n0}", Fresult.Ft_Cheque)</td>
+                        <th>Payorders</th>
+                        <td>@string.Format("{0:n0}", Fresult.Ft_PayOrder)</td>
+                        <th>Bank Draft</th>
+                        <td>@string.Format("{0:n0}", Fresult.Ft_BankDraft)</td>
+                        <th>Online</th>
+                        <td>@string.Format("{0:n0}", Fresult.Ft_Online)</td>
+                        <td colspan="3"></td>
+                    </tr>
+                </tbody>
+            </table>
+        }
+        if (Fresult.PlotCollection.Any())
+        {
+            <table class="table table-striped table-bordered" cellspacing="0" width="100%">
+                <thead>
+                    <tr>
+                        <td colspan="19">Plot Recovery</td>
+                    </tr>
+                    <tr>
+                        <th>Sr.</th>
+                        <th>Amount</th>
+                        <th>Receipt No.</th>
+                        <th>Plot No.</th>
+                        <th>Block</th>
+                        <th>Plot Type</th>
+                        <th>Size</th>
+                        <th>Dealership</th>
+                        <th>Cash/Bank</th>
+                        <th>Bank</th>
+                        <th>No.</th>
+                        <th>inst Date</th>
+                        <th>Name</th>
+                        <th>Contact</th>
+                        <th>Type</th>
+                        <th>Project</th>
+                        <th>Time</th>
+                        <th>Cashier Name</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        int srcount = 1;
+                        foreach (var item in Fresult.PlotCollection)
+                        {
+                            string col = "";
+                            if (item.Amount < 0)
+                            {
+                                col = "bgc-yellow-50";
+                            }
+                            <tr class="@col">
+                                <td>@srcount</td>
+                                <td>@string.Format("{0:n0}", item.Amount)</td>
+                                <td>@item.ReceiptNo</td>
+                                <td>@item.File_Plot_Number</td>
+                                <td>@item.Block</td>
+                                <td>@item.Plot_Type</td>
+                                <td>@item.Size</td>
+                                <td>@item.Dealership_Name</td>
+                                <td>@item.PaymentType</td>
+                                <td>@item.Bank</td>
+                                <td>@item.Ch_Pay_Draft_No</td>
+                                <td>@item.Ch_Pay_Draft_Date</td>
+                                <td>@item.Name</td>
+                                <td>@item.Contact</td>
+                                <td>@item.Type</td>
+                                <td>@item.Project</td>
+                                <td>@string.Format("{0:MM-dd-yyy t}", item.DateTime)</td>
+                                <td>@item.Cashier_Name</td>
+                                @if (User.IsInRole("Print Duplicate Receipt") || User.IsInRole("Administrator"))
+                                {
+                                    <td>
+                                        <ul style="list-style:none;margin-left:0px;">
+                                            <li class="dropdown">
+                                                <a href="" class="dropdown-toggle no-after peers " data-toggle="dropdown">
+                                                    <i class="ti-more-alt  c-grey-900" style="transform:rotate(90deg);"></i>
+                                                </a>
+                                                <ul class="dropdown-menu">
+                                                    <li><a class="pointer orig-rece" id="@item.Id"><span>Original</span></a></li>
+                                                    <li><a class="pointer dup-rece" id="@item.Id"><span>Duplicate</span></a></li>
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                    </td>
+
+                                }
+                            </tr>
+                            srcount++;
+                        }
+                    }
+                    <tr>
+                        <th>Total</th>
+                        <td>@string.Format("{0:n0}", Fresult.Plot_Total)</td>
+                        <th>Cash</th>
+                        <td>@string.Format("{0:n0}", Fresult.Plot_Cash)</td>
+                        <th>Cheques</th>
+                        <td>@string.Format("{0:n0}", Fresult.Plot_Cheque)</td>
+                        <th>Payorders</th>
+                        <td>@string.Format("{0:n0}", Fresult.Plot_PayOrder)</td>
+                        <th>Bank Draft</th>
+                        <td>@string.Format("{0:n0}", Fresult.Plot_BankDraft)</td>
+                        <th>Online</th>
+                        <td>@string.Format("{0:n0}", Fresult.Plot_Online)</td>
+                        <td colspan="3"></td>
+                    </tr>
+                </tbody>
+            </table>
+        }
+        if (Fresult.PlotsTransferCollection.Any())
+        {
+            <table class="table table-striped table-bordered" cellspacing="0" width="100%">
+                <thead>
+                    <tr>
+                        <th>Name: </th>
+                        <td colspan="19">Plots Transfer Collection</td>
+                    </tr>
+                    <tr>
+                        <th>Sr.</th>
+                        <th>Amount</th>
+                        <th>Receipt No.</th>
+                        <th>Plot No.</th>
+                        <th>Block</th>
+                        <th>Plot Type</th>
+                        <th>Size</th>
+                        <th>Dealership</th>
+                        <th>Cash/Bank</th>
+                        <th>Bank</th>
+                        <th>No.</th>
+                        <th>inst Date</th>
+                        <th>Name</th>
+                        <th>Contact</th>
+                        <th>Type</th>
+                        <th>Project</th>
+                        <th>Time</th>
+                        <th>Cashier Name</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        int srcount = 1;
+                        foreach (var item in Fresult.PlotsTransferCollection)
+                        {
+                            <tr>
+                                <td>@srcount</td>
+                                <td>@string.Format("{0:n0}", item.Amount)</td>
+                                <td>@item.ReceiptNo</td>
+                                <td>@item.File_Plot_Number</td>
+                                <td>@item.Block</td>
+                                <td>@item.Plot_Type</td>
+                                <td>@item.Size</td>
+                                <td>@item.Dealership_Name</td>
+                                <td>@item.PaymentType</td>
+                                <td>@item.Bank</td>
+                                <td>@item.Ch_Pay_Draft_No</td>
+                                <td>@item.Ch_Pay_Draft_Date</td>
+                                <td>@item.Name</td>
+                                <td>@item.Contact</td>
+                                <td>@item.Type</td>
+                                <td>@item.Project</td>
+                                <td>@string.Format("{0:t}", item.DateTime)</td>
+                                <td>@item.Cashier_Name</td>
+                                @if (User.IsInRole("Print Duplicate Receipt") || User.IsInRole("Administrator"))
+                                {
+                                    <td>
+                                        <ul style="list-style:none;margin-left:0px;">
+                                            <li class="dropdown">
+                                                <a href="" class="dropdown-toggle no-after peers " data-toggle="dropdown">
+                                                    <i class="ti-more-alt  c-grey-900" style="transform:rotate(90deg);"></i>
+                                                </a>
+                                                <ul class="dropdown-menu">
+                                                    <li><a class="pointer orig-rece" id="@item.Id"><span>Original</span></a></li>
+                                                    <li><a class="pointer dup-rece" id="@item.Id"><span>Duplicate</span></a></li>
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                    </td>
+
+                                }
+                            </tr>
+                            srcount++;
+                        }
+                    }
+                    <tr>
+                        <th>Total</th>
+                        <td>@string.Format("{0:n0}", Fresult.Pt_Total)</td>
+                        <th>Cash</th>
+                        <td>@string.Format("{0:n0}", Fresult.Pt_Cash)</td>
+                        <th>Cheques</th>
+                        <td>@string.Format("{0:n0}", Fresult.Pt_Cheque)</td>
+                        <th>Payorders</th>
+                        <td>@string.Format("{0:n0}", Fresult.Pt_PayOrder)</td>
+                        <th>Bank Draft</th>
+                        <td>@string.Format("{0:n0}", Fresult.Pt_BankDraft)</td>
+                        <th>Online</th>
+                        <td>@string.Format("{0:n0}", Fresult.Pt_Online)</td>
+                        <td colspan="3"></td>
+                    </tr>
+                </tbody>
+            </table>
+        }
+        if (Fresult.CommercialCollection.Any())
+        {
+            foreach (var projects in Fresult.CommercialCollection.GroupBy(x => new { x.Project }))
+            {
+                <table class="table table-striped table-bordered" cellspacing="0" width="100%">
+                    <thead>
+                        <tr>
+                            <td colspan="19">@projects.Key.Project Recovery</td>
+                        </tr>
+                        <tr>
+                            <th>Sr.</th>
+                            <th>Amount</th>
+                            <th>Receipt No.</th>
+                            <th>Plot No.</th>
+                            <th>Block</th>
+                            <th>Plot Type</th>
+                            <th>Size</th>
+                            <th>Dealership</th>
+                            <th>Cash/Bank</th>
+                            <th>Bank</th>
+                            <th>No.</th>
+                            <th>inst Date</th>
+                            <th>Name</th>
+                            <th>Contact</th>
+                            <th>Type</th>
+                            <th>Project</th>
+                            <th>Time</th>
+                            <th>Cashier Name</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            int srcount = 1;
+                            foreach (var item in projects)
+                            {
+                                string col = "";
+                                if (item.Amount < 0)
+                                {
+                                    col = "bgc-yellow-50";
+                                }
+                                <tr class="@col">
+                                    <td>@srcount</td>
+                                    <td>@string.Format("{0:n0}", item.Amount)</td>
+                                    <td>@item.ReceiptNo</td>
+                                    <td>@item.File_Plot_Number</td>
+                                    <td>@item.Block</td>
+                                    <td>@item.Plot_Type</td>
+                                    <td>@item.Size</td>
+                                    <td>@item.Dealership_Name</td>
+                                    <td>@item.PaymentType</td>
+                                    <td>@item.Bank</td>
+                                    <td>@item.Ch_Pay_Draft_No</td>
+                                    <td>@item.Ch_Pay_Draft_Date</td>
+                                    <td>@item.Name</td>
+                                    <td>@item.Contact</td>
+                                    <td>@item.Type</td>
+                                    <td>@item.Project</td>
+                                    <td>@string.Format("{0:MM-dd-yyy t}", item.DateTime)</td>
+                                    <td>@item.Cashier_Name</td>
+                                    @if (User.IsInRole("Print Duplicate Receipt") || User.IsInRole("Administrator"))
+                                    {
+                                        <td>
+                                            <ul style="list-style:none;margin-left:0px;">
+                                                <li class="dropdown">
+                                                    <a href="" class="dropdown-toggle no-after peers " data-toggle="dropdown">
+                                                        <i class="ti-more-alt  c-grey-900" style="transform:rotate(90deg);"></i>
+                                                    </a>
+                                                    <ul class="dropdown-menu">
+                                                        <li><a class="pointer orig-rece" id="@item.Id"><span>Original</span></a></li>
+                                                        <li><a class="pointer dup-rece" id="@item.Id"><span>Duplicate</span></a></li>
+                                                    </ul>
+                                                </li>
+                                            </ul>
+                                        </td>
+
+                                    }
+                                </tr>
+                                srcount++;
+                            }
+                        }
+                        <tr>
+                            <th>Total</th>
+                            <td>@string.Format("{0:n0}", Fresult.CommercialCollection.Where(x => x.Project == projects.Key.Project).Sum(x => x.Amount))</td>
+                            <th>Cash</th>
+                            <td>@string.Format("{0:n0}", Fresult.CommercialCollection.Where(x => x.Project == projects.Key.Project && x.PaymentType == "Cash").Sum(x => x.Amount))</td>
+                            <th>Cheques</th>
+                            <td>@string.Format("{0:n0}", Fresult.CommercialCollection.Where(x => x.Project == projects.Key.Project && x.PaymentType == "Cheque").Sum(x => x.Amount))</td>
+                            <th>Payorders</th>
+                            <td>@string.Format("{0:n0}", Fresult.CommercialCollection.Where(x => x.Project == projects.Key.Project && x.PaymentType == "PayOrder").Sum(x => x.Amount))</td>
+                            <th>Bank Draft</th>
+                            <td>@string.Format("{0:n0}", Fresult.CommercialCollection.Where(x => x.Project == projects.Key.Project && x.PaymentType == "BankDraft").Sum(x => x.Amount))</td>
+                            <th>Online</th>
+                            <td>@string.Format("{0:n0}", Fresult.CommercialCollection.Where(x => x.Project == projects.Key.Project && x.PaymentType.Contains("Online")).Sum(x => x.Amount))</td>
+                            <td colspan="3"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            }
+        }
+        if (Fresult.CommercialTransferCollection.Any())
+        {
+            foreach (var projects in Fresult.CommercialTransferCollection.GroupBy(x => new { x.Project }))
+            {
+                <table class="table table-striped table-bordered" cellspacing="0" width="100%">
+                    <thead>
+                        <tr>
+                            <td colspan="19">@projects.Key.Project Transfer Collection</td>
+                        </tr>
+                        <tr>
+                            <th>Sr.</th>
+                            <th>Amount</th>
+                            <th>Receipt No.</th>
+                            <th>Plot No.</th>
+                            <th>Block</th>
+                            <th>Plot Type</th>
+                            <th>Size</th>
+                            <th>Dealership</th>
+                            <th>Cash/Bank</th>
+                            <th>Bank</th>
+                            <th>No.</th>
+                            <th>inst Date</th>
+                            <th>Name</th>
+                            <th>Contact</th>
+                            <th>Type</th>
+                            <th>Project</th>
+                            <th>Time</th>
+                            <th>Cashier Name</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            int srcount = 1;
+                            foreach (var item in projects)
+                            {
+                                string col = "";
+                                if (item.Amount < 0)
+                                {
+                                    col = "bgc-yellow-50";
+                                }
+                                <tr class="@col">
+                                    <td>@srcount</td>
+                                    <td>@string.Format("{0:n0}", item.Amount)</td>
+                                    <td>@item.ReceiptNo</td>
+                                    <td>@item.File_Plot_Number</td>
+                                    <td>@item.Block</td>
+                                    <td>@item.Plot_Type</td>
+                                    <td>@item.Size</td>
+                                    <td>@item.Dealership_Name</td>
+                                    <td>@item.PaymentType</td>
+                                    <td>@item.Bank</td>
+                                    <td>@item.Ch_Pay_Draft_No</td>
+                                    <td>@item.Ch_Pay_Draft_Date</td>
+                                    <td>@item.Name</td>
+                                    <td>@item.Contact</td>
+                                    <td>@item.Type</td>
+                                    <td>@item.Project</td>
+                                    <td>@string.Format("{0:MM-dd-yyy t}", item.DateTime)</td>
+                                    <td>@item.Cashier_Name</td>
+                                    @if (User.IsInRole("Print Duplicate Receipt") || User.IsInRole("Administrator"))
+                                    {
+                                        <td>
+                                            <ul style="list-style:none;margin-left:0px;">
+                                                <li class="dropdown">
+                                                    <a href="" class="dropdown-toggle no-after peers " data-toggle="dropdown">
+                                                        <i class="ti-more-alt  c-grey-900" style="transform:rotate(90deg);"></i>
+                                                    </a>
+                                                    <ul class="dropdown-menu">
+                                                        <li><a class="pointer orig-rece" id="@item.Id"><span>Original</span></a></li>
+                                                        <li><a class="pointer dup-rece" id="@item.Id"><span>Duplicate</span></a></li>
+                                                    </ul>
+                                                </li>
+                                            </ul>
+                                        </td>
+
+                                    }
+                                </tr>
+                                srcount++;
+                            }
+                        }
+                        <tr>
+                            <th>Total</th>
+                            <td>@string.Format("{0:n0}", Fresult.CommercialTransferCollection.Where(x => x.Project == projects.Key.Project).Sum(x => x.Amount))</td>
+                            <th>Cash</th>
+                            <td>@string.Format("{0:n0}", Fresult.CommercialTransferCollection.Where(x => x.Project == projects.Key.Project && x.PaymentType == "Cash").Sum(x => x.Amount))</td>
+                            <th>Cheques</th>
+                            <td>@string.Format("{0:n0}", Fresult.CommercialTransferCollection.Where(x => x.Project == projects.Key.Project && x.PaymentType == "Cheque").Sum(x => x.Amount))</td>
+                            <th>Payorders</th>
+                            <td>@string.Format("{0:n0}", Fresult.CommercialTransferCollection.Where(x => x.Project == projects.Key.Project && x.PaymentType == "PayOrder").Sum(x => x.Amount))</td>
+                            <th>Bank Draft</th>
+                            <td>@string.Format("{0:n0}", Fresult.CommercialTransferCollection.Where(x => x.Project == projects.Key.Project && x.PaymentType == "BankDraft").Sum(x => x.Amount))</td>
+                            <th>Online</th>
+                            <td>@string.Format("{0:n0}", Fresult.CommercialTransferCollection.Where(x => x.Project == projects.Key.Project && x.PaymentType.Contains("Online")).Sum(x => x.Amount))</td>
+                            <td colspan="3"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            }
+        }
+
+        if (Fresult.ServiceChargesCollection.Any())
+        {
+            <table class="table table-striped table-bordered" cellspacing="0" width="100%">
+                <thead>
+                    <tr>
+                        <td colspan="19">Service Charges Recovery</td>
+                    </tr>
+                    <tr>
+                        <th>Sr.</th>
+                        <th>Amount</th>
+                        <th>Receipt No.</th>
+                        <th>Plot No.</th>
+                        <th>Block</th>
+                        <th>Plot Type</th>
+                        <th>Size</th>
+                        <th>Dealership</th>
+                        <th>Cash/Bank</th>
+                        <th>Bank</th>
+                        <th>No.</th>
+                        <th>inst Date</th>
+                        <th>Name</th>
+                        <th>Contact</th>
+                        <th>Type</th>
+                        <th>Project</th>
+                        <th>Time</th>
+                        <th>Cashier Name</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        int srcount = 1;
+                        foreach (var item in Fresult.ServiceChargesCollection)
+                        {
+                            string col = "";
+                            if (item.Amount < 0)
+                            {
+                                col = "bgc-yellow-50";
+                            }
+                            <tr class="@col">
+                                <td>@srcount</td>
+                                <td>@string.Format("{0:n0}", item.Amount)</td>
+                                <td>@item.ReceiptNo</td>
+                                <td>@item.File_Plot_Number</td>
+                                <td>@item.Block</td>
+                                <td>@item.Plot_Type</td>
+                                <td>@item.Size</td>
+                                <td>@item.Dealership_Name</td>
+                                <td>@item.PaymentType</td>
+                                <td>@item.Bank</td>
+                                <td>@item.Ch_Pay_Draft_No</td>
+                                <td>@item.Ch_Pay_Draft_Date</td>
+                                <td>@item.Name</td>
+                                <td>@item.Contact</td>
+                                <td>@item.Type</td>
+                                <td>@item.Project</td>
+                                <td>@string.Format("{0:MM-dd-yyy t}", item.DateTime)</td>
+                                <td>@item.Cashier_Name</td>
+                                @if (User.IsInRole("Print Duplicate Receipt") || User.IsInRole("Administrator"))
+                                {
+                                    <td>
+                                        <ul style="list-style:none;margin-left:0px;">
+                                            <li class="dropdown">
+                                                <a href="" class="dropdown-toggle no-after peers " data-toggle="dropdown">
+                                                    <i class="ti-more-alt  c-grey-900" style="transform:rotate(90deg);"></i>
+                                                </a>
+                                                <ul class="dropdown-menu">
+                                                    <li><a class="pointer orig-rece" id="@item.Id"><span>Original</span></a></li>
+                                                    <li><a class="pointer dup-rece" id="@item.Id"><span>Duplicate</span></a></li>
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                    </td>
+
+                                }
+                            </tr>
+                            srcount++;
+                        }
+                    }
+                    <tr>
+                        <th>Total</th>
+                        <td>@string.Format("{0:n0}", Fresult.Ser_Total)</td>
+                        <th>Cash</th>
+                        <td>@string.Format("{0:n0}", Fresult.Ser_Cash)</td>
+                        <th>Cheques</th>
+                        <td>@string.Format("{0:n0}", Fresult.Ser_Cheque)</td>
+                        <th>Payorders</th>
+                        <td>@string.Format("{0:n0}", Fresult.Ser_PayOrder)</td>
+                        <th>Bank Draft</th>
+                        <td>@string.Format("{0:n0}", Fresult.Ser_BankDraft)</td>
+                        <th>Online</th>
+                        <td>@string.Format("{0:n0}", Fresult.Ser_Online)</td>
+                        <td colspan="3"></td>
+                    </tr>
+                </tbody>
+            </table>
+        }
+
+        if (Fresult.Advance_236_C_Collection.Any())
+        {
+            <table class="table table-striped table-bordered" cellspacing="0" width="100%">
+                <thead>
+                    <tr>
+                        <td colspan="19">Advance Tax 236 C - Seller</td>
+                    </tr>
+                    <tr>
+                        <th>Sr.</th>
+                        <th>Amount</th>
+                        <th>Receipt No.</th>
+                        <th>Plot No.</th>
+                        <th>Block</th>
+                        <th>Plot Type</th>
+                        <th>Size</th>
+                        <th>Cash/Bank</th>
+                        <th>Bank</th>
+                        <th>No.</th>
+                        <th>inst Date</th>
+                        <th>Name</th>
+                        <th>Contact</th>
+                        <th>Type</th>
+                        <th>CNIC</th>
+                        <th>Time</th>
+                        <th>Cashier Name</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        int srcount = 1;
+                        foreach (var item in Fresult.Advance_236_C_Collection)
+                        {
+                            string col = "";
+                            if (item.Amount < 0)
+                            {
+                                col = "bgc-yellow-50";
+                            }
+                            <tr class="@col">
+                                <td>@srcount</td>
+                                <td>@string.Format("{0:n0}", item.Amount)</td>
+                                <td>@item.ReceiptNo</td>
+                                <td>@item.File_Plot_Number</td>
+                                <td>@item.Block</td>
+                                <td>@item.Plot_Type</td>
+                                <td>@item.Size</td>
+                                <td>@item.PaymentType</td>
+                                <td>@item.Bank</td>
+                                <td>@item.Ch_Pay_Draft_No</td>
+                                <td>@item.Ch_Pay_Draft_Date</td>
+                                <td>@item.Name</td>
+                                <td>@item.Contact</td>
+                                <td>@item.Type</td>
+                                <td>@item.Project</td>
+                                <td>@string.Format("{0:MM-dd-yyy t}", item.DateTime)</td>
+                                <td>@item.Cashier_Name</td>
+                                @if (User.IsInRole("Print Duplicate Receipt") || User.IsInRole("Administrator"))
+                                {
+                                    <td>
+                                        <ul style="list-style:none;margin-left:0px;">
+                                            <li class="dropdown">
+                                                <a href="" class="dropdown-toggle no-after peers " data-toggle="dropdown">
+                                                    <i class="ti-more-alt  c-grey-900" style="transform:rotate(90deg);"></i>
+                                                </a>
+                                                <ul class="dropdown-menu">
+                                                    <li><a class="pointer orig-rece" id="@item.Id"><span>Original</span></a></li>
+                                                    <li><a class="pointer dup-rece" id="@item.Id"><span>Duplicate</span></a></li>
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                    </td>
+
+                                }
+                            </tr>
+                            srcount++;
+                        }
+                    }
+                    <tr>
+                        <th>Total</th>
+                        <td>@string.Format("{0:n0}", Fresult.Ad_C_Total)</td>
+                        <th>Cash</th>
+                        <td>@string.Format("{0:n0}", Fresult.Ad_C_Cash)</td>
+                        <th>Cheques</th>
+                        <td>@string.Format("{0:n0}", Fresult.Ad_C_Cheque)</td>
+                        <th>Payorders</th>
+                        <td>@string.Format("{0:n0}", Fresult.Ad_C_PayOrder)</td>
+                        <th>Bank Draft</th>
+                        <td>@string.Format("{0:n0}", Fresult.Ad_C_BankDraft)</td>
+                        <th>Online</th>
+                        <td>@string.Format("{0:n0}", Fresult.Ad_C_Online)</td>
+                        <td colspan="3"></td>
+                    </tr>
+                </tbody>
+            </table>
+        }
+        if (Fresult.Advance_236_K_Collection.Any())
+        {
+            <table class="table table-striped table-bordered" cellspacing="0" width="100%">
+                <thead>
+                    <tr>
+                        <td colspan="19">Advance Tax 236 K - Buyer</td>
+                    </tr>
+                    <tr>
+                        <th>Sr.</th>
+                        <th>Amount</th>
+                        <th>Receipt No.</th>
+                        <th>Plot No.</th>
+                        <th>Block</th>
+                        <th>Plot Type</th>
+                        <th>Size</th>
+                        <th>Cash/Bank</th>
+                        <th>Bank</th>
+                        <th>No.</th>
+                        <th>inst Date</th>
+                        <th>Name</th>
+                        <th>Contact</th>
+                        <th>Type</th>
+                        <th>CNIC</th>
+                        <th>Time</th>
+                        <th>Cashier Name</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        int srcount = 1;
+                        foreach (var item in Fresult.Advance_236_K_Collection)
+                        {
+                            string col = "";
+                            if (item.Amount < 0)
+                            {
+                                col = "bgc-yellow-50";
+                            }
+                            <tr class="@col">
+                                <td>@srcount</td>
+                                <td>@string.Format("{0:n0}", item.Amount)</td>
+                                <td>@item.ReceiptNo</td>
+                                <td>@item.File_Plot_Number</td>
+                                <td>@item.Block</td>
+                                <td>@item.Plot_Type</td>
+                                <td>@item.Size</td>
+                                <td>@item.PaymentType</td>
+                                <td>@item.Bank</td>
+                                <td>@item.Ch_Pay_Draft_No</td>
+                                <td>@item.Ch_Pay_Draft_Date</td>
+                                <td>@item.Name</td>
+                                <td>@item.Contact</td>
+                                <td>@item.Type</td>
+                                <td>@item.Project</td>
+                                <td>@string.Format("{0:MM-dd-yyy t}", item.DateTime)</td>
+                                <td>@item.Cashier_Name</td>
+                                @if (User.IsInRole("Print Duplicate Receipt") || User.IsInRole("Administrator"))
+                                {
+                                    <td>
+                                        <ul style="list-style:none;margin-left:0px;">
+                                            <li class="dropdown">
+                                                <a href="" class="dropdown-toggle no-after peers " data-toggle="dropdown">
+                                                    <i class="ti-more-alt  c-grey-900" style="transform:rotate(90deg);"></i>
+                                                </a>
+                                                <ul class="dropdown-menu">
+                                                    <li><a class="pointer orig-rece" id="@item.Id"><span>Original</span></a></li>
+                                                    <li><a class="pointer dup-rece" id="@item.Id"><span>Duplicate</span></a></li>
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                    </td>
+
+                                }
+                            </tr>
+                            srcount++;
+                        }
+                    }
+                    <tr>
+                        <th>Total</th>
+                        <td>@string.Format("{0:n0}", Fresult.Ad_K_Total)</td>
+                        <th>Cash</th>
+                        <td>@string.Format("{0:n0}", Fresult.Ad_K_Cash)</td>
+                        <th>Cheques</th>
+                        <td>@string.Format("{0:n0}", Fresult.Ad_K_Cheque)</td>
+                        <th>Payorders</th>
+                        <td>@string.Format("{0:n0}", Fresult.Ad_K_PayOrder)</td>
+                        <th>Bank Draft</th>
+                        <td>@string.Format("{0:n0}", Fresult.Ad_K_BankDraft)</td>
+                        <th>Online</th>
+                        <td>@string.Format("{0:n0}", Fresult.Ad_K_Online)</td>
+                        <td colspan="3"></td>
+                    </tr>
+                </tbody>
+            </table>
+        }
+        if (Fresult.ArchiFees.Any())
+        {
+            <table class="table table-striped table-bordered" cellspacing="0" width="100%">
+                <thead>
+                    <tr>
+                        <td colspan="19">Architecture Fees</td>
+                    </tr>
+                    <tr>
+                        <th>Sr.</th>
+                        <th>Amount</th>
+                        <th>Receipt No.</th>
+                        <th>Plot No.</th>
+                        <th>Block</th>
+                        <th>Plot Type</th>
+                        <th>Size</th>
+                        <th>Cash/Bank</th>
+                        <th>Bank</th>
+                        <th>No.</th>
+                        <th>inst Date</th>
+                        <th>Name</th>
+                        <th>Contact</th>
+                        <th>Type</th>
+                        <th>CNIC</th>
+                        <th>Time</th>
+                        <th>Cashier Name</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        int srcount = 1;
+                        foreach (var item in Fresult.ArchiFees)
+                        {
+                            string col = "";
+                            if (item.Amount < 0)
+                            {
+                                col = "bgc-yellow-50";
+                            }
+                            <tr class="@col">
+                                <td>@srcount</td>
+                                <td>@string.Format("{0:n0}", item.Amount)</td>
+                                <td>@item.ReceiptNo</td>
+                                <td>@item.File_Plot_Number</td>
+                                <td>@item.Block</td>
+                                <td>@item.Plot_Type</td>
+                                <td>@item.Size</td>
+                                <td>@item.PaymentType</td>
+                                <td>@item.Bank</td>
+                                <td>@item.Ch_Pay_Draft_No</td>
+                                <td>@item.Ch_Pay_Draft_Date</td>
+                                <td>@item.Name</td>
+                                <td>@item.Contact</td>
+                                <td>@item.Type</td>
+                                <td>@item.Project</td>
+                                <td>@string.Format("{0:MM-dd-yyy t}", item.DateTime)</td>
+                                <td>@item.Cashier_Name</td>
+                                @if (User.IsInRole("Print Duplicate Receipt") || User.IsInRole("Administrator"))
+                                {
+                                    <td>
+                                        <ul style="list-style:none;margin-left:0px;">
+                                            <li class="dropdown">
+                                                <a href="" class="dropdown-toggle no-after peers " data-toggle="dropdown">
+                                                    <i class="ti-more-alt  c-grey-900" style="transform:rotate(90deg);"></i>
+                                                </a>
+                                                <ul class="dropdown-menu">
+                                                    <li><a class="pointer orig-rece" id="@item.Id"><span>Original</span></a></li>
+                                                    <li><a class="pointer dup-rece" id="@item.Id"><span>Duplicate</span></a></li>
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                    </td>
+
+                                }
+                            </tr>
+                            srcount++;
+                        }
+                    }
+                    <tr>
+                        <th>Total</th>
+                        <td>@string.Format("{0:n0}", Fresult.ArchiFees.Sum(x => x.Amount))</td>
+                        <th>Cash</th>
+                        <td>@string.Format("{0:n0}", Fresult.ArchiFees.Sum(x => x.Amount))</td>
+                        <th>Cheques</th>
+                        <td>@string.Format("{0:n0}", 0)</td>
+                        <th>Payorders</th>
+                        <td>@string.Format("{0:n0}", 0)</td>
+                        <th>Bank Draft</th>
+                        <td>@string.Format("{0:n0}", 0)</td>
+                        <th>Online</th>
+                        <td>@string.Format("{0:n0}", 0)</td>
+                        <td colspan="3"></td>
+                    </tr>
+                </tbody>
+            </table>
+        }
+        if (Fresult.OtherCollection.Any())
+        {
+            <table class="table table-striped table-bordered" cellspacing="0" width="100%">
+                <thead>
+                    <tr>
+                        <td colspan="19">Other Recovery</td>
+                    </tr>
+                    <tr>
+                        <th>Sr.</th>
+                        <th>Amount</th>
+                        <th>Receipt No.</th>
+                        <th>Description</th>
+                        <th>Cash/Bank</th>
+                        <th>Bank</th>
+                        <th>No.</th>
+                        <th>inst Date</th>
+                        <th>Name</th>
+                        <th>Contact</th>
+                        <th>Type</th>
+                        <th>Project</th>
+                        <th>Time</th>
+                        <th>Cashier Name</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        int srcount = 1;
+                        foreach (var item in Fresult.OtherCollection)
+                        {
+                            string col = "";
+                            if (item.Amount < 0)
+                            {
+                                col = "bgc-yellow-50";
+                            }
+                            <tr class="@col">
+                                <td>@srcount</td>
+                                <td>@string.Format("{0:n0}", item.Amount)</td>
+                                <td>@item.ReceiptNo</td>
+                                <td>@item.Description  </td>
+                                <td>@item.PaymentType</td>
+                                <td>@item.Bank</td>
+                                <td>@item.Ch_Pay_Draft_No</td>
+                                <td>@item.Ch_Pay_Draft_Date</td>
+                                <td>@item.Name</td>
+                                <td>@item.Contact</td>
+                                <td>@item.Type</td>
+                                <td>@item.Project</td>
+                                <td>@string.Format("{0:MM-dd-yyy t}", item.DateTime)</td>
+                                <td>@item.Cashier_Name</td>
+                                @if (User.IsInRole("Print Duplicate Receipt") || User.IsInRole("Administrator"))
+                                {
+                                    <td>
+                                        <ul style="list-style:none;margin-left:0px;">
+                                            <li class="dropdown">
+                                                <a href="" class="dropdown-toggle no-after peers " data-toggle="dropdown">
+                                                    <i class="ti-more-alt  c-grey-900" style="transform:rotate(90deg);"></i>
+                                                </a>
+                                                <ul class="dropdown-menu">
+                                                    <li><a class="pointer orig-rece" id="@item.Id"><span>Original</span></a></li>
+                                                    <li><a class="pointer dup-rece" id="@item.Id"><span>Duplicate</span></a></li>
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                    </td>
+
+                                }
+                            </tr>
+                            srcount++;
+                        }
+                    }
+                    <tr>
+                        <th>Total</th>
+                        <td>@string.Format("{0:n0}", Fresult.Other_Total)</td>
+                        <th>Cash</th>
+                        <td>@string.Format("{0:n0}", Fresult.Other_Cash)</td>
+                        <th>Cheques</th>
+                        <td>@string.Format("{0:n0}", Fresult.Other_Cheque)</td>
+                        <th>Payorders</th>
+                        <td>@string.Format("{0:n0}", Fresult.Other_PayOrder)</td>
+                        <th>Bank Draft</th>
+                        <td>@string.Format("{0:n0}", Fresult.Other_BankDraft)</td>
+                        <th>Online</th>
+                        <td>@string.Format("{0:n0}", Fresult.Other_Online)</td>
+                        <td colspan="3"></td>
+                    </tr>
+                </tbody>
+            </table>
+        }
+
+        <table class="table table-striped table-bordered">
+            <thead>
+                <tr><th colspan="12">Grand Total</th></tr>
+                <tr>
+                    <th>Total</th>
+                    <td>@string.Format("{0:n0}", Fresult.Total)</td>
+                    <th>Cash</th>
+                    <td>@string.Format("{0:n0}", Fresult.Cash)</td>
+                    <th>Cheques</th>
+                    <td>@string.Format("{0:n0}", Fresult.Cheque)</td>
+                    <th>Payorders</th>
+                    <td>@string.Format("{0:n0}", Fresult.PayOrder)</td>
+                    <th>Bank Draft</th>
+                    <td>@string.Format("{0:n0}", Fresult.BankDraft)</td>
+                    <th>Online</th>
+                    <td>@string.Format("{0:n0}", Fresult.Online)</td>
+                </tr>
+            </thead>
+        </table>
+
+
+        <hr />
+        <table class="table table-striped table-bordered" cellspacing="0" width="100%">
+            <thead>
+                <tr>
+                    <td colspan="19">Payments</td>
+                </tr>
+                <tr>
+                    <th>Sr.</th>
+                    <th>Amount</th>
+                    <th>Payment Voucher No.</th>
+                    <th>Description</th>
+                    <th>Cash/Bank</th>
+                    <th>Bank</th>
+                    <th>No.</th>
+                    <th>inst Date</th>
+                    <th>Name</th>
+                    <th>Contact</th>
+                    <th>Type</th>
+                    <th>Project</th>
+                    <th>Time</th>
+                    <th>Cashier Name</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    if (Fresult.Payments.Any())
+                    {
+                        int srcount = 1;
+                        foreach (var item in Fresult.Payments)
+                        {
+                            string col = "";
+                            if (item.Amount < 0)
+                            {
+                                col = "bgc-yellow-50";
+                            }
+                            <tr class="@col">
+                                <td>@srcount</td>
+                                <td>@string.Format("{0:n0}", item.Amount)</td>
+                                <td>@item.ReceiptNo</td>
+                                <td>@item.Description</td>
+                                <td>@item.PaymentType</td>
+                                <td>@item.Bank</td>
+                                <td>@item.Ch_Pay_Draft_No</td>
+                                <td>@item.Ch_Pay_Draft_Date</td>
+                                <td>@item.Name</td>
+                                <td>@item.Contact</td>
+                                <td>@item.Type</td>
+                                <td>@item.Project</td>
+                                <td>@string.Format("{0:MM-dd-yyy hh:mm tt}", item.DateTime)</td>
+                                <td>@item.Cashier_Name</td>
+                                @if (User.IsInRole("Print Duplicate Receipt") || User.IsInRole("Administrator"))
+                                {
+                                    <td>
+                                        <ul style="list-style:none;margin-left:0px;">
+                                            <li class="dropdown">
+                                                <a href="" class="dropdown-toggle no-after peers " data-toggle="dropdown">
+                                                    <i class="ti-more-alt  c-grey-900" style="transform:rotate(90deg);"></i>
+                                                </a>
+                                                <ul class="dropdown-menu">
+                                                    <li><a class="pointer pay-vou" id="@item.TransacitonId"><span>Original</span></a></li>
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                    </td>
+                                }
+                            </tr>
+                            srcount++;
+                        }
+                    }
+                }
+                <tr>
+                    <th>Total</th>
+                    <td>@string.Format("{0:n0}", Fresult.Pay_Total)</td>
+                    <th>Cash</th>
+                    <td>@string.Format("{0:n0}", Fresult.Pay_Cash)</td>
+                    <th>Cheques</th>
+                    <td>@string.Format("{0:n0}", Fresult.Pay_Cheque)</td>
+                    <th>Payorders</th>
+                    <td>@string.Format("{0:n0}", Fresult.Pay_PayOrder)</td>
+                    <th>Bank Draft</th>
+                    <td>@string.Format("{0:n0}", Fresult.Pay_BankDraft)</td>
+                    <th>Online</th>
+                    <td>@string.Format("{0:n0}", Fresult.Pay_Online)</td>
+                    <td colspan="2"></td>
+                </tr>
+            </tbody>
+        </table>
+        <hr />
+        <table class="table table-striped table-bordered">
+            <thead>
+                <tr><th colspan="12">Grand Total</th></tr>
+                <tr>
+                    <th>Total</th>
+                    <td>@string.Format("{0:n0}", Fresult.Grand_Total)</td>
+                    <th>Cash</th>
+                    <td>@string.Format("{0:n0}", Fresult.Grand_Cash)</td>
+                    <th>Cheques</th>
+                    <td>@string.Format("{0:n0}", Fresult.Grand_Cheque)</td>
+                    <th>Payorders</th>
+                    <td>@string.Format("{0:n0}", Fresult.Grand_PayOrder)</td>
+                    <th>Bank Draft</th>
+                    <td>@string.Format("{0:n0}", Fresult.Grand_BankDraft)</td>
+                    <th>Online</th>
+                    <td>@string.Format("{0:n0}", Fresult.Grand_Online)</td>
+                </tr>
+            </thead>
+        </table>
+
+
+
+        if (Fresult.CancelledReceipts.Any())
+        {
+            <table class="table table-striped table-bordered" cellspacing="0" width="100%">
+                <thead>
+                    <tr>
+                        <td colspan="19">Cancel receipts</td>
+                    </tr>
+                    <tr>
+                        <th>Sr.</th>
+                        <th>Amount</th>
+                        <th>Receipt No.</th>
+                        <th>Plot No.</th>
+                        <th>Block</th>
+                        <th>Plot Type</th>
+                        <th>Size</th>
+                        <th>Cash/Bank</th>
+                        <th>Bank</th>
+                        <th>No.</th>
+                        <th>inst Date</th>
+                        <th>Name</th>
+                        <th>Contact</th>
+                        <th>Type</th>
+                        <th>Time</th>
+                        <th>Cashier Name</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        int srcount = 1;
+                        foreach (var item in Fresult.CancelledReceipts)
+                        {
+                            string col = "bgc-red-50";
+                            <tr class="@col">
+                                <td>@srcount</td>
+                                <td>@string.Format("{0:n0}", item.Amount)</td>
+                                <td>@item.ReceiptNo</td>
+                                <td>@item.File_Plot_Number</td>
+                                <td>@item.Block</td>
+                                <td>@item.Plot_Type</td>
+                                <td>@item.Size</td>
+                                <td>@item.PaymentType</td>
+                                <td>@item.Bank</td>
+                                <td>@item.Ch_Pay_Draft_No</td>
+                                <td>@item.Ch_Pay_Draft_Date</td>
+                                <td>@item.Name</td>
+                                <td>@item.Contact</td>
+                                <td>@item.Type</td>
+                                <td>@string.Format("{0:MM-dd-yyy t}", item.DateTime)</td>
+                                <td>@item.Cashier_Name</td>
+                                @if (User.IsInRole("Print Duplicate Receipt") || User.IsInRole("Administrator"))
+                                {
+                                    <td>
+                                        <ul style="list-style:none;margin-left:0px;">
+                                            <li class="dropdown">
+                                                <a href="" class="dropdown-toggle no-after peers " data-toggle="dropdown">
+                                                    <i class="ti-more-alt  c-grey-900" style="transform:rotate(90deg);"></i>
+                                                </a>
+                                                <ul class="dropdown-menu">
+                                                    <li><a class="pointer orig-rece" id="@item.Id"><span>Original</span></a></li>
+                                                    <li><a class="pointer dup-rece" id="@item.Id"><span>Duplicate</span></a></li>
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                    </td>
+
+                                }
+                            </tr>
+                            srcount++;
+                        }
+                    }
+                    <tr>
+                        <th>Total</th>
+                        <td>@string.Format("{0:n0}", Fresult.CancelledReceipts.Sum(x => x.Amount))</td>
+                        <th>Cash</th>
+                        <td>@string.Format("{0:n0}", Fresult.CancelledReceipts.Where(x => x.PaymentType == "Cash").Sum(x => x.Amount))</td>
+                        <th>Cheques</th>
+                        <td>@string.Format("{0:n0}", Fresult.CancelledReceipts.Where(x => x.PaymentType == "Cheque").Sum(x => x.Amount))</td>
+                        <th>Payorders</th>
+                        <td>@string.Format("{0:n0}", Fresult.CancelledReceipts.Where(x => x.PaymentType == "PayOrder").Sum(x => x.Amount))</td>
+                        <th>Bank Draft</th>
+                        <td>@string.Format("{0:n0}", Fresult.CancelledReceipts.Where(x => x.PaymentType == "BankDraft").Sum(x => x.Amount))</td>
+                        <th>Online</th>
+                        <td>@string.Format("{0:n0}", Fresult.CancelledReceipts.Where(x => x.PaymentType.Contains("Online")).Sum(x => x.Amount))</td>
+                        <td colspan="3"></td>
+                    </tr>
+                </tbody>
+            </table>
+        }
+    }
+</div>
+<style>
+    table tr td, table tr th {
+        padding: 2px !important;
+        font-size: 12px;
+    }
+</style>

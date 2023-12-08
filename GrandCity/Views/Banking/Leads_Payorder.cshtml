@@ -1,0 +1,110 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Sp_Get_ChDDPO_Leads_Result>
+<div class="row">
+    <div class="col-md-2">
+        <div class="scrollable bd bgc-white pos-r bdT layer w-100 fxg-1">
+            <ul class="p-20 nav flex-column">
+                <li class="nav-item">
+                    <a href="javascript:void(0)" data-link="/Banking/Leads_Cheques?Status=@ViewBag.Status&Company=@ViewBag.Comp" class="nav-link c-grey-800 cH-blue-500 active chddpo-link">
+                        <div class="peers ai-c jc-sb">
+                            <div class="peer peer-greed">
+                                <span>Cheques</span>
+                            </div>
+                        </div>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="javascript:void(0)" data-link="/Banking/Leads_BankDrafts?Status=@ViewBag.Status&Company=@ViewBag.Comp" class="nav-link c-grey-800 cH-blue-500 chddpo-link">
+                        <div class="peers ai-c jc-sb">
+                            <div class="peer peer-greed">
+                                <span>BankDrafts</span>
+                            </div>
+                        </div>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="javascript:void(0)" data-link="/Banking/Leads_Payorder?Status=@ViewBag.Status&Company=@ViewBag.Comp" class="nav-link c-grey-800 cH-blue-500 chddpo-link">
+                        <div class="peers ai-c jc-sb">
+                            <div class="peer peer-greed">
+                                <span>Payorder</span>
+                            </div>
+                        </div>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="javascript:void(0)" data-link="/Banking/Leads_Online?Status=@ViewBag.Status&Company=@ViewBag.Comp" class="nav-link c-grey-800 cH-blue-500 chddpo-link">
+                        <div class="peers ai-c jc-sb">
+                            <div class="peer peer-greed">
+                                <span>Online</span>
+                            </div>
+                        </div>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="col-md-10">
+        <div class="bgc-white bd bdrs-3 p-20 mB-20">
+            <h4 class="c-grey-900 mB-20">Payment Order</h4>
+            <table class="table table-striped table-bordered" id="mytable"  cellspacing="0" width="100%">
+                <thead>
+                    <tr>
+                        <th>Payorder No.</th>
+                        <th>Date</th>
+                        <th>Bank</th>
+                        <th>Amount</th>
+                        <th>File/Plot No -  Module - Type</th>
+                        @if (ViewBag.Status != "Pending")
+                        {
+                            <th>Dep Bank</th>
+                            <th>Acc No</th>
+                            <th>Dep Date</th>
+                        }
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        if (Model.Any())
+                        {
+                            foreach (var g in Model.GroupBy(x => new { x.Ch_Pay_Draft_No, x.Bank, x.Ch_Pay_Draft_Date, x.Status, x.Deposit_Bank, x.Deposit_Bank_Acc_Number, x.Posted_Date }))
+                            {
+                                string statuscolor = "";
+                                if (g.Key.Status == "Approved") { statuscolor = "bgc-green-50"; }
+                                else if (g.Key.Status == "Dishonored") { statuscolor = "bgc-red-50"; }
+                                //id = "@g.Key.Ch_Pay_Draft_No`@g.Key.Ch_Pay_Draft_Date`@g.Key.Bank`@g.Key.Status"
+                                <tr class="@statuscolor" data-toggle="modal" data-target="#Modal">
+                                    <td>@g.Key.Ch_Pay_Draft_No</td>
+                                    <td>@string.Format("{0:D}", g.Key.Ch_Pay_Draft_Date)</td>
+                                    <td>@g.Key.Bank</td>
+                                    <td>@string.Format("{0:n0}", g.Sum(x => x.Amount))</td>
+                                    <td>
+                                        @foreach (var item in g)
+                                        {
+                                            var data = item.File_Plot_Number + " - " + item.Module + " - " + item.Type;
+                                            <span>@data</span><br />
+                                        }
+                                    </td>
+
+                                    @if (ViewBag.Status != "Pending")
+                                    {
+                                        <td>@g.Key.Deposit_Bank</td>
+                                        <td>@g.Key.Deposit_Bank_Acc_Number</td>
+                                        <td>@string.Format("{0:MMM dd yyyy}", g.Key.Posted_Date)</td>
+                                    }
+                                    <td>
+                                        <span class="@statuscolor fa fa-pencil pointer ld-cbp-details" id="@g.Key.Ch_Pay_Draft_No`@g.Key.Ch_Pay_Draft_Date`@g.Key.Bank`@g.Key.Status" data-toggle="modal" data-target="#Modal"></span>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $('#mytable').DataTable();
+    });
+</script>

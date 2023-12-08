@@ -1,0 +1,38 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Sp_Get_LandPaymentDetails_Result>
+@{ if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+}
+<table class="table table-bordered">
+    <thead class="thead-dark">
+        <tr>
+            <th>Sr#</th>
+            <th>Party Name</th>
+            <th>Deal No.</th>
+            <th>Total Amount</th>
+            <th>Paid Amount</th>
+            <th>Pending Amount</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{ int i = 1; }
+        @foreach (var a in Model)
+        {
+        <tr>
+            <td>@(i++)</td>
+            <td>@a.PartyName</td>
+            <td>@a.DealNo</td>
+            <td>@string.Format("{0:0,0.##}", a.TotalAmount)</td>
+            <td>@string.Format("{0:0,0.##}", a.PaidAmount)</td>
+            @{var pendingAmount = a.TotalAmount - a.PaidAmount;}
+            <td>@string.Format("{0:0,0.##}", pendingAmount)</td>
+        </tr>
+        }
+
+    </tbody>
+</table>

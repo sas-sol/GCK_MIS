@@ -1,0 +1,104 @@
+﻿@model MeherEstateDevelopers.Models.DealershipDeals
+
+<div class="row">
+    <div class="col-md-10">
+        <div class="bgc-white bd bdrs-3 p-20 mB-20" style="margin-left:20%">
+
+            <h4 class="c-grey-900 mB-20">Assign Files</h4>
+            <table id="dataTable" class="table table-striped table-bordered" cellspacing="0" width="100%">
+                <thead>
+                    <tr>
+                        <th>Plot Size</th>
+                        <th>Total Files</th>
+                        <th>Generated Files</th>
+                        <th class="himem">Remaning Files</th>
+                        <th>Assign Files/Plots</th>
+                        <th>Marlas</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        if (Model.PlanDetails.Any())
+                        {
+                            int dealercounter = 1;
+                            foreach (var item in Model.PlanDetails)
+                            {
+                                <tr class="deal-ver-cre" id="@item.Id">
+                                    <td class="plot_size" id="@item.Plot_Size">@item.Plot_Size Marla</td>
+                                    <td>@item.Num_Of_Files</td>
+                                    <td class="gen_files" id="@( item.Num_Of_Files-item.Remaning_Files )"> @( item.Num_Of_Files - item.Remaning_Files )</td>
+                                    <td class="rem_files himem" id="@item.Remaning_Files">@item.Remaning_Files</td>
+                                    <td><input type="text" class="assign_file" id="" style="width:70px"></td>
+                                    <td><input type="text" class="marlas_cal" id="" style="width:70px" readonly></td>
+                                </tr>
+                                dealercounter++;
+                            }
+                        }
+                    }
+                </tbody>
+            </table>
+            <div>
+                <input type="hidden" class="rate" value="@Model.PlanDetails.Select(x=>x.Rate_Per_Marla).FirstOrDefault()" />
+                <input type="hidden" class="adv" value="@Model.PlanDetails.Select(x=>x.Advance).FirstOrDefault()" />
+                <input type="hidden" class="deal_id" value="@Model.PlanDetails.Select(x=>x.Deal_Id).FirstOrDefault()" />
+                <input type="hidden" class="proj" value="@Model.Dealer.Project_Id" />
+                <input type="hidden" class="phase" value="@Model.Dealer.Phase_Id" />
+                <input type="hidden" class="blk" value="@Model.Dealer.Block_Id" />
+                <input type="hidden" class="dealershipid" value="@Model.Dealer.Dealer_Id" />
+                <input type="hidden" class="dealershipname" value="@Model.Dealer.Dealer_Name" />
+                @if (ViewBag.VersionAmt == null)
+                {
+                    ViewBag.VersionAmt = 0;
+                }
+                <button type="button" id="gen-dl-ver" value="" class="btn btn-info" style="float:right">Genarate</button>
+                <label class="font">&nbsp;&nbsp;&nbsp;Remaining Balance :&nbsp;&nbsp;&nbsp; <label id="">@string.Format("{0:n0}", Model.Dealer.Deposit - ViewBag.VersionAmt) </label></label>&nbsp;&nbsp;
+                <label class="font">Generated Files&nbsp;&nbsp;:&nbsp;&nbsp; <label id="gene_file"></label></label>
+                <input type="hidden" id="gene_file_1" />
+                <label class="font himem">&nbsp;&nbsp;&nbsp;Total Remaining  Files :&nbsp;&nbsp;&nbsp; <label id="remni_files"></label></label>
+                <input type="hidden" id="remni_files_1" class="himem" />
+                <label class="font">&nbsp;&nbsp;&nbsp;Total Assign Files :&nbsp;&nbsp;&nbsp; <label id="assgn_files"></label></label>
+                <input type="hidden" id="assgn_files_1" />
+                <label class="font">&nbsp;&nbsp;&nbsp;Total Marlas :&nbsp;&nbsp;&nbsp; <label id="assgn_marlas"></label></label>
+                <input type="hidden" id="assgn_marlas_1" />
+                <label class="font">&nbsp;&nbsp;&nbsp;Total Amount :&nbsp;&nbsp;&nbsp; <label id="tot_amt"></label></label>
+                <input type="hidden" id="tot_amt_1" />
+                <label class="font">&nbsp;&nbsp;&nbsp;Deposit :&nbsp;&nbsp;&nbsp; <label id="tot_depo"></label></label>
+                <input type="hidden" id="tot_depo_1" />
+
+
+
+            </div>
+        </div>
+    </div>
+    @*<div class="col-md-7">
+            <div class="bgc-white bd bdrs-3 p-20 mB-20" id="generated-files" style="min-height:500px">
+            </div>
+        </div>*@
+</div>
+<hr />
+<h4 class="c-grey-900 mB-20">Versions</h4>
+<div id="ver">
+</div>
+<hr />
+<h4 class="c-grey-900 mB-20">Ledger</h4>
+<hr />
+<div>
+    <button class="btn btn-primary pointer" data-toggle="modal" data-target="#Modal"  id="reb-rel" value="@Model.PlanDetails.Select(x=>x.Deal_Id).FirstOrDefault()" style="float:right">Rebate Release</button>
+</div>
+<div id="ledger">
+</div>
+
+<style>
+    .font {
+        font-weight: 700;
+    }
+</style>
+
+<script>
+    $('.himem').hide();
+    @*$('#generated-files').load('/Dealership/FullDealDetails/', { Id: @Model.PlanDetails.Select(x=>x.Deal_Id).FirstOrDefault()})*@
+    $('#ver').load('/Dealership/VersionList/', { Deal_Id: @Model.PlanDetails.Select(x=>x.Deal_Id).FirstOrDefault()})
+    //
+    $('#ledger').load('/Dealership/Ledger/', { Deal_Id: @Model.PlanDetails.Select(x=>x.Deal_Id).FirstOrDefault()})
+    TotalFilescalculationsTwo();
+</script>

@@ -1,0 +1,69 @@
+﻿<div class="col-md-12 mt-3">
+    <button class="btn btn-success upl-boq" data-toggle="modal" data-target="#Modal">Upload BOQ excel File</button>
+</div>
+
+<div class="col-md-12 mt-2" id="mts">
+    @*idhar sare milestone task ain gay*@
+</div>
+<div class="container-fluid pl-0 ml-0 pr-0 mr-0">
+    <h4 class="text-center">Create Milestone</h4>
+    <hr />
+</div>
+<div class="container-fluid ml-0 pr-0 mr-0">
+    <div class="form-row mts-form">
+        <div class="col-md-7 form-row">
+            <div class="form-group col-md-4">
+                <input type="text" class="form-control" id="mile-title" placeholder="Title" autocomplete="off">
+            </div>
+            <div class="form-group col-md-8">
+                <textarea rows="4" class=" form-control" id="mile-desc" placeholder="Enter Description"></textarea>
+            </div>
+        </div>
+        <div class="col-md-4 form-row">
+            <div class="form-group col-md-3">
+                <select class="form-control" id="mile-unit"></select>
+            </div>
+            <div class="form-group col-md-3" >
+                <input type="text" class="coma form-control mile-rate-cal" id="mile-qty" placeholder="Qty" autocomplete="off">
+            </div>
+            <div class="form-group col-md-3">
+                <input type="text" class="coma form-control mile-rate-cal" id="mile-rate" placeholder="Rate" autocomplete="off">
+            </div>
+            <div class="form-group col-md-3">
+                <input type="text" class="form-control coma" id="mile-total" autocomplete="off">
+            </div>
+            <div class="form-group col-md-6">
+                <input type="text" class="form-control " id="mile-start" data-provide="datepicker" placeholder="Start Date" autocomplete="off">
+            </div>
+            <div class="form-group col-md-6">
+                <input type="text" class="form-control " id="mile-dead" data-provide="datepicker" placeholder="Deadline" autocomplete="off">
+            </div>
+            <div class="form-group col-md-12">
+                @Html.DropDownList("Department", null, "Department..", new { Name = "Dep_Id", @class = "form-control" })
+            </div>
+            <input type="hidden" id="MTS" value="Milestone" />
+        </div>
+        <div class="col-md-1 form-row">
+            <div class="form-group col-md-12">
+                <button class="btn btn-primary cr-mile-btn">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="mtrl-stmt-wrp container-fluid">
+
+</div>
+
+<script>
+    $(document).on('click',
+        '#AddSubtask',
+        function () {
+            $('#AddTask').hide();
+        });
+    $(function () {
+        var prjId = $("#Prj_Id").val();
+        $("#mts").load("/ConstructProjectManagement/Get_MTS", { Prj_Id: prjId });
+    })
+    $("#mile-unit").append(unitlist);
+</script>

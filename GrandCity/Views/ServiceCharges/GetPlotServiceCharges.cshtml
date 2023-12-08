@@ -1,0 +1,78 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.ServiceCharges_Bill>
+
+<div class="row bgc-white" style="align-items:center;">
+    <div class="col-md-11">
+        <label class="" style="font-size:16px;color:#000;"><b>Service Charges Payments</b></label>
+    </div>
+
+    <div class="col-md-1">
+        <i class="fa fa-plus fa-2x info-expander-servs fast-trans pointer" title="Click To Expand Details"></i>
+    </div>
+
+    <div class="col-md-12 p-5 inst-strct-dets-lksjdfa" style="display:none">
+        <div class="row">
+            <div class="col-md-12">
+                <table class="table table-borderless dark-table">
+                    <thead>
+                        <tr>
+                            <th>Sr.</th>
+                            <th>Bill Month</th>
+                            <th>Amount</th>
+                            <th>Arrears</th>
+                            <th>Net Total</th>
+                            <th>Paid Amount</th>
+                            <th>Paid Date</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @{
+                            int cnt = 1;
+                        }
+                        @if (Model.Any())
+                        {
+                            foreach (var item in Model.OrderByDescending(x => x.Date))
+                            {
+                                item.Amount_Paid = item.Amount_Paid ?? 0;
+                                <tr>
+                                    <td>@(cnt++)</td>
+                                    <td>@(item.Date.AddMonths(-1).ToString("MMM-yyyy"))</td>
+                                    <td>@string.Format("{0:n0}", item.Amount)</td>
+                                    <td>@string.Format("{0:n0}", item.Arrears)</td>
+                                    <td>@string.Format("{0:n0}", item.Net_Total)</td>
+                                    <td>@string.Format("{0:n0}", item.Amount_Paid)</td>
+                                    <td>@((item.PaidAmount_Date == null)?"-":item.PaidAmount_Date.Value.ToString("dd-MMM-yyyy"))</td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr class="bgc-red-50" style="color:#000;">
+                                <td colspan="7">No Record Found</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('.info-expander-servs').unbind().click(function () {
+            if ($(this).closest('.row').find('.inst-strct-dets-lksjdfa').is(':visible')) {
+                $(this).closest('.row').find('.inst-strct-dets-lksjdfa').slideUp('slow');
+                $(this).closest('.row').find('.info-expander-servs').removeClass('rotater-45');
+            }
+            else {
+                $(this).closest('.row').find('.inst-strct-dets-lksjdfa').slideDown('slow');
+                $(this).closest('.row').find('.info-expander-servs').addClass('rotater-45');
+            }
+        });
+    });
+</script>
+
+<style>
+    
+</style>

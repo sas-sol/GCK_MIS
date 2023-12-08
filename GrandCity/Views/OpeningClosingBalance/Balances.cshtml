@@ -1,0 +1,58 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Sp_Get_CA_OpeningClosing_Balance_Result>
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<div class=" bgc-white bd bdrs-3 mB-20 row" style="justify-content:center;">
+
+    <div class="col-md-12">
+        <h4 style="text-align:center !important;">OPENING BALANCES</h4>
+
+        <h6 style="text-align:center !important;"> @string.Format("{0:dd-MMM-yyyy}", ViewBag.From) - @string.Format("{0:dd-MMM-yyyy}", ViewBag.To)</h6>
+    </div>
+
+    <div class="col-md-8">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th style="text-align:center;">Sr.</th>
+                    <th style="text-align:center;">Code</th>
+                    <th style="text-align:center;">Head Name</th>
+                    <th style="text-align:center;">Debit</th>
+                    <th style="text-align:center;">Credit</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                @foreach (var g in Model.GroupBy(x => x.MainAccount))
+                {
+                    int sr = 1;
+                    <tr>
+                        <th colspan="5">@g.Key</th>
+                    </tr>
+                    foreach (var item in g)
+                    {
+                        <tr id="@item.Id">
+                            <td style="text-align:center;">@sr</td>
+                            <td style="text-align:center;">@item.Text_ChartCode</td>
+                            <td style="text-align:center;">@item.Head</td>
+                            <td><input value="@string.Format("{0:0,0.##}", item.Debit_Balance)" class="form-control db coma" /></td>
+                            <td><input value="@string.Format("{0:0,0.##}", item.Credit_Balance)" class="form-control cb" /></td>
+                        </tr>
+                        sr++;
+                    }
+
+                }
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th></th>
+                    <th>TOTAL</th>
+                    <th></th>
+                    <th style="text-align:right;">@string.Format("{0:n0}", Model.Sum(x => x.Debit_Balance))</th>
+                    <th style="text-align:right;">@string.Format("{0:n0}", Model.Sum(x => x.Credit_Balance))</th>
+                </tr>
+            </tfoot>
+        </table>
+        <hr style="border:2px solid black;" />
+    </div>
+</div>

@@ -1,0 +1,278 @@
+﻿@{ if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+}
+<script>
+    var shelves = @Html.Raw(Json.Encode(ViewBag.shelf));
+    var warehouses = @Html.Raw(Json.Encode(ViewBag.warehouse));
+
+</script>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script src="~/Scripts/Inv.js"></script>
+<input type="hidden" value="@ViewBag.group" id="grpId" />
+<input type="hidden" value="@ViewBag.group" class="trans-id" />
+<div class="bgc-white p-20 bd">
+    <div class="col-md-12">
+        <div class="alert alert-danger text-cen" role="alert">This will <b>Not</b> generate Good Receive Note</div>
+        <h5 class="text-cen">
+            Manual Stock In
+        </h5>
+    </div>
+    <div class="row">
+        <div class="form-group col-md-4">
+            <label>Delivered By</label>
+            @Html.DropDownList("Employees", null, "Choose..", new { @class = "form-control" })
+        </div>
+        <div class="form-group col-md-4">
+            <label>Department</label>
+            @Html.DropDownList("Department", null, "Choose..", new { @class = "form-control", @id = "dep-id" })
+            <input type="hidden" id="dep-name" />
+        </div>
+    </div>
+    <div class="main-inv-rec mt-md-3">
+        <div class="row inv-item-wrap">
+            <div class="lefter">
+                <div class="col-md-1 rmv">
+                    <i class="ti-trash pointer rmv-inv-row"></i>
+                </div>
+            </div>
+            <div class="col-md-11 mt-md-2" id="ad-iven-stock">
+                <div class="form-row cal" id="add-inv">
+                    <div class="form-group col-md-3">
+                        <label>Product</label>
+                        <input type="text" class="form-control invs" />
+                        <input type="hidden" class="form-control invs-id" />
+                    </div>
+                    <div class="form-group col-md-1">
+                        <label>Quantity</label>
+                        <input type="number" class="form-control qty" placeholder="12,345" required>
+                    </div>
+                    <div class="form-group col-md-1">
+                        <label>UOM</label>
+                        <input type="text" class="form-control uom" placeholder="UOM" required readonly>
+                    </div>
+                    <input type="hidden" class="form-control inv-rate" name="Rate" data-id="1" placeholder="Rate" value="0" readonly>
+                   
+                    <div class="form-group col-md-3">
+                        <label>Warehouse</label>
+                        <select class="form-control warehouse"></select>
+                    </div>
+                    <div class="form-group col-md-3" style="display:none">
+                        <label>Shelf</label>
+                        <select class="form-control shelf">
+                            <option value="1">1</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label>Expiry Date</label>
+                        <input data-provide="datepicker" class="form-control expiry" data-id="1" placeholder="mm/dd/yyyy">
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label>Remarks</label>
+                        <textarea class="form-control rems" placeholder="remarks" rows="3" cols="5" style="resize:none"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="foot-row row">
+        <div class="col-md-12 mt-md-2">
+            <div class="col-md-2  auto-mar">
+                <button class="btn btn-primary add-inv-row">Add Another Product</button>
+            </div>
+        </div>
+    </div>
+    <div class="foot-row row">
+        <div class="col-md-12 mt-md-2">
+            <div class="col-md-2 righty">
+                <button class="btn btn-success save-to-inv-man">Save Stock</button>
+            </div>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+</div>
+<script>
+    $(document).on("change", "#dep-id", function () {
+        var text = $("#dep-id :selected").text();
+        $('#dep-name').val(text);
+    });
+    $('.add-inv-row').click(function () {
+        var _strct = `<div class="row inv-item-wrap">
+            <div class="lefter">
+                <div class="col-md-1 rmv">
+                    <i class="ti-trash pointer rmv-inv-row"></i>
+                </div>
+            </div>
+            <div class="col-md-11 mt-md-2" id="ad-iven-stock">
+                <div class="form-row cal" id="add-inv">
+                    <div class="form-group col-md-3">
+                        <label>Product</label>
+                        <input type="text" class="form-control invs" />
+                        <input type="hidden" class="form-control invs-id" />
+                    </div>
+                    <div class="form-group col-md-1">
+                        <label>Quantity</label>
+                        <input type="number" class="form-control qty" placeholder="12,345" required>
+                    </div>
+                    <div class="form-group col-md-1">
+                        <label>UOM</label>
+                        <input type="text" class="form-control uom" placeholder="UOM" required readonly>
+                    </div>
+                    <input type="hidden" class="form-control inv-rate" name="Rate" data-id="1" placeholder="Rate" value="0" readonly>
+    
+                    <div class="form-group col-md-3">
+                        <label>Warehouse</label>
+                        <select class="form-control warehouse"></select>
+                    </div>
+                    <div class="form-group col-md-3" style="display:none">
+                        <label>Shelf</label>
+                        <select class="form-control shelf">
+                            <option value="1">1</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label>Expiry Date</label>
+                        <input data-provide="datepicker" class="form-control expiry" data-id="1" placeholder="mm/dd/yyyy">
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label>Remarks</label>
+                        <textarea class="form-control rems" placeholder="remarks" rows="3" cols="5" style="resize:none"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>`;
+        var addedItem = $('.main-inv-rec').append(_strct);
+        $('html, body').animate({
+            scrollTop: $('.inv-item-wrap').last().offset().top
+        }, 1500);
+        PopulateWareHouses($(addedItem).find('.warehouse').last());
+        if ($('.inv-item-wrap').length > 0) {
+            $('.save-to-inv').show();
+        }
+
+        var prdctThat = $(addedItem).find('.invs').last();
+        $(prdctThat).autocomplete({
+        source: function (request, response) {
+            $.ajax({
+                type:"Post",
+                url: '@Url.Action("GetSearchValue","Inventory")',
+                dataType: "json",
+                data: { search: $(prdctThat).val() },
+                success: function (data) {
+                    response($.map(data, function (item) {
+                        return { label: item.Complete_Name, value: item.Complete_Name, info: item.Id, len: item.Length, wid: item.Width, hei: item.Heigth, dia: item.Diameter, uom: item.UOM, luom: item.L_UOM, wuom: item.W_UOM, huom: item.H_UOM, duom: item.D_UOM, sz: item.Size, szuom: item.Size_UOM };
+                    }));
+                },
+                error: function (xhr, status, error) {
+                    alert("Unable to select this item. Please try again or contact SA Systems Team");
+                }
+            });
+        },
+            select: function (event, ui) {
+                
+            $(this).closest('.inv-item-wrap').find('.invs-id').val(ui.item.info);
+            $(this).closest('.inv-item-wrap').find('.uom').val(ui.item.uom);
+        }
+    });
+    });
+    $(document).ready(function () {
+        $(document).on('click', '.rmv-inv-row', function () {
+            let con = confirm('Are you sure you want to remove this item?');
+            if (con) {
+                $(this).closest('.inv-item-wrap').remove();
+                if ($('.inv-item-wrap').length <= 0) {
+                    $('.save-to-inv').hide();
+                }
+            }
+        });
+    });
+
+    function PopulateWareHouses(_ele) {
+        $(_ele).append('<option value="">Select Warehouse</option>');
+        $.each(warehouses, function (key, value) {
+            $(_ele).append('<option value="' + value.Id + '">' + value.Name + '</option>');
+        });
+    }
+
+    function PopulateShelf(_ele, wh) {
+
+        var whs = shelves.find(x => x.WarehouseId == wh);
+        $(_ele).empty();
+        $(_ele).append('<option value="">Select Shelf</option>');
+        $.each(whs, function (key, value) {
+            $(_ele).append('<option value="' + value.Id+ '">' + value.Name + '</option>');
+        });
+    }
+    $(function () {
+        PopulateWareHouses($('.warehouse'));
+
+        var prdctThat = $('.invs');
+        $(prdctThat).autocomplete({
+        source: function (request, response) {
+            $.ajax({
+                type: "Post",
+                url: '@Url.Action("GetSearchValue","Inventory")',
+                dataType: "json",
+                data: { search: $(prdctThat).val() },
+                success: function (data) {
+                    response($.map(data, function (item) {
+                        return { label: item.Complete_Name, value: item.Complete_Name, info: item.Id, len: item.Length, wid: item.Width, hei: item.Heigth, dia: item.Diameter, uom: item.UOM, luom: item.L_UOM, wuom: item.W_UOM, huom: item.H_UOM, duom: item.D_UOM, sz: item.Size, szuom: item.Size_UOM };
+                        //return { label: ((item.Company == null) ? '' : item.Company) + ' ' + item.NameWithProps, value: ((item.Company == null) ? '' : item.Company) + ' ' + item.Item_Name, info: item.Id, len: item.Length, wid: item.Width, hei: item.Heigth, dia: item.Diameter, uom: item.UOM, luom: item.L_UOM, wuom: item.W_UOM, huom: item.H_UOM, duom: item.D_UOM, sz: item.Size, szuom: item.Size_UOM };
+                    }));
+                },
+                error: function (xhr, status, error) {
+                    alert("Unable to select this item. Please try again or contact SA Systems Team");
+                }
+            });
+        },
+            select: function (event, ui) {
+                
+            $(this).closest('.inv-item-wrap').find('.invs-id').val(ui.item.info);
+            $(this).closest('.inv-item-wrap').find('.uom').val(ui.item.uom);
+        }
+    });
+
+    $(".selector").autocomplete("destroy");
+    });
+    $(function () {
+        $('#Employees').select2();
+    })
+
+
+
+
+</script>
+<style>
+    .text-cen {
+        text-align: center;
+    }
+
+    .inv-item-wrap {
+        padding: 5px;
+        border-bottom: 1px solid #72777A;
+    }
+
+    .auto-mar {
+        margin: auto;
+    }
+
+    .rmv {
+        align-items: center;
+        height: 100%;
+        display: flex;
+    }
+
+    .righty {
+        float: right;
+    }
+
+    .clearfix {
+        clear: both;
+    }
+</style>

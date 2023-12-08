@@ -1,0 +1,127 @@
+﻿
+ 
+@*<script>
+    $('.modal-title').html('Leave Requisition');
+</script>*@
+@*<div class="stat-body">
+    <div class="half-container lefty" style="font-size:14px;">
+        <div class="pop-row">
+            <div class="left-col">
+                <p class="heavy-font">From:</p>
+            </div>
+            <div class="right-col">
+                <p>@Convert.ToString(string.Format("{0:d ddd MMMM yyy}", Model.StartDate))</p>
+            </div>
+            <div class="clear"></div>
+        </div>
+        <div class="pop-row">
+            <div class="left-col">
+                <p class="heavy-font">To:</p>
+            </div>
+            <div class="right-col">
+                <p>@Convert.ToString(string.Format("{0:d ddd MMMM yyy}", Model.EndDate))</p>
+            </div>
+            <div class="clear"></div>
+        </div>
+        <div class="pop-row">
+            <div class="left-col">
+                <p class="heavy-font">Creation Date & Time</p>
+            </div>
+            <div class="right-col">
+                <p>@Convert.ToString(string.Format("{0:d ddd MMMM yyy hh:mm tt}", Model.CreatedAt))</p>
+            </div>
+            <div class="clear"></div>
+        </div>
+        <div class="pop-row">
+            <div class="left-col">
+                <p class="heavy-font">No. of days:</p>
+            </div>
+            <div class="right-col">
+                <p>@Html.DisplayFor(model => model.NoOfDays, new { htmlAttributes = new { @class = "progtxt" } })</p>
+            </div>
+            <div class="clear"></div>
+        </div>
+        <div class="pop-row">
+            <div class="left-col">
+                <p class="heavy-font">Leaves Consumed:</p>
+            </div>
+            <div class="right-col">
+                <p>@(ViewBag.spent + " out of " + ViewBag.granted)</p>
+            </div>
+            <div class="clear"></div>
+        </div>
+        <div class="pop-row">
+            <div class="left-col">
+                <p class="heavy-font">Reporting To:</p>
+            </div>
+            @{
+                string name = "";
+                if (Model.User.ReportingTo == null)
+                {
+                    name = "-";
+                }
+                else
+                {
+                    name = Model.User.Name;
+                }
+            }
+            <div class="right-col">
+                <p>@name</p>
+            </div>
+            <div class="clear"></div>
+        </div>
+        <div class="pop-row">
+            <div class="left-col">
+                <p class="heavy-font">Reason:</p>
+            </div>
+            <div class="right-col">
+                @Html.TextAreaFor(model => model.Reason, htmlAttributes: new { @class = "createleave", disabled = "disabled", rows = "7", @style = "width:100%" })
+            </div>
+            <div class="clear"></div>
+        </div>
+    </div>
+    <div class="half-container lefty" style="font-size:14px;">
+        <div class="pop-row">
+            <div class="left-col">
+                <p class="heavy-font">Manager Remarks:</p>
+            </div>
+            <div class="right-col">
+                @Html.TextAreaFor(model => model.ManagerRemarks, htmlAttributes: new { @class = "createleave", rows = 5, disabled = "disabled", @style = "width:100%" })
+            </div>
+            <div class="clear"></div>
+        </div>
+        <div class="pop-row">
+            <div class="left-col top-bal">
+                <p class="heavy-font">Status:</p>
+            </div>
+            <div class="right-col top-bal">
+                @Html.DropDownList("Managerapproval", null, htmlAttributes: new { @class = "sklls", style = "width:100%;", disabled = "disabled" })
+            </div>
+            <div class="clear"></div>
+        </div>
+        <div class="pop-row">
+            <div class="left-col top-bal">
+                <p class="heavy-font">HR Remarks:</p>
+            </div>
+            <div class="right-col top-bal">
+                @Html.TextAreaFor(model => model.HrRemarks, htmlAttributes: new { @class = "createleave", rows = 5, disabled = "disabled", @style = "width:100%" })
+            </div>
+            <div class="clear"></div>
+        </div>
+        <div class="pop-row">
+            <div class="left-col top-bal">
+                <p class="heavy-font">Status:</p>
+            </div>
+            <div class="right-col top-bal">
+                @Html.DropDownList("Hrapproval", null, htmlAttributes: new { @class = "sklls", style = "width:100%;", disabled = "disabled" })
+            </div>
+            <div class="clear"></div>
+        </div>
+    </div>
+    <div class="clear"></div>
+</div>*@
+@*<div class="clear"></div>
+<div class="anchor modal-opts">
+    <button class="anchor-btn btn-cancel" data-dismiss="modal">Cancel</button>
+</div>
+<div class="clear"></div>*@

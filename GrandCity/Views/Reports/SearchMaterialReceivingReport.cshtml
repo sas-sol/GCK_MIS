@@ -1,0 +1,105 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Sp_Get_Material_Receiving_Report_Result>
+<style>
+    @@media print {
+        table, tr, td, th {
+            padding: 1px !important;
+        }
+    }
+</style>
+<div class="row">
+    <div class="col-md-12">
+        <div class="bgc-white bd bdrs-3 p-20 mB-20">
+            <h4 class="c-grey-900 mB-20">Material Receiving report</h4>
+            @*<a href="#" class="btn btn-primary" id="test" onClick="convert()">Download</a>*@
+            <div id="result">
+                <table  class="table table-striped table-bordered" cellspacing="0" width="100%">
+                    <thead>
+                        <tr>
+                            <th>
+                                @{
+                                    if (ViewBag.From == ViewBag.To)
+                                    {
+                                        <span>@string.Format("{0:D}", ViewBag.From)</span>
+                                    }
+                                    else
+                                    {
+                                        <span>@string.Format("{0:D}", ViewBag.From) - @string.Format("{0:D}", ViewBag.To)  </span>
+                                    }
+                                }
+                            </th>
+                        </tr>
+                    </thead>
+                </table>
+                @{
+                    if (Model.Any())
+                    {
+                        <table id="mat_rec_rep" class="table table-striped table-bordered" cellspacing="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <th>Sr.</th>
+                                    <th>SKU</th>
+                                    <th>Name</th>
+                                    <th>Department</th>
+                                    <th>Category</th>
+                                    <th>Vendor</th>
+                                    <th>Project</th>
+                                    <th>Received Qty</th>
+                                    <th>Rate</th>
+                                    <th>Amount</th>
+                                    <th>PO Number</th>
+                                    <th>PO Date</th>
+                                    <th>GRN Number</th>
+                                    <th>Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+
+                                    int srcount = 1;
+                                    foreach (var item in Model)
+                                    {
+
+                                                                <tr>
+                                                                    <td>@srcount</td>
+                                                                    <td>@item.SKU</td>
+                                                                    <td>@item.Complete_Name</td>
+                                                                    <td>@item.Dep_Name</td>
+                                                                    <td>@item.Category_Name</td>
+                                                                    <td>@item.Vendor_Name</td>
+                                                                    <td>@item.Prj_Name</td>
+                                                                    <td>@String.Format("{0:n0}", item.Received_Qty)</td>
+                                                                    <td>@string.Format("{0:n0}", item.Rate)</td>
+                                                                    <td>@String.Format("{0:n0}", item.Received_Qty * item.Rate)</td>
+                                                                    <td>@item.PO_Number</td>
+                                                                    <td>@String.Format("{0: MMMM dd, yyyy}", item.PO_Date)</td>
+                                                                    <td>@item.GRN</td>
+                                                                    <td>@String.Format("{0: MMMM dd, yyyy}", item.DATETIME)</td>
+                                                                </tr>
+                                        srcount++;
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    }
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('#mat_rec_rep').dataTable({
+            dom: 'Bfrtip',
+            buttons: [
+                'copy', 'csv', 'excel', 'pdf', 'print'
+            ],
+
+            aaSorting: [],
+            scrollY: "500px",
+            scrollX: true,
+            scrollCollapse: true,
+            paging: false,
+        });
+    });
+</script>

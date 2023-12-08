@@ -1,0 +1,130 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Sp_Get_PlotRentals_Result>
+
+@{ if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+}
+
+
+<div class="col-md-12 bgc-white p-10">
+    <div class="panel-heading central-text-align">
+        <h5>Rented Properties</h5>
+    </div>
+    <div class="row mt-md-3 mb-md-3">
+        <div class="col-md-10"></div>
+        <div class="col-md-2">
+            <button class="btn btn-success new-rental-prop">Add New Rental</button>
+        </div>
+    </div>
+    <table class="table table-borderless rentals-tbl">
+        <thead>
+            <tr>
+                <th>Sr.</th>
+                <th>Plot #</th>
+                <th>Block</th>
+                <th>Type</th>
+                <th>Rented To</th>
+                <th>Rented On</th>
+                <th>View</th>
+                <th>NOC</th>
+                <th>Edit Rental</th>
+                <th>Remove Rental</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @{ int count = 1;}
+            @foreach (var g in Model.OrderByDescending(x => x.Rental_DateTime).GroupBy(x => x.Block_Name))
+            {
+                <tr>
+                    <td colspan="8" class="central-text-align"><h5>@g.Key Block</h5></td>
+                </tr>
+                foreach (var v in g)
+                {
+        <tr>
+            <td>@(count++)</td>
+            <td>@v.Plot_Number</td>
+            <td>@v.Block_Name</td>
+            <td>@v.Type</td>
+            <td>@v.Name @v.Father_Husband</td>
+            <td>@((v.Rental_DateTime != null)?v.Rental_DateTime.Value.ToShortDateString():string.Empty)</td>
+
+
+            <td><i class="fa fa-eye pointer view-hjkfds" data-tag="@v.Id" title="Details"></i></td>
+            <td><i class="fa fa-legal pointer NOC-hjkfds" data-tag="@v.Id" title="Generate NOC"></i></td>
+            @if (v.Rental_Close_DateTime is null)
+            {
+
+                <td><i class="fa fa-pencil pointer view-edit" data-tag="@v.Id" title="Edit"></i></td>
+                <td><i class="fa fa-times pointer UNR-hjkfds" style="color:#d0232a" title="Remove Rental" data-tag="@v.Id"></i></td>
+            }
+            else
+            {
+                <td>-</td>
+            }
+        </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('.view-hjkfds').unbind().click(function () {
+            let id = $(this).attr('data-tag');
+            window.open('/Rental/RentalInfo?id=' + id);
+        });
+        $('.view-edit').unbind().click(function () {
+            let id = $(this).attr('data-tag');
+            window.open('/Rental/EditRental?id=' + id);
+        });
+
+
+        $('.NOC-hjkfds').unbind().click(function () {
+            let id = $(this).attr('data-tag');
+            window.open('/Rental/RentalNOC?id=' + id);
+        });
+
+        $('.UNR-hjkfds').unbind().click(function () {
+            let confi = confirm('Are you sure you want to unrent this property?');
+            if (!confi) {
+                return;
+            }
+            let id = $(this).attr('data-tag');
+            $.ajax({
+                type: "POST",
+                url: '/Rental/RemoveRental/',
+                data: { id: id },
+                success: function (data) {
+                    if (data) {
+                        alert('Rental status has been removed successfully.');
+                    }
+                    else {
+                        alert("Failed to remove rental status of this property.");
+                    }
+                }
+                , error: function (xmlhttprequest, textstatus, message) {
+                    if (textstatus === "timeout") {
+                        alert("got timeout");
+                    } else {
+                        alert(textstatus);
+                    }
+                }
+            });
+
+        });
+
+        $('.rentals-tbl').DataTable();
+    });
+
+    $('.new-rental-prop').unbind().click(function () {
+        window.open('/Rental/AddRental/');
+    });
+
+</script>

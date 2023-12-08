@@ -1,0 +1,26 @@
+﻿<div class="col-md-4 p-0">
+    <div class="bdrs-3 ov-h bgc-white p-10 bd">
+        <div class="row">
+            <div class="col-md-12 mt-2" id="mile-sum">
+                @* For Milestone Summary     *@
+            </div>
+            <div class="col-md-12 mt-2" id="prj-fin-sum">
+                @* For Project Finance Summary *@
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col-md-8">
+    <div class="bdrs-3 ov-h bgc-white p-10 bd">
+        <div class="col-md-12" id="prj-gant">
+        </div>
+    </div>
+</div>
+<script>
+    $(function () {
+        var id = $("#Prj_Id").val();
+        $("#mile-sum").load("/ConstructProjectManagement/MilestoneSummary/", { Prj_Id: id });
+        $("#prj-fin-sum").load("/ConstructProjectManagement/FinanceSummary/", { Prj_Id: id });
+        $("#prj-gant").load("/ConstructProjectManagement/GanttChart/", { Prj_Id: id });
+    });
+</script>

@@ -1,0 +1,616 @@
+﻿@font-face {
+    font-family: RobotoRegular;
+    src: url('fonts/Roboto-Regular.ttf');
+}
+
+.head-widget {
+    width: 100%;
+    height: 75px;
+    background: transparent linear-gradient(151deg, #082044 4%, #36132C 24%, #5E0918 45%, #76020C 61%, #800008 70%) 0% 0% no-repeat padding-box;
+    opacity: 1;
+    color: white;
+}
+
+
+.sidebar-header {
+    background-color: #171E40;
+    height: 64px;
+    color: white;
+}
+
+.sidebar-body {
+    left: -0.0033723092637956142px;
+    background: #0D0F19 0% 0% no-repeat padding-box;
+    opacity: 1;
+    color: #C7C9CB;
+    border-right: none !important;
+    border-bottom: none !important;
+}
+
+.default-backgroud {
+    background: #0D0F19 0% 0% no-repeat padding-box;
+    opacity: 1;
+}
+
+.default-midnight-dark-bg {
+    background-color: #2D2D2E;
+    color: white;
+}
+
+.side-20-pad {
+    padding: 0px 20px;
+}
+
+.rotater-45 {
+    transform: rotate(-45deg);
+}
+
+.fast-trans {
+    transition: 0.3s linear;
+}
+
+.own-name-plc {
+    transition: all 0.2s linear;
+}
+
+.curr-sel {
+    border-bottom: 10px solid orange;
+}
+
+.own-name-plc:hover {
+    border-bottom: 10px solid yellow;
+}
+
+.prevent-text-overflow {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.header-underline-top {
+    height: 50px;
+    padding: 8px 10px;
+}
+
+.plt-card-heading {
+    font-weight: 600;
+    color: #000;
+}
+
+.cover-back-area {
+    background: url('../assets/static/images/CoverImages/default-cover.png');
+    background-size: cover;
+}
+
+    .cover-back-area::after {
+        background-image: linear-gradient(to bottom, transparent, #0d0f19);
+        content: '';
+        display: block;
+        height: 35%;
+        bottom: 0px;
+        position: absolute;
+        width: 100%;
+        left: 0%;
+    }
+
+.black-bg-semi-opq {
+    background-color: rgba(0,0,0,0.3);
+    color: #C7C9CB;
+}
+
+.slight-round-border {
+    border-radius: 10px;
+}
+
+.no-pad {
+    padding: 0px !important;
+}
+
+.footer-bg {
+    background: transparent linear-gradient(151deg, #082044 4%, #36132C 24%, #5E0918 45%, #76020C 61%, #800008 70%) 0% 0% no-repeat padding-box;
+}
+
+.transparent-input {
+    background-color: transparent !important;
+    color: #C7C9CB !important;
+}
+
+.thead-new-dark {
+    background-color: #363D5A;
+    color: white;
+}
+
+.tcel-80 {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    max-width: 80px;
+}
+
+.tcel-100 {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    max-width: 100px;
+}
+
+.tcel-120 {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    max-width: 120px;
+}
+
+.tcel-140 {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    max-width: 140px;
+}
+
+.tcel-150 {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    max-width: 150px;
+}
+
+.tcel-200 {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    max-width: 200px;
+}
+
+.tcel-340 {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    max-width: 340px;
+}
+
+.tcel-130 {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    max-width: 130px;
+}
+
+/*.table tbody > tr:nth-child(odd) {
+    background-color: rgba(12, 131, 226, .4) !important;
+    color: white;
+}*/
+
+/*.table tbody > tr:nth-child(even) {
+    color: black;
+}*/
+
+.hr-lg-on-dark {
+    border-top: 1px solid rgba(255,255,255,.3);
+}
+
+.warn-bg {
+    background-color: rgba(128,0,8,0.7);
+    color: white;
+}
+
+.success-bg{
+    background-color:rgba(76,175,80,0.7);
+    color:white;
+}
+
+.pending-bg{
+    background-color:rgba(255,127,80,0.7);
+    color:#fff;
+}
+
+.new-header {
+    width: 100%;
+    color: #fff;
+}
+
+.new-footer {
+    background-color: #EBF0F7;
+    color: #222222;
+}
+
+.header-underline-top:before {
+    content: "";
+    position: absolute;
+    left: 10px;
+    top: 40px;
+    height: 1px;
+    width: 90%;
+    border-bottom: 1px solid #E8E9EC;
+}
+
+.header-underline-bottom:before {
+    content: "";
+    position: absolute;
+    left: 10px;
+    bottom: 5px;
+    height: 1px;
+    width: 90%;
+    border-bottom: 1px solid #E8E9EC;
+}
+
+
+.dark-table thead, .dark-table tfoot {
+    background-color: #2B3046;
+    color: #fff;
+}
+
+.dark-table tbody {
+    background-color: #373d5a;
+    color: #fff;
+}
+
+.line-text-right {
+    text-align: right;
+    float: right;
+}
+
+.line-text-left {
+    text-align: left;
+    float: left;
+}
+
+.just-cont-cent {
+    justify-content: center;
+}
+
+.just-item-cent {
+    justify-items: center;
+}
+
+.align-cont-cent {
+    align-content: center;
+}
+
+.align-item-cent {
+    align-items: center;
+}
+
+.border-top-yellow {
+    border-top: 5px solid #F8D420;
+}
+
+.border-top-purple {
+    border-top: 5px solid #D68DFF;
+}
+
+.border-top-green {
+    border-top: 5px solid #B1D45E;
+}
+
+.border-top-light-green {
+    border-top: 5px solid #3ADBA6;
+}
+
+.border-top-light-orange {
+    border-top: 5px solid orange;
+}
+
+.border-top-light-cyan {
+    border-top: 5px solid #D7F9FF;
+}
+
+.border-top-light-babyBlue {
+    border-top: 5px solid #B9D7FF;
+}
+
+.border-top-light-skyBlue {
+    border-top: 5px solid #1FDDFF;
+}
+
+
+.bg-dark-theme {
+    background-color: #363D5A;
+    color: white;
+}
+
+.white-divider {
+    border-top: 1px solid rgba(255,255,255,.3) !important;
+}
+
+.right-popup {
+    height: 100vh;
+    position: absolute;
+    right: 0;
+}
+
+.right-pop-body {
+}
+
+.blur-area {
+    background-color: rgba(0,0,0,0.3);
+}
+
+.right-pop-header-row {
+    height: 60px;
+    color: white;
+    background-color: #2B3046;
+}
+
+
+/*testing overlay*/
+
+.right-popup {
+    height: 100%;
+    width: 100%;
+    display: none;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    right: 0;
+    background-color: rgb(0,0,0);
+    background-color: rgba(0,0,0, 0.9);
+}
+
+.overlay-content {
+    position: relative;
+    top: 9%;
+    right: -27.5%;
+    height: 91%;
+    width: 45%;
+    text-align: center;
+    margin-top: 30px;
+    margin: auto;
+    background-color: white;
+}
+
+.right-pop-close-btn {
+    position: fixed;
+    right: 1%;
+    top: 5%;
+    padding-top: 2.5%;
+}
+
+    .right-pop-close-btn:hover {
+        color: #D0232A !important;
+    }
+
+.default-div-bg {
+    background-color: rgba(54, 61, 90, 0.5);
+    color: lightgray;
+}
+
+    .thead-new-dark tr th{
+        border:0px !important;
+    }
+
+.default-div-bg input[type=text], .default-div-bg input, .default-div-bg textarea {
+    background-color: rgba(54, 61, 90, 1);
+    color: lightgray;
+}
+
+.default-div-bg select, .default-div-bg select:focus, .default-div-bg select option, .default-div-bg select optgroup, .default-div-bg textarea:focus {
+    background-color: rgba(54, 61, 90, 1) !important;
+    color: lightgray;
+}
+
+    .default-div-bg option, .default-div-bg optgroup {
+        background-color: rgba(54, 61, 90, 1) !important;
+        color: lightgray;
+    }
+
+.hr-white {
+    border-top: 1px solid rgba(232,232,232,.4) !important;
+}
+
+.heading-lgt-onDark {
+    color: #D3D3D3;
+}
+
+.default-div-bg > tspan {
+    color: #D3D3D3;
+}
+
+.full-scope-img {
+    height: 100%;
+    width: 100%;
+}
+
+.fullScreenLoader {
+    position: absolute;
+    top: 45%;
+    left: 45%;
+    display: block;
+    margin: auto;
+    width: 100px;
+    height: 50px;
+}
+
+
+/*Hexagon Tile Icons Stylings*/
+.hexy-tile {
+    background: url('../../assets/static/images/hexagon.png') no-repeat;
+    height: 120px;
+    width: 105px;
+    background-size: contain;
+    margin: auto;
+}
+
+.hexy-items {
+    height: 80%;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+}
+
+.nice-font {
+    font-family: RobotoRegular;
+    font-size: 13px;
+    /*visibility: hidden;*/
+    width: 100%;
+    text-align: center;
+}
+
+/*.___tile-link-custom:hover .nice-font {
+    visibility: visible;
+}*/
+
+.lime-green-hov:hover {
+    color: limegreen;
+}
+
+.no-disp {
+    display: none !important;
+}
+
+.bgc-red-50 {
+    color: black;
+}
+
+/*New Reports Css*/
+
+/* Hexagonal Grid */
+
+#grid {
+    width: 100%;
+    padding: 20px 2%;
+    -o-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -ms-box-sizing: border-box;
+    box-sizing: border-box;
+    /*overflow: hidden;*/
+}
+
+    #grid li {
+        position: relative;
+        float: left;
+        width: 24.857143%;
+        padding: 0 0 29.167601% 0;
+        list-style-type: none;
+        -o-transform: rotate(-60deg) skewY(30deg);
+        -moz-transform: rotate(-60deg) skewY(30deg);
+        -webkit-transform: rotate(-60deg) skewY(30deg);
+        -ms-transform: rotate(-60deg) skewY(30deg);
+        transform: rotate(-60deg) skewY(30deg);
+        overflow: hidden;
+        visibility: hidden;
+        cursor: pointer;
+    }
+
+        #grid li * {
+            visibility: visible;
+        }
+
+        #grid li .hexagon {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 100%;
+            -o-transform: skewY(-30deg) rotate(60deg);
+            -moz-transform: skewY(-30deg) rotate(60deg);
+            -webkit-transform: skewY(-30deg) rotate(60deg);
+            -ms-transform: skewY(-30deg) rotate(60deg);
+            transform: skewY(-30deg) rotate(60deg);
+            overflow: hidden;
+            background: none;
+        }
+
+        #grid li:nth-child(3n+2) {
+            margin: 0 1%;
+        }
+
+        #grid li:nth-child(6n+4), #grid li:nth-child(6n+5), #grid li:nth-child(6n+6) {
+            margin-top: -6.9285714285%;
+            margin-bottom: -6.9285714285%;
+        }
+
+        #grid li:nth-child(6n+1), #grid li:nth-child(6n+2), #grid li:nth-child(6n+3) {
+            -o-transform: translateX(50%) rotate(-60deg) skewY(30deg);
+            -moz-transform: translateX(50%) rotate(-60deg) skewY(30deg);
+            -webkit-transform: translateX(50%) rotate(-60deg) skewY(30deg);
+            -ms-transform: translateX(50%) rotate(-60deg) skewY(30deg);
+            transform: translateX(50%) rotate(-60deg) skewY(30deg);
+        }
+
+        #grid li:nth-child(6n+1) {
+            margin-left: 0.5%;
+        }
+
+        #grid li .hexagon img {
+            left: -100%;
+            right: -100%;
+            height: 100%;
+            width: auto;
+            margin: 0 auto;
+            -o-transition: all 0.6s linear 0s;
+            -moz-transition: all 0.6s linear 0s;
+            -ms-transition: all 0.6s linear 0s;
+            -webkit-transition: all 0.6s linear 0s;
+            transition: all 0.6s linear 0s;
+            transform: translateY(0) translateX(-7%);
+        }
+
+        #grid li:hover img, #grid li:hover .hexy-info-wrp{
+            transform: translateY(5%) translateX(-12%);
+            transition: all 0.6s linear 0s;
+        }
+
+.hexy-info-wrp {
+    transition: all 0.6s linear 0s;
+}
+
+        #grid li .hexagon .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 100%;
+            background: rgba(255,255,255,0);
+        }
+
+        #grid li:hover .overlay {
+            -o-transition: all 0.6s linear 0s;
+            -moz-transition: all 0.6s linear 0s;
+            -ms-transition: all 0.6s linear 0s;
+            -webkit-transition: all 0.6s linear 0s;
+            transition: all 0.6s linear 0s;
+            background: rgba(255,255,255,0.6);
+        }
+
+
+.thead-dark th {
+    color: #fff !important;
+    background-color: #2B3046 !important;
+    border-color: transparent !important;
+}
+
+.bgc-blue-50{
+    color:black;
+}
+
+.clickable-rows tbody tr:hover {
+    transform: scale(1.01);
+    transition: .2s linear;
+    background-color: rgba(12,131,226,0.6);
+    transition: background-color .3s cubic-bezier(.17,.67,.83,.67);
+    box-shadow: 1px 1px 1px 2px #271734;
+}
+
+/*blunders Ive to make for new ui :'( */
+.nav {
+    border-bottom: 1px solid #4A0F23 !important;
+}
+
+.nav-tabs .nav-item.show .nav-link, .nav-tabs .nav-link.active {
+    background-color: #1E1B39 !important;
+    border-color: #4A0F23 #4A0F23 #4A0F23 !important;
+    color: white !important;
+}
+
+.nav-tabs .nav-link:focus, .nav-tabs .nav-link:hover {
+    border-color: #4A0F23 #4A0F23 #4A0F23;
+    background-color: #1E1B39;
+}
+
+/*data table new*/
+
+/*
+ * Table styles
+ */

@@ -1,0 +1,71 @@
+﻿@{
+    if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+}
+<div class="form-row">
+    <div class="col-md-10">
+        <div class="vertical-menu">
+            <a href="javascript:void(0)" class="active sideLink" data-typ="/Services/NewQuotations/">Services Process</a>
+            <a href="javascript:void(0)" class="sideLink" data-typ="/Services/Dep_ServiceReq/">Requisitions</a>
+            <a href="javascript:void(0)" class="sideLink" data-typ="/Services/Dep_ServiceOrder/">Work Orders</a>
+        </div>
+    </div>
+</div>
+<div class="form-row">
+    <div class="col-md-12">
+        <div id="empdetail" class="tab-pane">
+            @{ Html.RenderAction("NewQuotations", "Services");}
+        </div>
+    </div>
+</div>
+<script>
+    $('.sideLink').unbind().click(function () {
+        if (!$(this).hasClass('active')) {
+            $(this).addClass('active');
+            $(this).prevAll('.sideLink').removeClass('active');
+            $(this).nextAll('.sideLink').removeClass('active');
+            let typeOfLink = $(this).attr('data-typ');
+            SASLoad($('#empdetail'));
+            $('#empdetail').load(typeOfLink, function () {
+                SASUnLoad($('#empdetail'));
+            });
+        }
+    });
+    //
+    $(document).on("click", ".ser-m-req", function () {
+        var id = $("#Prj_Id").val();
+        window.open('/Services/NewServiceRequisition?Id=' + id);
+    });
+</script>
+
+<style>
+    .vertical-menu {
+        /*width: 200px;*/
+        display: flex;
+        justify-content: center;
+    }
+
+        .vertical-menu a {
+            background-color: #eee;
+            color: black;
+            display: block;
+            padding: 12px;
+            text-decoration: none;
+            min-width: 10%;
+        }
+
+            .vertical-menu a:hover {
+                background-color: #ccc;
+            }
+
+            .vertical-menu a.active {
+                background-color: #D0232A;
+                color: white !important;
+            }
+</style>

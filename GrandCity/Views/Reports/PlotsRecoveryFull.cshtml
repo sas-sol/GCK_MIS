@@ -1,0 +1,63 @@
+﻿@model MeherEstateDevelopers.Models.Report_Amounts
+<div class="form-group col-md-3">
+    <label>Start Date</label>
+    <input type="text" class="form-control" onchange="GetBlkRecov()" data-provide="datepicker" id="blk-rec-start" name="revenuestartdate" placeholder="mm/dd/yyyy" required>
+</div>
+<div class="form-group col-md-3">
+    <label>End Date</label>
+    <input type="text" class="form-control" onchange="GetBlkRecov()" data-provide="datepicker" id="blk-rec-to" name="revenueenddate" placeholder="mm/dd/yyyy" required>
+</div>
+
+<div class="col-md-6"></div>
+<div  id="blkrec"></div>
+
+<script>
+    Highcharts.chart('blkrec', {
+        chart: {
+            type: 'column',
+            backgroundColor: '#212639'
+        },
+        title: {
+            text: 'All Plots Recovery'
+        },
+        xAxis: {
+            categories: @Html.Raw(Json.Encode(Model.Categories))
+        },
+        yAxis: [{
+            min: 0,
+            title: {
+                text: ''
+            }
+        }, {
+            title: {
+                text: 'Profit (millions)'
+            },
+            opposite: true
+        }],
+        legend: {
+            shadow: false,
+            valuePrefix: 'Rs '
+        },
+        tooltip: {
+            shared: true
+        },
+        plotOptions: {
+            column: {
+                grouping: false,
+                shadow: false,
+                borderWidth: 0
+            },
+            series: {
+                cursor: 'pointer',
+                point: {
+                    events: {
+                        click: function () {
+                            window.open("/Reports/PlotsOutStandingReport_View?Block=" + this.category, '_blank');
+                        }
+                    }
+                }
+            }
+        },
+        series:@Html.Raw(Json.Encode(Model.Series))
+    });
+</script>

@@ -1,0 +1,58 @@
+﻿@{ Layout = "~/Views/Shared/_AdminLayout.cshtml"; }
+
+<div class="full-container">
+    <div class="email-app">
+        <div class="email-side-nav remain-height ov-h">
+            <div class="h-100 layers">
+                <div class="p-20 bgc-grey-100 layer w-100">
+                    <a href="javascript:void(0);" onclick="LoadSideContent('/Dealership/AddDealer/')" class="btn btn-danger btn-block">Add Dealer</a>
+                </div>
+                <div class="scrollable pos-r bdT layer w-100 fxg-1">
+                    <ul class="p-20 nav flex-column">
+                        <li class="nav-item">
+                            <a href="javascript:void(0)" class="nav-link c-grey-800 cH-blue-500 active">
+                                <div class="peers ai-c jc-sb">
+                                    <div class="peer peer-greed">
+                                        <i class="mR-10 ti-email"></i>
+                                        <span>Dealerships</span>
+                                    </div>
+                                    <div class="peer">
+                                        <span class="badge badge-pill bgc-deep-purple-50 c-deep-purple-700">+99</span>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="" class="nav-link c-grey-800 cH-blue-500">
+                                <div class="peers ai-c jc-sb">
+                                    <div class="peer peer-greed">
+                                        <i class="mR-10 ti-share"></i>
+                                        <span>Dealers Names</span>
+                                    </div>
+                                    <div class="peer">
+                                        <span class="badge badge-pill bgc-green-50 c-green-700">12</span>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="email-wrapper row remain-height pos-r scrollable bgc-white">
+            <div class="email-content open no-inbox-view">
+                <div class="email-compose">
+                    <div class="d-n@md+ p-20">
+                        <a class="email-side-toggle c-grey-900 cH-blue-500 td-n" href="javascript:void(0)">
+                            <i class="ti-menu"></i>
+                        </a>
+                    </div>
+                    <div id="sideContent" class="email-compose-body">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+</div>

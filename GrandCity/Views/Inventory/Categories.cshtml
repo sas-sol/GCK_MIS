@@ -1,0 +1,150 @@
+﻿@{
+    if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else if (User.IsInRole("CEO"))
+    {
+        Layout = "~/Views/Shared/_CEOLayout.cshtml";
+    }
+    else if (User.IsInRole("Staff"))
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+}
+<script src="~/Scripts/scanning.js"></script>
+
+<div class="row gap-20 pos-r">
+    <div class="col-md-12">
+        <div class="bgc-white p-20 bd">
+            <h6 class="c-grey-900">Assets & Inventory Categories</h6>
+            <div class="mT-30">
+                <div class="form-row row">
+                    <div class="col-md-6" id="cat-lst">
+                    </div>
+                    <div class="col-md-6">
+                        <h5>Add New Category</h5>
+                        <div class="row">
+                            <div class="col-md-7 form-group">
+                                <label>Category</label>
+                                <input type="text" class="form-control cat-nam" />
+                            </div>
+                            <div class="col-md-5">
+                                <label>Code</label>
+                                <input type="text" class="form-control cat-code" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 form-group" style="text-align:right">
+                                <label></label>
+                                <button class="btn btn-info ad-cate" >Submit</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+           
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $('#cat-lst').load('/Inventory/CategoryList/');
+    });
+    $(document).on("click", ".ad-cate", function () {
+        var c_nam = $(".cat-nam").val();
+        var c_code = $(".cat-code").val();
+        $.ajax({
+            type: "POST",
+            url: '/Inventory/AddCategory/',
+            data: { Name: c_nam, Code: c_code },
+            success: function (data) {
+                if (data.Status) {
+                    alert(data.Msg);
+                    $('#cat-lst').load('/Inventory/CategoryList/');
+                }
+            }
+            , error: function (xmlhttprequest, textstatus, message) {
+                if (textstatus === "timeout") {
+                    alert("got timeout");
+                } else {
+                    alert(textstatus);
+                }
+            }
+        });
+    })
+    //
+    $(document).on("click", ".cat-del", function () {
+        var id = $(this).closest('.cat-opt').attr('id');
+        if (confirm("Are you sure you want to remove this category")) {
+            $.ajax({
+                type: "POST",
+                url: '/Inventory/DeleteCategory/',
+                data: { Id: id },
+                success: function (data) {
+                    if (data.Status) {
+                        alert(data.Msg);
+                        $('#cat-lst').load('/Inventory/CategoryList/');
+                    }
+                }
+                , error: function (xmlhttprequest, textstatus, message) {
+                    if (textstatus === "timeout") {
+                        alert("got timeout");
+                    } else {
+                        alert(textstatus);
+                    }
+                }
+            });
+
+        }
+    })
+    //
+    $(document).on("click", ".cat-edit", function () {
+        EmptyModel();
+        var id = $(this).closest('.cat-opt').attr('id'); 
+        $('#ModalLabel').text("Update Category");
+        $('#modalbody').load('/Inventory/UpdateCategory/', { Id: id });
+    });
+    //
+    $(document).on("click", "#up-cate", function () {
+        var c_id = $(".c-id").val();
+        var c_nam = $(".c-nam").val();
+        var c_code = $(".c-code").val();
+        if (confirm("Are you sure you want to update this Category")) {
+            $.ajax({
+                type: "POST",
+                url: '/Inventory/UpdateCate/',
+                data: { Id: c_id, Name: c_nam, Code: c_code },
+                success: function (data) {
+                    if (data.Status) {
+                        alert(data.Msg);
+                        closeModal();
+                        $('#cat-lst').load('/Inventory/CategoryList/');
+                    }
+                }
+                , error: function (xmlhttprequest, textstatus, message) {
+                    if (textstatus === "timeout") {
+                        alert("got timeout");
+                    } else {
+                        alert(textstatus);
+                    }
+                }
+            });
+        }
+      
+    })
+</script>
+<style>
+    .cat-del, .cat-edit {
+        display: none;
+    }
+
+    .cat-opt:hover {
+        background: #ccc;
+    }
+
+        .cat-opt:hover .cat-del, .cat-opt:hover .cat-edit {
+            display: inline-block;
+        }
+
+</style>

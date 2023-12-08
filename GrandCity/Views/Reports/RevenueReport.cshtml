@@ -1,0 +1,74 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.ChartParentChildModel>
+<div id="revencontainer" style="min-width: 310px; height: 600px; max-width: 600px; margin: 0 auto"></div>
+@{ 
+    var res = Model.Where(x => x.id == "0").Select(x => x.value).FirstOrDefault();
+}
+<script>
+    var data =@Html.Raw(Json.Encode(Model));
+
+
+    // Splice in transparent for the center circle
+    //Highcharts.getOptions().colors.splice(0, 0, 'transparent');
+
+
+    Highcharts.chart('revencontainer', {
+
+        chart: {
+            height: '100%'
+        },
+
+        title: {
+            text: 'Total Revenue'
+        },
+        subtitle: {
+            text: '@string.Format("{0:n0}",res)'
+        },
+        series: [{
+            type: "sunburst",
+            data: data,
+            allowDrillToNode: true,
+            cursor: 'pointer',
+            dataLabels: {
+                format: '{point.name}',
+                filter: {
+                    property: 'innerArcLength',
+                    operator: '>',
+                    value: 16
+                }
+            },
+            levels: [{
+                level: 1,
+                levelIsConstant: false,
+                dataLabels: {
+                    filter: {
+                        property: 'outerArcLength',
+                        operator: '>',
+                        value: 64
+                    }
+                }
+            }, {
+                level: 2,
+                colorByPoint: true
+            },
+            {
+                level: 3,
+                colorVariation: {
+                    key: 'brightness',
+                    to: -0.5
+                }
+            }, {
+                level: 4,
+                colorVariation: {
+                    key: 'brightness',
+                    to: 0.5
+                }
+            }]
+
+        }],
+        tooltip: {
+            headerFormat: "",
+            pointFormat: 'The Revenue of <b>{point.name}</b> is <b>{point.value}</b>'
+        }
+    });
+
+</script>

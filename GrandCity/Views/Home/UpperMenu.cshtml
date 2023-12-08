@@ -1,0 +1,1695 @@
+﻿@model IEnumerable<Management_Information_System.Models.QuickLink>
+
+<style>
+    .info-blocks > li {
+        /*min-width: 0px !important;*/
+        /*margin: 45px 0px !important;*/
+        width:200px;
+        height:200px;
+        word-break:break-word;
+    }
+
+    .upper-menu-items-holder {
+        height: 120px;
+        align-items: center;
+        box-shadow: rgba(1, 1, 1, 0.7) 10px 30px 8px;
+    }
+</style>
+<head>
+    <script>
+        var dash_tp = @Html.Raw(Json.Encode(ViewBag.Dash));
+    </script>
+</head>
+<div class="utla-panel upper-menu-items-holder" style="align-items:center;min-width:100%; height:100%;">
+    <div class="col-md-12">
+        <div class="menu-bookmrk">
+            <i class="fa-2x fa fa-pencil-square-o pointer bookmrk-hjkfasd"></i>
+        </div>
+        <div class="menu-close">
+            <i class="fa-2x fa fa-times-circle-o pointer fhkjdsa"></i>
+        </div>
+
+        <div class="clearfix"></div>
+    </div>
+    <ul class="info-blocks scrollable pos-r" @*style="display:flex; width:100%;max-width:11500px;justify-content:space-evenly;height: 100%;align-items: center;"*@>
+        @{
+            if (ViewBag.Dash == "dealer")
+            {
+
+                <li class="___tile-link-custom">
+                    <a href="/Dealership/DealerFormAssociation">
+                        <div class="hexy-tile">
+                            <div class="hexy-items">
+                                <i class="fa fa-3x fa-id-card-o"></i>
+                            </div>
+                        </div>
+                        <label class="nice-font"><b>Generate Files</b></label>
+                    </a>
+                </li>
+
+                <li class="___tile-link-custom">
+                    <a href="/Dealership/AddDealer">
+                        <div class="hexy-tile">
+                            <div class="hexy-items">
+                                <i class="fa fa-3x fa-users"></i>
+                            </div>
+                        </div>
+                        <label class="nice-font"><b>Add Dealership</b></label>
+                    </a>
+                </li>
+
+                <li class="___tile-link-custom">
+                    <a href="/Dealership/AllDealerships">
+                        <div class="hexy-tile">
+                            <div class="hexy-items">
+                                <i class="fa fa-3x fa-newspaper-o"></i>
+                            </div>
+                        </div>
+                        <label class="nice-font"><b>Dealership Details</b></label>
+                    </a>
+                </li>
+            }
+            else if (ViewBag.Dash == "cash counter")
+            {
+
+                <li class="___tile-link-custom">
+                    <a href="/FileSystem/RegisterFile">
+                        <div class="hexy-tile">
+                            <div class="hexy-items">
+                                <i class="fa fa-3x fa-address-card"></i>
+                            </div>
+                        </div>
+                        <label class="nice-font"><b>File Registration</b></label>
+                    </a>
+                </li>
+
+                <li class="___tile-link-custom">
+                    <a href="/Plots/PlotOwnership">
+                        <div class="hexy-tile">
+                            <div class="hexy-items">
+                                <i class="fa fa-3x fa-clipboard"></i>
+                            </div>
+                        </div>
+                        <label class="nice-font"><b>Plot Registration</b></label>
+                    </a>
+                </li>
+
+                <li class="___tile-link-custom">
+                    <a href="/Installments/InstallmentPortal">
+                        <div class="hexy-tile">
+                            <div class="hexy-items">
+                                <i class="fa fa-3x fa-bitbucket"></i>
+                            </div>
+                        </div>
+                        <label class="nice-font"><b>Receive Installments</b></label>
+                    </a>
+                </li>
+
+                <li class="___tile-link-custom">
+                    <a href="/FileSystem/FileTransfer">
+                        <div class="hexy-tile">
+                            <div class="hexy-items">
+                                <i class="fa fa-3x fa-refresh"></i>
+                            </div>
+                        </div>
+                        <label class="nice-font"><b>File Transfer</b></label>
+                    </a>
+                </li>
+
+                <li class="___tile-link-custom">
+                    <a href="/Transfer/PlotTransfer">
+                        <div class="hexy-tile">
+                            <div class="hexy-items">
+                                <i class="fa fa-3x fa-random"></i>
+                            </div>
+                        </div>
+                        <label class="nice-font"><b>Plot Transfer</b></label>
+                    </a>
+                </li>
+
+                <li class="___tile-link-custom">
+                    <a href="/ServiceCharges/ElectricityBillPayment">
+                        <div class="hexy-tile">
+                            <div class="hexy-items">
+                                <i class="fa fa-3x fa-money"></i>
+                            </div>
+                        </div>
+                        <label class="nice-font"><b>Electricity Charges Recovery</b></label>
+                    </a>
+                </li>
+
+                <li class="___tile-link-custom">
+                    <a href="/ServiceCharges/ServiceChargesBillPayment">
+                        <div class="hexy-tile">
+                            <div class="hexy-items">
+                                <i class="fa fa-3x fa-credit-card-alt"></i>
+                            </div>
+                        </div>
+                        <label class="nice-font"><b>Service Charges Recovery</b></label>
+                    </a>
+                </li>
+
+                <li class="___tile-link-custom">
+                    <a href="/ServiceCharges/NewConnection">
+                        <div class="hexy-tile">
+                            <div class="hexy-items">
+                                <i class="fa fa-3x fa-link"></i>
+                            </div>
+                        </div>
+                        <label class="nice-font"><b>New Connection</b></label>
+                    </a>
+                </li>
+
+                <li class="___tile-link-custom">
+                    <a href="/ServiceCharges/FineCollection">
+                        <div class="hexy-tile">
+                            <div class="hexy-items">
+                                <i class="fa fa-3x fa-braille"></i>
+                            </div>
+                        </div>
+                        <label class="nice-font"><b>Other Recovery</b></label>
+                    </a>
+                </li>
+
+                <li class="___tile-link-custom">
+                    <a href="/Finance/AllCancelRequests">
+                        <div class="hexy-tile">
+                            <div class="hexy-items">
+                                <i class="fa fa-3x fa-recycle"></i>
+                            </div>
+                        </div>
+                        <label class="nice-font"><b>Receipt Cancelation Requests</b></label>
+                    </a>
+                </li>
+
+                <li class="___tile-link-custom">
+                    <a href="/Leads/LeadsPayments">
+                        <div class="hexy-tile">
+                            <div class="hexy-items">
+                                <i class="fa fa-3x fa-ticket"></i>
+                            </div>
+                        </div>
+                        <label class="nice-font"><b>Leads Receipts</b></label>
+                    </a>
+                </li>
+
+                <li class="___tile-link-custom">
+                    <a href="/Vouchers/VoucherRequest">
+                        <div class="hexy-tile">
+                            <div class="hexy-items">
+                                <i class="fa fa-3x fa-newspaper-o"></i>
+                            </div>
+                        </div>
+                        <label class="nice-font"><b>Leads Vouchers</b></label>
+                    </a>
+                </li>
+
+                <li class="___tile-link-custom">
+                    <a href="/PropertyDeal/PaymentsRequest">
+                        <div class="hexy-tile">
+                            <div class="hexy-items">
+                                <i class="fa fa-3x fa-files-o"></i>
+                            </div>
+                        </div>
+                        <label class="nice-font"><b>Propperty Deal Payment Requests</b></label>
+                    </a>
+                </li>
+
+            }
+            else if (ViewBag.Dash == "Ballot")
+            {
+                <li class="___tile-link-custom">
+                    <a href="/Balloting/Ballot">
+                        <div class="hexy-tile">
+                            <div class="hexy-items">
+                                <i class="fa fa-3x fa-align-left"></i>
+                            </div>
+                        </div>
+                        <label class="nice-font"><b>Perform Balloting</b></label>
+                    </a>
+                </li>
+
+                <li class="___tile-link-custom">
+                    <a href="/Balloting/BallotedPlots">
+                        <div class="hexy-tile">
+                            <div class="hexy-items">
+                                <i class="fa fa-3x fa-chess-board"></i>
+                            </div>
+                        </div>
+                        <label class="nice-font"><b>Balloted Plots</b></label>
+                    </a>
+                </li>
+
+                <li class="___tile-link-custom">
+                    <a href="/Balloting/BallotInventory">
+                        <div class="hexy-tile">
+                            <div class="hexy-items">
+                                <i class="fa fa-3x fa-database"></i>
+                            </div>
+                        </div>
+                        <label class="nice-font"><b>Balloted Inventory</b></label>
+                    </a>
+                </li>
+            }
+            else if (ViewBag.Dash == "files Plots")
+            {
+                <li class="___tile-link-custom">
+                    <a href="/FileSystem/FileInformation">
+                        <div class="hexy-tile">
+                            <div class="hexy-items">
+                                <i class="fa fa-3x fa-info"></i>
+                            </div>
+                        </div>
+                        <label class="nice-font"><b>File Information</b></label>
+                    </a>
+                </li>
+
+                <li class="___tile-link-custom">
+                    <a href="/FileSystem/OverDueFiles">
+                        <div class="hexy-tile">
+                            <div class="hexy-items">
+                                <i class="fa fa-3x fa-exclamation-triangle"></i>
+                            </div>
+                        </div>
+                        <label class="nice-font"><b>Overdue Files</b></label>
+                    </a>
+                </li>
+
+                <li class="___tile-link-custom">
+                    <a href="/FileSystem/CancellationReqs">
+                        <div class="hexy-tile">
+                            <div class="hexy-items">
+                                <i class="fa fa-3x fa-paper-plane-o"></i>
+                            </div>
+                        </div>
+                        <label class="nice-font"><b>Files Cancellation Requests</b></label>
+                    </a>
+                </li>
+
+                <li class="___tile-link-custom">
+                    <a href="/FileSystem/FileDelivery">
+                        <div class="hexy-tile">
+                            <div class="hexy-items">
+                                <i class="fa fa-3x fa-briefcase"></i>
+                            </div>
+                        </div>
+                        <label class="nice-font"><b>Files Delivery</b></label>
+                    </a>
+                </li>
+
+                <li class="___tile-link-custom">
+                    <a href="/FileSystem/TransferRequestList">
+                        <div class="hexy-tile">
+                            <div class="hexy-items">
+                                <i class="fa fa-3x fa-random"></i>
+                            </div>
+                        </div>
+                        <label class="nice-font"><b>Files Transfer Requests</b></label>
+                    </a>
+                </li>
+
+                <li class="___tile-link-custom">
+                    <a href="/Transfer/FilesTransfersList">
+                        <div class="hexy-tile">
+                            <div class="hexy-items">
+                                <i class="fa fa-3x fa-exchange"></i>
+                            </div>
+                        </div>
+                        <label class="nice-font"><b>File Transfer</b></label>
+                    </a>
+                </li>
+
+                <li class="___tile-link-custom">
+                    <a href="/Plots/PlotInformation">
+                        <div class="hexy-tile">
+                            <div class="hexy-items">
+                                <i class="fa fa-3x fa-inbox"></i>
+                            </div>
+                        </div>
+                        <label class="nice-font"><b>Plot Information</b></label>
+                    </a>
+                </li>
+
+                <li class="___tile-link-custom">
+                    <a href="/Plots/AllotmentLettersList">
+                        <div class="hexy-tile">
+                            <div class="hexy-items">
+                                <i class="fa fa-3x fa-tasks"></i>
+                            </div>
+                        </div>
+                        <label class="nice-font"><b>Allotment Letters List</b></label>
+                    </a>
+                </li>
+
+                <li class="___tile-link-custom">
+                    <a href="/Transfer/PlotTransferRequest">
+                        <div class="hexy-tile">
+                            <div class="hexy-items">
+                                <i class="fa fa-3x fa-sitemap"></i>
+                            </div>
+                        </div>
+                        <label class="nice-font"><b>Plot Transfer Request</b></label>
+                    </a>
+                </li>
+
+                <li class="___tile-link-custom">
+                    <a href="/Transfer/PlotTransferRequestList">
+                        <div class="hexy-tile">
+                            <div class="hexy-items">
+                                <i class="fa fa-3x fa-database"></i>
+                            </div>
+                        </div>
+                        <label class="nice-font"><b>Plot Transfer Request List</b></label>
+                    </a>
+                </li>
+                <li class="___tile-link-custom">
+                    <a href="/Transfer/PlotsTransfersList">
+                        <div class="hexy-tile">
+                            <div class="hexy-items">
+                                <i class="fa fa-3x fa-cubes"></i>
+                            </div>
+                        </div>
+                        <label class="nice-font"><b>All Transfers List</b></label>
+                    </a>
+                </li>
+                <li class="___tile-link-custom">
+                    <a href="/Plots/AllotmentTrackingViews">
+                        <div class="hexy-tile">
+                            <div class="hexy-items">
+                                <i class="fa fa-3x fa-search"></i>
+                            </div>
+                        </div>
+                        <label class="nice-font"><b>Allotment Letter Tracking</b></label>
+                    </a>
+                </li>
+
+                <li class="___tile-link-custom">
+                    <a href="/Plots/CancellationReqs">
+                        <div class="hexy-tile">
+                            <div class="hexy-items">
+                                <i class="fa fa-3x fa-industry"></i>
+                            </div>
+                        </div>
+                        <label class="nice-font"><b>Plot Cancelation Requests</b></label>
+                    </a>
+                </li>
+
+                <li class="___tile-link-custom">
+                    <a href="/Plots/ExtraAmountRefund">
+                        <div class="hexy-tile">
+                            <div class="hexy-items">
+                                <i class="fa fa-3x fa-reply"></i>
+                            </div>
+                        </div>
+                        <label class="nice-font"><b>Receipt Refund Request</b></label>
+                    </a>
+                </li>
+
+                <li class="___tile-link-custom">
+                    <a href="/Plots/OverDuePlots">
+                        <div class="hexy-tile">
+                            <div class="hexy-items">
+                                <i class="fa fa-3x fa-level-up"></i>
+                            </div>
+                        </div>
+                        <label class="nice-font"><b>Overdue Plot</b></label>
+                    </a>
+                </li>
+
+                <li class="___tile-link-custom">
+                    <a href="/Plots/PossessionRequests">
+                        <div class="hexy-tile">
+                            <div class="hexy-items">
+                                <i class="fa fa-3x fa-key"></i>
+                            </div>
+                        </div>
+                        <label class="nice-font"><b>Possession Letter Requests</b></label>
+                    </a>
+                </li>
+
+
+                <li class="___tile-link-custom">
+                    <a href="/Rental/Index">
+                        <div class="hexy-tile">
+                            <div class="hexy-items">
+                                <i class="fa fa-3x fa-building-o"></i>
+                            </div>
+                        </div>
+                        <label class="nice-font"><b>Rented Properties</b></label>
+                    </a>
+                </li>
+
+            }
+            else if (ViewBag.Dash == "prj management")
+            {
+                <li class="___tile-link-custom">
+                    <a href="/ConstructProjectManagement/ProjectsList">
+                        <div class="hexy-tile">
+                            <div class="hexy-items">
+                                <i class="fa fa-3x fa-chess-board"></i>
+                            </div>
+                        </div>
+                        <label class="nice-font"><b>Projects</b></label>
+                    </a>
+                </li>
+            }
+            else if (ViewBag.Dash == "tickets")
+            {
+                <li class="___tile-link-custom">
+                    <a href="/Tickets/AllTickets">
+                        <div class="hexy-tile">
+                            <div class="hexy-items">
+                                <i class="fa fa-3x fa-file-o"></i>
+                            </div>
+                        </div>
+                        <label class="nice-font"><b>All Tickets</b></label>
+                    </a>
+                </li>
+
+                <li class="___tile-link-custom">
+                    <a href="/Tickets/ReceptionTicketing">
+                        <div class="hexy-tile">
+                            <div class="hexy-items">
+                                <i class="fa fa-3x fa-map-signs"></i>
+                            </div>
+                        </div>
+                        <label class="nice-font"><b>Reception Tickets</b></label>
+                    </a>
+                </li>
+
+                <li class="___tile-link-custom">
+                    <a href="/Tickets/MyTickets">
+                        <div class="hexy-tile">
+                            <div class="hexy-items">
+                                <i class="fa fa-3x fa-window-restore"></i>
+                            </div>
+                        </div>
+                        <label class="nice-font"><b>My Tickets</b></label>
+                    </a>
+                </li>
+
+            }
+            else if (ViewBag.Dash == "transfer requests")
+            {
+                <li class="___tile-link-custom">
+                    <a href="/FileSystem/TransferRequest">
+                        <div class="hexy-tile">
+                            <div class="hexy-items">
+                                <i class="fa fa-3x fa-chess-board"></i>
+                            </div>
+                        </div>
+                        <label class="nice-font"><b>File Transfer</b></label>
+                    </a>
+                </li>
+
+                <li class="___tile-link-custom">
+                    <a href="/Transfer/PlotTransferRequest">
+                        <div class="hexy-tile">
+                            <div class="hexy-items">
+                                <i class="fa fa-3x fa-chess-board"></i>
+                            </div>
+                        </div>
+                        <label class="nice-font"><b>Plot Transfer Request</b></label>
+                    </a>
+                </li>
+            }
+            else if (ViewBag.Dash == "accounts")
+            {
+                <li class="___tile-link-custom">
+                    <a href="/Banking/AllBankPayments">
+                        <div class="hexy-tile">
+                            <div class="hexy-items">
+                                <i class="fa fa-3x fa-envelope-o"></i>
+                            </div>
+                        </div>
+                        <label class="nice-font"><b>Instruments</b></label>
+                    </a>
+                </li>
+
+                <li class="___tile-link-custom">
+                    <a href="/Reports/RecoveryReport">
+                        <div class="hexy-tile">
+                            <div class="hexy-items">
+                                <i class="fa fa-3x fa-bar-chart"></i>
+                            </div>
+                        </div>
+                        <label class="nice-font"><b>All Recovery Reports</b></label>
+                    </a>
+                </li>
+
+                <li class="___tile-link-custom">
+                    <a href="/Finance/UpdateRequests">
+                        <div class="hexy-tile">
+                            <div class="hexy-items">
+                                <i class="fa fa-3x fa-circle-o-notch"></i>
+                            </div>
+                        </div>
+                        <label class="nice-font"><b>Receipt Updation</b></label>
+                    </a>
+                </li>
+
+                <li class="___tile-link-custom">
+                    <a href="/Banking/BanksMIS">
+                        <div class="hexy-tile">
+                            <div class="hexy-items">
+                                <i class="fa fa-3x fa-cloud"></i>
+                            </div>
+                        </div>
+                        <label class="nice-font"><b>Online Bank Reconciliation</b></label>
+                    </a>
+                </li>
+
+                <li class="___tile-link-custom">
+                    <a href="/Banking/LeadAllBankPayments?Company=SAM">
+                        <div class="hexy-tile">
+                            <div class="hexy-items">
+                                <i class="fa fa-3x fa-line-chart"></i>
+                            </div>
+                        </div>
+                        <label class="nice-font"><b>Sales Recovery</b></label>
+                    </a>
+                </li>
+
+                <li class="___tile-link-custom">
+                    <a href="/AccountHeads/AccountHeadList">
+                        <div class="hexy-tile">
+                            <div class="hexy-items">
+                                <i class="fa fa-3x fa-map-signs"></i>
+                            </div>
+                        </div>
+                        <label class="nice-font"><b>Chart Of Accounts</b></label>
+                    </a>
+                </li>
+
+                <li class="___tile-link-custom">
+                    <a href="/AccountHeads/TrailBalance">
+                        <div class="hexy-tile">
+                            <div class="hexy-items">
+                                <i class="fa fa-3x fa-balance-scale"></i>
+                            </div>
+                        </div>
+                        <label class="nice-font"><b>Trial Balance</b></label>
+                    </a>
+                </li>
+
+                <li class="___tile-link-custom">
+                    <a href="/GeneralEntry/GeneralEntry">
+                        <div class="hexy-tile">
+                            <div class="hexy-items">
+                                <i class="fa fa-3x fa-book"></i>
+                            </div>
+                        </div>
+                        <label class="nice-font"><b>General Entries</b></label>
+                    </a>
+                </li>
+
+                <li class="___tile-link-custom">
+                    <a href="/GeneralEntry/PendingEntries">
+                        <div class="hexy-tile">
+                            <div class="hexy-items">
+                                <i class="fa fa-3x fa-cart-arrow-down"></i>
+                            </div>
+                        </div>
+                        <label class="nice-font"><b>Pending Vouchers</b></label>
+                    </a>
+                </li>
+
+                <li class="___tile-link-custom">
+                    <a href="/GeneralEntry/PayableVouchers">
+                        <div class="hexy-tile">
+                            <div class="hexy-items">
+                                <i class="fa fa-3x fa-paper-plane-o"></i>
+                            </div>
+                        </div>
+                        <label class="nice-font"><b>Payable Vouchers</b></label>
+                    </a>
+                </li>
+            }
+            else if (ViewBag.Dash == "audit")
+            {
+                <li class="___tile-link-custom">
+                    <a href="/FileSystem/FileVerification">
+                        <div class="hexy-tile">
+                            <div class="hexy-items">
+                                <i class="fa fa-3x fa-registered"></i>
+                            </div>
+                        </div>
+                        <label class="nice-font"><b>File Verification</b></label>
+                    </a>
+                </li>
+
+                <li class="___tile-link-custom">
+                    <a href="/Plots/ReqVerificationList">
+                        <div class="hexy-tile">
+                            <div class="hexy-items">
+                                <i class="fa fa-3x fa-check"></i>
+                            </div>
+                        </div>
+                        <label class="nice-font"><b>Plot Verification</b></label>
+                    </a>
+                </li>
+
+                <li class="___tile-link-custom">
+                    <a href="/Plots/AllotmentRequest">
+                        <div class="hexy-tile">
+                            <div class="hexy-items">
+                                <i class="fa fa-3x fa-chess-board"></i>
+                            </div>
+                        </div>
+                        <label class="nice-font"><b>Allotment Letter Request</b></label>
+                    </a>
+                </li>
+
+            }
+            else if (ViewBag.Dash == "service charges")
+            {
+                <li class="___tile-link-custom">
+                    <a href="/ServiceCharges/Bills">
+                        <div class="hexy-tile">
+                            <div class="hexy-items">
+                                <i class="fa fa-3x fa-road"></i>
+                            </div>
+                        </div>
+                        <label class="nice-font"><b>Service Charges Details</b></label>
+                    </a>
+                </li>
+
+                <li class="___tile-link-custom">
+                    <a href="/ServiceCharges/ElectricityBill">
+                        <div class="hexy-tile">
+                            <div class="hexy-items">
+                                <i class="fa fa-3x fa-lightbulb-o"></i>
+                            </div>
+                        </div>
+                        <label class="nice-font"><b>Electricity Charges Details</b></label>
+                    </a>
+                </li>
+
+                <li class="___tile-link-custom">
+                    <a href="/ServiceCharges/MeterChangeRequests/">
+                        <div class="hexy-tile">
+                            <div class="hexy-items">
+                                <i class="fa fa-3x fa-retweet"></i>
+                            </div>
+                        </div>
+                        <label class="nice-font"><b>Meter Change Requests</b></label>
+                    </a>
+                </li>
+
+                <li class="___tile-link-custom">
+                    <a href="/ServiceCharges/InstallmentRequests/">
+                        <div class="hexy-tile">
+                            <div class="hexy-items">
+                                <i class="fa fa-3x fa-database"></i>
+                            </div>
+                        </div>
+                        <label class="nice-font"><b>Installments Requests</b></label>
+                    </a>
+                </li>
+
+                <li class="___tile-link-custom">
+                    <a href="/ServiceCharges/RequestsList?typ=Fine_Waiver&mod=Plot">
+                        <div class="hexy-tile">
+                            <div class="hexy-items">
+                                <i class="fa fa-3x fa-file-word-o"></i>
+                            </div>
+                        </div>
+                        <label class="nice-font"><b>Requests List</b></label>
+                    </a>
+                </li>
+            }
+
+            else if (ViewBag.Dash == "hr")
+            {
+
+                <li class="___tile-link-custom">
+                    <a href="/Company/AddCompany">
+                        <div class="hexy-tile">
+                            <div class="hexy-items">
+                                <i class="fa fa-3x fa-building-o"></i>
+                            </div>
+                        </div>
+                        <label class="nice-font"><b>Add Company</b></label>
+                    </a>
+                </li>
+                @*<li>
+                        <div style="width:120px">
+                            <a href="">
+                                <img src="~/assets/static/images/Tileicons/ad-com.png" style="width:100%" />
+                            </a>
+                        </div>
+                    </li>*@
+
+                <li class="___tile-link-custom">
+                    <a href="/Company/AddDepartments">
+                        <div class="hexy-tile">
+                            <div class="hexy-items">
+                                <i class="fa fa-3x fa-database"></i>
+                            </div>
+                        </div>
+                        <label class="nice-font"><b>Add Departments</b></label>
+                    </a>
+                </li>
+                @*<li>
+                        <div style="width:120px">
+                            <a href="">
+                                <img src="~/assets/static/images/Tileicons/ad-dep.png" style="width:100%" />
+                            </a>
+                        </div>
+                    </li>*@
+
+                <li class="___tile-link-custom">
+                    <a href="/HumanResource/EmployeesList">
+                        <div class="hexy-tile">
+                            <div class="hexy-items">
+                                <i class="fa fa-3x fa-blind"></i>
+                            </div>
+                        </div>
+                        <label class="nice-font"><b>Employees List</b></label>
+                    </a>
+                </li>
+
+                @*<li>
+                        <div style="width:120px">
+                            <a href="">
+                                <img src="~/assets/static/images/Tileicons/emp-lst.png" style="width:100%" />
+                            </a>
+                        </div>
+                    </li>*@
+
+                <li class="___tile-link-custom">
+                    <a href="/HumanResource/AddEmployee">
+                        <div class="hexy-tile">
+                            <div class="hexy-items">
+                                <i class="fa fa-3x fa-user-o"></i>
+                            </div>
+                        </div>
+                        <label class="nice-font"><b>Add Employee</b></label>
+                    </a>
+                </li>
+                @*<li>
+                        <div style="width:120px">
+                            <a href="">
+                                <img src="~/assets/static/images/Tileicons/add-emp.png" style="width:100%" />
+                            </a>
+                        </div>
+                    </li>*@
+
+                <li class="___tile-link-custom">
+                    <a href="/HumanResource/MakeOrgano">
+                        <div class="hexy-tile">
+                            <div class="hexy-items">
+                                <i class="fa fa-3x fa-line-chart"></i>
+                            </div>
+                        </div>
+                        <label class="nice-font"><b>Company Hierarchy</b></label>
+                    </a>
+                </li>
+                @*<li>
+                        <div style="width:120px">
+                            <a href="">
+                                <img src="~/assets/static/images/Tileicons/org-chart.png" style="width:100%" />
+                            </a>
+                        </div>
+                    </li>*@
+
+                <li class="___tile-link-custom">
+                    <a href="/HumanResource/ProbationEndEmployees">
+                        <div class="hexy-tile">
+                            <div class="hexy-items">
+                                <i class="fa fa-3x fa-hourglass-half"></i>
+                            </div>
+                        </div>
+                        <label class="nice-font"><b>Probation Employees</b></label>
+                    </a>
+                </li>
+                @*<li>
+                        <div style="width:120px">
+                            <a href="">
+                                <img src="~/assets/static/images/Tileicons/Probation-Employees.png" style="width:100%" />
+                            </a>
+                        </div>
+                    </li>*@
+
+                <li class="___tile-link-custom">
+                    <a href="/HumanResource/SetQuestionnaire">
+                        <div class="hexy-tile">
+                            <div class="hexy-items">
+                                <i class="fa fa-3x fa-file-word-o"></i>
+                            </div>
+                        </div>
+                        <label class="nice-font"><b>Set Questionnaire</b></label>
+                    </a>
+                </li>
+                @*<li>
+                        <div style="width:120px">
+                            <a href="">
+                                <img src="~/assets/static/images/Tileicons/Set-Questionnaire.png" style="width:100%" />
+                            </a>
+                        </div>
+                    </li>*@
+
+                <li class="___tile-link-custom">
+                    <a href="/HumanResource/PendingQuestionnaires">
+                        <div class="hexy-tile">
+                            <div class="hexy-items">
+                                <i class="fa fa-3x fa-file-archive-o"></i>
+                            </div>
+                        </div>
+                        <label class="nice-font"><b>Pending Questionnaires</b></label>
+                    </a>
+                </li>
+                @*<li>
+                        <div style="width:120px">
+                            <a href="">
+                                <img src="~/assets/static/images/Tileicons/Questionnaires.png" style="width:100%" />
+                            </a>
+                        </div>
+                    </li>*@
+
+                <li class="___tile-link-custom">
+                    <a href="/HumanResource/SmartGoalReporting">
+                        <div class="hexy-tile">
+                            <div class="hexy-items">
+                                <i class="fa fa-3x fa-mortar-board"></i>
+                            </div>
+                        </div>
+                        <label class="nice-font"><b>SMART Goals</b></label>
+                    </a>
+                </li>
+                @*<li>
+                        <div style="width:120px">
+                            <a href="">
+                                <img src="~/assets/static/images/Tileicons/Smart-Goals.png" style="width:100%" />
+                            </a>
+                        </div>
+                    </li>*@
+                <li class="___tile-link-custom">
+                    <a href="/Salaries/SalaryManagement">
+                        <div class="hexy-tile">
+                            <div class="hexy-items">
+                                <i class="fa fa-3x fa-dollar"></i>
+                            </div>
+                        </div>
+                        <label class="nice-font"><b>Salary Management</b></label>
+                    </a>
+                </li>
+
+
+                @*<li>
+                        <div style="width:120px">
+                            <a href="">
+                                <img src="~/assets/static/images/Tileicons/sal-lst.png" style="width:100%" />
+                            </a>
+                        </div>
+                    </li>*@
+
+                <li class="___tile-link-custom">
+                    <a href="/ArrearsSalaries/ArrearsManagement">
+                        <div class="hexy-tile">
+                            <div class="hexy-items">
+                                <i class="fa fa-3x fa-sheqel"></i>
+                            </div>
+                        </div>
+                        <label class="nice-font"><b>Arrears Management</b></label>
+                    </a>
+                </li>
+
+                @*<li>
+                        <div style="width:120px">
+                            <a href="">
+                                <img src="~/assets/static/images/Tileicons/gen-ar.png" style="width:100%" />
+                            </a>
+                        </div>
+                    </li>*@
+
+                <li class="___tile-link-custom">
+                    <a href="/Leave/UserLeaves">
+                        <div class="hexy-tile">
+                            <div class="hexy-items">
+                                <i class="fa fa-3x fa-plane"></i>
+                            </div>
+                        </div>
+                        <label class="nice-font"><b>Leaves</b></label>
+                    </a>
+                </li>
+
+                @*<li>
+                        <div style="width:120px">
+                            <a href="">
+                                <img src="~/assets/static/images/Tileicons/levs.png" style="width:100%" />
+                            </a>
+                        </div>
+                    </li>*@
+
+                <li class="___tile-link-custom">
+                    <a href="/Loan/Index">
+                        <div class="hexy-tile">
+                            <div class="hexy-items">
+                                <i class="fa fa-3x fa-money"></i>
+                            </div>
+                        </div>
+                        <label class="nice-font"><b>Loans</b></label>
+                    </a>
+                </li>
+
+                @*<li>
+                        <div style="width:120px">
+                            <a href="">
+                                <img src="~/assets/static/images/Tileicons/la-ad.png" style="width:100%" />
+                            </a>
+                        </div>
+                    </li>*@
+
+                <li class="___tile-link-custom">
+                    <a href="/Loan/BalanceDetail">
+                        <div class="hexy-tile">
+                            <div class="hexy-items">
+                                <i class="fa fa-3x fa-balance-scale"></i>
+                            </div>
+                        </div>
+                        <label class="nice-font"><b>Loans Balances</b></label>
+                    </a>
+                </li>
+                @*<li>
+                        <div style="width:120px">
+                            <a href="">
+                                <img src="~/assets/static/images/Tileicons/la-app.png" style="width:100%" />
+                            </a>
+                        </div>
+                    </li>*@
+
+                <li class="___tile-link-custom">
+                    <a href="/HumanResource/HrConfigPanel">
+                        <div class="hexy-tile">
+                            <div class="hexy-items">
+                                <i class="fa fa-3x fa-sliders"></i>
+                            </div>
+                        </div>
+                        <label class="nice-font"><b>Configuration Panel</b></label>
+                    </a>
+                </li>
+                @*<li>
+                        <div style="width:120px">
+                            <a href="">
+                                <img src="~/assets/static/images/Tileicons/Configuration-Panel.png" style="width:100%" />
+                            </a>
+                        </div>
+                    </li>*@
+
+            }
+            else if (ViewBag.Dash == "call center")
+            {
+                <li class="___tile-link-custom">
+                    <a href="/Company/AddAsset">
+                        <div class="hexy-tile">
+                            <div class="hexy-items">
+                                <i class="fa fa-3x fa-chess-board"></i>
+                            </div>
+                        </div>
+                        <label class="nice-font"><b>Call Center</b></label>
+                    </a>
+                </li>
+            }
+            else if (ViewBag.Dash == "asset")
+            {
+                <li class="___tile-link-custom">
+                    <a href="/CallCenter/OverdueInstallments">
+                        <div class="hexy-tile">
+                            <div class="hexy-items">
+                                <i class="fa fa-3x fa-chess-board"></i>
+                            </div>
+                        </div>
+                        <label class="nice-font"><b>Call Center</b></label>
+                    </a>
+                </li>
+
+            }
+            else if (ViewBag.Dash == "vehical")
+            {
+                <li class="___tile-link-custom">
+                    <a href="/Company/AddVehical">
+                        <div class="hexy-tile">
+                            <div class="hexy-items">
+                                <i class="fa fa-3x fa-chess-board"></i>
+                            </div>
+                        </div>
+                        <label class="nice-font"><b>Vehicle Details</b></label>
+                    </a>
+                </li>
+
+                <li class="___tile-link-custom">
+                    <a href="/Company/FuelDetails">
+                        <div class="hexy-tile">
+                            <div class="hexy-items">
+                                <i class="fa fa-3x fa-chess-board"></i>
+                            </div>
+                        </div>
+                        <label class="nice-font"><b>Fuel Details</b></label>
+                    </a>
+                </li>
+
+            }
+            else if (ViewBag.Dash == "sa marketing")
+            {
+                <li class="___tile-link-custom">
+                    <a href="/Reports/SAMRecoveryReport">
+                        <div class="hexy-tile">
+                            <div class="hexy-items">
+                                <i class="fa fa-3x fa-pie-chart"></i>
+                            </div>
+                        </div>
+                        <label class="nice-font"><b>Recovery Reports</b></label>
+                    </a>
+                </li>
+
+                <li class="___tile-link-custom">
+                    <a href="/Leads/SAMLead">
+                        <div class="hexy-tile">
+                            <div class="hexy-items">
+                                <i class="fa fa-3x fa-list"></i>
+                            </div>
+                        </div>
+                        <label class="nice-font"><b>All Leads</b></label>
+                    </a>
+                </li>
+
+                <li class="___tile-link-custom">
+                    <a href="/leads/DealsReport">
+                        <div class="hexy-tile">
+                            <div class="hexy-items">
+                                <i class="fa fa-3x fa-bar-chart"></i>
+                            </div>
+                        </div>
+                        <label class="nice-font"><b>Deals Reports</b></label>
+                    </a>
+                </li>
+
+                <li class="___tile-link-custom">
+                    <a href="/Reports/LeadsReports">
+                        <div class="hexy-tile">
+                            <div class="hexy-items">
+                                <i class="fa fa-3x fa-area-chart"></i>
+                            </div>
+                        </div>
+                        <label class="nice-font"><b>Leads Reports</b></label>
+                    </a>
+                </li>
+
+                <li class="___tile-link-custom">
+                    <a href="/PropertyDeal/AllDeales">
+                        <div class="hexy-tile">
+                            <div class="hexy-items">
+                                <i class="fa fa-3x fa-handshake-o"></i>
+                            </div>
+                        </div>
+                        <label class="nice-font"><b>Property Deals</b></label>
+                    </a>
+                </li>
+
+            }
+            else if (ViewBag.Dash == "reports")
+            {
+                <li class="___tile-link-custom">
+                    <a href="/Reports/Index">
+                        <div class="hexy-tile">
+                            <div class="hexy-items">
+                                <i class="fa fa-3x fa-chess-board"></i>
+                            </div>
+                        </div>
+                        <label class="nice-font"><b>All Reports</b></label>
+                    </a>
+                </li>
+            }
+            else if (ViewBag.Dash == "Admin Facilities")
+            {
+                <li class="___tile-link-custom">
+                    <a href="/AdminFacilities/Project/">
+                        <div class="hexy-tile">
+                            <div class="hexy-items">
+                                <i class="fa fa-3x fa-university"></i>
+                            </div>
+                        </div>
+                        <label class="nice-font"><b>Admin Projects</b></label>
+                    </a>
+                </li>
+
+                <li class="___tile-link-custom">
+                    <a href="/AdminFacilities/Registration/">
+                        <div class="hexy-tile">
+                            <div class="hexy-items">
+                                <i class="fa fa-3x fa-user-plus"></i>
+                            </div>
+                        </div>
+                        <label class="nice-font"><b>Member Registration</b></label>
+                    </a>
+                </li>
+
+                <li class="___tile-link-custom">
+                    <a href="/AdminFacilities/Detail/">
+                        <div class="hexy-tile">
+                            <div class="hexy-items">
+                                <i class="fa fa-3x fa-money "></i>
+                            </div>
+                        </div>
+                        <label class="nice-font"><b>Fee</b></label>
+                    </a>
+                </li>
+
+                <li class="___tile-link-custom">
+                    <a href="/AdminFacilities/MemberListingproject/">
+                        <div class="hexy-tile">
+                            <div class="hexy-items">
+                                <i class="fa fa-3x fa-users"></i>
+                            </div>
+                        </div>
+                        <label class="nice-font"><b>All Member</b></label>
+                    </a>
+                </li>
+            }
+            else if (ViewBag.Dash == "inventory")
+            {
+                <li class="___tile-link-custom">
+                    <a href="/Inventory/InventoryList/">
+                        <div class="hexy-tile">
+                            <div class="hexy-items">
+                                <i class="fa fa-3x fa-sort-amount-asc"></i>
+                            </div>
+                        </div>
+                        <label class="nice-font"><b>Inventory</b></label>
+                    </a>
+                </li>
+
+                <li class="___tile-link-custom">
+                    <a href="/Inventory/ReceiveItems/">
+                        <div class="hexy-tile">
+                            <div class="hexy-items">
+                                <i class="fa fa-3x fa-hand-lizard-o"></i>
+                            </div>
+                        </div>
+                        <label class="nice-font"><b>Receive Items</b></label>
+                    </a>
+                </li>
+
+                <li class="___tile-link-custom">
+                    <a href="/Inventory/InventoryReturn/">
+                        <div class="hexy-tile">
+                            <div class="hexy-items">
+                                <i class="fa fa-3x fa-reply-all"></i>
+                            </div>
+                        </div>
+                        <label class="nice-font"><b>Return Items</b></label>
+                    </a>
+                </li>
+
+                <li class="___tile-link-custom">
+                    <a href="/Inventory/DemandOrders">
+                        <div class="hexy-tile">
+                            <div class="hexy-items">
+                                <i class="fa fa-3x fa-shopping-basket"></i>
+                            </div>
+                        </div>
+                        <label class="nice-font"><b>Demand Orders</b></label>
+                    </a>
+                </li>
+
+                <li class="___tile-link-custom">
+                    <a href="/Inventory/InventoryReport">
+                        <div class="hexy-tile">
+                            <div class="hexy-items">
+                                <i class="fa fa-3x fa-area-chart"></i>
+                            </div>
+                        </div>
+                        <label class="nice-font"><b>Inventory Report</b></label>
+                    </a>
+                </li>
+
+                <li class="___tile-link-custom">
+                    <a href="/Inventory/List">
+                        <div class="hexy-tile">
+                            <div class="hexy-items">
+                                <i class="fa fa-3x fa-list-ul"></i>
+                            </div>
+                        </div>
+                        <label class="nice-font"><b>Stock Taking</b></label>
+                    </a>
+                </li>
+
+                <li class="___tile-link-custom">
+                    <a href="/Inventory/DirectItems">
+                        <div class="hexy-tile">
+                            <div class="hexy-items">
+                                <i class="fa fa-3x fa-arrow-right"></i>
+                            </div>
+                        </div>
+                        <label class="nice-font"><b>Direct Issuance</b></label>
+                    </a>
+                </li>
+
+            }
+            else if (ViewBag.Dash == "proc")
+            {
+                <li class="___tile-link-custom">
+                    <a href="/Inventory/NewQuotations">
+                        <div class="hexy-tile">
+                            <div class="hexy-items">
+                                <i class="fa fa-3x fa-list-alt"></i>
+                            </div>
+                        </div>
+                        <label class="nice-font"><b>Purchase Requisitions</b></label>
+                    </a>
+                </li>
+
+                <li class="___tile-link-custom">
+                    <a href="/Services/NewQuotations">
+                        <div class="hexy-tile">
+                            <div class="hexy-items">
+                                <i class="fa fa-3x fa-newspaper-o"></i>
+                            </div>
+                        </div>
+                        <label class="nice-font"><b>Service Requisitions</b></label>
+                    </a>
+                </li>
+
+                <li class="___tile-link-custom">
+                    <a href="/Procurement/PO_Invoice">
+                        <div class="hexy-tile">
+                            <div class="hexy-items">
+                                <i class="fa fa-3x fa-level-up"></i>
+                            </div>
+                        </div>
+                        <label class="nice-font"><b>Submit Invoice</b></label>
+                    </a>
+                </li>
+
+                <li class="___tile-link-custom">
+                    <a href="/Finance/PattyCashSattlment">
+                        <div class="hexy-tile">
+                            <div class="hexy-items">
+                                <i class="fa fa-3x fa-usd"></i>
+                            </div>
+                        </div>
+                        <label class="nice-font"><b>Petty Cash</b></label>
+                    </a>
+                </li>
+
+                <li class="___tile-link-custom">
+                    <a href="/Finance/AllPattyCash">
+                        <div class="hexy-tile">
+                            <div class="hexy-items">
+                                <i class="fa fa-3x fa-hand-o-right"></i>
+                            </div>
+                        </div>
+                        <label class="nice-font"><b>Petty Cash Approval</b></label>
+                    </a>
+                </li>
+
+                <li class="___tile-link-custom">
+                    <a href="/Vendor/VendorList">
+                        <div class="hexy-tile">
+                            <div class="hexy-items">
+                                <i class="fa fa-3x fa-users"></i>
+                            </div>
+                        </div>
+                        <label class="nice-font"><b>Vendors List</b></label>
+                    </a>
+                </li>
+            }
+
+            if (ViewBag.Dash == "building")
+            {
+                <li class="___tile-link-custom">
+                    <a href="/Commercial/AddShopOrAppartment/">
+                        <div class="hexy-tile">
+                            <div class="hexy-items">
+                                <i class="fa fa-3x fa-building-o"></i>
+                            </div>
+                        </div>
+                        <label class="nice-font"><b>Add Shop</b></label>
+                    </a>
+                </li>
+
+                <li class="___tile-link-custom">
+                    <a href="/Commercial/CommercialUpdation/">
+                        <div class="hexy-tile">
+                            <div class="hexy-items">
+                                <i class="fa fa-3x fa-server"></i>
+                            </div>
+                        </div>
+                        <label class="nice-font"><b>Commercial Management</b></label>
+                    </a>
+                </li>
+
+                <li class="___tile-link-custom">
+                    <a href="/Installments/CreateCommercialInstallmentStructure/">
+                        <div class="hexy-tile">
+                            <div class="hexy-items">
+                                <i class="fa fa-3x fa-bars"></i>
+                            </div>
+                        </div>
+                        <label class="nice-font"><b>Installment Structure</b></label>
+                    </a>
+                </li>
+
+                <li class="___tile-link-custom">
+                    <a href="/Commercial/CommercialRegisteration/">
+                        <div class="hexy-tile">
+                            <div class="hexy-items">
+                                <i class="fa fa-3x fa-plug"></i>
+                            </div>
+                        </div>
+                        <label class="nice-font"><b>Registration</b></label>
+                    </a>
+                </li>
+
+                <li class="___tile-link-custom">
+                    <a href="/Commercial/UpdateCommercialInformation/">
+                        <div class="hexy-tile">
+                            <div class="hexy-items">
+                                <i class="fa fa-3x fa-retweet"></i>
+                            </div>
+                        </div>
+                        <label class="nice-font"><b>Update Information</b></label>
+                    </a>
+                </li>
+
+                <li class="___tile-link-custom">
+                    <a href="/Commercial/CommercialInfo/">
+                        <div class="hexy-tile">
+                            <div class="hexy-items">
+                                <i class="fa fa-3x fa-barcode"></i>
+                            </div>
+                        </div>
+                        <label class="nice-font"><b>Detail Information</b></label>
+                    </a>
+                </li>
+
+                <li class="___tile-link-custom">
+                    <a href="/Commercial/VerifcationRequests/">
+                        <div class="hexy-tile">
+                            <div class="hexy-items">
+                                <i class="fa fa-3x fa-handshake-o"></i>
+                            </div>
+                        </div>
+                        <label class="nice-font"><b>Verification Requests</b></label>
+                    </a>
+                </li>
+
+            }
+        }
+    </ul>
+</div>
+
+<script>
+    $('.hexagon').on('click', function () {
+        let _ele = $(this).find('a');
+        if (_ele.length <= 0) {
+            return;
+        }
+
+        $(_ele).get(0).click();
+        //console.log();
+    });
+</script>
+<style>
+    /*.a {
+        color: #592a88;
+    }
+
+    .hexagon a {
+        font-size: 10px;
+        font-weight: bold;
+    }
+
+    .text {
+        position: absolute;
+        z-index: 1000;
+        width: 100%;
+        text-align: center;
+        font-size: 17px;
+    }
+
+    .hexagon {
+        position: relative;
+        width: 120px;
+        height: 90px;
+        border-left: solid 2px transparent;
+        border-right: solid 2px transparent;
+        cursor: pointer;
+        padding-top: 10px;
+    }
+
+        .hexagon:before,
+        .hexagon:after {
+            content: "";
+            position: absolute;
+            z-index: 1;
+            width: 113px;
+            height: 113px;
+            -webkit-transform: scaleY(0.5774) rotate(-45deg);
+            -ms-transform: scaleY(0.5774) rotate(-45deg);
+            transform: scaleY(0.5774) rotate(-45deg);
+            background-color: inherit;
+            left: 21.5px;
+            transition: .3s ease-out;
+        }
+
+        .hexagon:before {
+            top: -57px;
+            border-top: solid transparent;
+            border-right: solid transparent;
+        }
+
+        .hexagon:after {
+            bottom: -57px;
+            border-bottom: solid transparent;
+            border-left: solid transparent;
+            transition: .1s ease-out;
+        }
+
+    .heavyFont {
+        font-size: 30px;
+    }
+
+    .bg-red {
+        background-color: #d0232A;
+        color: white;
+    }
+
+    .bg-purple {
+        background-color: #592a88;
+        color: white;
+    }
+
+    .bg-yellow {
+        background-color: yellow;
+        color: #000;
+    }
+
+    .font-white {
+        color: white;
+    }*/
+
+    .menu-close {
+        position: absolute;
+        right: 2%;
+        /*background-color: #121522;*/
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 75px;
+        width: 75px;
+        /*box-shadow: rgba(1, 1, 1, 0.7) 10px 30px 8px;*/
+        color: #d0232a;
+        top:-10px;
+    }
+
+    .bookmark-star, .bookmark-star-filled {
+        position: absolute;
+        left: 1%;
+    }
+    .___tile-link-custom{
+        position:relative;
+    }
+    .menu-bookmrk {
+        position: absolute;
+        right: 6%;
+        /*background-color: #121522;*/
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 75px;
+        width: 75px;
+        /*box-shadow: rgba(1, 1, 1, 0.7) 10px 30px 8px;*/
+        color: #0C83E2;
+        top: -10px;
+    }
+
+    .wiggle-wiggle .___tile-link-custom:nth-child(2n) {
+        animation-name: alpha;
+        animation-iteration-count: infinite;
+        transform-origin: 50% 10%;
+        animation-duration: 0.3s;
+    }
+
+    .wiggle-wiggle .___tile-link-custom:nth-child(2n-1) {
+        animation-name: beta;
+        animation-iteration-count: infinite;
+        animation-direction: alternate;
+        transform-origin: 30% 5%;
+        animation-duration: 0.3s;
+    }
+
+    @@keyframes alpha {
+      0% {
+        transform: rotate(-1deg);
+        animation-timing-function: ease-in;
+        
+      }
+
+      50% {
+        transform: rotate(1.5deg);
+        animation-timing-function: ease-out;
+      }
+    }
+
+    @@keyframes beta {
+      0% {
+        transform: rotate(1deg);
+        animation-timing-function: ease-in;
+      }
+
+      50% {
+        transform: rotate(-1.5deg);
+        animation-timing-function: ease-out;
+      }
+    }
+
+</style>
+
+<script>
+    $(document).ready(function () {
+        $('.fhkjdsa').addClass('animate__animated').addClass('animate__infinite	infinite').addClass('animate__heartBeat').addClass('animate__delay-2s	2s').addClass('animate__slow');
+        $('.fhkjdsa').unbind().click(function () {
+
+            const element = document.querySelector('.afhjksgdl');
+            element.classList.add('animate__animated', 'animate__backOutUp');
+            element.addEventListener('animationend', overHeadMenuHider, true);
+        });
+
+        //$('.___tile-link-custom').hover(function () {
+        //    $(this).addClass('animate__animated').addClass('animate__headShake animate__faster');
+        //    //$(this).find('.nice-font').addClass('animate__animated').addClass('animate__fadeInDown');
+        //}, function () {
+        //        $(this).removeClass('animate__animated').removeClass('animate__headShake animate__faster');
+        //    //$(this).find('.nice-font').removeClass('animate__animated').removeClass('animate__fadeInDown');
+        //});
+
+        //$('.upper-menu-items-holder').unbind().click(function () {
+        //    $('.fhkjdsa').click();
+        //});
+
+        $('.bookmrk-hjkfasd').unbind().click(function () {
+            if ($('.info-blocks').hasClass('wiggle-wiggle')) {
+                $('.info-blocks').removeClass('wiggle-wiggle');
+                $('.___tile-link-custom').each(function () {
+                    $(this).find('.bookmark-star').remove();
+                });
+            }
+            else {
+                $('.info-blocks').addClass('wiggle-wiggle');
+
+                $('.___tile-link-custom').each(function () {
+                    let __lnkl__ = $(this).find('a').attr('href');
+                    let __strtctr_bkmrk__ = `<span class="bookmark-star" data-qid="-1" data-trgt="${__lnkl__}">
+                        <i class="fa fa-star-o pointer fa-2x bkmrk-lnk-fahdksj"></i>
+                    </span>`;
+                    if ($(this).find('.bookmark-star').length <= 0) {
+                        $(this).prepend(__strtctr_bkmrk__);
+                    }
+                });
+
+                $('.bkmrk-lnk-fahdksj').unbind().click(function () {
+                    let linkinf = $(this).parent().attr('data-trgt');
+                    let qid = $(this).parent().attr('data-qid');
+                    let imgs = $(this).closest('.___tile-link-custom').find('.hexy-items').find('i').attr('class');
+                    let ttl = $(this).closest('.___tile-link-custom').find('.nice-font').find('b').text();
+                    qid = (qid == -1) ? null : qid;
+                    let that = $(this);
+                    $.ajax({
+                        type: "POST",
+                        url: '/Home/ToggleQuickLink/',
+                        data: { id: qid, lnk: linkinf, img: imgs, narate: ttl },
+                        success: function (data) {
+                            if (qid == null) {
+                                $(that).parent().removeClass('bookmark-star').addClass('bookmark-star-filled');
+                                $(that).removeClass('fa-star-o').addClass('fa-star');
+                                $(that).css('color', '#0C83E2');
+                            }
+                            else {
+                                $(that).parent().removeClass('bookmark-star-filled').addClass('bookmark-star');
+                                $(that).removeClass('fa-star').addClass('fa-star-o');
+                                $(that).css('color', '#fff');
+                            }
+                            $('.qk-lnks-spc').load('/Home/QuickLinks/');
+                        }
+                        , error: function (xmlhttprequest, textstatus, message) {
+                            if (textstatus === "timeout") {
+                                alert("Failed to bookmark this link.");
+                            } else {
+                                alert("Failed to bookmark this link.");
+                            }
+                        }
+                    });
+                });
+            }
+        });
+
+
+        $(function () {
+            let qLnks = @Html.Raw(Json.Encode(Model));
+            $('.___tile-link-custom').each(function (i, v) {
+                let lnk__ = $(this).find('a').attr('href');
+                let check = qLnks.find(x => x.Link == lnk__);
+                if (check != undefined) {
+                    let prnt_bdy = $(this);
+                    let __strtctr_bkmrk__ = `<span class="bookmark-star-filled" data-qid="${check.Id}" data-trgt="${lnk__}">
+                        <i class="fa fa-star pointer fa-2x bkmrk-lnk-fahdksj" style="color:#0C83E2;"></i>
+                    </span>`;
+                    $(prnt_bdy).prepend(__strtctr_bkmrk__);
+
+                    //$(prnt_bdy).find('.bkmrk-lnk-fahdksj').unbind().click(function () {
+                    //    let idinf = $(this).parent().attr('data-qid');
+                    //    let linkinf = $(this).parent().attr('data-trgt');
+                    //    let my_prnt_bdy = $(this).closest('.___tile-link-custom');
+                    //    $.ajax({
+                    //        type: "POST",
+                    //        url: '/Home/ToggleQuickLink/',
+                    //        data: { id: idinf, lnk: linkinf },
+                    //        success: function (data) {
+                    //            $(my_prnt_bdy).find('.bookmark-star-filled').removeClass('bookmark-star-filled').addClass('bookmark-star');
+                    //            $(my_prnt_bdy).find('.fa-star').removeClass('fa-star').addClass('fa-star-o');
+                    //        }
+                    //        , error: function (xmlhttprequest, textstatus, message) {
+                    //            if (textstatus === "timeout") {
+                    //                alert("Failed to bookmark this link.");
+                    //            } else {
+                    //                alert("Failed to bookmark this link.");
+                    //            }
+                    //        }
+                    //    });
+                    //});
+                }
+            });
+        });
+
+    });
+
+    function overHeadMenuHider() {
+        const element = document.querySelector('.afhjksgdl');
+        $('.afhjksgdl').hide();
+        $('.afhjksgdl').removeClass('animate__animated').removeClass('animate__backOutUp');
+        element.removeEventListener('animationend', overHeadMenuHider, true);
+        $('.fhkjdsa').removeClass('animate__animated').removeClass('animate__infinite	infinite').removeClass('animate__heartBeat').removeClass('animate__delay-2s	2s').removeClass('animate__slow');
+    }
+</script>

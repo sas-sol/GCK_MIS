@@ -1,0 +1,138 @@
+﻿@model MeherEstateDevelopers.Models.Comp_Dep_Desig
+
+@{ if (User.IsInRole("Administrator")) { Layout = "~/Views/Shared/_AdminLayout.cshtml"; } else { Layout = "~/Views/Shared/_StaffLayout.cshtml"; } }
+<div class="gap-20 pos-r">
+    <div class="col-md-12">
+        <h6 class="c-grey-900">Add Department</h6>
+        <div class="mT-30 bgc-white p-20 bd" id="des-1">
+            @using (Html.BeginForm("AddDepartments", "Company", FormMethod.Post, new { @id = "ad-dep", @class = "", role = "form" }))
+            {
+                @Html.AntiForgeryToken()
+                <div class="form-row">
+                    <div class="form-group col-md-3">
+                        <label>Department Name</label>
+                        @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control", required = "" } })
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label>Company</label>
+                        @Html.DropDownList("Comp_Id", null, "Choose..", new { @class = "form-control get-dep", data_id = 1, required = "" })
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label>Departments</label>
+                        <select class="form-control com-dep" name="Parent_Id"></select>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label>Description</label>
+                        <textarea class="form-control" name="Description"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Add Department</button>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<div class="col-md-12 mt-md-3">
+    <div class="row">
+        <h5>Choose Employees For This Department</h5>
+    </div>
+
+    <div class="row">
+        <div class="col-md-3">
+            @Html.DropDownList("EmpsList", null, "Choose..", new { @class = "form-control emps-slcxn-lst", required = "" })
+        </div>
+        <div class="col-md-2">
+            <button type="button" class="btn btn-primary fnlz-emp"><i class="fa fa-plus"></i>&nbsp; Add</button>
+        </div>
+    </div>
+
+    <div class="col-md-12 slctd-emp-disp-area">
+        @*<div class="row slctd-emp">
+            <div class="col-md-4">
+                <b>Name of Employee</b>
+            </div>
+
+            <div class="col-md-1">
+                <i class="fa fa-trash pointer del-emp-slctd"></i>
+            </div>
+        </div>*@
+    </div>
+</div>
+<div class="col-md-12">
+    @{ Html.RenderAction("CompanyHierarchy", "Company");}
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('#EmpsList').select2();
+    });
+    $('.fnlz-emp').unbind().click(function () {
+        var slctdEmp = $('#EmpsList option:selected').val();
+        var slctdEmpNam = $('#EmpsList option:selected').text();
+
+        var flag = true;
+        $('.slctd-emp').each(function () {
+            var foundEmp = $(this).find('.empId').val();
+            if (foundEmp == slctdEmp) {
+                flag = false;
+            }
+        });
+
+        if (!flag) {
+            alert('This employee has already been selected. Cannot select again.');
+            return;
+        }
+
+        let strct = `<div class="row slctd-emp mt-md-2" style="justify-content:center;">
+            <div class="col-md-4">
+                <input type = "hidden" class="empId" value="${slctdEmp}"/>
+                <b>${slctdEmpNam}</b>
+            </div>
+
+            <div class="col-md-1">
+                <i class="fa fa-trash pointer del-emp-slctd"></i>
+            </div>
+        </div>`;
+
+        $('.slctd-emp-disp-area').append(strct);
+
+        $('.del-emp-slctd').last().unbind().click(function () {
+            if (!confirm('Are you sure you want to remove this employee from the list?')) {
+                return;
+            }
+
+            $(this).closest('.slctd-emp').remove();
+        });
+    });
+
+    function submitNewDepEmps(dep) {
+        var depEmps = [];
+        $('.slctd-emp').each(function () {
+            var foundEmp = $(this).find('.empId').val();
+            depIds.push(foundEmp);
+        });
+
+
+        $.ajax({
+            type: "POST",
+            url: '/Company/SaveNewDepEmployees/',
+            data: { depId: dep, emps: depEmps },
+            success: function (data) {
+                if (data) {
+                    alert("Employees have been added successfully.");
+                    window.location.reload();
+                }
+                else {
+                    alert("Failed to add these employees");
+                }
+            }
+            , error: function (xmlhttprequest, textstatus, message) {
+                if (textstatus === "timeout") {
+                    alert("got timeout");
+                } else {
+                    alert(textstatus);
+                }
+            }
+        });
+    }
+</script>

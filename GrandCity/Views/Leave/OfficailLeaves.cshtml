@@ -1,0 +1,195 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.LeaveRequisition>
+<head>
+    @*<script src="https://cdnjs.cloudflare.com/ajax/libs/datepicker/0.6.5/datepicker.js"></script>*@
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link href="~/Content/Leave.css" rel="stylesheet" />
+    <link href="~/Content/JqueryStepsCss/aurstyle.css" rel="stylesheet" />
+
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+</head>
+<div class="bgc-white bd bdrs-3 p-20 mB-20">
+    <h4>Create Official Leave</h4>
+    @using (Html.BeginForm("OfficailLeaves", "Leave", FormMethod.Post, new { @id = "leaveformOfficials", @class = "", role = "form", autocomplete = "off" }))
+    {
+        <input type="hidden" name="EmpId" value="@ViewBag.Userid" />
+        @Html.AntiForgeryToken()
+        <div class="col-md-12">
+            <div class="form-row">
+                <div class="form-group col-md-2">
+                    <label>From</label>
+                    <input class="form-control text-box single-line" data-provide="datepicker" data-val="true" data-val-date="The field StartDate must be a date." data-val-required="The StartDate field is required." id="fromleave" name="StartDate" onchange="checkdates(); " readonly="" required="required" type="datetime" value="">
+                </div>
+                <div class="form-group col-md-2">
+                    <label>To</label>
+                    <input class="form-control text-box single-line" data-provide="datepicker" data-val="true" data-val-date="The field EndDate must be a date." data-val-required="The EndDate field is required." id="toleave" name="EndDate" onchange="checkdates(); " readonly="" required="required" type="datetime" value="">
+                </div>
+                <div class="form-group col-md-2">
+                    <h6 style="margin-top:30px" id="ttldays">Number of days : 0</h6>
+                    <input data-val="true" data-val-number="The field NoOfDays must be a number." id="NoOfDays" name="NoOfDays" type="hidden" value="">
+                </div>
+                <div class="form-group col-md-6">
+                    <label>Reason</label>
+                    <textarea class="createleave form-control" id="leaveReason" name="Reason" onkeyup="" rows="2" cols="1" required></textarea>
+                </div>
+            </div>
+            <hr />
+        </div>
+        <div class="container" style="width:50%">
+            <div class="full-callender-div ">
+                <div class="leave-cal newcal">
+                    <div id="datepickerfullyear"></div>
+                </div>
+            </div>
+        </div>
+        <div class="form-row" style="margin-left:36%; margin-top:2%">
+            <div class="peer" style="margin-left:3%">
+                <span class="badge badge-pill bgc-amber-50 c-amber-700"> @(Convert.ToInt32(ViewBag.TotalOfficialsLeaves))</span>
+            </div>
+            <div class="form-group col-md-1">
+                <label id="Notify">Officials</label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                    <input type="checkbox" id="terms" onchange="" required="required" >
+                        <span class="ser-ch-nam" style="font-weight:bold"> I Accept the terms of the Official Leave Requisition Policy </span>
+            </div>
+            <div class="col-md-4">
+                <p>Total official leaves in fiscal year | @(Convert.ToInt32(ViewBag.TotalOfficialsLeaves))  </p>
+            </div>
+            <div class="col-md-2">
+                <button class="btn btn-info leaveSubmt" type="submit" id="">Create</button>
+            </div>
+        </div>
+        <hr class="leave-req-hr">
+    }
+
+    <h4>Official Leaves</h4>
+    <div class="row">
+        <table class="table table-bordered">
+            <tr>
+                <th>Sr.</th>
+                <th>Start</th>
+                <th>End</th>
+                <th>Occasion</th>
+                <th>No of Days</th>
+            </tr>
+            @{ 
+                int i = 1;
+            }
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <th>@i</th>
+                    <th>@string.Format("{0:dd-MMM-yyyy}", item.StartDate)</th>
+                    <th>@string.Format("{0:dd-MMM-yyyy}", item.EndDate)</th>
+                    <th>@item.Reason</th>
+                    <th>@item.NoOfDays</th>
+                </tr>
+				i++;
+            }
+        </table>
+    </div>
+</div>
+<style>
+    #LeaveType {
+        margin-left: 5%;
+    }
+
+    #RemDisp {
+        margin-left: 10%;
+    }
+</style>
+<script>
+      $(document).ready(function () {
+         $('.leaveSubmt').prop('disabled', false);
+        $.ajax({
+            url: "/Leave/LeaveRequestOfficials/",
+            type: "GET",
+            contentType: "application/json;charset=utf-8",
+            dataType: "json",
+            data: {userid: @ViewBag.Userid },
+            success: function (result) {
+                
+                var OfficialdisabledDays = new Array();
+                for (var i = 0; i < result.officialDates.length; i++) {
+                    var dates = result.officialDates[i];
+                    var parsedDate = new Date(parseInt(dates.substr(6)));
+                    var jsDate = new Date(parsedDate);
+                    var myday = jsDate.getDate();
+                    var mymonth = jsDate.getMonth() + 1;
+                    var year = jsDate.getFullYear();
+                    var myfulldate = year + '-' + mymonth + '-' + myday;
+                    OfficialdisabledDays.push(myfulldate);
+                }
+                var date = new Date();
+                $("#datepickerfullyear").datepicker({
+                    dateFormat: "mm/dd/yy",
+                    dayNamesMin: ['S', 'M', 'T', 'W', 'T', 'F', 'S'],
+                    numberOfMonths: [3, 4],
+                    minDate: new Date(2022, 0 - 1, 31),
+                    maxDate: new Date(2022, 12 - 1, 31),
+                    beforeShowDay: function (date) {
+                        var m = date.getMonth(), d = date.getDate(), y = date.getFullYear();
+                        for (i = 0; i < OfficialdisabledDays.length; i++) {
+                            if ($.inArray(y + '-' + (m + 1) + '-' + d, OfficialdisabledDays) != -1) {
+                                return [true, 'ui-state-selectedCL', ''];//official leave wala scene hai ye
+                            }
+                        }
+                        return [true];
+                    }
+                });
+            },
+            error: function (response) {
+                alert('eror');
+            }
+        });
+    });
+
+    function checkdates() {
+        var start = $('#fromleave').val();
+        var from = new Date(start);
+        var end = $('#toleave').val();
+        var To = new Date(end)
+        var a = moment(from);
+        var b = moment(To);
+        var daysCount = b.diff(a, 'days', false) + 1;
+        if (!dateCorrect()) {
+            alert('Check Dates From & To.');
+            $('.leaveSubmt').prop('disabled', true);
+            $('#ttldays').text('Number of days : ' + daysCount);
+            $('#NoOfDays').val(daysCount);
+        }
+        else {
+            $('#ttldays').text('Number of days : ' + daysCount);
+            $('#NoOfDays').val(daysCount);
+            $('.leaveSubmt').prop('disabled', false);
+        }
+    }
+    function dateCorrect() {
+        var date = new Date();
+        var from = $('#fromleave').val();
+        from = new Date(from);
+        var To = $('#toleave').val();
+        To = new Date(To);
+        if (To.getFullYear() >= from.getFullYear()) {
+            if (To.getMonth() == from.getMonth()) {
+                if (To.getDate() < from.getDate()) {
+                    return false;
+                }
+            }
+            else if (To.getMonth() < from.getMonth()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+</script>
+
+
+
+
+
+
+

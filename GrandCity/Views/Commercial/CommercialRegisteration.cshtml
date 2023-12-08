@@ -1,0 +1,289 @@
+﻿@{
+    Layout = "~/Views/Shared/_StaffLayout.cshtml";
+}
+    <script src="~/Scripts/scanning.js"></script>
+<script>
+    var banklist = @Html.Raw(Json.Encode(ViewBag.Bank));
+     var cities = @Html.Raw(Json.Encode(ViewBag.Cities));
+</script>
+<div class="row gap-20 pos-r">
+    <div class="col-md-12">
+        <div class="bgc-white p-20 bd">
+            @using (Html.BeginForm("CommercialRegisteration", "Commercial", FormMethod.Post, new { @id = "re-com", @class = "", role = "form", autocomplete = "off" }))
+            {
+
+            <div class="mT-30">
+                <div class="form-row row">
+                    <div class="col-md-9">
+                        <div class="form-row">
+                            <div class="form-group col-md-3">
+                                <label>Project</label>
+                                @Html.DropDownList("Projects", null, "Choose..", new { @class = "form-control prj-com-flo", required = "" })
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label>Floors</label>
+                                <select class="form-control prj-shp" id="floor">
+                                    <option>Select Floor</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-3" >
+                                <label>Unit</label>
+                                <select class="form-control com_shp__da" id="shp">
+                                    <option>Select Shop</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label>Choose Installment Structure</label>
+                                @Html.DropDownList("InstallmentStruct", null, "Choose..", new { @class = "form-control com__inst__get", required = "" })
+                            </div>
+                            <input type="hidden" id="app-fil-id" />
+                            <input type="hidden" id="com-id" />
+                            <div class="form-group col-md-2">
+                                <label>Floor</label>
+                                <input type="text" class="form-control" id="floor__name" readonly>
+                            </div>
+                            <input type="hidden" class="form-control" id="Image" readonly>
+                            <div class="form-group col-md-2">
+                                <label>Area</label>
+                                <input type="text" class="form-control" id="area" readonly>
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label>Type</label>
+                                <input type="text" class="form-control" id="type" name="Plot_Size" readonly>
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label>Location</label>
+                                <input type="text" class="form-control" id="loc" readonly>
+                            </div>
+                            <div class="form-group col-md-2" id="sts__div">
+                                <label>Status</label>
+                                <div class="alert alert-success" role="alert"><label id="get__stat"></label></div>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label>&nbsp;</label>
+                                <button type="button" class="btn btn-primary my-4" id="sea-com-file">Check Availability</button>
+                            </div>
+                        </div>
+                        <div class="row col-md-12 stru__map" id="">
+
+                        </div>
+                    </div>
+                    <div class="col-md-2 form-group  own-det" id="1">
+                        <img style="margin-top:0px" src="/assets/static/images/no-img.png" width="200" height="180" id="own_img" name="Owner_Image1" />
+                        <input type="hidden" id="image" name="Image" required />
+                        <input type="button" class="btn btn-info own-img add-own-img" id="add-own-img1" style="margin-top:10px;" data-toggle="modal" value="Upload Image" data-target="#Modal" />
+                    </div>
+
+                </div>
+            </div>
+                <hr />
+                <button type="button" class="btn btn-primary fi-reg-ath" style="float:right">Add Another</button>
+                <h6 class="c-grey-900">Applicant Information</h6>
+                <div class="mT-30">
+                    <div class="col-md-12 " id="ad-reg-form">
+                        <div class="" id="add-reg-1">
+                            <h6 class="lh-1 mB-0 add-reg-counter">1.</h6>
+                            <div class="form-row">
+                                <div class="form-group col-md-3">
+                                    <label>Name</label>
+                                    <input type="text" class="form-control Name" id="Name" required data-id="1">
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label>Father's/Husband's Name</label>
+                                    <input type="text" class="form-control Father_Husband" id="Father_Husband" required data-id="1">
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label>CNIC / NICOP</label>
+                                    <input type="text" class="form-control" id="CNIC_NICOP" pattern="[0-9+]{5}-[0-9+]{7}-[0-9]{1}|[0-9+]{6}-[0-9+]{6}-[0-9]{1}" placeholder="12345-1234567-1   or   123456-123456-1" required data-id="1">
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <label>Date Of Birth</label>
+                                    <input type="text" class="form-control" id="Date_Of_Birth" data-provide="datepicker" required data-id="1">
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>Postal Address</label>
+                                    <input type="text" class="form-control" id="Postal_Address" placeholder="1234 Main St" required data-id="1">
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>Residential Address</label>
+                                    <input type="text" class="form-control Residential_Address" id="Residential_Address" placeholder="Apartment, Plot, or floor" required data-id="1">
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <label>Select City</label>
+                                    <select class="form-control city" data-id="1"></select>
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label>Occupation</label>
+                                    <input type="text" class="form-control" id="Occupation" name="" required data-id="1">
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <label>Nationality</label>
+                                    <input type="text" class="form-control" id="Nationality" name="" required data-id="1">
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <label>Email</label>
+                                    <input type="text" class="form-control" id="Email" name="" data-id="1">
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label>Phone Office</label>
+                                    <input type="text" class="form-control" id="Phone_Office" name="" data-id="1">
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label>Residential</label>
+                                    <input type="text" class="form-control" id="Residential" name="" data-id="1">
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label>Mobile 1</label>
+                                    <input type="text" class="form-control" id="Mobile_1" pattern="^0\d{10}" placeholder="03121234567" name="" required data-id="1">
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label>Mobile 2</label>
+                                    <input type="text" class="form-control" id="Mobile_2" pattern="^0\d{10}" placeholder="03121234567" name="" data-id="1">
+                                </div>
+                            </div>
+                            <h6 class="c-grey-900">Nominee</h6>
+                            <div class="">
+                                <div class="form-row">
+                                    <div class="form-group col-md-3">
+                                        <label>Name</label>
+                                        <input type="text" class="form-control" id="Nominee_Name" required data-id="1">
+                                    </div>
+                                    <div class="form-group col-md-2">
+                                        <label>CNIC / NICOP</label>
+                                        <input type="text" class="form-control" pattern="[0-9+]{5}-[0-9+]{7}-[0-9]{1}|[0-9+]{6}-[0-9+]{6}-[0-9]{1}" placeholder="12345-1234567-1 or 123456-123456-1" id="Nominee_CNIC_NICOP" required data-id="1">
+                                    </div>
+                                    <div class="form-group col-md-2">
+                                        <label>Relation</label>
+                                        <input class="form-control" id="Nominee_Relation" placeholder="" required data-id="1">
+                                    </div>
+                                    <div class="form-group col-md-5">
+                                        <label>Address</label>
+                                        <input type="text" class="form-control" id="Nominee_Address" placeholder="1234 Main St" required data-id="1">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr />
+                <hr />
+                <div class="form-row">
+                    <div class="col-md-2">
+                        <h6 class="c-grey-900"></h6>
+                    </div>
+                    <div class="col-md-3">
+                        <h6 class="c-grey-900">Total Amount: <span id="adv-pmt"></span></h6>
+                        <input type="hidden" id="adv" />
+                        <input type="hidden" id="bok" />
+                    </div>
+                    <div class="form-group col-md-1">
+                        <div class="checkbox checkbox-circle checkbox-info peers ai-c">
+                            <input type="checkbox" value="1" id="full__pay__Commer" class="peer" autocomplete="off">
+                            <label class="peers peer-greed js-sb ai-c">
+                                <span class="peer peer-greed ser-ch-nam" style="font-weight:bold">Full Payment</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-1 hidden_memb">
+                        <label>Discount %</label>
+                        <input class="form-control" id="dis__amt" placeholder="%">
+                    </div>
+                    
+                    <div class="col-md-3">
+                        <h6 style="width: auto;float: left;margin: 7px;">Advance</h6>
+                        <label class="switch" style="float:left">
+                            <input type="checkbox" id="book-stat">
+                            <span class="slider round"></span>
+                        </label>
+                        <h6 style="width: auto;float: left;margin: 7px;">Booking</h6>
+                    </div>
+                    <div class="col-md-2">
+                        <button type="submit" id="reg-file" class="btn btn-primary btn__reg__com" disabled>Register</button>
+                    </div>
+                </div>
+                <div class="mT-30">
+                    <div class="mT-30" id="pay-list">
+                        <div class="col-md-2">
+                            <button type="button" id="add-pay-typ" class="btn btn-info"><i class="ti-plus"></i>&nbsp; Add Payment</button>
+                        </div>
+                        <div class="form-row" id="pay-1">
+                            <div class="form-group col-md-2">
+                                <label>Cash / Bank</label>
+                                <select class="form-control paytypesel" id="cah-chq-bak" required>
+                                    <option value="Cash">Cash</option>
+                                    <option value="BankDraft">Bank Draft</option>
+                                    <option value="Cheque">Cheque</option>
+                                    <option value="PayOrder">Pay Order</option>
+                                    <option value="Online_Cash">Online - Cash</option>
+                                    <option value="Online_Cheque">Online - Cheque</option>
+                                    <option value="Online_Payorder">Online - PayOrder</option>
+                                    <option value="Online_Bankdraft">Online - BankDraft</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-1">
+                                <label>Amount</label>
+                                <input class="form-control coma" placeholder="250,000" required>
+                                <input type="hidden" id="Amount" class="amt" required>
+                            </div>
+                            <div class="form-group col-md-2 paymentotherinfo">
+                                <label id="paytypelabel">-</label>
+                                <input type="text" class="form-control" id="paymenttype" placeholder="" disabled required>
+                            </div>
+                            <div class="form-group col-md-2 paymentotherinfo">
+                                <label>Date</label>
+                                <input type="text" class="form-control" id="cbp-date" data-provide="datepicker" placeholder="mm/dd/yyyy" disabled required>
+                            </div>
+                            <div class="form-group col-md-2 paymentotherinfo">
+                                <label>Bank</label>
+                                <select class="form-control" id="bank" disabled>
+                                    <option>Choose..</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-2 paymentotherinfo">
+                                <label>Branch </label>
+                                <input type="text" class="form-control" id="Branch" placeholder="Mall Rd" disabled required>
+                            </div>
+                            <div class="form-group col-md-1 paymentotherinfo">
+                                <label>Scan File </label>
+                                <button class=" btn btn-block" data-v="1" type="button" id="scanbtn">Scan</button>
+
+                            </div>
+                            <div id="images-1" class="col-md-1 images"></div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+<style>
+    .paymentotherinfo {
+        display: none;
+    }
+
+    #inst-stat {
+        height: 1245px;
+        overflow-y: scroll;
+    }
+</style>
+<script>
+    $(function () {
+        InitBanks(1);
+        Initcity(1);
+    });
+    $("#sts__div").hide();
+    $(".hidden_memb").hide();
+    
+</script>
+
+
+
+
+
+
+
+
+
+
+
+

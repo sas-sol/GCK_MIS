@@ -1,0 +1,69 @@
+﻿
+@model MeherEstateDevelopers.Models.Employee_Assets
+
+@{ if (User.IsInRole("Administrator"))
+    { Layout = "~/Views/Shared/_AdminLayout.cshtml"; }
+    else
+    { Layout = "~/Views/Shared/_StaffLayout.cshtml"; } }
+
+    <div class="row gap-20 pos-r">
+        <div class="col-md-4">
+            <div class="bgc-white p-20 bd">
+                <h6 class="c-grey-900">Assign Asset</h6>
+                <div class="mT-30">
+
+                    <div class="form-group col-md-12">
+                        <label class="hide_and_show_Company">Select Asset</label>
+                        @Html.DropDownList("AssetName", null, "Choose..", new { @class = "form-control assetname" })
+                    </div>
+                    <div class="form-group col-md-12">
+                        <label class="hide_and_show_Company">Select Employee</label>
+                        @Html.DropDownList("Employee_Name", null, "Choose..", new { @class = "form-control employeename" })
+                    </div>
+                    <button type="button" id="" class="btn btn-primary " onclick="assetassignment()">Assign Asset</button>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8">
+            @{ Html.RenderAction("CompanyHierarchy", "Company");}
+        </div>
+    </div>
+
+    <script>
+        function assetassignment() {
+            var Asset_Id = $('.assetname').val();
+            var Employee_Id = $('.employeename').val();
+
+            var dataasset = {
+                Asset_Id: Asset_Id,
+                Employee_Id: Employee_Id,
+            }
+            $.ajax({
+                type: "POST",
+                url: '/Company/AssetAssinToEmployee/',
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify({
+                    Emp_Asset: dataasset,
+
+                }),
+                success: function (data) {
+                    if (!data) {
+                        alert("Please select the options")
+                    }
+                    else {
+                        alert("Successfully updated")
+                        window.location.reload(true);
+                    }
+
+                },
+                error: function (data) {
+                    alert("error")
+                }
+            });
+
+
+        }
+
+
+    </script>

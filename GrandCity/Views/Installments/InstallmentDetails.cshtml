@@ -1,0 +1,33 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Installment_Struct>
+@{
+    if (Model.Any())
+    {
+        foreach (var item in Model.GroupBy(x => x.Plot_Size))
+        {
+            <div class="col-md-4">
+                <div class="bgc-white p-20 bd">
+                    <h5>Plot size: @item.Key</h5>
+                    <hr />
+                    @foreach (var a in item)
+                    {
+                        if (a.Installment_Type == "1")
+                        {
+                            var amt = a.Amount / a.Rate;
+                            <h6>@a.Installment_Name / @string.Format("{0:n}", amt)  : <span style="float:right;font-weight:normal">@string.Format("{0:n0}", a.Amount)</span></h6>
+                            <hr />
+                        }
+                        else
+                        {
+                            <h6>@a.Installment_Name : <span style="float:right;font-weight:normal">@string.Format("{0:n0}", a.Amount)</span></h6>
+                            <hr />
+                        }
+
+                    }
+                    <h6>Total : <span style="float:right">@string.Format("{0:n0}", item.Sum(x => x.Amount))</span></h6>
+                </div>
+
+            </div>
+        }
+    }
+}
+

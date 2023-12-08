@@ -1,0 +1,55 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Sp_Get_TransferRequestList_Result>
+@using MeherEstateDevelopers.Models;
+@{
+    if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+}
+<div class="form-row">
+    <div class="col-md-12 bgc-white bd bdrs-3 p-20 mB-20">
+        <h4 class="c-grey-900 mB-20">Sher Afghan Transfer Requests</h4>
+        <table id="dataTable" class="table table-striped table-bordered" cellspacing="0" width="100%">
+            <thead>
+                <tr>
+                    <th>Sr.</th>
+                    <td>NDC Serial No</td>
+                    <td>From Name</td>
+                    <td>Plot Size</td>
+                    <td>File Number</td>
+                    <td>To</td>
+                    <td>Status</td>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    if (Model.Any())
+                    {
+                        int srcounter = 1;
+                        foreach (var item in Model)
+                        {
+                            Status filestat = (Status)item.Status;
+                            string status = filestat.ToString();
+                            string statuscolor = "";
+                            if (status == "Approved") { statuscolor = "bgc-green-50"; }
+                            <tr class="pointer @statuscolor trans-det" id="@item.FileFormNumber">
+                                <td>@srcounter</td>
+                                <td>@item.NDC_SerialNo</td>
+                                <td>@item.From_Name</td>
+                                <td>@item.Plot_Size</td>
+                                <td>@item.FileFormNumber</td>
+                                <td>@item.To_Name</td>
+                                <td>@status</td>
+                            </tr>
+                            srcounter++;
+                        }
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

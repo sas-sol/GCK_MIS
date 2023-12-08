@@ -1,0 +1,158 @@
+﻿
+@model MeherEstateDevelopers.Models.SC_Installments_Detailed
+
+@if (!(Model is null))
+{
+    <div class="col-md-12">
+        <table class="table table-borderless">
+            <thead>
+                <tr class="central-text-align">
+                    <th colspan="6">Installment Overview</th>
+                </tr>
+                <tr class="central-text-align">
+                    <th>Plot No.</th>
+                    <th>Meter No.</th>
+                    <th>Amount</th>
+                    <th>Installments</th>
+                    <th>Requested By</th>
+                    <th>Requested On</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="central-text-align">
+                    <td>@Model.InstallmentOverview.Plot_Num</td>
+                    <td>@Model.InstallmentOverview.Meter_Num</td>
+                    <td>@Model.InstallmentOverview.BillDetails.Total_Amount</td>
+                    <td>@Model.InstallmentOverview.PlanId</td>
+                    <td>@Model.InstallmentOverview.CreatedBy_Name</td>
+                    <td>@Model.InstallmentOverview.Create_DateTime.Value.ToShortDateString()</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <hr />
+
+    <div class="col-md-12">
+        <table class="table table-bordered">
+            <thead>
+                <tr class="central-text-align">
+                    <th colspan="3"></th>
+                </tr>
+                <tr class="central-text-align">
+                    <th>Sr.</th>
+                    <th>Installment Month</th>
+                    <th>Amount</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{ int count = 1;}
+                @foreach (var v in Model.InstallmentStructure)
+                {
+                    <tr class="central-text-align">
+                        <td>@(count++)</td>
+                        <td>@v.Installment_Month.Value.Month.ToString("d2")/@v.Installment_Month.Value.Year</td>
+                        <td>@v.Installment_Amount</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <label><b>Remarks By Creating Body :</b></label>
+            <br />
+            <pre>@Html.Raw(Model.InstallmentOverview.CreatedBy_Remarks)</pre>
+        </div>
+        @if (Model.InstallmentOverview.Status == MeherEstateDevelopers.Models.ServiceChargesInstallmentsStatus.Pending.ToString() && User.IsInRole("Utilities Manager"))
+        {
+            <div class="col-md-6">
+                <label><b>Approving Body Remarks :</b></label>
+                <textarea class="form-control rems" placeholder="Remarks" cols="7" rows="5"></textarea>
+            </div>
+        }
+        else
+        {
+            <div class="col-md-6">
+                <label><b>Approving Body Remarks :</b></label>
+                <br />
+                <pre>@Html.Raw(Model.InstallmentOverview.ApprovedBy_Remarks)</pre>
+            </div>
+        }
+    </div>
+
+    if (Model.InstallmentOverview.Status == MeherEstateDevelopers.Models.ServiceChargesInstallmentsStatus.Pending.ToString() && User.IsInRole("Utilities Manager"))
+    {
+        <input type="hidden" class="billId-hjig" value="@Model.InstallmentOverview.BillDetails.Id" />
+        <input type="hidden" class="insId-hjig" value="@Model.InstallmentOverview.Id" />
+        <div class="col-md-12 mt-md-3">
+            <div class="col-md-2" style="float:right">
+                <button class="btn btn-success btn-multi-ghjdsa-fgh" data-tr="1">Accept</button>
+            </div>
+            <div class="col-md-2" style="float:right">
+                <button class="btn btn-danger btn-multi-ghjdsa-fgh" data-tr="0">Reject</button>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+    }
+    else if (User.IsInRole("Utilities Staff"))
+    {
+        string str;
+        if (Model.InstallmentOverview.Status == "Approved")
+        {
+            str = "bgc-green-50";
+        }
+        else
+        {
+            str = "bgc-red-50";
+        }
+        <div class="col-md-12 @str">
+            <label>Request is <b>@Model.InstallmentOverview.Status</b></label>
+        </div>
+    }
+}
+else
+{
+    <table class="table table-borderless">
+        <thead>
+            <tr>
+                <th colspan="6">No Record Found</th>
+            </tr>
+        </thead>
+    </table>
+}
+
+<script>
+    $('.btn-multi-ghjdsa-fgh').unbind().click(function () {
+        let coni = confirm('Are you sure you want to update status of this installment?');
+        if (!coni) {
+            return;
+        }
+        showLoader();
+        let vl = $(this).attr('data-tr');
+        let bill = $('.billId-hjig').val();
+        let instId = $('.insId-hjig').val();
+        let remarks = $('.rems').val();
+        $.ajax({
+            type: "POST",
+            url: "/ServiceCharges/UpdateInstallmentApprovalStatus/",
+            contentType: "application/json",
+            traditional: true,
+            beforeSend: function () {
+            },
+            complete: function () {
+                hideLoader();
+            },
+            data: JSON.stringify({ bill: bill, id: instId, rems: remarks, stat: vl }),
+        }).done(function (data) {
+            if (data == true) {
+                alert('Status has been updated successfully.');
+                closeModal();
+            }
+            else {
+                alert('Failed to update status. Please try again');
+            }
+        });
+    });
+</script>

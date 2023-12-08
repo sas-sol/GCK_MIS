@@ -1,0 +1,59 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Employee>
+
+@if (Model.Any())
+    {
+        foreach (var v in Model.GroupBy(x => x.BankId))
+        {
+    <div class=" form-row bank_det com-md-12" data-headId="@v.Select(x=> x.BankId).FirstOrDefault()">
+        <input class="form-control head_Name col-md-5" type="text" id="@v.Select(x=> x.BankId).FirstOrDefault()" value="@v.Select(x=> x.BankName).FirstOrDefault()" readonly />
+        <input class="form-control instNo col-md-2 instNumber" placeholder="Instrument No.">
+        <input type="text" class="form-control instDate col-md-3" data-provide="datepicker" placeholder="mm/dd/yyyy">
+        <input type="text" class="form-control tot_Amount coma col-md-2" placeholder="Total Amount" />
+    </div>
+        }
+    }
+
+<script>
+    $(document).ready(function () {
+        $('.modal-footer').append('<button class="btn btn-success" id="add_emp_bank_det" type="submit">Save</button>');
+    });
+    $(document).on('click', '#add_emp_bank_det', function () {
+        var bankdet = [];
+        $('.bank_det').each(function () {
+            
+            var hId =  $(this).attr('data-headid');
+            var iNo = $(this).find('.instNo').val();
+            var IDate = $(this).find('.instDate').val();
+            var TAmnt = RemoveComma($(this).find('.tot_Amount').val());
+            bankdet.push({
+                HeadId: hId,
+                InstNo: iNo,
+                InstDate: IDate,
+                TotalAmnt: TAmnt
+            });
+        });
+        if (confirm("Are you sure you want to add Standing Order details?")) {
+            $.ajax({
+                type: "POST",
+                url: '/Salaries/AddStandingOrderDetails/',
+                data: { standingOrders: bankdet },
+                success: function (data) {
+                    if (data) {
+                        alert("Success");
+                        window.location.reload();
+                    }
+                    else {
+                        alert("Error");
+                    }
+                }
+                , error: function (xmlhttprequest, textstatus, message) {
+                    if (textstatus === "timeout") {
+                        alert("got timeout");
+                    } else {
+                        alert(textstatus);
+                    }
+                }
+            });
+        }
+    });
+</script>

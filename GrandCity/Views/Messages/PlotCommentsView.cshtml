@@ -1,0 +1,126 @@
+@model IEnumerable<Management_Information_System.Models.Sp_Get_PlotComments_Result>
+
+
+
+    <div class="layer w-100 bd gapY-15 fxg-1 bgc-grey-200 pos-r">
+        @if (Model.Any())
+        {
+            <div class="p-20 layers ai-fe gapY-10 chat-box-height" id="chat-msg">
+                @{
+                    if (Model.Any())
+                    {
+                        foreach (var item in Model)
+                        {
+                            string color = "";
+                            if (item.Msg_Type == "Allotment_Letter_Delivered")
+                            {
+                                color = "bgc-purple-50";
+                            }
+                            else if (item.Msg_Type == "Signed")
+                            {
+                                color = "bgc-blue-50";
+                            }
+                            else if (item.Msg_Type == "Plot_Verified")
+                            {
+                                color = "bgc-green-50";
+                            }
+                            else if (item.Msg_Type == "Allotment_Letter_Generate")
+                            {
+                                color = "bgc-blue-50";
+                            }
+                            else if (item.Msg_Type == "Allotment_Letter_Requested")
+                            {
+                                color = "bgc-purple-50";
+                            }
+                            else if (item.Msg_Type == "Dimension_Updation")
+                            {
+                                color = "bgc-red-50";
+                            }
+                            else if (item.Msg_Type == "Plan_Updation")
+                            {
+                                color = "bgc-red-50";
+                            }
+                            else if (item.Msg_Type == "Add_Plot_Owner")
+                            {
+                                color = "bgc-blue-50";
+                            }
+                            else if (item.Msg_Type == "Record_Upatation")
+                            {
+                                color = "bgc-red-50";
+                            }
+                            else if (item.Msg_Type == "Customer_File")
+                            {
+                                color = "bgc-blue-50";
+                            }
+                            else if (item.Msg_Type == "Plot_Status_Updation")
+                            {
+                                color = "bgc-red-50";
+                            }
+                            <div class="layer">
+                                <div class="peers fxw-nw ai-c pY-3 pX-10 bgc-white bdrs-2 lh-3/2 @color">
+                                    <div class="peer-greed ord-0">
+                                        @if (item.Msg_Type == "file")
+                                        {
+                                            <img src="/PlotsData/@item.Plot_Id/@item.Comment" width="200" height="200" />
+                                        }
+                                        else
+                                        {
+                                            <span>@item.Comment</span>
+                                        }
+                                    </div>
+                                </div>
+                                <div class="peers fxw-nw ai-c pY-3 pX-10 bgc-white @color">
+                                    <div class="peer-greed ord-0">
+                                        <span>@item.Name</span>
+                                    </div>
+                                    <div class="peer mL-10 ord-1">
+                                        <small>@string.Format("{0:d MMM yyy, h:mm tt}", item.Date)</small>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    }
+                }
+            </div>
+        }
+        else
+        {
+            <div class="layer">
+                <div class="peers fxw-nw ai-c pY-3 pX-10 bgc-white bdrs-2 lh-3/2 bgc-red-50" >
+                    <div class="peer-greed ord-0">
+                        <span>No Comments Added Yet</span>
+                    </div>
+                </div>
+                <div class="peers fxw-nw ai-c pY-3 pX-10 bgc-white bgc-red-50">
+                    <div class="peer-greed ord-0">
+                        <span>...</span>
+                    </div>
+                    <div class="peer mL-10 ord-1">
+                        
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+<div class="layer w-100">
+    <!-- Chat Send -->
+    <div class="bdT bgc-white" style="padding-top:2.5%">
+        @using (Html.BeginForm("PostPlotComment", "Messages", FormMethod.Post, new { @id = "plt-comt", @class = "", role = "form", enctype = "multipart/form-data" }))
+        {
+            <input type="hidden" name="Plot_id" value="@ViewBag.PlotId" />
+            <div class="pos-r">
+                <textarea type="text" name="Comment" class="chat-comment-box form-control m-0 fl-text" style="width:90%; padding-right:10%" placeholder="Add Comment"></textarea>
+                <button type="submit" class="btn btn-primary w-2r p-0 h-2r pos-a r-1 t-1" style="margin-top:10px">
+                    <i class="fa fa-paper-plane-o"></i>
+                </button>
+                <input type="file" id="files" name="Files" style="margin:10px;" />
+            </div>
+        }
+    </div>
+</div>
+
+<script>
+    //$(document).ready(function () {
+    //    ChatBottom();
+    //});
+</script>

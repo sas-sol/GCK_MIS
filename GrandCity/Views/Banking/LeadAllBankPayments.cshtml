@@ -1,0 +1,31 @@
+﻿@{
+    if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+}
+<div class="container-fluid">
+    <h4 class="c-grey-900 mT-10 mB-30"></h4>
+    <ul class="nav nav-tabs" id="myTabs">
+        @{ string activeclass = "active";}
+        <li class="nav-item"><a class="nav-link @activeclass" data-toggle="tab" role="tab" data-link="/Banking/Leads_Cheques?Status=Pending&Company=@ViewBag.Comp" href="#cheques">Pending</a></li>
+        @{ activeclass = ""; }
+        <li class="nav-item"><a class="nav-link @activeclass" data-toggle="tab" role="tab" data-link="/Banking/Leads_Cheques?Status=Deposited&Company=@ViewBag.Comp" href="#cheques">Deposited</a></li>
+        @{ activeclass = ""; }
+        <li class="nav-item"><a class="nav-link @activeclass" data-toggle="tab" role="tab" data-link="/Banking/Leads_Cheques?Status=Approved&Company=@ViewBag.Comp" href="#cheques">Approved</a></li>
+        @{ activeclass = ""; }
+        <li class="nav-item"><a class="nav-link @activeclass" data-toggle="tab" role="tab" data-link="/Banking/Leads_Cheques?Status=Dishonored&Company=@ViewBag.Comp" href="#cheques">Dishonored</a></li>
+        @{ activeclass = ""; }
+
+    </ul>
+    <!-- Tab panes -->
+    <div class="tab-content">
+        <div id="cheques" class="tab-pane active">
+            @{ Html.RenderAction("Leads_Cheques", "Banking", new { Status = "Pending",Company = ViewBag.Comp });}
+        </div>
+    </div>
+</div>

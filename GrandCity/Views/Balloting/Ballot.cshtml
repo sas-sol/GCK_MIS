@@ -1,0 +1,700 @@
+﻿@{ if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+}
+
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/sunburst.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+<script src="https://code.highcharts.com/modules/export-data.js"></script>
+<script src="https://code.highcharts.com/modules/accessibility.js"></script>
+
+<link rel="stylesheet" href="~/Content/select2.css" />
+<script src="~/Scripts/select2.js"></script>
+
+<div class="col-md-12 bgc-white pt-md-3">
+
+    @*<div class="col-md-12 fkhjgfdk-sdfakhj bgc-white pt-md-3">
+        @{ Html.RenderAction("MapViewSherAfghan", "Balloting");}
+    </div>*@
+    <div class="panel-heading central-text-align">
+        <h4>Balloting</h4>
+    </div>
+    <div class="plts-series-info mt-md-3 mb-md-5 central-text-align">
+        <div class="row" style="align-items:center;">
+            <div class="col-md-10">
+                <div class="panel-heading">
+                    <h5>Plots Series Selection</h5>
+                </div>
+            </div>
+
+            <div class="col-md-2">
+                <button class="btn btn-outline-dark plts-inv-up-btn" data-toggle="modal" data-target="#Modal"><i class="fa fa-file-excel"></i> &nbsp; Upload Plots Inventory</button>
+            </div>
+        </div>
+
+        <div class="row mt-md-3 mb-md-5">
+            <div class="form-group col-md-4" style="margin:auto;">
+                <h6 style="width: auto;float: left;margin: 7px;">Include All Available Inventory?</h6>
+                <label class="switch"><input type="checkbox" class="allavl"><span class="slider round"></span></label>
+            </div>
+        </div>
+
+        <div class="row plt-data-sfdjklh mt-md-3" style="align-items: flex-end; justify-content: center;">
+            <div class="col-md-2">
+                <div class="col-md-6">
+                    <label><b>Block</b></label>
+                </div>
+                <div class="col-md-12">
+                    <select class="form-control blk-name-jkhdsf">
+                        <option>Sher Afghan</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="col-md-2">
+                <div class="col-md-9">
+                    <label><b>Sector</b></label>
+                </div>
+                <div class="col-md-12">
+                    <select class="form-control sect-name-sdfhjk">
+                        @foreach (var v in ViewBag.sectors)
+                        {
+                            <option value="@v">@v</option>
+                        }
+                    </select>
+                </div>
+            </div>
+
+            <div style="border-right: 2px solid #ddc;height: 35px;">
+
+            </div>
+
+            <div class="col-md-2">
+                <div class="col-md-9">
+                    <label><b>Start</b></label>
+                </div>
+                <div class="col-md-12">
+                    <select class="form-control strt-plt">
+                        <option>Starting Plot</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="col-md-2">
+                <div class="col-md-9">
+                    <label><b>End</b></label>
+                </div>
+                <div class="col-md-12">
+                    <select class="form-control ending-plt">
+                        <option>Ending Plot</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="col-md-1">
+                <button class="pointer add-sect btn btn-primary"><i class="fa fa-plus"></i> Add</button>
+            </div>
+        </div>
+    </div>
+    <hr />
+
+    <div class="fls-series-info mt-md-5">
+        <div class="panel-heading central-text-align">
+            <h5>Files Qualifying Criteria</h5>
+        </div>
+        <div class="row mt-md-3" style="align-items: flex-end; justify-content: center;">
+            <div class="col-md-2">
+                <label><b>Ballot Date Between :</b></label>
+            </div>
+            <div class="col-md-2">
+                <input type="text" class="form-control book-start-date" data-provide="datepicker" />
+            </div>
+            <div class="col-md-1">
+                <label> <b> And </b></label>
+            </div>
+
+            <div class="col-md-2">
+                <input type="text" class="form-control book-end-date" data-provide="datepicker" />
+            </div>
+        </div>
+
+        <div class="row mt-md-3" style="align-items: flex-end; justify-content: center;">
+            <div class="col-md-1">
+                <input type="number" class="form-control ttl-inst-paid-khjfds" />
+            </div>
+            <div class="col-md-2">
+                <label> <b> Installments paid. </b></label>
+            </div>
+
+            <div class="col-md-3">
+                <input type="checkbox" class="all-ins-pd-fdsjkh" /><label>&nbsp;All installments paid till this month.</label>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-12 mt-md-5 pb-md-3 central-text-align">
+        <button class="btn btn-primary ballot-btn-dsfh">Ballot</button>
+    </div>
+</div>
+
+<hr />
+<div class="col-md-12 fkhjgfdk-sdfakhj bgc-white pt-md-3">
+    
+</div>
+
+
+<script>
+    var __sectors = @Html.Raw(Json.Encode(ViewBag.sectors));
+    //let __dummy = [];
+    $('.all-ins-pd-fdsjkh').change(function () {
+        if ($(this).is(':checked')) {
+            $(".ttl-inst-paid-khjfds").attr("disabled", "disabled");
+        }
+        else {
+            $(".ttl-inst-paid-khjfds").removeAttr("disabled");
+        }
+    });
+    $(document).on('click', '.rmv-sect', function () {
+        let confi = confirm('Are you sure you want to remove this row?');
+        if (!confi) {
+            return;
+        }
+        $(this).closest('.plt-data-sfdjklh').remove();
+    });
+    $('.add-sect').unbind().click(function () {
+        let strc = `<div class="row plt-data-sfdjklh mt-md-3" style="align-items: flex-end; justify-content: center;">
+            <div class="col-md-2">
+                <div class="col-md-6">
+                    <label><b>Block</b></label>
+                </div>
+                <div class="col-md-12">
+                    <select class="form-control blk-name-jkhdsf">
+                        <option>Sher Afghan</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="col-md-2">
+                <div class="col-md-9">
+                    <label><b>Sector</b></label>
+                </div>
+                <div class="col-md-12">
+                    <select class="form-control sect-name-sdfhjk">`;
+
+        $.each(__sectors, function (_i, _v) {
+            strc += `<option value="${_v}">${_v}</option>`;
+        });
+
+        strc   += `</select>
+                </div>
+            </div>
+
+            <div style="border-right: 2px solid #ddc;height: 35px;">
+
+            </div>
+
+            <div class="col-md-2">
+                <div class="col-md-9">
+                    <label><b>Start</b></label>
+                </div>
+                <div class="col-md-12">
+                    <select class="form-control strt-plt">
+                        <option>Starting Plot</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="col-md-2">
+                <div class="col-md-9">
+                    <label><b>End</b></label>
+                </div>
+                <div class="col-md-12">
+                    <select class="form-control ending-plt">
+                        <option>Ending Plot</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="col-md-1">
+                <button class="pointer rmv-sect btn btn-primary"><i class="fa fa-trash"></i> Del</button>
+            </div>
+        </div>`;
+
+        $('.plts-series-info').append(strc);
+        let lastAddedRow = $('.strt-plt').last();
+        let starter = $('.strt-plt').last().select2({
+            ajax: {
+                url: '/Balloting/GetPlotsRange/',
+                data: function (params) {
+                    var query = {
+                        s: params.term,
+                        blk: 'Sher Afghan',
+                        sec: $(lastAddedRow).closest('.plt-data-sfdjklh').find('.sect-name-sdfhjk option:selected').val()
+                    }
+
+                    // Query parameters will be ?search=[term]&type=public
+                    return query;
+                },
+                processResults: function (data) {
+                    //console.log(data);
+                    // Transforms the top-level key of the response object from 'items' to 'results'
+                    return {
+                        results: data
+                    };
+                }
+            }
+        });
+
+        $('.ending-plt').last().select2({
+            ajax: {
+                url: '/Balloting/GetPlotsRange/',
+                data: function (params) {
+                    var query = {
+                        s: params.term,
+                        blk: 'Sher Afghan',
+                        sec: $('.ending-plt').last().closest('.plt-data-sfdjklh').find('.sect-name-sdfhjk option:selected').val(),
+                        start: $(starter).val()
+                    }
+
+                    // Query parameters will be ?search=[term]&type=public
+                    return query;
+                },
+                processResults: function (data) {
+                    //console.log(data);
+                    // Transforms the top-level key of the response object from 'items' to 'results'
+                    return {
+                        results: data
+                    };
+                }
+            }
+        });
+    });
+
+    $('.strt-plt').select2({
+        ajax: {
+            url: '/Balloting/GetPlotsRange/',
+            data: function (params) {
+                var query = {
+                    s: params.term,
+                    blk: 'Sher Afghan',
+                    sec: $('.sect-name-sdfhjk option:selected').val()
+                }
+
+                // Query parameters will be ?search=[term]&type=public
+                return query;
+            },
+            processResults: function (data) {
+                //console.log(data);
+                // Transforms the top-level key of the response object from 'items' to 'results'
+                return {
+                    results: data
+                };
+            }
+        }
+    });
+
+    $('.ending-plt').select2({
+        ajax: {
+            url: '/Balloting/GetPlotsRange/',
+            data: function (params) {
+                var query = {
+                    s: params.term,
+                    blk: 'Sher Afghan',
+                    sec: $('.sect-name-sdfhjk option:selected').val(),
+                    start: $('.strt-plt option:selected').val()
+                }
+
+                // Query parameters will be ?search=[term]&type=public
+                return query;
+            },
+            processResults: function (data) {
+                //console.log(data);
+                // Transforms the top-level key of the response object from 'items' to 'results'
+                return {
+                    results: data
+                };
+            }
+        }
+    });
+
+    $('.ballot-btn-dsfh').unbind().click(function () {
+        let confi = confirm('Are you sure you want to perform ballot?');
+        if (!confi) {
+            return;
+        }
+
+        //Request to perform ballot is sent to controller below
+
+        let pltsData = [];
+        let paidInstalmentsForQualify = $('.ttl-inst-paid-khjfds').val();
+        let bookingStartDate = $('.book-start-date').val();
+        let bookingEndDate = $('.book-end-date').val();
+        let incAll = $('.allavl').is(':checked');
+
+        if ($('.all-ins-pd-fdsjkh').is(':checked')) {
+            paidInstalmentsForQualify = -1;
+        }
+        //Filtering all plots
+        if (!incAll) {
+            $('.plt-data-sfdjklh').each(function (i, v) {
+                let blk = $(this).find('.blk-name-jkhdsf option:selected').val();
+                let sec = $(this).find('.sect-name-sdfhjk option:selected').val();
+                let startFrom = $(this).find('.strt-plt option:selected').val();
+                let endAt = $(this).find('.ending-plt option:selected').val();
+                pltsData.push({
+                    block: blk,
+                    sector: sec,
+                    start: startFrom,
+                    end: endAt
+                });
+            });
+        }
+        ShowFullScreenLoader();
+        $('.fkhjgfdk-sdfakhj').load('/Balloting/BallotResult/', { reqPlots: pltsData, pdInst: paidInstalmentsForQualify, bookStart: bookingStartDate, bookEnd: bookingEndDate, allAvailable: incAll }, function () {
+            HideFullScreenLoader();
+            $('html, body').animate({
+                scrollTop: $(".fkhjgfdk-sdfakhj").offset().top
+            }, 2000);
+        });
+        return;
+
+        $.ajax({
+            type: "POST",
+            url: "/Balloting/PerformBallot/",
+            contentType: "application/json",
+            traditional: true,
+            beforeSend: function () {
+                ShowFullScreenLoader();
+            },
+            complete: function () {
+                HideFullScreenLoader();
+            },
+            data: JSON.stringify({ reqPlots: pltsData, pdInst: paidInstalmentsForQualify, bookStart: bookingStartDate, bookEnd: bookingEndDate, allAvailable: incAll }),
+        }).done(function (data) {
+            HideFullScreenLoader();
+            if (data.Status == true) {
+                alert(data.Msg);
+                //window.location.reload();
+                //yahan pe balloted files show krani hain
+                //console.log(data.ballotFiles);
+                let balloted = data.ballotFiles.reduce((r, a) => {
+                    r[a.Preference] = [...r[a.Preference] || [], a];
+                    return r;
+                }, {});
+                //__dummy = data;
+                let __strctr__fjkh = ``;
+                __strctr__fjkh += `<div class="panel-heading">
+        <h5>Ballot Summary</h5>
+    </div>
+<div class="row mt-md-3">
+    <div class="col-md-6">
+        <table class="table table-borderless">
+            <thead>
+                <tr>
+                    <th colspan="3">Plots In Hand Summary</th>
+                </tr>
+                <tr>
+                    <th>Sr.</th>
+                    <th>Type</th>
+                    <th>Count</th>
+                </tr>
+            </thead>
+
+            <tbody>`;
+                $.each(data.plotSummary, function (psi, psv) {
+                    __strctr__fjkh += `<tr>
+                    <td>${psi + 1}</td>
+                    <td>${psv.Ident}</td>
+                    <td>${psv.Count}</td>
+                </tr>`;
+                });
+                __strctr__fjkh += `</tbody>
+        </table>
+    </div>
+
+    <div class="col-md-6">
+        <table class="table table-borderless">
+            <thead>
+                <tr>
+                    <th colspan="3">Qualifying Files Summary</th>
+                </tr>
+                <tr>
+                    <th>Sr.</th>
+                    <th>Type</th>
+                    <th>Count</th>
+                </tr>
+            </thead>
+
+            <tbody>`;
+                $.each(data.filesSummary, function (fsi, fsv) {
+                    __strctr__fjkh += `<tr>
+                    <td>${fsi + 1}</td>
+                    <td>${fsv.Ident}</td>
+                    <td>${fsv.Count}</td>
+                </tr>`
+                });
+                __strctr__fjkh += `</tbody>
+        </table>
+    </div>
+</div>`;
+                let __perf_ident__ = 0;
+                $.each(balloted, function (ind, val) {
+                    __strctr__fjkh += `<hr />
+                                <div class="col-md-12 mt-md-3" style="max-height: 500px;overflow-y: scroll;">
+                                    <div class="panel-heading central-text-align" style="background-color:#d0232a;color:#fff;">
+                                        <h5>${val[0].Preference} --- Total : ${val.length}</h5>
+                                    </div>
+
+                                    <div class="col-md-12">
+                                        <table class="table table-borderless">
+                                            <thead>
+                                                <tr class="thead-dark">
+                                                    <th>Sr#</th>
+                                                    <th>File No.</th>
+                                                    <th>File Size</th>
+                                                    <th>Owner Name</th>
+                                                    <th>Owner CNIC</th>
+                                                    <th>Booking Date</th>
+                                                    <th>Development Charges</th>
+                                                    <th>Plot Assigned</th>
+                                                    <th>Plot Size</th>
+                                                    <th>Plot Dimensions</th>
+                                                    <th>File Details</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>`;
+                    let marlas = val.reduce((r, a) => {
+                        r[a.PlotArea] = [...r[a.PlotArea] || [], a];
+                        return r;
+                    }, {});
+                    $.each(marlas, function (i, v) {
+                        __perf_ident__ += 1;
+                        __strctr__fjkh += `<tr style="background-color:#000; color:white" class = "pointer tr-toggler-sklfjd" data-vtag="${__perf_ident__}">
+                                                    <td colspan="11">${v[0].PlotArea} Marla --- Total : ${v.length}</td>
+                                                </tr>`;
+                        $.each(v, function (_i, _v) {
+                            __strctr__fjkh += `<tr class="${__perf_ident__}" style="display:none;">
+                                                    <td>${_i + 1}</td>
+                                                    <td>${_v.FileNo}</td>
+                                                    <td>${_v.FileSize}</td>
+                                                    <td>${_v.Name}</td>
+                                                    <td>${_v.CNIC_NICOP}</td>
+                                                    <td>${_v.BookingDate}</td>
+                                                    <td>${(_v.DevelopmentCharges == true)?"DC" : "NDC"}</td>
+                                                    <td>${_v.PlotNo}</td>
+                                                    <td>${_v.PlotArea} Marla</td>
+                                                    <td>${_v.PlotDimensions}</td>
+                                                    <td><i class="fa fa-eye pointer file-info-fhjkgsd" data-dtag="${_v.File_Id}"></i></td>
+                                                </tr>`;
+                        });
+                        });
+                    __strctr__fjkh += `</tbody>
+                                        </table></div>
+                                </div>`;
+                    //console.log(__strctr__fjkh);
+                });
+
+                __strctr__fjkh += `<hr />
+                                <div class="col-md-12" style="max-height: 500px;overflow-y: scroll;">
+                                    <div class="panel-heading central-text-align" style="background-color:#d0232a;color:#fff;">
+                                        <h5>UnBalloted Plots</h5>
+                                    </div>
+
+                                    <div class="col-md-12">
+                                        <table class="table table-borderless">
+                                            <thead>
+                                                <tr class="thead-dark">
+                                                    <th>Sr#</th>
+                                                    <th>Plot No.</th>
+                                                    <th>Sector</th>
+                                                    <th>Marla</th>
+                                                    <th>Plot Size</th>
+                                                    <th>Location</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>`;
+                $.each(data.unballotedPlots, function (indi, vali) {
+                    $.each(vali.Plots, function (_indi, _vali) {
+                        __strctr__fjkh += `<tr>
+                                                    <th>${_indi + 1}</th>
+                                                    <th>${_vali.PlotNo}</th>
+                                                    <th>${_vali.Sector}</th>
+                                                    <th>${_vali.PlotArea}</th>
+                                                    <th>${_vali.PlotSize}</th>
+                                                    <th>${_vali.PlotType}</th>
+                                                </tr>`;
+                    });
+                });
+
+                __strctr__fjkh += `</table> </div>
+                                </div>`;
+
+                __strctr__fjkh += `<hr />
+                                <div class="col-md-12" style="max-height: 500px;overflow-y: scroll;">
+                                    <div class="panel-heading central-text-align" style="background-color:#d0232a;color:#fff;">
+                                        <h5>UnBalloted Files</h5>
+                                    </div>
+
+                                    <div class="col-md-12">
+                                        <table class="table table-borderless">
+                                            <thead>
+                                                <tr class="thead-dark">
+                                                    <th>Sr#</th>
+                                                    <th>File No.</th>
+                                                    <th>Marla</th>
+                                                    <th>Prefrence</th>
+                                                    <th>Owner Name</th>
+                                                    <th>Owner CNIC</th>
+                                                    <th>Booking Date</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>`;
+                $.each(data.unballotedFiles, function (indi, vali) {
+                    __strctr__fjkh += `<tr>
+                                                    <th>${indi + 1}</th>
+                                                    <th>${vali.FileFormNumber}</th>
+                                                    <th>${vali.Plot_Size}</th>
+                                                    <th>${vali.Plot_Prefrence}</th>
+                                                    <th>${vali.Name}</th>
+                                                    <th>${vali.CNIC_NICOP}</th>
+                                                    <th>${vali.Mobile_2}</th>
+                                                </tr>`;
+                });
+
+                __strctr__fjkh += `</table> </div>
+                                </div>`;
+
+                $('.fkhjgfdk-sdfakhj').empty();
+                $('.fkhjgfdk-sdfakhj').append(__strctr__fjkh);
+
+                $('html, body').animate({
+                    scrollTop: $(".fkhjgfdk-sdfakhj").offset().top
+                }, 2000);
+
+                $('.tr-toggler-sklfjd').unbind().click(function () {
+                    let cls = $(this).attr('data-vtag');
+                    $('.' + cls).slideToggle();
+                });
+
+                $('.file-info-fhjkgsd').unbind().click(function () {
+                    let fid = parseInt($(this).attr('data-dtag'));
+                    EmptyModel();
+                    $('.modal-body').load('/FileSystem/GetFileDetails/', { FileId: fid }, function () {
+                        $(".modal-dialog").attr('style', 'max-width: 1500px !important');
+                        $("#ModalLabel").text("Details");
+                    });
+                });
+
+                //preparing report of ballot
+                //let __cats = __dummy.ballotFiles.reduce((r, a) => {
+                //    r[a.Preference] = [...r[a.Preference] || [], a];
+                //    return r;
+                //}, {});
+
+                //let __cats_Final = [];
+                //let __sers_Final = [];
+                //$.each(__cats, function (_i, _v) {
+                //    __cats_Final.push(_v[0].Preference);
+                //});
+
+
+                //let __sizes = __dummy.ballotFiles.reduce((r, a) => {
+                //    r[a.PlotArea] = [...r[a.PlotArea] || [], a];
+                //    return r;
+                //}, {});
+
+                //$.each(__sizes, function (_ii, _vv) {
+                //    let _counts = [];
+                //    $.each(__cats, function (_iii, _vvv) {
+                //        _counts.push(_vv.filter(x => x.PlotArea == _vv[0].PlotArea && x.Preference == _vvv[0].Preference).length);
+                //    });
+
+                //    __sers_Final.push({
+                //        name: _vv[0].PlotArea + ' Marla',
+                //        data: _counts
+                //    });
+                //});
+
+                ////console.log(__cats_Final);
+                ////console.log(__sers_Final);
+                //$('#repcont').show();
+                //Highcharts.chart('repcont', {
+                //    chart: {
+                //        type: 'column'
+                //    },
+                //    title: {
+                //        text: 'Balloting Summary'
+                //    },
+                //    xAxis: {
+                //        categories: __cats_Final
+                //    },
+                //    yAxis: {
+                //        min: 0,
+                //        title: {
+                //            text: 'Total Plots Balloted'
+                //        },
+                //        stackLabels: {
+                //            enabled: true,
+                //            style: {
+                //                fontWeight: 'bold',
+                //                color: ( // theme
+                //                    Highcharts.defaultOptions.title.style &&
+                //                    Highcharts.defaultOptions.title.style.color
+                //                ) || 'gray'
+                //            }
+                //        }
+                //    },
+                //    legend: {
+                //        align: 'right',
+                //        x: -30,
+                //        verticalAlign: 'top',
+                //        y: 25,
+                //        floating: true,
+                //        backgroundColor:
+                //            Highcharts.defaultOptions.legend.backgroundColor || 'white',
+                //        borderColor: '#CCC',
+                //        borderWidth: 1,
+                //        shadow: false
+                //    },
+                //    tooltip: {
+                //        headerFormat: '<b>{point.x}</b><br/>',
+                //        pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}'
+                //    },
+                //    plotOptions: {
+                //        column: {
+                //            stacking: 'normal',
+                //            dataLabels: {
+                //                enabled: true
+                //            }
+                //        }
+                //    },
+                //    series: __sers_Final
+                //});
+            }
+            else {
+                alert(data.Msg);
+            }
+        });
+    });
+
+    $('.plts-inv-up-btn').unbind().click(function () {
+        EmptyModel();
+        $('#ModalLabel').text("Upload Ballot Plots Inventory");
+        $('#modalbody').load('/Balloting/UploadPlotsInventory/');
+    });
+
+    $('.allavl').unbind().change(function () {
+        if ($(this).is(':checked')) {
+            $('.plt-data-sfdjklh').slideUp();
+        }
+        else {
+            $('.plt-data-sfdjklh').slideDown();
+        }
+    });
+</script>   

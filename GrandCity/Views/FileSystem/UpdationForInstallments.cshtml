@@ -1,0 +1,113 @@
+﻿
+<style>
+    .scrolling-box {
+        height: 740px;
+        overflow-y: scroll;
+        overflow-x: scroll;
+        width: 100%;
+        position: sticky;
+        top: 0;
+    }
+
+    .tableFixHead {
+        overflow: auto;
+        min-height: 380px;
+        height: 100px;
+    }
+
+        .tableFixHead .ka th {
+            position: sticky;
+            top: 0;
+        }
+</style>
+
+
+<input type="hidden" value="@ViewBag.FileID" id="Fileid"/>
+<div class="row" >
+    <div class="col-md-6">
+        <div class="form-row" id="">
+            <div class="form-group col-md-4">
+
+                <h6 class="c-grey-900" style="margin-top:23px">Advance</h6>
+            </div>
+            <div class="form-group col-md-4">
+                <input type="text" class="form-control" data-provide="datepicker" id="Advance_date" placeholder="mm/dd/yyyy" style="margin-top:23px" name="">
+            </div>
+            <div class="form-group col-md-4">
+                <label>Amount</label>
+                <input type="text" class="form-control" id="advance_amt" />
+            </div>
+        </div>
+        <div class="form-row" id="">
+            <div class="form-group col-md-4">
+                <h6 class="c-grey-900" style="margin-top:23px">Plan Starting Date</h6>
+            </div>
+            <div class="form-group col-md-3">
+                <input type="text" class="form-control" data-provide="datepicker" id="p__st__date" placeholder="mm/dd/yyyy" style="margin-top:23px" name="">
+            </div>
+            <div class="form-group col-md-2">
+                <label>Installment</label>
+                <input type="text" class="form-control" id="p__st__ins" />
+            </div>
+            <div class="form-group col-md-3">
+                <label>Amount</label>
+                <input type="text" class="form-control" id="p__st__amt" />
+            </div>
+        </div>
+        <div class="form-row" id="">
+            <div class="form-group col-md-4">
+                <h6 class="c-grey-900" style="margin-top:23px">Balloting</h6>
+            </div>
+            <div class="form-group col-md-4">
+                <input type="text" class="form-control" data-provide="datepicker" id="b__date" placeholder="mm/dd/yyyy" style="margin-top:23px" name="">
+            </div>
+            <div class="form-group col-md-4">
+                <label>Amount</label>
+                <input type="text" class="form-control" id="b__amt" />
+            </div>
+        </div>
+        <div class="form-row" id="">
+            <div class="form-group col-md-4">
+                <h6 class="c-grey-900" style="margin-top:23px">Development Charges</h6>
+            </div>
+            <div class="form-group col-md-4">
+                <input type="text" class="form-control" data-provide="datepicker" id="Dv__date" placeholder="mm/dd/yyyy" style="margin-top:23px" name="">
+            </div>
+            <div class="form-group col-md-4">
+                <label>Amount</label>
+                <input type="text" class="form-control" id="Dv__amt" />
+            </div>
+        </div>
+        <div class="form-row" id="">
+            <div class="form-group col-md-10">
+            </div>
+            <div class="form-group col-md-2">
+                <button class="btn btn-primary" id="Make__update__request__table" value="">Check</button>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div id="body_load__instal" class="tableFixHead">
+            <table id="" class="table table-striped table-bordered col-md-12" cellspacing="0" width="">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>Sr</th>
+                        <th>Date</th>
+                        <th>Amount</th>
+                        <th>Date</th>
+                        <th>Paid Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+        </div>
+    </div>
+
+
+<script>
+    $(function () {
+        $('.modal-footer').append(' <button type="button" class="btn btn-primary upda___fil__str" id="@ViewBag.FileID" >Generate</button>');
+    });
+</script>

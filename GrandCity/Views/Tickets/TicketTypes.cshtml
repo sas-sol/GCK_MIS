@@ -1,0 +1,62 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Sp_Get_Ticket_Type_Result>
+@{ if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="bdrs-3 ov-h bgc-white p-10 bd">
+            <div class="form-row">
+                <div class="col-md-6">
+                    <h5>Tickets Management System</h5>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-4">
+                    <label>Title</label>
+                    <input type="text" id="title" class="form-control" />
+                </div>
+                <div class="form-group col-md-3">
+                    <label style="width:100%">Department</label>
+                    @Html.DropDownList("Department", null, null, new { @class = "form-control" })
+                </div>
+                <div class="form-group col-md-3">
+                    <label></label>
+                    <button class="btn btn-info a-t-t">Submit</button>
+                </div>
+            </div>
+            <div class="row">
+                @{
+                    if (Model.Any())
+                    {
+                        foreach (var item in Model.GroupBy(x => x.Name))
+                        {
+                            <div class="col-md-4">
+                                <div class="bgc-white p-20 bd">
+                                    <h5>@item.Key</h5>
+                                    <hr />
+                                    @foreach (var a in item)
+                                    {
+                                        <div id="@a.Id"><label>- @a.Title </label><i data-id="@a.Id" style="float: right;margin-top: 5px;font-size: 9px;" class="ti-close del-tic-type"></i><hr style="margin:3px" /></div>
+                                    }
+                                </div>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <div class=" form-group col-md-12">
+                            <label>No Types Created Yet</label>
+                        </div>
+                    }
+                }
+            </div>
+        </div>
+    </div>
+</div>

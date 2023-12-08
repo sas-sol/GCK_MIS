@@ -1,0 +1,259 @@
+﻿@model MeherEstateDevelopers.Models.MIS_Reminders
+
+@{ if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+}
+<link href="~/Content/bootstrap-material-datetimepicker.css" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<script src="~/Scripts/bootstrap-material-datetimepicker.min.js"></script>
+<input type="hidden" class="remIdFld" value="@Model.Id" />
+<div class="col-md-12 bgc-white p-20">
+    <h5>
+        Reminder Details
+        @if (Model.Status != "Closed")
+        {
+            <span>&nbsp;&nbsp;|&nbsp;&nbsp;</span><button class="btn btn-danger cls-remdr">Close Reminder</button>
+        }
+        else
+        {
+            <span>&nbsp;&nbsp;|&nbsp;&nbsp;</span><span class="btn-danger" style="font-size: 12px;padding: 5px;">Closed</span>
+        }
+    </h5>
+    <hr />
+    <div class="row">
+        <div class="col-md-8">
+            <div class="row">
+                <div class="col-md-2">
+                    <b>Reminder # </b>
+                </div>
+                <div class="col-md-3">
+                    @Model.ReminderNo
+                </div>
+            </div>
+
+            <div class="row mt-md-3">
+                <div class="col-md-2">
+                    <b>Title : </b>
+                </div>
+                <div class="col-md-8">
+                    @Model.Title
+                </div>
+            </div>
+
+            <div class="row mt-md-3">
+                <div class="col-md-2">
+                    <b>Status : </b>
+                </div>
+                <div class="col-md-3">
+                    @Model.Status
+                </div>
+            </div>
+
+            <div class="row mt-md-3">
+                <div class="col-md-2">
+                    <b>Remind At : </b>
+                </div>
+                <div class="col-md-4">
+                    <span class="dt-text">@Model.RemindOn.ToString()</span>
+                    <input type="text" class="dt-fld form-control" style="display:none;" />
+                </div>
+                @if (Model.Status != "Closed")
+                {
+                    <div class="col-md-2">
+                        <span><i class="fa fa-wrench pointer updt-rmndr-dt-tm" style="color:cornflowerblue" title="Change Reminder Date Time"></i></span>
+                        <span style="display:none;"><i class="fa fa-times pointer cancel-rmndr-dt-tm" style="color:#d0232a" title="Cancel"></i>&nbsp;&nbsp;|&nbsp;&nbsp;<i class="fa fa-check pointer sv-rmndr-dt-tm" style="color:limegreen" title="Update"></i></span>
+                    </div>
+                }
+            </div>
+
+            <div class="row mt-md-3">
+                <div class="col-md-2">
+                    <b>Notify via : </b>
+                </div>
+                <div class="col-md-2 notifyModeSelection" style="display:none;">
+                    <input type="checkbox" data-mode="Email" class="Email notifyMode" name="EmailNotify" @(Model.EmailNotify == true ? "checked" : string.Empty) />&nbsp;&nbsp;Email
+                </div>
+
+                <div class="col-md-2 notifyModeSelection" style="display:none;">
+                    <input type="checkbox" data-mode="SMS" class="SMS notifyMode" name="SMSNotify" @(Model.SMSNotify == true ? "checked" : string.Empty) />&nbsp;&nbsp;SMS
+                </div>
+                <div class="col-md-4 notifyModesDisp">
+                    @if (Model.EmailNotify == true)
+                    {
+                        <span>Email &nbsp;&nbsp;<i class="fa fa-check" style="color:limegreen"></i></span>
+                    }
+                    else
+                    {
+                        <span>Email &nbsp;&nbsp;<i class="fa fa-times" style="color:#d0232a"></i></span>
+                    }
+
+                    @if (Model.SMSNotify == true)
+                    {
+                        <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SMS &nbsp;&nbsp;<i class="fa fa-check" style="color:limegreen"></i></span>
+                    }
+                    else
+                    {
+                        <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SMS &nbsp;&nbsp;<i class="fa fa-times" style="color:#d0232a"></i></span>
+                    }
+                </div>
+                @if (Model.Status != "Closed")
+                {
+                    <div class="col-md-2">
+                        <span><i class="fa fa-wrench pointer updt-rmndr-ntfy-mode" style="color:cornflowerblue" title="Change Reminder Notify Mode"></i></span>
+                        <span style="display:none;"><i class="fa fa-times pointer cancel-rmndr-ntfy-mode" style="color:#d0232a" title="Cancel"></i></span>
+                    </div>
+                }
+            </div>
+
+            <div class="row mt-md-3">
+                <div class="col-md-2">
+                    <b>Created At : </b>
+                </div>
+                <div class="col-md-8">
+                    @Model.CreatedAt.Value.ToShortDateString()
+                </div>
+            </div>
+
+            <div class="row mt-md-3">
+                <div class="col-md-2">
+                    <b>Details : </b>
+                </div>
+                <div class="col-md-8">
+                    @Html.Raw(Model.Description)
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            @{ Html.RenderAction("ReminderComments", "Reminders", new { remId = Model.Id });}
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('.cls-remdr').unbind().click(function () {
+            if (!confirm('Are you sure you want to close this reminder?')) {
+                return;
+            }
+
+            var remndr = $('.remIdFld').val();
+            $.ajax({
+                type: "POST",
+                url: '/Reminders/CloseReminder/',
+                data: { remId: remndr },
+                success: function (data) {
+                    if (data) {
+                        window.location.reload();
+                    }
+                    else {
+                        alert("Failed to close this reminder. Please try again.");
+                    }
+                }
+                , error: function (xmlhttprequest, textstatus, message) {
+                    if (textstatus === "timeout") {
+                        alert("got timeout");
+                    } else {
+                        alert(textstatus);
+                    }
+                }
+            });
+        });
+
+        $('.updt-rmndr-dt-tm').unbind().click(function () {
+            $('.dt-text').hide();
+            $('.dt-fld').show();
+            $(this).closest('span').hide();
+            $(this).closest('span').next().show();
+        });
+
+        $('.cancel-rmndr-dt-tm').unbind().click(function () {
+            $('.dt-text').show();
+            $('.dt-fld').hide();
+            $(this).closest('span').prev().show();
+            $(this).closest('span').hide();
+        });
+
+        $('.sv-rmndr-dt-tm').unbind().click(function () {
+            if (!confirm('Are you sure you want to update reminder date?')) {
+                return;
+            }
+            var newDt = $('.dt-fld').val();
+            var redIden = $('.remIdFld').val();
+            if (newDt == '' || newDt == undefined) {
+                alert('Set a date first before proceeding');
+                return;
+            }
+            $.ajax({
+                type: "POST",
+                url: '/Reminders/UpdateReminderDate/',
+                data: { remId: redIden, newRemindDate: newDt },
+                success: function (data) {
+                    if (data) {
+                        window.location.reload(true);
+                    }
+                    else {
+                        alert("Failed to update the date. Please try again");
+                    }
+                }
+                , error: function (xmlhttprequest, textstatus, message) {
+                    if (textstatus === "timeout") {
+                        alert("got timeout");
+                    } else {
+                        alert(textstatus);
+                    }
+                }
+            });
+        });
+
+        $('.updt-rmndr-ntfy-mode').unbind().click(function () {
+            $('.notifyModeSelection').show();
+            $('.notifyModesDisp').hide();
+            $(this).closest('span').next().show();
+            $(this).closest('span').hide();
+        });
+
+        $('.cancel-rmndr-ntfy-mode').unbind().click(function () {
+            $('.notifyModeSelection').hide();
+            $('.notifyModesDisp').show();
+            $(this).closest('span').prev().show();
+            $(this).closest('span').hide();
+        });
+
+        $('.notifyMode').unbind().change(function () {
+            var nmode = $(this).attr('data-mode');
+            var nstat = $(this).is(':checked');
+            var remId = $('.remIdFld').val();
+            $.ajax({
+                type: "POST",
+                url: '/Reminders/UpdateReminderNotifyMode/',
+                data: { remId: remId, modeType: nmode, status: nstat },
+                success: function (data) {
+                    if (data) {
+                        window.location.reload();
+                    }
+                    else {
+                        alert("Failed to update notify mode of this reminder. Please try again.");
+                    }
+                }
+                , error: function (xmlhttprequest, textstatus, message) {
+                    if (textstatus === "timeout") {
+                        alert("got timeout");
+                    } else {
+                        alert(textstatus);
+                    }
+                }
+            });
+
+        });
+
+        $('.dt-fld').bootstrapMaterialDatePicker({ weekStart: 0, time: true, format: 'MM-DD-YYYY HH:mm' }).on('change', function (e, date) {
+        });
+    });
+</script>

@@ -1,0 +1,100 @@
+﻿@model MeherEstateDevelopers.Models.Receipts_Pending
+<input type="hidden" name="ReceiptId" id="rece-id" value="@Model.Id" />
+<div class="form-row">
+    <div class="form-group col-md-2">
+        <label>Receipt No.</label>
+        <h6>@Model.ReceiptNo</h6>
+    </div>
+    <div class="form-group col-md-2">
+        <label>Amount</label>
+        <h6>@string.Format("{0:n0}", Model.Amount)</h6>
+    </div>
+    <div class="form-group col-md-2">
+        <label>Payment Type</label>
+        <h6 id="paytype">@Model.PaymentType</h6>
+    </div>
+    @if (Model.PaymentType != "Cash")
+    {
+        <div class="form-group col-md-2">
+            <label>Bank</label>
+            <h6> @Model.Bank</h6>
+        </div>
+        <div class="form-group col-md-2">
+            <label>@Model.PaymentType No</label>
+            <h6> @Model.Ch_Pay_Draft_No</h6>
+        </div>
+    }
+</div>
+@*<div class="form-row">
+        <div class="cal item-unidnfd-rcpt-row col-md-12">
+            <input type="hidden" name="ReceiptId" id="rece-id" value="0" />
+            <div class="form-row dm-stat" style="justify-content:center"></div>
+            <div class="form-row col-md-12">
+                <span class="sr" style="margin: 4% 32px 0 0;">1</span>
+                <div class="form-group col-md-2">
+                    <select class="form-control " id="module">
+                        <option value="PlotManagement">Plots</option>
+                        <option value="FileManagement">File</option>
+                    </select>
+                </div>
+                <div class="form-group col-md-2">
+                    @Html.DropDownList("Block", null, "Choose..", new { @class = "form-control block-nam blk-plotss", required = "" })
+                </div>
+                <div class="form-group col-md-2">
+                    <select class="form-control blk-plots" id="type">
+                        <option value="Residential">Residential</option>
+                        <option value="Commercial">Commercial</option>
+                    </select>
+                </div>
+                <div class="form-group col-md-2">
+                    <input type="text" class="form-control" placeholder="File Plot No" id="fileplot">
+                </div>
+                <div class="form-group col-md-2">
+                    <input type="number" placeholder="Amount" class="form-control" id="amt">
+                </div>
+                <i class="ti-trash rmv-unidnfd-rcpt-row rmv" style="margin: 1% 0 0 2%;"></i>
+            </div>
+        </div>
+    </div>*@
+<div class="form-row">
+    <div class="cal form-row item-unidnfd-rcpt-row col-md-12">
+        <div class="form-row dm-stat" style="justify-content:center"></div>
+        <span class="sr" style="margin: 4% 6px 25px 24px;">1</span>
+        <div class="form-group col-md-2">
+            <label>Amount</label>
+            <input type="text" class="form-control coma" id="Amount" name="Amount">
+        </div>
+        <div class="form-group col-md-2">
+            <label>Received Bank</label>
+            <select class="form-control" id="From_Bank" name="From_Bank">
+                <option value="DIB">Dubai Islamic Bank</option>
+                <option value="HBL">Habib Bank Limited</option>
+            </select>
+        </div>
+        <div class="form-group col-md-3">
+            <label>Bank</label>
+            @Html.DropDownList("Bank", null, "Choose..", new { @class = "form-control" })
+        </div>
+    </div>
+</div>
+
+<div class="form-row item-unidnfd-rcpt-row" id="ad-demand">
+
+</div>
+<div class="form-row col-md-12">
+
+    <div class="col-md-2">
+        <button type="button" id="add-new-unidnfd-rcpt-row" class="btn btn-success">Add New File/Plot</button>
+    </div>
+</div>
+
+
+<div class="form-row">
+    <div class="col-md-12" id="plot-det"></div>
+</div>
+<script>
+    $('.modal-footer').append('<button class="btn btn-primary" id="ad-rec-adj-unspr-pndg-multiunits" type="button">Update</button>');
+    $(".modal-header").text("Adjust Amount of File/Plot");
+
+
+</script>

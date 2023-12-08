@@ -1,0 +1,93 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Sp_Get_GeneralEntries_All_Result>
+<input type="hidden" value="@ViewBag.From" id="frm-val" />
+<input type="hidden" value="@ViewBag.To" id="to-val" />
+<div class=" bgc-white bd bdrs-3 p-20 mB-20 row">
+    <div class="col-md-12">
+        <h5 style="text-align:center">My Posted Entries</h5>
+    </div>
+    <div class="col-md-12 row">
+        <div class="col-md-2 form-group">
+            <h5>Cash Receipts</h5>
+            <br />
+            @string.Format("{0:n0}", ViewBag.Cash_R)
+        </div>
+        <div class="col-md-2 form-group">
+            <h5>Bank Receipts</h5>
+            <br />
+            @string.Format("{0:n0}", ViewBag.Bank_R)
+        </div>
+        <div class="col-md-2 form-group">
+            <h5>Cash Payments</h5>
+            <br />
+            @string.Format("{0:n0}", ViewBag.Cash_P)
+        </div>
+        <div class="col-md-2 form-group">
+            <h5>Bank Payments</h5>
+            <br />
+            @string.Format("{0:n0}", ViewBag.Bank_P)
+        </div>
+        <div class="col-md-2 form-group">
+            <h5>Journal Voucher</h5>
+            <br />
+            @string.Format("{0:n0}", ViewBag.Jv)
+        </div>
+    </div>
+
+    <div class="col-md-12">
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item"><a class="nav-link crv" role="tab" data-toggle="tab" aria-controls="home" data-type="Cash_Receipt_Voucher" data-link="/JournalEntry/CashReceiptVouchers" aria-selected="true" href="#vouch">Cash Receipt Voucher</a></li>
+            <li class="nav-item"><a class="nav-link brv" role="tab" data-toggle="tab" aria-controls="home" data-type="Bank_Receipt_Voucher" data-link="/JournalEntry/BankReceiptVouchers" aria-selected="true" href="#vouch">Bank Receipt Voucher</a></li>
+            <li class="nav-item"><a class="nav-link cpv" role="tab" data-toggle="tab" aria-controls="home" data-type="Cash_Payment_Voucher" data-link="/JournalEntry/CashPaymentVouchers" aria-selected="true" href="#vouch">Cash Payment Voucher</a></li>
+            <li class="nav-item"><a class="nav-link bpv" role="tab" data-toggle="tab" aria-controls="home" data-type="Bank_Payment_Voucher" data-link="/JournalEntry/BankPaymentVouchers" aria-selected="true" href="#vouch">Bank Payment Voucher</a></li>
+            <li class="nav-item"><a class="nav-link jv" role="tab" data-toggle="tab" aria-controls="home" data-type="Journal_Voucher" data-link="/JournalEntry/JournalVouchers" aria-selected="true" href="#vouch">Journal Voucher</a></li>
+        </ul>
+        <div class="tab-content">
+            <div id="vouch" class="tab-pane active">
+                @{ Html.RenderAction("CashReceiptVouchers", "JournalEntry", new { From = DateTime.Now, To = DateTime.Now, Type = "Cash_Receipt_Voucher" }); }
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(function () {
+        var f = $("#frm-val").val();
+        var t = $("#to-val").val();
+        var vt = '@ViewBag.VT';
+        $('.nav-link').removeClass('active')
+        if (vt == '') {
+            $('.nav-link').removeClass('active')
+            $('.crv').addClass('active');
+            $("#vouch").load('/JournalEntry/CashReceiptVouchers/', { From: f, To: t, Type: "Cash_Receipt_Voucher" });
+        }
+        else {
+            if (vt == 'CRV') {
+                $('.crv').addClass('active');
+                $("#vouch").load('/JournalEntry/CashReceiptVouchers/', { From: f, To: t, Type: "Cash_Receipt_Voucher" });
+
+            }
+            else if (vt == 'BRV') {
+                $('.brv').addClass('active');
+                $("#vouch").load('/JournalEntry/BankReceiptVouchers/', { From: f, To: t, Type: "Bank_Receipt_Voucher" });
+
+            }
+            else if (vt == 'CPV') {
+                $('.cpv').addClass('active');
+                $("#vouch").load('/JournalEntry/CashPaymentVouchers/', { From: f, To: t, Type: "Cash_Payment_Voucher" });
+
+            }
+            else if (vt == 'BPV') {
+                $('.bpv').addClass('active');
+                $("#vouch").load('/JournalEntry/BankPaymentVouchers/', { From: f, To: t, Type: "Bank_Payment_Voucher" });
+
+            }
+            else if (vt == 'JV') {
+                $('.jv').addClass('active');
+                $("#vouch").load('/JournalEntry/JournalVouchers/', { From: f, To: t, Type: "Journal_Voucher" });
+            }
+
+        }
+    });
+
+
+
+</script>

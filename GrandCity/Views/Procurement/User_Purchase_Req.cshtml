@@ -1,0 +1,43 @@
+﻿@{
+    if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+}
+<script src="~/Scripts/Prj.js"></script>
+<div class="row">
+    <div class="col-md-12">
+        <div class="bdrs-3 ov-h bgc-white p-10 bd">
+            <div class="form-row">
+                <h5 style="text-align:center" class="col-md-12"><u>Purchase Details</u></h5>
+            </div>
+            <div class="col-md-12">
+                <ul class="nav nav-tabs" id="myTabs">
+                    @{ string activeclass = "active";}
+                    <li class="nav-item"><a class="nav-link @activeclass" role="tab"  data-toggle="tab" data-link="/Procurement/Dep_PurchaseReq" id="pen-ap" href="#coahead">Purchase Requisitions</a></li>
+                    @{ activeclass = ""; }
+                    <li class="nav-item"><a class="nav-link @activeclass" role="tab"  data-toggle="tab" data-link="/Procurement/Dep_PurchaseOrder" id="po" href="#coahead">Purchased Orders</a></li>
+                </ul>
+                <!-- Tab panes -->
+                <div class="tab-content">
+                    <div id="coahead" class="tab-pane active"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(function () {
+        $('#coahead').load('/Procurement/Dep_PurchaseReq/');
+    });
+</script>
+<style>
+    .text-col {
+        text-align: center;
+        vertical-align: middle !important;
+    }
+</style>

@@ -1,0 +1,304 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.BiometricVerification>
+
+<div class="col-md-12 bgc-white">
+    <div class="central-text-align panel-heading">
+        <h5>Owner Finger Print Record</h5>
+    </div>
+    <div class="row mt-md-3">
+        <div class="col-md-2">
+            <label>Select Owner :</label>
+        </div>
+        <div class="col-md-5">
+            <select class="form-control own-id-matcher-jhd">
+                @foreach (var v in Model)
+                {
+                    <option value="@v.CNIC">@v.Name (@v.CNIC_Uparsed)</option>
+                }
+            </select>
+        </div>
+
+        <div class="col-md-1"></div>
+
+    </div>
+
+    <div class="row mt-md-5">
+        <div class="col-md-2 no-disp">
+            <label>Select Finger</label>
+        </div>
+
+        <div class="col-md-3 no-disp">
+            <select class="form-control fngr-slctr-fgk">
+                <option value="9">Right Little Finger</option>
+                <option value="8">Right Ring Finger</option>
+                <option value="7">Right Middle Finger</option>
+                <option value="6">Right Index Finger</option>
+                <option value="10">Right Thumb</option>
+                <option value="5">Left Thumb</option>
+                <option value="4">Left Index Finger</option>
+                <option value="3">Left Middle Finger</option>
+                <option value="2">Left Ring Finger</option>
+                <option value="1">Left Little Finger</option>
+            </select>
+        </div>
+
+        <div class="col-md-1">
+            <button class="btn btn-primary capt-btn-dsfjk">Capture</button>
+        </div>
+    </div>
+
+    <div class="row mt-md-5 rs-div-fsdj" style="display:none;">
+        <div class="col-md-1">
+            Result :
+        </div>
+
+        <div class="col-md-4">
+            <div class="pic-div">
+                <img class="img-full" id="rzlt-img-dkads" src="" />
+            </div>
+        </div>
+
+        <div class="col-md-1">
+            <button class="btn btn-success" onclick="matchScore(succMatch, failureFunc);">Verify</button>
+        </div>
+    </div>
+
+    @*<div class="row">
+            <div class="col-md-1">
+                <button class="btn btn-success matcher">Match</button>
+            </div>
+        </div>*@
+
+    <input type="hidden" class="temp-val" />
+    <input type="hidden" class="temp-img" />
+    @*<input type="hidden" class="own-id" value="@Model.Id" />*@
+</div>
+
+
+<script>
+    $(document).ready(function () {
+        let slctdOwnId = $('.own-id-matcher-jhd option:selected').val();
+        template_1 = verifiedOwners.find(x => x.CNIC == slctdOwnId).SavedTemplate;
+
+        $.ajax({
+            type: "GET",
+            dataType: "json",
+            url: "https://localhost:9999/ASW/initialize",
+            async: false,
+            headers: {
+                'Cache-Control': 'no-cache, no-store, must-revalidate',
+                'Pragma': 'no-cache',
+                'Expires': '0'
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                //alert("secugen wrapper service not running");
+                alert("Failed to initialize the finger print scanning device");
+                $('.capt-btn-dsfjk').attr('disabled', true);
+            },
+            success: function (data) {
+                if (data.code === '00') {
+                    //document.getElementById("initResult").innerHTML = '<p style="font-weight:bold" class="text-info">Result: <spand class="text-success" style="font-weight:normal">Device successfully initialized</span></p>';
+                } else {
+                    //document.getElementById("initResult").innerHTML = '<p style="font-weight:bold" class="text-info">Result: <spand class="text-danger" style="font-weight:normal"> ' + data.value + '</span></p>';
+                    alert('Failed to initialize device properly.');
+                    $('.capt-btn-dsfjk').attr('disabled', true);
+                }
+
+            }
+        });
+    });
+
+    $('.capt-btn-dsfjk').unbind().click(function () {
+        $(".rzlt-img-dkads").attr('src', '');
+        $('.temp-val').val('');
+        var template_ = 1;
+        var finger_ = $('.fngr-slctr-fgk option:selected').val();
+        console.log(template_);
+        console.log(finger_);
+        $.ajax({
+            type: "GET",
+            dataType: "json",
+            url: "https://localhost:9999/ASW/captureFinger",
+            async: false,
+            headers: {
+                'Cache-Control': 'no-cache, no-store, must-revalidate',
+                'Pragma': 'no-cache',
+                'Expires': '0'
+            },
+            data: {
+                "template": template_,
+                "finger": finger_
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                //alert("secugen wrapper service not running");
+                alert("Failed to communicate with the device. Please try plugging in the device again.");
+            },
+            success: function (data) {
+                console.log(data);
+                if (data.code === '00') {
+                    $("#rzlt-img-dkads").attr('src', "data:image/png;base64," + data.image);
+                    $('.temp-val').val(data.value);
+                    $('.temp-img').val("data:image/png;base64," + data.image);
+                    $('.svbtn-sfhk').show();
+                    $('.rs-div-fsdj').show();
+                    //document.getElementById("captureResult").innerHTML = '<p style="font-weight:bold" class="text-info">Template: <pre class="text-success" style="font-weight:normal">' + data.value + '</pre></p>';
+                } else {
+                    //document.getElementById("captureResult").innerHTML = '<p style="font-weight:bold" class="text-info">Result: <spand class="text-danger" style="font-weight:normal">' + data.value + '</span></p>';
+                    alert('Failed to capture finger print. Please try again.');
+                }
+            }
+        });
+    });
+
+    $('.matcher').unbind().click(function () {
+        var con = confirm("Are You sure you want to save this finger print to this owner?");
+        if (con) {
+            let finger = $('.fngr-slctr-fgk option:selected').val();
+            let imgCode = $('.temp-img').val();
+            let template = $('.temp-val').val();
+            let owner = parseInt($('.own-id').val());
+
+            $.ajax({
+                type: "POST",
+                url: '/Plots/MatchFingers/',
+                data: { img: imgCode, ownId: owner, ftype: finger },
+                success: function (data) {
+                    if (data.Status == true) {
+                        alert('Finger print matched successfully.');
+                    }
+                    else {
+                        alert('Failed to verify this finger print. Please try again. Error Code : ' + data.Code);
+                    }
+
+
+                },
+                error: function () {
+                    alert("Error Occured. Failed to save this finger print");
+                }
+            });
+
+        }
+    });
+
+    $('.own-id-matcher-jhd').unbind().change(function () {
+        let slctdOwnId = $('.own-id-matcher-jhd option:selected').val();
+        template_1 = verifiedOwners.find(x => x.CNIC == slctdOwnId).SavedTemplate;
+    });
+</script>
+
+<script>
+    var template_1 = '';
+    var template_2 = $('.temp-val').val();
+    var verifiedOwners = @Html.Raw(Json.Encode(Model));
+    function SuccessFunc1(result) {
+        if (result.ErrorCode == 0) {
+            /* 	Display BMP data in image tag
+                BMP data is in base 64 format
+            */
+
+            template_1 = template;
+        }
+        else {
+            alert("Fingerprint Capture Error Code:  " + result.ErrorCode + ".\nDescription:  " + ErrorCodeToString(result.ErrorCode) + ".");
+        }
+    }
+
+    function SuccessFunc2(result) {
+        if (result.ErrorCode == 0) {
+            /* 	Display BMP data in image tag
+                BMP data is in base 64 format
+            */
+
+            template_2 = template;
+        }
+        else {
+            alert("Fingerprint Capture Error Code:  " + result.ErrorCode + ".\nDescription:  " + ErrorCodeToString(result.ErrorCode) + ".");
+        }
+    }
+
+    function ErrorFunc(status) {
+        /*
+            If you reach here, user is probabaly not running the
+            service. Redirect the user to a page where he can download the
+            executable and install it.
+        */
+        alert("Check if SGIBIOSRV is running; status = " + status + ":");
+    }
+
+    function CallSGIFPGetData(successCall, failCall) {
+        var uri = "https://localhost:8443/SGIFPCapture";
+        var xmlhttp = new XMLHttpRequest();
+        xmlhttp.onreadystatechange = function () {
+            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                fpobject = JSON.parse(xmlhttp.responseText);
+                successCall(fpobject);
+            }
+            else if (xmlhttp.status == 404) {
+                failCall(xmlhttp.status)
+            }
+        }
+        xmlhttp.onerror = function () {
+            failCall(xmlhttp.status);
+        }
+        var params = "Timeout=" + "10000";
+        params += "&Quality=" + "50";
+        params += "&licstr=" + encodeURIComponent(secugen_lic);
+        params += "&templateFormat=" + "ISO";
+        xmlhttp.open("POST", uri, true);
+        xmlhttp.send(params);
+    }
+
+    function matchScore(succFunction, failFunction) {
+        template_2 = $('.temp-val').val();
+        if (template_1 == "" || template_2 == "") {
+            alert("Please scan finger to verify!!");
+            return;
+        }
+        var uri = "https://localhost:8443/SGIMatchScore";
+
+        var xmlhttp = new XMLHttpRequest();
+        xmlhttp.onreadystatechange = function () {
+            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                fpobject = JSON.parse(xmlhttp.responseText);
+                succFunction(fpobject);
+            }
+            else if (xmlhttp.status == 404) {
+                failFunction(xmlhttp.status)
+            }
+        }
+
+        xmlhttp.onerror = function () {
+            failFunction(xmlhttp.status);
+        }
+        var params = "template1=" + encodeURIComponent(template_1);
+        params += "&template2=" + encodeURIComponent(template_2);
+        params += "&licstr=" + encodeURIComponent("");
+        params += "&templateFormat=" + "ANSI";
+        xmlhttp.open("POST", uri, false);
+        xmlhttp.send(params);
+    }
+
+    function succMatch(result) {
+        //var idQuality = document.getElementById("quality").value;
+        if (result.ErrorCode == 0) {
+            if (result.MatchingScore >= 100) {
+                //alert("MATCHED ! (" + result.MatchingScore + ")");
+                alert('Verified successfully.');
+                let slctdOwnId = $('.own-id-matcher-jhd option:selected').val();
+                verifiedOwners.find(x => x.CNIC == slctdOwnId).isMatched = true;
+                updateVerificationTest();
+                closeRightPopup();
+            }
+            else {
+                //alert("NOT MATCHED ! (" + result.MatchingScore + ")");
+                alert('Unable to verify this customer');
+            }
+        }
+        else {
+            alert("Error Scanning Fingerprint ErrorCode = " + result.ErrorCode);
+        }
+    }
+
+    function failureFunc(error) {
+        alert("On Match Process, failure has been called");
+    }
+</script>

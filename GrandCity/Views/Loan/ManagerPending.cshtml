@@ -1,0 +1,40 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Sp_Get_LoanManagement_Manager_Result>
+
+<div class="bgc-white col-md-12 bd bdrs-3 p-20 mB-20">
+    <h4 class="c-grey-900 mB-20">Manager Pendings Loans</h4>
+    <table class="table table-striped table-bordered" cellspacing="0" width="100%">
+        <thead>
+            <tr>
+                <th>Created At</th>
+                <th>Employee Name</th>
+                <th>Reason</th>
+                <th>Installments</th>
+                <th>Total Amount</th>
+                <th>Details</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+
+                if (!Model.Any())
+                {
+                    <tr><td colspan="6" style="text-align:center">No data available</td></tr>
+                }
+                else
+                {
+                    foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@string.Format("{0: dd-MMM-yyyy}", item.CreatedAt)</td>
+                            <td>@item.Name</td>
+                            <td>@item.Reason</td>
+                            <td>@item.Installments</td>
+                            <td>@String.Format("{0:n0}", item.Amount)</td>
+                            <td><i data-toggle="modal" data-target="#Modal" id="@item.Id" class="pop_show_pending_loan pointer ti-eye"></i></td>
+                        </tr>
+                    }
+                }
+            }
+        </tbody>
+    </table>
+</div>

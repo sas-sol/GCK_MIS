@@ -1,0 +1,31 @@
+﻿@{ if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+}
+<div class="container-fluid">
+    <h4 class="c-grey-900 mT-10 mB-30"></h4>
+    <ul class="nav nav-tabs" id="myTabs">
+        @{ string activeclass = "active";}
+        @if (User.IsInRole("Files") || User.IsInRole("Administrator"))
+        {
+            <li class="nav-item"><a class="nav-link @activeclass" data-toggle="tab" role="tab" data-link="/Reports/AllFilesReports" href="#cheques">Files</a></li>
+            activeclass = "";
+        }
+        @if (User.IsInRole("Plots") || User.IsInRole("Administrator"))
+        {
+            <li class="nav-item"><a class="nav-link @activeclass" data-toggle="tab" role="tab" data-link="/Reports/AllPlotReports" href="#cheques">Plots</a></li>
+            activeclass = "";
+        }
+    </ul>
+    <!-- Tab panes -->
+    <div class="tab-content">
+        <div id="cheques" class="tab-pane active">
+            @{ Html.RenderAction("AllFilesReports", "Reports");}
+        </div>
+    </div>
+</div>

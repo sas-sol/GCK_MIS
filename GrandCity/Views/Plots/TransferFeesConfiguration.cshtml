@@ -1,0 +1,151 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.BlockTransferFeeModel>
+
+<div class="col-md-12">
+    <fieldset class="p-20" style="border:1px solid #ddc">
+        <legend>Plots Transfer Fee Configuration</legend>
+
+        <div class="col-md-12">
+
+            <div class="row mb-md-2 trans-fee-conf-row">
+                <div class="col-md-2">
+                    <b>Block</b>
+                </div>
+                <div class="col-md-1">
+                    <b>Residential (Per Marla)</b>
+                </div>
+
+                <div class="col-md-1">
+                    <b>Commercial (Per Marla)</b>
+                </div>
+                <div class="col-md-1">
+                    <b>Residential - Dealer (Per Marla)</b>
+                </div>
+
+                <div class="col-md-1">
+                    <b>Commercial - Dealer (Per Marla)</b>
+                </div>
+
+                <div class="col-md-1">
+                    <b>Contructed Residential (Per Marla)</b>
+                </div>
+
+                <div class="col-md-1">
+                    <b>Contructed Commercial (Per Marla)</b>
+                </div>
+                <div class="col-md-1">
+                    <b>Contructed Residential - Dealer (Per Marla)</b>
+                </div>
+
+                <div class="col-md-1">
+                    <b>Contructed Commercial - Dealer (Per Marla)</b>
+                </div>
+            </div>
+
+            @foreach (var v in Model)
+            {
+                <div class="row mb-md-2 trans-fee-conf-row">
+                    <div class="col-md-2">
+                        <label>@v.BlockName</label>
+                        <input type="hidden" value="@v.BlockId" class="blkiden" />
+                        <input type="hidden" value="@v.BlockName" class="blknm" />
+                    </div>
+                    <div class="col-md-1">
+                        <input type="text" class="coma form-control nc-res-amt" value="@string.Format("{0:n0}",v.NC_Residential)" />
+                    </div>
+                    <div class="col-md-1">
+                        <input type="text" class="coma form-control nc-com-amt" value="@string.Format("{0:n0}",v.NC_Commercial)" />
+                    </div>
+                    <div class="col-md-1">
+                        <input type="text" class="coma form-control nc-res-deal-amt" value="@string.Format("{0:n0}",v.NC_Residential_Dealer)" />
+                    </div>
+                    <div class="col-md-1">
+                        <input type="text" class="coma form-control nc-com-deal-amt" value="@string.Format("{0:n0}",v.NC_Commercial_Dealer)" />
+                    </div>
+                    <div class="col-md-1">
+                        <input type="text" class="coma form-control c-res-amt" value="@string.Format("{0:n0}",v.C_Residential)" />
+                    </div>
+                    <div class="col-md-1">
+                        <input type="text" class="coma form-control c-com-amt" value="@string.Format("{0:n0}",v.C_Commercial)" />
+                    </div>
+                    <div class="col-md-1">
+                        <input type="text" class="coma form-control c-res-deal-amt" value="@string.Format("{0:n0}",v.C_Residential_Dealer)" />
+                    </div>
+                    <div class="col-md-1">
+                        <input type="text" class="coma form-control c-com-deal-amt" value="@string.Format("{0:n0}",v.C_Commercial_Dealer)" />
+                    </div>
+                </div>
+            }
+        </div>
+
+        <div class="col-md-12">
+            <button class="btn btn-success updt-trans-tax">Update</button>
+        </div>
+    </fieldset>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('.updt-trans-tax').unbind().click(function () {
+            if (!confirm('Are you sure you want to update transfer fee configuration?')) {
+                return;
+            }
+            let configValues = [];
+            $('.trans-fee-conf-row').each(function () {
+                let nc_ramt = RemoveComma($(this).find('.nc-res-amt').val());
+                let nc_camt = RemoveComma($(this).find('.nc-com-amt').val());
+                let nc_rdealamt = RemoveComma($(this).find('.nc-res-deal-amt').val());
+                let nc_cdealamt = RemoveComma($(this).find('.nc-com-deal-amt').val());
+
+                let c_ramt = RemoveComma($(this).find('.c-res-amt').val());
+                let c_camt = RemoveComma($(this).find('.c-com-amt').val());
+                let c_rdealamt = RemoveComma($(this).find('.c-res-deal-amt').val());
+                let c_cdealamt = RemoveComma($(this).find('.c-com-deal-amt').val());
+
+
+                let blkId = $(this).find('.blkiden').val();
+                let blkNm = $(this).find('.blknm').val();
+
+                configValues.push({
+                    BlockName: blkNm,
+                    BlockId: blkId,
+
+                    NC_Residential: nc_ramt,
+                    NC_Commercial: nc_camt,
+                    NC_Residential_Dealer: nc_rdealamt,
+                    NC_Commercial_Dealer: nc_cdealamt,
+
+                    C_Residential: c_ramt,
+                    C_Commercial: c_camt,
+                    C_Residential_Dealer: c_rdealamt,
+                    C_Commercial_Dealer: c_cdealamt
+
+
+                });
+            });
+            ShowFullScreenLoader();
+            $.ajax({
+                type: "POST",
+                url: '/Plots/SaveBlockTransferFeeConfig/',
+                data: { config: configValues },
+                success: function (data) {
+                    HideFullScreenLoader();
+                    if (data) {
+                        alert('Transfer fee has been updated successfully.');
+                        window.location.reload();
+                    }
+                    else {
+                        alert('Failed to update configuration. Please try again.');
+                    }
+                }
+                , error: function (xmlhttprequest, textstatus, message) {
+                    HideFullScreenLoader();
+                    if (textstatus === "timeout") {
+                        alert("Network communication error. Please check your network.");
+                    } else {
+                        alert(textstatus);
+                    }
+                }
+            });
+        });
+    });
+</script>

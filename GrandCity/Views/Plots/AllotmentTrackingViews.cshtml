@@ -1,0 +1,158 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Sp_Get_AllotmentLetterTracking_Result>
+@{ Layout = "~/Views/Shared/_StaffLayout.cshtml"; }
+<div class="col-md-12">
+    <div class="bgc-white bd bdrs-3 p-20 mB-20">
+        <h4 class="c-grey-900 mB-20">Allotment Letter Generated Lists</h4>
+        <table id="gen-all" class="table table-striped table-bordered" cellspacing="0" width="100%">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Sr</th>
+                    <th>Name</th>
+                    <th>Father Name</th>
+                    <th>Plot No</th>
+                    <th>Block</th>
+                    <th>Type</th>
+                    <th>Size</th>
+                    <th>Ownership Date</th>
+                    <th></th>
+                    <th>Verification Req</th>
+                    <th>Verified</th>
+                    <th>Allotment Letter Status</th>
+                    <th>Signed</th>
+                    <th>Delivered</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    if (Model.Any())
+                    {
+                        int sr = 1;
+                        foreach (var item in Model.GroupBy(x=> new { x.Id, x.GroupTag, x.Plot_No,x.Plot_Size, x.Block, x.Plot_Type, x.Verification_Req, x.Verified , x.Allotment_Letter, x.DATETIME, x.Owner_Id ,  x.Ownership_DateTime, x.Signed, x.SingedDate,x.Delivered, x.Delivery_Date, x.VerificationReqDate , x.Verification_Date }))
+                        {
+                            <tr class="pointer" id="@item.Key.Id">
+                                <td>@sr</td>
+                                <td>@string.Join(",", item.Select(x=> x.Name))</td>
+                                <td>@string.Join(",", item.Select(x => x.Father_Husband))</td>
+                                <td>@item.Key.Plot_No</td>
+                                <td>@item.Key.Block</td>
+                                <td>@item.Key.Plot_Type</td>
+                                <td>@item.Key.Plot_Size</td>
+                                <td>@string.Format("{0:dd-MMM-yyyy}", item.Key.Ownership_DateTime)</td>
+                                <td></td>
+                                @{
+                                    if (item.Key.Verification_Req == true)
+                                    {
+                                        <td class="bgc-yellow-50">
+                                            Requested
+                                            <br />
+                                            @string.Format("{0:d MMM, yyyy}", item.Key.VerificationReqDate)
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td>
+                                            -
+                                            <br />
+                                            @string.Format("{0:d MMM, yyyy}", item.Key.VerificationReqDate)
+                                        </td>
+
+                                    }
+                                }
+                                @{
+                                    if (item.Key.Verified == true)
+                                    {
+                                        <td class="bgc-green-50">
+                                            <i class="ti-check" style="color:green"></i>
+                                            <br />
+                                            @string.Format("{0:d MMM, yyyy}", item.Key.Verification_Date)
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td>-</td>
+                                    }
+                                }
+
+                                @{
+                                    if (item.Key.Allotment_Letter == 1)
+                                    {
+                                        <td class="bgc-green-50">
+                                            <i class="ti-check" style="color:green"></i>
+                                            <br />
+                                            @string.Format("{0:d MMM, yyyy}", item.Key.DATETIME)
+                                        </td>
+                                    }
+                                    else if (item.Key.Allotment_Letter == 2 || item.Key.Allotment_Letter == 0)
+                                    {
+                                        <td class="bgc-red-50">Not Generated</td>
+                                    }
+                                    else if (item.Key.Allotment_Letter == 3)
+                                    {
+                                        <td class="bgc-yellow-50">Requested</td>
+                                    }
+                                    else
+                                    {
+                                        <td class="bgc-red-50">Not Generated</td>
+                                    }
+                                }
+                                @{
+                                    if (item.Key.Signed == true)
+                                    {
+                                        <td class="bgc-green-50">
+                                            <i class="ti-check" style="color:green"></i>
+                                            <br />
+                                            @string.Format("{0:d MMM, yyyy}", item.Key.SingedDate)
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td class="bgc-yellow-50">-</td>
+                                    }
+                                }
+                                @{
+                                    if (item.Key.Delivered == true)
+                                    {
+                                        <td class="bgc-green-50">
+                                            <i class="ti-check" style="color:green"></i>
+                                            <br />
+                                            @string.Format("{0:d MMM, yyyy}", item.Key.Delivery_Date)
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td class="bgc-yellow-50">-</td>
+                                    }
+                                }
+                                @{
+                                    if (item.Key.Delivered == true)
+                                    {
+                                        string name = item.Key.Owner_Id + ".pdf";
+                                        <td><a href="~/Repository/DeliveredAllotmentLetters/@name" target="_blank" class="ti-eye"></a></td>
+                                    }
+                                    else
+                                    {
+                                        <td>-</td>
+                                    }
+                                }
+                            </tr>
+                            sr++;
+                        }
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $('#gen-all').DataTable({
+            dom: 'Bfrtip',
+            buttons: [
+                'copy', 'excel', 'pdf', 'print'
+            ],
+            "aoColumnDefs": [{ "bSortable": false, "aTargets": [0, 1, 2, 3, 4, 5, 6, 7] }],
+            "ordering": false
+        });
+    });
+</script>

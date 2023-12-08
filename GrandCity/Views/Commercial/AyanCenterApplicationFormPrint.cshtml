@@ -1,0 +1,41 @@
+@model IEnumerable<MeherEstateDevelopers.Models.Sp_Get_Commercial_Project_Inventory_Result>
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>PrintPremiumHomesForms</title>
+    <style>
+
+        .bg_image {
+            background-image: url("/assets/static/images/applicationformAC.png");
+            background-size: cover;
+            background-position: 50% 50%;
+            position: absolute;
+            height: 1555px;
+            width: 1100px;
+        }
+    </style>
+</head>
+<body>
+    @foreach (var v in Model)
+    {
+    <div style="height:1555px;">
+        <div class="bg_image">
+        </div>
+        <div>
+            <img style="height: 124px; width: 124px; margin-top:131px; margin-left: 876px;" src="~/Repository/QR Codes Ayan/@(v.Com_App_Shop_Number).png" alt="" />
+        </div>
+        <div><p style=" margin-top: 27px;   margin-left: 300px; font-size:20px; font-family:-webkit-body;">@v.Com_App_Shop_Number</p></div>
+        <div><p style=" margin-top: -42px;   margin-left: 870px; font-size:20px; font-family:-webkit-body;">@v.Project_Name</p></div>
+        <div><p style=" margin-left: 300px; margin-top: 51px; font-size:20px; font-family:-webkit-body;">@v.FloorName</p></div>
+        <div><p style=" margin-left: 870px; margin-top: -45px; font-size:20px; font-family:-webkit-body;">@((v.Type == "Apartment")?"Apartment" : v.Type)</p></div>
+        <div><p style=" margin-left: 870px; margin-top: 44px; font-size:20px; font-family:-webkit-body;">@string.Format("{0:0,0}", v.Area) Sq.Ft</p></div>
+     </div>
+    }
+</body>
+</html>

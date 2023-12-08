@@ -1,0 +1,681 @@
+@{
+    Layout = "~/Views/Shared/_StaffLayout.cshtml";
+}
+<script src="~/Scripts/scanning.js"></script>
+<script>
+    var banklist = @Html.Raw(Json.Encode(ViewBag.Bank));
+</script>
+<input type="hidden" value="@ViewBag.TransactionId" id="transid" />
+<div class="row gap-20 pos-r">
+    <div class="col-md-12">
+        <div class="bgc-white p-20 bd">
+            <h4 class="c-grey-900" style="text-align:center">Plot Booking</h4>
+            <div class="mT-30" id="">
+                <div class="form-row row">
+                    <div class="col-md-12">
+                        <div class="form-row">
+                            <div class="form-group col-md-2">
+                                <label>Block</label>
+                                @Html.DropDownList("Block", null, "Choose..", new { @class = "form-control blk-plts", required = "" })
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label>Type</label>
+                                <select class="form-control blk-plts" id="plot-type">
+                                    <option value="Residential">Residential</option>
+                                    <option value="Commercial">Commercial</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label>Plot No</label>
+                                <select class="form-control bid-plt-lst" id="plt-lst">
+                                    <option>Select Block</option>
+                                </select>
+                            </div>
+                            <div class="col-md-1">
+                                <button class="btn btn-info sear-del-plt" style="margin-top:29px">Search</button>
+                            </div>
+                            <div class="col-md-3"><div id="plt-det-deal"></div></div>
+                        </div>
+                        <hr />
+                        <div class="form-row">
+                            <div class="form-group col-md-1">
+                                <label>Plot No.</label>
+                                <h5 id="plt-no"></h5>
+                                <input type="hidden" class="form-control" id="plt-id" name="Plot_Id" readonly>
+                            </div>
+                            <div class="form-group col-md-1">
+                                <label>Plot Size</label>
+                                <h5 id="plt-size"></h5>
+                                <input type="hidden" class="form-control" id="pl-size" name="Plot_Size" readonly>
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label>Type</label>
+                                <h5 id="plt-type"></h5>
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label>Dimension</label>
+                                <h5 id="plt-dim"></h5>
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label>Status</label>
+                                <h5 id="plt-status"></h5>
+                            </div>
+                            <div class="form-group col-md-1">
+                                <label>Road</label>
+                                <h5 id="plt-road"></h5>
+                            </div>
+                            <div class="form-group col-md-1">
+                                <label>Area</label>
+                                <h5 id="plt-area"></h5>
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label>Location</label>
+                                <h5 id="plt-loc"></h5>
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label>Dealership</label>
+                                <h5 id="dealership"></h5>
+                                <input type="hidden" id="dealer-id" />
+                            </div>
+                            <div class="col-md-3">
+                                <label>Select Dealer </label>
+                                <select class="dealerselected form-control">
+                                </select>
+                            </div>
+                            <div class="form-group col-md-2" id="dealerships">
+                                <label>Submitted By Dealership</label>
+                                @Html.DropDownList("Dealership", null, "Select Dealer ", new { Name = "Id", @class = "form-control select2" })
+                            </div>
+                        </div>
+                        @*<div class="form-row">
+                             <div class="form-group col-md-1">
+                                <label>Total Price</label>
+                                <input class="form-control coma gran-cal" placeholder="300,000" required>
+                                <input type="hidden" id="plt-pric" class="amt" required>
+                            </div>
+                           <div class="form-group col-md-2">
+            <label>Discount Amount</label>
+            <input class="form-control coma gran-cal" readonly placeholder="300,000">
+        </div>
+        <div class="form-group col-md-2">
+            <label>Grand Total</label>
+            <input class="form-control" id="grnd-total" readonly>
+        </div>
+        <div class="form-group col-md-2">
+                <label>No. of Installments</label>
+                <input type="text" class="form-control" id="ttl-ins">
+            </div>
+            <div class="form-group col-md-1">
+                <label>Advance</label>
+                <input class="form-control coma" placeholder="550,000" required>
+                <input type="hidden" id="adv-amt" class="amt" required>
+            </div>
+            <div class="form-group col-md-2">
+                <label>Date of Registeration</label>
+                <input type="text" class="form-control" placeholder="mm/dd/yyyy" id="reg-date" data-provide="datepicker">
+            </div>
+            <div class="form-group col-md-2">
+                <label>Installment Start Date</label>
+                <input type="text" class="form-control" placeholder="mm/dd/yyyy" id="inst-date" data-provide="datepicker">
+            </div>
+            <div class="form-group col-md-1">
+                <label style="width:100%"></label>
+                <button type="button" class="btn btn-info" id="gen-ins">Generate Installments</button>
+            </div>
+                    </div>
+                        <hr />
+                        <div class="form-row">
+                            <h5>Dealership Commession Details</h5>
+                        </div>
+                        <div class="form-row">
+<div class="form-group col-md-2">
+                <label>Commession Type</label>
+                <select class="form-control com-typ">
+                    <option value="Fixed">Fixed</option>
+                    <option value="Percentage">Percentage</option>
+                </select>
+            </div>
+            <div class="form-group col-md-1 com-per-div">
+                <label>Percentage</label>
+                <input type="text" class="form-control per-val coma" value="" />
+            </div>
+            <div class="col-md-2">
+                <label>Commession Amount</label>
+                <input type="text" class="form-control com-amt coma" value="" />
+            </div>
+            <div class="col-md-3">
+                <label>Commession Maturity on Total Plot Value (%) </label>
+                <input type="text" class="form-control com-mat coma" value="" />
+            </div>
+        </div>*@
+                        </div>
+                </div>
+            </div>
+            <hr />
+            <div class="mT-30 own-info">
+                <div class="Tran-own">
+                    <div class="own-det" id="own-1">
+                        <h6 class="c-grey-900">1 Owner Information &nbsp;&nbsp;(&nbsp;<input type="checkbox" class="comp-prop-check" /> &nbsp;<small>Company Property</small>)</h6>
+                        <div class="form-row row close-info">
+                            <div class="col-md-12">
+                                <div class="form-row">
+                                    <div class="form-group col-md-6 comp-prop-fld" style="display:none;">
+                                        <label>Company Name</label>
+                                        <input type="text" class="form-control comp-Name" required>
+                                    </div>
+                                    <div class="form-group col-md-3 deflt-fld">
+                                        <label>Name</label>
+                                        <input type="text" class="form-control ownname" name="Name" required>
+                                    </div>
+                                    <div class="form-group col-md-3 deflt-fld">
+                                        <label>Father's/Husband's Name</label>
+                                        <input type="text" class="form-control ownfather" name="Father_Husband" required>
+                                    </div>
+                                    <div class="form-group col-md-3 deflt-fld">
+                                        <label>CNIC / NICOP</label>
+                                        <input type="text" class="form-control owncnic" name="CNIC_NICOP" placeholder="12345-1234567-1   or   123456-123456-1" required>
+                                    </div>
+                                    <div class="form-group col-md-3 comp-prop-fld" style="display:none;">
+                                        <label>NTN</label>
+                                        <input type="text" class="form-control comp-CNIC_NICOP" placeholder="12345-1234567-1   or   123456-123456-1" required>
+                                    </div>
+                                    <div class="form-group col-md-2 deflt-fld">
+                                        <label>Date Of Birth</label>
+                                        <input type="text" class="form-control datebirth" placeholder="mm/dd/yyyy" data-provide="datepicker" name="Date_Of_Birth" required>
+                                    </div>
+                                    <div class="form-group col-md-2 comp-prop-fld" style="display:none;">
+                                        <label>Date Of Incorp.</label>
+                                        <input type="text" class="form-control comp-Date_Of_Birth" placeholder="mm/dd/yyyy" data-provide="datepicker" name="Date_Of_Birth" required>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label>Postal Address</label>
+                                        <input type="text" class="form-control pstladdrs" name="Postal_Address" placeholder="1234 Main St" required>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label>Residential Address</label>
+                                        <input type="text" class="form-control resaddrs" name="Residential_Address" placeholder="Apartment, Plot, or floor" required>
+                                    </div>
+                                    <div class="form-group col-md-2">
+                                        <label>City</label>
+                                        @Html.DropDownList("City", null, "Choose..", new { @class = "form-control", required = "" })
+                                    </div>
+                                    <script>
+                                        $(document).ready(function () {
+                                            $("#City").val("Lahore");
+                                        });
+                                    </script>
+                                    <div class="form-group col-md-3">
+                                        <label>Occupation</label>
+                                        <input type="text" class="form-control" name="Occupation">
+                                    </div>
+                                    <div class="form-group col-md-2">
+                                        <label>Nationality</label>
+                                        <input type="text" class="form-control nasnal" name="Nationality">
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <label>Email</label>
+                                        <input type="text" class="form-control" name="Email">
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-3">
+                                        <label>Phone Office</label>
+                                        <input type="text" class="form-control" name="Phone_Office">
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <label>Residential</label>
+                                        <input type="text" class="form-control" name="Residential">
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <label>Mobile 1</label>
+                                        <input type="text" class="form-control mobpho" placeholder="03121234567" name="Mobile_1" required>
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <label>Mobile 2</label>
+                                        <input type="text" class="form-control mob2pho" pattern="^0\d{10}" placeholder="03121234567" name="Mobile_2">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <h6 class="c-grey-900 nomin-heading">Nominee</h6>
+                        <div class="form-row">
+                            <div class="form-group col-md-3">
+                                <label>Name</label>
+                                <input type="text" class="form-control nomnam" name="Nominee_Name">
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label>CNIC / NICOP</label>
+                                <input type="text" class="form-control nomcnic" placeholder="12345-1234567-1 or 123456-123456-1" name="Nominee_CNIC_NICOP">
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label>Relation</label>
+                                <input class="form-control nomrel" name="Nominee_Relation" placeholder="">
+                            </div>
+                            <div class="form-group col-md-5">
+                                <label>Address</label>
+                                <input type="text" class="form-control nomadd" name="Nominee_Address" placeholder="1234 Main St">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button class="btn btn-info add__Owner__from__plts" type="button">Add Owner</button>
+            <hr style="margin-top:4%" />
+            <h4 class="c-grey-900" style="text-align:center;margin:2% 0">Plot Payments</h4>
+            <div class="form-row">
+                <div class="col-md-3">
+                    <h6>Plot Price</h6>
+                    <h5 id="plt-pric"></h5>
+                </div>
+                <div class="col-md-3">
+                    <select class="form-control pay-check">
+                        <option value="Payment">Payment</option>
+                        <option value="DealerAdjustment">Dealership Adjustment</option>
+                    </select>
+                </div>
+                <div class="load-div"></div>
+            </div>
+            <div class="mT-30 pay-div">
+                <div class="col-md-3">
+                    <button type="button" id="add-pay-typ" class="btn btn-info"><i class="ti-plus"></i>&nbsp; Add Payment</button>
+                </div>
+                <div class="mT-30" id="pay-list">
+                    <div class="form-row" id="pay-1">
+                        <div class="form-group col-md-2">
+                            <label>Cash / Bank</label>
+                            <select class="form-control paytypesel" id="cah-chq-bak" required>
+                                <option value="Cash">Cash</option>
+                                <option value="BankDraft">Bank Draft</option>
+                                <option value="Cheque">Cheque</option>
+                                <option value="PayOrder">Pay Order</option>
+                                <option value="Online_Cash">Online - Cash</option>
+                                <option value="Online_Cheque">Online - Cheque</option>
+                                <option value="Online_Payorder">Online - PayOrder</option>
+                                <option value="Online_Bankdraft">Online - BankDraft</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-1">
+                            <label>Amount</label>
+                            <input class="form-control coma" placeholder="250,000" required>
+                            <input type="hidden" id="Amount" class="amt" required>
+                        </div>
+                        <div class="form-group col-md-2 paymentotherinfo">
+                            <label id="paytypelabel">-</label>
+                            <input type="text" class="form-control" id="paymenttype" placeholder="" disabled required>
+                        </div>
+                        <div class="form-group col-md-1 paymentotherinfo">
+                            <label>Date</label>
+                            <input type="text" class="form-control" id="cbp-date" data-provide="datepicker" placeholder="mm/dd/yyyy" disabled required>
+                        </div>
+                        <div class="form-group col-md-2 paymentotherinfo">
+                            <label>Bank</label>
+                            <select class="form-control" id="bank" disabled>
+                                <option>Choose..</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-2 paymentotherinfo">
+                            <label>Branch </label>
+                            <input type="text" class="form-control" id="Branch" placeholder="Mall Rd" disabled required>
+                        </div>
+                        <div class="form-group col-md-1 paymentotherinfo">
+                            <label>Scan File </label>
+                            <button class=" btn btn-block" data-v="1" type="button" id="scanbtn">Scan</button>
+                        </div>
+                        <div id="images-1" class="col-md-1 images"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="mT-30 del-bal-div" style="display:none">
+                <div class="form-row">
+                    <div class="form-group col-md-2">
+                        <label>Dealership:</label>
+                        <h6 id="del-nam"></h6>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label>Available Balance:</label>
+                        <h6 id="avl-bal"></h6>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label>Amount</label>
+                        <input value="" class="form-control coma" id="rec-amt" />
+                    </div>
+                </div>
+            </div>
+            <div class="mT-30">
+                <div class="form-row" style="justify-content:center">
+                    <button id="reg-btn" style="width:25%; height:50px; font-size:24px" class="btn btn-primary">Register Plot</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).on("click", "#reg-btn", function (e) {
+        e.preventDefault();
+        var isCompPropCheck = $('.comp-prop-check').is(':checked');
+        var availbal = -( Number(RemoveComma($('#avl-bal').text())));
+        var pltpric = Number(RemoveComma($('#plt-pric').text()));
+        var payType = $("pay-check option:selected").val();
+        var DealersId = $('#Dealership').val();
+        if (payType == "DealerAdjustment") {
+            if (availbal < pltpric) {
+                alert("Plot Cannot be Register Due to Low Dealer Balance");
+                return false;
+            }
+        }
+        var own = [];
+        $('.Tran-own').each(function () {
+            var plotowndata = {
+                Id: 0,
+                Name: (isCompPropCheck) ? $(this).find(".comp-Name").val() : $(this).find("input[name=Name]").val(),
+                Father_Husband: (isCompPropCheck) ? '' : $(this).find("input[name=Father_Husband]").val(),
+                Postal_Address: $(this).find("input[name=Postal_Address]").val(),
+                Residential_Address: $(this).find("input[name=Residential_Address]").val(),
+                Phone_Office: $(this).find("input[name=Phone_Office]").val(),
+                Residential: $(this).find("input[name=Residential]").val(),
+                Mobile_1: $(this).find("input[name=Mobile_1]").val(),
+                Mobile_2: $(this).find("input[name=Mobile_2]").val(),
+                Email: $(this).find("input[name=Email]").val(),
+                Occupation: $(this).find("input[name=Occupation]").val(),
+                Nationality: $(this).find("input[name=Nationality]").val(),
+                Date_Of_Birth: (isCompPropCheck) ? $(this).find(".comp-Date_Of_Birth").val() : $(this).find("input[name=Date_Of_Birth]").val(),
+                CNIC_NICOP: (isCompPropCheck) ? $(this).find(".comp-CNIC_NICOP").val() : $(this).find("input[name=CNIC_NICOP]").val(),
+                Nominee_Name: $(this).find("input[name=Nominee_Name]").val(),
+                Nominee_Relation: $(this).find("input[name=Nominee_Relation]").val(),
+                Nominee_Address: $(this).find("input[name=Nominee_Address]").val(),
+                Nominee_CNIC_NICOP: $(this).find("input[name=Nominee_CNIC_NICOP]").val(),
+                Plot_Id: $("#plt-id").val(),
+                City: $("#City").val(),
+                IsCompanyProperty: isCompPropCheck
+            }
+            own.push(plotowndata)
+        });
+        var transid = $('#transid').val();
+        var data = { Owners: own, Plot_Id: $("#plt-id").val(), TransactionId: transid, DealersId: DealersId };
+        var conf = confirm("Are You Want to Submit Owners Informations");
+        if (conf) {
+            $.ajax({
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                url: '/Plots/RegisterDealerPlot/',
+                data: JSON.stringify(data),
+                success: function (data) {
+                    if (data.Status) {
+                        alert("Plot Registered")
+                        window.open("/Banking/PlotReceipt?Id=" + data.ReceiptId + "&Token=" + data.Token, '_blank');
+                        window.open("/Vouchers/SAGVouchers_Vendor?Id=" + data.Payment + "&Token=" + data.Token, '_blank');
+                        window.location.reload();
+                    }
+                    else {
+                        alert(data.Msg)
+                    }
+                }
+            });
+        }
+    });
+    $('.sear-del-plt').click(function () {
+        var id = $('.bid-plt-lst').val();
+        $.ajax({
+            type: "POST",
+            url: '/Dealership/DealerPlot_Details/',
+            data: { Id: id },
+            beforeSend: function () {
+                SASLoad($('#plt-det-deal'));
+            },
+            complete: function () {
+                SASUnLoad($('#plt-det-deal'));
+            },
+            success: function (data) {
+                if (data.Dealership == null) {
+                    alert("This Plot is not assigned to Dealership")
+                    return false;
+                }
+                $("#file-trans-alert").empty();
+                if (data == null) {
+                    alert("No Record Found");
+                    return False;
+                }
+                if (data.Status == 'Registered') {
+                    var html = '<div class="alert alert-danger" style="text-align:center" role="alert">This Plot is Already Registered</div>';
+                    $("#file-trans-alert").prepend(html);
+                    $("#reg-btn").hide();
+                }
+                else if (data.Status == 'Hold') {
+                    var html = '<div class="alert alert-danger" style="text-align:center" role="alert">This Plot is Holded By Meher Estate Developers</div>';
+                    $("#file-trans-alert").prepend(html);
+                    $("#reg-btn").hide();
+                }
+                else {
+                    $("#reg-btn").show();
+                }
+                $('#plt-no').text(data.PlotData.Plot_No);
+                $('#plt-size').text(data.PlotData.Plot_Size);
+                $('#plt-dim').text(data.PlotData.Dimension);
+                $('#plt-type').text(data.PlotData.Type);
+                $('#plt-status').text(data.PlotData.Develop_Status);
+                $('#plt-area').text(data.PlotData.Area + " Sq-ft");
+                $('#plt-road').text(data.PlotData.Road_Type);
+                $('#plt-loc').text(data.PlotData.Plot_Location);
+                $('#plt-id').val(data.PlotData.Id);
+                $('#pl-size').val(data.PlotData.Plot_Size);
+                $('#plt-pric').text(Number(data.GrandTotal).toLocaleString());
+                $('#rec-amt').val(Number(data.GrandTotal).toLocaleString());
+                $('#dealership').text(data.Dealership.Dealership_Name);
+                $('#dealer-id').val(data.Dealership.Id);
+                $.ajax({
+                    traditional: true,
+                    type: "POST",
+                    data: { id: data.Dealership.Id },
+                    url: "/Dealership/DealerListForSelect/",
+                    success: function (data) {
+                        $('.dealerselected').append('<option value="">Select Dealer</option>');
+                        $.each(data, function (key, value) {
+                            $('.dealerselected').append('<option value=' + value.Id + '>' + value.Name + '</option>');
+                        });
+                    },
+                    error: function () {
+                    }
+                });
+            }
+            , error: function (xmlhttprequest, textstatus, message) {
+                if (textstatus === "timeout") {
+                    alert("got timeout");
+                } else {
+                    alert(textstatus);
+                }
+            }
+        });
+    });
+    $('.pay-check').change(function () {
+        var val = $(this).val();
+        if (val == "Payment") {
+            $('.pay-div').show();
+            $('.del-bal-div').hide();
+        }
+        else if (val == "DealerAdjustment") {
+            $('.del-bal-div').show();
+            $('.pay-div').hide();
+            var id = $('#dealer-id').val();
+            $.ajax({
+                type: "POST",
+                url: '/Dealership/DealerBalance/',
+                data: { DealerId: id, Led_Nature:"Advance"  },
+                beforeSend: function () {
+                    SASLoad($('.load-div'))
+                },
+                complete: function () {
+                    SASUnLoad($('.load-div'))
+                },
+                success: function (data) {
+                    $('#del-nam').text($('#dealership').text());
+                    $('#avl-bal').text(Number(data.Balance).toLocaleString());
+                }
+                , error: function (xmlhttprequest, textstatus, message) {
+                    if (textstatus === "timeout") {
+                        alert("got timeout");
+                    } else {
+                        alert(textstatus);
+                    }
+                }
+            });
+        }
+    });
+    $(document).ready(function () {
+        $('#Dealership').select2();
+        $('.add__Owner__from__plts').click(function () {
+            let strct = `<hr/>
+<div class="row own-row-dat">
+                                <div class="col-md-12">
+                                    <div class="form-row">
+<div class="form-group col-md-3">
+    <label>Name</label>
+    <input type="text" class="form-control Name" name="">
+</div>
+<div class="form-group col-md-3">
+    <label>Father's/Husband's Name</label>
+    <input type="text" class="form-control Father_Husband" name="">
+</div>
+<div class="form-group col-md-3">
+    <label>CNIC / NICOP</label>
+    <input type="text" class="form-control CNIC_NICOP" name="" placeholder="12345-1234567-1   or   123456-123456-1">
+</div>
+<div class="form-group col-md-2">
+    <label>Date Of Birth</label>
+    <input type="text" class="form-control Date_Of_Birth" data-provide="datepicker" placeholder="mm/dd/yyyy" name="">
+</div>
+<div class="form-group col-md-6">
+    <label>Postal Address</label>
+    <input type="text" class="form-control Postal_Address" name="" placeholder="1234 Main St">
+</div>
+<div class="form-group col-md-6">
+    <label>Residential Address</label>
+    <input type="text" class="form-control Residential_Address" name="" placeholder="Apartment, Plot, or floor">
+</div>
+<div class="form-group col-md-2">
+    <label>City</label>
+    <input type="text" class="form-control City">
+</div>
+<div class="form-group col-md-3">
+    <label>Occupation</label>
+    <input type="text" class="form-control Occupation" name="">
+</div>
+<div class="form-group col-md-2">
+    <label>Nationality</label>
+    <input type="text" class="form-control Nationality" name="">
+</div>
+<div class="form-group col-md-3">
+    <label>Email</label>
+    <input type="text" class="form-control Email" name="">
+</div>
+                                    </div>
+<div class="form-row">
+    <div class="form-group col-md-3">
+        <label>Phone Office</label>
+        <input type="text" class="form-control Phone_Office" name="">
+    </div>
+    <div class="form-group col-md-3">
+        <label>Residential</label>
+        <input type="text" class="form-control Residential" name="">
+    </div>
+    <div class="form-group col-md-3">
+        <label>Mobile 1</label>
+        <input type="text" class="form-control Mobile_1" placeholder="03121234567" name="">
+    </div>
+    <div class="form-group col-md-3">
+        <label>Mobile 2</label>
+        <input type="text" class="form-control Mobile_2" pattern="^0\d{10}" placeholder="03121234567" name="">
+    </div>
+</div>
+<h6 class="c-grey-900">Nominee</h6>
+<div class="form-row">
+    <div class="form-group col-md-3">
+        <label>Name</label>
+        <input type="text" class="form-control Nominee_Name" name="">
+    </div>
+    <div class="form-group col-md-2">
+        <label>CNIC / NICOP</label>
+        <input type="text" class="form-control Nominee_CNIC_NICOP"  placeholder="12345-1234567-1 or 123456-123456-1" name="">
+    </div>
+    <div class="form-group col-md-2">
+        <label>Relation</label>
+        <input class="form-control Nominee_Relation" name="" placeholder="">
+    </div>
+    <div class="form-group col-md-5">
+        <label>Address</label>
+        <input type="text" class="form-control Nominee_Address" name="" placeholder="1234 Main St">
+    </div>
+</div>
+                                </div>
+                            </div>`;
+            $('.Tran-own').append(strct);
+        });
+        $('.comp-prop-check').unbind().change(function () {
+            //lets hook up the event listener here
+            if ($(this).is(':checked')) {
+                $('.comp-prop-fld').show();
+                $('.deflt-fld').hide();
+                $('.nomin-heading').text('Board Resolution');
+            }
+            else {
+                $('.comp-prop-fld').hide();
+                $('.deflt-fld').show();
+                $('.nomin-heading').text('Nominee');
+            }
+        });
+    });
+    $(document).on("change", ".dealerselected", function () {
+        $.ajax({
+            traditional: true,
+            type: "POST",
+            data: { id: $('.dealerselected :selected').val() },
+            url: "/Dealership/GetDealerResult/",
+            success: function (data) {
+                $('.ownname').val(data.Name);
+                $('.ownfather').val(data.Father_Name);
+                $('.owncnic').val(data.CNIC_NICOP);
+                $('.datebirth').val(moment(data.Date_Birth).format("MM/DD/YYYY"));
+                $('.pstladdrs').val(data.Address);
+                $('.resaddrs').val(data.Address);
+                $('.nasnal').val("Pakistani");
+                $('.mobpho').val(data.Mobile_1);
+                $('.mob2pho').val(data.Mobile_2);
+                $('.nomnam').val(data.Father_Name);
+                $('.nomcnic').val(data.CNIC_NICOP);
+                $('.nomrel').val("Father");
+                $('.nomadd').val(data.Address);
+            },
+            error: function () {
+            }
+        });
+    });
+    $(document).on("change", ".com-typ", function () {
+        var id = $('.com-typ').val();
+        if (id == "Percentage") {
+            $('.com-amt').attr("readonly", true);
+            $('.com-per-div').show()
+            $('.com-amt').val('');
+        }
+        else {
+            $('.com-per-div').hide()
+            $('.com-amt').removeAttr("readonly", true);
+            $('.com-amt').val('');
+        }
+    });
+    $(document).on('keyup', '.per-val', function () {
+        var p = $(this).val();
+        var gr = RemoveComma($('#grnd-total').val());
+        if (gr <= 0 || gr == "") {
+            alert('Please Enter Plan first');
+            $(this).val('');
+            return false;
+        }
+        else {
+            $('.com-amt').val(Number((p * gr) / 100).toLocaleString());
+        }
+    });
+</script>
+<style>
+    .paymentotherinfo {
+        display: none;
+    }
+</style>

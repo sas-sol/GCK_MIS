@@ -1,0 +1,876 @@
+﻿@model MeherEstateDevelopers.Models.PlotTransferDetailData
+@{ Layout = "~/Views/Shared/_StaffLayout.cshtml"; }
+
+<input hidden id="Plot_Id" value="@Model.PlotData.Id" />
+<div class="row gap-20 pos-r">
+    <div class="col-md-7">
+        <div class="bgc-white p-20 bd">
+            <h6 class="c-grey-900">Plot Transfer</h6>
+            <div class="mT-30">
+                <div class="col-md-12">
+                    <div class="form-row">
+                        <div class="form-group col-md-2">
+                            <label>Plot No.</label>
+                            <h5 id="plt-no">@Model.PlotData.Plot_No</h5>
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label>Block</label>
+                            <h5 id="plt-size">@Model.PlotData.Block_Name</h5>
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label>Plot Size</label>
+                            <h5 id="plt-size">@Model.PlotData.Plot_Size</h5>
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label>Type</label>
+                            <h5 id="plt-type">@Model.PlotData.Type</h5>
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label>Location</label>
+                            <h5 id="plt-loc">@Model.PlotData.Plot_Location</h5>
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label>Road</label>
+                            <h5 id="plt-road">@Model.PlotData.Road_Type</h5>
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label>Area</label>
+                            <h5 id="plt-area">@Convert.ToDecimal(Model.PlotData.Area).ToString("0.##") Sq-Ft</h5>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label>Dimension</label>
+                            <h5 id="plt-dim">@Model.PlotData.Dimension</h5>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label>Status</label>
+                            <h5 id="plt-status">@Model.PlotData.Develop_Status</h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr />
+            <div class="form-row">
+                <div class="col-md-4">
+                    <h6 class="c-grey-900">Personal Information</h6>
+                </div>
+            </div>
+            @{ int counter = 1;}
+            @foreach (var v in Model.PlotOwners)
+            {
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <div class="panel-heading">
+                            <h5 class="panel-title">
+                                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#@string.Concat("own",counter.ToString())" aria-expanded="true"></a>
+                                Owner <span class="own-count-info">1</span>
+                            </h5>
+                        </div>
+                    </div>
+
+                    <div class="panel-collapse collapse in show" id="@string.Concat("own",counter.ToString())">
+                        <div class="mT-30">
+                            <div class="form-row">
+                                <div class="form-group col-md-3">
+                                    <label>Name</label>
+                                    <input type="text" class="form-control" value="@v.Name" id="Name" readonly>
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label>Father's/Husband's Name</label>
+                                    <input type="text" class="form-control" id="Father_Husband" value="@v.Father_Husband" readonly>
+                                </div>
+                                <div class="form-group col-md-5">
+                                    <label>Postal Address</label>
+                                    <input type="text" class="form-control" id="Postal_Address" value="@v.Postal_Address" readonly>
+                                </div>
+                                <div class="form-group col-md-5">
+                                    <label>Residential Address</label>
+                                    <input type="text" class="form-control" id="Residential_Address" value="@v.Residential_Address" readonly>
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label>City</label>
+                                    <input type="text" class="form-control" id="City" value="@v.City" readonly>
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label>Date Of Birth</label>
+                                    <input type="text" class="form-control" id="Date_Of_Birth" value="@v.Date_Of_Birth" readonly>
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label>CNIC / NICOP</label>
+                                    <input type="text" class="form-control" id="CNIC_NICOP" value="@v.CNIC_NICOP" readonly>
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label>Occupation</label>
+                                    <input type="text" class="form-control" id="Occupation" value="@v.Occupation" readonly>
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label>Nationality</label>
+                                    <input type="text" class="form-control" id="Nationality" value="@v.Nationality" readonly>
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label>Email</label>
+                                    <input type="text" class="form-control" id="Email" value="@v.Email" readonly>
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label>Phone Office</label>
+                                    <input type="text" class="form-control" id="Phone_Office" value="@v.Phone_Office" readonly>
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label>Residential</label>
+                                    <input type="text" class="form-control" id="Residential" value="@v.Residential" readonly>
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label>Mobile 1</label>
+                                    <input type="text" class="form-control" id="Mobile_1" value="@v.Mobile_1" readonly>
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label>Mobile 2</label>
+                                    <input type="text" class="form-control" id="Mobile_2" value="@v.Mobile_2" readonly>
+                                </div>
+
+                                <div class="form-group col-md-6" style="margin:auto;">
+                                    <h6 style="width: auto;float: left;margin: 7px;">Filer</h6>
+                                    @if (v.IsFiler == true)
+                                    {
+                                        <label class="switch"><input type="checkbox" class="filerCheck filer-khjsdf" data-own="@v.Id" checked><span class="slider round"></span></label>
+                                    }
+                                    else
+                                    {
+                                        <label class="switch"><input type="checkbox" class="filerCheck filer-khjsdf" data-own="@v.Id"><span class="slider round"></span></label>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                        <hr />
+                        <h6 class="c-grey-900">Nominee</h6>
+                        <div class="mT-30">
+                            <div class="form-row">
+                                <div class="form-group col-md-2">
+                                    <label>Name</label>
+                                    <input type="text" class="form-control" id="Nominee_Name" value="@v.Nominee_Name" readonly>
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <label>CNIC / NICOP</label>
+                                    <input type="text" class="form-control" id="Nominee_CNIC_NICOP" value="@v.Nominee_CNIC_NICOP" readonly>
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <label>Relation</label>
+                                    <input class="form-control" id="Nominee_Relation" value="@v.Nominee_Relation" readonly>
+                                </div>
+                                <div class="form-group col-md-5">
+                                    <label>Address</label>
+                                    <input type="text" class="form-control" id="Nominee_Address" value="@v.Nominee_Address" readonly>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                counter++;
+            }
+            <hr />
+            <div class="form-row">
+                <div class="col-md-2">
+                    <label>Booking Price</label>
+                    <h6 class="c-grey-900" id="plt-bk-price">@string.Format("{0:n0}", Math.Round(Model.PlotInstallments.Sum(x => x.Amount)))</h6>
+                </div>
+                <div class="col-md-2">
+                    <label>Received</label>
+                    <h6 class="c-grey-900" id="rece-amt">@string.Format("{0:n0}", Model.PlotReceipts.Sum(x => x.Amount))</h6>
+                </div>
+                <div class="col-md-2">
+                    <label>Over Due</label>
+                    <h6 class="c-grey-900" id="due-amt"></h6>
+                </div>
+            </div>
+            <div class="mT-30">
+                <div class="form-row">
+                    <div class="col-md-6">
+                        <table class="table table-striped table-bordered" cellspacing="0" width="100%" style="margin-bottom:0px">
+                            <thead class="thead-dark">
+                                <tr><th>Sr.</th></tr>
+                            </thead>
+                        </table>
+                        <div style="min-height:0px; max-height:500px;overflow:auto" class=" ps--active-y">
+                            <table class="table table-striped table-bordered" id="all-instments" cellspacing="0" width="100%">
+                                <tbody>
+                                    @{ foreach (var item in Model.PlotInstallments)
+                                        {
+                                            <tr>
+                                                <td>@item.Installment_Name</td>
+                                                <td>@string.Format("{0:n0}", item.Amount)</td>
+                                                <td>@string.Format("{0:dd-MMM-yyyy}", item.DueDate)</td>
+                                            </tr>
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <table class="table table-striped table-bordered" cellspacing="0" width="100%" style="margin-bottom:0px">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th>Receipt No.</th>
+                                    <th>Amount</th>
+                                    <th>Date</th>
+                                    <th>Type</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                        </table>
+                        <div style="min-height:0px; max-height:500px;overflow:auto" class=" ps--active-y">
+                            <table class="table table-striped table-bordered" id="rec-amts" cellspacing="0" width="100%">
+                                <tbody>
+                                    @{ int srcount = 1;
+                                        foreach (var item in Model.PlotReceipts)
+                                        {
+                                            <tr id="@item.Id">
+                                                <td>@srcount</td>
+                                                <td>@item.ReceiptNo</td>
+                                                <td>@string.Format("{0:n0}", item.Amount)</td>
+                                                <td>@string.Format("{0:dd-MMM-yyyy}", item.DateTime)</td>
+                                                <td>@item.PaymentType</td>
+                                            </tr>
+                                            srcount++;
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-5">
+        <div class="bgc-white p-20 bd">
+            <div class="mT-30">
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <h5 style="width:100%">NDC Serial No: @Model.TransferTo.Select(x => x.TransferRequestNo).FirstOrDefault()</h5>
+                    </div>
+                    @if (Model.TransferTo.Select(x => x.Plot_Price).FirstOrDefault() != null)
+                    {
+                        <div class="form-group col-md-6">
+                            <h5 style="width:100%">Plot Price: @string.Format("{0:0,0.##}", Model.TransferTo.Select(x => x.Plot_Price).FirstOrDefault())</h5>
+                        </div>
+                    }
+
+                </div>
+                <div class="form-row row">
+                    @if (Model.TransferTo.Any(x => x.Dealer_Req == true))
+                    {
+                        <div class="form-group col-md-6">
+                            <h4 style="color:red">Dealer Transfer</h4>
+
+                        </div>
+                    }
+                    @if (Model.TransferTo.Any(x => x.Employee_Req == true))
+                    {
+                        <div class="form-group col-md-6">
+                            <h4 style="color:red">Employee Transfer</h4>
+                        </div>
+                    }
+                    <div class="form-group col-md-6">
+                        <h6 style="width: auto;float: left;margin: 7px;">Blood Relation Transfer</h6>
+                        <label class="switch"><input type="checkbox" id="bl-rel"><span class="slider round"></span></label>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <h6 style="width: auto;float: left;margin: 7px;">Transfer Charges Wave off</h6>
+                        <label class="switch"><input type="checkbox" id="tran-ch"><span class="slider round"></span></label>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <h6 style="width: auto;float: left;margin: 7px;">Other Transfer Charges</h6>
+                        <label class="switch"><input type="checkbox" id="oth-tran-ch"><span class="slider round"></span></label>
+                    </div>
+                    <div class="form-group col-md-6 tran-amt" style="display:none">
+                        <label>Rate / Marla</label>
+                        <input class="form-control coma" placeholder="12,345" required>
+                        <input type="hidden" id="amt" name="Amount" class="amt" required>
+                    </div>
+                    @if (Model.TransferTo.Any(x => !string.IsNullOrEmpty(x.Filer_NonFiler)))
+                    {
+                        <div class="form-group col-md-6">
+                            <h6 style="width: auto;float: left;margin: 7px;">Seller Exempted</h6>
+                            <label class="switch"><input type="checkbox" id="sl-tax-exe" checked><span class="slider round"></span></label>
+                        </div>
+                        <div class="form-group col-md-6 slr-exe-rzn-area">
+                            <h6 style="width: auto;float: left;margin: 7px;">Seller Exempt Reason</h6>
+                            <input type="text" class="form-control slr-exe-rzn" value="@Model.TransferTo.Select(x=>x.SellExemptReason).FirstOrDefault()" />
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="form-group col-md-6">
+                            <h6 style="width: auto;float: left;margin: 7px;">Seller Exempted</h6>
+                            <label class="switch"><input type="checkbox" id="sl-tax-exe"><span class="slider round"></span></label>
+                        </div>
+                        <div class="form-group col-md-6 slr-exe-rzn-area" style="display:none;">
+                            <h6 style="width: auto;float: left;margin: 7px;">Seller Exempt Reason</h6>
+                            <input type="text" class="form-control slr-exe-rzn" placeholder="Seller Exempt Reason" />
+                        </div>
+                    }
+                    <div class="form-group col-md-6" style="display:none;">
+                        <button class="btn btn-outline-info slr-exe-stat" data-grp="@Model.TransferTo.Select(x=>x.GroupTag).FirstOrDefault()">Update Seller Exemption Status</button>
+                    </div>
+                    @if (Model.TransferTo.Any(x => x.TaxExempted == true))
+                    {
+                        <div class="form-group col-md-6">
+                            <h6 style="width: auto;float: left;margin: 7px;">Buyer Exempted</h6>
+                            <label class="switch"><input type="checkbox" id="buy-tax-exe" checked><span class="slider round"></span></label>
+                        </div>
+                        <div class="form-group col-md-6 byr-exe-rzn-area">
+                            <h6 style="width: auto;float: left;margin: 7px;">Buyer Exempt Reason</h6>
+                            <input type="text" class="form-control" id="buy-tax-exe-rzn" value="@Model.TransferTo.Select(x=>x.TaxExemptReason).FirstOrDefault()" />
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="form-group col-md-6">
+                            <h6 style="width: auto;float: left;margin: 7px;">Buyer Exempted</h6>
+                            <label class="switch"><input type="checkbox" id="buy-tax-exe"><span class="slider round"></span></label>
+                        </div>
+                        <div class="form-group col-md-6 byr-exe-rzn-area" style="display:none">
+                            <h6 style="width: auto;float: left;margin: 7px;">Buyer Exempt Reason</h6>
+                            <input type="text" class="form-control" id="buy-tax-exe-rzn" value="@Model.TransferTo.Select(x=>x.TaxExemptReason).FirstOrDefault()" />
+                        </div>
+                    }
+                    <div class="form-group col-md-6" style="display:none;">
+                        <button class="btn btn-outline-info byr-exe-stat" data-grp="@Model.TransferTo.Select(x=>x.GroupTag).FirstOrDefault()">Update Buyer Exemption Status</button>
+                    </div>
+                    <div class="form-group col-md-6 remarks" style="display:none">
+                        <label>Remarks</label>
+                        <textarea class="form-control" id="remarks"></textarea>
+                    </div>
+                    <input type="hidden" id="blod-rel" value="false" />
+                    <input type="hidden" id="Trans-val" value="false" />
+                    <input type="hidden" id="oth-Trans-val" value="false" />
+                </div>
+                <hr />
+            </div>
+            @{ int transCount = 1;}
+
+            @foreach (var v in Model.TransferTo)
+            {
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h5 class="panel-title">
+                            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#@string.Concat("trans",transCount.ToString())" aria-expanded="true"></a>
+                            New Owner <span class="own-count-info">@transCount</span>
+                        </h5>
+                    </div>
+
+                    <div class="panel-collapse collapse in show" id="@string.Concat("trans",transCount.ToString())">
+                        <div class="mT-30">
+                            <div class="form-row">
+                                <h5>
+                                    Transfer To: &nbsp;&nbsp;
+                                    @if (Model.TransferTo.Any(x => x.Status != 0))
+                                    {
+                                        <span>| &nbsp; &nbsp;</span><button class="btn btn-primary snd-to-fd-plt" data-trans="@Model.TransferTo.Select(x=>x.GroupTag).FirstOrDefault()">Send Back To Front Desk</button>
+                                    }
+                                    <span>| &nbsp; &nbsp;</span><button class="btn btn-primary bio-verif-buyer-plt" data-trans="@Model.TransferTo.Select(x=>x.GroupTag).FirstOrDefault()"><i class="fas fa-fingerprint"></i> Biometric Record</button>
+                                </h5>
+                                <input type="hidden" id="plt-id" value="@Model.PlotData.Id" name="File_Form_Id">
+                            </div>
+                            <div class="form-row">
+                                @if (v.IsCompanyProperty == true)
+                                {
+                                    <div class="form-group col-md-12">
+                                        <label>Comapny Name</label>
+                                        <input type="text" class="form-control" value="@v.Name" id="Name" readonly>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="form-group col-md-4">
+                                        <label>Name</label>
+                                        <input type="text" class="form-control" value="@v.Name" id="Name" readonly>
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label>Father's/Husband's Name</label>
+                                        <input type="text" class="form-control" id="Father_Husband" value="@v.Father_Husband" readonly>
+                                    </div>
+                                }
+                                <div class="form-group col-md-10">
+                                    <label>Postal Address</label>
+                                    <input type="text" class="form-control" id="Postal_Address" value="@v.Postal_Address" readonly>
+                                </div>
+                                <div class="form-group col-md-10">
+                                    <label>Residential Address</label>
+                                    <input type="text" class="form-control" id="Residential_Address" value="@v.Residential_Address" readonly>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label>City</label>
+                                    <input type="text" class="form-control" id="City" value="@v.City" readonly>
+                                </div>
+                                @if (v.IsCompanyProperty == true)
+                                {
+                                    <div class="form-group col-md-4">
+                                        <label>Date Of Incorp.</label>
+                                        <input type="text" class="form-control" id="Date_Of_Birth" value="@v.Date_Of_Birth" readonly>
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label>NTN</label>
+                                        <input type="text" class="form-control" id="CNIC_NICOP" value="@v.CNIC_NICOP" readonly>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="form-group col-md-4">
+                                        <label>Date Of Birth</label>
+                                        <input type="text" class="form-control" id="Date_Of_Birth" value="@v.Date_Of_Birth" readonly>
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label>CNIC / NICOP</label>
+                                        <input type="text" class="form-control" id="CNIC_NICOP" value="@v.CNIC_NICOP" readonly>
+                                    </div>
+                                }
+                                <div class="form-group col-md-4">
+                                    <label>Occupation</label>
+                                    <input type="text" class="form-control" id="Occupation" value="@v.Occupation" readonly>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label>Nationality</label>
+                                    <input type="text" class="form-control" id="Nationality" value="@v.Nationality" readonly>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label>Email</label>
+                                    <input type="text" class="form-control" id="Email" value="@v.Email" readonly>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label>Phone Office</label>
+                                    <input type="text" class="form-control" id="Phone_Office" value="@v.Phone_Office" readonly>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label>Residential</label>
+                                    <input type="text" class="form-control" id="Residential" value="@v.Residential" readonly>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label>Mobile 1</label>
+                                    <input type="text" class="form-control" id="Mobile_1" value="@v.Mobile_1" readonly>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label>Mobile 2</label>
+                                    <input type="text" class="form-control" id="Mobile_2" value="@v.Mobile_2" readonly>
+                                </div>
+
+                                <div class="form-group col-md-6" style="margin:auto;">
+                                    <h6 style="width: auto;float: left;margin: 7px;">Filer</h6>
+                                    @if (v.IsFiler == true)
+                                    {
+                                        <label class="switch"><input type="checkbox" class="filerCheck new-own-file-dsfjkh" data-own="@v.Id" checked><span class="slider round"></span></label>
+                                    }
+                                    else
+                                    {
+                                        <label class="switch"><input type="checkbox" class="filerCheck new-own-file-dsfjkh" data-own="@v.Id"><span class="slider round"></span></label>
+                                    }
+                                </div>
+
+                            </div>
+                            <hr />
+                            <h6 class="c-grey-900">Nominee</h6>
+                            <div class="mT-40">
+                                <div class="form-row">
+                                    <div class="form-group col-md-4">
+                                        <label>Name</label>
+                                        <input type="text" class="form-control" id="Nominee_Name" value="@v.Nominee_Name" readonly>
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label>CNIC / NICOP</label>
+                                        <input type="text" class="form-control" id="Nominee_CNIC_NICOP" value="@v.Nominee_CNIC_NICOP" readonly>
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label>Relation</label>
+                                        <input class="form-control" id="Nominee_Relation" value="@v.Nominee_Relation" readonly>
+                                    </div>
+                                    <div class="form-group col-md-10">
+                                        <label>Address</label>
+                                        <input type="text" class="form-control" id="Nominee_Address" value="@v.Nominee_Address" readonly>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                transCount++;
+            }
+
+            @if (Model.TransferTo.Any(x => x.Transfer_Success != true))
+            {
+
+                <hr style="border-top:13px solid red" />
+                <h3 style="text-align:center">Tax Calculations</h3>
+                <hr style="border-top:13px solid red" />
+
+                <hr style="border-top:3px solid green" />
+                <h3 style="text-align:center">Buyer Tax Calculations</h3>
+                <hr style="border-top:3px solid green" />
+                <div class="row">
+                    @{ decimal pltVal = (decimal)Model.TransferTo.Select(x => x.Plot_Price).FirstOrDefault();}
+                    @foreach (var v in Model.TransferTo)
+                    {
+                        if (Model.TransferTo.Any(x => x.TaxExempted == true))
+                        {
+                            <div class="col-md-6">
+                                <label>@v.Name (Exempted) :</label>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label><b>0 (@Model.TransferTo.Select(x=>x.TaxExemptReason).FirstOrDefault())</b></label>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="col-md-6">
+                                <label>@v.Name (@((v.IsFiler == true)?"Filer":"Non Filer")) :</label>
+                            </div>
+
+                            <div class="col-md-6">
+                                @if (v.IsFiler == true)
+                                {
+                                    <label><b>@(string.Format("{0:n0}",((decimal)pltVal/Model.TransferTo.Count())*(decimal)ViewBag.Buyer_filerRate))</b></label>
+                                }
+                                else
+                                {
+                                    <label><b>@(string.Format("{0:n0}",((decimal)pltVal/Model.TransferTo.Count())*(decimal)ViewBag.Buyer_nonFilerRate))</b></label>
+                                }
+                            </div>
+                        }
+                    }
+                </div>
+
+                <hr style="border-top:3px solid green" />
+                <h3 style="text-align:center">Seller's Tax Calculations</h3>
+                <hr style="border-top:3px solid green" />
+                <div class="row">
+
+                    @foreach (var v in Model.PlotOwners)
+                    {
+                        if (Model.TransferTo.Any(x => !string.IsNullOrEmpty(x.Filer_NonFiler)))
+                        {
+                            <div class="col-md-6">
+                                <label>@v.Name (Exempted) :</label>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label><b>0 (@Model.TransferTo.Select(x=>x.SellExemptReason).FirstOrDefault())</b></label>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="col-md-6">
+                                <label>@v.Name (@((v.IsFiler == true)?"Filer":"Non Filer")) :</label>
+                            </div>
+
+                            <div class="col-md-6">
+                                @{
+                                    string[] types = { "Booking", "Installment", "Advance" };
+                                    var lastInstDate = Model.PlotReceipts.Where(x => types.Contains(x.Type)).OrderByDescending(x => x.DateTime).Select(x => x.DateTime).FirstOrDefault();
+                                    v.Ownership_DateTime = (v.Ownership_DateTime.Value.Date < lastInstDate.Value.Date) ? lastInstDate : v.Ownership_DateTime;
+
+
+                                }
+
+                                @if (ViewBag.isExp)
+                                {
+                                    if ((DateTime.Now - v.Ownership_DateTime.Value).TotalDays <= ViewBag.ExpDays)
+                                    {
+                                        if (v.IsFiler == true)
+                                        {
+                                            <label><b>@(string.Format("{0:n0}",((decimal)pltVal/Model.PlotOwners.Count())*(decimal)ViewBag.Seller_filerRate))</b></label>
+                                        }
+                                        else
+                                        {
+                                            <label><b>@(string.Format("{0:n0}",((decimal)pltVal/Model.PlotOwners.Count())*(decimal)ViewBag.Seller_nonFilerRate))</b></label>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <label><b>0 (Tax Exempted since own duration > @ViewBag.ExpDays Days)</b></label>
+                                    }
+                                }
+                                else
+                                {
+                                    if (v.IsFiler == true)
+                                    {
+                                        <label><b>@(string.Format("{0:n0}",((decimal)pltVal/Model.PlotOwners.Count())*(decimal)ViewBag.Seller_filerRate))</b></label>
+                                    }
+                                    else
+                                    {
+                                        <label><b>@(string.Format("{0:n0}",((decimal)pltVal/Model.PlotOwners.Count())*(decimal)ViewBag.Seller_nonFilerRate))</b></label>
+                                    }
+                                }
+                            </div>
+                        }
+                    }
+                </div>
+
+                <hr style="border-top:13px solid red" />
+                <h3 style="text-align:center">Check List of NDC</h3>
+                <hr style="border-top:13px solid red" />
+                <div class="form-row" style="margin:15px">
+                    <div class="col-md-6">
+                        <div class="checkbox checkbox-circle checkbox-info peers ai-c">
+                            @{
+                                if (Model.TransferTo.Any(x => x.AllDocuments == true))
+                                {
+                                    <input type="checkbox" value="@Model.TransferTo.Select(x=>x.Id).FirstOrDefault()" id="all-doc" data-checklst="1" class="peer rec-plt-pres" checked>
+                                }
+                                else
+                                {
+                                    <input type="checkbox" value="@Model.TransferTo.Select(x=>x.Id).FirstOrDefault()" id="all-doc" data-checklst="1" class="peer rec-plt-pres">
+                                }
+                            }
+                            <label class="peers peer-greed js-sb ai-c">
+                                <span class="peer peer-greed ser-ch-nam" style="font-weight:bold"> All Documments Verified </span>
+                            </label>
+                        </div>
+
+                    </div>
+                    <div class="col-md-6">
+                        <div class="checkbox checkbox-circle checkbox-info peers ai-c">
+                            @{
+                                if (Model.TransferTo.Any(x => x.ComputerRecord == true))
+                                {
+                                    <input type="checkbox" value="@Model.TransferTo.Select(x=>x.Id).FirstOrDefault()" id="comp-rec" data-checklst="2" class="peer rec-plt-pres" checked>
+                                }
+                                else
+                                {
+                                    <input type="checkbox" value="@Model.TransferTo.Select(x=>x.Id).FirstOrDefault()" id="comp-rec" data-checklst="2" class="peer rec-plt-pres">
+                                }
+                            }
+                            <label class="peers peer-greed js-sb ai-c">
+                                <span class="peer peer-greed ser-ch-nam" style="font-weight:bold"> Computer Record Updated </span>
+                            </label>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="form-row" style="margin:15px">
+                    <div class="col-md-6">
+                        <div class="checkbox checkbox-circle checkbox-info peers ai-c">
+                            @{
+                                if (Model.TransferTo.Any(x => x.CashPayments == true))
+                                {
+                                    <input type="checkbox" value="@Model.TransferTo.Select(x=>x.Id).FirstOrDefault()" id="cash-pay" data-checklst="3" class="peer rec-plt-pres" checked>
+                                }
+                                else
+                                {
+                                    <input type="checkbox" value="@Model.TransferTo.Select(x=>x.Id).FirstOrDefault()" id="cash-pay" data-checklst="3" class="peer rec-plt-pres">
+                                }
+                            }
+                            <label class="peers peer-greed js-sb ai-c">
+                                <span class="peer peer-greed ser-ch-nam" style="font-weight:bold"> Cash Payments Verified </span>
+                            </label>
+                        </div>
+
+                    </div>
+                    <div class="col-md-6">
+                        <div class="checkbox checkbox-circle checkbox-info peers ai-c">
+                            @{
+                                if (Model.TransferTo.Any(x => x.Cheques_dd_po == true))
+                                {
+                                    <input type="checkbox" value="@Model.TransferTo.Select(x=>x.Id).FirstOrDefault()" id="chpodd" data-checklst="4" class="peer rec-plt-pres" checked>
+                                }
+                                else
+                                {
+                                    <input type="checkbox" value="@Model.TransferTo.Select(x=>x.Id).FirstOrDefault()" id="chpodd" data-checklst="4" class="peer rec-plt-pres">
+                                }
+                            }
+                            <label class="peers peer-greed js-sb ai-c">
+                                <span class="peer peer-greed ser-ch-nam" style="font-weight:bold"> Cheques / PO / DD</span>
+                            </label>
+                        </div>
+                    </div>
+
+                </div>
+                <input type="hidden" value="@Model.TransferTo.Select(x=>x.Id).FirstOrDefault()" id="req-id" />
+
+                <div class="form-row" id="trns-btn">
+                    @if (Model.TransferTo.Any(x => x.Cheques_dd_po == true) && Model.TransferTo.Any(x => x.CashPayments == true) && Model.TransferTo.Any(x => x.ComputerRecord == true) && Model.TransferTo.Any(x => x.AllDocuments == true) && !Model.TransferTo.Any(x=>x.Status == 0))
+                    {
+                        <button class="btn btn-success" data- type="button" id="plt-transf-veri" style="width:100%;margin-top:10px">Verified & Ready Transfer</button>
+                    }
+                </div>
+            }
+
+        </div>
+    </div>
+</div>
+
+<script>
+    //new-own-file-dsfjkh
+    $('.filer-khjsdf').unbind().change(function () {
+        let confr = confirm('Are you sure you want to change Filer/Non Filer status of this owner?');
+
+        if (!confr) {
+            return;
+        }
+
+        let own = $(this).attr('data-own');
+        let chc = $(this).is(':checked');
+        let that = $(this);
+
+        $.ajax({
+            type: "POST",
+            url: '/Plots/UpdateFilerStatus/',
+            data: { owner: own, filer: chc },
+            success: function (data) {
+                alert("Status changed successfully");
+                window.location.reload();
+            },
+            error: function () {
+                alert("Failed to change status. Please try again");
+                $(that).prop('checked', !chc);
+            }
+        });
+
+    });
+
+    $('.new-own-file-dsfjkh').unbind().change(function () {
+        let confr = confirm('Are you sure you want to change Filer/Non Filer status of this new owner?');
+
+        if (!confr) {
+            return;
+        }
+
+        let own = $(this).attr('data-own');
+        let chc = $(this).is(':checked');
+        let that = $(this);
+
+        $.ajax({
+            type: "POST",
+            url: '/Transfer/UpdatePlotTransferFilerStatus/',
+            data: { owner: own, filer: chc },
+            success: function (data) {
+                alert("Status changed successfully");
+                window.location.reload();
+            },
+            error: function () {
+                alert("Failed to change status. Please try again");
+                $(that).prop('checked', !chc);
+            }
+        });
+
+    });
+
+    $(document).ready(function () {
+        //Yahan seller exempt ka kro
+        $('#sl-tax-exe').unbind().change(function () {
+            if ($(this).is(':checked')) {
+                $('.slr-exe-rzn-area').show();
+            }
+            else {
+                $('.slr-exe-rzn-area').hide();
+                $('.slr-exe-rzn').val('');
+            }
+            $('.slr-exe-stat').parent().show();
+        });
+
+        $('.slr-exe-stat').unbind().click(function () {
+            if (!confirm('Are you sure you want to update exemption status?')) {
+                return;
+            }
+
+            let grp = $(this).attr('data-grp');
+            $.ajax({
+                type: "POST",
+                url: '/Transfer/UpdateTaxExemptionStatus/',
+                data: { grp: grp, tp: false, enable: $('#sl-tax-exe').is(':checked'), rzn: $('.slr-exe-rzn').val() },
+                success: function (data) {
+                    if (data) {
+                        alert("Status updated successfully.");
+                        window.location.reload(true);
+                    }
+                    else {
+                        alert("Failed to update status.");
+                    }
+                }
+                , error: function (xmlhttprequest, textstatus, message) {
+                    if (textstatus === "timeout") {
+                        alert("got timeout");
+                    } else {
+                        alert(textstatus);
+                    }
+                }
+            });
+        });
+
+        // yahan buyer exempt ka kro
+        $('#buy-tax-exe').unbind().change(function () {
+            if ($(this).is(':checked')) {
+                $('.byr-exe-rzn-area').show();
+
+            }
+            else {
+                $('.byr-exe-rzn-area').hide();
+                $('.byr-exe-rzn').val('');
+            }
+            $('.byr-exe-stat').parent().show();
+        });
+
+        $('.byr-exe-stat').unbind().click(function () {
+            if (!confirm('Are you sure you want to update exemption status?')) {
+                return;
+            }
+
+            let grp = $(this).attr('data-grp');
+            $.ajax({
+                type: "POST",
+                url: '/Transfer/UpdateTaxExemptionStatus/',
+                data: { grp: grp, tp: true, enable: $('#buy-tax-exe').is(':checked'), rzn: $('.byr-exe-rzn').val() },
+                success: function (data) {
+                    if (data) {
+                        alert("Status has been updated successfully.");
+                        window.location.reload(true);
+                    }
+                    else {
+                        alert("Failed to update status.");
+                    }
+                }
+                , error: function (xmlhttprequest, textstatus, message) {
+                    if (textstatus === "timeout") {
+                        alert("got timeout");
+                    } else {
+                        alert(textstatus);
+                    }
+                }
+            });
+        });
+
+        $('.snd-to-fd-plt').unbind().click(function () {
+            if (!confirm('Are you sure you want to send this request back to the counter?')) {
+                return;
+            }
+
+            let grp = $(this).attr('data-trans');
+            $.ajax({
+                type: "POST",
+                url: '/Transfer/SendBackToCounter/',
+                data: { Id: grp, Module: 'PlotManagement' },
+                success: function (data) {
+                    if (data) {
+                        alert("Request sent back to front desk.");
+                        window.location.reload(true);
+                    }
+                    else {
+                        alert("Failed to send this request to front desk.");
+                    }
+                }
+                , error: function (xmlhttprequest, textstatus, message) {
+                    if (textstatus === "timeout") {
+                        alert("got timeout");
+                    } else {
+                        alert(textstatus);
+                    }
+                }
+            });
+        });
+
+        $('.bio-verif-buyer-plt').unbind().click(function () {
+            let grp = $(this).attr('data-trans');
+            window.open('/Biometric/BioAuthSetting?Id=' + grp + '&module=PlotManagement&tp=Transfer', true);
+        });
+    });
+</script>

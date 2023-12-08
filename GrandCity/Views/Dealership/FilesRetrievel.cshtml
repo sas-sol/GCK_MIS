@@ -1,0 +1,49 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Sp_Get_Printed_FilesFormsNumber_Result>
+
+<style>
+    .scrolling-box {
+        height: 311px;
+        overflow-y: scroll;
+        overflow-x: scroll;
+        width: 100%;
+    }
+
+    table thead tr th, table tbody tr td {
+        font-size: 12px;
+    }
+</style>
+<div class="col-md-5" style="margin-left:30%">
+    <table id="dataTable" class="table table-striped table-bordered" cellspacing="0" width="100%">
+        <thead class="thead-light">
+            <tr>
+                <th>Plot Size</th>
+                <th>File Number</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (!Model.Any())
+            {
+
+            <tr><td colspan="2" style="text-align:center">No files register yet</td></tr>
+            }
+            else
+            {
+
+                foreach (var item in Model)
+                {
+                    <tr class="deal" id="@item.Id">
+                        <td>@item.Plot_Size</td>
+                        <td>@item.FileFormNumber</td>
+                    </tr>
+                }
+
+            }
+
+        </tbody>
+    </table>
+</div>
+
+
+
+
+

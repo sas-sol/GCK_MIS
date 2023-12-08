@@ -1,0 +1,1010 @@
+﻿@model MeherEstateDevelopers.Models.DailyCashRep
+<style>
+    @@media print {
+        table, tr, td, th {
+            padding: 1px !important;
+        }
+    }
+</style>
+<div class="row">
+    <div class="col-md-12">
+        <div class="bgc-white bd bdrs-3 p-20 mB-20">
+            <h4 class="c-grey-900 mB-20">Pending Day Close Cash Report</h4>
+            <a href="#" class="btn btn-primary" id="test" onClick="convert()">Download</a>
+            <div id="result">
+
+
+                <table class="table table-striped table-bordered" cellspacing="0" width="100%">
+                    <thead>
+                        <tr>
+                            <th>Meher Estate Developers Recovery Report</th>
+                            <th>
+                                @{
+                                    if (ViewBag.From == ViewBag.To)
+                                    {
+                                        <span>@string.Format("{0:D}", ViewBag.From)</span>
+                                    }
+                                    else
+                                    {
+                                        <span>@string.Format("{0:D}", ViewBag.From) - @string.Format("{0:D}", ViewBag.To)  </span>
+                                    }
+                                }
+
+                            </th>
+                        </tr>
+                    </thead>
+                </table>
+                @{
+                    if (Model.FileCollection.Any())
+                    {
+                        <table class="table table-striped table-bordered" cellspacing="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <th colspan="2">Name: </th>
+                                    <th colspan="5">@ViewBag.Name</th>
+                                    <th colspan="9">Sher Afghan Recovery</th>
+                                </tr>
+                                <tr>
+                                    <th>Sr.</th>
+                                    <th>Amount</th>
+                                    <th>Receipt No.</th>
+                                    <th>File</th>
+                                    <th>Block</th>
+                                    <th>Plot Type</th>
+                                    <th>Dealership</th>
+                                    <th>Cash/Bank</th>
+                                    <th>Bank</th>
+                                    <th>No.</th>
+                                    <th>Inst Date</th>
+                                    <th>Name</th>
+                                    <th>Contact</th>
+                                    <th>Type</th>
+                                    <th>Project</th>
+                                    <th>Time</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+
+                                    int srcount = 1;
+                                    foreach (var item in Model.FileCollection)
+                                    {
+
+                                        <tr>
+                                            <td>@srcount</td>
+                                            <td>@string.Format("{0:n0}", item.Amount)</td>
+                                            <td>@item.ReceiptNo</td>
+                                            <td>@item.File_Plot_Number</td>
+                                            <td>@item.Block</td>
+                                            <td>@item.Plot_Type</td>
+                                            <td>@item.Dealership_Name</td>
+                                            <td>@item.PaymentType</td>
+                                            <td>@item.Bank</td>
+                                            <td>@item.Ch_Pay_Draft_No</td>
+                                            <td>@item.Ch_Pay_Draft_Date</td>
+                                            <td>@item.Name</td>
+                                            <td>@item.Contact</td>
+                                            <td>@item.Type</td>
+                                            <td>@item.Project</td>
+                                            <td>@string.Format("{0:dd-MMM-yyyy t}", item.DateTime)</td>
+                                        </tr>
+                                        srcount++;
+                                    }
+                                }
+
+                                <tr>
+                                    <th>Total</th>
+                                    <td>@string.Format("{0:n0}", Model.File_Total)</td>
+                                    <th>Cash</th>
+                                    <td>@string.Format("{0:n0}", Model.File_Cash)</td>
+                                    <th>Cheques</th>
+                                    <td>@string.Format("{0:n0}", Model.File_Cheque)</td>
+                                    <th>Payorders</th>
+                                    <td>@string.Format("{0:n0}", Model.File_PayOrder)</td>
+                                    <th>Bank Draft</th>
+                                    <td>@string.Format("{0:n0}", Model.File_BankDraft)</td>
+                                    <th>Online</th>
+                                    <td>@string.Format("{0:n0}", Model.File_Online)</td>
+                                    <td colspan="4"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <hr />
+                    }
+                }
+
+                @{
+                    if (Model.FileTransferCollection.Any())
+                    {
+                        <table class="table table-striped table-bordered" cellspacing="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <th colspan="2">Name: </th>
+                                    <th colspan="3">@ViewBag.Name</th>
+                                    <th colspan="10">Sher Afghan Transfer Collection</th>
+                                </tr>
+                                <tr>
+                                    <th>Sr.</th>
+                                    <th>Amount</th>
+                                    <th>Receipt No.</th>
+                                    <th>Plot No.</th>
+                                    <th>Block</th>
+                                    <th>Plot Type</th>
+                                    <th>Dealership</th>
+                                    <th>Cash/Bank</th>
+                                    <th>Bank</th>
+                                    <th>No.</th>
+                                    <th>inst Date</th>
+                                    <th>Name</th>
+                                    <th>Contact</th>
+                                    <th>Type</th>
+                                    <th>Time</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+                                    int srcount = 1;
+                                    foreach (var item in Model.FileTransferCollection)
+                                    {
+                                        <tr>
+                                            <td>@srcount</td>
+                                            <td>@string.Format("{0:n0}", item.Amount)</td>
+                                            <td>@item.ReceiptNo</td>
+                                            <td>@item.File_Plot_Number</td>
+                                            <td>@item.Block</td>
+                                            <td>@item.Plot_Type</td>
+                                            <td>@item.Dealership_Name</td>
+                                            <td>@item.PaymentType</td>
+                                            <td>@item.Bank</td>
+                                            <td>@item.Ch_Pay_Draft_No</td>
+                                            <td>@item.Ch_Pay_Draft_Date</td>
+                                            <td>@item.Name</td>
+                                            <td>@item.Contact</td>
+                                            <td>@item.Type</td>
+                                            <td>@string.Format("{0:dd-MMM-yyyy t}", item.DateTime)</td>
+                                        </tr>
+                                        srcount++;
+                                    }
+                                }
+                                <tr>
+                                    <th>Total</th>
+                                    <td>@string.Format("{0:n0}", Model.Ft_Total)</td>
+                                    <th>Cash</th>
+                                    <td>@string.Format("{0:n0}", Model.Ft_Cash)</td>
+                                    <th>Cheques</th>
+                                    <td>@string.Format("{0:n0}", Model.Ft_Cheque)</td>
+                                    <th>Payorders</th>
+                                    <td>@string.Format("{0:n0}", Model.Ft_PayOrder)</td>
+                                    <th>Bank Draft</th>
+                                    <td>@string.Format("{0:n0}", Model.Ft_BankDraft)</td>
+                                    <th>Online</th>
+                                    <td>@string.Format("{0:n0}", Model.Ft_Online)</td>
+                                    <td colspan="3"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <hr />
+                    }
+                }
+
+                @{
+                    if (Model.PlotCollection.Any())
+                    {
+                        <table class="table table-striped table-bordered" cellspacing="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <th colspan="2">Name: </th>
+                                    <th colspan="3">@ViewBag.Name</th>
+                                    <th colspan="10">Plot Recovery</th>
+                                </tr>
+                                <tr>
+                                    <th>Sr.</th>
+                                    <th>Amount</th>
+                                    <th>Receipt No.</th>
+                                    <th>Plot No.</th>
+                                    <th>Block</th>
+                                    <th>Plot Type</th>
+                                    <th>Cash/Bank</th>
+                                    <th>Bank</th>
+                                    <th>No.</th>
+                                    <th>inst Date</th>
+                                    <th>Name</th>
+                                    <th>Contact</th>
+                                    <th>Type</th>
+                                    <th>Project</th>
+                                    <th>Time</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+                                    int srcount = 1;
+                                    foreach (var item in Model.PlotCollection)
+                                    {
+                                        <tr>
+                                            <td>@srcount</td>
+                                            <td>@string.Format("{0:n0}", item.Amount)</td>
+                                            <td>@item.ReceiptNo</td>
+                                            <td>@item.File_Plot_Number</td>
+                                            <td>@item.Block</td>
+                                            <td>@item.Plot_Type</td>
+                                            <td>@item.PaymentType</td>
+                                            <td>@item.Bank</td>
+                                            <td>@item.Ch_Pay_Draft_No</td>
+                                            <td>@item.Ch_Pay_Draft_Date</td>
+                                            <td>@item.Name</td>
+                                            <td>@item.Contact</td>
+                                            <td>@item.Type</td>
+                                            <td>@item.Project</td>
+                                            <td>@string.Format("{0:dd-MMM-yyyy t}", item.DateTime)</td>
+                                        </tr>
+                                        srcount++;
+                                    }
+                                }
+                                <tr>
+                                    <th>Total</th>
+                                    <td>@string.Format("{0:n0}", Model.Plot_Total)</td>
+                                    <th>Cash</th>
+                                    <td>@string.Format("{0:n0}", Model.Plot_Cash)</td>
+                                    <th>Cheques</th>
+                                    <td>@string.Format("{0:n0}", Model.Plot_Cheque)</td>
+                                    <th>Payorders</th>
+                                    <td>@string.Format("{0:n0}", Model.Plot_PayOrder)</td>
+                                    <th>Bank Draft</th>
+                                    <td>@string.Format("{0:n0}", Model.Plot_BankDraft)</td>
+                                    <th>Online</th>
+                                    <td>@string.Format("{0:n0}", Model.Plot_Online)</td>
+                                    <td colspan="3"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <hr />
+                    }
+                }
+                @{
+                    if (Model.PlotsTransferCollection.Any())
+                    {
+                        <table class="table table-striped table-bordered" cellspacing="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <th colspan="2">Name: </th>
+                                    <th colspan="3">@ViewBag.Name</th>
+                                    <th colspan="9">Plots Transfer Collection</th>
+                                </tr>
+                                <tr>
+                                    <th>Sr.</th>
+                                    <th>Amount</th>
+                                    <th>Receipt No.</th>
+                                    <th>Plot No.</th>
+                                    <th>Block</th>
+                                    <th>Plot Type</th>
+                                    <th>Cash/Bank</th>
+                                    <th>Bank</th>
+                                    <th>No.</th>
+                                    <th>inst Date</th>
+                                    <th>Name</th>
+                                    <th>Contact</th>
+                                    <th>Type</th>
+                                    <th>Time</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+                                    int srcount = 1;
+                                    foreach (var item in Model.PlotsTransferCollection)
+                                    {
+                                        <tr>
+                                            <td>@srcount</td>
+                                            <td>@string.Format("{0:n0}", item.Amount)</td>
+                                            <td>@item.ReceiptNo</td>
+                                            <td>@item.File_Plot_Number</td>
+                                            <td>@item.Block</td>
+                                            <td>@item.Plot_Type</td>
+                                            <td>@item.PaymentType</td>
+                                            <td>@item.Bank</td>
+                                            <td>@item.Ch_Pay_Draft_No</td>
+                                            <td>@item.Ch_Pay_Draft_Date</td>
+                                            <td>@item.Name</td>
+                                            <td>@item.Contact</td>
+                                            <td>@item.Type</td>
+                                            <td>@string.Format("{0:dd-MMM-yyyy t}", item.DateTime)</td>
+                                        </tr>
+                                        srcount++;
+                                    }
+                                }
+                                <tr>
+                                    <th>Total</th>
+                                    <td>@string.Format("{0:n0}", Model.Pt_Total)</td>
+                                    <th>Cash</th>
+                                    <td>@string.Format("{0:n0}", Model.Pt_Cash)</td>
+                                    <th>Cheques</th>
+                                    <td>@string.Format("{0:n0}", Model.Pt_Cheque)</td>
+                                    <th>Payorders</th>
+                                    <td>@string.Format("{0:n0}", Model.Pt_PayOrder)</td>
+                                    <th>Bank Draft</th>
+                                    <td>@string.Format("{0:n0}", Model.Pt_BankDraft)</td>
+                                    <th>Online</th>
+                                    <td>@string.Format("{0:n0}", Model.Pt_Online)</td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <hr />
+                    }
+                }
+                @{
+                    if (Model.CommercialCollection.Any())
+                    {
+                        foreach (var projects in Model.CommercialCollection.GroupBy(x => new { x.Project }))
+                        {
+                            <table class="table table-striped table-bordered" cellspacing="0" width="100%">
+                                <thead>
+                                    <tr>
+                                        <td colspan="17">@projects.Key.Project Recovery</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Sr.</th>
+                                        <th>Amount</th>
+                                        <th>Receipt No.</th>
+                                        <th>Plot No.</th>
+                                        <th>Block</th>
+                                        <th>Plot Type</th>
+                                        <th>Size</th>
+                                        <th>Dealership</th>
+                                        <th>Cash/Bank</th>
+                                        <th>Bank</th>
+                                        <th>No.</th>
+                                        <th>inst Date</th>
+                                        <th>Name</th>
+                                        <th>Contact</th>
+                                        <th>Type</th>
+                                        <th>Project</th>
+                                        <th>Time</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{
+                                        int srcount = 1;
+                                        foreach (var item in projects)
+                                        {
+                                            string col = "";
+                                            if (item.Amount < 0)
+                                            {
+                                                col = "bgc-yellow-50";
+                                            }
+                                            <tr class="@col">
+                                                <td>@srcount</td>
+                                                <td>@string.Format("{0:n0}", item.Amount)</td>
+                                                <td>@item.ReceiptNo</td>
+                                                <td>@item.File_Plot_Number</td>
+                                                <td>@item.Block</td>
+                                                <td>@item.Plot_Type</td>
+                                                <td>@item.Size</td>
+                                                <td>@item.Dealership_Name</td>
+                                                <td>@item.PaymentType</td>
+                                                <td>@item.Bank</td>
+                                                <td>@item.Ch_Pay_Draft_No</td>
+                                                <td>@item.Ch_Pay_Draft_Date</td>
+                                                <td>@item.Name</td>
+                                                <td>@item.Contact</td>
+                                                <td>@item.Type</td>
+                                                <td>@item.Project</td>
+                                                <td>@string.Format("{0:dd-MMM-yyyy t}", item.DateTime)</td>
+                                            </tr>
+                                            srcount++;
+                                        }
+                                    }
+                                    <tr>
+                                        <th>Total</th>
+                                        <td>@string.Format("{0:n0}", Model.CommercialCollection.Where(x => x.Project == projects.Key.Project).Sum(x => x.Amount))</td>
+                                        <th>Cash</th>
+                                        <td>@string.Format("{0:n0}", Model.CommercialCollection.Where(x => x.Project == projects.Key.Project && x.PaymentType == "Cash").Sum(x => x.Amount))</td>
+                                        <th>Cheques</th>
+                                        <td>@string.Format("{0:n0}", Model.CommercialCollection.Where(x => x.Project == projects.Key.Project && x.PaymentType == "Cheque").Sum(x => x.Amount))</td>
+                                        <th>Payorders</th>
+                                        <td>@string.Format("{0:n0}", Model.CommercialCollection.Where(x => x.Project == projects.Key.Project && x.PaymentType == "PayOrder").Sum(x => x.Amount))</td>
+                                        <th>Bank Draft</th>
+                                        <td>@string.Format("{0:n0}", Model.CommercialCollection.Where(x => x.Project == projects.Key.Project && x.PaymentType == "BankDraft").Sum(x => x.Amount))</td>
+                                        <th>Online</th>
+                                        <td>@string.Format("{0:n0}", Model.CommercialCollection.Where(x => x.Project == projects.Key.Project && x.PaymentType.Contains("Online")).Sum(x => x.Amount))</td>
+                                        <td colspan="5"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        }
+                    }
+                }
+                @{
+                    if (Model.CommercialTransferCollection.Any())
+                    {
+                        foreach (var projects in Model.CommercialTransferCollection.GroupBy(x => new { x.Project }))
+                        {
+                            <table class="table table-striped table-bordered" cellspacing="0" width="100%">
+                                <thead>
+                                    <tr>
+                                        <td colspan="17">@projects.Key.Project Transfer Collection</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Sr.</th>
+                                        <th>Amount</th>
+                                        <th>Receipt No.</th>
+                                        <th>Plot No.</th>
+                                        <th>Block</th>
+                                        <th>Plot Type</th>
+                                        <th>Size</th>
+                                        <th>Dealership</th>
+                                        <th>Cash/Bank</th>
+                                        <th>Bank</th>
+                                        <th>No.</th>
+                                        <th>inst Date</th>
+                                        <th>Name</th>
+                                        <th>Contact</th>
+                                        <th>Type</th>
+                                        <th>Project</th>
+                                        <th>Time</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{
+                                        int srcount = 1;
+                                        foreach (var item in projects)
+                                        {
+                                            string col = "";
+                                            if (item.Amount < 0)
+                                            {
+                                                col = "bgc-yellow-50";
+                                            }
+                                            <tr class="@col">
+                                                <td>@srcount</td>
+                                                <td>@string.Format("{0:n0}", item.Amount)</td>
+                                                <td>@item.ReceiptNo</td>
+                                                <td>@item.File_Plot_Number</td>
+                                                <td>@item.Block</td>
+                                                <td>@item.Plot_Type</td>
+                                                <td>@item.Size</td>
+                                                <td>@item.Dealership_Name</td>
+                                                <td>@item.PaymentType</td>
+                                                <td>@item.Bank</td>
+                                                <td>@item.Ch_Pay_Draft_No</td>
+                                                <td>@item.Ch_Pay_Draft_Date</td>
+                                                <td>@item.Name</td>
+                                                <td>@item.Contact</td>
+                                                <td>@item.Type</td>
+                                                <td>@item.Project</td>
+                                                <td>@string.Format("{0:MM-dd-yyy t}", item.DateTime)</td>
+                                            </tr>
+                                            srcount++;
+                                        }
+                                    }
+                                    <tr>
+                                        <th>Total</th>
+                                        <td>@string.Format("{0:n0}", Model.CommercialTransferCollection.Where(x => x.Project == projects.Key.Project).Sum(x => x.Amount))</td>
+                                        <th>Cash</th>
+                                        <td>@string.Format("{0:n0}", Model.CommercialTransferCollection.Where(x => x.Project == projects.Key.Project && x.PaymentType == "Cash").Sum(x => x.Amount))</td>
+                                        <th>Cheques</th>
+                                        <td>@string.Format("{0:n0}", Model.CommercialTransferCollection.Where(x => x.Project == projects.Key.Project && x.PaymentType == "Cheque").Sum(x => x.Amount))</td>
+                                        <th>Payorders</th>
+                                        <td>@string.Format("{0:n0}", Model.CommercialTransferCollection.Where(x => x.Project == projects.Key.Project && x.PaymentType == "PayOrder").Sum(x => x.Amount))</td>
+                                        <th>Bank Draft</th>
+                                        <td>@string.Format("{0:n0}", Model.CommercialTransferCollection.Where(x => x.Project == projects.Key.Project && x.PaymentType == "BankDraft").Sum(x => x.Amount))</td>
+                                        <th>Online</th>
+                                        <td>@string.Format("{0:n0}", Model.CommercialTransferCollection.Where(x => x.Project == projects.Key.Project && x.PaymentType.Contains("Online")).Sum(x => x.Amount))</td>
+                                        <td colspan="5"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        }
+                    }
+                }
+
+                @{
+                    if (Model.ServiceChargesCollection.Any())
+                    {
+                        <table class="table table-striped table-bordered" cellspacing="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <th colspan="2">Name: </th>
+                                    <th colspan="3">@ViewBag.Name</th>
+                                    <th colspan="10">Service Charges Recovery</th>
+                                </tr>
+                                <tr>
+                                    <th>Sr.</th>
+                                    <th>Amount</th>
+                                    <th>Receipt No.</th>
+                                    <th>Plot No.</th>
+                                    <th>Block</th>
+                                    <th>Plot Type</th>
+                                    <th>Cash/Bank</th>
+                                    <th>Bank</th>
+                                    <th>No.</th>
+                                    <th>inst Date</th>
+                                    <th>Name</th>
+                                    <th>Contact</th>
+                                    <th>Type</th>
+                                    <th>Project</th>
+                                    <th>Time</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+                                    int srcount = 1;
+                                    foreach (var item in Model.ServiceChargesCollection)
+                                    {
+                                        <tr>
+                                            <td>@srcount</td>
+                                            <td>@string.Format("{0:n0}", item.Amount)</td>
+                                            <td>@item.ReceiptNo</td>
+                                            <td>@item.File_Plot_Number</td>
+                                            <td>@item.Block</td>
+                                            <td>@item.Plot_Type</td>
+                                            <td>@item.PaymentType</td>
+                                            <td>@item.Bank</td>
+                                            <td>@item.Ch_Pay_Draft_No</td>
+                                            <td>@item.Ch_Pay_Draft_Date</td>
+                                            <td>@item.Name</td>
+                                            <td>@item.Contact</td>
+                                            <td>@item.Type</td>
+                                            <td>@item.Project</td>
+                                            <td>@string.Format("{0:dd-MMM-yyyy t}", item.DateTime)</td>
+                                        </tr>
+                                        srcount++;
+                                    }
+                                }
+                                <tr>
+                                    <th>Total</th>
+                                    <td>@string.Format("{0:n0}", Model.Ser_Total)</td>
+                                    <th>Cash</th>
+                                    <td>@string.Format("{0:n0}", Model.Ser_Cash)</td>
+                                    <th>Cheques</th>
+                                    <td>@string.Format("{0:n0}", Model.Ser_Cheque)</td>
+                                    <th>Payorders</th>
+                                    <td>@string.Format("{0:n0}", Model.Ser_PayOrder)</td>
+                                    <th>Bank Draft</th>
+                                    <td>@string.Format("{0:n0}", Model.Ser_BankDraft)</td>
+                                    <th>Online</th>
+                                    <td>@string.Format("{0:n0}", Model.Ser_Online)</td>
+                                    <td colspan="3"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <hr />
+                    }
+                }
+                @{
+                    if (Model.Advance_236_C_Collection.Any())
+                    {
+                        <table class="table table-striped table-bordered" cellspacing="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <td colspan="16">Advance Tax 236 C - Seller</td>
+                                </tr>
+                                <tr>
+                                    <th>Sr.</th>
+                                    <th>Amount</th>
+                                    <th>Receipt No.</th>
+                                    <th>Plot No.</th>
+                                    <th>Block</th>
+                                    <th>Plot Type</th>
+                                    <th>Size</th>
+                                    <th>Cash/Bank</th>
+                                    <th>Bank</th>
+                                    <th>No.</th>
+                                    <th>inst Date</th>
+                                    <th>Name</th>
+                                    <th>Contact</th>
+                                    <th>Type</th>
+                                    <th>CNIC</th>
+                                    <th>Time</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+                                    int srcount = 1;
+                                    foreach (var item in Model.Advance_236_C_Collection)
+                                    {
+                                        string col = "";
+                                        if (item.Amount < 0)
+                                        {
+                                            col = "bgc-yellow-50";
+                                        }
+                                        <tr class="@col">
+                                            <td>@srcount</td>
+                                            <td>@string.Format("{0:n0}", item.Amount)</td>
+                                            <td>@item.ReceiptNo</td>
+                                            <td>@item.File_Plot_Number</td>
+                                            <td>@item.Block</td>
+                                            <td>@item.Plot_Type</td>
+                                            <td>@item.Size</td>
+                                            <td>@item.PaymentType</td>
+                                            <td>@item.Bank</td>
+                                            <td>@item.Ch_Pay_Draft_No</td>
+                                            <td>@item.Ch_Pay_Draft_Date</td>
+                                            <td>@item.Name</td>
+                                            <td>@item.Contact</td>
+                                            <td>@item.Type</td>
+                                            <td>@item.Project</td>
+                                            <td>@string.Format("{0:MM-dd-yyy t}", item.DateTime)</td>
+
+                                        </tr>
+                                        srcount++;
+                                    }
+                                }
+                                <tr>
+                                    <th>Total</th>
+                                    <td>@string.Format("{0:n0}", Model.Ad_C_Total)</td>
+                                    <th>Cash</th>
+                                    <td>@string.Format("{0:n0}", Model.Ad_C_Cash)</td>
+                                    <th>Cheques</th>
+                                    <td>@string.Format("{0:n0}", Model.Ad_C_Cheque)</td>
+                                    <th>Payorders</th>
+                                    <td>@string.Format("{0:n0}", Model.Ad_C_PayOrder)</td>
+                                    <th>Bank Draft</th>
+                                    <td>@string.Format("{0:n0}", Model.Ad_C_BankDraft)</td>
+                                    <th>Online</th>
+                                    <td>@string.Format("{0:n0}", Model.Ad_C_Online)</td>
+                                    <td colspan="4"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <hr />
+                    }
+                }
+                @{
+                    if (Model.Advance_236_K_Collection.Any())
+                    {
+                        <table class="table table-striped table-bordered" cellspacing="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <td colspan="16">Advance Tax 236 K - Buyer</td>
+                                </tr>
+                                <tr>
+                                    <th>Sr.</th>
+                                    <th>Amount</th>
+                                    <th>Receipt No.</th>
+                                    <th>Plot No.</th>
+                                    <th>Block</th>
+                                    <th>Type</th>
+                                    <th>Size</th>
+                                    <th>Cash/Bank</th>
+                                    <th>Bank</th>
+                                    <th>No.</th>
+                                    <th>inst Date</th>
+                                    <th>Name</th>
+                                    <th>Contact</th>
+                                    <th>Type</th>
+                                    <th>CNIC</th>
+                                    <th>Time</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+                                    int srcount = 1;
+                                    foreach (var item in Model.Advance_236_K_Collection)
+                                    {
+                                        string col = "";
+                                        if (item.Amount < 0)
+                                        {
+                                            col = "bgc-yellow-50";
+                                        }
+                                        <tr class="@col">
+                                            <td>@srcount</td>
+                                            <td>@string.Format("{0:n0}", item.Amount)</td>
+                                            <td>@item.ReceiptNo</td>
+                                            <td>@item.File_Plot_Number</td>
+                                            <td>@item.Block</td>
+                                            <td>@item.Plot_Type</td>
+                                            <td>@item.Size</td>
+                                            <td>@item.PaymentType</td>
+                                            <td>@item.Bank</td>
+                                            <td>@item.Ch_Pay_Draft_No</td>
+                                            <td>@item.Ch_Pay_Draft_Date</td>
+                                            <td>@item.Name</td>
+                                            <td>@item.Contact</td>
+                                            <td>@item.Type</td>
+                                            <td>@item.Project</td>
+                                            <td>@string.Format("{0:MM-dd-yyy t}", item.DateTime)</td>
+                                        </tr>
+                                        srcount++;
+                                    }
+                                }
+                                <tr>
+                                    <th>Total</th>
+                                    <td>@string.Format("{0:n0}", Model.Ad_K_Total)</td>
+                                    <th>Cash</th>
+                                    <td>@string.Format("{0:n0}", Model.Ad_K_Cash)</td>
+                                    <th>Cheques</th>
+                                    <td>@string.Format("{0:n0}", Model.Ad_K_Cheque)</td>
+                                    <th>Payorders</th>
+                                    <td>@string.Format("{0:n0}", Model.Ad_K_PayOrder)</td>
+                                    <th>Bank Draft</th>
+                                    <td>@string.Format("{0:n0}", Model.Ad_K_BankDraft)</td>
+                                    <th>Online</th>
+                                    <td>@string.Format("{0:n0}", Model.Ad_K_Online)</td>
+                                    <td colspan="4"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <hr />
+                    }
+                }
+                @{
+                    if (Model.ArchiFees.Any())
+                    {
+                        <table class="table table-striped table-bordered" cellspacing="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <td colspan="16">Architecture Receipts</td>
+                                </tr>
+                                <tr>
+                                    <th>Sr.</th>
+                                    <th>Amount</th>
+                                    <th>Receipt No.</th>
+                                    <th>Plot No.</th>
+                                    <th>Block</th>
+                                    <th>Type</th>
+                                    <th>Size</th>
+                                    <th>Cash/Bank</th>
+                                    <th>Bank</th>
+                                    <th>No.</th>
+                                    <th>inst Date</th>
+                                    <th>Name</th>
+                                    <th>Contact</th>
+                                    <th>Type</th>
+                                    <th>CNIC</th>
+                                    <th>Time</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+                                    int srcount = 1;
+                                    foreach (var item in Model.ArchiFees)
+                                    {
+                                        string col = "";
+                                        if (item.Amount < 0)
+                                        {
+                                            col = "bgc-yellow-50";
+                                        }
+                                        <tr class="@col">
+                                            <td>@srcount</td>
+                                            <td>@string.Format("{0:n0}", item.Amount)</td>
+                                            <td>@item.ReceiptNo</td>
+                                            <td>@item.File_Plot_Number</td>
+                                            <td>@item.Block</td>
+                                            <td>@item.Plot_Type</td>
+                                            <td>@item.Size</td>
+                                            <td>@item.PaymentType</td>
+                                            <td>@item.Bank</td>
+                                            <td>@item.Ch_Pay_Draft_No</td>
+                                            <td>@item.Ch_Pay_Draft_Date</td>
+                                            <td>@item.Name</td>
+                                            <td>@item.Contact</td>
+                                            <td>@item.Type</td>
+                                            <td>@item.Project</td>
+                                            <td>@string.Format("{0:MM-dd-yyy t}", item.DateTime)</td>
+                                        </tr>
+                                        srcount++;
+                                    }
+                                }
+                                <tr>
+                                    <th>Total</th>
+                                    <td>@string.Format("{0:n0}", Model.ArchiFees.Sum(x => x.Amount))</td>
+                                    <th>Cash</th>
+                                    <td>@string.Format("{0:n0}", Model.ArchiFees.Sum(x => x.Amount))</td>
+                                    <th>Cheques</th>
+                                    <td>@string.Format("{0:n0}", 0)</td>
+                                    <th>Payorders</th>
+                                    <td>@string.Format("{0:n0}", 0)</td>
+                                    <th>Bank Draft</th>
+                                    <td>@string.Format("{0:n0}", 0)</td>
+                                    <th>Online</th>
+                                    <td>@string.Format("{0:n0}", 0)</td>
+                                    <td colspan="4"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <hr />
+
+                    }
+                }
+                @{
+                    if (Model.OtherCollection.Any())
+                    {
+                        <table class="table table-striped table-bordered" cellspacing="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <td colspan="17">Other Recovery</td>
+                                </tr>
+                                <tr>
+                                    <th>Sr.</th>
+                                    <th>Amount</th>
+                                    <th>Receipt No.</th>
+                                    <th>Plot No.</th>
+                                    <th>Block</th>
+                                    <th>Plot Type</th>
+                                    <th>Size</th>
+                                    <th>Cash/Bank</th>
+                                    <th>Bank</th>
+                                    <th>No.</th>
+                                    <th>inst Date</th>
+                                    <th>Name</th>
+                                    <th>Contact</th>
+                                    <th>Type</th>
+                                    <th>Project</th>
+                                    <th>Time</th>
+                                    <th>Cashier Name</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+                                    int srcount = 1;
+                                    foreach (var item in Model.OtherCollection)
+                                    {
+                                        string col = "";
+                                        if (item.Amount < 0)
+                                        {
+                                            col = "bgc-yellow-50";
+                                        }
+                                        <tr class="@col">
+                                            <td>@srcount</td>
+                                            <td>@string.Format("{0:n0}", item.Amount)</td>
+                                            <td>@item.ReceiptNo</td>
+                                            <td>@item.File_Plot_Number</td>
+                                            <td>@item.Block</td>
+                                            <td>@item.Plot_Type</td>
+                                            <td>@item.Size</td>
+                                            <td>@item.PaymentType</td>
+                                            <td>@item.Bank</td>
+                                            <td>@item.Ch_Pay_Draft_No</td>
+                                            <td>@item.Ch_Pay_Draft_Date</td>
+                                            <td>@item.Name</td>
+                                            <td>@item.Contact</td>
+                                            <td>@item.Type</td>
+                                            <td>@item.Project</td>
+                                            <td>@string.Format("{0:MM-dd-yyy t}", item.DateTime)</td>
+                                            <td>@item.Cashier_Name</td>
+                                        </tr>
+                                        srcount++;
+                                    }
+                                }
+                                <tr>
+                                    <th>Total</th>
+                                    <td>@string.Format("{0:n0}", Model.Other_Total)</td>
+                                    <th>Cash</th>
+                                    <td>@string.Format("{0:n0}", Model.Other_Cash)</td>
+                                    <th>Cheques</th>
+                                    <td>@string.Format("{0:n0}", Model.Other_Cheque)</td>
+                                    <th>Payorders</th>
+                                    <td>@string.Format("{0:n0}", Model.Other_PayOrder)</td>
+                                    <th>Bank Draft</th>
+                                    <td>@string.Format("{0:n0}", Model.Other_BankDraft)</td>
+                                    <th>Online</th>
+                                    <td>@string.Format("{0:n0}", Model.Other_Online)</td>
+                                    <td colspan="5"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <hr />
+                    }
+                }
+                <table class="table table-striped table-bordered">
+                    <thead>
+                        <tr><th colspan="12">Grand Total</th></tr>
+                        <tr>
+                            <th>Total</th>
+                            <td>@string.Format("{0:n0}", Model.Total)</td>
+                            <th>Cash</th>
+                            <td>@string.Format("{0:n0}", Model.Cash)</td>
+                            <th>Cheques</th>
+                            <td>@string.Format("{0:n0}", Model.Cheque)</td>
+                            <th>Payorders</th>
+                            <td>@string.Format("{0:n0}", Model.PayOrder)</td>
+                            <th>Bank Draft</th>
+                            <td>@string.Format("{0:n0}", Model.BankDraft)</td>
+                            <th>Online</th>
+                            <td>@string.Format("{0:n0}", Model.Online)</td>
+                        </tr>
+                    </thead>
+                </table>
+
+                <hr />
+
+                @{
+                    if (Model.Payments.Any())
+                    {
+                        <table class="table table-striped table-bordered" cellspacing="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <td colspan="14">Payments</td>
+                                </tr>
+                                <tr>
+                                    <th>Sr.</th>
+                                    <th>Amount</th>
+                                    <th>Payment Voucher No.</th>
+                                    <th>Description</th>
+                                    <th>Cash/Bank</th>
+                                    <th>Bank</th>
+                                    <th>No.</th>
+                                    <th>inst Date</th>
+                                    <th>Name</th>
+                                    <th>Contact</th>
+                                    <th>Type</th>
+                                    <th>Project</th>
+                                    <th>Time</th>
+                                    <th>Cashier Name</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+                                    int srcount = 1;
+                                    foreach (var item in Model.Payments)
+                                    {
+                                        string col = "";
+                                        if (item.Amount < 0)
+                                        {
+                                            col = "bgc-yellow-50";
+                                        }
+                                        <tr class="@col">
+                                            <td>@srcount</td>
+                                            <td>@string.Format("{0:n0}", item.Amount)</td>
+                                            <td>@item.ReceiptNo</td>
+                                            <td>@item.Description</td>
+                                            <td>@item.PaymentType</td>
+                                            <td>@item.Bank</td>
+                                            <td>@item.Ch_Pay_Draft_No</td>
+                                            <td>@item.Ch_Pay_Draft_Date</td>
+                                            <td>@item.Name</td>
+                                            <td>@item.Contact</td>
+                                            <td>@item.Type</td>
+                                            <td>@item.Project</td>
+                                            <td>@string.Format("{0:MM-dd-yyy t}", item.DateTime)</td>
+                                            <td>@item.Cashier_Name</td>
+                                        </tr>
+                                        srcount++;
+                                    }
+                                }
+                                <tr>
+                                    <th>Total</th>
+                                    <td>@string.Format("{0:n0}", Model.Pay_Total)</td>
+                                    <th>Cash</th>
+                                    <td>@string.Format("{0:n0}", Model.Pay_Cash)</td>
+                                    <th>Cheques</th>
+                                    <td>@string.Format("{0:n0}", Model.Pay_Cheque)</td>
+                                    <th>Payorders</th>
+                                    <td>@string.Format("{0:n0}", Model.Pay_PayOrder)</td>
+                                    <th>Bank Draft</th>
+                                    <td>@string.Format("{0:n0}", Model.Pay_BankDraft)</td>
+                                    <th>Online</th>
+                                    <td>@string.Format("{0:n0}", Model.Pay_Online)</td>
+                                    <td colspan="2"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <hr />
+
+                    }
+                }
+                <table class="table table-striped table-bordered">
+                    <thead>
+                        <tr><th colspan="12">Net Total</th></tr>
+                        <tr>
+                            <th>Total</th>
+                            <td>@string.Format("{0:n0}", Model.Grand_Total)</td>
+                            <th>Cash</th>
+                            <td>@string.Format("{0:n0}", Model.Grand_Cash)</td>
+                            <th>Cheques</th>
+                            <td>@string.Format("{0:n0}", Model.Grand_Cheque)</td>
+                            <th>Payorders</th>
+                            <td>@string.Format("{0:n0}", Model.Grand_PayOrder)</td>
+                            <th>Bank Draft</th>
+                            <td>@string.Format("{0:n0}", Model.Grand_BankDraft)</td>
+                            <th>Online</th>
+                            <td>@string.Format("{0:n0}", Model.Grand_Online)</td>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

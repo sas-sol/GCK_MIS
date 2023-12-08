@@ -1,0 +1,52 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.RecoveryReport>
+<table id="result" class="table table-striped table-bordered" cellspacing="0" width="100%">
+    <thead>
+        <tr>
+            <th class="col-date">Date</th>
+            <th class="col-name">Name</th>
+            <th class="col-rece">Receipt No</th>
+            <th class="col-file">File/Plot</th>
+            <th class="col-amt">Amount</th>
+            <th class="col-mod">Mode</th>
+            <th class="col-type">Type</th>
+            <th class="col-size">Size</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            if (Model.Any())
+            {
+                foreach (var item in Model.OrderBy(x=> x.Amount).OrderBy(x=> x.DateTime ))
+                {
+                    <tr class="pointer" id="@item.Id">
+                        <td class="col-date">@string.Format("{0:MM/dd/yyyy}", item.DateTime)</td>
+                        <td class="col-name">@item.Name</td>
+                        <td class="col-rece"><input class="recup" value="@item.ReceiptNo" /></td>
+                        <td class="col-file">@item.File_Plot_No</td>
+                        <td class="col-amt">@string.Format("{0:n0}", item.Amount)</td>
+                        <td class="col-mod">@item.PaymentType</td>
+                        <td class="col-type">@item.Type</td>
+                        <td class="col-size">@item.Size</td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="10">No Record Found</td>
+                </tr>
+            }
+        }
+
+    </tbody>
+</table>
+<script>
+    //....
+    $(document).on("keyup", ".recup", function () {
+
+        var id = $(this).closest('tr').attr('id');
+        var rec = $(this).val();
+        $.post('/Installments/UpdateReceiptNo/', { Id: id, Rec: rec }, function () { });
+
+    });
+</script>

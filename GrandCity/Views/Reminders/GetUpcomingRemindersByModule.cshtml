@@ -1,0 +1,57 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.MIS_Reminders>
+
+    <div class="col-md-12">
+
+        @if (Model.Any())
+        {
+            <div class="row mb-md-2 mt-md-2 p-3" style="background-color:#000;color:white;">
+                <div class="col-md-2"><b>Rem#</b></div>
+                <div class="col-md-6"><b>Title</b></div>
+                <div class="col-md-4"><b>Remind On</b></div>
+            </div>
+            foreach (var v in Model.OrderByDescending(x => x.RemindOn))
+            {
+                string stat = string.Empty;
+                if (v.Status == "Closed")
+                {
+                    stat = "bgc-red-50";
+                }
+                else
+                {
+                    stat = "bgc-green-50";
+                }
+                <div class="row p-3 hover-feel pointer rmnd-part-dets @stat" style="font-size:10px;" data-toggle="modal" data-target="#Modal" title="View Details" data-remind="@v.Id">
+                    <div class="col-md-2">@v.ReminderNo</div>
+                    <div class="col-md-6">@v.Title</div>
+                    <div class="col-md-4">@v.RemindOn</div>
+                </div>
+                <hr />
+            }
+        }
+        else
+        {
+            <h5 class="bgc-red-50 mt-md-3" style="text-align:center">No Reminders Added Yet</h5>
+        }
+    </div>
+<script>
+    $(document).ready(function () {
+        $('.rmnd-part-dets').unbind().click(function () {
+            EmptyModel();
+            $('#ModalLabel').text("Reminder Details");
+            $('#modalbody').load('/Reminders/ReminderDetailsPartial/', { rem: $(this).attr('data-remind') });
+        });
+    });
+</script>
+
+<style>
+    .hover-feel:hover {
+        transform: scale(1.05);
+        transition: .5s linear;
+        box-shadow: 5px 5px #888888;
+        /*font-size:14px !important;*/
+    }
+
+    .hover-feel {
+        transition: .5s linear;
+    }
+</style>

@@ -1,0 +1,114 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Sp_Get_Inventory_Report_Result>
+
+<h5>@Model.Select(x => x.SKU).FirstOrDefault() - @Model.Select(x => x.Item_Name).FirstOrDefault()</h5>
+<hr />
+
+<div class="col-md-12">
+    <ul class="nav nav-tabs" role="tablist" id="myTabs">
+        @{
+            int j = 1;
+        }
+        @foreach (var item in Model.GroupBy(x => x.Dep_Name))
+        {
+            string active = "";
+            if (j == 1)
+            {
+                active = "active";
+            }
+            <li class="nav-item"><a class="nav-link leads-data active" data-lead="1" role="tab" data-toggle="tab" href="#@item.Key.Replace(" ", "_")">@item.Key</a></li>
+            j++;
+        }
+    </ul>
+    <div class="tab-content">
+        @{ 
+            int k = 1;
+        }
+        @foreach (var g in Model.GroupBy(x => x.Dep_Name))
+        {
+            string active = "";
+            if(k == 1)
+            {
+                active = "active";
+            }
+            <div role="tabpanel" id="@g.Key.Replace(" ", "_")" class="tab-pane p-20 table-responsive @active">
+                <table class="table table-striped table-bordered inv-rep" cellspacing="0" width="100%" style="margin-left:0%">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>Sr.</th>
+                            <th>In</th>
+                            <th>Out</th>
+                            <th>UOM</th>
+                            <th>Project</th>
+                            <th>Vendor</th>
+                            <th>Date</th>
+                            <th>Warehouse</th>
+                            <th>Name</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            if (g.Any())
+                            {
+                                int i = 1;
+                                foreach (var item in g.OrderBy(x => x.DATETIME))
+                                {
+                                    string color = "";
+                                    if (item.In_Out == 1)
+                                    {
+                                        color = "bgc-green-50";
+                                    }
+                                    else
+                                    {
+                                        color = "bgc-red-50";
+                                    }
+                                    <tr id="@item.Id" class="@color">
+                                        <td>@i</td>
+                                        @if (item.In_Out == 1)
+                                        {
+                                            <td>@item.Qty</td>
+                                            <td>-</td>
+                                        }
+                                        else
+                                        {
+                                            <td>-</td>
+                                            <td>@item.Qty</td>
+                                        }
+                                        <td>@item.UOM</td>
+                                        <td>@item.Prj</td>
+                                        <td>@item.Vendor_Name</td>
+                                        <td>@string.Format("{0:dd-MMM-yyyy}", item.DATETIME)</td>
+                                        <td>@item.Warehouse_Name</td>
+                                        <td>@item.UserName</td>
+                                    </tr>
+                                    i++;
+                                }
+                                var t_in = g.Where(x => x.In_Out == 1).Sum(x => x.Qty);
+                                var t_out = g.Where(x => x.In_Out == 0).Sum(x => x.Qty);
+                                <tr>
+                                    <td></td>
+                                    <td>@t_in</td>
+                                    <td>@t_out</td>
+                                    <td>@(t_in - t_out)</td>
+                                    <td colspan="5"></td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+                                k++;
+                            }
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('#inv-rep').DataTable({
+            ordering: false
+        });
+
+        $('.nav .nav-item a').first().addClass('active');
+        $('.tab-content .tab-pane').first().addClass('active');
+
+    });
+</script>

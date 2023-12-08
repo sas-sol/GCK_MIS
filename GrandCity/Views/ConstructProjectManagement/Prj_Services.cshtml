@@ -1,0 +1,222 @@
+﻿@model MeherEstateDevelopers.Models.Project_Services
+    <div class="col-md-12">
+        @if (ViewBag.Prj_Type == "Recurring")
+        {
+            <div class="form-group row">
+                <button type="submit" class="btn btn-info ser-req col-md-6"><i class="fas fa-clipboard-list"></i> Services Requisition</button>
+                @if (User.IsInRole("Service Requisition For Others"))
+                {
+                    <button type="submit" class="btn btn-info ser-req-other col-md-6"><i class="fas fa-clipboard-list"></i> Services Requisition For Other</button>
+                }
+            </div>
+        }
+        else
+        {
+            <div class="row">
+                @if (ViewBag.Depart == "Development")
+                {
+                    <div class="form-group col-md-3">
+                        <button type="submit" class="btn btn-info ser-dev-req"><i class="fas fa-clipboard-list"></i> Services Requisition</button>
+                    </div>
+                }
+                else
+                {
+                    <div class="form-group col-md-3">
+                        <button type="submit" class="btn btn-info ser-m-req"><i class="fas fa-clipboard-list"></i> Services Requisition</button>
+                    </div>
+                }
+                @if (User.IsInRole("Service Requisition For Others"))
+                {
+                    <div class="form-group col-md-5">
+                        <button type="submit" class="btn btn-info ser-req-other col-md-6"><i class="fas fa-clipboard-list"></i> Services Requisition For Other</button>
+                    </div>
+                }
+            </div>
+        }
+
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item"><a class="nav-link active" role="tab" data-toggle="tab" data-lead="1" aria-controls="home" aria-selected="true" href="#assigned">Requisitions</a></li>
+            <li class="nav-item"><a class="nav-link" role="tab" data-toggle="tab" data-lead="1" aria-controls="home" aria-selected="true" href="#created">Services/Work Orders</a></li>
+        </ul>
+        <div class="tab-content">
+            <div id="assigned" class="tab-pane active">
+                <div class="p-20">
+                    <table class="table table-bordered" id="inv" width="100%">
+                        <thead>
+                            <tr>
+                                <th width="10%">Sr.</th>
+                                <th width="10%">Date</th>
+                                <th width="10%">Status</th>
+                                <th width="15%">Requested By</th>
+                                <th width="55%">Services</th>
+                                <th width="10%"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model.Req.Any())
+                            {
+                                int sr = 1;
+                                foreach (var v in Model.Req.GroupBy(x => new { x.Group_Id, x.DateTime, x.RequestedBy_Name, x.Status }))
+                                {
+                                    <tr class="pointer exp-dfkhjsa">
+                                        <td>@(sr++)</td>
+                                        <td>@string.Format("{0:dd-MMM-yyyy}", v.Key.DateTime)</td>
+                                        <td>@v.Key.Status</td>
+                                        <td>@v.Key.RequestedBy_Name</td>
+                                        <td class="tdscrol">
+                                            <table class="table table-bordered" style="margin-bottom:0px; border:none">
+                                                <thead>
+                                                    <tr>
+                                                        <th width="5%">Sr.</th>
+                                                        <th width="85%">Service Name</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @{int count = 1;}
+                                                    @foreach (var item in v)
+                                                    {
+                                                        <tr>
+                                                            <td>@(count++)</td>
+                                                            <td>@item.Item_Name</td>
+                                                        </tr>
+                                                    }
+                                                </tbody>
+                                            </table>
+                                        </td>
+                                        <td>
+                                            <i class="ti-panel"></i>&nbsp;&nbsp;<a href="/Services/BidsListing?Group=@v.Key.Group_Id" target="_blank">Requisition Details</a>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td colspan="5"> No requisitions created yet</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div id="created" class="tab-pane">
+                <div class="p-20">
+
+                    <table class="table table-bordered potbl" cellspacing="0" width="100%">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th width="1%">Sr.</th>
+                                <th width="5%">Month</th>
+                                <th width="10%">Department</th>
+                                <th width="60%">Items</th>
+                                <th width="10%">PO#</th>
+                                <th width="10%">Date</th>
+                                <th width="14%">Vendor</th>
+                                <th width="1%"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model.PO.Any())
+                            {
+                                int i = 1;
+                                foreach (var po in Model.PO.GroupBy(x => new { x.PO_Number, x.Dep_Name, x.Prj_Name, x.Prj_Offsite, x.DateTime, x.CreatedBy_Name, x.Vendor_Name, x.Summary_Gen, Summary_Date = string.Format("{0:yyyy-MM-dd}", x.Summary_Date), x.Group_Id }).OrderByDescending(x => x.Key.DateTime).ToList())
+                                {
+                                    int ii = 1;
+                                    <tr>
+                                        <td>@i</td>
+                                        <td class="pur-req-prdct-name">@string.Format("{0:MMMM - yyyy}", po.Key.DateTime)</td>
+                                        <td>@po.Key.Dep_Name</td>
+                                        @*<td>@po.Key.Prj_Name</td>*@
+                                        <td class="tdscrol" style="">
+                                            <table class="table" style="margin-bottom:0px; border:none">
+                                                <thead>
+                                                    <tr>
+                                                        <th width="5%">Sr</th>
+                                                        <th width="70%">Item</th>
+                                                        <th width="25%">Total</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach (var v in po)
+                                                    {
+                                                        string cl = (v.Completed == true) ? "bgc-green-50" : "bgc-red-50";
+                                                        <tr class="@cl">
+                                                            <th style="max-width:50px">@ii</th>
+                                                            <td>
+                                                                @v.Item_Name
+                                                                <br />
+                                                                @{
+                                                                    string dims = string.Empty;
+                                                                    if (!(v.Length is null))
+                                                                    {
+                                                                        dims += " /Length - " + v.Length + " " + v.L_UOM;
+                                                                    }
+                                                                    if (!(v.Width is null))
+                                                                    {
+                                                                        dims += " /Width - " + v.Width + " " + v.W_UOM;
+                                                                    }
+                                                                    if (!(v.Heigth is null))
+                                                                    {
+                                                                        dims += " /Height - " + v.Heigth + " " + v.H_UOM;
+                                                                    }
+                                                                    if (!(v.Breadth is null))
+                                                                    {
+                                                                        dims += " /Breadth - " + v.Breadth + " " + v.B_UOM;
+                                                                    }
+                                                                }
+                                                                @dims
+                                                            </td>
+                                                            <td>@string.Format("{0:0,0.##}", v.Purchase_Rate )</td>
+                                                        </tr>
+                                                        ii++;
+                                                    }
+                                                </tbody>
+                                                <tfoot>
+                                                    <tr>
+                                                        <th></th>
+                                                        <th>Total PO Value</th>
+                                                        <th>@string.Format("{0:0,0.##}", po.Sum(x => x.Purchase_Rate))</th>
+                                                    </tr>
+                                                </tfoot>
+                                            </table>
+                                        </td>
+                                        <td class=" pointer">
+                                            @po.Key.PO_Number
+                                            <br />
+                                            @if (po.Key.CreatedBy_Name != null)
+                                            {
+                                                <span>Not Printed Yet</span>
+                                            }
+                                        </td>
+                                        <td>@string.Format("{0:dd-MMM-yyyy}", po.Key.DateTime)</td>
+                                        @*<td>@po.Key.CreatedBy_Name</td>*@
+                                        <td>@po.Key.Vendor_Name</td>
+                                        <td>
+                                            <ul style="list-style:none;margin-left:0px;">
+                                                <li class="dropdown">
+                                                    <a href="" class="dropdown-toggle no-after peers" data-toggle="dropdown">
+                                                        <i class="ti-more-alt  c-grey-900" style="transform:rotate(90deg);"></i>
+                                                    </a>
+                                                    <ul class="dropdown-menu" style="padding:10px;width:210px !important;left:-100px!important">
+                                                        <li class="mt-1"><i class="ti-panel"></i>&nbsp;&nbsp;<a href="/Services/BidsListing?Group=@po.Key.Group_Id" target="_blank">Requisition Details</a></li>
+                                                        <li class="mt-1 gen-com-ser" data-grpid="@po.Key.Group_Id" data-po="@po.Key.PO_Number"><i class="ti-bookmark"></i>&nbsp;&nbsp;Process for Payments</li>
+                                                    </ul>
+                                                </li>
+                                            </ul>
+                                        </td>
+                                    </tr>
+                                    i++;
+                                }
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td colspan="5">No Record Exists</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>

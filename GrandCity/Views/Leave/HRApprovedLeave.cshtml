@@ -1,0 +1,44 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Sp_Get_LeaveManagement_HR_Result>
+
+
+
+
+<h4 class="c-grey-900 mB-20">Hr Approved</h4>
+<table class="table table-striped table-bordered" cellspacing="0" width="100%">
+    <thead>
+        <tr>
+            <th>Employee Name</th>
+            <th>Leave Type</th>
+            <th>Reason</th>
+            <th>From</th>
+            <th>To</th>
+            <th>Number Of Days</th>
+
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            if (!Model.Any())
+            {
+                <tr><td colspan="7" style="text-align:center">No data available</td></tr>
+            }
+            else
+            {
+                foreach (var item in Model)
+                {
+                    <tr class="bgc-green-50 pointer" id="@item.Id">
+                        <td>@item.Name</td>
+                        <td>@item.LeaveType</td>
+                        <td>@item.Reason</td>
+                        <td> @string.Format("{0: MM/dd/yyyy}", item.StartDate)</td>
+                        <td> @string.Format("{0: MM/dd/yyyy}", item.EndDate)</td>
+                        <td>@item.NoOfDays</td>
+                    </tr>
+                }
+            }
+        }
+    </tbody>
+</table>
+
+
+

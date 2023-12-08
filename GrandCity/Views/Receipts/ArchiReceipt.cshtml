@@ -1,0 +1,301 @@
+﻿@model MeherEstateDevelopers.Models.ArchiReceiptModel
+@{
+    Layout = null;
+}
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title></title>
+    <style type="text/css" media="all">
+
+        body, div, table, thead, tbody, tfoot, tr, th, td, p {
+            font-family: "Calibri";
+            font-size: 19px;
+        }
+
+            table td {
+                height: 28px;
+            }
+
+        body {
+            -webkit-print-color-adjust: exact;
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    <table cellspacing="0" border="0" style="width:1000px">
+        <tr>
+            <td width="200px" align="right" valign="middle">
+                <img src="~/assets/static/images/Archi Receipts Data/odd-img.png" width=200 height=70>
+            </td>
+            <td width="800px" align="center" valign="middle">
+                <img src="~/assets/static/images/Archi Receipts Data/invoice.png" width=200 height=35>
+            </td>
+            <td width="200px" align="right" valign=bottom>
+                <img src="~//assets/static/images/Archi Receipts Data/cust-copy.png" width=125 height=125>
+            </td>
+        </tr>
+    </table>
+    <table cellspacing="0" border="0" style="width:1000px">
+        <tr>
+
+            <td width="30px" valign=bottom style="font-weight:bold">Receipt No.</td>
+            <td width="125px" align="center" valign=bottom style="border-bottom:1px solid">@Model.ReceiptinfoData.ReceiptNo</td>
+
+            <td width="90px" valign=bottom></td>
+
+            <td width="30px" valign=bottom style="font-weight:bold">Date</td>
+            <td width="125px" align="center" valign=bottom style="border-bottom:1px solid">@Model.ReceiptinfoData.DateTime.Value.ToString("dd-MMM-yyyy")</td>
+        </tr>
+    </table>
+    <table cellspacing="0" border="0" style="width:1000px">
+        <tr>
+            <td width="30px" align="left" valign=bottom style="font-weight:bold">Name</td>
+            <td width="150px" align="center" valign=bottom style="border-bottom:1px solid">@Model.ReceiptinfoData.Name</td>
+
+            <td width="30px" align="left" valign=bottom style="font-weight:bold">Father Name</td>
+            <td width="150px" align="center" valign=bottom style="border-bottom:1px solid">@Model.ReceiptinfoData.Father_Name</td>
+        </tr>
+    </table>
+    <table cellspacing="0" border="0" style="width:1000px">
+        <tr>
+            <td width="40px" align="left" valign=bottom style="font-weight:bold">Payment Mode</td>
+            <td width="200px" align="center" valign=bottom style="border-bottom:1px solid">@Model.ReceiptinfoData.PaymentType</td>
+
+            <td width="40px" align="left" valign=bottom style="font-weight:bold">Contact</td>
+            <td width="200px" align="center" valign=bottom style="border-bottom:1px solid">@Model.ReceiptinfoData.Contact</td>
+        </tr>
+    </table>
+    <table cellspacing="0" border="0" style="width:1000px">
+        <tr>
+            <td width="125px" align="left" valign=bottom style="font-weight:bold">CNIC/NICOP</td>
+            <td width="850px" align="center" valign=bottom style="border-bottom:1px solid">@Model.ReceiptinfoData.Text</td>
+        </tr>
+    </table>
+    <table cellspacing="0" border="0" style="width:1000px">
+        <tr>
+            <td width="125px" align="left" valign=bottom style="font-weight:bold">Rupees</td>
+            <td width="850px" align="center" valign=bottom style="border-bottom:1px solid">@Model.ReceiptinfoData.AmountinWords</td>
+        </tr>
+    </table>
+
+    <table cellspacing="0" border="0" style="width:1000px">
+        @foreach (var item in Model.archiServices)
+        {
+            <tr>
+                <td width="125px" align="left" valign=bottom style="font-weight:bold">@item.ServiceName <u>@item.Description (Rs. @string.Format("{0:n0}", item.ServiceAmount))</u> </td>
+            </tr>
+        }
+    </table>
+
+    <table cellspacing="0" border="0" style="width:1000px">
+        <tr>
+            <td align="right" valign=bottom><font size="4">A Project of</font></td>
+        </tr>
+    </table>
+    <table cellspacing="0" border="0" style="width:1000px">
+        <tr>
+            <td width="35px" align="left" valign=bottom style="font-weight:bold"><font size="6">Rs.</font></td>
+            <td width="170px" align="center" valign=bottom style="border-bottom:1px solid"><font size="6"> @string.Format("{0:n0}", Model.ReceiptinfoData.Amount)</font></td>
+            <td width="60px" align="left" valign=bottom><font size="4"></font></td>
+            <td width="220px" align="right" valign=bottom><font size="4">Signature</font></td>
+            <td width="180px" align="center" valign=bottom style="border-bottom:1px solid"><font size="6"></font></td>
+            <td width="180px" align="left" valign=bottom><font size="4"></font></td>
+            <td width="130px" align="left" style="vertical-align:top"><img src="~/assets/static/images/meherestate-simple.png" width=130 height=29></td>
+        </tr>
+
+    </table>
+    <!-- ************************************************************************** -->
+    <table cellspacing="0" border="0" style="width:1000px">
+        <tr>
+            <td align="center" valign="middle">-----------------------------------------------------------------------------------------------------------------------------------------------------------------------</td>
+        </tr>
+    </table>
+
+    <table cellspacing="0" border="0" style="width:1000px">
+        <tr>
+            <td width="200px" align="right" valign="middle">
+                <img src="~/assets/static/images/Archi Receipts Data/odd-img.png" width=200 height=70>
+            </td>
+            <td width="800px" align="center" valign="middle">
+                <img src="~/assets/static/images/Archi Receipts Data/invoice.png" width=200 height=35>
+            </td>
+            <td width="200px" align="right" valign=bottom>
+                <img src="~//assets/static/images/Archi Receipts Data/off-copy.png" width=125 height=125>
+            </td>
+        </tr>
+    </table>
+    <table cellspacing="0" border="0" style="width:1000px">
+        <tr>
+
+            <td width="30px" valign=bottom style="font-weight:bold">Receipt No.</td>
+            <td width="125px" align="center" valign=bottom style="border-bottom:1px solid">@Model.ReceiptinfoData.ReceiptNo</td>
+
+            <td width="90px" valign=bottom></td>
+
+            <td width="30px" valign=bottom style="font-weight:bold">Date</td>
+            <td width="125px" align="center" valign=bottom style="border-bottom:1px solid">@Model.ReceiptinfoData.DateTime.Value.ToString("dd-MMM-yyyy")</td>
+
+            @*<td width="250px"></td>
+                <td width="90px" valign=bottom style="font-weight:bold">Receipt No.</td>
+                <td width="125px" align="center" valign=bottom style="border-bottom:1px solid">@Model.ReceiptNo</td>
+                <td width="246x" valign=bottom></td>*@
+        </tr>
+    </table>
+    <table cellspacing="0" border="0" style="width:1000px">
+        <tr>
+            <td width="30px" align="left" valign=bottom style="font-weight:bold">Name</td>
+            <td width="150px" align="center" valign=bottom style="border-bottom:1px solid">@Model.ReceiptinfoData.Name</td>
+
+            <td width="30px" align="left" valign=bottom style="font-weight:bold">Father Name</td>
+            <td width="150px" align="center" valign=bottom style="border-bottom:1px solid">@Model.ReceiptinfoData.Father_Name</td>
+        </tr>
+    </table>
+    <table cellspacing="0" border="0" style="width:1000px">
+        <tr>
+            <td width="40px" align="left" valign=bottom style="font-weight:bold">Payment Mode</td>
+            <td width="200px" align="center" valign=bottom style="border-bottom:1px solid">@Model.ReceiptinfoData.PaymentType</td>
+
+            <td width="40px" align="left" valign=bottom style="font-weight:bold">Contact</td>
+            <td width="200px" align="center" valign=bottom style="border-bottom:1px solid">@Model.ReceiptinfoData.Contact</td>
+        </tr>
+    </table>
+    <table cellspacing="0" border="0" style="width:1000px">
+        <tr>
+            <td width="125px" align="left" valign=bottom style="font-weight:bold">CNIC/NICOP</td>
+            <td width="850px" align="center" valign=bottom style="border-bottom:1px solid">@Model.ReceiptinfoData.Text</td>
+        </tr>
+    </table>
+    <table cellspacing="0" border="0" style="width:1000px">
+        <tr>
+            <td width="125px" align="left" valign=bottom style="font-weight:bold">Rupees</td>
+            <td width="850px" align="center" valign=bottom style="border-bottom:1px solid">@Model.ReceiptinfoData.AmountinWords</td>
+        </tr>
+    </table>
+
+    <table cellspacing="0" border="0" style="width:1000px">
+        @foreach (var item in Model.archiServices)
+        {
+            <tr>
+                <td width="125px" align="left" valign=bottom style="font-weight:bold">@item.ServiceName <u>@item.Description (Rs. @string.Format("{0:n0}", item.ServiceAmount))</u> </td>
+            </tr>
+        }
+    </table>
+
+    <table cellspacing="0" border="0" style="width:1000px">
+        <tr>
+            <td align="right" valign=bottom><font size="4">A Project of</font></td>
+        </tr>
+    </table>
+    <table cellspacing="0" border="0" style="width:1000px">
+        <tr>
+            <td width="35px" align="left" valign=bottom style="font-weight:bold"><font size="6">Rs.</font></td>
+            <td width="170px" align="center" valign=bottom style="border-bottom:1px solid"><font size="6"> @string.Format("{0:n0}", Model.ReceiptinfoData.Amount)</font></td>
+            <td width="60px" align="left" valign=bottom><font size="4"></font></td>
+            <td width="220px" align="right" valign=bottom><font size="4">Signature</font></td>
+            <td width="180px" align="center" valign=bottom style="border-bottom:1px solid"><font size="6"></font></td>
+            <td width="180px" align="left" valign=bottom><font size="4"></font></td>
+            <td width="130px" align="left" style="vertical-align:top"><img src="~/assets/static/images/meherestate-simple.png" width=130 height=29></td>
+        </tr>
+
+    </table>
+
+    <!-- ************************************************************************** -->
+    <table cellspacing="0" border="0" style="width:1000px">
+        <tr>
+            <td align="center" valign="middle">-----------------------------------------------------------------------------------------------------------------------------------------------------------------------</td>
+        </tr>
+    </table>
+
+    <table cellspacing="0" border="0" style="width:1000px">
+        <tr>
+            <td width="200px" align="right" valign="middle">
+                <img src="~/assets/static/images/Archi Receipts Data/odd-img.png" width=200 height=70>
+            </td>
+            <td width="800px" align="center" valign="middle">
+                <img src="~/assets/static/images/Archi Receipts Data/invoice.png" width=200 height=35>
+            </td>
+            <td width="200px" align="right" valign=bottom>
+                <img src="~//assets/static/images/Archi Receipts Data/rec-copy.png" width=125 height=125>
+            </td>
+        </tr>
+    </table>
+    <table cellspacing="0" border="0" style="width:1000px">
+        <tr>
+
+            <td width="30px" valign=bottom style="font-weight:bold">Receipt No.</td>
+            <td width="125px" align="center" valign=bottom style="border-bottom:1px solid">@Model.ReceiptinfoData.ReceiptNo</td>
+
+            <td width="90px" valign=bottom></td>
+
+            <td width="30px" valign=bottom style="font-weight:bold">Date</td>
+            <td width="125px" align="center" valign=bottom style="border-bottom:1px solid">@Model.ReceiptinfoData.DateTime.Value.ToString("dd-MMM-yyyy")</td>
+
+            @*<td width="250px"></td>
+                <td width="90px" valign=bottom style="font-weight:bold">Receipt No.</td>
+                <td width="125px" align="center" valign=bottom style="border-bottom:1px solid">@Model.ReceiptNo</td>
+                <td width="246x" valign=bottom></td>*@
+        </tr>
+    </table>
+    <table cellspacing="0" border="0" style="width:1000px">
+        <tr>
+            <td width="30px" align="left" valign=bottom style="font-weight:bold">Name</td>
+            <td width="150px" align="center" valign=bottom style="border-bottom:1px solid">@Model.ReceiptinfoData.Name</td>
+
+            <td width="30px" align="left" valign=bottom style="font-weight:bold">Father Name</td>
+            <td width="150px" align="center" valign=bottom style="border-bottom:1px solid">@Model.ReceiptinfoData.Father_Name</td>
+        </tr>
+    </table>
+    <table cellspacing="0" border="0" style="width:1000px">
+        <tr>
+            <td width="40px" align="left" valign=bottom style="font-weight:bold">Payment Mode</td>
+            <td width="200px" align="center" valign=bottom style="border-bottom:1px solid">@Model.ReceiptinfoData.PaymentType</td>
+
+            <td width="40px" align="left" valign=bottom style="font-weight:bold">Contact</td>
+            <td width="200px" align="center" valign=bottom style="border-bottom:1px solid">@Model.ReceiptinfoData.Contact</td>
+        </tr>
+    </table>
+    <table cellspacing="0" border="0" style="width:1000px">
+        <tr>
+            <td width="125px" align="left" valign=bottom style="font-weight:bold">CNIC/NICOP</td>
+            <td width="850px" align="center" valign=bottom style="border-bottom:1px solid">@Model.ReceiptinfoData.Text</td>
+        </tr>
+    </table>
+    <table cellspacing="0" border="0" style="width:1000px">
+        <tr>
+            <td width="125px" align="left" valign=bottom style="font-weight:bold">Rupees</td>
+            <td width="850px" align="center" valign=bottom style="border-bottom:1px solid">@Model.ReceiptinfoData.AmountinWords</td>
+        </tr>
+    </table>
+    <table cellspacing="0" border="0" style="width:1000px">
+        @foreach (var item in Model.archiServices)
+        {
+            <tr>
+                <td width="125px" align="left" valign=bottom style="font-weight:bold">@item.ServiceName <u>@item.Description (Rs. @string.Format("{0:n0}", item.ServiceAmount))</u> </td>
+            </tr>
+        }
+    </table>
+
+    <table cellspacing="0" border="0" style="width:1000px">
+        <tr>
+            <td align="right" valign=bottom><font size="4">A Project of</font></td>
+        </tr>
+    </table>
+    <table cellspacing="0" border="0" style="width:1000px">
+        <tr>
+            <td width="35px" align="left" valign=bottom style="font-weight:bold"><font size="6">Rs.</font></td>
+            <td width="170px" align="center" valign=bottom style="border-bottom:1px solid"><font size="6"> @string.Format("{0:n0}", Model.ReceiptinfoData.Amount)</font></td>
+            <td width="60px" align="left" valign=bottom><font size="4"></font></td>
+            <td width="220px" align="right" valign=bottom><font size="4">Signature</font></td>
+            <td width="180px" align="center" valign=bottom style="border-bottom:1px solid"><font size="6"></font></td>
+            <td width="180px" align="left" valign=bottom><font size="4"></font></td>
+            <td width="130px" align="left" style="vertical-align:top"><img src="~/assets/static/images/meherestate-simple.png" width=130 height=29></td>
+        </tr>
+
+    </table>
+
+
+</body>
+</html>

@@ -1,0 +1,103 @@
+﻿@model MeherEstateDevelopers.Models.CommercialNOC
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <style>
+        body {
+            font-family: Roboto,-apple-system,system-ui,BlinkMacSystemFont,Segoe UI,Oxygen,Ubuntu,Cantarell,Fira Sans,Droid Sans,Helvetica Neue,Arial,sans-serif;
+        }
+    </style>
+</head>
+<body>
+    @if (Model.Serial_No == null)
+    {
+        <table cellspacing="0" border="0" style="width:1000px">
+            <tr>
+                <td width="600px" align="center" valign=bottom style="font-weight:bold"><font size="7">Shop N.O.C. Can not be Generated Due to @ViewBag.OverdueReason</font></td>
+            </tr>
+        </table>
+    }
+    else
+    {
+        <table cellspacing="0" border="0" style="width:1000px">
+            <tr>
+                <td width="200px" align="center" valign=bottom style="font-weight:bold"><b>Serial No.</b> @Model.Serial_No</td>
+                <td width="600px" align="center" valign=bottom style="font-weight:bold"><font size="7">Shop N.O.C.</font></td>
+                <td width="200px" align="center" valign=bottom style="font-weight:bold"></td>
+            </tr>
+        </table>
+        <table cellspacing="0" border="0" style="width:1000px;font-size: 21px;margin-top: 50px;">
+            <tr>
+                <td align="left" valign=bottom style="line-height: 44px;">
+                    <p>
+                        <b>This is to certify that Mr/Mrs/Miss </b> &nbsp; <u> @Model.Name</u> &nbsp; <b>owns a Shop No. </b> &nbsp; <u> @Model.Com_No </u> &nbsp;<b> on </b> &nbsp; <u> @Model.Floor</u> <b> Size </b> <u> @Model.Size  </u>  &nbsp;
+                         &nbsp; <b>in Ayyan Center</b> &nbsp;
+                    </p>
+                </td>
+            </tr>
+        </table>
+        <table cellspacing="0" border="0" style="width:1000px;font-size: 19px;margin: 5px 0 50px 0">
+            <tr>
+                <td width="1000px" align="left" valign=bottom style="font-weight:bold">The details of Installment Paid & Installment due is.</td>
+            </tr>
+        </table>
+        <table cellspacing="0" border="0" style="width:1000px;font-size: 22px;">
+            <tr>
+                <td width="200px" align="left" valign=bottom style="font-weight:bold;">Installments Paid</td>
+                <td width="180px" align="left" style="border-bottom:1px solid" valign=bottom> Rs. @string.Format("{0:n0}", Math.Round(Model.TotalAmt)) /- </td>
+                <td width="640"></td>
+            </tr>
+        </table>
+        <table cellspacing="0" border="0" style="width:1000px;font-size: 22px;margin-top: 50px;">
+            <tr>
+                <td width="200px" align="left" valign=bottom style="font-weight:bold;">Installments Due</td>
+                <td width="180px" align="left" style="border-bottom:1px solid" valign=bottom> Rs. @string.Format("{0:n0}", Math.Round(Model.DueAmt)) /- </td>
+                <td width="640"></td>
+            </tr>
+        </table>
+        <table cellspacing="0" border="0" style="width:1000px;font-size: 22px;margin-top: 30px;">
+            <tr>
+                <td width="1000px" align="left" valign=bottom><b>NOTE:</b></td>
+            </tr>
+            <tr>
+                <td width="1000px" align="left" valign=bottom>- This NOC is valid for 15 DAYS from the date of issue.</td>
+            </tr>
+            <tr>
+                <td width="1000px" align="left" valign=bottom>- This NOC is issued on the basis of existing Data in our Record. In case of any objection by our Audit Department, this NOC will be considered CANCELLED</td>
+            </tr>
+        </table>
+        <table cellspacing="0" border="0" style="width:1000px;font-size: 20px;margin-top: 30px;">
+            <tr>
+                <td width="50px" align="left" valign=bottom style="font-weight:bold;">Date</td>
+                <td width="300px" align="center" style="border-bottom:1px solid" valign=bottom> @string.Format("{0:D}", Model.DateTime) </td>
+                <td width="650"></td>
+            </tr>
+        </table>
+        <table style="width:1000px;margin-top:80px;font-size: 25px;">
+            <tbody>
+                <tr>
+                    <td width="500" align="left"><b>@ViewBag.Name</b></td>
+                    <td width="500"></td>
+                </tr>
+                <tr>
+                    <td width="500" align="left"><b>Manager</b></td>
+                    <td width="500" align="left"></td>
+                </tr>
+            </tbody>
+        </table>
+
+    }
+
+    <table cellspacing="0" border="0" style="width:1000px;font-size: 22px;margin-top: 10px;">
+        <tr>
+            <td width="1000px" align="center" valign=bottom style="padding-right: 95px;">
+                <img src="~/assets/static/images/Ayan Center.png" width=450 height=135>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>

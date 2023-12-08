@@ -1,0 +1,41 @@
+﻿
+
+@{
+    if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+}
+
+ 
+<h5>Late Commers Report</h5>
+<div class="row bgc-white">
+    <div class="col-md-4">
+        <input type="text" class="form-control" data-provide="datepicker" id="from" placeholder="mm/dd/yyyy">
+    </div>
+     
+
+    <div class="col-md-4">
+        <button type="submit" class="btn btn-primary" id="serch">Search</button>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12" id="rptlate">
+
+    </div>
+</div>
+<script>
+     
+
+    $(document).on("click", "#serch", function () {
+
+        var from = $('#from').val();
+  
+
+        $("#rptlate").load("/Reports/LateReportData/", { From: from });
+    });
+</script>

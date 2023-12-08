@@ -1,0 +1,659 @@
+﻿@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+@*<script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/sunburst.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/modules/export-data.js"></script>
+    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+    <script src="~/Scripts/Highcharts/DarkUnica.js"></script>*@
+<script src="~/Scripts/Highcharts/highcharts.js"></script>
+<script src="~/Scripts/Highcharts/modules/sunburst.js"></script>
+<script src="~/Scripts/Highcharts/modules/exporting.js"></script>
+<script src="~/Scripts/Highcharts/modules/export-data.js"></script>
+<script src="~/Scripts/Highcharts/modules/accessibility.js"></script>
+<script src="~/Scripts/Highcharts/themes/dark-unica.js"></script>
+@*<link rel="stylesheet" href="~/Content/packery-docs.css" media="screen">*@
+<script src="~/Scripts/packery.pkgd.js"></script>
+<script src="~/Scripts/packery-docs.min.js"></script>
+<link href="~/Content/bootstrap-material-datetimepicker.css" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<script src="~/Scripts/bootstrap-material-datetimepicker.min.js"></script>
+<link rel="stylesheet" href="~/Content/select2.css" />
+<script src="~/Scripts/select2.js"></script>
+
+
+<div class="col-md-12">
+    <div class="weather-temperature"></div>
+</div>
+<div class="row gap-20 pos-r">
+    <div class="w-100 no-pad" id="cont">
+        <div class="row gap-20">
+            <div class="col-md-12 cover-back-area" id="parallax">
+                <div class="row">
+                    <div class="col-md-6" style="margin:auto; z-index:1;">
+                        @{ Html.RenderAction("WelcomeWidget", "Home");}
+                    </div>
+
+                    <div class="col-md-6" style="z-index:1;">
+                        <div class="row" style="align-items: flex-end;">
+                            <div class="col-md-9">
+                                <h4 style="color:white;">My Attendance Report</h4>
+                            </div>
+
+                            <div class="col-md-3">
+                                <button class="btn btn-success" style="width : 100% !important;">Leaves</button>
+                            </div>
+                        </div>
+                        <hr class="hr-white" />
+                        @{ Html.RenderAction("HomeWidget", "Attendance");}
+                    </div>
+
+                    @*<div class="col-md-12 black-bg-semi-opq" style="z-index:1;">
+                    <h4 class="">Requests</h4>
+                    @{ Html.RenderAction("RequestsView", "Home");}
+                </div>*@
+                </div>
+            </div>
+            <div class="col-md-12 default-background mt-md-2 qk-lnks-spc">
+                @{ Html.RenderAction("QuickLinks", "Home"); }
+            </div>
+            <div class="col-md-12 default-background mt-md-2">
+                @{ Html.RenderAction("AuditorsHome", "Home"); }
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="row">
+                <div class="default-div-bg bd bdrs-3 p-20 mB-20 mt-md-3 col-md-6" id="sc-short">        </div>
+                <div class="default-div-bg bd bdrs-3 p-20 mB-20 col-md-6 mt-md-3" id="ec-short">        </div>
+            </div>
+        </div>
+        <div class="default-div-bg bd bdrs-3 p-20 mB-20 drag-hero-demos__grid drag-hero-demos__grid--masonry" style="width:100%;">
+            <div class="row mt-md-3 drag-hero-demos__item drag-hero-demos__item--masonry">
+                <div class="form-group col-md-3">
+                    <label>Start Date</label>
+                    <input type="text" class="form-control" data-provide="datepicker" onchange="getbookingdata();" id="startdate" name="startdate" placeholder="mm/dd/yyyy" required>
+                </div>
+                <div class="form-group col-md-3">
+                    <label>End Date</label>
+                    <input type="text" class="form-control" data-provide="datepicker" onchange="getbookingdata();" id="enddate" name="enddate" placeholder="mm/dd/yyyy" required>
+                </div>
+                <div class="form-group col-md-3">
+                    <label>Choose Last Booking Records</label>
+                    <select class="form-control" id="opt" onchange="getoptions();">
+                        <option selected disabled>Choose...</option>
+                        <option value="weekly">Weekly</option>
+                        <option value="monthly">Monthly</option>
+                        <option value="6months">6 Month</option>
+                        <option value="yearly">Yearly</option>
+                    </select>
+                </div>
+                <div class="col-md-3"></div>
+                <div class="row mt-md-3">
+                    <div class="col-md-6" id="bookin"></div>
+                    <div class="col-md-6" id="bk-det"></div>
+                </div>
+            </div>
+
+            <div class="row mt-md-3 drag-hero-demos__item drag-hero-demos__item--masonry">
+                <div class="form-group col-md-3">
+                    <label>Start Date</label>
+                    <input type="text" class="form-control" data-provide="datepicker" onchange="gettransferdata();" id="transferstartdate" name="transferstartdate" placeholder="mm/dd/yyyy" required>
+                </div>
+                <div class="form-group col-md-3">
+                    <label>End Date</label>
+                    <input type="text" class="form-control" data-provide="datepicker" onchange="gettransferdata();" id="transferenddate" name="transferenddate" placeholder="mm/dd/yyyy" required>
+                </div>
+                <div class="form-group col-md-3">
+                    <label>Choose Last Transfer Records</label>
+                    <select class="form-control" id="opttransfer" onchange="gettransferoptions();">
+                        <option selected disabled>Choose...</option>
+                        <option value="weekly">Weekly</option>
+                        <option value="monthly">Monthly</option>
+                        <option value="6months">6 Month</option>
+                        <option value="yearly">Yearly</option>
+                    </select>
+                </div>
+                <div class="col-md-3"></div>
+                <div class="row mt-md-3">
+                    <div class="col-md-6" id="transferplot"></div>
+                    <div class="col-md-6" id="tans-plt-lst"></div>
+                </div>
+            </div>
+
+            <div class="row mt-md-3  drag-hero-demos__item drag-hero-demos__item--masonry">
+                <div class="form-group col-md-3">
+                    <label>Start Date</label>
+                    <input type="text" class="form-control" data-provide="datepicker" onchange="getrevenuedata();" id="revenuestartdate" name="revenuestartdate" placeholder="mm/dd/yyyy" required>
+                </div>
+                <div class="form-group col-md-3">
+                    <label>End Date</label>
+                    <input type="text" class="form-control" data-provide="datepicker" onchange="getrevenuedata();" id="revenueenddate" name="revenueenddate" placeholder="mm/dd/yyyy" required>
+                </div>
+                <div class="col-md-6"></div>
+                <div class="form-row mt-md-3">
+                    <div class="col-md-12" id="revreport"></div>
+                </div>
+            </div>
+
+            <div class="row drag-hero-demos__item drag-hero-demos__item--masonry">
+                <div class="form-group col-md-3">
+                    <label>Start Date</label>
+                    <input type="text" class="form-control" data-provide="datepicker" onchange="getpaydata();" id="p-st-dat" placeholder="mm/dd/yyyy" required>
+                </div>
+                <div class="form-group col-md-3">
+                    <label>End Date</label>
+                    <input type="text" class="form-control" data-provide="datepicker" onchange="getpaydata();" id="p-end-dat" placeholder="mm/dd/yyyy" required>
+                </div>
+
+                <div class="col-md-6"></div>
+
+                <div class="form-row mt-md-3">
+                    <div class="col-md-12" id="paymentreport"></div>
+                </div>
+            </div>
+
+            <div class="row mt-md-3 drag-hero-demos__item drag-hero-demos__item--masonry">
+                <div class="form-group col-md-3">
+                    <label>From</label>
+                    <input type="text" class="form-control" data-provide="datepicker" onchange="getmonthdata();" id="monthdate" placeholder="mm/dd/yyyy">
+                </div>
+                <div class="form-group col-md-3">
+                    <label>To</label>
+                    <input type="text" class="form-control" data-provide="datepicker" onchange="getmonthdata();" id="monthtodate" placeholder="mm/dd/yyyy">
+                </div>
+                <div class="form-group col-md-3">
+                    <label>Choose Last Records</label>
+                    <select class="form-control monthinstrep">
+                        <option selected disabled>Choose...</option>
+                        <option value="twomonth">Last 2 Months</option>
+                        <option value="thremonth">Last 3 Months</option>
+                        <option value="6months">6 Month</option>
+                        <option value="yearly">Yearly</option>
+                    </select>
+                </div>
+                <div class="col-md-3"></div>
+
+                <div class="col-md-12 mt-md-3" id="instrep">
+                </div>
+            </div>
+
+            <div class="row mt-md-3 drag-hero-demos__item drag-hero-demos__item--masonry">
+                <div class="form-group col-md-3">
+                    <label>Start Date</label>
+                    <input type="text" class="form-control" onchange="GetBlkRecov()" data-provide="datepicker" id="blk-rec-start" name="revenuestartdate" placeholder="mm/dd/yyyy" required>
+                </div>
+                <div class="form-group col-md-3">
+                    <label>End Date</label>
+                    <input type="text" class="form-control" onchange="GetBlkRecov()" data-provide="datepicker" id="blk-rec-to" name="revenueenddate" placeholder="mm/dd/yyyy" required>
+                </div>
+
+                <div class="col-md-6"></div>
+                <div class="col-md-12" id="blk-recovery"></div>
+            </div>
+
+            <div class="row mt-md-3 drag-hero-demos__item drag-hero-demos__item--masonry">
+                <div class="col-md-12" id="file-year">
+                </div>
+            </div>
+            @if (User.IsInRole("Attendance Report"))
+            {
+
+                <div class="row mt-md-3 drag-hero-demos__item drag-hero-demos__item--masonry">
+                    <div class="col-md-12">
+                        <div class="row" style="align-items: flex-end;">
+                            <div class="col-md-3">
+                                <div class="col-md-6">From :</div>
+                                <div class="col-md-10">
+                                    <input type="text" class="form-control st-dt-khjdf" placeholder="From Date" />
+                                </div>
+                            </div>
+
+                            <div class="col-md-3">
+                                <div class="col-md-6">To :</div>
+                                <div class="col-md-10">
+                                    <input type="text" class="form-control en-dt-khjdf" placeholder="To Date" />
+                                </div>
+                            </div>
+
+                            <div class="col-md-3">
+                                <div class="col-md-10">Department :</div>
+                                <div class="col-md-10">
+                                    <select class="form-control dep-att-lst-gskfskj">
+                                        <option>All</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-md-2">
+                                <button class="btn btn-primary get-att-rep-btn-fkajh">Update</button>
+                                <button class="btn btn-primary dets-att-rep-btn-fkajh">Details</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12 mt-md-3" id="att-rep-data">
+                    </div>
+                </div>
+            }
+
+            @if (User.IsInRole("Payroll Report"))
+            {
+
+                <div class="form-row mt-md-3 drag-hero-demos__item drag-hero-demos__item--masonry">
+                    <div class="col-md-12">
+                        <div class="row" style="align-items: flex-end;">
+                            <div class="col-md-3">
+                                <div class="col-md-5">From :</div>
+                                <div class="col-md-10">
+                                    <input type="text" class="form-control st-dt-dfhjgs" placeholder="From Date" />
+                                </div>
+                            </div>
+
+                            <div class="col-md-3">
+                                <div class="col-md-5">To :</div>
+                                <div class="col-md-10">
+                                    <input type="text" class="form-control en-dt-fkjdghs" placeholder="To Date" />
+                                </div>
+                            </div>
+
+                            <div class="col-md-3">
+                                <div class="col-md-10">Department :</div>
+                                <div class="col-md-10">
+                                    <select class="form-control dep-payrl-lst-dsfjk">
+                                        <option>All</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-md-2">
+                                <button class="btn btn-primary get-payrl-rep-btn-fdljk">Update</button>
+                                <button class="btn btn-primary dets-payrl-rep-btn-fdljk">Details</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12 mt-md-3" id="payrl-rep-data">
+                    </div>
+                </div>
+            }
+
+            @if (User.IsInRole("Payroll Report"))
+            {
+
+                <div class="form-row mt-md-3 drag-hero-demos__item drag-hero-demos__item--masonry">
+                    <div class="col-md-12">
+                        <div class="row" style="align-items: flex-end;">
+                            <div class="col-md-2">
+                                <div class="col-md-8">From :</div>
+                                <div class="col-md-12">
+                                    <input type="text" class="form-control st-dt-skdfj-sdfhjg" placeholder="From Date" />
+                                </div>
+                            </div>
+
+                            <div class="col-md-2">
+                                <div class="col-md-8">To :</div>
+                                <div class="col-md-12">
+                                    <input type="text" class="form-control en-dt-hsfdgvhjs-asdhjgv" placeholder="To Date" />
+                                </div>
+                            </div>
+
+                            <div class="col-md-3">
+                                <div class="col-md-12">Compare :</div>
+                                <div class="col-md-12">
+                                    <select class="form-control cmprsn-typ-fdshjksdjfhk">
+                                        <option value="AllComps">All Companies</option>
+                                        <option value="SelectedComps">Selected Companies</option>
+                                        <option value="AllDepts">All Departments</option>
+                                        <option value="SelectedDepts">Selected Departments</option>
+                                        <option value="AllDesigs">All Designations</option>
+                                        <option value="SelectedDesigs">Selected Designations</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4 last-opt-sal-rep-kjfhsd" style="display:none;">
+                                <div class="col-md-10">Department :</div>
+                                <div class="col-md-10">
+                                    <select class="form-control comp-sal-typ-dsfjk sel-typ" multiple>
+                                        <option>All</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-md-1">
+                                <button class="btn btn-primary get-sal-rep-btn-fdljk">Update</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12 mt-md-3" id="sal-rep-data">
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+
+    <div class="edt-btn pointer" title="Re Adjust Reports">
+        <i class="fa fa-pencil fa-2x"></i>
+    </div>
+</div>
+<script>
+    let draggies = [];
+    let ___allLoaded___ = 0;
+    let maxRepLoadCount = 12;
+    function initRearrangerBase() {
+        ___allLoaded___++;
+        if (___allLoaded___ >= maxRepLoadCount) {
+
+            $('.drag-hero-demos__grid').packery({
+                // options
+                itemSelector: '.drag-hero-demos__item',
+                gutter: 10
+            });
+
+            $('.drag-hero-demos__grid').find('.drag-hero-demos__item').each(function (i, gridItem) {
+                var draggie = new Draggabilly(gridItem);
+                draggies.push(draggie);
+                // bind drag events to Packery
+                $('.drag-hero-demos__grid').packery('bindDraggabillyEvents', draggie);
+            });
+        }
+    }
+
+    $(function () {
+        //showing a loader on all report places
+        SASLoad($("#blk-recovery"));
+        SASLoad($("#instrep"));
+        SASLoad($("#revreport"));
+        SASLoad($("#paymentreport"));
+        SASLoad($("#transferplot"));
+        SASLoad($("#bookin"));
+        SASLoad($("#sc-short"));
+        SASLoad($("#ec-short"));
+        SASLoad($("#file-year"));
+        SASLoad($("#att-rep-data"));
+        SASLoad($("#payrl-rep-data"));
+        SASLoad($("#sal-rep-data"));
+    });
+
+    //document Ready function...
+    $(document).ready(function () {
+        var date = "@DateTime.Now";
+        $("#blk-recovery").load('/Reports/PlotsRecovery/', { From: null, To: null }, function () {
+            initRearrangerBase();
+            SASUnLoad($("#blk-recovery"));
+        });
+        $("#instrep").load('/Reports/MonthlyInstallment/', { From: date, To: date }, function () {
+            SASUnLoad($("#instrep"));
+            initRearrangerBase();
+        });
+        $("#revreport").load('/Reports/RevenueReport/', { From: date, To: date }, function () {
+            SASUnLoad($("#revreport"));
+            initRearrangerBase();
+        });
+        $("#paymentreport").load('/Reports/PayableReport/', { From: date, To: date }, function () {
+            SASUnLoad($("#paymentreport"));
+            initRearrangerBase();
+        });
+        $("#transferplot").load('/Reports/PlotTranfer/', { Startdate: date, Enddate: date }, function () {
+            SASUnLoad($("#transferplot"));
+            initRearrangerBase();
+        });
+        $("#bookin").load('/Reports/PlotBooking/', { Startdate: date, Enddate: date }, function () {
+            SASUnLoad($("#bookin"));
+            initRearrangerBase();
+        });
+        $("#sc-short").load('/Reports/ServiceChargesBills_Short/', function () {
+            SASUnLoad($("#sc-short"));
+            initRearrangerBase();
+        });
+        $("#ec-short").load('/Reports/ElectricityChargesBill_Short/', function () {
+            SASUnLoad($("#ec-short"));
+            initRearrangerBase();
+        });
+        $("#file-year").load('/Reports/FilesYearlyRecovery/', function () {
+            SASUnLoad($("#file-year"));
+            initRearrangerBase();
+        });
+        $("#att-rep-data").load('/Reports/AttendanceReport/', function () {
+            SASUnLoad($("#att-rep-data"));
+            initRearrangerBase();
+        });
+        $("#payrl-rep-data").load('/Reports/PayrollReport/', function () {
+            SASUnLoad($("#payrl-rep-data"));
+            initRearrangerBase();
+        });
+        $("#sal-rep-data").load('/Reports/SalaryComparativeReport?typ=AllComps', function () {
+            SASUnLoad($("#sal-rep-data"));
+            initRearrangerBase();
+        });
+    });
+
+    $('.st-dt-khjdf').bootstrapMaterialDatePicker({ weekStart: 0, time: false, format: 'MM-DD-YYYY' }).on('change', function (e, date) {
+        $('.en-dt-khjdf').bootstrapMaterialDatePicker('setMinDate', date);
+    });
+    $('.en-dt-khjdf').bootstrapMaterialDatePicker({ weekStart: 0, time: false, format: 'MM-DD-YYYY' });
+
+    $('.st-dt-dfhjgs').bootstrapMaterialDatePicker({ weekStart: 0, time: false, format: 'MM-DD-YYYY' }).on('change', function (e, date) {
+        $('.en-dt-fkjdghs').bootstrapMaterialDatePicker('setMinDate', date);
+    });
+    $('.en-dt-fkjdghs').bootstrapMaterialDatePicker({ weekStart: 0, time: false, format: 'MM-DD-YYYY' });
+
+    $('.st-dt-skdfj-sdfhjg').bootstrapMaterialDatePicker({ weekStart: 0, time: false, format: 'MM-DD-YYYY' }).on('change', function (e, date) {
+        $('.en-dt-hsfdgvhjs-asdhjgv').bootstrapMaterialDatePicker('setMinDate', date);
+    });
+    $('.en-dt-hsfdgvhjs-asdhjgv').bootstrapMaterialDatePicker({ weekStart: 0, time: false, format: 'MM-DD-YYYY' });
+
+    $('.get-att-rep-btn-fkajh').unbind().click(function () {
+        let stDt = $('.st-dt-khjdf').val();
+        let enDt = $('.en-dt-khjdf').val();
+        let dep = $('.dep-att-lst-gskfskj option:selected').val();
+
+        $('#att-rep-data').load('/Reports/AttendanceReport/', { start: stDt, end: enDt, depart: dep });
+    });
+
+    $('.get-payrl-rep-btn-fdljk').unbind().click(function () {
+        let stDt = $('.st-dt-dfhjgs').val();
+        let enDt = $('.en-dt-fkjdghs').val();
+        let dep = $('.dep-payrl-lst-dsfjk').val();
+
+        $('#payrl-rep-data').load('/Reports/PayrollReport/', { start: stDt, end: enDt, depart: dep });
+    });
+
+    $('.dets-att-rep-btn-fkajh').unbind().click(function () {
+        let stDt = $('.st-dt-khjdf').val();
+        let enDt = $('.en-dt-khjdf').val();
+        let dep = $('.dep-att-lst-gskfskj').val();
+        let depNam = $.trim($('.dep-att-lst-gskfskj').text());
+        window.open('/Reports/DetailedAttendanceReport?start=' + stDt + '&end=' + enDt + '&depart=' + dep + '&typ=' + depNam);
+    });
+
+    $('.dets-payrl-rep-btn-fdljk').unbind().click(function () {
+        let stDt = $('.st-dt-dfhjgs').val();
+        let enDt = $('.en-dt-fkjdghs').val();
+        let dep = $('.dep-payrl-lst-dsfjk').val();
+        let depNam = $.trim($('.dep-payrl-lst-dsfjk').text());
+        window.open('/Reports/DetailedPayrollReport?start=' + stDt + '&end=' + enDt + '&depart=' + dep + '&typ=' + depNam);
+    });
+
+    $('.get-sal-rep-btn-fdljk').unbind().click(function () {
+        let st = $('.st-dt-skdfj-sdfhjg').val();
+        let en = $('.en-dt-hsfdgvhjs-asdhjgv').val();
+        let typ = $('.cmprsn-typ-fdshjksdjfhk option:selected').val();
+        let colle = $('.comp-sal-typ-dsfjk').val();
+        $('#sal-rep-data').load('/Reports/SalaryComparativeReport/', { start: st, end: en, typ: typ, ids: colle }, function () {
+
+        });
+        //$.ajax({
+        //    type: "POST",
+        //    url: "/Reports/SalaryComparativeReport/",
+        //    contentType: "application/json",
+        //    traditional: true,
+        //    beforeSend: function () {
+
+        //    },
+        //    complete: function () {
+
+        //    },
+        //    data: JSON.stringify({ start: st, end: en, typ: typ, ids:colle }),
+        //}).done(function (data) {
+        //    if (data == true) {
+        //        alert('data has been saved');
+
+        //        let prj = $("#Prj_Id").val();
+
+        //    }
+        //    else {
+        //        alert('unable to save the data');
+        //    }
+        //});
+    });
+
+    $('.dep-payrl-lst-dsfjk').select2({
+        ajax: {
+            url: '/HumanResource/GetDepartmentsList/',
+            data: function (params) {
+                var query = {
+                    search: params.term,
+                    type: 'public'
+                }
+
+                // Query parameters will be ?search=[term]&type=public
+                return query;
+            },
+            processResults: function (data) {
+                console.log(data);
+                // Transforms the top-level key of the response object from 'items' to 'results'
+                return {
+                    results: data
+                };
+            }
+        }
+    });
+
+    $('.dep-att-lst-gskfskj').select2({
+        ajax: {
+            url: '/HumanResource/GetDepartmentsList/',
+            data: function (params) {
+                var query = {
+                    search: params.term,
+                    type: 'public'
+                }
+
+                // Query parameters will be ?search=[term]&type=public
+                return query;
+            },
+            processResults: function (data) {
+                console.log(data);
+                // Transforms the top-level key of the response object from 'items' to 'results'
+                return {
+                    results: data
+                };
+            }
+        }
+    });
+
+    $('.comp-sal-typ-dsfjk').select2({
+        ajax: {
+            url: '/HumanResource/CompDepsDesigs_Select2/',
+            data: function (params) {
+                var query = {
+                    s: params.term,
+                    t: $('.cmprsn-typ-fdshjksdjfhk option:selected').val()
+                }
+
+                // Query parameters will be ?search=[term]&type=public
+                return query;
+            },
+            processResults: function (data) {
+                console.log(data);
+                // Transforms the top-level key of the response object from 'items' to 'results'
+                return {
+                    results: data
+                };
+            },
+            maximumSelectionLength: 200
+        }
+    });
+
+    $('.cmprsn-typ-fdshjksdjfhk').change(function () {
+        let txt = $('.cmprsn-typ-fdshjksdjfhk option:selected').val();
+        $('.comp-sal-typ-dsfjk').val(null).trigger('change');
+        if (txt == 'SelectedComps' || txt == 'SelectedDepts' || txt == 'SelectedDesigs') {
+            $('.last-opt-sal-rep-kjfhsd').show();
+        }
+        else {
+            $('.last-opt-sal-rep-kjfhsd').hide();
+        }
+    });
+
+    $('.fhjkasd').unbind().click(function () {
+        if (!SASLoaded($(this))) {
+            SASLoad($(this));
+        }
+        else {
+            SASUnLoad($(this));
+        }
+    });
+
+    $('.edt-btn').unbind().click(function () {
+        if ($(this).hasClass('__edit___Mode__')) {
+            $('.drag-hero-demos__grid').packery('destroy');
+            $.each(draggies, function (i, v) {
+                v.destroy();
+            });
+            draggies = [];
+            $(this).removeClass('__edit___Mode__');
+        }
+        else {
+            $(this).addClass('__edit___Mode__');
+            $('.drag-hero-demos__grid').find('.drag-hero-demos__item').each(function (i, gridItem) {
+                var draggie = new Draggabilly(gridItem);
+                draggies.push(draggie);
+                // bind drag events to Packery
+                $('.drag-hero-demos__grid').packery('bindDraggabillyEvents', draggie);
+            });
+        }
+    });
+
+</script>
+
+<style>
+    .grid-item {
+        width: 25%;
+    }
+
+    .grid-item--width2 {
+        width: 50%;
+    }
+
+    .edt-btn {
+        position: fixed;
+        bottom: 2%;
+        right: 2%;
+        background-color: #d0232a;
+        height: 50px;
+        width: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        color: white;
+        opacity: 0.5;
+        transition: all 0.6s linear 0s;
+        box-shadow: 1px 1px #000;
+    }
+
+        .edt-btn:hover {
+            opacity: 1;
+            transition: all 0.3s linear 0s;
+            transform: rotate(60deg);
+            box-shadow: 5px 5px #000;
+        }
+
+    .__edit___Mode__ {
+        opacity: 1;
+        transition: all 0.3s linear 0s;
+        transform: rotate(60deg);
+        box-shadow: 5px 5px #000;
+    }
+</style>

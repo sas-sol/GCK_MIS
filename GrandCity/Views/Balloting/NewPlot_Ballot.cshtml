@@ -1,0 +1,27 @@
+﻿<div class="col-md-12 bgc-white pt-md-3">
+    <div class="mt-md-3 mb-md-5">
+        <div class="row mt-md-3">
+            <div class="col-md-3">
+                <label>File Number</label>
+                <input type="text" class="form-control " id="file_num" />
+            </div>
+            <div class="col-md-2">
+                <button class="btn btn-primary" style="margin-top:29px" id="sear-file-short">Search</button>
+            </div>
+        </div>
+        <hr />
+        <div class="row mt-md-3" id="plot-det"></div>
+        <hr />
+        <h5>New Number</h5>
+        <div class="row mt-md-3">
+            <div class="col-md-3">
+                <label>Block</label>
+                @Html.DropDownList("Blocks", null, htmlAttributes: new { @class = "form-control n-blk" })
+            </div>
+            <div class="col-md-3">
+                <label>Plot No.</label>
+                <select class="form-control" id="n-pltnos"></select>
+            </div>
+        </div>
+    </div>
+</div>

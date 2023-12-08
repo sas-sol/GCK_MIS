@@ -1,0 +1,164 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Sp_Get_Purchase_Req_For_Quotation_Result>
+<input type="hidden" />
+<div class="form-row">
+    <div class="form-group col-md-3">
+        <h6>Vendor</h6>
+        <select class='form-control vendor' name="V"></select>
+    </div>
+    <div class="form-group col-md-3">
+        <h6>Quotation Ref:</h6>
+        <input type="text" class="form-control quot-ref" />
+    </div>
+    <div class="form-group col-md-3">
+        <h6>Qutation Attachment</h6>
+        <input type="file" id="quote-file" />
+    </div>
+    <div class="form-group col-md-3">
+        <h6>Delivery Date</h6>
+        <input type="text" class="form-control fdeliv-date" readonly />
+    </div>
+    <div class="col-md-4">
+        <h6>Payment Timeline</h6>
+        <div class="form-group ">
+            <select class="form-control select1 PaymentTime" name="PaymentTime" id="PaymentTime" data-let="1">
+                <option value="" >Select Timeline</option>
+                <option value="100% Advance">100% Advance </option>
+                <option value="75% Advance & BOD">75% Advance & Balance on Delivery</option>
+                <option value="50% Advance & BOD">50% Advance & Balance on Delivery</option>
+                <option value="25% Advance & BOD">25% Advance & Balance on Delivery</option>
+                <option value="Cash On Delivery">Cash on Delivery</option>
+                <option value="15 Days Credit">15 days Credit</option>
+                <option value="30 Days Credit">30 days Credit</option>
+                <option value="45 Days Credit">45 days Credit</option>
+                <option value="60 Days Credit">60 days Credit</option>
+                <option value="75 Days Credit">75 days Credit</option>
+                <option value="90 Days Credit">90 days Credit</option>
+            </select>
+        </div>
+    </div>
+    <div class="form-group col-md-8">
+        <h6>Remarks:</h6>
+        <input type="text" class="form-control Description" />
+    </div>
+
+</div>
+<hr />
+<div class="form-row">
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th width="10%">Sr.</th>
+                <th width="35%">Item Name</th>
+                <th width="10%">Req Qty</th>
+                <th width="10%">Qty</th>
+                <th width="10%">Rate  / <select class="ccy" name="C"><option value="Rs">Rs</option><option value="$">$</option><option value="£">£</option></select></th>
+                <th width="10%">GST % <input type="text" style="width:40px" class="tax qty-rate" /></th>
+                <th width="10%">Total</th>
+                <th width="10%">Ex Delivery</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                int i = 1;
+                var check = Model.Any(x => x.Item_Id == -1);
+                if (check)
+                {
+                    <tr >
+                        <td colspan="8">Please Complete the Item Codes First Then add Quotaions</td>
+                    </tr>
+                }
+                else
+                {
+                    foreach (var item in Model)
+                    {
+                        <tr data-id="@item.Id" data-item="@item.Item_Id">
+                            <td>
+                                @(i++)
+                                <input type="checkbox" class="it-qu-ch" />
+                            </td>
+                            <td>@item.Item_Name</td>
+                            <td>@string.Format("{0:0,0.##}", item.Qty)</td>
+                            <td class="zer-pad"><input type="text" style="border:none" class="form-control coma qty qty-rate" value="@string.Format("{0:0,0.##}", item.Qty)" /></td>
+                            <td class="zer-pad"><input type="text" style="border:none" class="form-control coma rate-p-uom qty-rate" /></td>
+                            <td class="zer-pad"><input type="text" style="border:none" class="form-control coma gst qty-rate" /></td>
+                            <td class="zer-pad"><input type="text" style="border:none" class="form-control ttl-rate" /></td>
+                            <td class="zer-pad"><input type="text" data-provide="datepicker" style="border:none" class="form-control deliv-date" /></td>
+                        </tr>
+                    }
+                    <tr>
+                        <td colspan="6"></td>
+                        <td colspan="2" class="zer-pad"><input type="text" style="border:none" class="form-control totalquo" readonly /></td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
+<script>
+    // manual stock in
+   
+    $(function () {
+        $('.vendor').select2({
+            dropdownParent: $('#Modal'),
+            placeholder: "Search for item",
+            ajax: {
+                url: '/Vendor/GetVendorsForAutoComplete/',
+                dataType: 'json',
+                params: {
+                    contentType: 'application/json; charset=utf-8'
+                },
+                quietMillis: 100,
+                data: function (params) {
+                    return {
+                        q: params.term// search term
+                    };
+                },
+                processResults: function (data) {
+                    return {
+                        results: data.items
+                    };
+                }
+            }
+        });
+
+        $('.modal-footer').append(' <button type="button" class="btn btn-primary add-all-quot">Add Quote</button>');
+    });
+    // Rate & qty calc
+    $(document).on('keyup', '.qty-rate', function () {
+        var qty = RemoveComma($(this).closest('tr').find(".qty").val());
+        var rate = RemoveComma($(this).closest('tr').find(".rate-p-uom").val());
+
+        var tax = RemoveComma($(".tax").val());
+        var total = qty * rate;
+        var gst = qty * ((tax * rate) / 100);
+
+        $(this).closest('tr').find(".gst").val(Number(gst).toLocaleString());
+        $(this).closest('tr').find(".gst-v").val(gst);
+        $(this).closest('tr').find(".ttl-rate").val(Number(total + gst).toLocaleString());
+        caltotalquote();
+    });
+    $(document).on("blur", ".deliv-date", function () {
+        var hold_date = $('.deliv-date').val();;
+        $('.deliv-date').each(function () {
+            var date = $(this).val();
+            if (date == "") {
+                return;
+            }
+            var isafter = moment(date).isAfter(hold_date);
+            if (isafter) {
+                hold_date = date;
+            }
+        });
+        $('.fdeliv-date').val(hold_date);
+    });
+    $(document).on('keyup', '.gst-cal', function () {
+    });
+    function caltotalquote() {
+        var total = 0;
+        $('.ttl-rate').each(function () {
+            var itemttl = Number(RemoveComma($(this).val()));
+            total += itemttl;
+        });
+        $('.totalquo').val(Number(total).toLocaleString());
+    }
+</script>

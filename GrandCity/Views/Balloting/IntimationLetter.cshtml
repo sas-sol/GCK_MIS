@@ -1,0 +1,457 @@
+﻿@model MeherEstateDevelopers.Models.Sp_Get_BallotIntimationLetter_Result
+
+<style>
+    @@page {
+        margin: 0 !important;
+    }
+
+    body {
+        margin: 0px !important;
+    }
+
+    @@media print {
+        .letterhead {
+            height: 1600px;
+            width: 1186px;
+            margin: 0 !important;
+            background-image: url(../../images/BallotLetter.jpg);
+            background-size: 1186px 1600px;
+            font-family: sans-serif;
+            color: black;
+            background-repeat: no-repeat;
+        }
+
+        .let-cont {
+            padding: 15% 5% 0 5%;
+        }
+    }
+
+    .letterhead {
+        height: 1555px;
+        width: 1186px;
+        background-image: url(../../images/BallotLetter.jpg);
+        background-size: 1186px 1555px;
+        font-family: sans-serif;
+        color: black;
+        background-repeat: no-repeat;
+    }
+
+    .let-cont {
+        padding: 15% 5% 0 5%;
+    }
+
+    p {
+        color: black !important;
+        font-size: 20px
+    }
+</style>
+@if (Model.PlotType == "Normal")
+{
+    <div class="letterhead">
+        <div class="let-cont">
+            @*<p><span style="font-family: 'Abadi',sans-serif;">&nbsp;</span></p>*@
+            <p><span style="font-family: 'Abadi',sans-serif;">&nbsp;</span></p>
+            @*<p><span style="font-family: 'Abadi',sans-serif;">&nbsp;</span></p>
+        <p><span style="font-family: 'Abadi',sans-serif;">&nbsp;</span></p>*@
+            <p><span style="font-family: 'Abadi',sans-serif;">&nbsp;</span></p>
+
+            <p style="text-align: center;"><strong><u><span style="font-size: 14.0pt; font-family: 'Abadi',sans-serif;">Sher Afghan – Ballot Confirmation</span></u></strong></p>
+            <p><strong><span style="font-family: 'Abadi',sans-serif;">Dear @Model.Owner_Name,</span></strong></p>
+            @*<p style="line-height:1"><span style="font-family: 'Abadi',sans-serif;">Hope you are having a great day!</span></p>*@
+
+            <p style="text-align: justify; text-justify: inter-ideograph;line-height:1.3"><span style="font-family: 'Abadi',sans-serif;">We are pleased to announce that you have been allotted below mentioned plot after balloting held on <b><u>@string.Format("{0:dd-MMM-yyyy}", Model.BallotedOn)</u></b> against your file <b><u>@Model.BallotFile</u></b> </span></p>
+
+
+            <table class="table-bordered table">
+                <thead>
+                    <tr style="text-align:center">
+                        <th>File</th>
+                        <th>Plot</th>
+                        <th>Sector</th>
+                        <th>Location</th>
+                        <th>Size</th>
+                        <th>Block</th>
+                        <th>Phase</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr style="text-align:center">
+                        <td>@Model.BallotFile</td>
+                        <td>@Model.PlotNo</td>
+                        <td>@Model.Sector</td>
+                        <td>@Model.PlotType</td>
+                        <td>@Model.PlotArea Marla (@Model.PlotSize Sq Ft.)</td>
+                        <td>Sher Afghan</td>
+                        <td>Phase: II</td>
+                    </tr>
+                </tbody>
+            </table>
+            @*<p style="text-align: justify; text-justify: inter-ideograph;line-height:1"><span style="font-family: 'Abadi',sans-serif;">Plot: @Model.PlotNo</span></p>
+        <p style="text-align: justify; text-justify: inter-ideograph;line-height:1"><span style="font-family: 'Abadi',sans-serif;">Block: Sher Afghan</span></p>
+        <p style="text-align: justify; text-justify: inter-ideograph;line-height:1"><span style="font-family: 'Abadi',sans-serif;">Sector: @Model.Sector</span></p>
+        <p style="text-align: justify; text-justify: inter-ideograph;line-height:1"><span style="font-family: 'Abadi',sans-serif;">Size: @Model.PlotArea Marla (@Model.PlotSize Sq Ft.)</span></p>
+        <p style="text-align: justify; text-justify: inter-ideograph;line-height:1"><span style="font-family: 'Abadi',sans-serif;">Phase: II</span></p>*@
+            <p style="text-align: justify; text-justify: inter-ideograph;line-height:1.3"><span style="font-family: 'Abadi',sans-serif;"><b>Terms and Conditions</b></span></p>
+            <ul>
+                <li>
+                    <p style="text-align: justify; text-justify: inter-ideograph;line-height:1.3"><span style="font-family: 'Abadi',sans-serif;"></span>Service Charges will be applicable on the plot as per company policy.</p>
+                </li>
+                <li>
+                    <p style="text-align: justify; text-justify: inter-ideograph;line-height:1.3"><span style="font-family: 'Abadi',sans-serif;">The owner is required to construct the building within three years after possession begins. In case of failure to construct the building, non-construction charges will be levied on the plot until the commencement of construction.</span></p>
+                </li>
+                <li>
+                    <p style="text-align: justify; text-justify: inter-ideograph;line-height:1.3"><span style="font-family: 'Abadi',sans-serif;">Excess area will be charged to the owner as determined by the management.</span></p>
+                </li>
+                <li>
+                    <p style="text-align: justify; text-justify: inter-ideograph;line-height:1.3"><span style="font-family: 'Abadi',sans-serif;">Allotment letter will be issued upon completion of the payment plan and clearance of all dues including development charges, if any.</span></p>
+                </li>
+                <li>
+                    <p style="text-align: justify; text-justify: inter-ideograph;line-height:1.3"><span style="font-family: 'Abadi',sans-serif;">Plots can be transfered as per company policy.</span></p>
+                </li>
+                <li>
+                    <p style="text-align: justify; text-justify: inter-ideograph;line-height:1.3"><span style="font-family: 'Abadi',sans-serif;">Meher Estate Developers reserves the right to make any change in location, size or dimension of the plot due to changes in layout plan or any other special circumstances, without any prior notice.</span></p>
+                </li>
+                <li>
+                    <p style="text-align: justify; text-justify: inter-ideograph;line-height:1.3"><span style="font-family: 'Abadi',sans-serif;">The allottee shall be bound to pay all applicable government taxes.</span></p>
+                </li>
+                @*<li>
+            <p style="text-align: justify; text-justify: inter-ideograph;line-height:1.3"><span style="font-family: 'Abadi',sans-serif;">I agree to the terms of company and details of this letter.</span></p>
+        </li>*@
+            </ul>
+            @*<p style="text-align: justify; text-justify: inter-ideograph;line-height:1.3"><span style="font-family: 'Abadi',sans-serif;"></span>Service Charges will be applicable on plot owner as per company policy.</p>*@
+
+            <p><span style="font-family: 'Abadi',sans-serif;">&nbsp;</span></p>
+            <p><span style="font-family: 'Abadi',sans-serif;">&nbsp;</span></p>
+            <p><span style="font-family: 'Abadi',sans-serif;">&nbsp;</span></p>
+            <p><span style="font-family: 'Abadi',sans-serif;">&nbsp;</span></p>
+            <p><span style="font-family: 'Abadi',sans-serif;">&nbsp;</span></p>
+            @*<p style="line-height:1"><span style="font-family: 'Abadi',sans-serif;">_________________</span></p>
+            <p style="line-height:1"><span style="font-family: 'Abadi',sans-serif;">Thumb Impression </span></p>*@
+            @*<p style="line-height:1"><span style="font-family: 'Abadi',sans-serif;">Date: @string.Format("{0:dd-MMMM-yyyy}", DateTime.Now)</span></p>*@
+            <p style="line-height:1.3"><span style="font-family: 'Abadi',sans-serif; font-size:13px;"><i>* Please Note This is a computer generated Letter. Errors and ommissions excepted.</i></span></p>
+
+            @*<p></p>
+        <p><span style="font-family: 'Abadi',sans-serif;">Regards,</span></p>
+        <p><span style="font-family: 'Abadi',sans-serif;">&nbsp;</span></p>
+        <p style="line-height:1"><span style="font-family: 'Abadi',sans-serif;">_________________</span></p>
+        <p style="line-height:1"><span style="font-family: 'Abadi',sans-serif;">Mr. Muhammad Naeem, </span></p>
+        <p style="line-height:1"><span style="font-family: 'Abadi',sans-serif;">Records Manager,</span></p>
+        <p style="line-height:1"><span style="font-family: 'Abadi',sans-serif;">Date: @string.Format("{0:dd-MMMM-yyyy}", DateTime.Now)</span></p>*@
+        </div>
+    </div>
+
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+
+    <div class="letterhead">
+        <div class="let-cont">
+            <p><span style="font-family: 'Abadi',sans-serif;">&nbsp;</span></p>
+            @*<p><span style="font-family: 'Abadi',sans-serif;">&nbsp;</span></p>*@
+            @*<p><span style="font-family: 'Abadi',sans-serif;">&nbsp;</span></p>
+        <p><span style="font-family: 'Abadi',sans-serif;">&nbsp;</span></p>*@
+            <p><span style="font-family: 'Abadi',sans-serif;">&nbsp;</span></p>
+
+            <p style="text-align: center;"><strong><u><span style="font-size: 14.0pt; font-family: 'Abadi',sans-serif;">Sher Afghan – Ballot Intimation Letter</span></u></strong></p>
+            <p><strong><span style="font-family: 'Abadi',sans-serif;">Dear @Model.Owner_Name,</span></strong></p>
+            @*<p style="line-height:1"><span style="font-family: 'Abadi',sans-serif;">Hope you are having a great day!</span></p>*@
+
+            <p style="text-align: justify; text-justify: inter-ideograph;line-height:1.3"><span style="font-family: 'Abadi',sans-serif;">We are pleased to announce that you have been allotted below mentioned plot after balloting held on <b><u>@string.Format("{0:dd-MMM-yyyy}", Model.BallotedOn)</u></b> against your file <b><u>@Model.BallotFile</u></b> .</span></p>
+
+
+            <table class="table-bordered table">
+                <thead>
+                    <tr style="text-align:center">
+                        <th>Application No.</th>
+                        <th>Plot</th>
+                        <th>Sector</th>
+                        <th>Block</th>
+                        <th>Phase</th>
+                        <th>Location</th>
+                        <th>Size</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr style="text-align:center">
+                        <td>@Model.BallotFile</td>
+                        <td>@Model.PlotNo</td>
+                        <td>@Model.Sector</td>
+                        <td>@Model.Block</td>
+                        <td>Phase: II</td>
+                        <td>@Model.PlotType</td>
+                        <td>@Model.PlotArea Marla (@Model.PlotSize Sq Ft.)</td>
+                    </tr>
+                </tbody>
+            </table>
+            @*<p style="text-align: justify; text-justify: inter-ideograph;line-height:1"><span style="font-family: 'Abadi',sans-serif;">Plot: @Model.PlotNo</span></p>
+        <p style="text-align: justify; text-justify: inter-ideograph;line-height:1"><span style="font-family: 'Abadi',sans-serif;">Block: Sher Afghan</span></p>
+        <p style="text-align: justify; text-justify: inter-ideograph;line-height:1"><span style="font-family: 'Abadi',sans-serif;">Sector: @Model.Sector</span></p>
+        <p style="text-align: justify; text-justify: inter-ideograph;line-height:1"><span style="font-family: 'Abadi',sans-serif;">Size: @Model.PlotArea Marla (@Model.PlotSize Sq Ft.)</span></p>
+        <p style="text-align: justify; text-justify: inter-ideograph;line-height:1"><span style="font-family: 'Abadi',sans-serif;">Phase: II</span></p>*@
+            <p style="text-align: justify; text-justify: inter-ideograph;line-height:1.3"><span style="font-family: 'Abadi',sans-serif;"><b>Terms and Conditions</b></span></p>
+            <ul>
+                <li>
+                    <p style="text-align: justify; text-justify: inter-ideograph;line-height:1.3"><span style="font-family: 'Abadi',sans-serif;"></span>Service Charges will be applicable on the plot as per company policy.</p>
+                </li>
+                <li>
+                    <p style="text-align: justify; text-justify: inter-ideograph;line-height:1.3"><span style="font-family: 'Abadi',sans-serif;">The owner is required to construct the building within three years after possession begins. In case of failure to construct the building, non-construction charges will be levied on the plot until the commencement of construction.</span></p>
+                </li>
+                <li>
+                    <p style="text-align: justify; text-justify: inter-ideograph;line-height:1.3"><span style="font-family: 'Abadi',sans-serif;">Excess area will be charged to the owner as determined by the management.</span></p>
+                </li>
+                <li>
+                    <p style="text-align: justify; text-justify: inter-ideograph;line-height:1.3"><span style="font-family: 'Abadi',sans-serif;">Allotment letter will be issued upon completion of the payment plan and clearance of all dues including development charges, if any.</span></p>
+                </li>
+                <li>
+                    <p style="text-align: justify; text-justify: inter-ideograph;line-height:1.3"><span style="font-family: 'Abadi',sans-serif;">Plots can be transfered as per company policy.</span></p>
+                </li>
+                <li>
+                    <p style="text-align: justify; text-justify: inter-ideograph;line-height:1.3"><span style="font-family: 'Abadi',sans-serif;">Meher Estate Developers reserves the right to make any change in location, size or dimension of the plot due to changes in layout plan or any other special circumstances, without any prior notice.</span></p>
+                </li>
+                <li>
+                    <p style="text-align: justify; text-justify: inter-ideograph;line-height:1.3"><span style="font-family: 'Abadi',sans-serif;">The allottee shall be bound to pay all applicable government taxes.</span></p>
+                </li>
+                @*<li>
+                <p style="text-align: justify; text-justify: inter-ideograph;line-height:1.3"><span style="font-family: 'Abadi',sans-serif;">I agree to the terms of company and details of this letter.</span></p>
+            </li>*@
+            </ul>
+            @*<p style="text-align: justify; text-justify: inter-ideograph;line-height:1.3"><span style="font-family: 'Abadi',sans-serif;"></span>Service Charges will be applicable on plot owner as per company policy.</p>*@
+
+            @*<p><span style="font-family: 'Abadi',sans-serif;">&nbsp;</span></p>
+        <p><span style="font-family: 'Abadi',sans-serif;">&nbsp;</span></p>
+        <p><span style="font-family: 'Abadi',sans-serif;">&nbsp;</span></p>*@
+            @*<p style="text-align: justify; text-justify: inter-ideograph;line-height:1.3"><span style="font-family: 'Abadi',sans-serif;">&nbsp;&nbsp;&nbsp; <input type="checkbox" style="-ms-transform: scale(2); /* IE */-moz-transform: scale(2);-webkit-transform: scale(2);-o-transform: scale(2);transform: scale(2);padding: 10px;" checked>&nbsp; I agree to the terms of company and details of this letter.</span></p>*@
+            <p><span style="font-family: 'Abadi',sans-serif;">&nbsp;</span></p>
+            <p><span style="font-family: 'Abadi',sans-serif;">&nbsp;</span></p>
+            @*<p><span style="font-family: 'Abadi',sans-serif;">&nbsp;</span></p>*@
+            <p><span style="font-family: 'Abadi',sans-serif;">&nbsp;</span></p>
+            @*<p style="line-height:1"><span style="font-family: 'Abadi',sans-serif;">_________________</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span style="font-family: 'Abadi',sans-serif;">_________________</span></p>*@
+            <p style="line-height:1"><span style="font-family: 'Abadi',sans-serif; border-top:1px solid #000; padding-top:15px;">@Model.Owner_Name, </span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span style="font-family: 'Abadi',sans-serif; border-top:1px solid #000; padding-top:15px;">Thumb Impression </span></p>
+            <p style="line-height:1"><span style="font-family: 'Abadi',sans-serif;">CNIC/NICOP: @Model.CNIC</span></p>
+            <p style="line-height:1"><span style="font-family: 'Abadi',sans-serif;">Date: @string.Format("{0:dd-MMMM-yyyy}", DateTime.Now)</span></p>
+            <p style="line-height:0.5"><span style="font-family: 'Abadi',sans-serif; font-size:13px;"><i>* Please note this is a computer generated letter. Errors and ommissions excepted.</i></span></p>
+
+            @*<p></p>
+        <p><span style="font-family: 'Abadi',sans-serif;">Regards,</span></p>
+        <p><span style="font-family: 'Abadi',sans-serif;">&nbsp;</span></p>
+        <p style="line-height:1"><span style="font-family: 'Abadi',sans-serif;">_________________</span></p>
+        <p style="line-height:1"><span style="font-family: 'Abadi',sans-serif;">Mr. Muhammad Naeem, </span></p>
+        <p style="line-height:1"><span style="font-family: 'Abadi',sans-serif;">Records Manager,</span></p>
+        <p style="line-height:1"><span style="font-family: 'Abadi',sans-serif;">Date: @string.Format("{0:dd-MMMM-yyyy}", DateTime.Now)</span></p>*@
+            @*<p><span style="font-family: 'Abadi',sans-serif;">Regards,</span></p>*@
+            @*<p><span style="font-family: 'Abadi',sans-serif;">&nbsp;</span></p>
+        <p style="line-height:1"><span style="font-family: 'Abadi',sans-serif;">_________________</span></p>
+        <p style="line-height:1"><span style="font-family: 'Abadi',sans-serif;">@Model.Owner_Name, </span></p>
+        <p style="line-height:1"><span style="font-family: 'Abadi',sans-serif;">Date: @string.Format("{0:dd-MMMM-yyyy}", DateTime.Now)</span></p>*@
+            <p><span style="font-family: 'Abadi',sans-serif;">&nbsp;</span></p>
+            <p><span style="font-family: 'Abadi',sans-serif;">&nbsp;</span></p>
+            <p><span style="font-family: 'Abadi',sans-serif;">&nbsp;</span></p>
+            <p><span style="font-family: 'Abadi',sans-serif;">&nbsp;</span></p>
+        </div>
+    </div>
+}
+else
+{
+    <div class="letterhead">
+        <div class="let-cont">
+            <p><span style="font-family: 'Abadi',sans-serif;">&nbsp;</span></p>
+            @*<p><span style="font-family: 'Abadi',sans-serif;">&nbsp;</span></p>*@
+            @*<p><span style="font-family: 'Abadi',sans-serif;">&nbsp;</span></p>
+        <p><span style="font-family: 'Abadi',sans-serif;">&nbsp;</span></p>*@
+            <p><span style="font-family: 'Abadi',sans-serif;">&nbsp;</span></p>
+
+            <p style="text-align: center;"><strong><u><span style="font-size: 14.0pt; font-family: 'Abadi',sans-serif;">Sher Afghan – Ballot Intimation Letter</span></u></strong></p>
+            <p><strong><span style="font-family: 'Abadi',sans-serif;">Dear @Model.Owner_Name,</span></strong></p>
+            @*<p style="line-height:1"><span style="font-family: 'Abadi',sans-serif;">Hope you are having a great day!</span></p>*@
+
+            <p style="text-align: justify; text-justify: inter-ideograph;line-height:1.3"><span style="font-family: 'Abadi',sans-serif;">We are pleased to announce that you have been allotted below mentioned plot after balloting held on <b><u>@string.Format("{0:dd-MMM-yyyy}", Model.BallotedOn)</u></b> against your file <b><u>@Model.BallotFile</u></b>.</span></p>
+
+
+            <table class="table-bordered table">
+                <thead>
+                    <tr style="text-align:center">
+                        <th>File</th>
+                        <th>Plot</th>
+                        <th>Location</th>
+                        <th>Sector</th>
+                        <th>Size</th>
+                        <th>Block</th>
+                        <th>Phase</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr style="text-align:center">
+                        <td>@Model.BallotFile</td>
+                        <td>@Model.PlotNo</td>
+                        <td>@Model.PlotType</td>
+                        <td>@Model.Sector</td>
+                        <td>@Model.PlotArea Marla (@Model.PlotSize Sq Ft.)</td>
+                        <td>Sher Afghan</td>
+                        <td>Phase: II</td>
+                    </tr>
+                </tbody>
+            </table>
+            @*<p style="text-align: justify; text-justify: inter-ideograph;line-height:1"><span style="font-family: 'Abadi',sans-serif;">Plot: @Model.PlotNo</span></p>
+        <p style="text-align: justify; text-justify: inter-ideograph;line-height:1"><span style="font-family: 'Abadi',sans-serif;">Block: Sher Afghan</span></p>
+        <p style="text-align: justify; text-justify: inter-ideograph;line-height:1"><span style="font-family: 'Abadi',sans-serif;">Sector: @Model.Sector</span></p>
+        <p style="text-align: justify; text-justify: inter-ideograph;line-height:1"><span style="font-family: 'Abadi',sans-serif;">Size: @Model.PlotArea Marla (@Model.PlotSize Sq Ft.)</span></p>
+        <p style="text-align: justify; text-justify: inter-ideograph;line-height:1"><span style="font-family: 'Abadi',sans-serif;">Phase: II</span></p>*@
+            <p style="text-align: justify; text-justify: inter-ideograph;line-height:1.3"><span style="font-family: 'Abadi',sans-serif;"><b>Terms and Conditions</b></span></p>
+            <ul>
+                <li>
+                    <p style="text-align: justify; text-justify: inter-ideograph;line-height:1.3"><span style="font-family: 'Abadi',sans-serif;"></span>Please pay your preference charges. In case of failure to pay these charges within stipulated period of time you will be relocated to normal plot.</p>
+                </li>
+                <li>
+                    <p style="text-align: justify; text-justify: inter-ideograph;line-height:1.3"><span style="font-family: 'Abadi',sans-serif;"></span>Service Charges will be applicable on the plot as per company policy.</p>
+                </li>
+                <li>
+                    <p style="text-align: justify; text-justify: inter-ideograph;line-height:1.3"><span style="font-family: 'Abadi',sans-serif;">The owner is required to construct the building within three years after possession begins. In case of failure to construct the building, non-construction charges will be levied on the plot until the commencement of construction.</span></p>
+                </li>
+                <li>
+                    <p style="text-align: justify; text-justify: inter-ideograph;line-height:1.3"><span style="font-family: 'Abadi',sans-serif;">Excess area will be charged to the owner as determined by the management.</span></p>
+                </li>
+                <li>
+                    <p style="text-align: justify; text-justify: inter-ideograph;line-height:1.3"><span style="font-family: 'Abadi',sans-serif;">Allotment letter will be issued upon completion of the payment plan and clearance of all dues including development charges, if any.</span></p>
+                </li>
+                <li>
+                    <p style="text-align: justify; text-justify: inter-ideograph;line-height:1.3"><span style="font-family: 'Abadi',sans-serif;">Plots can be transfered as per company policy.</span></p>
+                </li>
+                <li>
+                    <p style="text-align: justify; text-justify: inter-ideograph;line-height:1.3"><span style="font-family: 'Abadi',sans-serif;">Meher Estate Developers reserves the right to make any change in location, size or dimension of the plot due to changes in layout plan or any other special circumstances, without any prior notice.</span></p>
+                </li>
+                <li>
+                    <p style="text-align: justify; text-justify: inter-ideograph;line-height:1.3"><span style="font-family: 'Abadi',sans-serif;">The allottee shall be bound to pay all applicable government taxes.</span></p>
+                </li>
+                @*<li>
+            <p style="text-align: justify; text-justify: inter-ideograph;line-height:1.3"><span style="font-family: 'Abadi',sans-serif;">I agree to the terms of company and details of this letter.</span></p>
+        </li>*@
+            </ul>
+            @*<p style="text-align: justify; text-justify: inter-ideograph;line-height:1.3"><span style="font-family: 'Abadi',sans-serif;"></span>Service Charges will be applicable on plot owner as per company policy.</p>*@
+
+            <p><span style="font-family: 'Abadi',sans-serif;">&nbsp;</span></p>
+            <p><span style="font-family: 'Abadi',sans-serif;">&nbsp;</span></p>
+            <p><span style="font-family: 'Abadi',sans-serif;">&nbsp;</span></p>
+            <p><span style="font-family: 'Abadi',sans-serif;">&nbsp;</span></p>
+            
+            @*<p style="line-height:1"><span style="font-family: 'Abadi',sans-serif;">_________________</span></p>
+            <p style="line-height:1"><span style="font-family: 'Abadi',sans-serif;">Thumb Impression </span></p>
+            <p style="line-height:1"><span style="font-family: 'Abadi',sans-serif;">Date: @string.Format("{0:dd-MMMM-yyyy}", DateTime.Now)</span></p>*@
+            <p style="line-height:1.3"><span style="font-family: 'Abadi',sans-serif; font-size:13px;"><i>* Please Note This is a computer generated Letter. Errors and ommissions excepted.</i></span></p>
+
+            @*<p></p>
+        <p><span style="font-family: 'Abadi',sans-serif;">Regards,</span></p>
+        <p><span style="font-family: 'Abadi',sans-serif;">&nbsp;</span></p>
+        <p style="line-height:1"><span style="font-family: 'Abadi',sans-serif;">_________________</span></p>
+        <p style="line-height:1"><span style="font-family: 'Abadi',sans-serif;">Mr. Muhammad Naeem, </span></p>
+        <p style="line-height:1"><span style="font-family: 'Abadi',sans-serif;">Records Manager,</span></p>
+        <p style="line-height:1"><span style="font-family: 'Abadi',sans-serif;">Date: @string.Format("{0:dd-MMMM-yyyy}", DateTime.Now)</span></p>*@
+        </div>
+    </div>
+
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <div class="letterhead">
+        <div class="let-cont">
+            <p><span style="font-family: 'Abadi',sans-serif;">&nbsp;</span></p>
+            @*<p><span style="font-family: 'Abadi',sans-serif;">&nbsp;</span></p>*@
+            @*<p><span style="font-family: 'Abadi',sans-serif;">&nbsp;</span></p>
+        <p><span style="font-family: 'Abadi',sans-serif;">&nbsp;</span></p>*@
+            <p><span style="font-family: 'Abadi',sans-serif;">&nbsp;</span></p>
+
+            <p style="text-align: center;"><strong><u><span style="font-size: 14.0pt; font-family: 'Abadi',sans-serif;">Sher Afghan – Ballot Intimation Letter</span></u></strong></p>
+            <p><strong><span style="font-family: 'Abadi',sans-serif;">Dear @Model.Owner_Name,</span></strong></p>
+            @*<p style="line-height:1"><span style="font-family: 'Abadi',sans-serif;">Hope you are having a great day!</span></p>*@
+
+            <p style="text-align: justify; text-justify: inter-ideograph;line-height:1.3"><span style="font-family: 'Abadi',sans-serif;">We are pleased to announce that you have been allotted below mentioned plot after balloting held on <b><u>@string.Format("{0:dd-MMM-yyyy}", Model.BallotedOn)</u></b> against your file <b><u>@Model.BallotFile</u></b>.</span></p>
+
+
+            <table class="table-bordered table">
+                <thead>
+                    <tr style="text-align:center">
+                        <th>File</th>
+                        <th>Plot</th>
+                        <th>Location</th>
+                        <th>Sector</th>
+                        <th>Size</th>
+                        <th>Block</th>
+                        <th>Phase</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr style="text-align:center">
+                        <td>@Model.BallotFile</td>
+                        <td>@Model.PlotNo</td>
+                        <td>@Model.PlotType</td>
+                        <td>@Model.Sector</td>
+                        <td>@Model.PlotArea Marla (@Model.PlotSize Sq Ft.)</td>
+                        <td>Sher Afghan</td>
+                        <td>Phase: II</td>
+                    </tr>
+                </tbody>
+            </table>
+            @*<p style="text-align: justify; text-justify: inter-ideograph;line-height:1"><span style="font-family: 'Abadi',sans-serif;">Plot: @Model.PlotNo</span></p>
+        <p style="text-align: justify; text-justify: inter-ideograph;line-height:1"><span style="font-family: 'Abadi',sans-serif;">Block: Sher Afghan</span></p>
+        <p style="text-align: justify; text-justify: inter-ideograph;line-height:1"><span style="font-family: 'Abadi',sans-serif;">Sector: @Model.Sector</span></p>
+        <p style="text-align: justify; text-justify: inter-ideograph;line-height:1"><span style="font-family: 'Abadi',sans-serif;">Size: @Model.PlotArea Marla (@Model.PlotSize Sq Ft.)</span></p>
+        <p style="text-align: justify; text-justify: inter-ideograph;line-height:1"><span style="font-family: 'Abadi',sans-serif;">Phase: II</span></p>*@
+            <p style="text-align: justify; text-justify: inter-ideograph;line-height:1.3"><span style="font-family: 'Abadi',sans-serif;"><b>Terms and Conditions</b></span></p>
+            <ul>
+                <li>
+                    <p style="text-align: justify; text-justify: inter-ideograph;line-height:1.3"><span style="font-family: 'Abadi',sans-serif;"></span>Please pay your preference charges. In case of failure to pay these charges within stipulated period of time you will be relocated to normal plot.</p>
+                </li>
+                <li>
+                    <p style="text-align: justify; text-justify: inter-ideograph;line-height:1.3"><span style="font-family: 'Abadi',sans-serif;"></span>Service Charges will be applicable on the plot as per company policy.</p>
+                </li>
+                <li>
+                    <p style="text-align: justify; text-justify: inter-ideograph;line-height:1.3"><span style="font-family: 'Abadi',sans-serif;">The owner is required to construct the building within three years after possession begins. In case of failure to construct the building, non-construction charges will be levied on the plot until the commencement of construction.</span></p>
+                </li>
+                <li>
+                    <p style="text-align: justify; text-justify: inter-ideograph;line-height:1.3"><span style="font-family: 'Abadi',sans-serif;">Excess area will be charged to the owner as determined by the management.</span></p>
+                </li>
+                <li>
+                    <p style="text-align: justify; text-justify: inter-ideograph;line-height:1.3"><span style="font-family: 'Abadi',sans-serif;">Allotment letter will be issued upon completion of the payment plan and clearance of all dues including development charges, if any.</span></p>
+                </li>
+                <li>
+                    <p style="text-align: justify; text-justify: inter-ideograph;line-height:1.3"><span style="font-family: 'Abadi',sans-serif;">Plots can be transfered as per company policy.</span></p>
+                </li>
+                <li>
+                    <p style="text-align: justify; text-justify: inter-ideograph;line-height:1.3"><span style="font-family: 'Abadi',sans-serif;">Meher Estate Developers reserves the right to make any change in location, size or dimension of the plot due to changes in layout plan or any other special circumstances, without any prior notice.</span></p>
+                </li>
+                <li>
+                    <p style="text-align: justify; text-justify: inter-ideograph;line-height:1.3"><span style="font-family: 'Abadi',sans-serif;">The allottee shall be bound to pay all applicable government taxes.</span></p>
+                </li>
+                @*<li>
+            <p style="text-align: justify; text-justify: inter-ideograph;line-height:1.3"><span style="font-family: 'Abadi',sans-serif;">I agree to the terms of company and details of this letter.</span></p>
+        </li>*@
+            </ul>
+            @*<p style="text-align: justify; text-justify: inter-ideograph;line-height:1.3"><span style="font-family: 'Abadi',sans-serif;"></span>Service Charges will be applicable on plot owner as per company policy.</p>*@
+
+            @*<p style="text-align: justify; text-justify: inter-ideograph;line-height:0"><span style="font-family: 'Abadi',sans-serif;">&nbsp;&nbsp;&nbsp; <input type="checkbox" style="-ms-transform: scale(2); /* IE */-moz-transform: scale(2);-webkit-transform: scale(2);-o-transform: scale(2);transform: scale(2);padding: 10px;" checked>&nbsp; I agree to the terms of company and details of this letter.</span></p>*@
+            <p><span style="font-family: 'Abadi',sans-serif;">&nbsp;</span></p>
+            <p><span style="font-family: 'Abadi',sans-serif;">&nbsp;</span></p>
+            @*<p><span style="font-family: 'Abadi',sans-serif;">&nbsp;</span></p>*@
+            <p style="line-height:1">@*<span style="font-family: 'Abadi',sans-serif;">_________________</span>*@ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span style="font-family: 'Abadi',sans-serif;">@*_________________*@</span></p>
+            <p style="line-height:1"><span style="font-family: 'Abadi',sans-serif; border-top:1px solid #000; padding-top:15px;">@Model.Owner_Name, </span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span style="font-family: 'Abadi',sans-serif; border-top: 1px solid #000; padding-top:15px;">Thumb Impression </span></p>
+            <p style="line-height:1"><span style="font-family: 'Abadi',sans-serif;">CNIC/NICOP: @Model.CNIC</span></p>
+            <p style="line-height:1"><span style="font-family: 'Abadi',sans-serif;">Date: @string.Format("{0:dd-MMMM-yyyy}", DateTime.Now)</span></p>
+            <p style="line-height:0"><span style="font-family: 'Abadi',sans-serif; font-size:13px;"><i>* Please Note This is a computer generated Letter. Errors and ommissions excepted.</i></span></p>
+
+            @*<p><span style="font-family: 'Abadi',sans-serif;">Regards,</span></p>*@
+        </div>
+    </div>
+}
+@*<div style="page-break-after:always"></div>
+    @{
+        Html.RenderAction("FileStatmentAcc","Reports",new { Token = Model.FileFormNumber });
+    }*@

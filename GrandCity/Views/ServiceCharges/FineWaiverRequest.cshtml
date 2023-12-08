@@ -1,0 +1,304 @@
+﻿@{
+    Layout = "~/Views/Shared/_StaffLayout.cshtml";
+}
+
+<div class="col-md-12 bg-white">
+
+    <div class="panel-heading mb-md-5">
+        <h5>Waiver Request</h5>
+    </div>
+
+    <div class="row">
+        <div class="form-group col-md-4">
+            <label style="width:100%">Request For</label>
+            <select class="form-control ghjfd-yrtweu">
+                <option value="0">Select Type</option>
+                <option value="1">Fine Waiver</option>
+                <option value="2">Bill Waiver</option>
+                <option value="3">Arrear Waiver</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="row slctn-row-hjkf">
+        <div class="form-group col-md-4">
+            <label style="width:100%">Request Waiver For</label>
+            <select class="form-control rqst-tp">
+                <option value="0">Select Option</option>
+                <option value="1">Phase</option>
+                <option value="2">Block</option>
+                <option value="3">Plot</option>
+            </select>
+        </div>
+
+        @*<div class="col-md-4">
+                <label style="width:100%">Bill Type</label>
+
+                <label class="radio-inline">
+                    <input type="radio" name="serType" checked value="1">Electricity
+                </label>
+                <label class="radio-inline ml-md-3">
+                    <input type="radio" name="serType" value="0">Service Charges
+                </label>
+            </div>*@
+
+        <input type="hidden" class="serType" value="@ViewBag.serviceType" />
+    </div>
+    <hr />
+    <div class="row">
+        <div class="form-group col-md-4 phaseSel">
+            <label style="width:100%">Phase</label>
+            @Html.DropDownList("phases", null, "Select Category", htmlAttributes: new { @class = "form-control phase-list" })
+        </div>
+
+        <div class="form-group col-md-4 blockSel">
+            <label style="width:100%">Block</label>
+            <select class="form-control block-list" multiple>
+                <option value="0">Select block</option>
+            </select>
+        </div>
+
+        <div class="form-group col-md-4 plotSel">
+            <label style="width:100%">Plot</label>
+            <select class="form-control plots-list" multiple>
+                <option value="0">Select Plot</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="col-md-12 plts-bill-hist-rec-jkhiou" style="display:none;">
+        <table class="table-bordered table central-text-align">
+            <thead>
+                <tr class="thead-dark">
+                    <th colspan="2">Billing History</th>
+                </tr>
+                <tr>
+                    <td>Plot No:</td>
+                    <td>History</td>
+                </tr>
+            </thead>
+
+            <tbody class="plt-rows-inf-uiyjhk">
+            </tbody>
+        </table>
+    </div>
+
+    <div class="col-md-12">
+        <textarea class="form-control rems" placeholder="Reason for Fine Waiver" rows="7" cols="7"></textarea>
+    </div>
+
+    <div class="col-md-12 central-text-align">
+        <button class="btn btn-primary guh-iop">Save</button>
+    </div>
+</div>
+
+<script>
+
+    $(document).ready(function () {
+        //$('.modal-footer').append('<button class="btn btn-primary guh-iop">Save</button>');
+        $('.phase-list').select2({
+            placeholder: 'Select a Phase',
+            //dropdownParent: $('#Modal'),
+            maximumSelectionLength: 2
+        });
+        $('.block-list').select2({
+            placeholder: 'Select a Block',
+            //dropdownParent: $('#Modal'),
+            maximumSelectionLength: 20
+        });
+        $('.plots-list').select2({
+            placeholder: 'Select a Plot',
+            //dropdownParent: $('#Modal'),
+            maximumSelectionLength: 200
+        });
+        $('.slctn-row-hjkf').hide();
+    });
+
+    $(function () {
+        $('.plotSel').hide();
+        $('.blockSel').hide();
+        $('.phaseSel').hide();
+    });
+    $('.rqst-tp').change(function () {
+        //yahan pe options show hide krani hain
+        let opt = $(this).val();
+
+        if (opt == 1) {
+            $('.plts-bill-hist-rec-jkhiou').slideUp();
+            $('.plotSel').hide();
+            $('.blockSel').hide();
+            $('.phaseSel').show();
+        }
+        else if (opt == 2) {
+            $('.plts-bill-hist-rec-jkhiou').slideUp();
+            $('.plotSel').hide();
+            $('.blockSel').show();
+            $('.phaseSel').show();
+        }
+        else if (opt == 3) {
+            $('.plotSel').show();
+            $('.blockSel').show();
+            $('.phaseSel').show();
+        }
+    });
+
+    $('.phase-list').change(function () {
+        let phase = $(this).val();
+        let that = $('.block-list');
+        showLoader();
+        $.ajax({
+            type: "POST",
+            url: '/ServiceCharges/GetBlocksByPhases',
+            data: { phase: phase },
+            success: function (data) {
+                hideLoader();
+                PopulateBlocks($(that), data);
+            },
+            error: function (xmlhttprequest, textstatus, message) {
+                hideLoader();
+                if (textstatus === "timeout") {
+                    alert("got timeout");
+                } else {
+                    alert("got timeout");
+                }
+            }
+        });
+    });
+
+    $('.block-list').change(function () {
+        let block = $(this).val();
+        let that = $('.plots-list');
+        let rqstType = $('.rqst-tp').val();
+        let ttl = $(this).val().length;
+        let typ = parseInt($('.serType').val());
+        if (rqstType == 3 && ttl > 1) {
+            alert('Cannot Select Multiple Blocks When Requesting For Plot.');
+            $('.rqst-tp').val(2);
+            $('.plotSel').hide();
+            return;
+        }
+
+        showLoader();
+        $.ajax({
+            type: "POST",
+            url: '/ServiceCharges/GetPlotsbyBlocks',
+            data: { block: block, tp: typ },
+            success: function (data) {
+                hideLoader();
+                PopulateBlocks($(that), data);
+            },
+            error: function (xmlhttprequest, textstatus, message) {
+                hideLoader();
+                if (textstatus === "timeout") {
+
+                } else {
+
+                }
+            }
+        });
+    });
+
+    $('.plots-list').change(function () {
+
+        let res = $(this).val();
+        let that = this;
+        let strctr = ``;
+        $.each(res, function (ind, val) {
+            var chi = $(that).children('option');
+            let chiName='fads';
+            $.each(chi, function (i, v) {
+                if ($(this).attr('value') == val) {
+                    chiName = $(this).text();
+                }
+            });
+            strctr += `<tr>
+                <td>${chiName}</td>
+                <td><i class="ti-eye pointer bill-hist-hjkhgjyhjk" data-ptrg="${val}" data-toggle="modal" data-target="#Modal"></i></td>
+            </tr>`;
+        });
+        if (res.length > 0) {
+            $('.plts-bill-hist-rec-jkhiou').slideDown();
+            $('.plt-rows-inf-uiyjhk').empty();
+            $('.plt-rows-inf-uiyjhk').append(strctr);
+        }
+        else {
+            $('.plts-bill-hist-rec-jkhiou').slideUp();
+            $('.plt-rows-inf-uiyjhk').empty();
+        }
+    });
+
+    function PopulateBlocks(_ele, arr) {
+        $(_ele).empty();
+        $(_ele).append('<option value="0">Select Block</option>');
+        $.each(arr, function (ind, val) {
+            $(_ele).append('<option value=' + val.Id + '>' + val.Name + '</option>');
+        });
+    }
+
+    function PopulatePlots(_ele, arr) {
+        $(_ele).empty();
+        $(_ele).append('<option value="0">Select Plot</option>');
+        $.each(arr, function (ind, val) {
+            $(_ele).append('<option value=' + val.Id + '>' + val.Name + '</option>');
+        });
+    }
+
+    $(document).unbind().on('click', '.guh-iop', function () {
+        let phases = $('.phase-list').val();
+        let blocks = $('.block-list').val();
+        let plots = $('.plots-list').val();
+        let tp = $('.rqst-tp option:selected').val();
+        let remarks = $('.rems').val();
+        let serviceType = parseInt($('.serType').val());
+        let wvTp = $('.ghjfd-yrtweu option:selected').val();
+
+        let conf = confirm('Are you sure you want to forward this request?');
+        if (!conf) {
+            return;
+        }
+
+        //is k baad ajax ki hit maarni hai
+        $.ajax({
+            type: "POST",
+            url: "/ServiceCharges/SaveWaiverRequests/",
+            contentType: "application/json",
+            traditional: true,
+            beforeSend: function () {
+                showLoader();
+            },
+            complete: function () {
+                hideLoader()
+            },
+            data: JSON.stringify({ phases: phases, blocks: blocks, plots: plots, tp: tp, remarks: remarks, billType: serviceType, waiveType: wvTp }),
+        }).done(function (data) {
+            if (data == true) {
+                alert("Request has been forwarded successfully.");
+                closeModal();
+            }
+            else {
+                alert('Unable to save the request at the moment. Try again later.');
+            }
+        });
+    });
+
+    $('.ghjfd-yrtweu').change(function () {
+        let slctd = $(this).val();
+
+        if (slctd == 0) {
+            $(this).closest('.row').nextAll('.row').slideUp('slow');
+        }
+        else {
+            $(this).closest('.row').nextAll('.row').slideDown('slow');
+        }
+    });
+
+    $(document).on('click', '.bill-hist-hjkhgjyhjk', function () {
+        let a = parseInt($(this).attr('data-ptrg'));
+        showLoader();
+        EmptyModel();
+        $('#ModalLabel').text("History");
+        $('#modalbody').load('/ServiceCharges/BillHistory/', { PlotId: a }, function () {
+            hideLoader();
+        });
+    });
+</script>

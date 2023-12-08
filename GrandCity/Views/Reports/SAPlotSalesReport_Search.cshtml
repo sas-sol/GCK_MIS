@@ -1,0 +1,224 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Sp_Get_SalesReport_Result>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="bdrs-3 ov-h bgc-white p-10 bd">
+            <div class="row">
+                <h2 style="text-align:center;">Sales Report</h2>
+            </div>
+            <div class="row">
+                <div class='col-md-2'>
+                    <div class="layers bd bgc-white p-10 mt-2">
+                        <div class="layer w-100">
+                            <div class="peers ai-sb fxw-nw">
+                                <div class="peer peer-greed">
+                                    <h6 class="lh-1">Total Sales</h6>
+                                </div>
+                                <div class="peer">
+                                    <span class="d-ib lh-0 va-m fw-600 bdrs-10em pX-15 pY-15 bgc-green-50 c-green-500">@string.Format("{0:n0}", Model.Sum(x => x.Total_Amt))</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class='col-md-2'>
+                    <div class="layers bd bgc-white p-10 mt-2">
+                        <div class="layer w-100">
+                            <div class="peers ai-sb fxw-nw">
+                                <div class="peer peer-greed">
+                                    <h6 class="lh-1">Discount Amounts</h6>
+                                </div>
+                                <div class="peer">
+                                    <span class="d-ib lh-0 va-m fw-600 bdrs-10em pX-15 pY-15 bgc-green-50 c-green-500">@string.Format("{0:n0}", Model.Sum(x => x.Discount_Amt))</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class='col-md-2'>
+                    <div class="layers bd bgc-white p-10 mt-2">
+                        <div class="layer w-100">
+                            <div class="peers ai-sb fxw-nw">
+                                <div class="peer peer-greed">
+                                    <h6 class="lh-1">Received Amounts</h6>
+                                </div>
+                                <div class="peer">
+                                    <span class="d-ib lh-0 va-m fw-600 bdrs-10em pX-15 pY-15 bgc-green-50 c-green-500">@string.Format("{0:n0}", Model.Sum(x => x.Received_Amt))</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class='col-md-2'>
+                    <div class="layers bd bgc-white p-10 mt-2">
+                        <div class="layer w-100">
+                            <div class="peers ai-sb fxw-nw">
+                                <div class="peer peer-greed">
+                                    <h6 class="lh-1">Outstanding Amounts</h6>
+                                </div>
+                                <div class="peer">
+                                    <span class="d-ib lh-0 va-m fw-600 bdrs-10em pX-15 pY-15 bgc-green-50 c-green-500">@string.Format("{0:n0}", Model.Sum(x => x.Outstanding_Amt))</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <table id="sale-list" class="table table-borderless table-striped" width="100%">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>Sr No.</th>
+                            <th>Unit No.</th>
+                            <th>Sector</th>
+                            <th>Block</th>
+                            <th>Owner Name</th>
+                            <th>Booking Date</th>
+                            <th>Total Price</th>
+                            <th>Discount</th>
+                            <th>Net Total</th>
+                            <th>Received Amount</th>
+                            <th>Remaining Amount</th>
+                        </tr>
+                    </thead>
+                    @if (Model.Any())
+                    {
+                        <tbody>
+                            @{
+                                int sr = 1;
+
+                                foreach (var v in Model.OrderBy(x=> x.Booking_Date))
+                                {
+
+                                    <tr data-unit="@v.Id">
+                                        <td>@sr</td>
+                                        <td>@v.Unit_No</td>
+                                        <td>@v.Sector</td>
+                                        <td>@v.Block</td>
+                                        <td>@v.Name</td>
+                                        <td>@String.Format("{0:dd/MM/yyyy}", v.Booking_Date)</td>
+                                        <td>@String.Format("{0:n0}", v.Total_Amt)</td>
+                                        <td>@String.Format("{0:n0}", v.Discount_Amt)</td>
+                                        <td>@String.Format("{0:n0}", v.Total_Amt - v.Discount_Amt)</td>
+                                        <td>@String.Format("{0:n0}", v.Received_Amt)</td>
+                                        <td>@String.Format("{0:n0}", v.Outstanding_Amt)</td>
+                                    </tr>
+                                    sr++;
+                                }
+                            }
+                        </tbody>
+                    }
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $('#sale-list').DataTable({
+            dom: 'Bfrtip',
+            buttons: [
+                'copy', 'excel', 'pdf', 'print'
+            ],
+            ordering:false
+        });
+    });
+</script>
+
+
+@*<div class="row">
+        <div class="col-sm-12">
+            <table class="table table-bordered table-striped" id="tblStudent">
+                <thead>
+                    <tr>
+                        <th>Sr No.</th>
+                        <th>Unit No.</th>
+                        <th>Block</th>
+                        <th>Owner Name</th>
+                        <th>Booking Date</th>
+                        <th>Total Price</th>
+                        <th>Discount</th>
+                        <th>Net Total</th>
+                        <th>Booking Amount</th>
+                        <th>Installments Amount</th>
+                        <th>Received Amount</th>
+                        <th>Remaining Amount</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+
+    <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            bindDatatable();
+        });
+
+        function bindDatatable() {
+            datatable = $('#tblStudent')
+                .DataTable({
+                    "sAjaxSource": "/Reports/GetSaleData",
+                    "bServerSide": true,
+                    "bProcessing": true,
+                    "bSearchable": true,
+                    "order": [[1, 'asc']],
+                    "language": {
+                        "emptyTable": "No record found.",
+                        "processing":
+                            '<i class="fa fa-spinner fa-spin fa-3x fa-fw" style="color:#2a2b2b;"></i><span class="sr-only">Loading...</span> '
+                    },
+                    "columns": [
+                        {
+                            "data": "Unit",
+                            "autoWidth": true,
+                            "searchable": true
+                        },
+                        {
+                            "data": "Block",
+                            "autoWidth": true,
+                            "searchable": true
+                        },
+                        {
+                            "data": "Name",
+                            "autoWidth": true,
+                            "searchable": true
+                        },
+                        {
+                            "data": "Booking_Date",
+                            "autoWidth": true,
+                            "searchable": true
+                        }, {
+                            "data": "Total_Amount",
+                            "autoWidth": true,
+                            "searchable": true
+                        }, {
+                            "data": "Discount_Amount",
+                            "autoWidth": true,
+                            "searchable": true
+                        }, {
+                            "data": "NetTotal",
+                            "autoWidth": true,
+                            "searchable": true
+                        }, {
+                            "data": "booking_Amount",
+                            "autoWidth": true,
+                            "searchable": true
+                        }, {
+                            "data": "Installment_Amount",
+                            "autoWidth": true,
+                            "searchable": true
+                        }, {
+                            "data": "Received_Amount",
+                            "autoWidth": true,
+                            "searchable": true
+                        }, {
+                            "data": "Outstanding_Amount",
+                            "autoWidth": true,
+                            "searchable": true
+                        },
+                    ]
+                });
+        }
+    </script>*@

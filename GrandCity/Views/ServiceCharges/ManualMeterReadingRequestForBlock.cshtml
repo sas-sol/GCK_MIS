@@ -1,0 +1,44 @@
+﻿
+<div class="col-md-12 central-text-align">
+    <h5>Request Manual Meter Reading For @ViewBag.blkName Block</h5>
+    <input type="hidden" class="blkNam" value="@ViewBag.blkName"/>
+    <input class="blockId" value="@ViewBag.blockId" type="hidden" />
+    <div class="row">
+        <textarea class="form-control perm-rem" rows="7" cols="7" placeholder="Reason for manual entry..."></textarea>
+    </div>
+</div>
+
+<script>
+    $(document).unbind().on('click', '.dfg-yu', function () {
+        let rems = $('.perm-rem').val();
+        let blk = $('.blockId').val();
+        let blkName = $('.blkNam').val();
+        //yahan submit krani hain
+
+        let conf = confirm('Are you sure you want to submit this request?');
+        if (!conf) {
+            return;
+        }
+        showLoader();
+        $.ajax({
+            type: "POST",
+            url: '/ServiceCharges/RequestForManualBillingPermission',
+            data: { block: blk, blockName: blkName, rems: rems },
+            success: function (data) {
+                hideLoader();
+                if (data <= 0) {
+                    alert("Error Occured. Unable to forward request");
+                }
+                else {
+                    alert('Request has been forwarded successfully.');
+                    closeModal();
+                    window.location.reload();
+                }
+            },
+            error: function () {
+                alert("Error Occured. Unable to forward request");
+                hideLoader();
+            }
+        });
+    });
+</script>

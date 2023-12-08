@@ -1,0 +1,105 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.DealerFileForm>
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <style>
+            @@page {
+                margin: 0;
+                size: A4
+            }
+            .bg {
+                height: 1555px;
+                width: 1186px;
+                margin-left: 0%;
+                background-image: url(../../assets/static/images/Dealership.jpg);
+                background-size: 1186px 1620px;
+                font-family: sans-serif;
+                margin-bottom: 70px;
+                color: black;
+                background-repeat: no-repeat;
+            }
+            .section1233 {
+                margin-top: -53%;
+                margin-left: 557%;
+                width: 7%;
+            }
+            .section1 {
+                margin-top: 2%;
+                margin-left: 24%;
+                width: 7%;
+            }
+            .section12 {
+                width: 17%;
+                float: left;
+                margin-left: 5%;
+            }
+            .uppersec {
+                margin-left: 22%;
+                margin-top: 27.5%;
+                font-size: 18px;
+            }
+            .uppersec1 {
+                margin-left: 30%;
+                margin-top: 0;
+                font-size: 16px;
+            }
+            .uppersec3 {
+                width: 70%;
+                text-align: center;
+                margin-left: 21%;
+                margin-top: 5.5%;
+                font-size: 18px;
+            }
+            .uppersec4 {
+                margin: 16% 0 0 0%;
+                color: black;
+                width: 100%;
+                text-align: center;
+                font-size: 18px;
+            }
+            .imageqr {
+                width: 220px;
+                height: 228px;
+                float: left;
+                margin-top: -5%;
+                margin-left: 20px;
+            }
+            .imageqrs {
+                width: 100%
+            }
+            .mar {
+                margin-top: 1%;
+            }
+            .pagebreak {
+                page-break-before: always;
+            }
+            .deal-sec {
+                width: 50%;
+                margin-left: 4%;
+                float: left
+            }
+        </style>
+    </head>
+    <body>
+        @foreach (var item in Model)
+        {
+            string img = item.FileCode + ".png";
+            <div class="bg">
+                <div class="mar"></div>
+                <label class="uppersec">@item.FileCode</label>
+                <label class="uppersec1">@item.Dealership_Id</label>
+                <div class="deal-sec">
+                    <label class="uppersec3">@item.Dealership_Name</label>
+                </div>
+                <div class="section12">
+                    <label class="uppersec4">@item.Plot_Size</label>
+                </div>
+                <div class="imageqr">
+                    
+                    <img class="imageqrs" src="~/QR Codes/@img" />
+                </div>
+            </div>
+            <div class="pagebreak"></div>
+        }
+    </body>
+</html>

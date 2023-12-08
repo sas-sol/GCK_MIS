@@ -1,0 +1,293 @@
+﻿@{ if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+}
+<input type="hidden" value="@ViewBag.TransactionId" id="trans-id" name="TransactionId" />
+<div class="col-md-12 bgc-white p-20">
+    <div class="row">
+        <div class="acc-pg-head col-md-12">
+            <div class="col-md-4 acc-pg-title"><h4>Patty Cash Payment</h4></div>
+        </div>
+    </div>
+    <div class="row col-md-12" style="margin-top:6px">
+        <div class="col-md-3">
+            <select class="form-control vendor-eml"></select>
+        </div>
+        <div class="col-md-3">
+            <select class="form-control bank-heads-slcxn"></select>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="row">
+                <div class="col-md-5 form-group">
+                    <label>Mailing address</label>
+                    <textarea class="form-control" id="mail-address" rows="5" style="resize:none;"></textarea>
+                </div>
+                <div class="col-md-5 form-group">
+                    <label>Amount Received By</label>
+                    <input type="text" class="form-control" id="amount-received-by" />
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+        </div>
+    </div>
+    <div class="row">
+        <h5>Patty Cash Transaction</h5>
+        <table class="table table-borderless">
+            <thead>
+                <tr>
+                    @*<th><input type="checkbox" id="cb-all-payable" /></th>*@
+                    <th>DESCRIPTION</th>
+                    @*<th>DATE</th>*@
+                    <th>AUTHORIZED AMOUNT</th>
+                    <th>BALANCE AMOUNT</th>
+                    <th>AMOUNT TO PAY</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr>
+                    @*<td class="ispayable"><input type="checkbox" class="cb-item-payable" /></td>*@
+                    <td class="narration"><input type="text" class="form-control" id="narration" placeholder="Description" /></td>
+                    @*<td class="today"><input type="text" class="form-control" data-provide="datepicker" id="today_date" placeholder="mm/dd/yyyy" required></td>*@
+                    <td class="auth-amt"><input type="text" class="form-control coma" id="auth_amt" readonly></td>
+                    <td class="bal-amt"><input type="text" class="form-control coma" id="bal_amt" readonly></td>
+                    <td class="payment"><input type="text" class="form-control coma" id="pay_amt"></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="col-md-12">
+            <div class="col-md-6 float-right" style="text-align:right;">
+                <div class="row">
+                    <div class="col-md-8">
+                        <b>Amount to Pay</b>
+                    </div>
+                    <div class="col-md-4">
+                        <label id="amount-to-pay">0.00</label>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+
+        <div class="row col-md-12">
+            @*Buttons area*@
+
+            <div class="col-md-2">
+                @*clear button*@
+            </div>
+            <div class="col-md-8"></div>
+            <div class="col-md-2">
+                <div class="btn-group float-right">
+                    <button type="button" class="btn btn-primary rec-pattycash-entry">Pay Now</button>
+
+                </div>
+            </div>
+
+            <div class="clearfix"></div>
+            @*<div class="col-md-1"></div>*@
+        </div>
+    </div>
+</div>
+
+<style>
+    .paymentotherinfo {
+        display: none;
+    }
+
+    .acc-pg-head {
+        background-color: #466a93;
+        color: white;
+    }
+
+    .pmnt-big-font {
+        font-size: 40px;
+        font-weight: bolder;
+        color: #000;
+        text-align: right;
+        width: 100%;
+    }
+
+    .big-head-info-lbl {
+        color: #c2c3c7;
+        font-size: 13px;
+        text-align: right;
+        width: 100%;
+        margin-bottom: 0px;
+    }
+</style>
+
+<script>
+    $(document).ready(function () {
+        //$('#cb-all-payable').prop('checked', true);
+        //$('#cb-all-payable').trigger('change');
+        $('.paychqdetails').hide();
+        $('.vendor-eml').select2({
+            //dropdownParent: $('#Modal'),
+            placeholder: "Choose a Payee",
+            ajax: {
+                url: '/Finance/PattyCashEmployeeSearch/',
+                dataType: 'json',
+                params: {
+                    contentType: 'application/json; charset=utf-8'
+                },
+                quietMillis: 100,
+                data: function (params) {
+                    var query = {
+                        s: params.term,
+                        type: 'public'
+                    }
+                    // Query parameters will be ?search=[term]&type=public
+                    return query;
+                },
+                processResults: function (data) {
+                    console.log(data);
+                    // Transforms the top-level key of the response object from 'items' to 'results'
+                    return {
+                        results: data
+                    };
+                }
+            }
+        });
+
+        $('.bank-heads-slcxn').select2({
+            //dropdownParent: $('#Modal'),
+            placeholder: "Choose Account",
+            ajax: {
+                url: '/AccountHeads/GetHeadCashBanks/',
+                dataType: 'json',
+                params: {
+                    contentType: 'application/json; charset=utf-8'
+                },
+                quietMillis: 100,
+                data: function (params) {
+                    return {
+                        q: params.term// search term
+                    };
+                },
+                processResults: function (data) {
+                    return {
+                        results: $.map(data.items, function (item) {
+                            return {
+
+                                text: item.Parent,
+                                children: [{
+                                    id: item.id,
+                                    text: item.text + ' - ' + item.head
+                                }]
+                            }
+                        })
+                    };
+                }
+            }
+        });
+    });
+
+    $('.vendor-eml').change(function () {
+        $.ajax({
+            type: "POST",
+            url: '/Finance/GetPattyCashBalance/',
+            data: { empId: $('.vendor-eml option:selected').val() },
+            success: function (data) {
+                $('#auth_amt').val((data.Cashlimit).toLocaleString());
+                $('#bal_amt').val((data.Cashlimit - data.Remaining).toLocaleString());
+                $('#pay_amt').val((data.Cashlimit - data.Remaining).toLocaleString());
+                $('#amount-to-pay').text((data.Cashlimit - data.Remaining).toLocaleString());
+            },
+            error: function () {
+            }
+        });
+    });
+
+    $('#pay_amt').change(function () {
+        $('#amount-to-pay').text(($(this).val()).toLocaleString());
+    });
+
+    $(document).on("change", ".vpd-paytype-select", function () {
+        var res = $(this).val();
+        var text = $("option:selected", this).text();
+        $(" .vpdpaymentinfo").css("display", "block");
+        $(" .vpdpaymentinfo :input").attr("disabled", false);
+        $("#vpd-paytypelabel").text(text + " No.");
+        $(" #paymenttype").attr("placeholder", text);
+
+    });
+    $('.rec-pattycash-entry').click(function () {
+        var payee_name = "";
+        var payee_id = $('.vendor-eml option:selected').val();
+        if (payee_id != "" && payee_id != null) {
+            payee_name = $('.vendor-eml option:selected').text();
+        }
+        else {
+            alert("Please select Payee Account");
+            return false;
+        }
+        var accountname = "";
+        var accountId = $('.bank-heads-slcxn option:selected').val();
+        if (accountId == "" || accountId == null) {
+            alert("Please select Paying Account");
+            return false;
+        }
+        else {
+            accountname = $('.bank-heads-slcxn option:selected').text();
+        }
+        var mailAddr = $('#mail-address').val();
+        var TransactionId = $('#trans-id').val();
+        var amountreceivedby = $('#amount-received-by').val();
+        if (amountreceivedby == null) {
+            alert("Please Enter Receiver's Name");
+            return false;
+        }
+        var instType = $('#cah-chq-bak option:selected').val();
+        var instrumentNo = $('#vpd-paymenttype').val();
+        var paychqDate = $('#vpd_Ch_bk_Pay_Date').val();
+        var branch = $('#vpd_Branch').val();
+        var narration = $('#narration').val();
+        if (narration == "" || narration == null) {
+            alert("Please Enter Payment Description");
+            return false;
+        }
+        var payableAmnt = RemoveComma($('#amount-to-pay').text());
+        var remaining = RemoveComma($('#bal_amt').val());
+        if (payableAmnt == 0 || payableAmnt == null) {
+            alert("Please Enter Ammount To Pay");
+            return false;
+        }
+        if (payableAmnt > remaining) {
+            alert("Payment cannot be more than the Balance Amount");
+            return false;
+        }
+        var conf = confirm("Are you Sure You want to Add this Payable Entry")
+        if (conf) {
+            $.ajax({
+                type: "POST",
+                url: '/Finance/AddNewPattyCashEntry/',
+                data: { payeeId: payee_id, payaccId: accountId, desc: narration, receivedby: amountreceivedby, amount: payableAmnt, paytype: instType, instNo: instrumentNo, instDate: paychqDate, TransactionId: TransactionId },
+                success: function (data) {
+                    if (data) {
+                        alert("Petty Cash Release Successfully.");
+                        window.open("/Vouchers/Voucher?GroupId=" + TransactionId, '_blank');
+                        window.location.reload();
+                    }
+                    else {
+                        alert("Error Occured");
+                    }
+                },
+                error: function () {
+                    alert("Error Occured");
+                    $('#gen-rec').attr("disabled", false);
+                }
+            });
+        }
+    });
+
+
+</script>

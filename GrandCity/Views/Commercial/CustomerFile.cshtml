@@ -1,0 +1,472 @@
+﻿@model MeherEstateDevelopers.Models.CommercialDetailData
+@{
+    Layout = null;
+    string[] types = { "Booking", "Installment" };
+    var price = Math.Round(Model.CommercialInstallments.Sum(x => x.Amount));
+    var size = Convert.ToDecimal(Model.commercialData.Area);
+    var rate = Math.Round((price / size), 2);
+    var advaAmt = Model.CommercialInstallments.SingleOrDefault(x => x.Installment_Name == "Advance").Amount;
+    var advadate = Model.CommercialInstallments.SingleOrDefault(x => x.Installment_Name == "Advance").Due_Date;
+    var AmtRec = Model.CommercialReceipts.Where(x => types.Contains(x.Type) && x.Status != "Dishonored").Sum(x => x.Amount);
+    var bal = Math.Round(Convert.ToDecimal(price - AmtRec), 2);
+    var Ttlinst = Model.CommercialInstallments.Count(x => x.Installment_Name != "Advance");
+    var Monthist = Model.CommercialInstallments.FirstOrDefault(x => x.Installment_Name != "Advance");
+}
+@*<!DOCTYPE html>
+    <html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+        <link href="~/assets/styles/Dealertemplate/base.min.css" rel="stylesheet" />
+        <link href="~/assets/styles/Dealertemplate/fancy.min.css" rel="stylesheet" />
+        <link href="~/assets/styles/Dealertemplate/main.css" rel="stylesheet" />
+        <title></title>
+        <style>
+            body, div, table, thead, tbody, tfoot, tr, th, td, p {
+                font-family: "Calibri";
+                font-size: 19px;
+            }
+
+            .w0 {
+                width: 1000px !important;
+            }
+
+            p {
+                margin-left: 5%;
+                margin-right: 5%;
+            }
+
+            table {
+                margin-left: 5%;
+            }
+
+                table tr td {
+                    padding: 5px;
+                }
+
+                    table tr td p {
+                        margin: 0;
+                        padding: 5px;
+                    }
+
+            @@media print {
+                p {
+                    margin-left: 5%;
+                    margin-right: 5%;
+                }
+
+                table {
+                    margin-left: 5%;
+                }
+
+                    table tr td {
+                        padding: 5px;
+                    }
+            }
+        </style>
+    </head>
+    <body>
+        <div id="page-container">
+            <div id="pf1" class="pf w0" data-page-no="1">
+                <div style="margin-top:32%">
+                    <p align="center" style="background-color:#ccc;">
+                        <strong>APPLICATION FORM</strong><br />
+                        <strong>(Annexure-A)</strong>
+                    </p>
+                    <p>
+                        <strong></strong>
+                    </p>
+                    <p>
+                        <strong>Dear Sir</strong><br />
+                        I / we, the undersigned request you to please register my / our name for booking of following office(s) in your project <b>“AYAN CENTRE”</b> on the prescribed schedule of payment:
+                    </p>
+                    <table border="1" style="width:450px;font-size:16px;border-collapse:collapse;float:left">
+                        <tbody>
+                            <tr style="visibility:hidden">
+                                <td width="115" valign="top"></td>
+                                <td width="87" valign="top"></td>
+                                <td width="112" valign="top"></td>
+                                <td width="124" valign="top"></td>
+                            </tr>
+                            <tr>
+                                <td width="115" valign="top"><b>SHOP NO.</b></td>
+                                <td width="87" valign="top">@Model.commercialData.shop_no</td>
+                                <td width="112" valign="top"><b>Floor</b></td>
+                                <td width="124" valign="top">@Model.commercialData.Floor</td>
+                            </tr>
+                            <tr>
+                                <td valign="top"><b>Size /Sqft</b></td>
+                                <td valign="top">@Model.commercialData.Area</td>
+                                <td valign="top"></td>
+                                <td valign="top"></td>
+                            </tr>
+                            <tr>
+                                <td valign="top"><b>Rate / Sqft</b></td>
+                                <td valign="top">@string.Format("{0:n0}", rate)</td>
+                                <td valign="top"><b>PRICE</b></td>
+                                <td valign="top">@string.Format("{0:n0}", price)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <table style="width:450px;float:right">
+                        <tbody>
+                            <tr>
+                                <td align="center">
+                                            <img src="@Model.shopOwnersforallt.Owner_Image1" width="160" height="170" />
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <br />
+                    <div style="clear:both"></div>
+                    <p style="line-height:30px">
+                        NAME: <b><u> &nbsp;&nbsp;&nbsp; @Model.shopOwnersforallt.Name &nbsp;&nbsp;&nbsp;</u></b> CNIC NO.:    <b><u>&nbsp;&nbsp;&nbsp;  @Model.shopOwnersforallt.CNIC_NICOP &nbsp;&nbsp;&nbsp;</u></b>
+                        S/O, W/O, D/O  <b><u> &nbsp;&nbsp;&nbsp; @Model.shopOwnersforallt.Father_Husband &nbsp;&nbsp;&nbsp;</u></b> NATIONALITY:<b><u>&nbsp;&nbsp;&nbsp; @Model.shopOwnersforallt.Nationality  &nbsp;&nbsp;&nbsp; </u></b>
+                        OCCUPATION: <b><u> &nbsp;&nbsp;&nbsp; @Model.shopOwnersforallt.Occupation &nbsp;&nbsp;&nbsp; </u></b> POSTAL ADDRESS: <b><u>&nbsp;&nbsp;&nbsp; @Model.shopOwnersforallt.Postal_Address &nbsp;&nbsp;&nbsp; </u></b>
+                        RESIDENTIAL ADDRESS:<b><u> &nbsp;&nbsp;&nbsp;  @Model.shopOwnersforallt.Residential_Address. &nbsp;&nbsp;&nbsp; </u></b>
+
+                        PH. NO. (MOB): <b><u>&nbsp;&nbsp;&nbsp; @Model.shopOwnersforallt.Mobile_1 &nbsp;&nbsp;&nbsp; </u></b> Email ID: <b><u> &nbsp;&nbsp;&nbsp; @Model.shopOwnersforallt.Email &nbsp;&nbsp;&nbsp; </u></b>
+                        PH. NO. (MOB 2):<b><u>&nbsp;&nbsp;&nbsp; @Model.shopOwnersforallt.Mobile_2 .&nbsp;&nbsp;&nbsp;</u></b>
+                        NOMINEE’S NAME AND RELATION:    <b><u> &nbsp;&nbsp;&nbsp; @Model.shopOwnersforallt.Nominee_Name  @Model.shopOwnersforallt.Nominee_Relation &nbsp;&nbsp;&nbsp;  </u></b>
+                        <br />
+                        I /we hereby declare that I /we have read all the terms and conditions of booking in the project, attached with this application form and I/we accept the same. It is further declared that I/we shall abide by the payment schedule Annexure-B, existing and future terms and conditions, which have been or may be prescribed by you for the purchase of Shop in this project from time to time.<p>
+                        Your’s faithfully,
+                    </p>
+                    <table style="margin-top:40px">
+                        <tbody>
+                            <tr>
+                                <td width="200" valign="top" style="border-top:1px solid">Signature of Applicant</td>
+                                <td width="87" valign="top"></td>
+                                <td width="200" valign="top" style="border-top:1px solid">Place &amp; Date</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <p><strong></strong></p>
+                    <p><strong></strong></p>
+                    <br clear="ALL" />
+                    <p>
+                        <strong>Thumb Impression of Applicant:</strong>
+                    </p>
+                    <p><strong></strong></p>
+                    <p><strong></strong></p>
+                    <table style="margin-top:40px">
+                        <tbody>
+                            <tr>
+                                <td width="200" valign="top" style="border-top:1px solid">Signature of Plot Manager</td>
+                                <td width="87" valign="top"></td>
+                                <td width="200" valign="top" style="border-top:1px solid">Place &amp; Date</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+                <div style="margin-top:25%">
+
+                    <p align="center" style="background-color:#ccc;margin-top:10%">
+                        <strong>Payment Schedule</strong><br />
+                        <strong>(Annexure B)</strong>
+                    </p>
+                    <p>
+                        <strong><u></u></strong>
+                    </p>
+                    <p>
+                        Please find the required Plot fill up the desired data of your selected Shop & its price, Consult with Sales Head at Site Office for Confirmation of availability & details of Installments of your Shop, sign these both forms
+                    </p>
+                    <p>
+                        <strong></strong>
+                    </p>
+                    @{
+                        if (bal > 0)
+                        {
+                            <table border="1" cellspacing="0" cellpadding="0">
+                                <tbody>
+                                    <tr>
+                                        <td width="120" valign="top"><p align="center"><b>Floor</b></p><p align="center"><b>@Model.commercialData.Floor</b></p></td>
+                                        <td width="76" valign="top"><p align="center"><b>Total Area</b></p></td>
+                                        <td width="76" valign="top"><p align="center"><b>Rate Per Sqft</b></p></td>
+                                        <td width="88" valign="top"><p align="center"><b>Total Amount</b></p></td>
+                                        <td width="95" valign="top"><p align="center"><b>Booking Amount</b></p><p align="center"><b>Dated: @string.Format("{0:dd.MM.yy}", advadate)</b></p></td>
+                                    </tr>
+                                    <tr>
+                                        <td width="120" valign="top"><p align="center">Plot Number @Model.commercialData.shop_no</p></td>
+                                        <td width="76" valign="top"><p align="center">@Model.commercialData.Area</p></td>
+                                        <td width="76" valign="top"><p align="center">@string.Format("{0:n0}", rate)</p></td>
+                                        <td width="88" valign="top"><p align="center">@string.Format("{0:n0}", price)</p></td>
+                                        <td width="95" valign="top"><p align="center">@string.Format("{0:n0}", advaAmt)</p></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                        }
+                        else
+                        {
+                            <table border="1" cellspacing="0" cellpadding="0">
+                                <tbody>
+                                    <tr>
+                                        <td width="120" valign="top"><p align="center"><b>Floor</b></p><p align="center"><b>@Model.commercialData.Floor</b></p></td>
+                                        <td width="76" valign="top"><p align="center"><b>Total Area</b></p></td>
+                                        <td width="76" valign="top"><p align="center"><b>Rate Per Marla</b></p></td>
+                                        <td width="88" valign="top"><p align="center"><b>Total Amount</b></p></td>
+                                        <td width="95" valign="top"><p align="center"><b>Booking Amount</b></p><p align="center"><b>Dated: @string.Format("{0:dd.MM.yy}", advadate)</b></p></td>
+                                    </tr>
+                                    <tr>
+                                        <td width="120" valign="top"><p align="center">Plot Number @Model.commercialData.shop_no</p></td>
+                                        <td width="76" valign="top"><p align="center">@Model.commercialData.Area</p></td>
+                                        <td width="76" valign="top"><p align="center">@string.Format("{0:n0}", rate)</p></td>
+                                        <td width="88" valign="top"><p align="center">@string.Format("{0:n0}", price)</p></td>
+                                        <td width="95" valign="top"><p align="center">@string.Format("{0:n0}", advaAmt)</p></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        }
+                    }
+                    <br />
+                    <br />
+                    <table>
+                        <tbody>
+                            <tr>
+                                <td width="220">Booked / Received by:</td>
+                                <td width="75">Name:</td>
+                                <td width="250"></td>
+                                <td width="75">Signed:</td>
+                                <td width="150"></td>
+                            </tr>
+                            <tr>
+                                <td>Witness:</td>
+                                <td>Name:</td>
+                                <td></td>
+                                <td>Signed:</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>Allotted & Approved by:</td>
+                                <td>Name:</td>
+                                <td><b>Muhammad Naeem</b></td>
+                                <td>Signed:</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>Prepared by:</td>
+                                <td>Name:</td>
+                                <td><b>@ViewBag.Name</b></td>
+                                <td>Signed:</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td colspan="3"></td>
+                                <td>Date:</td>
+                                <td>@string.Format("{0:MMM dd yyyy}", DateTime.UtcNow)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <p>
+                        <b>
+                            This application form & its receipt is subject to approval from the directors & site heads after receipt of payment in bank account after clearance of cheque. In case of cash, receipt must be taken by the client from the site office otherwise no claim shall be entertained in respect of payment receipt.
+                        </b>
+                    </p>
+                    <p></p>
+                </div>
+            </div>
+        </div>
+    </body>
+    </html>*@
+
+<style>
+    body {
+        font-family: Calibri;
+        font-size: 17px;
+        text-transform: uppercase;
+    }
+
+    .bg {
+        height: 1045px;
+        width: 1580px;
+        line-height: 22px;
+    }
+
+    @@media print {
+        .bg {
+            height: 1045px;
+            width: 1580px;
+            background-size: 1580px 1045px;
+            background-repeat: no-repeat;
+        }
+    }
+</style>
+<div class="container bg">
+    <p>THIS AGREEMENT TO SELL IS MADE AND EXECUTED AT KALA SHAH KAKU ON THIS <u><strong style="font-size:18px;"> &nbsp;&nbsp;&nbsp;&nbsp; @String.Format("{0:dd}", DateTime.Now) &nbsp;&nbsp;&nbsp;&nbsp;</strong></u> DAY OF <u><strong style="font-size:18px;"> &nbsp;&nbsp;&nbsp;&nbsp; @String.Format("{0:MMMM yyyy}", DateTime.Now) &nbsp;&nbsp;&nbsp;&nbsp; </strong></u> , BY AND</p>
+    <strong style="font-size:large;">BETWEEN</strong>
+    <p>SA PREMIUM HOMES, LOCATED IN SA GARDEN ON MAIN GT ROAD, KALA SHAH KAKU, (HERIENAFTER REFERRRED TO AS A "SELLER" WHICH EXPRESSION SHALL WHEREVER THE CONTEXT SO PERMIT MEAN AND INCLUDE ITS SUCCSSEORS-IN-INTEREST AND ASSIGNS) OF THE FIRST PART;</p>
+    <strong style="font-size:large;">AND</strong>
+    <p><u> &nbsp;&nbsp;&nbsp;&nbsp;<strong style="font-size:18px;">@string.Join(",", Model.shopOwnersforallt.Select(x => x.Name))</strong> &nbsp;&nbsp;&nbsp;&nbsp;</u> S/O <u> &nbsp;&nbsp;&nbsp;&nbsp;<strong style="font-size:18px;">@string.Join(",", Model.shopOwnersforallt.Select(x => x.Father_Husband))</strong> &nbsp;&nbsp;&nbsp;&nbsp;</u> BEARING CNIC# <u> &nbsp;&nbsp;&nbsp;&nbsp;<strong style="font-size:18px;">@string.Join(",", Model.shopOwnersforallt.Select(x => x.CNIC_NICOP))</strong> &nbsp;&nbsp;&nbsp;&nbsp;</u> RESIDENT OF <u> &nbsp;&nbsp;&nbsp;&nbsp;<strong style="font-size:18px;">@string.Join(",", Model.shopOwnersforallt.Select(x => x.Residential_Address))</strong> &nbsp;&nbsp;&nbsp;&nbsp;</u> (HERIENAFTER REFERRED TO AS THE "BUYER" WHICH EXPRESSION SHALL WHEREVER THE CONTEXT SO PERMIT MEAN AND INCLUDE HIS/HER LEGAL HEIRS, SUCCSSEORS-IN-INTEREST AND ASSIGNS)OF THE OTHER PART.</p>
+    <p>(THE SELLER AND THE BUYER SHALL HERIENAFTER COLECTIVELY BE REFERRED TO AS THE "PARTIES"AND INDIVIDUALLY ALSO REFERRED AS A "PARTY" AND THIS AGREEMENT TO SEE WILL BE REFERRED TO AS "AGREEMENT")</p>
+    <br />
+    <strong style="font-size:large;">WHEREAS</strong>
+    <p>A. &nbsp;&nbsp;&nbsp; THE SELLER IS DEVELOPING FOR SALE RESIDENTIAL DEPARTMENT(GROUND+2 FLOOR), ON LAND WITH THE NAME & STYLE OF "SA PREMIUM HOMES" (THE "PROJECT"), SITUATED AT Meher Estate Developers, MAIN GT ROAD KSK.</p>
+    <p>B. &nbsp;&nbsp;&nbsp; THE SELLER HAS AGREED TO SELL THE PROPERTY AND THE BUYER HAS AGREED TO PURCHASE THE PROPERTY ON THE TERM AND CONDITIONS HERIENAFTER SET FORTH. </p>
+    <p>NOW, THEREFORE, SELLER AND BYUER(S), INTENDING TO BE LEGALLY BOUND, AGREE AS FOLLOWS:</p>
+
+    <strong style="font-size:large;">SALE AND PURCHASE PROPERTY</strong>
+    <p>1. &nbsp;&nbsp;&nbsp; THE BUYER HAS APPLIED FOR BOOKING OF APARTMENT IN THE PROJECT ON THE PRESCRIBED APPLICATION FORM OF THE SELLER DATED <u> &nbsp;&nbsp;&nbsp;&nbsp;<strong style="font-size:18px;">@String.Format("{0: MMMM dd, yyyy}", Model.shopOwnersforallt.Select(x => x.DateTime).FirstOrDefault()) </strong> &nbsp;&nbsp;&nbsp;&nbsp;</u> FOR APARTMENT# <u> &nbsp;&nbsp;&nbsp;&nbsp;<strong style="font-size:18px;">@Model.commercialData.ApplicationNo</strong> &nbsp;&nbsp;&nbsp;&nbsp;</u>, <u> &nbsp;&nbsp;&nbsp;&nbsp;<strong style="font-size:18px;">@Model.commercialData.Floor</strong> &nbsp;&nbsp;&nbsp;&nbsp;</u>, AND MEASURING<u> &nbsp;&nbsp;&nbsp;&nbsp;<strong style="font-size:18px;">@String.Format("{0:0,0}", Model.commercialData.Total_SqFt_Marlas)</strong> &nbsp;&nbsp;&nbsp;&nbsp;</u> SQ.FT APPROXIMATELY. UPON SUCCESSFUL EXECUTION OF THIS AGREEMENT BETWEEN THE PARTIES AND COMPLETION OF THE PROJECT, & COMPLETION OF FULL PAYMENT SELLER SHALL TRANSFER THE TITLE OF PROPERTY TO THE BUYER. SELLER SHALL ISSUE FINAL ALLOTMENT LETTER IN FAVOR OF THE BUYER.</p>
+    <p>2. &nbsp;&nbsp;&nbsp; SUBJECT TO THE TERMS AND CONDITIONS OF THIS AGREEMENT, THE SELLER SHALL SELL THIS PROPERTY TO THE BUYER AND THE BUYER SHALL PURCHASE THE PROPERTY FROM THE SELLER FOR A TOTAL SALE CONSIDERATION OF RS. <u> &nbsp;&nbsp;&nbsp;&nbsp; <strong style="font-size:18px;">@String.Format("{0:n0}", Model.CommercialInstallments.Sum(x => x.Amount))</strong> &nbsp;&nbsp;&nbsp;&nbsp; </u> (HERIENAFTER REFERRED TO AS THE "SALE PRICE"). THE ENTIRE SALE PRICE SHALL BE PAID TO THE SELLER BY THE BUYER IN ACCORDIANCE WITH THE PAYMENT PLAN AS LAID OUT AND ATTACHED HEREWITH AS SHEDULE-C.</p>
+    <p>3. &nbsp;&nbsp;&nbsp; THE SELLER SHALL BE AVAILABLE TO EXECUTE THE SALE DEED PERTAINING TO THE PROPERTY IN FAVOR OF THE BUYER ON THE FULL AND FINAL PAYMENT OF AGREED SALE PRICE.</p>
+
+    <strong style="font-size:large;">PAYMENT TERMS AND FINANCIAL PROVISIONS</strong>
+    <p>4. &nbsp;&nbsp;&nbsp; BUYER HAS PAID 30% OF THE SALE PRICE AS DOWN-PAYMENT/ADVANCE AMOUNTING TO RS. <u> &nbsp;&nbsp;&nbsp;&nbsp; <strong style="font-size:18px">@String.Format("{0:n0}", Model.CommercialInstallments.Where(x => x.Installment_Name == "Confirmation" || x.Installment_Name == "Advance").Sum(x => x.Amount))</strong> &nbsp;&nbsp;&nbsp;&nbsp; </u> AND THE SAME HAS BEEN RECIEVED BY THESELLER DATED <u> &nbsp;&nbsp;&nbsp;&nbsp; <strong style="font-size:18px;">@String.Format("{0: MMMM dd, yyyy}", Model.shopOwnersforallt.Select(x => x.DateTime).FirstOrDefault())</strong> &nbsp;&nbsp;&nbsp;&nbsp; </u> THE OUTSTANDING SALE PRICE AMOUNTING TO RS. <u> &nbsp;&nbsp;&nbsp;&nbsp; <strong style="font-size:18px">@String.Format("{0:n0}", Model.CommercialInstallments.Where(x => x.Installment_Name != "Confirmation" && x.Installment_Name != "Advance").Sum(x => x.Amount))</strong> &nbsp;&nbsp;&nbsp;&nbsp; </u> SHALL BE PAYABLE BY THE BUYER TO THE SELLER AS FOLLOWS:</p>
+    <p>5. &nbsp;&nbsp;&nbsp; THE BUYER SHALL PAY 70% OF THE TOTAL SALEPRICE AMOUNTING TO RS. <u> &nbsp;&nbsp;&nbsp;&nbsp; <strong style="font-size:18px">@String.Format("{0:n0}", Model.CommercialInstallments.Where(x => x.Installment_Name != "Confirmation" && x.Installment_Name != "Advance").Sum(x => x.Amount))</strong> &nbsp;&nbsp;&nbsp;&nbsp; </u> IN 48 MONTHLY INSTALLMENTS OVER A PERIOD OF FOUR YEARS IN ACCORDIANCE WITH THE INSTALLMENT PLAN AS LAID OUT AND ATTACHED HEREWITH AS SHEDULE C(THE "PAYMENT PLAN").</p>
+
+    <div class="signature-area">
+
+        <div class="signature-left-area">
+            <br /><br />
+            <label style="display:block;text-align:center;"><strong>_____________________________</strong></label> <br />
+            <label style="display:block;text-align:center;"><strong>Delivered By</strong></label> <br />
+
+        </div>
+
+        <div class="signature-center-area">
+            <br /><br />
+            <label style="display:block;text-align:center;"><strong>_____________________________</strong></label> <br />
+            <label style="display:block;text-align:center;"><strong>Booked/Received By</strong></label> <br />
+        </div>
+        <div class="signature-right-area">
+            <br /><br />
+            <label style="display:block;text-align:center;"><strong>_____________________________</strong></label> <br />
+            <label style="display:block;text-align:center;"><strong>Date</strong></label> <br />
+        </div>
+
+    </div>
+
+    <style>
+
+        .signature-area {
+            display: flex;
+        }
+
+            .signature-area .signature-left-area {
+                display: block;
+                align-content: center;
+                width: 33%;
+            }
+
+            .signature-area .signature-center-area {
+                width: 33%;
+            }
+
+            .signature-area .signature-right-area {
+                width: 34%;
+            }
+    </style>
+
+    @*<p>6. &nbsp;&nbsp;&nbsp; Without prejudice to the Seller’s right to terminate this Agreement in accordance with the terms hereof, in case the Buyer fails to pay any installment(s) towards the Sale Price in accordance with the Payment Plan on the due date, the Seller shall charge, and the Buyer shall pay late payment charges at the rate of 1% of the delayed installment(s) per month till the delayed installment(s) are received by the Seller.</p>
+
+        <br />
+        <strong style="font-size:large;">TERMS PERTAINING TO TRANSFER OF PROPERTY BY BUYER</strong>
+        <p>7. &nbsp;&nbsp;&nbsp; It is agreed that any re-sale, transfer or assignment of the Property or any rights hereunder by the Buyer to any subsequent person/entity shall not have any effect until the proposed person/entity enters into an agreement with the Seller to be bound by the terms as mentioned in this Agreement and the new buyer/transferee shall pay to the Seller a transfer fee as per prescribed schedule of transfer fee which shall be less than or equal to 01% (one percent) of the Property value. Such transfer fee shall be other than any government taxes if any applicable on transferor and transferee at the time of transfer.</p>
+        <p>8. &nbsp;&nbsp;&nbsp; Seller further confirms that the Buyer shall bear Rs. 10,000/- (Rupees Ten Thousand Only) on account of service charges for allotment on a Propertybeing purchased by the Buyer at the time of completion of payment. However, in case of executing Registry, allcharges& taxesrelated to Registry will be borne by the Buyer.</p>
+
+        <br />
+        <strong style="font-size:large;">MAINTENANCE AND MANAGEMENT OF PROJECT AND SERVICE CHARGES</strong>
+        <p>9. &nbsp;&nbsp;&nbsp; It is envisaged that, following completion of the Project, the Seller shall be responsible for the management of the Project in perpetuity. The Seller may undertake such management itself or it may, in its discretion, nominate another entity to do so. The Seller or its nominated entity will charge from the Buyer, reasonable service charges (the “Service Charge”) on account of maintenance and management of the Project. Service Charge will apply even if the Property is lying vacant. The Buyer shall adhere to and observe all policies, procedures and regulations as may be applied by the Seller or its nominated entity for the maintenance and management of the Project.</p>
+
+        <br />
+        <strong style="font-size:large;">SELLER’S RIGHTS & CONVENANTS IN CONNECTION WITH PROJECT</strong>
+        <p>10. &nbsp;&nbsp;&nbsp; Seller ensures that only requisite/ necessary changes to the specification of the Project may be altered during the process of construction without affecting the Property purchased by the Buyer.</p>
+        <p>11. &nbsp;&nbsp;&nbsp; Upon receipt of post-dated cheques of the balance sale price by the purchaser in respect of the property in accordance with the agreed payment timelines in Schedule C, the seller shall deliver vacant and peaceful possession of the Property within 2 Years of date of purchased and signing of Agreement to Sell and buyer will clear payments equivalent to 70% of the booking amount at time of possession, but will not be held responsible for any delay, inefficiency or inaction on account of Force Majeure Event, war, change in law and order situation, act of terrorismor any other circumstances beyond the control of the Seller. Once normal conditions revive, the Seller shall endeavor to apply its means and resources to complete the Project within the stipulated time.</p>
+
+        <br />
+        <strong style="font-size:large;">TERMINATION AND CANCELLATION PROVISIONS</strong>
+        <p>12. &nbsp;&nbsp;&nbsp; Notwithstanding to the terms of this Agreement, Seller retain the right to terminate, in case the Buyer fails to pay 03 (three) consecutive unpaid installments towards the Sale Price in accordance with the Payment Plan.</p>
+        <p>13. &nbsp;&nbsp;&nbsp; In the event of breach of the terms of this Agreement by the Buyer, including but not limited to failure to make any payment due under the payment plan within three (3) months of the due date, the Seller shall serve a written notice (“First Notice”) on the Buyer for payment of the outstanding sums including late payment surcharge, if any or for the adherence and compliance to this Agreement within fourteen (14) days of the date of the First Notice. In the event the Buyer fails to remedy the breach, default or defect mentioned in the First Notice within fourteen (14) days of the date of the First Notice, a final notice (“Final Notice”) shall be issued. In case Buyer fails to remedy the breach, default or defect mentioned in the Final Notice within a period of fourteen (14) days from the date of Final Notice, this Agreement shall stand terminated at the option of the Seller.</p>
+        <p>14. &nbsp;&nbsp;&nbsp; Under the scenario of termination as aforesaid, the Seller shall retain 20% (Twenty percent) of the Sale Price on account of liquidated damages, from the payment made towards the Sale Price by the Buyer to the Seller and remit the balance amount, if any, to the Buyer after completion of the Project or resale of the Property, whichever comes earlier. It is hereby agreed by the Parties that 20% (Twenty percent)of theSale Price is a genuine pre-estimate of damage that shall be suffered by the Seller in case of termination of the Agreement on the account of the breach by Seller. The Buyer acknowledges and confirms that the amount mentioned hereinabove is reasonable considering factors such as investment on the Project, cost of foregoing other buyers and difficulty of finding a new buyer.</p>
+        <p>15. &nbsp;&nbsp;&nbsp; It is agreed between the Parties that the Buyer has the right to opt for cancellation of this Agreement at any time subject to deduction of cancellation charges equal to 20% of the Sale Price. The balance payment (if any) received by the Seller (i.e. after deduction of 20% of the Sale Price) shall be refunded back to the Buyer after completion of the Project or resale of the Property, whichever comes earlier. In case of cancellation, the Buyer shall surrender all original documents such as this Agreement, Allotment Letter, original deposit slips and acknowledgements of receipts and other correspondence if any, made till the date of cancellation.</p>
+
+        <br />
+        <strong style="font-size:large;">BUYER’S COVENANTS</strong>
+        <p>16. &nbsp;&nbsp;&nbsp; The Buyer covenants, not to do, or permit or suffer to be done, upon the Property any act or omission which may become a nuisance, cause of annoyance or disturbance, damage or inconvenience to the Seller or other owners /occupiers of the Retained Premises.</p>
+        <p>17. &nbsp;&nbsp;&nbsp; The Buyer agrees to follow and be bound by the community rules that shall be communicated to the Buyer before handing over of the possession of the Property, as may be amended from time to time.</p>
+
+        <br />
+        <strong style="font-size:large;">TAXES</strong>
+        <p>18. &nbsp;&nbsp;&nbsp; The property tax along with all other applicable taxes/ ceases in respect of the Property shall be the responsibility of the Buyer from the date of taking possession of the Property. Till such time as the Property and the Retained Premises are separately assessed, the applicable governmental taxes and dues shall be paid by the Buyer to the Seller for onward discharge of collective liabilities with the concerned authorities.</p>
+
+        <br />
+        <strong style="font-size:large;">MISCELLANEOUS</strong>
+        <p>19. &nbsp;&nbsp;&nbsp; Reference in this Agreement to the Seller shall include its successors in title and reference to the Buyer shall include its successors in title. The rights, duties and obligations of the Parties to this Agreement shall be binding upon and inure to the benefit of the respective successors and permitted assigns of such Parties.</p>
+        <p>20. &nbsp;&nbsp;&nbsp; In case of any dispute between the Parties or their assignees arising out or in connection with this Agreement, or the breach thereof, the same shall be referred to arbitration. The arbitration shall be governed by the Arbitration Act, 1940 of Pakistan or such other law of arbitration as may be in force for the time being in Pakistan. The Arbitration shall be conducted by a sole Arbitrator appointed by mutual consent of the Parties. In case of Parties failing to agree upon an Arbitrator, the same shall be appointed by the Court. The seat of the Arbitration shall be Lahore and the language for the Arbitration shall be English. The Award given subsequent to the Arbitration shall be final and binding upon the Parties.</p>
+        <p>21. &nbsp;&nbsp;&nbsp; Each Party under this Agreement hereby agrees that it shall not disclose any oral or written confidential information about the transactions contemplated herein to anyone without the prior written approval of the other Party hereto except as may be required by law or for the purpose of business. The provisions of this Clause shall survive the cancellation or termination of this Agreement.</p>
+        <p>22. &nbsp;&nbsp;&nbsp; The Seller shall make endeavors to complete development of the Project; however Seller shall  not be held responsible for any delay, inefficiency or inaction on account of Force Majeure Event, political instability, sit in,  political crises, war, change in law and order situation, act of terrorism, compelled litigation, heavy rains, flood or flood like situation in or around the land, delay caused due to an act or omission of the Government or any other authorities, strikes or transportation interruption on any account, Government policies promoting abnormal cost rise in developmental material or any other circumstances beyond the control of the Seller.</p>
+        <p>23. &nbsp;&nbsp;&nbsp; Each Party shall in good faith perform their obligations under this Agreement based on confidence placed by such Party in the other and thereon relied upon by such Party.</p>
+        <p>24. &nbsp;&nbsp;&nbsp; Notwithstanding anything contained in this Agreement, the time fixed for payment of amount(s) or any part thereof under this Agreement is and shall be the essence of this Agreement.</p>*@
+
+    <p>    &nbsp;&nbsp;&nbsp; prior written approval of the other Party hereto except as may be required by law or for the purpose of business. The provisions of this Clause shall survive the cancellation or termination of this Agreement.</p>
+    <p>22. &nbsp;&nbsp;&nbsp; The Seller shall make endeavors to complete development of the Project; however Seller shall  not be held responsible for any delay, inefficiency or inaction on account of Force Majeure Event, political instability, sit in,  political crises, war, change in law and order situation, act of terrorism, compelled litigation, heavy rains, flood or flood like situation in or around the land, delay caused due to an act or omission of the Government or any other authorities, strikes or transportation interruption on any account, Government policies promoting abnormal cost rise in developmental material or any other circumstances beyond the control of the Seller.</p>
+    <p>23. &nbsp;&nbsp;&nbsp; Each Party shall in good faith perform their obligations under this Agreement based on confidence placed by such Party in the other and thereon relied upon by such Party.</p>
+    <p>24. &nbsp;&nbsp;&nbsp; Notwithstanding anything contained in this Agreement, the time fixed for payment of amount(s) or any part thereof under this Agreement is and shall be the essence of this Agreement.</p>
+
+    <br />
+    <strong style="font-size:large;">IN WITNESS WHEREOF, the Parties hereto at Lahore have caused this Agreement to be signed in their respective names as of the day, month and year first above written, in presence of the witnesses:</strong>
+
+    <div class="signature-area">
+
+        <div class="signature-left-area">
+            <br /><br />
+            _____________________________ <br />
+            For and on behalf of <strong>SELLER</strong> <br />
+            Name: _______________________<br />
+            CNIC: _______________________<br />
+
+        </div>
+
+        <div class="signature-right-area">
+            <br /><br />
+            _____________________________ <br />
+            For and on behalf of <strong>BUYER</strong> <br />
+            Name: _______________________<br />
+            CNIC: _______________________<br />
+        </div>
+
+    </div>
+
+    <br /><br />
+    <strong style="font-size:large;">WITNESSED</strong>
+
+    <div class="signature-area">
+
+        <div class="signature-left-area">
+            <br /><br />
+            _____________________________ <br />
+            For and on behalf of <strong>SELLER</strong> <br />
+            Name: _______________________<br />
+            CNIC: _______________________<br />
+            Date: _______________________<br />
+
+        </div>
+
+        <div class="signature-right-area">
+            <br /><br />
+            _____________________________ <br />
+            For and on behalf of <strong>BUYER</strong> <br />
+            Name: _______________________<br />
+            CNIC: _______________________<br />
+            Date: _______________________<br />
+        </div>
+
+    </div>
+
+    <style>
+
+        .signature-area {
+            display: flex;
+        }
+
+            .signature-area .signature-left-area {
+                width: 50%;
+            }
+
+            .signature-area .signature-right-area {
+                width: 50%;
+            }
+    </style>
+</div>

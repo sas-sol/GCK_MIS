@@ -1,0 +1,64 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Sp_Get_Payables_Detail_Result>
+@{Layout = "~/Views/Shared/_StaffLayout.cshtml"; }
+
+<div class="col-md-12">
+    <div class="bgc-white bd bdrs-3 p-20 mB-20">
+        <h4 class="c-grey-900 mB-20">Loan & Advance</h4>
+        <table id="loan-list" class="table table-striped table-bordered asset-dat" cellspacing="0" width="100%">
+            <thead class="">
+                <tr>
+                    <th>Sr.</th>
+                    <th>Name</th>
+                    <th>Amount</th>
+                    <th>Installments</th>
+                    <th>Paid</th>
+                    <th>Remaining</th>
+                    <td></td>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    int sr = 1;
+                    foreach (var g in Model)
+                    {
+                        var rem = g.Amount - g.Loan_Paid;
+                        string col = "";
+                        if (rem < 0)
+                        {
+                            col = "bgc-green-50";
+                        }
+                        <tr class="@col">
+                            <td>@sr</td>
+                            <td>@g.Name</td>
+                            <td>@String.Format("{0:n0}", g.Amount)</td>
+                            <td>@g.inst</td>
+                            <td>@String.Format("{0:n0}", g.Loan_Paid)</td>
+                            <td>@String.Format("{0:n0}", rem)</td>
+                            <td>
+                                @if (g.ManagerApproval == "Approved" && g.HrApproval == "Approved" && g.Paid_Status != true)
+                                {
+                                    <i data-toggle="modal" data-target="#Modal" id="@g.Id" class="g-l-vouc ti-pencil"></i>
+                                }
+                                <i data-toggle="modal" data-target="#Modal" id="@g.Id" class="l-a-det ti-eye"></i>
+                            </td>
+                        </tr>
+                        sr++;
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('#loan-list').DataTable({
+            dom: 'Bfrtip',
+            buttons: [
+                'copy', 'excel', 'pdf', 'print'
+            ]
+        });
+    });
+</script>
+
+

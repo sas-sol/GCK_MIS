@@ -1,0 +1,104 @@
+﻿@{
+    Layout = "~/Views/Shared/_StaffLayout.cshtml";
+}
+
+
+
+@model IEnumerable<Management_Information_System.Models.CanceledFileReport>
+
+
+<h5>Cancelled File Reports </h5>
+
+
+
+
+
+
+
+
+<table id="" class="table table-borderless clickable-rows rea-dat" cellspacing="0" width="100%">
+    <thead class="thead-new-dark">
+        <tr>
+            <th class="col-name">File Form Number</th>
+            <th align="center" class="col-date">Size (Marla)</th>
+            <th class="col-name">Cancelled On</th>
+            <th class="col-name">Total Installments Paid (Amount)</th>
+            <th class="col-name">Total Installments Paid (Count)</th>
+            <th class="col-name">Total Installments Not Paid (Amount)</th>
+            <th class="col-name">Total Installments Not Paid (Count)</th>
+            <th class="col-name">Total Installments Pending (Amount)</th>
+            <th class="col-name">Total Installments Pending (Count)</th>
+            <th class="col-name">Amount Payable (~Approx.)</th>
+
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            foreach (var i in Model)
+            {
+                decimal ttl = (i.TotalInstallmentsNotPaidAmount + i.TotalInstallmentsPaidAmount + i.TotalInstallmentsRemainAmount);
+                <tr>
+                    <td>@i.FileNumber</td>
+                    <td>@i.PlotSize</td>
+                    <td>@i.CancelledOn.ToString("DD-MM-YYYY")</td>
+                    <td>@i.TotalInstallmentsPaidAmount</td>
+                    <td>@i.TotalInstallmentsPaidCount</td>
+                    <td>@i.TotalInstallmentsNotPaidAmount</td>
+                    <td>@i.TotalInstallmentsNotPaidCount</td>
+                    <td>@i.TotalInstallmentsRemainAmount</td>
+                    <td>@i.TotalInstallmentsRemainCount</td>
+                    <td>@(ttl*(decimal)0.1)</td>
+
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
+
+
+
+
+
+<script>
+    $(document).ready(function () {
+        var groupColumn = 0;
+        var table = $('.rea-dat').DataTable({
+            dom: 'Bfrtip',
+            //"order": [[groupColumn, 'asc']],
+            "displayLength": 25,
+            "drawCallback": function (settings) {
+                var api = this.api();
+                var rows = api.rows({ page: 'current' }).nodes();
+                var last = null;
+
+                //api.column(groupColumn, { page: 'current' }).data().each(function (group, i) {
+                //    if (last !== group) {
+                //        $(rows).eq(i).before(
+                //            '<tr class="group"><td colspan="11">' + group + '</td></tr>'
+                //        );
+
+                //        last = group;
+                //    }
+                //});
+            },
+            //"columnDefs": [
+            //    { "targets": groupColumn, "visible": false, },
+
+            //]
+        });
+        // Order by the grouping
+        $('#example tbody').on('click', 'tr.group', function () {
+            var currentOrder = table.order()[0];
+            if (currentOrder[0] === groupColumn && currentOrder[1] === 'asc') {
+                table.order([groupColumn, 'desc']).draw();
+            }
+            else {
+                table.order([groupColumn, 'asc']).draw();
+            }
+        });
+    });
+</script>
+
+
+

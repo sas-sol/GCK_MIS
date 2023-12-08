@@ -1,0 +1,307 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Sp_Get_WbdResources_Material_Result>
+
+<style>
+
+    .table-scrollable {
+        max-height: 500px;
+        overflow-x: auto;
+        overflow-y: auto;
+        scrollbar-width: thin;
+    }
+
+        .table-scrollable thead th {
+            position: sticky;
+            top: 0px;
+            background-color: white;
+            margin-top: -1px;
+            margin-bottom: -1px;
+            /* This is our fake border (see above comment) */
+            box-shadow: inset 0 1px 0 #dee2e6, inset 0 -1px 0 #dee2e6;
+        }
+
+        .table-scrollable tbody tr {
+            height: 10px;
+        }
+</style>
+
+
+
+<div class="table-scrollable" style="">
+    <table class="table table-bordered" id="mts-table" cellspacing="0" style="width:100%;table-layout:fixed">
+        <thead>
+            <tr>
+                <th width="5%">Sr.</th>
+
+                <th width="30%">Item</th>
+                <th width="30%">Activity</th>
+                @*<th width="7%">Type</th>*@
+                <th width="8%">Qty</th>
+                <th width="8%">Rate</th>
+                <th width="8%">Amount</th>
+                <th width="7%">UOM</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                decimal? Total_Amount = 0;
+                if (Model.Any())
+                {
+                    int srcounter = 1;
+                    foreach (var item in Model)
+                    {
+                        Total_Amount += item.Amount;
+                        <tr>
+                            <td>@srcounter</td>
+
+                            <td>@item.Title</td>
+                            <td>@item.Item_Name</td>
+                            @*<td>@item.Material_Type</td>*@
+                            <td>@string.Format("{0:0,0.##}", item.Qty)</td>
+                            <td>@string.Format("{0:0,0.##}", item.Rate)</td>
+                            <td>@string.Format("{0:0,0.##}", item.Amount)</td>
+                            <td>@item.UOM</td>
+                        </tr>
+                        srcounter++;
+                    }
+                }
+                else
+                {
+                    <tr><td colspan="12" align="center">No Activity has been created</td></tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
+
+
+<div class="container-fluid pl-0 ml-0 pr-0 mr-0">
+    <h4 class="text-center">WBD Resource Material </h4>
+    <div class="form-group col-md-3">
+        @Html.DropDownList("ResourceActivity", null, "Select Activity ", new { Name = "Id", @class = "form-control", required = "" })
+    </div>
+</div>
+<div class="container-fluid ml-0 pr-0 mr-0 main-ms wbd-res in-active main-rec-do">
+    <div class="form-row inv-assign-row">
+        @*<div class="form-group col-md-3">
+                <label>Type</label>
+                <select class="form-control  select2" name="Type" id="Type" required>
+                    <option>Select One</option>
+                    <option value="Material" id="Material">Material</option>
+                    <option value="Labour">Labour</option>
+                    <option value="Equipment">Equipment</option>
+                </select>
+            </div>*@
+        <div class="form-group col-md-2" style="display: none;">
+            <label>SKU</label>
+            <input type="text" class="form-control sku" readonly />
+        </div>
+
+        <div class="form-group col-md-3" id="Inventory">
+            <label>Item</label>
+            @*@Html.DropDownList("wbdresInventory", null, "Select Item ", new { Name = "Id", @class = "form-control", required = "" })*@
+            <select class="form-control item-name" id="wbdresInventory"></select>
+        </div>
+        <div class="form-group col-md-2" id="uom">
+            <label>UOM</label>
+            <input type="text" class="form-control item-uom" id="wbd-res-uom" required placeholder="Enter Quantity" readonly />
+        </div>
+        <div class="form-group col-md-1">
+            <label>Quantity</label>
+            <input type="number" class="form-control wbd-res-rate" id="wbd-res-qty" placeholder="Quantity" autocomplete="off">
+        </div>
+        <div class="form-group col-md-1">
+            <label>Rate</label>
+            <input type="number" class="form-control wbd-res-rate" id="wbd-res-rate" placeholder="Rate" autocomplete="off">
+        </div>
+        <div class="form-group col-md-1">
+            <label>Amount</label>
+            <input type="number" class="form-control " id="wbd-res-Amnt" placeholder="Amount" readonly autocomplete="off">
+        </div>
+
+
+        <input type="number" class="" hidden id="Prj_Id" value="ViewBag.Proj_Id">
+
+        <div class="form-group col-md-12 justify-content-end d-flex px-0 mt-2">
+            <button class="btn btn-primary col-md-2 cr-WBD-rsrc-btn-mtrl">Save</button>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+
+        $('#ResourceActivity').on('change', function () {
+            var selectedCountry = $(this).children("option:selected").val();
+            console.log(selectedCountry);
+            debugger
+            if ((selectedCountry != undefined) && (selectedCountry != '')) {
+                if ($('.main-ms').css('display') == 'none') {
+                    $('.main-ms').slideToggle(300);
+                }
+            }
+            else {
+                console.log('hello');
+                $('.main-ms').slideToggle(300);
+            }
+        });
+    });
+</script>
+<style>
+    .invisi {
+        visibility: hidden;
+    }
+
+    .in-active {
+        display: none;
+    }
+
+    textarea {
+        resize: none;
+    }
+
+    .msi-row {
+        border-bottom: .1em solid #dddcdc;
+        margin-top: 10px;
+    }
+
+    .mile-name-mat {
+        font-size: 30px;
+        text-align: center;
+        vertical-align: middle !important;
+    }
+
+    .other {
+        margin-top: 0px !important;
+    }
+</style>
+
+<script>
+        var selectedInven = [];
+        var emps = @Html.Raw(Json.Encode(ViewBag.Employees));
+</script>
+
+<script>
+
+    $(function () {
+
+        var prdctThat = $('.item-name');
+        $(prdctThat).select2({
+            minimumInputLength: 3,
+            dropdownParent: $(prdctThat).parent(),
+            placeholder: "Search for Inventory",
+            ajax: {
+                url: '/Inventory/SearchInventory/',
+                dataType: 'json',
+                params: {
+                    contentType: 'application/json; charset=utf-8'
+                },
+                quietMillis: 100,
+                data: function (params) {
+                    return {
+                        d: params.term// search term
+                    };
+                },
+                processResults: function (data) {
+                    return {
+                        results: data.items
+                    };
+                }
+            }
+        });
+        $(prdctThat).on('select2:select', function (e) {
+            var s = e.params.data;
+            $.ajax({
+                type: "POST",
+                url: '/Inventory/GetInventoryItemById/',
+                data: { Id: s.id },
+                success: function (data) {
+                    $(prdctThat).closest('.inv-assign-row').find('.item-uom').val('');
+                    $(prdctThat).closest('.inv-assign-row').find('.item-uom').val(data.Inventory.UOM);
+                    $(prdctThat).closest('.inv-assign-row').find('.sku').val(data.Inventory.SKU);
+                    $(prdctThat).closest('.inv-assign-row').find('.ttl-qty').val(parseFloat(data.Inventory.Total_In_Qty) - parseFloat(data.Inventory.Total_Out_Qty));
+                }
+                , error: function (xmlhttprequest, textstatus, message) {
+                    if (textstatus === "timeout") {
+                        alert("got timeout");
+                    } else {
+                        alert(textstatus);
+                    }
+                }
+            });
+        });
+
+
+
+    });
+
+    $('.add-do-item').click(function () {
+        let _strctr = `<div class="col-md-12 inv-assign-row"></div>`;
+        var newRec = $('.main-rec-do').append(_strctr);
+        InitEmps($(newRec).find('.emp').last());
+        var prdctThat = $(newRec).find('.item-name').last();
+        $(prdctThat).select2({
+            dropdownParent: $(prdctThat).parent(),
+            minimumInputLength: 3,
+            placeholder: "Search for Inventory",
+            ajax: {
+                url: '/Inventory/SearchInventory/',
+                dataType: 'json',
+                params: {
+                    contentType: 'application/json; charset=utf-8'
+                },
+                quietMillis: 100,
+                data: function (params) {
+                    return {
+                        d: params.term// search term
+                    };
+                },
+                processResults: function (data) {
+                    return {
+                        results: data.items
+                    };
+                }
+            }
+        });
+
+
+        $(prdctThat).on('select2:select', function (e) {
+            var s = e.params.data;
+
+            debugger
+            $.ajax({
+                type: "POST",
+                url: '/Inventory/GetInventoryItemById/',
+                data: { Id: s.id },
+                success: function (data) {
+                    $(prdctThat).closest('.inv-assign-row').find('.item-uom').val('');
+                    $(prdctThat).closest('.inv-assign-row').find('.item-uom').val(data.Inventory.UOM);
+                    $(prdctThat).closest('.inv-assign-row').find('.sku').val(data.Inventory.SKU);
+                    $(prdctThat).closest('.inv-assign-row').find('.ttl-qty').val(parseFloat(data.Inventory.Total_In_Qty) - parseFloat(data.Inventory.Total_Out_Qty));
+                }
+                , error: function (xmlhttprequest, textstatus, message) {
+                    if (textstatus === "timeout") {
+                        alert("got timeout");
+                    } else {
+                        alert(textstatus);
+                    }
+                }
+            });
+        });
+    });
+
+    function InitEmps(_ele) {
+        $(_ele).append('<option> Select Employee </option>');
+
+        debugger
+        var $prevGroup, prevGroupName;
+        $.each(emps, function () {
+            var group = (this.Group == null) ? ' ' : this.Group.Name;
+            if (prevGroupName !== group) {
+                $prevGroup = $('<optgroup />').prop('label', group).appendTo(_ele);
+            }
+            $("<option />").val(this.Value).text(this.Text).appendTo($prevGroup);
+            prevGroupName = group;
+        });
+
+    }
+</script>

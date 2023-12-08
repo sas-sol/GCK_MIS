@@ -1,0 +1,33 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Sp_Get_Arrear_Salary_Details_Result>
+
+
+
+@if (Model.Any())
+{
+
+    foreach (var item in Model.Where(x => x.Type == "AllowncesAndBonus"))
+    {
+
+        <input type="hidden" class="AllowncesAndBonusSalaries" value="@item.Salaries_id" />
+        <div class="from-row row">
+
+            <div class="form-group col-md-3">
+
+                <label>@item.Description</label>
+
+            </div>
+            <div class="form-group col-md-3">
+
+                <label>@String.Format("{0:n0}", item.Amount)</label>
+            </div>
+            @if (item.Userid == ViewBag.userid)
+            {
+                <div class="form-group">
+                    <i class="ti-minus rmv-al-arr bgc-red-50 pointer" id="@item.Id"></i>
+                </div>
+            }
+
+        </div>
+
+    }
+}

@@ -1,0 +1,37 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Salary>
+<div class="col-md-12 ">
+    <table class="table table-bordered">
+        <thead>
+            <tr class="thead-dark central-text-align">
+                <th colspan="6">Salaries History</th>
+            </tr>
+            <tr>
+                <th>Salary Month</th>
+                <th>Basic Salary</th>
+                <th>Salary Amount</th>
+                <th>Status</th>
+                <th>Receive Date</th>
+                <th></th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (var v in Model.OrderByDescending(x => x.Salary_Month))
+            {
+                <tr>
+                    <td>@v.Salary_Month.Value.ToString("MMM/yyyy")</td>
+                    <td>@string.Format("{0:n0}", v.Basic_salary)</td>
+                    <td>@string.Format("{0:n0}", v.Grand_total)</td>
+                    <td>@v.Status</td>
+                    <td>@((v.Received_Date is null) ? "-" : string.Format("{0:dd-MMM-yyyy}", v.Received_Date.Value.ToLongDateString()))</td>
+                    <td>
+                        @if (v.Status == "Received")
+                        {
+                            <a href="#" class="ti-eye" onclick="window.open('/Salaries/PaySlipEmployee?SalariesId=@v.Id', '_blank')"></a>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

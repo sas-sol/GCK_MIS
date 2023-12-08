@@ -1,0 +1,98 @@
+﻿
+    <input id="Plot_Id" value="@ViewBag.Plot_Id" hidden/>
+<div class="form-row">
+    <div class="form-group col-md-3">
+        <label>Plot No.</label>
+        <h5 id="plt-nop"></h5>
+    </div>
+    <div class="form-group col-md-2">
+        <label>Block</label>
+        <h5 id="plt-blkp"></h5>
+    </div>
+    <div class="form-group col-md-1">
+        <label>Plot Size</label>
+        <h5 id="plt-sizep"></h5>
+    </div>
+    <div class="form-group col-md-2">
+        <label>Type</label>
+        <h5 id="plt-typep"></h5>
+    </div>
+    <div class="col-md-6">
+        <div class="dropdown">
+            @*<button class="btn btn-secondary  dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Select NOC</button>*@
+            @*<div class="dropdown-menu" aria-labelledby="dropdownMenuButton" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 35px, 0px); top: 0px; left: 0px; will-change: transform;">
+            <text><input type="button" class="dropdown-item select-plot-noc" id="Customer">Customer</text>
+            <hr />
+            <text><input type="button" class="dropdown-item select-plot-noc" id="Dealer">Dealers</text>
+        </div>*@
+
+            <select class=" form-control col-md-5 select1 select-plot-noc" name="NocType" required id="NocType" data-let="1">
+                <option value="Select NOC">Select NOC</option>
+                <option value="Customer">Customer</option>
+                <option value="Dealers">Dealers</option>
+            </select>
+        </div>
+    </div>
+</div>
+<div class="form-row" style="margin-top:10px">
+    <div class="form-group col-md-3" id="DealerPurpose" style="display:none">
+        <label>Purpose</label>
+        <select class=" form-control col-md-10 select2" required name="DealerType" id="DealerType">
+            <option value="Select Purpose" class="select">Select Purpose</option>
+            <option value="Transfer">Transfer</option>
+            @*<option value="Record">Record</option>
+            <option value="GaswaterElectricity">Gas, Water, & Electricity </option>
+            <option value="Possession" id="Possession">Possession</option>*@
+        </select>
+    </div>
+    <div class="form-group col-md-3" id="CustomerPurpose" style="display:none">
+        <label>Purpose</label>
+        <select class=" form-control col-md-10 select2 chck_posession_NOC" required name="CustomeType" id="CustomeType">
+            <option value="Select Purpose" class="select">Select Purpose</option>
+            
+            <option value="Transfer">Transfer</option>
+            <option value="Mortgage">Mortgage</option>
+            
+            <option value="Record">Record</option>
+            <option value="Gas Connection">Gas Connection</option>
+            <option value="Water Connection">Water Connection</option>
+            <option value="Electricity Connection">Electricity Connection</option>
+            <option value="Possession" id="Possession">Possession</option>
+        </select>
+    </div>
+    <div class="form-group col-md-4" id="Dealerships" style="display:none">
+        <label>Dealership</label>
+        @Html.DropDownList("Dealership", null, "Choose..", new { @class = "form-control" })
+    </div>
+</div>
+<script>
+    $(function () {
+        $('.modal-footer').append('<button class="btn btn-success Generate_Cust_dealer_noc">Generate NOC</button>');
+        $("#plt-nop").text($("#plt-no").text());
+        $("#plt-blkp").text($("#plt-blk").text());
+        $("#plt-sizep").text($("#plt-size").text());
+        $("#plt-typep").text($("#plt-type").text());
+        var mortgade = $(".mortgade").val();
+        if (mortgade == "true") {
+            $("option[value='Transfer']").remove();
+            $("option[value='Mortgage']").remove();
+        }
+
+    });
+
+    $(document).on("change", ".select-plot-noc", function () {
+        var text = $("option:selected", this).text();
+        if (text == 'Customer') {
+            $('#CustomerPurpose').show();
+            $('#Dealerships').hide();
+            $('#DealerPurpose').hide();
+        }
+        if (text == 'Dealers') {
+            $('#DealerPurpose').show();
+            $('#Dealerships').show();
+            $('#CustomerPurpose').hide();
+        }
+        
+    });
+</script>
+

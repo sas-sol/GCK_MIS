@@ -1,0 +1,52 @@
+﻿@model MeherEstateDevelopers.Models.Sp_Get_PlotsShortSummary_Result
+<div class='col-md-4'>
+    <div class="layers bd bgc-white p-10 mt-2">
+        <div class="layer w-100">
+            <div class="peers ai-sb fxw-nw">
+                <div class="peer peer-greed">
+                    <h6 class="lh-1">Cancelled Plots</h6>
+                </div>
+                <div class="peer">
+                    <span class="d-ib lh-0 va-m fw-600 bdrs-10em pX-15 pY-15 bgc-red-50 c-red-500">@Model.Cancelled</span>
+                </div>
+            </div>
+        </div>
+        <div class="layer w-100">
+            <a href="/Plots/CancelledPlots/">View all</a>
+        </div>
+    </div>
+</div>
+<div class='col-md-4'>
+    <div class="layers bd bgc-white p-10 mt-2">
+        <div class="layer w-100">
+            <div class="peers ai-sb fxw-nw">
+                <div class="peer peer-greed">
+                    <h6 class="lh-1">Hold Plots</h6>
+                </div>
+                <div class="peer">
+                    <span class="d-ib lh-0 va-m fw-600 bdrs-10em pX-15 pY-15 bgc-red-50 c-red-500">@Model.Holded</span>
+                </div>
+            </div>
+        </div>
+        <div class="layer w-100">
+            <a href="/Plots/HoldedPlots/">View all</a>
+        </div>
+    </div>
+</div>
+<div class='col-md-4'>
+    <div class="layers bd bgc-white p-10 mt-2">
+        <div class="layer w-100">
+            <div class="peers ai-sb fxw-nw">
+                <div class="peer peer-greed">
+                    <h6 class="lh-1">Available for Sale</h6>
+                </div>
+                <div class="peer">
+                    <span class="d-ib lh-0 va-m fw-600 bdrs-10em pX-15 pY-15 bgc-red-50 c-red-500">@Model.AvaiableforSale</span>
+                </div>
+            </div>
+        </div>
+        <div class="layer w-100">
+            <a href="/Plots/AvaiableForSalePlots/">View all</a>
+        </div>
+    </div>
+</div>

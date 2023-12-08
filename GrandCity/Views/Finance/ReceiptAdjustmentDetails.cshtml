@@ -1,0 +1,95 @@
+﻿@model MeherEstateDevelopers.Models.Sp_Get_ReceiptAdjustReqs_Details_Result
+<input type="hidden" name="ReceiptId" id="adj-req-id" value="@Model.Id" />
+<input type="hidden" id="rece-id" value="@Model.Receipt_Id" />
+<h5>From : </h5>
+<div class="form-row">
+    <div class="form-group col-md-3">
+        <label>Name</label>
+        <h6> @Model.FromName</h6>
+    </div>
+    <div class="form-group col-md-2">
+        <label>File / Plot No.</label>
+        <h6 id="fromplt"> @Model.From_Plot</h6>
+    </div>
+    <div class="form-group col-md-2">
+        <label>Block</label>
+        <h6> @Model.Block</h6>
+    </div>
+    <div class="form-group col-md-5">
+        <label>Reason</label>
+        <h6> @Model.Reason</h6>
+    </div>
+</div>
+<h5>To : </h5>
+<div class="form-row">
+    <div class="form-group col-md-3">
+        <label>Name</label>
+        <h6> @Model.To_Plot_Name</h6>
+    </div>
+    <div class="form-group col-md-2">
+        <label>File / Plot No.</label>
+        <h6 id="fromplt"> @Model.To_Plot</h6>
+    </div>
+    <div class="form-group col-md-2">
+        <label>Block</label>
+        <h6> @Model.Block</h6>
+    </div>
+</div>
+<div class="form-row">
+    <div class="form-group col-md-2">
+        <label>Receipt No.</label>
+        <h6> @Model.ReceiptNo</h6>
+    </div>
+    <div class="form-group col-md-2">
+        <label>Amount</label>
+        <h6>@string.Format("{0:n0}", Model.Amount)</h6>
+    </div>
+    <div class="form-group col-md-2">
+        <label>Payment Type</label>
+        <h6 id="paytype"> @Model.Payment_Type</h6>
+    </div>
+    @if (Model.Payment_Type != "Cash")
+    {
+        <div class="form-group col-md-2">
+            <label>Bank</label>
+            <h6> @Model.Bank</h6>
+        </div>
+        <div class="form-group col-md-2">
+            <label>@Model.Payment_Type No</label>
+            <h6> @Model.Ch_Pay_Draft_No</h6>
+        </div>
+        <div class="form-group col-md-2">
+            <label>Date</label>
+            <h6> @string.Format("{0: dd-MMM-yyyy}", Model.Ch_Pay_Draft_Date)</h6>
+        </div>
+        if (Model.Finance_Approved == true)
+        {
+                <div class="form-group col-md-2">
+                    <label>Finance Approved By</label>
+                    <h6> @Model.Finance_App_Name</h6>
+                </div>
+                <div class="form-group col-md-2">
+                    <label>Finance Approval Date</label>
+                    <h6>@string.Format("{0:dd-MMM-yyyy}", Model.Finance_App_Date)</h6>
+                </div>
+        }
+    }
+</div>
+
+@if (Model.Status == "Approved")
+{
+    <script>
+        $(function () {
+            $(".modal-header").text("Adjust Request");
+        });
+    </script>
+}
+else
+{
+    <script>
+        $(function () {
+            $('.modal-footer').append('<button class="btn btn-primary" id="adjust-rec" type="button">Adjust</button>');
+            $(".modal-header").text("Adjust Request");
+        });
+    </script>
+}

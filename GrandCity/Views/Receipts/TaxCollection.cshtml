@@ -1,0 +1,83 @@
+﻿
+@{ if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+}
+
+<link href="~/Content/bootstrap-material-datetimepicker.css" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<script src="~/Scripts/bootstrap-material-datetimepicker.min.js"></script>
+<link rel="stylesheet" href="~/Content/select2.css" />
+<script src="~/Scripts/select2.js"></script>
+
+
+<div class="col-md-12 default-div-bg">
+    <div class="row default-div-bg p-5" style="align-items:flex-end;">
+
+        <div class="col-md-12 pb-md-3 pt-md-3">
+            <div class="panel-heading central-text-align">
+                <h5>WHT Tax Collection</h5>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="col-md-12">
+                <label> Start Date :</label>
+            </div>
+            <div class="col-md-12">
+                <input type="text" class="form-control range-st-dfsjkh" />
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="col-md-12">
+                <label> End Date :</label>
+            </div>
+            <div class="col-md-12">
+                <input type="text" class="form-control range-end-dfsjkh" />
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="col-md-12">
+                <label> Cashier</label>
+            </div>
+            <div class="col-md-12">
+                @Html.DropDownList("Cashiers", null, "Cashier", new { @class = "form-control cashier-tax-sdfkjh" })
+            </div>
+        </div>
+
+        <div class="col-md-2">
+            <button class="btn btn-primary ser-rep-tax-btn-dfsajkh">Search</button>
+        </div>
+    </div>
+
+    <div class="row tax-rep-fsdakjlh default-div-bg mt-md-3">
+        @{ Html.RenderAction("TaxCollectionDetails", "Receipts");}
+    </div>
+</div>
+
+<script>
+    $('.ser-rep-tax-btn-dfsajkh').unbind().click(function () {
+        let st = $('.range-st-dfsjkh').val();
+        let en = $('.range-end-dfsjkh').val();
+        let usr = $('.cashier-tax-sdfkjh option:selected').val();
+        $('.tax-rep-fsdakjlh').load('/Receipts/TaxCollectionDetails/', { rangeStart: st, rangeEnd: en, uid: usr }, function () { });
+    });
+
+    $('.cashier-tax-sdfkjh').select2({
+        maximumSelectionLength: 200
+    });
+
+
+    $('.range-st-dfsjkh').bootstrapMaterialDatePicker({ weekStart: 0, time: false, format: 'MM-DD-YYYY' }).on('change', function (e, date) {
+        $('.range-end-dfsjkh').bootstrapMaterialDatePicker('setMinDate', date);
+    });
+    $('.range-end-dfsjkh').bootstrapMaterialDatePicker({ weekStart: 0, time: false, format: 'MM-DD-YYYY' });
+
+</script>

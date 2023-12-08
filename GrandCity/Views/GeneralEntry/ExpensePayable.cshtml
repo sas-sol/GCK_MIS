@@ -1,0 +1,34 @@
+﻿@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="row bgc-white bd bdrs-3 p-20 mB-20">
+    <div class="col-md-12">
+        <ul class="nav nav-tabs" role="tablist" id="myTabs">
+            <li class="nav-item"><a class="nav-link asset-link" role="tab" data-toggle="tab" data-link="/GeneralEntry/PayOpenPaymentCash" id="pen-ap" href="#coahead">Cash Payment Voucher</a></li>
+            <li class="nav-item"><a class="nav-link asset-link" role="tab" data-toggle="tab" data-link="/GeneralEntry/PayOpenPaymentBank" id="pen" href="#coahead">Bank Payment Voucher</a></li>
+            <li class="nav-item"><a class="nav-link asset-link" role="tab" data-toggle="tab" data-link="/GeneralEntry/PaymentCash" id="pen-ap" href="#coahead">Cash MultiPayments Voucher</a></li>
+        </ul>
+        <div class="tab-content">
+            <div role="tabpanel" id="coahead" class="tab-pane active p-20 table-responsive"></div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        SASLoad($('#coahead'));
+        $('#coahead').load('/GeneralEntry/PayOpenPaymentCash', function () {
+            SASUnLoad($('#coahead'));
+        });
+        $("#pen-ap").addClass('active');
+    });
+    $(document).on("Click", ".asset-link", function () {
+        var address = $(this).attr('data-link');
+        var id = $(this).attr('id');
+        SASLoad($('#coahead'));
+        $('#coahead').load(address, function () {
+            SASUnLoad($('#coahead'));
+        });
+        $("#" + id).addClass('active');
+    });
+</script>

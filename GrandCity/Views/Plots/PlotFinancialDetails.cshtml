@@ -1,0 +1,137 @@
+﻿@model Management_Information_System.Models.PlotFinancialOverview
+
+
+    <div class="border-top-light-babyBlue bgc-white" style="height:42%">
+        <div class="col-md-12 header-underline-top">
+            <h5><span class="plt-card-heading"><b>Booking Details</b></span></h5>
+        </div>
+
+        <div class="col-md-12">
+            <span class="line-text-left">Plot Price</span>
+            <b><span class="line-text-right"><label id="plt-price">@string.Format("{0:n0}", Model.PlotPrice)</label></span></b>
+            <div class="clearfix"></div>
+        </div>
+
+        <div class="col-md-12">
+            <span class="line-text-left">Discount Amount</span>
+            <b><span class="line-text-right"><label id="dis-amt"></label>@string.Format("{0:n0}", Model.DiscountAmount)</span></b>
+            <div class="clearfix"></div>
+        </div>
+
+        <div class="col-md-12">
+            <span class="line-text-left">Balance</span>
+            <b><span class="line-text-right"><label id="booking-date"></label>@string.Format("{0:n0}", Model.Balance)</span></b>
+            <div class="clearfix"></div>
+        </div>
+
+        <div class="col-md-12" style="border-bottom: 1px solid rgba(0,0,0,.1);padding-bottom: 10px;">
+            <span class="line-text-left">Booking Date</span>
+            <b><span class="line-text-right"><label id="booking-date"></label>@Model.BookingDate</span></b>
+            <div class="clearfix"></div>
+        </div>
+
+        <div class="col-md-12 central-text-align mt-md-2">
+            <label class="pointer go-to-inst-pln" style="text-decoration:underline;">View Installment Plan</label>
+        </div>
+
+    </div>
+
+<div class="bgc-white mt-md-2" style="height:58%">
+    <div class="col-md-12 header-underline-top">
+        <h5><span class="plt-card-heading"><b>Payment Report</b></span></h5>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12" style="width:100%; height: 60%;overflow-y:scroll !important;position:absolute" id="pmnt-rprt-grph">
+
+        </div>
+        @*<div class="col-md-4" style="position:absolute;right:0;">
+            <div class="col-md-12">
+                <label>Received Amount :</label>
+                <label><b>@string.Format("{0:n0}", Model.ReceivedAmount)</b></label>
+            </div>
+
+            <div class="col-md-12">
+                <label>Outstanding Amount : </label>
+                <label><b>@string.Format("{0:n0}", Model.Outstanding)</b></label>
+            </div>
+        </div>*@
+    </div>
+</div>
+
+<script>
+
+
+    $(document).ready(function () {
+        let mrcvd = parseInt(@Html.Raw(Json.Encode(Model.ReceivedAmount)));
+        let motsdng = parseInt(@Html.Raw(Json.Encode(Model.Outstanding)));
+        let mttl = parseInt(@Html.Raw(Json.Encode(Model.PlotPrice)));
+        var chrt = Highcharts.chart('pmnt-rprt-grph', {
+            chart: {
+                plotBackgroundColor: null,
+                plotBorderWidth: null,
+                plotShadow: false,
+                type: 'pie',
+                height: (9 / 21 * 100) + '%' // 4:3 ratio
+            },
+            title: false,
+            subtitle: false,
+            //title: {
+            //    text: 'Browser market shares in January, 2018'
+            //},
+            //tooltip: {
+            //    pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+            //},
+            accessibility: {
+                point: {
+                    valueSuffix: '%'
+                }
+            },
+            plotOptions: {
+                pie: {
+                    allowPointSelect: true,
+                    cursor: 'pointer',
+                    dataLabels: {
+                        enabled: false
+                    },
+                    showInLegend: true
+                }
+            },
+
+            legend: {
+                align: 'right',
+                verticalAlign: 'top',
+                layout: 'vertical',
+                x: -50,
+                y: 50
+            },
+
+            series: [
+                {
+                    name: "Payment Report",
+                    colorByPoint: true,
+                    innerSize: '90%',
+                    data: [
+                        {
+                            name: "Received " + mrcvd.toLocaleString(),
+                            y: ((mrcvd / mttl) * 100.0)
+                        },
+                        {
+                            name: "Outstanding " + motsdng.toLocaleString(),
+                            y: (motsdng / mttl) * 100.0
+                        }
+                    ]
+                }
+            ]
+        });
+
+        chrt.reflow();
+
+        $('.go-to-inst-pln').unbind().click(function () {
+            $('.info-expander-rcpts').click();
+            $('html, body').animate({
+                scrollTop: $(".info-expander-rcpts").offset().top
+            }, 2000);
+        });
+    });
+</script>

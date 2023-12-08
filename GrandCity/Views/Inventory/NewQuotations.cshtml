@@ -1,0 +1,113 @@
+﻿@model MeherEstateDevelopers.Models.PurchaseRequisitons
+@{
+    //if (User.IsInRole("Administrator"))
+    //{
+    //    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    //}
+    //else if (User.IsInRole("Staff"))
+    //{
+    //    Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    //}
+    string activeclass = "";
+}
+<script src="~/Scripts/Inv.js"></script>
+<div class="row bgc-white bd bdrs-3 mT-20">
+    <div class="col-md-12">
+        <ul class="nav nav-tabs" role="tablist" id="myTabs">
+            @if (User.IsInRole("Purchase Requisition Approval") || User.IsInRole("Administrator")  )
+            {
+                <li class="nav-item"><a class="nav-link" role="tab"  data-toggle="tab" data-link="/Inventory/PendingApproval" id="pen-ap" href="#coahead">Pending Requisitions</a></li>
+            }
+            @if (User.IsInRole("Pending Purchase Requisition") || User.IsInRole("Administrator") || User.IsInRole("View All Requisitions"))
+            {
+                <li class="nav-item"><a class="nav-link" role="tab" data-toggle="tab" data-link="/Procurement/Pending_PR" id="pen" href="#coahead">Approved Requisitions</a></li>
+            }
+            @if (User.IsInRole("Purchase Requisition Approval") || User.IsInRole("Administrator") || User.IsInRole("View All Requisitions"))
+            {
+                <li class="nav-item"><a class="nav-link"  role="tab" data-toggle="tab" data-link="/Inventory/QuotationFinalize" id="q-f" href="#coahead">Comparative Statement</a></li>
+            }
+            @if (User.IsInRole("Purchase Order List") || User.IsInRole("Administrator") || User.IsInRole("View All Requisitions"))
+            {
+                <li class="nav-item"><a class="nav-link" role="tab" data-toggle="tab" data-link="/Procurement/Gen_Po" id="po" href="#coahead">Purchased Orders</a></li>
+            }
+            @if (User.IsInRole("Complete Purchase Orders") || User.IsInRole("Administrator"))
+            {
+                <li class="nav-item"><a class="nav-link" role="tab" data-toggle="tab" data-link="/Inventory/GeneratedPurchaseOrders" id="p-o" href="#coahead">Completed Purchase Orders</a></li>
+            }
+        </ul>
+        <div class="tab-content">
+            <div role="tabpanel" id="coahead" class="tab-pane active p-20 table-responsive"></div>
+        </div>
+    </div>
+</div>
+@if (User.IsInRole("Purchase Requisition Approval") || User.IsInRole("Administrator"))
+{
+    <script>
+        $(function () {
+            SASLoad($('#coahead'));
+            $('#coahead').load('/Inventory/PendingApproval/', function () {
+                SASUnLoad($('#coahead'));
+            });
+            $("#pen-ap").addClass('active')
+            GetReqCount();
+        });
+    </script>
+}
+else if (User.IsInRole("Pending Purchase Requisition") || User.IsInRole("Administrator"))
+{
+    <script>
+        $(function () {
+            SASLoad($('#coahead'));
+            $('#coahead').load('/Procurement/Pending_PR/', function () {
+                SASUnLoad($('#coahead'));
+            });
+            $("#pen").addClass('active')
+            GetReqCount();
+        });
+    </script>
+}
+else if (User.IsInRole("Purchase Comparative Report") || User.IsInRole("Administrator"))
+{
+    <script>
+        $(function () {
+            SASLoad($('#coahead'));
+            $('#coahead').load('/Inventory/QuotationFinalize/', function () {
+                SASUnLoad($('#coahead'));
+            });
+            $("#q-f").addClass('active')
+            GetReqCount();
+        });
+    </script>
+}
+else if (User.IsInRole("Purchase Order List") || User.IsInRole("Administrator"))
+{
+    <script>
+        $(function () {
+            SASLoad($('#coahead'));
+            $('#coahead').load('/Procurement/Gen_Po/', function () {
+                SASUnLoad($('#coahead'));
+            });
+            $("#po").addClass('active')
+            GetReqCount();
+        });
+    </script>
+}
+
+<style>
+    .DemadnOrder tr.odd td:first-child,
+    .DemadnOrder tr.even td:first-child {
+        padding-left: 4em;
+    }
+
+    .dtrg-level-0 {
+        font-size: 20px;
+        text-align: center;
+        font-weight: bold;
+    }
+
+    .dtrg-level-1 {
+        font-size: 16px;
+        text-align: left;
+        font-weight: bold;
+    }
+</style>

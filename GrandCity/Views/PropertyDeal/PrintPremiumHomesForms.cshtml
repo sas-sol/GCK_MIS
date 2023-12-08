@@ -1,0 +1,39 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Sp_Get_Commercial_Project_Inventory_Result>
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>PrintPremiumHomesForms</title>
+    <style>
+
+        .bg_image {
+            background-image: url("/assets/static/images/saformsa4.png");
+            background-size: cover;
+            background-position: 50% 50%;
+            position: absolute;
+            height: 1555px;
+            width: 1100px;
+        }
+    </style>
+</head>
+<body>
+    @foreach (var v in Model)
+    {
+    <div style="height:1555px;">
+        <div class="bg_image">
+        </div>
+        <div>
+            <img style="height: 124px; width: 124px; margin-top:131px; margin-left: 876px;" src="~/Repository/QR Codes SAPH/@(v.ApplicationNo).png" alt="" />
+        </div>
+
+        <div><p style="margin-left: 205px; margin-top:-55px;">@v.ApplicationNo</p></div>
+        <div><p style="margin-left: 481px; margin-top:702px;">@v.FloorName</p></div>
+    </div>
+    }
+</body>
+</html>

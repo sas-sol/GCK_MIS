@@ -1,0 +1,50 @@
+﻿@model MeherEstateDevelopers.Models.Report_Serie_Stack
+<div id="prop-del-@ViewBag.Type" style="min-width: 310px; height: 600px; margin: 0 auto"></div>
+<script>
+    Highcharts.chart('prop-del-@ViewBag.Type', {
+
+        chart: {
+            type: 'column'
+        },
+
+        title: {
+            text: 'Property Deals  @ViewBag.Type  Report'
+        },
+
+        xAxis: {
+            categories: @Html.Raw( Json.Encode(Model.Categories)) ,
+        },
+        yAxis: {
+            allowDecimals: false,
+            min: 0,
+            title: {
+                text: 'Total'
+            }
+        },
+        tooltip: {
+            formatter: function () {
+                var stackName = this.series.userOptions.stack;
+
+                return  stackName + '<br/><b>' + this.x + '</b><br/>' +
+                    this.series.name + ': ' + this.y + '<br/>' +
+                    'Total: ' + this.point.stackTotal;
+            }
+        },
+        plotOptions: {
+            column: {
+                stacking: 'normal'
+            },
+            series: {
+                cursor: 'pointer',
+                point: {
+                    events: {
+                        click: function () {
+                            ShowFiles(this.category);
+                        }
+                    }
+                }
+            }
+        },
+        series:  @Html.Raw( Json.Encode(Model.Series))
+    });
+</script>

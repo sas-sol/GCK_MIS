@@ -1,0 +1,88 @@
+﻿@using (Html.BeginForm("AddQuotation", "Procurement", FormMethod.Post, new { @id = "ad-quo", @class = "", role = "form", autocomplete = "off" }))
+{
+    <input type="hidden" name="Req_Id" value="@ViewBag.Req_Id" />
+    <input type="hidden" name="Item_Id" value="@ViewBag.Item_Id" />
+    <div class="col-md-12">
+        <div class="form-row">
+            <div class="form-group col-md-12">
+                <h5 style="text-align:center"><u> @ViewBag.Item</u></h5>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-3">
+                <label>Vendor</label>
+                <select class='form-control vendor' name="V"></select>
+            </div>
+            <div class="form-group col-md-2">
+                <label>Quantity</label>
+                <input type="number" class="form-control qty qty-rate" name="Q" required />
+            </div>
+            <div class="form-group col-md-2">
+                <label>Rate / <select class="ccy" name="C"><option value="Rs">Rs</option><option value="$">$</option><option value="£">£</option></select></label>
+                <input type="email" class="form-control rate-p-uom qty-rate" name="R">
+            </div>
+            <div class="form-group col-md-3">
+                <label>GST %</label>
+                <div class="btn-group">
+                    <input type="text" class="form-control tax qty-rate" />
+                    <input type="text" class="form-control gst" readonly />
+                    <input type="hidden" class="gst-v" name="T" />
+                </div>
+            </div>
+            <div class="form-group col-md-2">
+                <label>Total</label>
+                <input type="text" class="form-control ttl-rate" readonly>
+            </div>
+            <div class="form-group col-md-5">
+                <label>Remarks</label>
+                <input type="text" class="form-control rems" name="Rem">
+            </div>
+            <div class="form-group col-md-3">
+                <label>Attachments</label>
+                <input type="file" id="files">
+            </div>
+        </div>
+    </div>
+}
+<script>
+    // Rate & qty calc
+    $(document).on('keyup', '.qty-rate', function () {
+        var qty = RemoveComma($(".qty").val());
+        var rate = RemoveComma($(".rate-p-uom").val());
+
+        var tax = RemoveComma($(".tax").val());
+        var total = qty * rate;
+        var gst = qty * (( tax * rate)/100);
+
+        $(".gst").val(Number(gst).toLocaleString());
+        $(".gst-v").val(gst);
+        $(".ttl-rate").val(Number(total + gst).toLocaleString());
+    });
+    $(function () {
+        $('.vendor').select2({
+            dropdownParent: $('#Modal'),
+            placeholder: "Search for item",
+            ajax: {
+                url: '/Vendor/GetVendorsForAutoComplete/',
+                dataType: 'json',
+                params: {
+                    contentType: 'application/json; charset=utf-8'
+                },
+                quietMillis: 100,
+                data: function (params) {
+                    return {
+                        q: params.term// search term
+                    };
+                },
+                processResults: function (data) {
+                    return {
+                        results: data.items
+                    };
+                }
+            }
+        });
+        $('.modal-footer').append(' <button type="button" class="btn btn-primary add-quot-btn">Add Quote</button>');
+
+    });
+
+</script>

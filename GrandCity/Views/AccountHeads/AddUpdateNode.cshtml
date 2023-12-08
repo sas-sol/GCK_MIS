@@ -1,0 +1,58 @@
+﻿@model MeherEstateDevelopers.Models.Sp_Get_CA_Head_Parameter_Result
+<h5>Update Head Name</h5>
+<div class="form-row">
+    <input type="hidden" value="@Model.Id" id="hd-id" />
+    <input type="hidden" value="@ViewBag.Start" id="fstart" />
+    <input type="hidden" value="@ViewBag.End" id="fend" />
+
+    <div class="form-group col-md-6">
+        <input type="text" class="form-control" id="head" value="@Model.Head" />
+    </div>
+    <div class="form-group col-md-6">
+        <button class="btn btn-primary up-head">Update Name</button>
+    </div>
+</div>
+
+<hr />
+<h5>Add a new Sub-Head</h5>
+<div class="form-row">
+    <div class="form-group col-md-6">
+        <input type="text" id="name" class="form-control" />
+    </div>
+    <div class="form-group col-md-6">
+        <button class="btn btn-info ad-heads">Add Head</button>
+    </div>
+</div>
+<hr />
+<h5>Change Parent Head</h5>
+<div class="form-row" id="add-inv-1">
+    <div class="form-group col-md-6">
+        <select id="ch-acc" class="form-control acc-head searchbox" data-id="1"></select>
+    </div>
+    <div class="form-group col-md-6">
+        <button class="btn btn-success ch-par-head">Change Parent</button>
+    </div>
+</div>
+<script>
+    var AccHead = @Html.Raw(Json.Encode(ViewBag.Type));
+
+    $(document).ready(function () {
+        InitHeads(1);
+        $('.searchbox').select2({ placeholder: 'Select an option' });
+    });
+    $('.hidn_member_trm_pay').hide();
+    $('#opening-date').focusout(function () {
+        if ($(this).val() != "") {
+            var start = @Html.Raw(Json.Encode(ViewBag.Start));
+            var end = @Html.Raw(Json.Encode(ViewBag.End));
+            if (Date.parse($(this).val()) < Date.parse(start)) {
+                alert("Select Date Within Current Fiscal Year");
+                return false;
+            }
+            else if (Date.parse($(this).val()) > Date.parse(end)) {
+                alert("Select Date Within Current Fiscal Year");
+                return false;
+            }
+        }
+    });
+</script>

@@ -1,0 +1,41 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Sp_Get_PattyCashItems_List_Result>
+<table class="table table-bordered ptc" width="100%">
+    <thead>
+        <tr>
+            <th>Sr</th>
+            <th>Created By</th>
+            <th>Date</th>
+            <th>Amount</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.Any())
+        {
+            int sr = 1;
+            foreach (var item in Model.GroupBy(x => new { x.Group_Id, x.CreatedBy_Name, x.CreatedBy_Date }))
+            {
+                <tr class="paty-cash pointer" id="@item.Key.Group_Id">
+                    <td>@sr</td>
+                    <td>@item.Key.CreatedBy_Name</td>
+                    <td>@string.Format("{0:dd-MMM-yyyy}", item.Key.CreatedBy_Date)</td>
+                    <td>@string.Format("{0:n0}", item.Sum(x => x.Amount))</td>
+                </tr>
+                sr++;
+            }
+        }
+    </tbody>
+</table>
+<script>
+    $(function () {
+        $('.ptc').DataTable({
+            ordering: false
+        });
+    });
+
+    $(document).on("click", ".paty-cash", function () {
+        var id = $(this).attr("id");
+        window.open("/Finance/PattyCashSupervisionDetails?Group_Id=" + id, '_blank');
+    });
+
+
+</script>

@@ -1,0 +1,128 @@
+﻿@*@model IEnumerable<MeherEstateDevelopers.Models.Sp_Get_Balance_Sheet_New_Result>*@
+
+@model IEnumerable<MeherEstateDevelopers.Models.HierarchicalNodeBalanceSheet>
+
+@{ if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+    int sr = 1;
+    //decimal debit = 0;
+    //decimal credit = 0;
+    decimal bal = 0, asset = 0, liability = 0, equity = 0;
+
+}
+<div class=" bgc-white bd bdrs-3 mB-20 row" style="justify-content:center;">
+
+    <div class="col-md-12" style="justify-content:center;">
+        <h4 style="text-align:center !important;">BALANCE SHEET</h4>
+        <h6 style="text-align:center;">As of @ViewBag.toDate</h6>
+    </div>
+    <div class="col-md-9 row" style="justify-content:center;">
+        <table class="table col-md-8">
+            <thead>
+                <tr>
+                    <th class="col-md-7"></th>
+                    <th class="col-md-2">TOTAL</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    @FolderTree(Model, "")
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    
+
+    @helper FolderTree(IEnumerable<MeherEstateDevelopers.Models.HierarchicalNodeBalanceSheet> subFolders, string accountNamelevel1)
+    {
+        decimal bal = 0;
+        foreach (var folder in subFolders)
+        {
+            if (folder.Id != 0)
+            {
+                if (folder.Decendants.Count > 0)
+                {
+                    if (folder.Level == 1)
+                    {
+                        <tr class="level1">
+                            <td><i class="fa fa-angle-right tick-close-one" style="display:none;" data-id="@folder.Head.Replace(" ", "-")"></i><i class="fa fa-angle-down tick-open-one"   data-id="@folder.Head.Replace(" ", "-")"></i><span class="folder" id="@folder.Code" data-head="@folder.Head">&nbsp;@folder.Head</span></td>
+                            <td class="level1-total"></td>
+                        </tr>
+                        @FolderTree(folder.Decendants, accountNamelevel1 + " " + folder.Head.Replace(" ", "-"));
+                    }
+                    else
+                    {
+                        <tr class="level2 @accountNamelevel1">
+                            <td>&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-angle-right tick-close-two" style="display:none;" data-id="@folder.Head.Replace(" ", "-")"></i><i class="fa fa-angle-down tick-open-two" data-id="@folder.Head.Replace(" ", "-")"></i><span class="folder" id="@folder.Code" data-head="@folder.Head">&nbsp;@folder.Head</span></td>
+                            <td class="total"></td>
+                        </tr>
+                        @FolderTree(folder.Decendants, accountNamelevel1 + " " + folder.Head.Replace(" ", "-"))
+                    }
+                }
+                else
+                {
+                    <tr class="level3 @accountNamelevel1">
+                        <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="leaf" id="@folder.Code" data-head="@folder.Head">@folder.Head</span></td>
+
+                        @if (folder.AccType == 1)
+                        {
+                            bal = folder.Debit - folder.Credit;
+                            //asset = asset + bal;
+                        }
+                        else if (folder.AccType == 2)
+                        {
+                            bal = folder.Credit - folder.Debit;
+                            //liability = liability + bal;
+                        }
+                        else if (folder.AccType == 6)
+                        {
+                            bal = folder.Credit - folder.Debit;
+                            //equity = equity + bal;
+                        }
+                        <td style="text-align:right;"><span>@String.Format("{0:n0}", Math.Abs(bal))</span></td>
+                    </tr>
+                }
+            }
+            else
+            {
+                @FolderTree(folder.Decendants, accountNamelevel1+" "+folder.Head.Replace(" ", "-"))
+            }
+        }
+    }
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('.tick-open-one').click(function () {
+            var id = $(this).attr('data-id');
+            $('.' + id).slideUp();
+            $(this).closest('tr').find('.tick-close-one').show();
+            $(this).closest('tr').find('.tick-open-one').hide();
+        });
+        $('.tick-close-one').click(function () {
+            var id = $(this).attr('data-id');
+            $('.' + id).slideDown();
+            $(this).closest('tr').find('.tick-open-one').show();
+            $(this).closest('tr').find('.tick-close-one').hide();
+        });
+        $('.tick-open-two').click(function () {
+            var ids = $(this).attr('data-id');
+            $('.' + ids).slideUp();
+            $(this).closest('tr').find('.tick-close-two').show();
+            $(this).closest('tr').find('.tick-open-two').hide();
+        });
+        $('.tick-close-two').click(function () {
+            var ids = $(this).attr('data-id');
+            $('.' + ids).slideDown();
+            $(this).closest('tr').find('.tick-open-two').show();
+            $(this).closest('tr').find('.tick-close-two').hide();
+        });
+    });
+    
+</script>

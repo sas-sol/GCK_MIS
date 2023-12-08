@@ -1,0 +1,140 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Stock_Out_Details>
+@{
+    var group = Model.Select(x => x.Inv.Group_Id).FirstOrDefault();
+    var Prj_Id = Model.Select(x => x.Inv.Prj_Id).FirstOrDefault();
+    var Prj_Name = Model.Select(x => x.Inv.Prj_Name).FirstOrDefault();
+    var Dep_Id = Model.Select(x => x.Inv.Dep_Id).FirstOrDefault();
+    var Dep_Name = Model.Select(x => x.Inv.Dep_Name).FirstOrDefault();
+    var IssueNote_No = Model.Select(x => x.Inv.IssueNote_No).FirstOrDefault();
+    var IssuedTo_Date = Model.Select(x => x.Inv.IssuedTo_Date).FirstOrDefault();
+    var Demandorder = Model.Select(x => x.DemandOrder_No).FirstOrDefault();
+    var Warehouse_Name = Model.Select(x => x.Inv.Warehouse_Name).FirstOrDefault();
+}
+@{ if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+}
+<script src="~/Scripts/Inv.js"></script>
+<div class="bgc-white bd bdrs-3 p-20 mB-20">
+    <h5 style="text-align:center">Issuance Supervision</h5>
+    <hr />
+    <div class="col-md-12">
+        <input type="hidden" value="@group" class="grpId" />
+        <input type="hidden" class="trans-id" value="@ViewBag.TransactionId" />
+        <div class="form-row">
+            <div class="form-group col-md-2">
+                <label>Issue Note</label>
+                <h5>@IssueNote_No</h5>
+            </div>
+            <div class="form-group col-md-2">
+                <label>Issuance Date</label>
+                <h5>@string.Format("{0:dd-MMM-yyyy}", IssuedTo_Date)</h5>
+                <input type="hidden" class="PO_Date" placeholder="mm/dd/yyyy" name="PO_Date" value="@Model.Select(x=>x.Inv.IssuedBy_Date).FirstOrDefault().Value.ToShortDateString()">
+            </div>
+            <div class="form-group col-md-2">
+                <label>Demand Order Number</label>
+                <h5>@Demandorder</h5>
+            </div>
+            <div class="form-group col-md-2">
+                <label>Department</label>
+                <h5>@Dep_Name</h5>
+            </div>
+        </div>
+    </div>
+    <hr />
+    @if (Model.Any())
+    {
+        int sr = 1;
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th width="5%">Sr.</th>
+                    <th width="30%">Item</th>
+                    <th width="5%">UOM</th>
+                    <th width="5%">Rcvd Qty</th>
+                    <th width="10%">Rate</th>
+                    <th width="10%">Total</th>
+                    <th width="15%">Warehouse</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var v in Model)
+                {
+                    <tr class="main-inv-rec cal" id="@v.Inv.Id">
+                        <td>@(sr++)</td>
+                        <td class="invs" data-slval='@v.Inv.Item_Id'>@v.Item_Name</td>
+                        <td>@v.UOM</td>
+                        <td class="rcvd-qty">@( string.Format("{0:0,0.##}", v.Inv.Qty))</td>
+                        <td>@( string.Format("{0:0,0.##}", v.IssuanceRate))</td>
+                        <td>@( string.Format("{0:0,0.##}", v.Inv.Qty * v.IssuanceRate))</td>
+                        <td>@v.Warehouse</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+
+    <div class="row">
+        <div class="form-row col-md-12 mt-md-2">
+            @if (Model.Where(x => x.Inv.Supervise == true).Any())
+            {
+                <h5>
+                    Supervised by : @Model.Select(x => x.Inv.SuperviseBy_Name).FirstOrDefault()
+                </h5>
+            }
+            else
+            {
+                <div class="col-md-2 righty form-group">
+                    <button class="btn btn-success sup-grn-to">Supervise GRN</button>
+                </div>
+            }
+
+        </div>
+    </div>
+
+
+    <div class="clearfix"></div>
+</div>
+
+<style>
+    .centralText {
+        text-align: center;
+    }
+
+    .warningText {
+        position: absolute;
+        left: 50%;
+        right: 50%;
+        /*font-size: 20px;*/
+        animation-name: warning;
+        animation-duration: .6s;
+        animation-iteration-count: infinite;
+    }
+
+    @@keyframes warning {
+        0% {
+            font-size: 15px;
+        }
+
+        25% {
+            font-size: 20px;
+        }
+
+        50% {
+            font-size: 25px;
+        }
+
+        70% {
+            font-size: 20px;
+        }
+
+        100% {
+            font-size: 15px;
+        }
+    }
+</style>

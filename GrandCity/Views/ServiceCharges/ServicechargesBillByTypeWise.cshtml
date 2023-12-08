@@ -1,0 +1,219 @@
+﻿@model MeherEstateDevelopers.Models.ServiceChargesBill
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        @@page {
+            margin: 0;
+            size: A4
+        }
+
+        .bg {
+            height: 1060px;
+            width: 595px;
+            margin-left: 0;
+            background-image: url('../../assets/static/images/SC1.jpg');
+            background-size: 595px 1060px;
+            font-family: sans-serif;
+            margin-bottom: 70px
+        }
+
+        .detailtable {
+            margin-top: 4%;
+            border: 2px solid #000;
+            margin-left: 20%;
+            width: 100%;
+            background-color: #fff
+        }
+
+            .detailtable table {
+                border-collapse: collapse;
+                width: 100%
+            }
+
+            .detailtable td, th {
+                border: 0;
+                text-align: left;
+                padding: 12px;
+                font-size: 14px
+            }
+
+            .detailtable tr:nth-child(odd) {
+                background-color: #ddd
+            }
+
+            .detailtable th {
+                background-color: #000;
+                color: #fff
+            }
+
+        .info {
+            width: 45%;
+            line-height: 18px;
+            font-size: 14px;
+            margin-left: 85%;
+            padding-top: 17%
+        }
+
+            .info td {
+                padding: 5px
+            }
+
+        .subtotal {
+            width: 40%;
+            line-height: 18px;
+            font-size: 14px;
+            margin-left: 85%;
+            margin-top: 3%
+        }
+
+            .subtotal td {
+                padding: 5px
+            }
+
+        @@media print {
+            .bg {
+                height: 1060px;
+                width: 595px;
+                margin-left: 0;
+                background-image: url('../../assets/static/images/SC1.jpg');
+                background-size: 595px 1060px;
+                font-family: sans-serif;
+                margin-bottom: 70px
+            }
+
+            .detailtable {
+                margin-top: 4%;
+                border: 2px solid #000;
+                margin-left: 20%;
+                width: 100%;
+                background-color: #fff
+            }
+
+                .detailtable table {
+                    border-collapse: collapse;
+                    width: 100%
+                }
+
+                .detailtable td, th {
+                    border: 0;
+                    text-align: left;
+                    padding: 12px;
+                    font-size: 14px
+                }
+
+                .detailtable tr:nth-child(odd) {
+                    background-color: #ddd
+                }
+
+                .detailtable th {
+                    background-color: #000;
+                    color: #fff
+                }
+
+            .info {
+                width: 45%;
+                line-height: 18px;
+                font-size: 14px;
+                margin-left: 85%;
+                padding-top: 17%
+            }
+
+                .info td {
+                    padding: 5px
+                }
+
+            .subtotal {
+                width: 40%;
+                line-height: 18px;
+                font-size: 14px;
+                margin-left: 83%;
+                margin-top: 3%
+            }
+
+                .subtotal td {
+                    padding: 5px
+                }
+        }
+    </style>
+</head>
+<body>
+    @{
+
+        foreach (var i in Model.ServiceChargesData.OrderBy(x => Convert.ToInt32(x.Plot_No.Split(' ')[0])))
+        {
+            long Ids = 0;
+            <div class="bg">
+                <div class="info">
+                        <table>
+                            <tr>
+                                <td width="250"><b>Invoice to</b></td>
+                            </tr>
+                            <tr>
+                                <td style="font-size:18px"><b>@i.Name @*@Model.ServiceChargesData.Select(x => x.Name).SingleOrDefault()*@</b></td>
+                            </tr>
+                            <tr>
+                                <td width=""><b>@i.Address  @*@Model.ServiceChargesData.Select(x => x.Address).SingleOrDefault()*@</b></td>
+                            </tr>
+                            <tr>
+                                <td width=""><b>Last Date: &nbsp;&nbsp;&nbsp; <span style="color:red">@string.Format("{0:dd MMM yyyy}", i.Due_Date)</span></b></td>
+                            </tr>
+                            <tr>
+                                <td width=""><b>Bill No: &nbsp;&nbsp;&nbsp; <span style="color:red">@i.Bill_No</span></b></td>
+                            </tr>
+                        </table>
+                </div>
+                <div class="detailtable">
+                    <table>
+                        <tr>
+                            <th>Sr #</th>
+                            <th>Detail of Dues</th>
+                            <th>Price</th>
+                            <th>Total</th>
+                        </tr>
+                        @{
+                            int sr = 1;
+                            decimal total = 0;
+                        }
+
+
+                        @foreach (var item in i.BillDeta)
+                        {
+                            Ids = item.Plot_Id;
+                        <tr>
+                            <td>@sr</td>
+                            <td>@item.Service_Charges - @item.Rate</td>
+                            <td>@item.Charges</td>
+                            <td><strong>@string.Format("{0:n0}", item.Charges)</strong></td>
+
+                        </tr>
+                            total += item.Charges;
+                            sr++;
+                        }
+                        <tr>
+                            <th>Current Bill</th>
+                            <th>Arrears</th>
+                            <th>Total Payable</th>
+                            <th>After Due Date</th>
+                        </tr>
+                        <tr>
+                            <td>@string.Format("{0:n0}", total)</td>
+                            <td>@string.Format("{0:n0}", i.Arrears)</td>
+                            @{var gtotal = total + i.Arrears;
+                            }
+                            <td>@string.Format("{0:n0}", gtotal)</td>
+                            <td>@string.Format("{0:n0}", i.After_Due_Date_Amount)</td>
+                        </tr>
+                    </table>
+                </div>
+
+                
+                <div style="clear:both"></div>
+            </div>
+        }
+    }
+</body>
+</html>

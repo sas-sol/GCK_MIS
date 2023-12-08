@@ -1,0 +1,111 @@
+﻿@model MeherEstateDevelopers.Models.Sp_Get_Receipt_Parameter_ById_Result
+
+@using (Html.BeginForm("UpdateCancelReceipts", "Finance", FormMethod.Post, new { @id = "up-cancel-rec", @class = "", role = "form" }))
+{
+    @Html.AntiForgeryToken()
+    <input type="hidden" name="ReceiptId" value="@Model.Id" />
+    <div class="form-row">
+        <div class="form-group col-md-2">
+            <label>Name</label>
+            <h6> @Model.Name</h6>
+        </div>
+        <div class="form-group col-md-3">
+            <label>Father Name</label>
+            <h6>@Model.Father_Name</h6>
+        </div>
+        <div class="form-group col-md-2">
+            <label>File / Plot No.</label>
+            <h6> @Model.File_Plot_Number  @Model.Block</h6>
+        </div>
+        <div class="form-group col-md-2">
+            <label>Size</label>
+            <h6> @Model.Size</h6>
+        </div>
+        <div class="form-group col-md-2">
+            <label>Receipt No.</label>
+            <h6> @Model.ReceiptNo</h6>
+        </div>
+        <div class="form-group col-md-2">
+            <label>Receipt Type</label>
+            <h6> @Model.Type</h6>
+        </div>
+        <div class="form-group col-md-2">
+            <label>Amount</label>
+            <h6>@string.Format("{0:n0}", Model.Amount)</h6>
+        </div>
+    </div>
+    <hr />
+    <div class="form-row">
+        <div class="form-group col-md-12">
+            <h5>Requested Information</h5>
+        </div>
+        <div class="form-group col-md-3">
+            <label>Description</label>
+            @*<h6>@Model.Description</h6>*@
+        </div>
+        <div class="form-group col-md-3">
+            <label>Action</label>
+            <select class="form-control can-rev" name="Cancel_Reversal">
+                <option value="1">Cancel</option>
+                @*<option value="2">Reversal</option>*@
+                <option value="3">Return Amount Back</option>
+            </select>
+        </div>
+        <div class="form-group col-md-4">
+            <label>Remarks</label>
+            <textarea name="Description" class="form-control"> </textarea>
+        </div>
+        <div class="col-md-12 ret-amt">
+            <div class="form-row">
+                <div class="form-group col-md-2">
+                    <label>Cash / Bank</label>
+                    <select class="form-control paytypesel-test" id="cah-chq-bak" name="PaymentType">
+                        <option value="Cash">Cash</option>
+                        <option value="BankDraft">Bank Draft</option>
+                        <option value="Cheque">Cheque</option>
+                        <option value="PayOrder">Pay Order</option>
+                        <option value="Online_Cash">Online - Cash</option>
+                        <option value="Online_Cheque">Online - Cheque</option>
+                        <option value="Online_Payorder">Online - PayOrder</option>
+                        <option value="Online_Bankdraft">Online - BankDraft</option>
+                    </select>
+                </div>
+                <div class="form-group col-md-3 paymentotherinfo">
+                    <label id="paytypelabel"></label>
+                    <input type="text" class="form-control" id="paymenttype" name="PayChqNo" placeholder="" disabled>
+                </div>
+                <div class="form-group col-md-3 paymentotherinfo">
+                    <label>Bank</label>
+                    @Html.DropDownList("Bank", null, "Choose..", new { @class = "form-control", disabled = "" })
+                </div>
+                <div class="form-group col-md-2 paymentotherinfo">
+                    <label>Branch </label>
+                    <input type="text" class="form-control" id="Branch" name="Branch" placeholder="Mall Rd" disabled>
+                </div>
+                <div class="form-group col-md-2 paymentotherinfo">
+                    <label>Date</label>
+                    <input type="text" class="form-control" id="cbp-date" data-provide="datepicker" name="Ch_bk_Pay_Date" placeholder="mm/dd/yyyy" disabled required>
+                </div>
+                <div class="form-group col-md-1 paymentotherinfo">
+                    <label>Scan File </label>
+                    <button class=" btn btn-primary" data-v="1" type="button" id="scanbtn">Scan</button>
+                </div>
+                <div id="images-1" class="col-md-2"></div>
+            </div>
+        </div>
+    </div>
+}
+<script>
+    $(function () {
+        $('.modal-footer').append('<button class="btn btn-primary" id="up-rec-can-btn" type="button">Update</button>');
+        $(".modal-header").text("Cancel Request");
+    });
+</script>
+<style>
+    .ret-amt{
+        display:none
+    }
+    .paymentotherinfo{
+        display:none;
+    }
+</style>

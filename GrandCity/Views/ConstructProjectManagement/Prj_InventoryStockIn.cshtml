@@ -1,0 +1,16 @@
+﻿<div class="col-md-12">
+    <div class="form-group col-md-3">
+        <button type="submit" class="btn btn-primary multi-dems" data-toggle="modal" data-target="#Modal"><i class="fas fa-file-export"></i> Demand Order</button>
+    </div>
+    <div class="row bgc-white bd bdrs-3 mT-20">
+        <div class="col-md-12">
+            <ul class="nav nav-tabs" role="tablist" id="myTabs">
+                <li class="nav-item"><a class="nav-link" role="tab" data-toggle="tab" data-link="/ConstructProjectManagement/ItemWise?Prj_Id=@ViewBag.Prj_Id" id="pen-ap" href="#coahead">By Item</a></li>
+                <li class="nav-item"><a class="nav-link" role="tab" data-toggle="tab" data-link="/ConstructProjectManagement/IssueNoteWise?Prj_Id=@ViewBag.Prj_Id" id="pen" href="#coahead">By Issuance</a></li>
+            </ul>
+            <div class="tab-content">
+                <div role="tabpanel" id="coahead" class="tab-pane active p-20 table-responsive"></div>
+            </div>
+        </div>
+    </div>
+</div>

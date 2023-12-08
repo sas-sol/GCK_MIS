@@ -1,0 +1,26 @@
+﻿@model MeherEstateDevelopers.Models.Prj_Financial_Summary
+<div class="card border-secondary mb-3">
+    <div class="card-header">
+        Finances
+    </div>
+    <div class="card-body text-secondary">
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item ">
+                Budget
+                <h3 class="badge badge-secondary pull-right">Pkr: @string.Format("{0:n2}", Model.Prj_Budget) /-</h3>
+            </li>
+            <li class="list-group-item">
+                Actual Budget
+                <h3 class="badge badge-secondary pull-right">Pkr: @string.Format("{0:n2}", Model.Actual_Budget) /-</h3>
+            </li>
+            <li class="list-group-item ">
+                Budget Exceed
+                <h3 class="badge badge-secondary pull-right">Pkr: @string.Format("{0:n2}", Model.Budget_Diff) /-</h3>
+            </li>
+            <li class="list-group-item">
+                Payment Requested
+                <h3 class="badge badge-secondary pull-right">Pkr: @string.Format("{0:n2}", Model.Payment_Requests) /-</h3>
+            </li>
+        </ul>
+    </div>
+</div>

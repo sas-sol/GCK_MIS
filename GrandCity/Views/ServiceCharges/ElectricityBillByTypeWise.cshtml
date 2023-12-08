@@ -1,0 +1,240 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.ElectricityBillViewTypeWise>
+
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        @@Page {
+            margin: 0;
+            size: A4;
+        }
+
+        .bg {
+            height: 1500px;
+            width: 1175px;
+            max-height: 1500px;
+            max-width: 1175px;
+            margin-left: 0;
+            background-image: url('../../assets/static/images/EB.jpg');
+            background-repeat: no-repeat;
+            background-size: 1175px 1500px;
+            font-family: sans-serif;
+        }
+
+        .info {
+            width: 40%;
+            line-height: 18px;
+            font-size: 20px;
+            margin-left: 52%;
+            padding-top: 100px;
+        }
+
+        .info-2 {
+            left: 43%;
+            top: 13%;
+        }
+
+        .info td {
+            padding: 5px
+        }
+
+        .cust-info {
+            width: 100%;
+            line-height: 20px;
+            font-size: 19px;
+            margin-left: 2%;
+            padding-top: 7%;
+        }
+
+            .cust-info td {
+                padding: 5px
+            }
+
+        .cost-cal {
+            width: 100%;
+            line-height: 4;
+            font-size: 21px;
+            margin-left: 1%;
+            padding-top: 7%;
+        }
+
+        .last-info {
+            width: 100%;
+            line-height: 24px;
+            font-size: 20px;
+            margin-left: 2%;
+        }
+
+        .last-cust-bill {
+            margin-top: 31.5%;
+            width: 40%;
+            margin-left: 60%;
+        }
+                
+        @@media print {
+            .bg {
+                height: 1500px;
+                width: 1200px;
+                margin-left: 0;
+                background-image: url('../../assets/static/images/EB.jpg');
+                background-repeat: no-repeat;
+                background-size: 1175px 1500px;
+                font-family: sans-serif;
+                margin-bottom: 250px;
+            }
+
+            .info {
+                width: 40%;
+                line-height: 18px;
+                font-size: 20px;
+                margin-left: 52%;
+                padding-top: 100px;
+            }
+
+            .info-2 {
+                position: absolute;
+                left: 53.3%;
+                top: 5.5%;
+            }
+
+            .info td {
+                padding: 5px
+            }
+
+            .cust-info {
+                width: 100%;
+                line-height: 20px;
+                font-size: 19px;
+                margin-left: 2%;
+                padding-top: 8%;
+            }
+
+                .cust-info td {
+                    padding: 5px
+                }
+
+            .cost-cal {
+                width: 100%;
+                line-height: 4;
+                font-size: 21px;
+                margin-left: 1%;
+                padding-top: 6%;
+            }
+
+            .last-info {
+                width: 100%;
+                line-height: 24px;
+                font-size: 20px;
+                margin-left: 2%;
+            }
+
+            .last-cust-bill {
+                margin-top: 31.5%;
+                width: 40%;
+                margin-left: 60%;
+            }
+        }
+    </style>
+</head>
+<body>
+    @foreach (var item in Model.OrderBy(x => Convert.ToInt32(x.CurrBill.PlotNo.Split(' ')[0])))
+    {
+        var gtotal = item.CurrBill.Arrears + item.CurrBill.Total_Amount;
+        var grandtotal = gtotal - item.CurrBill.Amount_Paid;
+        <div class="bg">
+            <div class="info">
+                <table>
+                    <tr>
+                        <td width="160" align="center"><b>@item.CurrBill.Bill_No</b></td>
+                        <td width="160" align="center">@string.Format("{0:MMM dd,yyyy}", item.CurrBill.Due_Date)</td>
+                        <td width="160" align="center">Rs. @string.Format("{0:n}", grandtotal)</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="cust-info"><div style="width: 50%;float: left;">
+                    <table>
+                        <tr><td><b>Service To:</b></td></tr>
+                        <tr><td>@item.CurrBill.Name</td></tr>
+                        <tr><td>@item.CurrBill.Plot_No @item.CurrBill.Block_Name Block @item.CurrBill.Plot_Type</td></tr>
+                        <tr><td>Meter: @item.CurrBill.Meter_No</td></tr>
+                    </table>
+                </div>
+                <div>
+                    <table>
+                        <tr><td><b>Meter No:</b></td><td><b>@item.CurrBill.Meter_No</b></td></tr>
+                        <tr><td><b>Previous Reading</b></td><td>@item.CurrBill.Previous_Reading</td></tr>
+                        <tr><td><b>Current Reading</b></td><td>@item.CurrBill.Current_Reading</td></tr>
+                        <tr><td><b>Units Consumed</b></td><td>@item.CurrBill.Units</td></tr>
+                    </table>
+                </div>
+            </div>
+            <div class="cost-cal">
+                <table style="border: 1px solid black;">
+                    <thead style="background-color:#043a80;color:white">
+                        <tr>
+                            <th>Cost Calculation</th>
+                            <th>This Month Bill</th>
+                            <th>Arrears</th>
+                            <th>Total</th>
+                            <th>Amount Paid</th>
+                            <th>Grand Total</th>
+                        </tr>
+                    </thead>
+                    <tr>
+                        <td width="350" style="line-height:17px;font-size:15px" align="left">
+                            @foreach (var v in item.CurrBillDetails)
+                            {
+                                <span>@v.Start_Range - @v.End_Range &nbsp;&nbsp;&nbsp;| @string.Format("{0:0,0.##}", v.Units) * @string.Format("{0:0,0.##}", v.Rate) = @string.Format("{0:0,0.##}", v.Amount)</span><br />
+                            }
+                    </td>
+                    <td width="250" align="center">@string.Format("{0:0,0.##}", item.CurrBill.Total_Amount)</td>
+                    <td width="200" align="center">@string.Format("{0:0,0.##}", item.CurrBill.Arrears)</td>
+                    <td width="180" align="center">@Convert.ToDecimal(gtotal).ToString("0,0.##")</td>
+                    <td width="180" align="center">@Convert.ToDecimal(item.CurrBill.Amount_Paid).ToString("0,0.##")</td>
+                    <td width="200" align="center">@Convert.ToDecimal(grandtotal).ToString("0,0.##")</td>
+                </tr>
+                </table>
+            </div>
+
+            <div class="hist-view">
+
+                <table style="width:50%;border:1px solid black;margin-left:5%">
+                    <thead style="background-color:#043a80;color:white">
+                        <tr>
+                            <th colspan="4"><b>Previous History</b></th>
+                        </tr>
+                        <tr>
+                            <td><b>Bill Month</b></td>
+                            <td><b>Units Consumed</b></td>
+                            <td><b>Bill Amount</b></td>
+                            <td><b>Paid Amount</b></td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var v in item.PastBills.OrderByDescending(x => x.BillMonth))
+                        {
+                        <tr class="">
+                            <td class=""><b>@v.BillMonth.ToString("MMM/yyyy")</b></td>
+                            <td class=""><b>@v.UnitsConsumed</b></td>
+                            <td class=""><b>@v.Amount</b></td>
+                            <td class=""><b>@v.AmountPaid</b></td>
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <div class="last-info">
+                <div>
+                    <table class="last-cust-bill">
+                        <tr><td width="180"><b>@string.Format("{0:MMM dd,yyyy}", item.CurrBill.Due_Date)</b></td><td><b>Rs. @string.Format("{0:n}", grandtotal)</b></td></tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    }
+</body>
+</html>

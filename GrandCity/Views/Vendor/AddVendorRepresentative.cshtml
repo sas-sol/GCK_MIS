@@ -1,0 +1,44 @@
+﻿
+@using (Html.BeginForm("AddVendorRepresentat", "Vendor", FormMethod.Post, new { @id = "ven-rep", @class = "", role = "form", autocomplete = "off" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="col-md-12">
+        <input type="hidden" value="" id="vendor-id" name="Vendor_Id" />
+        <div class="form-row">
+            <div class="form-group col-md-3">
+                <label>Name</label>
+                <input type="text" class="form-control" name="Name" required />
+            </div>
+            <div class="form-group col-md-3">
+                <label>Email</label>
+                <input type="email" class="form-control" name="Email">
+            </div>
+            <div class="form-group col-md-3">
+                <label>Job Title</label>
+                <input type="text" class="form-control" name="Job_Title">
+            </div>
+            <div class="form-group col-md-3">
+                <label>Office Mobile</label>
+                <input type="text" class="form-control" name="Office_Mobile">
+            </div>
+            <div class="form-group col-md-3">
+                <label>Mobile Number</label>
+                <input type="text" class="form-control" name="Mobile_Number" required>
+            </div>
+            <div class="form-group col-md-3">
+                <label>Fax</label>
+                <input type="text" class="form-control" name="Fax">
+            </div>
+            <div class="form-group col-md-3">
+                <label>City</label>
+                <input type="text" class="form-control" name="City">
+            </div>
+        </div>
+    </div>
+}
+<script>
+    $(function () {
+        $('.modal-footer').append(' <button type="button" class="btn btn-primary ven-rep-btn">Register</button>');
+        $("#vendor-id").val($("#ven-id").val())
+    });
+</script>

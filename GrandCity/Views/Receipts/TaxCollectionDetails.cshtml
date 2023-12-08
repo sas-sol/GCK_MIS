@@ -1,0 +1,423 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Sp_Get_TaxReport_Result>
+
+
+<nav>
+    <div class="nav nav-tabs" id="nav-tab" role="tablist">
+        <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">Buyers</a>
+        <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false">Sellers</a>
+        <a class="nav-item nav-link" id="nav-pbt-tab" data-toggle="tab" href="#nav-pbt" role="tab" aria-controls="nav-pbt-tab" aria-selected="false">Paid Buyers Tax</a>
+        <a class="nav-item nav-link" id="nav-pst-tab" data-toggle="tab" href="#nav-pst" role="tab" aria-controls="nav-pst-tab" aria-selected="false">Paid Sellers Tax</a>
+
+    </div>
+</nav>
+
+<div class="col-md-12">
+
+</div>
+
+<div class="tab-content" id="nav-tabContent">
+    <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+        <div class="col-md-12 default-div-bg bd bdrs-3 p-20 mB-20">
+            <h4 class="heading-lgt-onDark mB-20">Buyers</h4>
+            <table class="table table-borderless table-responsive">
+                <thead>
+                    <tr>
+                        <th colspan="11">
+                            Advance Tax (Buyers)
+                            @if (User.IsInRole("WHT Handler"))
+                            {
+                                <br />
+                                <br />
+                                <br />
+                                <span style="text-align:right; display:none; margin-top:3px;" class="wht-dt-span-buy" placeholder="WHT paid Date">
+                                    WHT Paid Date : &nbsp;
+                                    <input type="text" class="form-control wht-pd-dt-buy" />
+                                </span>
+                            }
+                        </th>
+                    </tr>
+                    <tr>
+                        <th>Sr#</th>
+                        <th>Name</th>
+                        <th>CNIC</th>
+                        <th>Payee Contact</th>
+                        <th>File/Plot No.</th>
+                        <th>Block</th>
+                        <th>Amount</th>
+                        <th>Plot Price</th>
+                        <th>Date</th>
+                        @if (User.IsInRole("WHT Handler"))
+                        {
+                            <th>Receive</th>
+                        }
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @{ int count = 1;}
+                    @foreach (var v in Model.Where(x => x.Type == "Advance_Tax_236_K" && (x.WHT_Paid == null) && (x.Amount > 0)))
+                    {
+                        <tr>
+                            <td>@(count++)</td>
+                            <td>@v.Name</td>
+                            <td>@v.Text</td>
+                            <td>@v.Contact</td>
+                            <td>@v.File_Plot_Number</td>
+                            <td>@v.Block</td>
+                            <td>@string.Format("{0:n0}", v.Amount)</td>
+                            <td>@string.Format("{0:n0}", v.Plot_Total_Amount)</td>
+                            <td>@v.DateTime.Value.ToShortDateString()</td>
+                            @if (User.IsInRole("WHT Handler"))
+                            {
+                                if (v.WHT_Paid == true)
+                                {
+                                    <td>-</td>
+                                }
+                                else
+                                {
+                                    <td><input type="checkbox" class="wht-recv-buy-hjfksal" data-recid="@v.Id" /> </td>
+                                }
+                            }
+                        </tr>
+                    }
+                </tbody>
+                <tbody>
+                    <tr>
+                        <th colspan="5"></th>
+                        <th>Total :</th>
+                        <th>@string.Format("{0:n0}", Model.Where(x => x.Type == "Advance_Tax_236_K" && (x.WHT_Paid == null) && (x.Amount > 0)).Sum(x => x.Amount))</th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="col-md-12">
+            <div class="sv-btn-tax-updtn-buy-dfskjhl btn btn-outline-success mb-md-3" style="display:none">Update Tax Payment Status</div>
+        </div>
+    </div>
+
+    <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+        <div class="col-md-12 default-div-bg bd bdrs-3 p-20 mB-20">
+            <h4 class="heading-lgt-onDark mB-20">Sellers</h4>
+            <table class="table table-borderless table-responsive">
+                <thead>
+                    <tr>
+                        <th colspan="11">
+                            Advance Tax (Sellers)
+                            @if (User.IsInRole("WHT Handler"))
+                            {
+                                <br />
+                                <br />
+                                <br />
+                                <span style="text-align:right; display:none; margin-top:3px;" class="wht-dt-span-sel">
+                                    WHT Paid Date : &nbsp;
+                                    <input type="text" class="form-control wht-pd-dt-sel" placeholder="WHT paid Date" />
+                                </span>
+                            }
+
+                        </th>
+                    </tr>
+                    <tr>
+                        <th>Sr#</th>
+                        <th>Name</th>
+                        <th>CNIC</th>
+                        <th>Payee Contact</th>
+                        <th>File/Plot No.</th>
+                        <th>Block</th>
+                        <th>Amount</th>
+                        <th>Plot Price</th>
+                        <th>Date</th>
+                        @if (User.IsInRole("WHT Handler"))
+                        {
+                            <th>Receive</th>
+                        }
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @{ count = 1;}
+                    @foreach (var v in Model.Where(x => x.Type == "Advance_Tax_236_C" && (x.WHT_Paid == null) && (x.Amount > 0)))
+                    {
+                        <tr>
+                            <td>@(count++)</td>
+                            <td>@v.Name</td>
+                            <td>@v.Text</td>
+                            <td>@v.Contact</td>
+                            <td>@v.File_Plot_Number</td>
+                            <td>@v.Block</td>
+                            <td>@string.Format("{0:n0}", v.Amount)</td>
+                            <td>@string.Format("{0:n0}", v.Plot_Total_Amount)</td>
+                            <td>@v.DateTime.Value.ToShortDateString()</td>
+                            @if (User.IsInRole("WHT Handler"))
+                            {
+                                if (v.WHT_Paid == true)
+                                {
+                                    <td>-</td>
+                                }
+                                else
+                                {
+                                    <td><input type="checkbox" class="wht-recv-sel-hjfksal" data-recid="@v.Id" /> </td>
+                                }
+                            }
+                        </tr>
+                    }
+                </tbody>
+                <tbody>
+                    <tr>
+                        <th colspan="5"></th>
+                        <th>Total :</th>
+                        <th>@string.Format("{0:n0}", Model.Where(x => x.Type == "Advance_Tax_236_C").Sum(x => x.Amount))</th>
+                        <th></th>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="col-md-12">
+            <div class="sv-btn-tax-updtn-sel-dfskjhl btn btn-outline-success mb-md-3" style="display:none">Update Tax Payment Status</div>
+        </div>
+    </div>
+
+    <div class="tab-pane fade" id="nav-pbt" role="tabpanel" aria-labelledby="nav-pbt-tab">
+        <div class="col-md-12 default-div-bg bd bdrs-3 p-20 mB-20">
+            <h4 class="heading-lgt-onDark mB-20">Buyers</h4>
+            <table class="table table-borderless table-responsive">
+                <thead>
+                    <tr>
+                        <th colspan="10">Advance Tax Paid (Buyers)</th>
+                    </tr>
+                    <tr>
+                        <th>Sr#</th>
+                        <th>Name</th>
+                        <th>CNIC</th>
+                        <th>Payee Contact</th>
+                        <th>File/Plot No.</th>
+                        <th>Block</th>
+                        <th>Amount</th>
+                        <th>Plot Price</th>
+                        <th>Date</th>
+                        <th>Paid Date</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @{ count = 1;}
+                    @foreach (var v in Model.Where(x => x.Type == "Advance_Tax_236_K" && x.WHT_Paid == true || (x.Amount == 0)))
+                    {
+                        <tr>
+                            <td>@(count++)</td>
+                            <td>@v.Name</td>
+                            <td>@v.Text</td>
+                            <td>@v.Contact</td>
+                            <td>@v.File_Plot_Number</td>
+                            <td>@v.Block</td>
+                            <td>@string.Format("{0:n0}", v.Amount)</td>
+                            <td>@string.Format("{0:n0}", v.Plot_Total_Amount)</td>
+                            <td>@v.DateTime.Value.ToShortDateString()</td>
+                            @if (v.WHT_Paid_Date is null)
+                            {
+                                <td>-</td>
+                            }
+                            else
+                            {
+                                <td>@v.WHT_Paid_Date.Value.ToShortDateString()</td>
+                            }
+                        </tr>
+                    }
+                </tbody>
+                <tbody>
+                    <tr>
+                        <th colspan="5"></th>
+                        <th>Total :</th>
+                        <th>@string.Format("{0:n0}", Model.Where(x => x.Type == "Advance_Tax_236_K" && x.WHT_Paid == true).Sum(x => x.Amount))</th>
+                        <th></th>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+    <div class="tab-pane fade" id="nav-pst" role="tabpanel" aria-labelledby="nav-pst-tab fade">
+        <div class="col-md-12 default-div-bg bd bdrs-3 p-20 mB-20">
+            <h4 class="heading-lgt-onDark mB-20">Sellers</h4>
+            <table class="table table-borderless table-responsive">
+                <thead>
+                    <tr>
+                        <th colspan="10">Advance Tax Paid (Sellers)</th>
+                    </tr>
+                    <tr>
+                        <th>Sr#</th>
+                        <th>Name</th>
+                        <th>CNIC</th>
+                        <th>Payee Contact</th>
+                        <th>File/Plot No.</th>
+                        <th>Block</th>
+                        <th>Amount</th>
+                        <th>Plot Price</th>
+                        <th>Date</th>
+                        <th>Paid Date</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @{ count = 1;}
+                    @foreach (var v in Model.Where(x => x.Type == "Advance_Tax_236_C" && (x.WHT_Paid == true) || (x.Amount == 0)))
+                    {
+                        <tr>
+                            <td>@(count++)</td>
+                            <td>@v.Name</td>
+                            <td>@v.Text</td>
+                            <td>@v.Contact</td>
+                            <td>@v.File_Plot_Number</td>
+                            <td>@v.Block</td>
+                            <td>@string.Format("{0:n0}", v.Amount)</td>
+                            <td>@string.Format("{0:n0}", v.Plot_Total_Amount)</td>
+                            <td>@v.DateTime.Value.ToShortDateString()</td>
+                            @if (v.WHT_Paid_Date is null)
+                            {
+                                <td>-</td>
+                            }
+                            else
+                            {
+                                <td>@v.WHT_Paid_Date.Value.ToShortDateString()</td>
+                            }
+                        </tr>
+                    }
+                </tbody>
+                <tbody>
+                    <tr>
+                        <th colspan="5"></th>
+                        <th>Total :</th>
+                        <th>@string.Format("{0:n0}", Model.Where(x => x.Type == "Advance_Tax_236_C" && x.WHT_Paid == true).Sum(x => x.Amount))</th>
+                        <th></th>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+    $('.wht-pd-dt-sel').bootstrapMaterialDatePicker({ weekStart: 0, time: false, format: 'MM-DD-YYYY' });
+    $('.wht-pd-dt-buy').bootstrapMaterialDatePicker({ weekStart: 0, time: false, format: 'MM-DD-YYYY' });
+
+    $(document).ready(function () {
+
+        //sellers area
+        $('.wht-recv-sel-hjfksal').unbind().change(function () {
+            if ($('.wht-recv-sel-hjfksal').filter(':checked').length > 0) {
+                $('.wht-dt-span-sel').show();
+                $('.sv-btn-tax-updtn-sel-dfskjhl').show();
+            }
+            else {
+                $('.wht-dt-span-sel').hide();
+                $('.sv-btn-tax-updtn-sel-dfskjhl').hide();
+            }
+        });
+
+        $('.sv-btn-tax-updtn-sel-dfskjhl').unbind().click(function () {
+            if (!confirm('Are you sure you want to update the status of the selected filer clients?')) {
+                return;
+            }
+
+
+            //upload the data to server here
+            ShowFullScreenLoader();
+            let sel_dt = $('.wht-pd-dt-sel').val();
+            let recidssel = [];
+
+            $('.wht-recv-sel-hjfksal').each(function () {
+                if ($(this).is(':checked')) {
+                    let _temp = parseInt($(this).attr('data-recid'));
+                    recidssel.push(_temp);
+                }
+            });
+
+            $.ajax({
+                type: "POST",
+                url: "/Receipts/UpdateWHTDetails/",
+                contentType: "application/json",
+                traditional: true,
+                beforeSend: function () {
+
+                },
+                complete: function () {
+
+                },
+                data: JSON.stringify({ recs: recidssel, dt: sel_dt }),
+            }).done(function (data) {
+                if (data == true) {
+                    alert('Status updated successfully');
+                    window.location.reload();
+                }
+                else {
+                    alert('Failed to update the status');
+                    HideFullScreenLoader();
+                }
+            });
+
+        });
+
+
+
+        //buyers area
+
+        $('.wht-recv-buy-hjfksal').unbind().change(function () {
+            if ($('.wht-recv-buy-hjfksal').filter(':checked').length > 0) {
+                $('.wht-dt-span-buy').show();
+                $('.sv-btn-tax-updtn-buy-dfskjhl').show();
+            }
+            else {
+                $('.wht-dt-span-buy').hide();
+                $('.sv-btn-tax-updtn-buy-dfskjhl').hide();
+            }
+        });
+
+        $('.sv-btn-tax-updtn-buy-dfskjhl').unbind().click(function () {
+            if (!confirm('Are you sure you want to update the status of the selected filer clients?')) {
+                return;
+            }
+
+
+            //upload the data to server here
+            ShowFullScreenLoader();
+            let sel_dt = $('.wht-pd-dt-buy').val();
+            let recidssel = [];
+
+            $('.wht-recv-buy-hjfksal').each(function () {
+                if ($(this).is(':checked')) {
+                    let _temp = parseInt($(this).attr('data-recid'));
+                    recidssel.push(_temp);
+                }
+            });
+
+            $.ajax({
+                type: "POST",
+                url: "/Receipts/UpdateWHTDetails/",
+                contentType: "application/json",
+                traditional: true,
+                beforeSend: function () {
+
+                },
+                complete: function () {
+
+                },
+                data: JSON.stringify({ recs: recidssel, dt: sel_dt }),
+            }).done(function (data) {
+                if (data == true) {
+                    alert('Status updated successfully');
+                    window.location.reload();
+                }
+                else {
+                    alert('Failed to update the status');
+                    HideFullScreenLoader();
+                }
+            });
+        });
+
+    });
+
+</script>

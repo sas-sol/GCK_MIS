@@ -1,0 +1,75 @@
+﻿@model MeherEstateDevelopers.Models.AdminProject
+<h6 class="c-grey-900">Update Project</h6>
+<div class="row  bgc-white bd bdrs-3 p-20 mB-20">
+
+    <div class="col-md-6">
+        <div class="form-row">
+
+            <hr />
+            <div class="col-md-12 " id="ad-pln-fac">
+                <h6 class="c-grey-900">Monthly Fee Structure</h6>
+                <hr />
+                <div class="form-row">
+                    <div class="form-group col-md-2">
+                    </div>
+                    <div class="form-group col-md-3">
+                        <h6 class="c-grey-900">Membership</h6>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <h6 class="c-grey-900">Monthly</h6>
+                    </div>
+                </div>
+                <div class="form-row" id="">
+                    <div class="form-group col-md-2">
+                        <h6 class="c-grey-900">Employee</h6>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <input class="form-control coma empmem" placeholder="12,345" value="@Model.Emp_Mem_Fee">
+                        <input type="hidden" id="empmem" name="Amount" class="amt" >
+                    </div>
+                    <div class="form-group col-md-3">
+                        <input class="form-control coma empmon" placeholder="12,345" value="@Model.Emp_Mem_Fee">
+                        <input type="hidden" id="empmon" name="Amount" class="amt" >
+                    </div>
+                </div>
+                <div class="form-row" id="">
+                    <div class="form-group col-md-2">
+                        <h6 class="c-grey-900">Resident</h6>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <input class="form-control coma Resmem" placeholder="12,345" value="@Model.Res_Mem_Fee">
+                        <input type="hidden" id="Resmem" name="Amount" class="amt" >
+                    </div>
+                    <div class="form-group col-md-3">
+                        <input class="form-control coma resmon" placeholder="12,345" value="@Model.Res_Fee" >
+                        <input type="hidden" id="resmon" name="Amount" class="amt" >
+                    </div>
+                </div>
+                <div class="form-row" id="">
+                    <div class="form-group col-md-2">
+                        <h6 class="c-grey-900">Outsiders</h6>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <input class="form-control coma outmem" placeholder="12,345" value="@Model.Out_Mem_Fee">
+                        <input type="hidden" id="outmem" name="Amount" class="amt" >
+                    </div>
+                    <div class="form-group col-md-3">
+                        <input class="form-control coma outmon" placeholder="12,345 "value="@Model.Out_Fee">
+                        <input type="hidden" id="outmon" name="Amount" class="amt" >
+                    </div>
+                </div>
+            </div>
+        </div>
+        <button type="button" class="btn btn-primary upda___inf__fee" id="@Model.Id" style="margin-left:53.5%">Add Plan</button>
+    </div>
+</div>
+<hr />
+<div class="row col-md-12" id="all-inst-strc-admin">
+</div>
+<script>
+    $(document).ready(function () {
+        $('#all-inst-strc-admin').load('/AdminFacilities/GetPlan/');
+    });
+</script>
+
+

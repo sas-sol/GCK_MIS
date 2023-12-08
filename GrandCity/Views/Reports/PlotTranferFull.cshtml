@@ -1,0 +1,138 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Transfer_Report>
+<div class="form-group col-md-3">
+    <label>Start Date</label>
+    <input type="text" class="form-control" data-provide="datepicker" onchange="gettransferdata();" id="transferstartdate" name="transferstartdate" placeholder="mm/dd/yyyy" required>
+</div>
+<div class="form-group col-md-3">
+    <label>End Date</label>
+    <input type="text" class="form-control" data-provide="datepicker" onchange="gettransferdata();" id="transferenddate" name="transferenddate" placeholder="mm/dd/yyyy" required>
+</div>
+<div class="form-group col-md-3">
+    <label>Choose Last Transfer Records</label>
+    <select class="form-control" id="opttransfer" onchange="gettransferoptions();">
+        <option selected disabled>Choose...</option>
+        <option value="weekly">Weekly</option>
+        <option value="monthly">Monthly</option>
+        <option value="6months">6 Month</option>
+        <option value="yearly">Yearly</option>
+    </select>
+</div>
+<div class="col-md-12">
+    <div class="row mt-md-3">
+        <div  id="transfercontainer"></div>
+    </div>
+</div>
+
+<table class="table" style="margin-top:10px">
+    <thead>
+        <tr>
+            <th>Sr.</th>
+            <th>Plot Number</th>
+            <th>Block</th>
+            <th>Plot Size</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr><td>1</td><td>73 - Residential</td><td>Sir Syed Block</td><td>6 Marla</td></tr>
+        <tr><td>2</td><td>24 - Residential</td><td>Sir Syed Block</td><td>5 Marla</td></tr>
+        <tr><td>3</td><td>58 - Commercial</td><td>Iqbal Block</td><td>3 Marla</td></tr>
+        <tr><td>4</td><td>21 - Residential</td><td>Rehmat Block</td><td>10 Marla</td></tr>
+        <tr><td>5</td><td>36 - Residential</td><td>Quaid Block</td><td>18 Marla</td></tr>
+        <tr><td>5</td><td>2 - Commercial</td><td>Liaqat Block</td><td>8 Marla</td></tr>
+    </tbody>
+</table>
+<script>
+
+
+    // Build the chart
+    Highcharts.chart('transfercontainer', {
+        chart: {
+            plotBackgroundColor: null,
+            plotBorderWidth: null,
+            plotShadow: false,
+            type: 'pie',
+            backgroundColor: '#212639'
+        },
+        title: {
+            text: 'Plot Transfer'
+        },
+        tooltip: {
+            pointFormat: '{series.name}: <b>{point.y:1f}</b>'
+        },
+        plotOptions: {
+            pie: {
+                allowPointSelect: true,
+                cursor: 'pointer',
+                dataLabels: {
+                    enabled: true,
+                    format: '<b>{point.name}</b>: {point.y:1f}',
+                    style: {
+                        color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                    },
+                    connectorColor: 'silver'
+                }
+            },
+            series: {
+                cursor: 'pointer',
+                point: {
+                    events: {
+                        click: function () {
+                            var f = $("#t-f-date").val();
+                            var t = $("#t-t-date").val();
+                            var block = this.name;
+                            $("#tans-plt-lst").slideDown("slow", function () {
+                                $.post("/Reports/PlotTranferList/", { Block: block, Startdate: f, Enddate: t }, function (data) {
+                                    $("#tans-plt-lst").empty();
+                                    var html = `<table class="table">
+        <thead>
+            <tr>
+                <th>Sr.</th><th>Plot Number</th><th>Block</th><th>Plot Size</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td>1</td><td>73 - Residential</td><td>Sir Syed Block</td><td>6 Marla</td></tr>
+            <tr><td>2</td><td>24 - Residential</td><td>Sir Syed Block</td><td>5 Marla</td></tr>
+            <tr><td>3</td><td>58 - Commercial</td><td>Iqbal Block</td><td>3 Marla</td></tr>
+            <tr><td>4</td><td>21 - Residential</td><td>Rehmat Block</td><td>10 Marla</td></tr>
+            <tr><td>5</td><td>36 - Residential</td><td>Quaid Block</td><td>18 Marla</td></tr>
+            <tr><td>5</td><td>2 - Commercial</td><td>Liaqat Block</td><td>8 Marla</td></tr>
+        </tbody>
+</table>`;
+                                    $("#tans-plt-lst").append(html);
+                                    $("#tans-plt-lst table").DataTable();
+                                });
+                            });
+                            return false;
+                        }
+                    }
+                }
+            }
+        },
+        series: [{
+            name: 'Plot Transfer',
+            data: [{
+                name: 'Sir Syed Block',
+                y: 4,
+            }, {
+                name: 'Iqbal Block',
+                y: 3
+            }, {
+                name: 'Rehmat Block',
+                y: 6
+            }, {
+                name: 'Quaid Block',
+                y: 1
+            }, {
+                name: 'Liaqat Block',
+                y: 7
+            }]
+        }]
+    });
+    $("#transfercontainer").load('/Reports/PlotTranfer/', { Startdate: date, Enddate: date }, function () {
+        SASUnLoad($("#transfercontainer"));
+        initRearrangerBase();
+    });
+
+</script>
+
+

@@ -1,0 +1,128 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Sp_Get_LeadInstrument_MultiParamter_Result>
+<script src="~/Scripts/scanning.js"></script>
+<script>
+    var banklist = @Html.Raw(Json.Encode(ViewBag.Bank));
+</script>
+@{ int counter = 0;}
+
+@using (Html.BeginForm("LeadsGenerateCancelation", "Banking", FormMethod.Post, new { @id = "gen-cancel", @class = "", role = "form" }))
+{
+    foreach (var g in Model.GroupBy(x => new { x.PaymentType, x.Ch_Pay_Draft_No, x.Bank, x.Ch_Pay_Draft_Date, x.Posted_Date, x.Status, x.Clearance_Date, x.Deposit_Bank, x.Deposit_Bank_Acc_Number }))
+    {
+
+        <div class="form-row">
+            <div class="form-group col-md-2">
+                <label>@g.Key.PaymentType No.</label>
+                <h6> @g.Key.Ch_Pay_Draft_No</h6>
+            </div>
+            <div class="form-group col-md-3">
+                <label>Date</label>
+                <h6>@string.Format("{0:D}", g.Key.Ch_Pay_Draft_Date)</h6>
+            </div>
+            <div class="form-group col-md-3">
+                <label>Bank</label>
+                <h6> @g.Key.Bank</h6>
+            </div>
+            <div class="form-group col-md-1">
+                <label>Amount </label>
+                <h6> @string.Format("{0:n0}", g.Sum(x => x.Amount))</h6>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group col-md-2">
+                <label>Posted Date</label>
+                <h6>@string.Format("{0:MM/dd/yyyy}", g.Key.Posted_Date)</h6>
+            </div>
+            <div class="form-group col-md-3">
+                <label>Deposited Bank</label>
+                <script>
+                    var a = "";
+                    $("#Bank").val(a);
+                </script>
+                <h6>@g.Key.Deposit_Bank</h6>
+            </div>
+            <div class="form-group col-md-2">
+                <label>Account Number</label>
+                <h6>@g.Key.Deposit_Bank_Acc_Number</h6>
+            </div>
+            <div class="form-group col-md-2">
+                <label>Status</label>
+                <h6>@g.Key.Status</h6>
+            </div>
+
+        </div>
+        <div class="form-row">
+            <h6>File Numbers</h6>
+            <div class="row">
+                <div class="col-md-6">
+                    @foreach (var item in g)
+                    {
+                        counter++;
+                        <h6>@item.File_Plot_Number - Amount: @string.Format("{0:n0}", item.Amount)</h6>
+                        <input type="hidden" class="ids" value="@item.Id" />
+                    }
+                </div>
+                <div class="row col-md-6">
+                    <div class="form-group col-md-6">
+                        <button type="button" id="add-pay-typ" class=" btn btn-info"><i class="ti-plus"></i>&nbsp; Add Payment</button>
+                    </div>
+                </div>
+                <div class="col-md-12" id="pay-list">
+                    <div class="form-row" id="pay-1">
+                        <div class="form-group col-md-2">
+                            <label>Cash / Bank</label>
+                            <select class="form-control paytypesel" id="cah-chq-bak" required>
+                                <option value="Cash">Cash</option>
+                                <option value="BankDraft">Bank Draft</option>
+                                <option value="PayOrder">Pay Order</option>
+                                <option value="Online_Cash">Online - Cash</option>
+                                <option value="Online_Payorder">Online - PayOrder</option>
+                                <option value="Online_Bankdraft">Online - BankDraft</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label>Amount</label>
+                            <input class="form-control coma" placeholder="250,000" required>
+                            <input type="hidden" id="Amount" class="amt" required>
+                        </div>
+                        <div class="form-group col-md-2 paymentotherinfo">
+                            <label id="paytypelabel">-</label>
+                            <input type="text" class="form-control" id="paymenttype" placeholder="" disabled required>
+                        </div>
+                        <div class="form-group col-md-2 paymentotherinfo">
+                            <label>Date</label>
+                            <input type="text" class="form-control" id="cbp-date" data-provide="datepicker" placeholder="mm/dd/yyyy" disabled required>
+                        </div>
+                        <div class="form-group col-md-2 paymentotherinfo">
+                            <label>Bank</label>
+                            <select class="form-control" id="bank" disabled>
+                                <option>Choose..</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-2 paymentotherinfo">
+                            <label>Branch </label>
+                            <input type="text" class="form-control" id="Branch" placeholder="Mall Rd" disabled required>
+                        </div>
+                        <div class="form-group col-md-1 paymentotherinfo">
+                            <label>Scan File </label>
+                            <button class=" btn btn-block" data-v="1" type="button" id="scanbtn">Scan</button>
+                        </div>
+                        <div id="images-1" class="col-md-1 images"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+}
+<script>
+    $(function () {
+        $('.modal-footer').append('<button class="btn btn-primary" id="ld-gen-can" type="button">Generate Cancelation</button>');
+        $(".modal-header").text("Update Information");
+    });
+</script>
+<script>
+    $(function () {
+        InitBanks(1);
+    });
+</script>

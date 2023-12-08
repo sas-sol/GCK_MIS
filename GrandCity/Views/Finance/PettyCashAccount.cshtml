@@ -1,0 +1,55 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.PettyCashAccountsDetModel>
+
+<div class="row bgc-white bd bdrs-3 p-20 mB-20">
+    <div class="col-md-11">
+        <h5 class="c-grey-900 mB-20" style="text-align:center;">Petty Cash Accounts</h5>
+    </div>
+    
+    <div class="col-md-1">
+        <button class="btn btn-primary add-new-patty" data-toggle="modal" data-target="#Modal">Add New</button>
+    </div>
+    <table class="table table-bordered ptc" width="100%">
+        <thead>
+            <tr>
+                <th>Sr</th>
+                <th>Employee Code</th>
+                <th>Employee Name</th>
+                <th>Cash Limit</th>
+                <th>Item Limit</th>
+                <th>Balance</th>
+                <th>Recorded On</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.Any())
+            {
+                int sr = 1;
+                foreach (var item in Model)
+                {
+            <tr id="@item.Id">
+                <td>@sr</td>
+                <td>@item.Employee_Code</td>
+                <td>@item.Employee_Name</td>
+                <td>@string.Format("{0:n0}", item.Cash_Limit)</td>
+                <td>@string.Format("{0:n0}", item.Item_Limit)</td>
+                <td>@string.Format("{0:n0}", item.Balance)</td>
+                <td>@string.Format("{0:dd-MMM-yyyy}", item.Recorded_On)</td>
+            </tr>
+                    sr++;
+                }
+            }
+        </tbody>
+    </table>
+</div>
+
+<script>
+    $('.add-new-patty').click(function () {
+        EmptyModel();
+        $('#ModalLabel').text("Add Petty Cash Account");
+        $('#modalbody').load('/Finance/NewPattyCashAccount/');
+        $('.modal-footer').append('<button class="btn btn-success" id="gen-pet-acc" type="submit">Add New</button>');
+    });
+   
+
+</script>
+

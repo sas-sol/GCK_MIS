@@ -1,0 +1,190 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Sp_Get_InProcess_Salaries_Result>
+@{ Layout = "~/Views/Shared/_StaffLayout.cshtml"; }
+<style>
+    table thead tr th, table tbody tr td {
+        font-size: 12px;
+    }
+
+    .scrolling-box {
+        height: 740px;
+        overflow-y: scroll;
+        overflow-x: scroll;
+        width: 100%;
+    }
+
+    .tableFixHead {
+        overflow: auto;
+        height: 700px;
+    }
+
+        .tableFixHead .ka th {
+            position: sticky;
+            top: 0;
+        }
+    .testbg {
+        border: 3px solid red;
+    }
+</style>
+<div class="bgc-white bd bdrs-3 p-20 mB-20">
+    <button id="btnbonus" data-toggle="modal" data-target="#Modal" class="btn btn-primary pointer">Bonus</button>
+    <button type="submit" class="btn btn-primary Salary_Status2">Forward</button>
+    <button type="submit" class="btn btn-primary sal-rep">Salary Report</button>
+    <h4 class="c-grey-900 mB-20">Employess salaries</h4>
+    <div class="tableFixHead">
+        <table id="salary-dat" class="table table-striped table-bordered " cellspacing="0" width="100%">
+            <thead class="thead-dark ka">
+                <tr>
+                    <th>Sr.</th>
+                    <th>Code</th>
+                    <th>Name</th>
+                    <th>Designation</th>
+                    <th>Basic Salary</th>
+                    <th>Per Day Wage</th>
+                    <th>Date Of Joining</th>
+                    <th>No Of Days</th>
+                    <th>Absentee</th>
+                    <th>Leaves</th>
+                    <th>Extra Days</th>
+                    <th>No Of Worked Days</th>
+                    <th>Allownces/Arrear</th>
+                    <th>Extra Days Wage</th>
+                    <th>Bonus DESC.</th>
+                    <th>Bonus</th>
+                    <th>Absentee Ded.</th>
+                    <th>Loan</th>
+                    <th>Advance</th>
+                    <th>Other Ded</th>
+                    <th>Net Payable</th>
+                    <th>FWD / REV</th>
+                </tr>
+            </thead>
+            @{
+                foreach (var g in Model.GroupBy(x => new { x.Name, x.depid }))
+                {
+                    int? g_dep = (g.Key.depid is null) ? 0 : g.Key.depid;
+                    int sr = 1;
+                    <thead class="">
+                        <tr>
+                            <th colspan="21" style="font-size:21px;text-align:center"> @g.Key.Name</th>
+                        </tr>
+                        <tr>
+                            <th>Sr.</th>
+                            <th>Code</th>
+                            <th>Name</th>
+                            <th>Designation</th>
+                            <th>Basic Salary</th>
+                            <th>Per Day Wage</th>
+                            <th>Date Of Joining</th>
+                            <th>No Of Days</th>
+                            <th>Absentee</th>
+                            <th>Leaves</th>
+                            <th>Extra Days</th>
+                            <th>No Of Worked Days</th>
+                            <th>Allownces/Arrear</th>
+                            <th>Extra Days Wage</th>
+                            <th>Bonus DESC.</th>
+                            <th>Bonus</th>
+                            <th>Absentee Ded.</th>
+                            <th>Loan</th>
+                            <th>Advance</th>
+                            <th>Other Ded</th>
+                            <th>Net Payable</th>
+                            <th>FWD / REV</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in g)
+                        {
+                        <tr class="fin-up-rec"  id="@item.Id">
+                            <td class="">@sr</td>
+                            <td>@item.Employee_code</td>
+                            <td>@item.Employee_Name</td>
+                            <td>@item.Designation_name</td>
+                            <td class="basic_salary @g_dep-basicSalary" id="@g_dep">@String.Format("{0:n0}", Math.Round(Convert.ToDecimal(item.Basic_salary)))</td>
+                            <td class="">@( Math.Round(Convert.ToDecimal(item.Basic_salary / 30)) )</td>
+                            <td style="font-weight:bold">@string.Format("{0: dd-MMM-yyyy}", item.Emp_Date_Of_Joining)</td>
+                            <td>@item.No_Of_Days</td>
+                            <td>@item.Absentee</td>
+                            <td>@item.Salary_Leaves</td>
+                            <td>@item.Extra_Working_Days</td>
+                            <td>@(item.No_Of_Days - item.Absentee + item.Extra_Working_Days)</td>
+                            <td class="t_allownce all_calc @g_dep-8" id="@g_dep"> @String.Format("{0:n0}", Math.Round(Convert.ToDecimal(item.Allownces))) </td>
+                            <td class="extra_work @g_dep-Ewd" id="@g_dep"> @String.Format("{0:n0}", Math.Round(Convert.ToDecimal(item.Basic_salary / 30 * item.Extra_Working_Days))) </td>
+                            <td>@item.Bonus_Description</td>
+                            <td class="bonus @g_dep-bon" id="@g_dep">@string.Format("{0:n0}", Math.Round(Convert.ToDecimal(item.Bonus)))</td>
+                            <td class="absn-cal @g_dep" id="@g_dep"><label>@String.Format("{0:n0}", Math.Round(Convert.ToDecimal(item.Ded_Absentee - (item.Basic_salary / 30) * item.Salary_Leaves)))</label></td>
+                            <td><span>@String.Format("{0:n0}", Math.Round(Convert.ToDouble(item.Ded_Loan)))</span></td>
+                            <td><span>@String.Format("{0:n0}", Math.Round(Convert.ToDouble(item.Ded_Advance)))</span></td>
+                            <td data-toggle="modal" data-target="#Modal" class="ti-pencil Salary_details fin-dedc" id="@item.Name"> @String.Format("{0:n0}", Math.Round(Convert.ToDouble(item.Ded_Other))) </td>
+                            <td class="GrndTot @g_dep-2" id="@item.Id" style="font:bold">@String.Format("{0:n0}", Math.Round(Convert.ToDecimal(item.Grand_total)))</td>
+                            <td>
+                                <ul style="list-style:none;margin-left:0px;">
+                                    <li class="dropdown">
+                                        <a href="" class="dropdown-toggle no-after peers " data-toggle="dropdown">
+                                            <i class="ti-more-alt  c-grey-900" style="transform:rotate(90deg);"></i>
+                                        </a>
+                                        <ul class="dropdown-menu">
+                                            <li><a id="Approved" data-id="@item.Id" class="pointer reverse_salary"><span>Forward</span></a></li>
+                                            <li role="separator" class="divider"></li>
+                                            <li><a id="" data-id="@item.Id" class="pointer reverse_salary"><span>Reverse</span></a></li>
+                                            <li><a  data-id="@item.Id"  class="pointer del-sal"><span>Delete</span></a></li>
+                                            <li><a  data-id="@item.Id"  class="pointer up-sal"><span>Update</span></a></li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </td>
+                        </tr>
+                            sr++;
+
+                        }
+                        <tr>
+                            <td style="font-size:20px" colspan="4">Gross Total</td>
+                            <td>@String.Format("{0:n0}", Math.Round(Convert.ToDecimal(g.Select(x => x.Basic_salary).Sum())))</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td id="totl_allownce" class="@g_dep-9">@String.Format("{0:n0}", Math.Round(Convert.ToDecimal(g.Select(x => x.Allownces).Sum()))) </td>
+                            <td class="@g_dep-1Ewd">@String.Format("{0:n0}", Math.Round(Convert.ToDecimal(g.Select(x => x.Basic_salary / 30 * x.Extra_Working_Days).Sum())))</td>
+                            <td></td>
+                            <td class="@g_dep-1depBo">@String.Format("{0:n0}", Math.Round(Convert.ToDecimal(g.Select(x => x.Bonus).Sum())))</td>
+                            <td class=" @g_dep-1">@String.Format("{0:n0}", Math.Round(Convert.ToDecimal(g.Select(x => x.Ded_Absentee).Sum() - (g.Select(x => x.Basic_salary / 30 * x.Salary_Leaves).Sum())))) </td>
+                            <td>@String.Format("{0:n0}", Math.Round(Convert.ToDecimal(g.Select(x => x.Ded_Loan).Sum()))) </td>
+                            <td>@String.Format("{0:n0}", Math.Round(Convert.ToDecimal(g.Select(x => x.Ded_Advance).Sum()))) </td>
+                            <td class=" @g_dep-22">@String.Format("{0:n0}", Math.Round(Convert.ToDecimal(g.Select(x => x.Ded_Other).Sum())))</td>
+                            <td class=" @g_dep-22">@String.Format("{0:n0}", Math.Round(Convert.ToDecimal(g.Select(x => x.Grand_total).Sum())))</td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                }
+
+            }
+            <tfoot>
+                <tr>
+                    <th style="font-size:20px" colspan="4">Total</th>
+                    <th>@String.Format("{0:n0}", Math.Round(Convert.ToDecimal(Model.Sum(x => x.Basic_salary))))</th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th class="total_allownces">@String.Format("{0:n0}", Math.Round(Convert.ToDecimal(Model.Sum(x => x.Allownces))))</th>
+                    <th class="total_extra_wage">@String.Format("{0:n0}", Math.Round(Convert.ToDecimal(Model.Sum(x => x.Basic_salary / 30 * x.Extra_Working_Days))))</th>
+                    <th></th>
+                    <th>@String.Format("{0:n0}", Math.Round(Convert.ToDecimal(Model.Sum(x => x.Bonus))))</th>
+                    <th class="footer_ded_absen">@String.Format("{0:n0}", Math.Round(Convert.ToDecimal(Model.Sum(x => x.Ded_Absentee) - Model.Sum(x => x.Basic_salary / 30 * x.Salary_Leaves))))</th>
+                    <th>@String.Format("{0:n0}", Math.Round(Convert.ToDecimal(Model.Sum(x => x.Ded_Loan))))</th>
+                    <th>@String.Format("{0:n0}", Math.Round(Convert.ToDecimal(Model.Sum(x => x.Ded_Advance))))</th>
+                    <th class="footer_salary_leave">@String.Format("{0:n0}", Math.Round(Convert.ToDecimal(Model.Sum(x => x.Ded_Other))))</th>
+                    <th class="NetPaysum">@String.Format("{0:n0}", Math.Round(Convert.ToDecimal(Model.Sum(x => x.Grand_total))))</th>
+                    <th></th>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>

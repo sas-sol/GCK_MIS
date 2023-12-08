@@ -1,0 +1,90 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.COA_Mapper>
+@using MeherEstateDevelopers.Models;
+@{ 
+    var Gp = Model.Where(x => x.ModuleType == COA_Mapper_ModuleTypes.General_Trade_Payable.ToString()).FirstOrDefault();
+    var ap = Model.Where(x => x.ModuleType == COA_Mapper_ModuleTypes.Advance_Trade_payable.ToString()).FirstOrDefault();
+    var pns = Model.Where(x => x.ModuleType == COA_Mapper_ModuleTypes.Purchase_Need_Supervision.ToString()).FirstOrDefault();
+    var v = Model.Where(x => x.ModuleType == COA_Mapper_ModuleTypes.Vendor.ToString()).FirstOrDefault();
+}
+<h4>Payables & Vendor</h4>
+<div class="col-md-12">
+    <div class="form-row row">
+        <div class="col-md-6">
+            <div class="from-row row p-20">
+                <div class="form-group col-md-6">
+                    <h5>General Payables</h5>
+                    <select class="form-control sel-plug gen-pay">
+                        @if (Gp != null)
+                        {
+                            <option value="@Gp.AccountId">@Gp.AccountCode - @Gp.Head_Name</option>
+                        }
+                    </select>
+                </div>
+                <div class="form-group col-md-6">
+                    <h5>Advance Payables</h5>
+                    <select class="form-control sel-plug ad-pay">
+                        @if (ap != null)
+                        {
+                            <option value="@ap.AccountId">@ap.AccountCode - @ap.Head_Name</option>
+                        }
+                    </select>
+                </div>
+                <div class="form-group col-md-6">
+                    <h5>Purchase Need Supervision</h5>
+                    <select class="form-control sel-plug pns-pay">
+                        @if (pns != null)
+                        {
+                            <option value="@pns.AccountId">@pns.AccountCode - @pns.Head_Name</option>
+                        }
+                    </select>
+                </div>
+                <div class="form-group col-md-6">
+                    <h5>Vendor</h5>
+                    <select class="form-control sel-plug ven">
+                        @if (v != null)
+                        {
+                            <option value="@v.AccountId">@v.AccountCode - @v.Head_Name</option>
+                        }
+                    </select>
+                </div>
+                <div class="form-group col-md-12">
+                    <button class="btn btn-primary up-ven">Update</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $('.sel-plug').select2({
+        placeholder: "Search for Account",
+        ajax: {
+            url: '/AccountHeads/GetHead/',
+            dataType: 'json',
+            params: {
+                contentType: 'application/json; charset=utf-8'
+            },
+            data: function (params) {
+                return {
+                    q: params.term// search term
+                };
+            },
+            processResults: function (data) {
+                // Transforms the top-level key of the response object from 'items' to 'results'
+                return {
+                    results: $.map(data.items, function (item) {
+                        return {
+                            text: item.Parent,
+                            children: [{
+                                id: item.id,
+                                text: item.text
+                            }]
+                        }
+                    })
+                };
+            }
+        }
+    });
+
+
+
+</script>

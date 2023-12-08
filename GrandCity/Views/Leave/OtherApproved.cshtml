@@ -1,0 +1,54 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Sp_Get_LeaveManagement_Other_Result>
+<h4 class="c-grey-900 mB-20">@ViewBag.Type Leaves</h4>
+<table class="table table-striped table-bordered" cellspacing="0" width="100%">
+    <thead>
+        <tr>
+            <th>Employee Name</th>
+            <th>Leave Type</th>
+            <th>Reason</th>
+            <th>From</th>
+            <th>To</th>
+            <th>Number Of Days</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            if (!Model.Any())
+            {
+                <tr><td colspan="7" style="text-align:center">No data available</td></tr>
+            }
+            else
+            {
+                foreach (var item in Model.OrderByDescending(x => x.CreatedAt))
+                {
+                <tr class=" pointer" id="@item.Id">
+                    <td>@item.Name</td>
+                    @if (item.AvailLeave != null)
+                    {
+                        <td>Half Day</td>
+                    }
+                    else
+                    {
+                        <td>@item.LeaveType</td>
+                    }
+                    <td>@item.Reason</td>
+                    <td>@string.Format("{0: dd-MMM-yyyy}", item.StartDate)</td>
+                    <td>@string.Format("{0: dd-MMM-yyyy}", item.EndDate)</td>
+                    @if (item.Status == null && item.AvailLeave == "HalfDay")
+                    {
+                        <td>1</td>
+                    }
+                    else if (item.Status == 1 && item.AvailLeave == "HalfDay")
+                    {
+                        <td>0.5</td>
+                    }
+                    else
+                    {
+                        <td>@item.NoOfDays</td>
+                    }
+                </tr>
+                }
+            }
+        }
+    </tbody>
+</table>

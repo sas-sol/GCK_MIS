@@ -1,0 +1,408 @@
+﻿@model IEnumerable<Management_Information_System.Models.Sp_Get_PlotOwnerList_Result>
+
+<div class="col-md-12 bgc-white p-5 border-top-light-babyBlue">
+    <div class="header-underline-bottom mt-md-3 mb-md-3">
+        <div class="row align-item-cent">
+            <div class="col-md-2">
+                <select class="form-control owns-grp-slct">
+                    @{ int cnt = 1;}
+                    @foreach (var v in Model.OrderByDescending(x => x.Ownership_DateTime).GroupBy(x => x.GroupTag))
+                    {
+                        <optgroup label="@(cnt++)">
+                            @foreach (var own in v)
+                            {
+                                <option value="@v.Key">@own.Name</option>
+                            }
+                        </optgroup>
+                    }
+                </select>
+            </div>
+
+            @{
+                bool firstOwnRec = true;
+                bool firstOwnFirst = true;
+            }
+
+            <div class="col-md-10">
+                @foreach (var owngruops in Model.OrderByDescending(x => x.Ownership_DateTime).GroupBy(x => x.GroupTag))
+                {
+                    if (firstOwnRec)
+                    {
+                        <div class="wrapper-owns-iden row owns-grp-@owngruops.Key" style="justify-content:space-evenly;">
+                            @foreach (var owns in owngruops)
+                            {
+                                <div class="col-md-2 prevent-text-overflow">
+                                    <span class="own-name-plc pointer @((firstOwnFirst)?"curr-sel":string.Empty)" data-ownId="@owns.Id">@owns.Name</span>
+                                </div>
+                                <div class="col-md-1"></div>
+                                firstOwnFirst = false;
+                            }
+                        </div>
+                        firstOwnRec = false;
+                    }
+                    else
+                    {
+                        <div class="wrapper-owns-iden row owns-grp-@owngruops.Key" style="display:none;">
+                            @foreach (var owns in owngruops)
+                            {
+                                <div class="col-md-2 prevent-text-overflow">
+                                    <span class="own-name-plc pointer" data-ownId="@owns.Id">@owns.Name</span>
+                                </div>
+                                <div class="col-md-1"></div>
+                            }
+                        </div>
+                    }
+
+                }
+            </div>
+
+        </div>
+    </div>
+</div>
+<div class="" style="width:100%;">
+    @{ int ownercount = 1;
+        foreach (var owns_item in Model.OrderByDescending(x => x.Ownership_DateTime).GroupBy(x => x.GroupTag))
+        {
+            string show = "";
+            if (ownercount == 1)
+            {
+                @*<script>
+                                var pltprice = "@owns_item.Select(x=>x.Total_Price).FirstOrDefault()";
+                                if (pltprice > 0) {
+                                    $("#plt-price").text(Number(parseFloat(pltprice).toFixed(0)).toLocaleString());
+                                }
+                                else {
+                                    var instprice = "@Model.PlotInstallments.Sum(x=> x.Amount)";
+                                    $("#plt-price").text(Number(parseFloat(instprice).toFixed(0)).toLocaleString());
+                                }
+                                var disamt = "@owns_item.Select(x=>x.Discount).FirstOrDefault()";
+                                if (disamt > 0 || disamt != "") {
+                                    $("#dis-amt-sec").show();
+                                    $("#dis-amt").text(Number(parseFloat(disamt).toFixed(0)).toLocaleString());
+                                }
+                    </script>*@
+            }
+            foreach (var item in owns_item)
+            {
+                <div class="own-det bgc-white p-20 own-det-@item.Id" @((ownercount > 1) ? "style=display:none;" : string.Empty)>
+                    <div class="form-row">
+                        <div class="col-md-8" style="border-right:1px solid rgba(0,0,0,0.1)">
+                            <input type="hidden" name="Id" id="Id" value="@item.Id" />
+                            <input type="hidden" name="GroupTag" id="GroupTag" value="@item.GroupTag" />
+                            <div class="col-md-12 header-underline-top">
+                                <h5><span class="plt-card-heading"><b>Owner Details</b></span> &nbsp;&nbsp;&nbsp;<i class="fa fa-pencil-square-o pointer edt-info-hgjfasd" title="Edit Details"></i>&nbsp;&nbsp;&nbsp;<i class="fa fa-plus pointer add-new-own-inf-fsdjhg" data-grp="@item.GroupTag" title="Add New Owner With This Owner" style="color:limegreen;"></i></h5>
+                            </div>
+
+                            <div class="row mt-md-3">
+                                <div class="col-md-3">
+                                    <div style="width:220px; height:220px;" class="hvr-opt-disp">
+                                        <img style="margin-top:10px;height:100%;width:100%;" src="@item.Owner_Img" id="own_img" class="owner-img-@item.Id" data-owner="@item.Id" />
+                                        <span style="position:absolute;background-color:rgba(0,0,0,0.6);width: 220px;height: 100px;left: 15px; top :10px;display: flex;justify-content: center;align-items: center;display:none;">
+                                            <i class="fa fa-4x fa-upload pointer lime-green-hov own-img-upld-fdjsgha" title="Upload New Image"></i>
+                                        </span>
+                                    </div>
+                                    @*<input type="button" class="btn btn-info own-img add-own-img" id="add-own-img1" style="margin-top:10px;" data-toggle="modal" value="Add Image" data-target="#Modal" />*@
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <label>Name</label>
+                                            <h6 class="own-inf"><b>@item.Name</b></h6>
+                                            <input type="text" class="form-control own-inf-edtbl no-disp" name="Name" value="@item.Name" id="Name">
+                                        </div>
+
+                                        <div class="col-md-12 mt-md-5">
+                                            <label>Father's/Husband's Name</label>
+                                            <h6 class="own-inf"><b>@item.Father_Husband</b></h6>
+                                            <input type="text" class="form-control own-inf-edtbl no-disp" name="Father_Husband" value="@item.Father_Husband" id="Father_Husband">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <label>CNIC / NICOP</label>
+                                            <h6 class="own-inf"><b>@item.CNIC_NICOP</b></h6>
+                                            <input type="text" class="form-control own-inf-edtbl no-disp" name="CNIC_NICOP" value="@item.CNIC_NICOP" placeholder="12345-1234567-1   or   123456-123456-1" id="CNIC_NICOP">
+                                        </div>
+
+                                        <div class="col-md-12 mt-md-5">
+                                            <label>Date Of Birth</label>
+                                            <h6 class="own-inf"><b>@item.Date_Of_Birth</b></h6>
+                                            <input type="text" class="form-control own-inf-edtbl no-disp" data-provide="datepicker" value="@item.Date_Of_Birth" placeholder="mm/dd/yyyy" name="Date_Of_Birth" id="Date_Of_Birth">
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="row mt-md-3">
+                                <div class="col-md-9">
+                                    <label>Postal Address</label>
+                                    <h6 class="own-inf"><b>@item.Postal_Address</b></h6>
+                                    <input type="text" class="form-control own-inf-edtbl no-disp" name="Postal_Address" value="@item.Postal_Address" placeholder="1234 Main St" id="Postal_Address">
+                                </div>
+                                <div class="col-md-3">
+                                    <label>Nationality</label>
+                                    <h6 class="own-inf"><b>@item.Nationality</b></h6>
+                                    <input type="text" class="form-control own-inf-edtbl no-disp" value="@item.Nationality" name="Nationality" id="Nationality">
+                                </div>
+                            </div>
+
+                            <div class="row mt-md-3">
+                                <div class="col-md-9">
+                                    <label>Residential Address</label>
+                                    <h6 class="own-inf"><b>@item.Residential_Address</b></h6>
+                                    <input type="text" class="form-control own-inf-edtbl no-disp" name="Residential_Address" value="@item.Residential_Address" placeholder="Apartment, Plot, or floor" id="Residential_Address">
+                                </div>
+
+                                <div class="col-md-3">
+                                    <label>Occupation</label>
+                                    <h6 class="own-inf"><b>@item.Occupation</b></h6>
+                                    <input type="text" class="form-control own-inf-edtbl no-disp" value="@item.Occupation" name="Occupation" id="Occupation">
+                                </div>
+                            </div>
+
+                            <div class="row mt-md-3">
+                                <div class="col-md-3">
+                                    <label>Phone Office</label>
+                                    <h6 class="own-inf"><b>@item.Phone_Office</b></h6>
+                                    <input type="text" class="form-control own-inf-edtbl no-disp" value="@item.Phone_Office" name="Phone_Office" id="Phone_Office">
+                                </div>
+
+                                <div class="col-md-3">
+                                    <label>Mobile 1</label>
+                                    <h6 class="own-inf"><b>@item.Mobile_1</b></h6>
+                                    <input type="text" class="form-control own-inf-edtbl no-disp" value="@item.Mobile_1" placeholder="03121234567" name="Mobile_1" id="Mobile_1">
+                                </div>
+
+                                <div class="col-md-3">
+                                    <label>Mobile 2</label>
+                                    <h6 class="own-inf"><b>@item.Mobile_2</b></h6>
+                                    <input type="text" class="form-control own-inf-edtbl no-disp" value="@item.Mobile_2" pattern="^0\d{10}" placeholder="03121234567" name="Mobile_2" id="Mobile_2">
+                                </div>
+
+                                <div class="col-md-3">
+                                    <label>Email</label>
+                                    <h6 class="own-inf"><b>@item.Email</b></h6>
+                                    <input type="text" class="form-control own-inf-edtbl no-disp" value="@item.Email" name="Email" id="Email">
+                                </div>
+                            </div>
+
+                            <div class="row mt-md-3 own-inf-edtbl no-disp" style="align-items: flex-end;">
+                                <div class="col-md-3">
+                                    <label>Date of Ownership</label>
+                                    <input type="text" class="form-control" data-provide="datepicker" value="@string.Format("{0:MM/dd/yyyy}",item.Ownership_DateTime)" name="Ownership_DateTime" id="Ownership_DateTime">
+                                </div>
+                                <div class="col-md-3">
+                                    <label>Ownership Status</label>
+                                    <select class="form-control" id="Ownership_Status" name="Ownership_Status">
+                                        <option value="">Select Ownership</option>
+                                        <option value="Owner" @((item.Ownership_Status == "Owner") ? "selected" : string.Empty)>Owner</option>
+                                        <option value="Transfered" @((item.Ownership_Status == "Transfered") ? "selected" : string.Empty)>Transfered</option>
+                                        <option value="Cancelled" @((item.Ownership_Status == "Cancelled") ? "selected" : string.Empty)>Cancelled</option>
+                                        <option value="Pending" @((item.Ownership_Status == "Pending") ? "selected" : string.Empty)>Pending</option>
+                                    </select>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="row" style=" justify-content:space-evenly;">
+                                        @if (item.Allotment_Letter != 1)
+                                        {
+                                            <input type="button" class="btn btn-info all-let-del-pre" data-toggle="modal" data-ownid="@item.Id" data-target="#Modal" value="Delivered Allotment Letter" />
+                                            if (User.IsInRole("Delete Ownership"))
+                                            {
+                                                <button class="btn btn-danger De__Owner__from__plts" data-id="@item.Id" title="Delete Owner">Delete @item.Name</button>
+                                                @*<i class="ti-trash pointer De__Owner__from__plts"  style="float:right"></i>*@
+                                            }
+                                        }
+
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row mt-md-3 own-inf-edtbl no-disp">
+                                <div class="col-md-3">
+                                    <button class="btn btn-success sv-own-info-btn-asygjf"><i class="fa fa-save"></i>&nbsp;&nbsp;Save</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4 pl-md-3">
+
+                            <div class="col-md-12 header-underline-top">
+                                <h5><span class="plt-card-heading"><b>Nominee Details</b></span></h5>
+                            </div>
+
+                            <div class="row mt-md-3">
+                                <div class="col-md-12">
+                                    <label>Name</label>
+                                    <h6 class="own-inf"><b>@item.Nominee_Name</b></h6>
+                                    <input type="text" class="form-control own-inf-edtbl no-disp" value="@item.Nominee_Name" name="Nominee_Name" id="Nominee_Name">
+                                </div>
+                            </div>
+
+                            <div class="row mt-md-5">
+                                <div class="col-md-12">
+                                    <label>CNIC / NICOP</label>
+                                    <h6 class="own-inf"><b>@item.Nominee_CNIC_NICOP</b></h6>
+                                    <input type="text" class="form-control own-inf-edtbl no-disp" value="@item.Nominee_CNIC_NICOP" placeholder="12345-1234567-1 or 123456-123456-1" name="Nominee_CNIC_NICOP" id="Nominee_CNIC_NICOP">
+                                </div>
+                            </div>
+
+                            <div class="row" style="margin-top: 4rem;">
+                                <div class="col-md-12">
+                                    <label>Relation</label>
+                                    <h6 class="own-inf"><b>@item.Nominee_Relation</b></h6>
+                                    <input type="text" class="form-control own-inf-edtbl no-disp" value="@item.Nominee_Relation" name="Nominee_Relation" placeholder="" id="Nominee_Relation">
+                                </div>
+                            </div>
+
+                            <div class="row mt-md-3">
+                                <div class="col-md-12">
+                                    <label>Address</label>
+                                    <h6 class="own-inf"><b>@item.Nominee_Address</b></h6>
+                                    <input type="text" class="form-control own-inf-edtbl no-disp" value="@item.Nominee_Address" name="Nominee_Address" placeholder="1234 Main St" id="Nominee_Address">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-row" id="can-ow-led-@item.Id" style="margin-top:10px"></div>
+                    @if (item.Ownership_Status == "Cancelled" || item.Ownership_Status == "Cancelled_Not_Refunded")
+                    {
+                        <script>
+                                                    $('#can-ow-led-'+ @item.Id).load('/Plots/CancelledOwnerLedger/', { Plotid: @item.Plot_Id , OwnerId: @item.Id});
+                                                    console.log(@item.Plot_Id)
+                                                    console.log(@item.Id)
+                        </script>
+                        <style>
+                            #can-ow-led table tr th, #can-ow-led table tr td {
+                                padding: 2px;
+                            }
+                        </style>
+                        <button class="btn btn-success btn-outline-success" onclick="window.open('/Plots/PreviousPlotDetailReport?Plotid=@Model.Select(x=>x.Plot_Id).FirstOrDefault()&OwnerId=@item.Id')">@item.Name Ledger Report</button>
+                    }
+
+                </div>
+                ownercount++;
+            }
+        }
+    }
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('.owns-grp-slct').unbind().change(function () {
+            //wrapper-owns-iden row owns-grp-
+            let id = $('.owns-grp-slct option:selected').val();
+            $('.wrapper-owns-iden').hide();
+            $('.owns-grp-' + id).show();
+        });
+
+        $('.own-name-plc').unbind().click(function () {
+            let id = $(this).attr('data-ownId');
+            $('.own-det').hide();
+            $('.own-det-' + id).show();
+            $('.curr-sel').removeClass('curr-sel');
+            $(this).addClass('curr-sel');
+        });
+
+        $('.edt-info-hgjfasd').unbind().click(function () {
+            if (!$(this).hasClass('taxi')) {
+                $(this).addClass('taxi');
+                let prnt = $(this).closest('.own-det');
+                $(prnt).find('.own-inf-edtbl').removeClass('no-disp').addClass("animate__animated animate__fadeInUp animate__slow");
+                $(prnt).find('.own-inf').addClass('no-disp');
+            }
+            else {
+                $(this).removeClass('taxi');
+                let prnt = $(this).closest('.own-det');
+                $(prnt).find('.own-inf-edtbl').addClass('no-disp').removeClass("animate__animated animate__fadeInUp animate__slow");
+                $(prnt).find('.own-inf').removeClass('no-disp');
+            }
+        });
+
+
+        $('.sv-own-info-btn-asygjf').unbind().click(function () {
+            if (!confirm('Are you sure you want to update this customer\'s details?')) {
+                return;
+            }
+
+            //yahan pe server ko hit maarni hai
+            var that = $(this);
+            let prnt = $(this).closest(".own-det");
+            var id = $(this).closest(".own-det").find("#Id").val();
+            var plotowndata = {
+                Id: id,
+                Name: $(prnt).find("#Name").val(),
+                Father_Husband: $(prnt).find("#Father_Husband").val(),
+                Postal_Address: $(prnt).find("#Postal_Address").val(),
+                Residential_Address: $(prnt).find("#Residential_Address").val(),
+                Phone_Office: (prnt).find("#Phone_Office").val(),
+                Residential: $(prnt).find("#Residential").val(),
+                Mobile_1: $(prnt).find("#Mobile_1").val(),
+                Mobile_2: $(prnt).find("#Mobile_2").val(),
+                Email: $(prnt).find("#Email").val(),
+                Occupation: $(prnt).find("#Occupation").val(),
+                Nationality: $(prnt).find("#Nationality").val(),
+                Date_Of_Birth: $(prnt).find("#Date_Of_Birth").val(),
+                CNIC_NICOP: $(prnt).find("#CNIC_NICOP").val(),
+                Ownership_DateTime: $(prnt).find("#Ownership_DateTime").val(),
+                Nominee_Name: $(prnt).find("#Nominee_Name").val(),
+                Nominee_Relation: $(prnt).find("#Nominee_Relation").val(),
+                Nominee_Address: $(prnt).find("#Nominee_Address").val(),
+                Nominee_CNIC_NICOP: $(prnt).find("#Nominee_CNIC_NICOP").val(),
+                DateTime: $(prnt).find("#Ownership_DateTime").val(),
+                Ownership_Status: $(prnt).find("#Ownership_Status").val(),
+                Plot_Id: $("#plt-id").val(),
+                IsFiler: false//$(that).closest(".own-det").find('.IsFiler').is(':checked'),
+            }
+            if (plotowndata.Name == null || plotowndata.Name.trim() == "") {
+                alert("Please Enter Name");
+                return false;
+            }
+            else if (plotowndata.CNIC_NICOP == null || plotowndata.CNIC_NICOP.trim() == "") {
+                alert("Please CNIC");
+                return false;
+            }
+            else if (plotowndata.Ownership_DateTime == null || plotowndata.Ownership_DateTime.trim() == "") {
+                alert("Ownership Date");
+                return false;
+            }
+
+            ShowFullScreenLoader();
+            $.ajax({
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                url: '/Plots/UpdateOwnerResult/',
+                data: JSON.stringify(plotowndata),
+                success: function (data) {
+                    if (data) {
+                        alert("Owner data has been updated");
+                        window.location.reload(true);
+                    }
+                    else {
+                        alert('Failed to save owner details.')
+                    }
+
+                    HideFullScreenLoader();
+                },
+                error: function (data) {
+                    HideFullScreenLoader();
+                }
+            });
+        });
+
+        $('.add-new-own-inf-fsdjhg').unbind().click(function () {
+            showRightPopup('Add Another Owner');
+            let grpTag = $(this).attr('data-grp');
+            SASLoad($('.right-pop-body'));
+            $('.right-pop-body').load('/Plots/NewPlotOwner', { grp: grpTag }, function () {
+                SASUnLoad($('.right-pop-body'));
+            });
+        });
+    });
+</script>

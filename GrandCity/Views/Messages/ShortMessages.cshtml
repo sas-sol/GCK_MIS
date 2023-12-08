@@ -1,0 +1,52 @@
+﻿@model  IEnumerable<MeherEstateDevelopers.Models.Sp_Get_Messages_Short_Result>
+<li class="notifications dropdown">
+    @*<span class="counter bgc-blue">3</span>*@
+    <a href="" class="dropdown-toggle no-after" data-toggle="dropdown">
+        <i class="ti-email"></i>
+    </a>
+    <ul class="dropdown-menu">
+        <li class="pX-20 pY-15 bdB"><i class="ti-email pR-10"></i> <span class="fsz-sm fw-600 c-grey-900">Messages</span></li>
+        <li>
+            <ul class="ovY-a pos-r scrollable lis-n p-0 m-0 fsz-sm">
+                @{
+                    if (Model.Any())
+                    {
+                        foreach (var item in Model)
+                        {
+                            <li>
+                                <a href="" class="peers fxw-nw td-n p-20 bdB c-grey-800 cH-blue bgcH-grey-100">
+                                    <div class="peer mR-15"><img class="w-3r bdrs-50p" src="https://randomuser.me/api/portraits/men/1.jpg" alt=""></div>
+                                    <div class="peer peer-greed">
+                                        <div>
+                                            <div class="peers jc-sb fxw-nw mB-5">
+                                                <div class="peer">
+                                                    <p class="fw-500 mB-0">@item.Name</p>
+                                                </div>
+                                                <div class="peer">
+                                                    <small class="fsz-xs">@item.DateTime</small>
+                                                </div>
+                                            </div>
+                                            <span class="c-grey-600 fsz-sm">@item.Message</span>
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+                        }
+
+                    }
+                    else
+                    {
+                        <li class="pX-20 pY-15 ta-c bdT">
+                            <span>
+                                <a href="javascript:void(0);" class="c-grey-600 cH-blue fsz-sm td-n">You Got No Messages</a>
+                            </span>
+                        </li>
+                    }
+                }
+            </ul>
+        </li>
+        <li class="pX-20 pY-15 ta-c bdT"><span><a href="" class="c-grey-600 cH-blue fsz-sm td-n">View All Messages <i class="fs-xs ti-angle-right mL-10"></i></a></span></li>
+    </ul>
+</li>
+
+

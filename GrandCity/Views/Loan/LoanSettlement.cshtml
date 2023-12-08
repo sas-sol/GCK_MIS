@@ -1,0 +1,48 @@
+﻿@{
+    if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+}
+
+<div class="col-md-12 bgc-white p-20">
+    <div class="row" style="justify-content:center;">
+        <h5>Loan Settlement</h5>
+    </div>
+    <hr />
+    <div class="row mt-md-5">
+        <div class="col-md-2">
+            <b>Select Employee</b>
+        </div>
+        <div class="col-md-5">
+            @Html.DropDownList("empsList", null, "Choose..", new { @class = "form-control emps-slcxn-lst", required = "" })
+        </div>
+        <div class="col-md-2">
+            <button class="btn btn-primary srch-emp-lns-inof-btn"><i class="fa fa-search"></i>&nbsp;Search</button>
+        </div>
+    </div>
+
+    <div class="col-md-12 mt-md-3 emps-active-loan-info-area">
+
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('.srch-emp-lns-inof-btn').unbind().click(function () {
+            var slctdEmp = $('#empsList option:selected').val();
+            $('.emps-active-loan-info-area').empty();
+            SASLoad($('.emps-active-loan-info-area'));
+            $('.emps-active-loan-info-area').load('/Loan/ActiveLoans/', { empId: slctdEmp }, function () {
+                SASUnLoad($('.emps-active-loan-info-area'));
+            });
+
+        });
+
+        $('#empsList').select2();
+    });
+</script>

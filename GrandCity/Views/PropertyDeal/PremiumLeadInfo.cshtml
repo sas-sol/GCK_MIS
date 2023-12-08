@@ -1,0 +1,155 @@
+﻿@model MeherEstateDevelopers.Models.Property_Deal_Parties
+@using (Html.BeginForm("PremiumLeadInfoUpdate", "PropertyDeal", FormMethod.Post, new { @id = "up-info-premium", @class = "", role = "form" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(x => x.Id)
+<div class="row">
+    <input type="hidden" id="deal-id" value="@Model.Deal_Id" />
+    <div class="form-group col-md-12">
+        <h5 id="buy-sel">@Model.Type Information</h5>
+    </div>
+    <div class="form-group col-md-3">
+        <label>Name</label>
+        <input class="form-control text-box single-line" id="Name" name="Name" required="" type="text" value="@Model.Name">
+    </div>
+    <div class="form-group col-md-3">
+        <label>Father Name</label>
+        <input class="form-control text-box single-line" id="Father_Name" name="Father_Name" required="" type="text" value="@Model.Father_Name">
+    </div>
+    <div class="form-group col-md-3">
+        <label>Mobile</label>
+        <input class="form-control text-box single-line" id="Mobile" name="Mobile" required="" type="text" value="@Model.Mobile">
+    </div>
+    <div class="form-group col-md-3">
+        <label>Address</label>
+        <input class="form-control text-box single-line" id="Address" name="Address" type="text" value="@Model.Address">
+    </div>
+    @if (Model.Status == MeherEstateDevelopers.Models.LeadsStatus.Close.ToString())
+    {
+        <div class="">
+            <label>Status</label>
+            <h5 class="bgc-green-50">@Model.Status</h5>
+        </div>
+    }
+</div>
+    <hr />
+    <div class="row" id="pay-btns">
+        @if (Model.Type == "Seller")
+        {
+            <div class="form-group col-md-2">
+                <button type="button" class="btn btn-primary v-r" id="Voucher">Request Voucher</button>
+            </div>
+        }
+        else
+        {
+            <div class="form-group col-md-2">
+                <button type="button" class="btn btn-danger v-r" id="Receipt">Request Receipt</button>
+            </div>
+            if (ViewBag.Type == "New_Lead")
+            {
+                <div class="form-group col-md-2">
+                    <button type="button" class="btn btn-primary v-r" id="Voucher">Request Voucher</button>
+                </div>
+            }
+        }
+    </div>
+    <input type="hidden" id="v-r-id" />
+    <div class="row" id="pay-voc" style="display:none">
+        <div class="form-group col-md-4">
+            <label><span id="type"></span> Amount</label>
+            <input class="form-control coma" placeholder="250,000" id="amt-t-p" required><input type="hidden" id="Amount" class="amt" required>
+        </div>
+        <div class="form-group col-md-8 des">
+            <label>Description</label>
+            <input id="desc" class="form-control" name="Description" placeholder="Description Written on Payment Voucher" required>
+        </div>
+    </div>
+}
+<script>
+    $(function () {
+        $('.modal-footer').append('<button class="btn btn-primary" id="up-prem-par" type="button">Update Information</button>');
+        $('.modal-footer').append('<button class="btn btn-info" style="display:none" id="v-r-btn" type="button">Request</button>');
+        $(".modal-header").text("Update Information");
+    });
+    $(document).on("click", "#up-prem-par", function (e) {
+        e.preventDefault();
+        $.ajax({
+            type: "POST",
+            url: $('#up-info-premium').attr("action"),
+            data: $('#up-info-premium').serialize(),
+            success: function (data) {
+                if (data.Status) {
+                    alert(data.Msg);
+                    window.location.reload();
+                }
+                else {
+                    alert(data.Msg);
+                }
+            },
+            error: function (data) {
+            }
+        });
+    });
+    $(document).on("click", ".v-r", function () {
+        var id = $(this).attr("id");
+        $("#v-r-id").val(id);
+        $("#type").text(id);
+        if (id == "Voucher") {
+            $("#amt-t-p").prop("readonly", false);
+            $(".des").show();
+        }
+        else {
+            $("#amt-t-p").prop("readonly", false);
+            $(".des").hide();
+        }
+        $("#pay-voc, #v-r-btn").show();
+        $("#up-prem-par").hide();
+    });
+    $('#v-r-btn').click(function () {
+        var type = $("#v-r-id").val();
+        var amount = parseInt($("#Amount").val());
+        var desc = $("#desc").val();
+        var del_id = $("#deal-id").val();
+        var part_id = $("#Id").val();
+        //if (de_typ == "Resale" || de_typ == "New_Lead") {
+        //    if (type == "Voucher") {
+        //        if (amount <= Rece_amt) {
+        //            if (amount > remain) {
+        //                alert("You Cant Request Voucher More than received Amount");
+        //                return false;
+        //            }
+        //        }
+        //        else {
+        //            alert("You Cant Request Voucher More than received Amount");
+        //            return false;
+        //        }
+        //    }
+        //    else if (type == "Receipt") {
+        //        var rem = offeramt - Rece_amt;
+        //        if (amount > rem) {
+        //            alert("You Cant Request Receipt More than Deal Amount");
+        //            return false;
+        //        }
+        //    }
+
+        //}
+        if (confirm("Are you sure you want to request " + type)) {
+            $.ajax({
+                type: "POST",
+                url: '/PropertyDeal/PremiumLeadPaymentRequest/',
+                data: { Type: type, Amount: amount, Description: desc, Deal_Id: del_id, Party_Id: part_id },
+                success: function (data) {
+                    if (data.Status) {
+                        alert(data.Msg)
+                    }
+                    else {
+                        alert("Deal is Closed you can not request a " + type + " Now")
+                    }
+
+                },
+                error: function (data) {
+                }
+            });
+        }
+    });
+</script>

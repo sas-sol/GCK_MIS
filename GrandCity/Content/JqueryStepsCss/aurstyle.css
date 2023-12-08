@@ -1,0 +1,362 @@
+﻿.ui-datepicker {
+    width: 300px;
+    height: auto;
+    margin: 5px auto 0;
+    font: 9pt Arial, sans-serif;
+    background-color: white;
+    -webkit-box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, .5);
+    -moz-box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, .5);
+    box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, .5);
+}
+    .ui-datepicker a {
+        text-decoration: none;
+    }
+    /* DatePicker Table */
+    .ui-datepicker table {
+        width: 100%;
+    }
+.ui-datepicker-header {
+    background-color: white;
+    color: #ffcc00;
+    font-weight: bold;
+    line-height: 30px;
+    border-width: 1px 0 0 0;
+    border-style: solid;
+    border-color: white;
+    font-size: 14pt;
+}
+.ui-datepicker-title {
+    text-align: center;
+}
+.ui-datepicker-prev, .ui-datepicker-next {
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    text-align: center;
+    cursor: pointer;
+    background-image: url('../Images/arrow.png');
+    background-repeat: no-repeat;
+    line-height: 600%;
+    overflow: hidden;
+}
+.ui-datepicker-prev {
+    float: left;
+    background-position: center -30px;
+}
+.ui-datepicker-prev-hover {
+    float: left !important;
+    background-position: center -30px !important;
+    cursor: pointer !important;
+    background-image: url('../Images/arrow1.png') !important;
+}
+.ui-datepicker-next {
+    float: right;
+    background-position: center 0px;
+}
+.ui-datepicker-next-hover {
+    float: right;
+    background-position: center 0px !important;
+    cursor: pointer !important;
+    background-image: url('../Images/arrow1.png') !important;
+}
+.ui-state-hover, .ui-widget-content .ui-state-hover, .ui-widget-header .ui-state-hover, .ui-state-focus, .ui-widget-content .ui-state-focus, .ui-widget-header .ui-state-focus {
+    font-weight: normal !important;
+    color: white !important;
+    background-color: transparent;
+    border: none;
+}
+.ui-datepicker thead {
+    background-color: white;
+}
+.ui-datepicker tr th {
+    text-transform: uppercase;
+    font-size: 10pt;
+    padding: 5px 0;
+    color: pink;
+    background-color: white;
+}
+.ui-datepicker tbody td {
+    padding: 0;
+    border-right: 1px solid white;
+}
+    .ui-datepicker tbody td:last-child {
+        border-right: 0px;
+    }
+.ui-datepicker tbody tr {
+    border-bottom: 1px solid white;
+    font-size: 10pt;
+}
+    .ui-datepicker tbody tr:last-child {
+        border-bottom: 0px;
+    }
+.ui-datepicker td span, .ui-datepicker td a {
+    display: inline-block;
+    font-weight: bold;
+    text-align: center;
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+    color: white;
+    border-radius: 14px;
+}
+.ui-datepicker-calendar .ui-state-default {
+    background: white;
+    border: none;
+    color: white;
+}
+.ui-datepicker-calendar .ui-state-hover {
+    background: #ffcc00;
+    color: white;
+}
+.ui-datepicker-calendar .ui-state-active {
+    background: #ffcc00;
+    color: white;
+    position: relative;
+    margin: -1px;
+    border: 1px solid #ffcc00;
+}
+.ui-datepicker-calendar .ui-state-selected {
+    background: white;
+    color: pink;
+    position: relative;
+    margin: -1px;
+    border-radius: 14px;
+}
+    .ui-datepicker-calendar .ui-state-selected a {
+        background: white;
+        border: none;
+        color: pink;
+        font-weight: bold;
+        font-size: 12pt;
+        border: 2px solid #ffcc00;
+        border-radius: 20px;
+        width: 30px;
+        padding-top: 0px;
+    }
+.ui-datepicker-unselectable .ui-state-default {
+    background: white;
+    color: white;
+    border-color: white;
+}
+.ui-datepicker-calendar td:first-child .ui-state-active {
+    width: 29px;
+    margin-left: 0;
+}
+.ui-datepicker-calendar td:last-child .ui-state-active {
+    width: 29px;
+    margin-right: 0;
+}
+.ui-datepicker-calendar tr:last-child .ui-state-active {
+    height: 29px;
+    margin-bottom: 0;
+}
+.ui-datepicker select.ui-datepicker-month, .ui-datepicker select.ui-datepicker-year {
+    width: 49%;
+    background-color: white;
+    border: none;
+}
+/* FOR HR PROFILLING*/
+.leaveRequisition .createleave {
+    width: 100%;
+    height: 380px;
+    margin-top: 8px;
+}
+.leaveRequisition .remarks .createleave {
+    width: 75%;
+    height: 100px;
+    margin-top: 8px;
+    margin-left: 12%;
+}
+/* Calender design for leave Requisition*/
+.newcal .ui-datepicker {
+    width: 550px !important;
+    height: auto;
+    margin: 5px 0 0 0;
+    font: 9pt Arial, sans-serif;
+    background-color: white;
+    -webkit-box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, .5);
+    -moz-box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, .5);
+    box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, .5);
+}
+.newcal .ui-datepicker-multi .ui-datepicker-group {
+    float: left;
+    margin: 0 8px 0 0;
+    height: 153px;
+    width: 127px;
+}
+.newcal .ui-datepicker a {
+    text-decoration: none;
+}
+/* DatePicker Table */
+.newcal .ui-datepicker table {
+    width: 90%;
+}
+.newcal .ui-datepicker-header {
+    background-color: white;
+    color: #ffcc00;
+    font-weight: bold;
+    line-height: 30px;
+    border-width: 1px 0 0 0;
+    border-style: solid;
+    border-color: white;
+    font-size: 8pt;
+}
+.newcal .ui-datepicker-title {
+    text-align: center;
+}
+.newcal .ui-datepicker-prev, .newcal .ui-datepicker-next {
+    display: none !important;
+}
+.newcal .ui-datepicker-prev {
+    display: none !important;
+}
+.newcal .ui-datepicker-prev-hover {
+    display: none !important;
+}
+.newcal .ui-datepicker .ui-datepicker-title {
+    margin: 0px 0px !important;
+}
+.newcal .ui-datepicker-next {
+    display: none !important;
+}
+.newcal .ui-datepicker-next-hover {
+    display: none !important;
+}
+.newcal .ui-state-hover, .newcal .ui-widget-content .ui-state-hover, .newcal .ui-widget-header .ui-state-hover, .newcal .ui-state-focus, .newcal .ui-widget-content .ui-state-focus, .newcal .ui-widget-header .ui-state-focus {
+    font-weight: normal !important;
+    color: #212121 !important;
+    background-color: transparent;
+    border: none;
+}
+.newcal .ui-datepicker thead {
+    background-color: white;
+}
+.newcal .ui-datepicker tr th {
+    text-transform: uppercase;
+    font-size: 7pt;
+    padding: 0px 0;
+    color: Red;
+    background-color: white;
+}
+.newcal .ui-datepicker tbody td {
+    padding: 0;
+    border-right: 1px solid white;
+}
+    .newcal .ui-datepicker tbody td:last-child {
+        border-right: 0px;
+    }
+.newcal .ui-datepicker tbody tr {
+    border-bottom: 1px solid white;
+    font-size: 8pt;
+}
+    .newcal .ui-datepicker tbody tr:last-child {
+        border-bottom: 0px;
+    }
+.newcal .ui-datepicker td span, .newcal .ui-datepicker td a {
+    display: inline-block;
+    font-weight: bold;
+    text-align: center;
+    width: 15px;
+    height: 15px;
+    color: white;
+    border-radius: 14px;
+    padding: 0 0 0 0;
+    margin: 3px 0 0 0;
+    line-height: 15px;
+}
+.newcal .ui-datepicker-calendar .ui-state-default {
+    background: white;
+    border: none;
+    color: black;
+}
+.newcal .ui-datepicker-calendar .ui-state-hover {
+    background: #00ffff !important;
+    color: white;
+}
+.newcal .ui-datepicker-calendar .ui-state-active {
+    background: #00ffff;
+    color: white;
+    position: relative;
+    margin: -1px;
+    border: 1px solid #ffcc00;
+}
+.newcal .ui-datepicker-calendar .ui-state-selected {
+    background: white;
+    color: pink;
+    position: relative;
+    margin: -1px;
+    border-radius: 14px;
+}
+    .newcal .ui-datepicker-calendar .ui-state-selected a {
+        background: white;
+        border: none;
+        color: #eddede;
+        font-weight: bold;
+        font-size: 7pt;
+        border: 1px solid red;
+        border-radius: 20px;
+        width: 15px;
+        padding-top: 0px;
+    }
+        .newcal .ui-datepicker-calendar .ui-state-selectedAL a {
+        background: white;
+        border: none;
+        color: white;
+        font-weight: bold;
+        font-size: 7pt;
+        border: 1px solid green;
+        border-radius: 20px;
+        width: 15px;
+        padding-top: 0px;
+    }
+.newcal .ui-datepicker-calendar .ui-state-selectedCL a {
+    background: white;
+    border: none;
+    color: blue;
+    font-weight: bold;
+    font-size: 7pt;
+    border: 1px solid #ff6600;
+    border-radius: 20px;
+    width: 15px;
+    padding-top: 0px;
+}
+.newcal .ui-datepicker-calendar .ui-state-selected1 a {
+    background: white;
+    border: none;
+    color: #eddede;
+    font-weight: bold;
+    font-size: 7pt;
+    border: 1px solid blue;
+    border-radius: 20px;
+    width: 15px;
+    padding-top: 0px;
+}
+.newcal .ui-datepicker-unselectable .ui-state-default {
+    background: white;
+    color: white;
+    border-color: white;
+}
+.newcal .ui-datepicker-calendar td:first-child .ui-state-active {
+    width: 15px;
+    margin-left: 0;
+}
+.newcal .ui-datepicker-calendar td:last-child .ui-state-active {
+    width: 15px;
+    margin-right: 0;
+}
+.newcal .ui-datepicker-calendar tr:last-child .ui-state-active {
+    height: 29px;
+    margin-bottom: 0;
+}
+.newcal .ui-datepicker select.ui-datepicker-month, .newcal .ui-datepicker select.ui-datepicker-year {
+    width: 49%;
+    background-color: white;
+    border: none;
+}
+.ui-state-disabled .ui-state-default {
+    color: gray;
+    background-color: white;
+}
+/***/
+
+/******************************* discussion board design *******************************/

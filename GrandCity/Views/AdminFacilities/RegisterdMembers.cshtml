@@ -1,0 +1,43 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.RealEstate_Projects>
+
+@{ Layout = "~/Views/Shared/_StaffLayout.cshtml"; }
+<style>
+    ul {
+        list-style-type: none;
+    }
+</style>
+
+<div class="row">
+
+    <div class="form-row col-3">
+        <h5>Project</h5>
+        <div class="form-row col-md-12">
+            <ul class="">
+                @{
+                    var sr = 1;
+                    foreach (var item in Model)
+                    {
+                        <li id="@item.Id" class="pointer memb-seg" data-scnam="@item.Project_Name"><h6 class="c-grey-900">@sr &nbsp;&nbsp; @item.Project_Name</h6> </li>
+                        sr++;
+                    }
+                }
+
+            </ul>
+        </div>
+    </div>
+
+    <div class="form-row col-5">
+        <div class="form-row">
+            <div id="seg-mem" class="col-md-12">
+            </div>
+        </div>
+    </div>
+
+    <div class="form-row col-4">
+        <div class="form-row ">
+            <div id="m-dtl" class="col-md-12">
+                <h5>Hellow</h5>
+            </div>
+        </div>
+    </div>
+</div>

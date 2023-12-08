@@ -1,0 +1,623 @@
+﻿
+@model IEnumerable<Management_Information_System.Models.Sp_Get_JournalEntriesPayable_Parameter_Result>
+@{ if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+    var groupid = Model.Select(x => x.GroupId).FirstOrDefault();
+    var amount = Model.Select(x => x).FirstOrDefault();
+    var Paid_Amt = Model.Select(x => x.RecordedBy_Name).FirstOrDefault();
+    var Remaing = Model.Select(x => x.RecordedBy_Name).FirstOrDefault();
+    var rec_name = Model.Select(x => x.RecordedBy_Name).FirstOrDefault();
+    var rec_date = Model.Select(x => x.RecordedBy_Date).FirstOrDefault();
+    var Supvise_by = Model.Select(x => x.Supvise_by).FirstOrDefault();
+    var Sup_Name = Model.Select(x => x.Supviseby_Name).FirstOrDefault();
+    var Sup_Date = Model.Select(x => x.Supviseby_Date).FirstOrDefault();
+    var Total_Amt = ViewBag.Remaining;
+}
+<script>
+        var AccHead = @Html.Raw(Json.Encode(ViewBag.Type));
+</script>
+<div class=" bgc-white bd bdrs-3 p-20 mB-20 row" style="display:none;">
+    <div class="col-md-12">
+        <div class="row">
+            <h4 style="width:100%; text-align:center">Journal Entries</h4>
+            <input type="hidden" value="@ViewBag.TransactionId" id="t-id" />
+            <input type="hidden" value="@groupid" id="g-id" />
+            <input type="hidden" value="@Total_Amt" id="t-amt" />
+            <input type="hidden" value="@ViewBag.Head" id="head-id" />
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel-group" id="accordion">
+                    @foreach (var g in Model.GroupBy(x => x.Line))
+                    {
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <div class="own-det">
+                                    @foreach (var item in g.GroupBy(x => new { x.Naration, x.Qty, x.UOM, x.Rate }))
+                                    {
+                                        <div class="form-row">
+                                            <div class="form-group col-md-4">
+                                                <label>Description</label>
+                                                <input type="text" class="form-control" value="@item.Key.Naration" readonly>
+                                            </div>
+                                            <div class="form-group col-md-1">
+                                                <label>Quantity</label>
+                                                <input type="text" class="form-control" value="@string.Format("{0:n0}", item.Key.Qty)" readonly>
+                                            </div>
+                                            <div class="form-group col-md-1">
+                                                <label>UOM</label>
+                                                <input type="text" class="form-control" value="@item.Key.UOM" name="Mobile_1" readonly>
+                                            </div>
+                                            <div class="form-group col-md-1">
+                                                <label>Rate</label>
+                                                <input type="text" class="form-control" value="@string.Format("{0:n0}", item.Key.Rate)" readonly>
+                                            </div>
+                                            <div class="form-group col-md-2">
+                                                <label>Amount</label>
+                                                <input type="text" class="form-control" value="@string.Format("{0:n0}", item.Sum(x=> x.Credit))" readonly>
+                                            </div>
+                                            <div class="form-group col-md-3">
+                                                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#@g.Key" aria-expanded="true"></a>
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                            <div id="@g.Key" class="panel-collapse collapse in" aria-expanded="true" style="">
+                                <div class="panel-body">
+                                    <div class="form-row">
+                                        <div class="form-group col-md-4"></div>
+                                        <div class="form-group col-md-3"><h6>Head</h6></div>
+                                        <div class="form-group col-md-1"><h6>Debit</h6></div>
+                                        <div class="form-group col-md-1"><h6>Credit</h6></div>
+                                    </div>
+                                    @foreach (var item1 in g)
+                                    {
+                                        <div class="own-det">
+                                            <div class="form-row">
+                                                <div class="form-group col-md-4"></div>
+                                                <div class="form-group col-md-3">
+                                                    <input type="text" class="form-control" value="@item1.Head" readonly>
+                                                </div>
+                                                <div class="form-group col-md-1">
+                                                    <input type="text" class="form-control" value="@string.Format("{0:n0}", item1.Debit)" readonly>
+                                                </div>
+                                                <div class="form-group col-md-1">
+                                                    <input type="text" class="form-control" value="@string.Format("{0:n0}", item1.Credit)" readonly>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-md-3">
+                <h4 style="padding-top:1%;float:right">Total Amount : @string.Format("{0:n0}", ViewBag.Amount)</h4>
+            </div>
+            <div class="form-group col-md-3">
+                <h4 style="padding-top:1%;float:right">Paid : @string.Format("{0:n0}", ViewBag.Paid_Amount)</h4>
+            </div>
+            <div class="form-group col-md-3">
+                <h4 style="padding-top:1%;float:right">Remaining : @string.Format("{0:n0}", ViewBag.Remaining)</h4>
+            </div>
+        </div>
+        <hr />
+        <h5>Supervised By: @Sup_Name at @string.Format("{0:dd-MMM-yyyy hh:mm tt}", Sup_Date)</h5>
+        @if (User.IsInRole("Vendor Payment"))
+        {
+            if (ViewBag.Remaining > 0)
+            {
+                <div class="form-row" id="sel1">
+                    <div class="form-group col-md-2">
+                        <label>Cash / Bank</label>
+                        <select class="form-control paytypesel" name="PaymentType" id="paymenttype" required>
+                            <option value="Cash">Cash</option>
+                            <option value="BankDraft">Bank Draft</option>
+                            <option value="Cheque">Cheque</option>
+                            <option value="PayOrder">Pay Order</option>
+                            <option value="Online_Cash">Online - Cash</option>
+                            <option value="Online_Cheque">Online - Cheque</option>
+                            <option value="Online_Payorder">Online - PayOrder</option>
+                            <option value="Online_Bankdraft">Online - BankDraft</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label>Amount</label>
+                        <input class="form-control coma" placeholder="250,000" value="" required>
+                        <input type="hidden" id="Amount" name="Amount" class="amt" value="" required>
+                    </div>
+                    <div class="form-group col-md-2 paymentotherinfo">
+                        <label id="paytypelabel">-</label>
+                        <input type="text" class="form-control" id="inst-no" name="Cbp_No" placeholder="" disabled required>
+                    </div>
+                    <div class="form-group col-md-2 paymentotherinfo">
+                        <label>Date</label>
+                        <input type="text" class="form-control" id="cbp-date" name="Cbp_date" data-provide="datepicker" placeholder="mm/dd/yyyy" disabled required>
+                    </div>
+                    <div class="form-group col-md-2 paymentotherinfo">
+                        <label>Bank</label>
+                        @Html.DropDownList("Bank", null, "Choose..", new { id = "bank", @class = "form-control", disabled = "" })
+                    </div>
+                    <div class="form-group col-md-2 paymentotherinfo">
+                        <label>Branch </label>
+                        <input type="text" class="form-control" id="Branch" name="Branch" placeholder="Mall Rd" disabled required>
+                    </div>
+                    @if (!User.IsInRole("ReadOnly"))
+                    {
+                        <div><button class="btn btn-primary pay-vouc" style="margin-top:29px">Pay this Payment</button></div>
+                    }
+                </div>
+            }
+        }
+    </div>
+</div>
+
+<div class="col-md-12 bgc-white p-20">
+    <div class="row">
+        <div class="acc-pg-head col-md-12">
+            <div class="col-md-4 acc-pg-title"><h4>Invoice Receivable</h4></div>
+        </div>
+    </div>
+    <div class="row col-md-12" style="margin-top:4px">
+        @*<div class="col-md-3">
+                <select class="form-control liabilities-slcxn"></select>
+            </div>*@
+
+        <div class="col-md-3" style="display:none">
+            <select class="form-control vendor-eml"></select>
+        </div>
+        <div class="col-md-3">
+            <input type="text" class="form-control" id="HeadName" value="@ViewBag.HeadName" readonly />
+        </div>
+
+        <div class="col-md-3">
+            <select class="form-control bank-heads-slcxn"></select>
+        </div>
+        <div class="col-md-3"></div>
+        <div class="col-md-3">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="row">
+                        <label class="big-head-info-lbl">AMOUNT DUE</label>
+                    </div>
+                    <div class="row">
+                        <label class="pmnt-big-font">Rs. @String.Format("{0:n0}", ViewBag.TotalRemaining)</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row paychqdetails">
+        <div class="form-group col-md-2">
+            <label>Instrument Type</label>
+            <select class="form-control vpd-paytype-select" id="cah-chq-bak" name="PaymentType">
+                <option value="BankDraft">Bank Draft</option>
+                <option value="Cheque">Cheque</option>
+                <option value="PayOrder">Pay Order</option>
+                <option value="Online_Cheque">Online - Cheque</option>
+                <option value="Online_Payorder">Online - PayOrder</option>
+                <option value="Online_Bankdraft">Online - BankDraft</option>
+            </select>
+        </div>
+        <div class="form-group col-md-3 vpdpaymentinfo">
+            <label id="vpd-paytypelabel">Bank Draft No.</label>
+            <input type="text" class="form-control" id="vpd-paymenttype" name="PayChqNo" placeholder="">
+        </div>
+        <div class="form-group col-md-2 vpdpaymentinfo">
+            <label>Branch </label>
+            <input type="text" class="form-control" id="vpd_Branch" name="Branch" placeholder="Mall Rd">
+        </div>
+        <div class="form-group col-md-2 vpdpaymentinfo">
+            <label>Date</label>
+            <input type="text" class="form-control" data-provide="datepicker" id="vpd_Ch_bk_Pay_Date" name="Ch_bk_Pay_Date" placeholder="mm/dd/yyyy" required>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="row">
+                <div class="col-md-5 form-group">
+                    <label>Mailing address</label>
+                    <textarea class="form-control" id="mail-address" rows="5" style="resize:none;"></textarea>
+                </div>
+                <div class="col-md-5 form-group">
+                    <label>Amount Paid By</label>
+                    <input type="text" class="form-control" id="amount-paid-by" />
+                    @*<input type="text" class="form-control payable-payment-date" data-provide="datepicker" placeholder="MM/DD/YYYY" />*@
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            @*<div class="col-md-4 form-group float-md-right">
+                    <label>Ref no.</label>
+                    <input type="text" class="form-control chequepono" value="Chq.1032" />
+                </div>*@
+            <div class="clearfix"></div>
+            <div class="col-md-4 form-group float-md-right" style="margin-top:15%;">
+                <label>Amount</label>
+                <input type="text" class="form-control coma" id="total-payable-amount" value="00" />@*@String.Format("{0:n0}", ViewBag.Amount)*@
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+
+    <div class="row">
+        <h5>Outstanding Transactions</h5>
+        <table class="table table-borderless">
+            <thead>
+                <tr>
+                    <th><input type="checkbox" id="cb-all-payable" /></th>
+                    <th>DESCRIPTION</th>
+                    <th>DUE DATE</th>
+                    <th>ORIGINAL AMOUNT</th>
+                    <th>RECEIVED AMOUNT</th>
+                    <th>REMAINING</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr data-grpid="@item.GroupId" data-head="@item.Head_Id" data-amount="@ViewBag.Remaining">
+                        <td class="ispayable"><input type="checkbox" class="cb-item-payable" /></td>
+                        <td class="narration">@item.Naration</td>
+                        <td class="due-date">@item.RecordedBy_Date.ToString("MMMM dd, yyyy")</td>
+                        <td class="original-amount">@String.Format("{0:n0}", ViewBag.Amount)</td>
+                        <td class="open-amount">@String.Format("{0:n0}", ViewBag.Paid_Amount)</td>
+                        <td class="payment">@String.Format("{0:n0}", ViewBag.Remaining)</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <div class="col-md-12">
+            <div class="col-md-6 float-right" style="text-align:right;">
+                @*<div class="row">
+                        <div class="col-md-8">
+                            <b>Total (EUR)</b>
+                        </div>
+                        <div class="col-md-4">
+                            <label>117.80</label>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-8">
+                            <b>Total (INR)</b>
+                        </div>
+                        <div class="col-md-4">
+                            <label>9136.53</label>
+                        </div>
+                    </div>*@
+
+                <div class="row">
+                    <div class="col-md-8">
+                        <b>Amount to Apply</b>
+                    </div>
+                    <div class="col-md-4">
+                        <label id="amount-to-apply">0.00</label>@*@String.Format("{0:n0}", ViewBag.Amount)*@
+                    </div>
+                </div>
+
+                @*<div class="row">
+                        <div class="col-md-8">
+                            <b>Amount to Credit</b>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="coma">00</label>
+                        </div>
+                    </div>*@
+
+                @*<div class="row float-right">
+                        <button class="btn btn-outline-primary">Clear Payments</button>
+                    </div>*@
+            </div>
+
+            <div class="clearfix"></div>
+        </div>
+    </div>
+
+    <div class="row mt-md-5">
+        @*Buttons area*@
+
+        <div class="col-md-2">
+            @*clear button*@
+        </div>
+        <div class="col-md-7"></div>
+        <div class="col-md-3">
+            <div class="btn-group float-right">
+                <button type="button" class="btn btn-primary rec-rec-entry">Receive Now</button>
+                @*<button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <span class="sr-only">Toggle Dropdown</span>
+                    </button>
+                    <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(64px, 34px, 0px); top: 0px; left: 0px; will-change: transform;">
+                        <a class="dropdown-item" href="#">Action</a> <a class="dropdown-item" href="#">Another action</a>
+                        <a class="dropdown-item" href="#">Something else here</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="#">Separated link</a>
+                    </div>*@
+            </div>
+        </div>
+
+        <div class="clearfix"></div>
+        @*<div class="col-md-1"></div>*@
+    </div>
+</div>
+
+
+<style>
+    .paymentotherinfo {
+        display: none;
+    }
+
+    .acc-pg-head {
+        background-color: #466a93;
+        color: white;
+    }
+
+    .pmnt-big-font {
+        font-size: 40px;
+        font-weight: bolder;
+        color: #000;
+        text-align: right;
+        width: 100%;
+    }
+
+    .big-head-info-lbl {
+        color: #c2c3c7;
+        font-size: 13px;
+        text-align: right;
+        width: 100%;
+        margin-bottom: 0px;
+    }
+</style>
+
+<script>
+    $(document).ready(function () {
+        $('#cb-all-payable').prop('checked', true);
+        $('#cb-all-payable').trigger('change');
+        $('.paychqdetails').hide();
+        $('.vendor-eml').select2({
+            //dropdownParent: $('#Modal'),
+            placeholder: "Choose a Payee",
+            ajax: {
+                url: '/AccountHeads/GetHeadLiabilities/',
+                dataType: 'json',
+                params: {
+                    contentType: 'application/json; charset=utf-8'
+                },
+                quietMillis: 100,
+                data: function (params) {
+                    return {
+                        q: params.term// search term
+                    };
+                },
+                processResults: function (data) {
+                    return {
+                        results: $.map(data.items, function (item) {
+                            return {
+
+                                text: item.Parent,
+                                children: [{
+                                    id: item.id,
+                                    text: item.text + ' - ' + item.head
+                                }]
+                            }
+                        })
+                    };
+                }
+            }
+        });
+        $('.bank-heads-slcxn').select2({
+            //dropdownParent: $('#Modal'),
+            placeholder: "Choose Account",
+            ajax: {
+                url: '/AccountHeads/GetHeadCashBanks/',
+                dataType: 'json',
+                params: {
+                    contentType: 'application/json; charset=utf-8'
+                },
+                quietMillis: 100,
+                data: function (params) {
+                    return {
+                        q: params.term// search term
+                    };
+                },
+                processResults: function (data) {
+                    return {
+                        results: $.map(data.items, function (item) {
+                            return {
+
+                                text: item.Parent,
+                                children: [{
+                                    id: item.id,
+                                    text: item.text + ' - ' + item.head
+                                }]
+                            }
+                        })
+                    };
+                }
+            }
+        });
+    });
+
+    $('.vendor-eml').change(function () {
+        $.ajax({
+            type: "POST",
+            url: '/GeneralEntry/GetPayableBalance/',
+            data: { HeadId: $('.vendor-eml').val() },
+            success: function (data) {
+                $('#pmnt-big-font').text('Rs. ' + data);
+            },
+            error: function () {
+            }
+        });
+    });
+    $('#total-payable-amount').change(function () {
+        var payableAmnt = RemoveComma($('#total-payable-amount').val());
+        if (payableAmnt > @ViewBag.Remaining) {
+            alert("Amount cannot exceed the total remiaining amount");
+            $(this).val(@ViewBag.Remaining);
+            $(this).trigger('keyup');
+        }
+        $('#amount-to-apply').text($(this).val());
+    });
+    $('#cb-all-payable').change(function () {
+        if ($(this).is(':checked')) {
+            $('.cb-item-payable').prop('checked', true);
+        }
+        else {
+            $('.cb-item-payable').prop('checked', false);
+        }
+        var payment = 0.0;
+        $('.cb-item-payable').each(function () {
+            if ($(this).is(':checked')) {
+                payment += parseFloat(RemoveComma($(this).closest('tr').attr('data-amount')));
+            }
+        });
+        $('#total-payable-amount').val(payment);
+        $('#total-payable-amount').trigger('keyup');
+        $('#amount-to-apply').text(payment.toLocaleString());
+    });
+    $('.cb-item-payable').change(function () {
+        var payment = 0.0;
+        $('.cb-item-payable').each(function () {
+            if ($(this).is(':checked')) {
+                payment += parseFloat(RemoveComma($(this).closest('tr').attr('data-amount')));
+            }
+        });
+        $('#total-payable-amount').val(payment);
+        $('#total-payable-amount').trigger('keyup');
+        $('#amount-to-apply').text(payment.toLocaleString());
+    });
+    $('.rec-rec-entry').click(function () {
+        //var payee_name = "";
+        //var payee_id = $('.vendor-eml option:selected').val();
+        //if (payee_id != "" && payee_id != null) {
+        //    payee_name = $('.vendor-eml option:selected').text();
+        //}
+        //else {
+        //    alert("Please select Payee Account");
+        //    return false;
+        //}
+        var billcount = 0;
+        $('.cb-item-payable').each(function () {
+            if ($(this).is(':checked')) {
+                billcount++;
+            }
+        });
+        if (billcount <= 0) {
+            alert("Please select Invoice(s) to receive Payment");
+            return false;
+        }
+        var accountname = "";
+        var accountId = $('.bank-heads-slcxn option:selected').val();
+        if (accountId == "" || accountId == null) {
+            alert("Please select Receiving Account");
+            return false;
+        }
+        else {
+            accountname = $('.bank-heads-slcxn option:selected').text();
+        }
+        var mailAddr = $('#mail-address').val();
+        var paydate = $('.payable-payment-date').val();
+        //if (paydate == "" || paydate == null) {
+        //    alert("Please Select Payment Date");
+        //    return false;
+        //}
+        var amountreceivedby = $('#amount-paid-by').val();
+        if (amountreceivedby == null) {
+            alert("Please Enter Receiver's Name");
+            return false;
+        }
+        var instType = $('#cah-chq-bak option:selected').val();
+        var instrumentNo = $('#vpd-paymenttype').val();
+        var paychqDate = $('#vpd_Ch_bk_Pay_Date').val();
+        var branch = $('#vpd_Branch').val();
+        var payableAmnt = RemoveComma($('#total-payable-amount').val());
+        if (payableAmnt == 0 || payableAmnt == null) {
+            alert("Please select items to Pay");
+            return false;
+        }
+        var allpayables = [];
+        $('.cb-item-payable').each(function () {
+            var payableitems = { HeadId: "", GroupId: "", Narration: "" };
+            if ($(this).is(':checked')) {
+                allpayables.push({
+                    HeadId: $(this).closest('tr').attr('data-head'),
+                    GroupId: $(this).closest('tr').attr('data-grpid'),
+                    Narration: $(this).closest('tr').find('.narration').text(),
+                });
+            }
+        });
+        var conf = confirm("Are you Sure You want to Add this Receivable Entry")
+        if (conf) {
+            $.ajax({
+                type: "POST",
+                url: '/Procurement/AddNewReceivable/',
+                data: { vpi: allpayables, payAccId: accountId, receivedBy: amountreceivedby, instNo: instrumentNo, instDate: paychqDate, branch: branch, payType: instType, Amount: payableAmnt },
+                success: function (data) {
+                    if (data.Status) {
+                        alert(data.Msg);
+                        window.close();
+                        window.open("/Receipts/InvoiceReceipt?Id=" + data.VoucherId + "&&Token=" + data.Token, '_blank');
+                    }
+                    else {
+                        alert(data.Msg);
+                    }
+                },
+                error: function () {
+                    alert("Error Occured");
+                    $('#gen-rec').attr("disabled", false);
+                }
+            });
+        }
+    });
+    $(document).on("change", ".vpd-paytype-select", function () {
+        var res = $(this).val();
+        var text = $("option:selected", this).text();
+        $(" .vpdpaymentinfo").css("display", "block");
+        $(" .vpdpaymentinfo :input").attr("disabled", false);
+        $("#vpd-paytypelabel").text(text + " No.");
+        $(" #paymenttype").attr("placeholder", text);
+
+
+        //if (res !== "Cash" && res !== "Online") {
+        //    $(" .vpdpaymentinfo").css("display", "block");
+        //    $(" .vpdpaymentinfo :input").attr("disabled", false);
+        //    $("#paytypelabel").text(text + "No.");
+        //    $(" #paymenttype").attr("placeholder", text);
+        //}
+        //else if (res == "Online") {
+        //    $(" .vpdpaymentinfo").css("display", "block");
+        //    $(" .vpdpaymentinfo :input").attr("disabled", false);
+        //    $("#paytypelabel").text("Bank Acc No.");
+        //    $(" #paymenttype").attr("placeholder", "Account No.");
+        //}
+        //else {
+        //    $(" .vpdpaymentinfo").hide();
+        //    $(" .vpdpaymentinfo :input").attr("disabled", true);
+        //}
+    });
+    $('.bank-heads-slcxn').on('change', function (e) {
+        if ($('.bank-heads-slcxn option:selected').text() != '/1/1/3/ - Cash') {
+            $('.paychqdetails').show();
+        }
+        else {
+            $('.paychqdetails').hide();
+        }
+    });
+
+</script>

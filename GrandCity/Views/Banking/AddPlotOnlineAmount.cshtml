@@ -1,0 +1,94 @@
+﻿@model MeherEstateDevelopers.Models.LatestPlotDetailData
+
+@using (Html.BeginForm("AddOnlinePlotAmount", "Banking", FormMethod.Post, new { @id = "onli-amt", @class = "", role = "form" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            @*<input type="hidden" id="amt-file-id" name="PlotId" value="@Model.PlotData.Id" />*@
+            <input type="hidden" id="PlotId" name="PlotId" value="@Model.PlotData.Id" />
+            <input type="hidden" id="amt-file-no" name="File_Plot_Number" value="@Model.PlotData.Plot_No" />
+            <input type="hidden" id="amt-in-wrds" name="AmountInWords" />
+            <input type="hidden" id="mbl" name="Mobile_1" value="@Model.PlotOwners.Select(x=>x.Mobile_1).FirstOrDefault()" />
+            <input type="hidden" id="fth-husbad" name="Father_Husband" value="@string.Join(" , ", Model.PlotOwners.Select(x=>x.Father_Husband))" />
+            <input type="hidden" id="name" name="Name" value="@string.Join(" , ", Model.PlotOwners.Select(x=>x.Name))"/>
+            <input type="hidden" id="total-amt" name="TotalAmount" value="@Model.PlotOwners.Where(x=>x.Total_Price != null).Select(x=>x.Total_Price).FirstOrDefault()" />
+            <input type="hidden" id="prj-name" name="Project_Name" />
+            <input type="hidden" id="rate" name="Rate" />
+            <input type="hidden" id="plt-size" name="Plot_Size" value="@Model.PlotData.Plot_Size" />
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-2">
+            <label>Amount</label>
+            <input type="text" class="form-control" id="amt" name="Amount">
+        </div>
+        <div class="form-group col-md-2">
+            <label>Receipt Date</label>
+            <input type="text" class="form-control" data-provide="datepicker" id="Date" name="Date">
+        </div>
+        <div class="form-group col-md-2">
+            <label>Received Bank</label>
+            <select class="form-control" id="" name="From_Bank">
+                <option value="DIB">Dubai Islamic Bank</option>
+                <option value="HBL">Habib Bank Limited</option>
+            </select>
+        </div>
+        <div class="form-group col-md-2">
+            <label>Cash / Bank</label>
+            <select class="form-control paytypesel-test" id="cah-chq-bak" name="PaymentType">
+                <option value="Online_Cash">Online - Cash</option>
+                <option value="Online_Cheque">Online - Cheque</option>
+                <option value="Debit/Credit Card">Debit / Credit Card</option>
+                <option value="Cash">Cash</option>
+            </select>
+        </div>
+        <div class="form-group col-md-3">
+            <label>Bank</label>
+            @Html.DropDownList("Bank", null, "Choose..", new { @class = "form-control" })
+        </div>
+
+        <div class="form-group col-md-2">
+            <label>Instrument No</label>
+            <input type="text" class="form-control" id="pcn" name="PayChqNo">
+        </div>
+        <div class="form-group col-md-2">
+            <label>Chq/PO/DO Date</label>
+            <input type="text" class="form-control" data-provide="datepicker" id="Ch_bk_Pay_Date" name="Ch_bk_Pay_Date">
+        </div>
+    </div>
+}
+
+<script>
+    $(function () {
+        $('.modal-footer').append('<button class="btn btn-success" id="add-plt-on-amt-sdfkhja" type="submit">Update</button>');
+        $("#bal").html($("#bal-amt").text());
+        $("#bal-val").val($("#bal-amt").text());
+        $("#amt-file-id").val($("#file-id").val());
+        $("#amt-file-no").val($("#app-num").val());
+        $("#mbl").val($("#Mobile_1").val());
+        $("#fth-husbad").val($("#Father_Husband").val());
+        $("#name").val($("#Name").val());
+        $("#total-amt").val($("#ttl-amt").val());//
+        $("#prj-name").val($("#prj").val());
+        $("#rate").val($("#file-rate").val());//
+        $("#plt-size").val($("#pl-size").val());
+    });
+
+    $(document).on("click", "#add-plt-on-amt-sdfkhja", function (e) {
+        e.preventDefault();
+        $('#add-on-amt').attr("disabled", true);
+        $("#amt-in-wrds").val(InWords($("#amt").val()));
+        $.ajax({
+            type: "POST",
+            url: $("#onli-amt").attr('action'),
+            data: $("#onli-amt").serialize(),
+            success: function (data) {
+                alert("receipt no is " + data);
+            },
+            error: function () {
+                alert("Error Occured");
+            }
+        });
+    });
+</script>

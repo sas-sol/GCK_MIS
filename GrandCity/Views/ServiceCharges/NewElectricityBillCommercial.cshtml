@@ -1,0 +1,47 @@
+﻿@model MeherEstateDevelopers.Models.Sp_Get_CommercialElectricCharges_ByProject_Result
+<input type="hidden" value="@Model.Id" id="bill-id" />
+<input type="hidden" value="@Model.Rate" id="rate" />
+<input type="hidden" value="@Model.Plot_Id" id="plt-id" />
+<div class="col-md-12">
+    <div class="form-row">
+        <div class="form-group col-md-2">
+            <label>Meter No</label>
+            <input type="text" class="form-control" value="@Model.Meter_No" />
+        </div>
+        <div class="form-group col-md-2">
+            <label>Plot No.</label>
+            <input type="text" class="form-control" value="@Model.ShopNo" />
+        </div>
+        <div class="form-group col-md-2">
+            <label>Previous Reading</label>
+            <input type="text" id="prev" class="form-control" value="@Model.Previous_Reading" readonly />
+        </div>
+        <div class="form-group col-md-2">
+            <label>Current Reading</label>
+            <input type="text" class="form-control calebill" value="@Model.Current_Reading" />
+        </div>
+        <div class="form-group col-md-2">
+            <label>Total Units </label>
+            <input type="text" class="form-control" id="unit" value="@Model.Units" readonly />
+        </div>
+        <div class="form-group col-md-2">
+            <label>Amount - Rate : @Model.Rate</label>
+            <input type="text" class="form-control" id="total-bill" value="@Model.Total_Amount" readonly />
+        </div>
+        <div class="form-group col-md-2">
+            <label>Arrears</label>
+            <input type="text" class="form-control recal-bil" id="arrears" value="@Model.Arrears" />
+        </div>
+        <div class="form-group col-md-2">
+            <label>Grand Total</label>
+            <input type="text" id="g-tot" class="form-control" value="@Model.Grand_Total" readonly />
+        </div>
+    </div>
+</div>
+<script>
+    $(function () {
+        $('.modal-footer').append('<button class="btn btn-primary" id="gen-elec-bill-com" type="button">Generate Bill</button>');
+        $(".modal-header").text("Electricity Bill");
+        CalBill();
+    });
+</script>

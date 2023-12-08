@@ -1,0 +1,153 @@
+﻿
+@model IEnumerable<MeherEstateDevelopers.Models.DiscountConfigModel>
+
+<div class="col-md-12">
+    <fieldset class="p-20">
+        <legend>Discount Configurations &nbsp;&nbsp; <i class="fa fa-plus pointer add-new-disc-conf-row" style="color:limegreen;" title="Add new Discount Configuration"></i></legend>
+
+        <div class="col-md-12 disc-conf-area">
+            @if (Model == null || !Model.Any())
+            {
+
+            }
+            else
+            {
+                foreach (var item in Model)
+                {
+                    <div class="disc-conf-row row">
+                        <div class="col-md-1">
+                            <span class="srno_num">1.</span>
+                        </div>
+                        <div class="col-md-3">
+                            <input type="text" value="@item.Description" class="form-control" placeholder="Description..." />
+                        </div>
+                        <div class="col-md-2">
+                            <input type="text" class="form-control" placeholder="Payment Percentage" value="@string.Format("{0:n0}",item.PaidFileAmount)" />
+                        </div>
+                        <div class="col-md-2">
+                            <input type="text" class="form-control" placeholder="Discount Percentage" value="@item.DiscountPercentage"/>
+                        </div>
+                        <div class="col-md-1">
+                            <i class="fa fa-trash pointer rmv-disc-conf-row" title="Remove this discount"></i>
+                        </div>
+                    </div>
+                }
+            }
+            <div class="disc-conf-row row">
+                <div class="col-md-1">
+                    <span class="srno_num">1.</span>
+                </div>
+                <div class="col-md-3">
+                    <input type="text" class="form-control" placeholder="Description..." />
+                </div>
+                <div class="col-md-2">
+                    <input type="text" class="form-control" placeholder="Payment Percentage" />
+                </div>
+                <div class="col-md-2">
+                    <input type="text" class="form-control" placeholder="Discount Percentage" />
+                </div>
+                <div class="col-md-1">
+                    <i class="fa fa-trash pointer rmv-disc-conf-row" title="Remove this discount"></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <button class="btn btn-success updt-discs-config" title="Update discount policy.">Update</button>
+        </div>
+    </fieldset>
+</div>
+
+<script>
+    $(document).ready(function () {
+
+        $('.rmv-disc-conf-row').last().unbind().click(function () {
+            if (!confirm('Are you sure you want to remove this discount?')) {
+                return;
+            }
+
+            $(this).closest('.disc-conf-row').remove();
+
+            $('.srno_num').each(function (i, v) {
+                $(this).text(i + 1);
+            });
+        });
+
+        $('.add-new-disc-conf-row').unbind().click(function () {
+            let strc = `<div class="disc-conf-row row">
+                <div class="col-md-1">
+                    <span class="srno_num">${$('.disc-conf-row').length}</span>
+                </div>
+                <div class="col-md-3">
+                    <input type="text" class="form-control desc" placeholder="Description..." />
+                </div>
+                <div class="col-md-2">
+                    <input type="text" class="form-control pp" placeholder="Payment Percentage" />
+                </div>
+                <div class="col-md-2">
+                    <input type="text" class="form-control dp" placeholder="Discount Percentage" />
+                </div>
+                <div class="col-md-1">
+                    <i class="fa fa-trash pointer rmv-disc-conf-row" title="Remove this discount"></i>
+                </div>
+            </div>`;
+
+            $('.disc-conf-area').append(strc);
+            $('.rmv-disc-conf-row').last().unbind().click(function () {
+                if (!confirm('Are you sure you want to remove this discount?')) {
+                    return;
+                }
+
+                $(this).closest('.disc-conf-row').remove();
+
+                $('.srno_num').each(function (i, v) {
+                    $(this).text(i + 1);
+                });
+            });
+        });
+
+        $('.updt-discs-config').unbind().click(function () {
+            if (!confirm('Are you sure you want to save this discounts policy?')) {
+                return;
+            }
+
+            var res = [];
+
+            $('.disc-conf-row').each(function (i, v) {
+                let desc = $(this).find('.desc').val();
+                let pymntprc = RemoveComma($(this).find('.pp').val());
+                let discprc = RemoveComma($(this).find('.dp').val());
+
+                res.push({
+                    Description: desc,
+                    DiscountPercentage: discprc,
+                    PaidFileAmount: pymntprc
+                });
+            });
+
+            ShowFullScreenLoader();
+            $.ajax({
+                type: "POST",
+                url: '/Plots/SaveDiscountConfig/',
+                data: { discounts: res },
+                success: function (data) {
+                    HideFullScreenLoader();
+                    if (data) {
+                        alert("Discount policy has been updated successfully.");
+                    }
+                    else {
+                        alert("Failed to update the policy. Please try again.");
+                    }
+                }
+                , error: function (xmlhttprequest, textstatus, message) {
+                    HideFullScreenLoader();
+                    if (textstatus === "timeout") {
+                        alert("got timeout");
+                    } else {
+                        alert(textstatus);
+                    }
+                }
+            });
+        });
+    });
+</script>

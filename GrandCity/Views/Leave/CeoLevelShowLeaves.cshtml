@@ -1,0 +1,58 @@
+﻿
+
+@{ if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+}
+<div class="col-md-12">
+
+    <div class="bgc-white bd bdrs-3 p-20 mB-20">
+
+        <div class="form-row">
+            <div class="form-group col-md-2">
+                <label>Departments</label>
+                @Html.DropDownList("Department", null, "Choose..", new { @class = "form-control dep-lvl_ceo" })
+            </div>
+
+            <div class="form-group col-md-2">
+                <button value="" type="button" class="btn btn-primary  dept_leaves_shw_to_ceo">Search</button>
+            </div>
+
+        </div>
+        <div id="CeoLEvelShowLeaves">
+
+
+        </div>
+
+      
+
+    </div>
+</div>
+<script>
+
+
+
+
+
+
+    $(document).ready(function () {
+        $('#Manager_lvl_leaves_show').DataTable({
+            dom: 'Bfrtip',
+            buttons: [
+                'copy', 'csv', 'excel', 'pdf', 'print'
+            ]
+        });
+    });
+        //$(document).on("click", ".comp-assets", function () {
+        //    var id = $(this).attr("id");
+        //    window.open("/Company/AssetsDetails?Id=" + id, '_blank');
+        //});
+
+</script>
+
+

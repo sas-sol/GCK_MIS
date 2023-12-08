@@ -1,0 +1,156 @@
+﻿@model MeherEstateDevelopers.Models.Sp_Get_NDCFormDetails_Result
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <style>
+        body {
+            font-family: Roboto,-apple-system,system-ui,BlinkMacSystemFont,Segoe UI,Oxygen,Ubuntu,Cantarell,Fira Sans,Droid Sans,Helvetica Neue,Arial,sans-serif;
+        }
+    </style>
+</head>
+
+@if (Model.Transfer_Success == true)
+{
+    <h1>This is Already Transfered</h1>
+}
+
+
+<body>
+    <table cellspacing="0" border="0" style="width:1000px">
+        <tr>
+            <td width="300px" align="center" valign=bottom style="font-weight:bold"><b>Serial No.</b> @Model.TransferReqNo</td>
+            <td width="500px" align="center" valign=bottom style="font-weight:bold"><font size="7">FILE TRANSFER</font></td>
+            <td width="200px" align="center" valign=bottom style="font-weight:bold"></td>
+        </tr>
+    </table>
+    <table cellspacing="0" border="0" style="width:1000px">
+        <tr>
+            <td width="200px" align="center" valign=bottom></td>
+            <td width="600px" align="center" valign=bottom><font size="6">REQUEST FORM</font></td>
+            <td width="200px" align="center" valign=bottom></td>
+        </tr>
+    </table>
+    <table cellspacing="0" border="0" style="width:1000px;font-size: 21px;margin-top: 50px;">
+        <tr>
+            <td align="left" valign=bottom style="line-height: 44px;">
+                <p>
+                    <b>I</b> &nbsp; <u> @Model.From_Name</u> &nbsp; <b>S/O, W/O</b> &nbsp; <u>@Model.From_FatherName</u>  &nbsp; <b>CNIC-NICOP</b> &nbsp; <u>@Model.From_CNIC_NICOP</u> &nbsp;
+                    <b>Contact</b> &nbsp; <u>@Model.From_Mobile1</u> &nbsp; <b>Owner Of Plot No</b> &nbsp; <u>@Model.FileFormNumber</u> &nbsp; <b>Block</b> &nbsp; <u>Sher Afghan</u> &nbsp; <b>Size</b>
+                    &nbsp; <u>@Model.Plot_Size</u> &nbsp; <b>Want to sell my Plot to</b> &nbsp; <u>@Model.To_Name</u> &nbsp;
+                    @if (Model.IsCompany)
+                    {
+                        <b>NTN  &nbsp;</b><u>@Model.To_CNIC_NICOP</u>
+                    }
+                    else
+                    {
+                        <b>S/O, W/O &nbsp;</b> <u>@Model.To_FatherName</u> <b>&nbsp; CNIC-NICOP &nbsp;</b> <u>@Model.To_CNIC_NICOP</u>
+                    }
+                    &nbsp; <b>Contact</b> &nbsp; <u>@Model.To_Mobile1</u> &nbsp; <b>Nominee Name</b> &nbsp; <u>@Model.Nominee_Name</u> &nbsp; <b>Nominee CNIC</b> &nbsp; <u>@Model.Nominee_CNIC_NICOP</u> &nbsp; <b>Address</b> &nbsp; <u>@Model.Postal_Address </u><br />
+                    <b>Please issue No Demand Certificate NDC for this Plot.(NDC will be issued within 5 working days).</b>
+                </p>
+            </td>
+        </tr>
+    </table>
+    <table cellspacing="0" border="0" style="width:1000px;font-size: 19px;">
+        <tr>
+            <td width="1000px" align="left" valign=bottom style="font-weight:bold">I HEREBY CONFIRM THAT TILL DATE, ALL THE INSTALLMENTS HAVE BEEN PAID & NO DUES ARE PENDING.</td>
+        </tr>
+    </table>
+    <table cellspacing="0" border="0" style="width:1000px;font-size: 22px;margin-top:5%">
+        <tr>
+            <td width="350px" align="left" valign=bottom style="font-weight:bold;border-top:1px solid">Name & Signature of Buyer</td>
+            <td width="270px" align="right" valign=bottom></td>
+            <td width="200px" align="right" valign=bottom style="font-weight:bold">Date</td>
+            <td width="200px" align="center" valign=bottom style="border-bottom:1px solid;font-size: 17px;">@string.Format("{0:D}", DateTime.Now)</td>
+        </tr>
+    </table>
+    <table cellspacing="0" border="0" style="width:1000px;font-size: 22px;;margin-top:5%">
+        <tr>
+            <td width="350px" align="left" valign=bottom style="font-weight:bold;border-top:1px solid">Name & Signature of Applicant</td>
+            <td width="270px" align="right" valign=bottom></td>
+            <td width="200px" align="right" valign=bottom style="font-weight:bold">Transfer Date</td>
+            <td width="200px" align="center" valign=bottom style="border-bottom:1px solid"></td>
+        </tr>
+    </table>
+    <table cellspacing="0" border="0" style="width:1000px;font-size: 23px;margin-top: 35px;">
+        <tr>
+            <td width="300px" align="right" valign=bottom style="border-bottom: 13px solid red;"></td>
+            <td width="350px" align="center" valign="baseline"><b>FOR OFFICE USE ONLY</b></td>
+            <td width="300px" align="right" valign=bottom style="border-bottom: 13px solid red;"></td>
+        </tr>
+    </table>
+    <table cellspacing="0" border="0" style="width:1000px;font-size: 25px;margin-top: 30px;">
+        <tr>
+            <td width="1000px" align="left" valign=bottom><b>NO DEMAND CERTIFICATE</b></td>
+        </tr>
+    </table>
+    <table cellspacing="0" border="0" style="width:1000px;font-size: 22px;margin-top: 30px;">
+        <tr>
+            <td width="500px" align="left" valign=bottom><b>All Documents in File</b></td>
+            <td width="500px" align="left" valign=bottom><b>Cash Payments Verified</b></td>
+        </tr>
+    </table>
+    <table cellspacing="0" border="0" style="width:1000px;font-size: 22px;margin-top: 20px;">
+        <tr>
+            <td width="150px" align="left" valign=bottom><input type="checkbox" /> Yes</td>
+            <td width="300px" align="left" valign=bottom><input type="checkbox" /> No</td>
+            <td width="150px" align="left" valign=bottom><input type="checkbox" /> Yes</td>
+            <td width="300px" align="left" valign=bottom><input type="checkbox" /> No</td>
+        </tr>
+    </table>
+    <table cellspacing="0" border="0" style="width:1000px;font-size: 22px;margin-top: 30px;">
+        <tr>
+            <td width="500px" align="left" valign=bottom><b>Computer Record Updated</b></td>
+            <td width="500px" align="left" valign=bottom><b>Cheques / Demand Drafts / Payorders Verified</b></td>
+        </tr>
+    </table>
+    <table cellspacing="0" border="0" style="width:1000px;font-size: 22px;margin-top: 20px;">
+        <tr>
+            <td width="150px" align="left" valign=bottom><input type="checkbox" /> Yes</td>
+            <td width="300px" align="left" valign=bottom><input type="checkbox" /> No</td>
+            <td width="150px" align="left" valign=bottom><input type="checkbox" /> Yes</td>
+            <td width="300px" align="left" valign=bottom><input type="checkbox" /> No</td>
+        </tr>
+    </table>
+    <table cellspacing="0" border="0" style="width:1000px;font-size: 22px;margin-top: 35px;">
+        <tr>
+            <td width="1000px" align="left" valign=bottom><b>DOCUMENTS REQUIRED</b></td>
+        </tr>
+    </table>
+    <table cellspacing="0" border="0" style="width:1000px;font-size: 22px;margin-top: 10px;">
+        <tr>
+            <td width="1000px" align="left" valign=bottom>- Original Documents</td>
+        </tr>
+    </table>
+    <table cellspacing="0" border="0" style="width:1000px;font-size: 22px;margin-top: 10px;">
+        <tr>
+            <td width="1000px" align="left" valign=bottom>- File Transfer Payment Receipts</td>
+        </tr>
+    </table>
+    <table cellspacing="0" border="0" style="width:1000px;font-size: 22px;margin-top: 10px;">
+        <tr>
+            <td width="1000px" align="left" valign=bottom>- CNIC copy of buyer & Seller & 2 Pictures of Buyer</td>
+        </tr>
+    </table>
+    <table cellspacing="0" border="0" style="width:1000px;font-size: 22px;margin-top: 10px;">
+        <tr>
+            <td width="1000px" align="left" valign=bottom>- Copy of file application form with aggreement on Rs. 100/- stamp paper</td>
+        </tr>
+    </table>
+    <table cellspacing="0" border="0" style="width:1000px;font-size: 22px;margin-top: 10px;">
+        <tr>
+            <td width="1000px" align="left" valign=bottom>- Copy of last payment Receipt</td>
+        </tr>
+    </table>
+    <table cellspacing="0" border="0" style="width:1000px;font-size: 22px;margin-top: 10px;">
+        <tr>
+            <td width="1000px" align="center" valign=bottom style="padding-right: 95px;">
+                <img src="~/assets/static/images/footer_urdu_logo.png" width=450 height=125>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>

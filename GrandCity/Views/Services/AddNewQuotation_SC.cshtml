@@ -1,0 +1,393 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Services_Purchase_Req>
+@*@using (Html.BeginForm("AddQuotation_SC", "Services", FormMethod.Post, new { @id = "ad-quo", @class = "", role = "form", autocomplete = "off" }))
+    {*@
+
+@*}*@
+<input type="hidden" name="Req_Id" value="@ViewBag.Req_Id" />
+<input type="hidden" id="GrpId" name="Group_Id" value="@ViewBag.GroupId" />
+
+<input type="hidden" />
+<div class="form-row">
+    <div class="form-group col-md-3">
+        <h6>Vendor</h6>
+        <select class="form-control vendor" name="Vendor_Id"></select>
+    </div>
+    <div class="form-group col-md-3">
+        <h6>Quotation Ref:</h6>
+        <input type="text" class="form-control quot-ref" name="Quote_Ref" />
+    </div>
+    <div class="form-group col-md-3">
+        <h6>Qutation Attachment</h6>
+        <input type="file" id="files" />
+    </div>
+    <div class="form-group col-md-3">
+        <h6>Delivery Date</h6>
+        <input type="text" data-provide="datepicker" class="form-control deliv-date" name="DeliveryDate" />
+    </div>
+    <div class="form-group col-md-12">
+        <h6>Remarks:</h6>
+        <input type="text" class="form-control Description" name="Description" />
+    </div>
+
+</div>
+
+
+@{
+    if (Model.Any())
+    {
+        int i = 1;
+        foreach (var item in Model.GroupBy(x => new { x.Milestone_Id, x.Milestone_Name }))
+        {
+            <div class="container1" style="background-color: lightblue;">
+                <input type="hidden" value="@item.Key.Milestone_Id" class="mile_id" />
+                <h5 class="milestoneName" style="margin-left: 44%; font-size: 25px; color:#000"><strong>@item.Key.Milestone_Name</strong></h5>
+            </div>
+            foreach (var a in item.GroupBy(x => new { x.Item_Name }))
+            {
+                <table>
+                    <tr>
+                        <td><strong style="font-size:25px; margin-left:2%;" id="itemname">@a.Key.Item_Name</strong></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th width="4%">Sr.</th>
+                                        <th width="15%">Description</th>
+                                        <th width="4%">L</th>
+                                        <th width="4%">W</th>
+                                        <th width="4%">H</th>
+                                        <th width="4%">B</th>
+                                        <th width="10%">UOM</th>
+                                        <th width="10%">Req Qty</th>
+                                        <th width="10%" colspan="2">Qty</th>
+                                        <th width="10%" colspan="2">Rate  / <select class="ccy" name="C"><option value="Rs">Rs</option><option value="$">$</option><option value="£">£</option></select></th>
+                                        <th width="10%" colspan="2">GST % <input type="text" style="width:40px" class="tax qty-rate" /></th>
+                                        <th width="10%" colspan="2">Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var b in a)
+                                    {
+                                        <tr class="ser-con-items" data-id="@b.Id" data-item="@b.Item_Name" data-mileId="@b.Milestone_Id" data-milename="@b.Milestone_Name" data-depid="@b.Dep_Id" data-depname="@b.Dep_Name">
+                                            <td>
+                                                @(i++)
+                                                <input type="checkbox" class="it-qu-ch" />
+                                            </td>
+                                            <td class="description">@b.Description</td>
+                                            <td class="len">@b.Length</td>
+                                            <td class="wid">@b.Width</td>
+                                            <td class="hei">@b.Heigth</td>
+                                            <td class="bdth">@b.Breadth</td>
+                                            <td class="uom">@b.UOM</td>
+                                            <td class="nos">@b.Qty</td>
+                                            <td class="zer-pad" colspan="2"><input type="text" class="form-control coma qty qty-rate" placeholder="Qty" /></td>
+                                            <td class="zer-pad" colspan="2"><input type="text" class="form-control coma rate-p-uom qty-rate" placeholder="Rate" /></td>
+                                            <td class="zer-pad"><input type="hidden" class="taxCal" /></td>
+                                            <td class="zer-pad" colspan="2"><input type="text" class="form-control ttl-rate" placeholder="Total" /></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="6"></td>
+                                            <td colspan="2" class="zer-pad"></td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+
+            }
+
+        }
+        <br />
+        <div class="row">
+            <div class="col-md-9"></div>
+            <div class="col-md-2">
+                <input type="text" class="form-control totalquo zer-pad" placeholder="Grand Total" readonly />
+            </div>
+            <div class="col-md-1"></div>
+        </div>
+        <br />
+    }
+
+}
+<script>
+    // manual stock in
+
+    $(function () {
+        $('.vendor').select2({
+            dropdownParent: $('#Modal'),
+            placeholder: "Search for item",
+            ajax: {
+                url: '/Vendor/GetVendorsForAutoComplete/',
+                dataType: 'json',
+                params: {
+                    contentType: 'application/json; charset=utf-8'
+                },
+                quietMillis: 100,
+                data: function (params) {
+                    return {
+                        q: params.term// search term
+                    };
+                },
+                processResults: function (data) {
+                    return {
+                        results: data.items
+                    };
+                }
+            }
+        });
+
+        $('.modal-footer').append(' <button type="button" class="btn btn-primary add-ser-con-quot-btn">Add Quote</button>');
+    });
+    // Rate & qty calc
+    // Rate & qty calc
+    //$(document).on('keyup', '.qty-rate', function (){
+    //    var qty = removeComma($(this).closest('tr').find(".qty").val());
+    //    var rate = RemoveComma($(this).closest('tr').find(".rate-p-uom").val());
+    //    var gst = $(this).closest('tr').find(".tax").val();
+    //    var total = ((qty * rate) * (gst / 100));
+    //    $('.totalquo').val(Number(total).toLocaleString());
+    //});
+
+    $(document).on('keyup', '.qty-rate', function () {
+        var qty = RemoveComma($(this).closest('tr').find(".qty").val());
+        var rate = RemoveComma($(this).closest('tr').find(".rate-p-uom").val());
+        $('.tax').change(function () {
+            $('.taxCal').val($(this).val());
+        });
+        var taxcal = RemoveComma($(this).closest('tr').find(".taxCal").val())
+        var tax = taxcal;
+
+        var total = qty * rate;
+        var gst = qty * ((tax * rate) / 100);
+        $(this).closest('tr').find(".gst").val(Number(gst).toLocaleString());
+        $(this).closest('tr').find(".gst-v").val(gst);
+        $(this).closest('tr').find(".ttl-rate").val(Number(total + gst).toLocaleString());
+        caltotalquote();
+    });
+    $(document).on("blur", ".deliv-date", function () {
+        var hold_date = $('.deliv-date').val();;
+        $('.deliv-date').each(function () {
+            var date = $(this).val();
+            if (date == "") {
+                return;
+            }
+            var isafter = moment(date).isAfter(hold_date);
+            if (isafter) {
+                hold_date = date;
+            }
+        });
+        $('.fdeliv-date').val(hold_date);
+    });
+    $(document).on('keyup', '.gst-cal', function () {
+    });
+    function caltotalquote() {
+        var total = 0;
+        $('.ttl-rate').each(function () {
+            var itemttl = Number(RemoveComma($(this).val()));
+            total += itemttl;
+        });
+        $('.totalquo').val(Number(total).toLocaleString());
+    }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@*<table class="table" style="margin-bottom:0px; border:none">
+        <thead>
+            <tr>
+                <th style="max-width:5%">Sr.</th>
+                <th>Description</th>
+                <th>Nos</th>
+                <th>Unit</th>
+                <th>L</th>
+                <th>B</th>
+                <th>H</th>
+                <th>UOM</th>
+                <th>Vendor</th>
+                <th>Qty</th>
+                <th>Rate</th>
+                <th>Amount</th>
+                <th>Attachment</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var a in Model)
+            {
+                int ii = 1;
+
+
+            <tr>
+                <td>@ii</td>
+                <td>
+                    @a.Prj_Name
+                    <br />
+                    @a.Item_Name
+                    <br />
+                    @a.Description
+                    <br />
+                    @a.Milestone_Name
+                </td>
+                <td>@a.NO</td>
+                <td>@a.UOM</td>
+                @if (a.Length == null)
+                {
+                    <td align="center">-</td>
+                }
+                else
+                {
+                    <td>@a.Length @a.Len_UOM</td>
+
+                }
+                @if (a.Breadth == null)
+                {
+                    <td align="center">-</td>
+                }
+                else
+                {
+                    <td>@a.Breadth @a.B_UOM</td>
+                }
+                @if (a.Heigth == null)
+                {
+                    <td align="center">-</td>
+                }
+                else
+                {
+                    <td>@a.Heigth @a.Hei_UOM</td>
+
+                }
+                <td>@a.UOM</td>
+                <td> <select class='form-control vendor' name="V"></select></td>
+                <td><input type="text" name="Qty" class="form-control" id="q-qty" placeholder="Qty" /></td>
+                <td><input type="text" name="PurchaseRate" class="form-control" id="q-rate" placeholder="Rate" /></td>
+                <td><input type="text" class="form-control" placeholder="Amount" id="q-amount" readonly /></td>
+                <td><input type="file" id="files"></td>
+
+                <td><input type="hidden" name="Group_Id" value="@a.Group_Id" /></td>
+                <td><input type="hidden" name="Created_By" value="@a.Requested_By" /></td>
+                <td><input type="hidden" name="CreatedBy_Name" value="@a.RequestedBy_Name" /></td>
+                <td><input type="hidden" name="ServiceReq_Id" value="@a.Id" /></td>
+                <td><input type="hidden" name="Milestone_Id" value="@a.Milestone_Id" /></td>
+                <td><input type="hidden" name="Milestone_Name" value="@a.Milestone_Name" /></td>
+            </tr>
+            ii++;
+            }
+
+        </tbody>
+    </table>*@
+
+
+
+
+@*<div class="col-md-12">
+        <div class="form-row">
+            <div class="form-group col-md-12">
+                <h6>@ViewBag.Item</h6>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-3">
+                <label>Vendor</label>
+                <select class='form-control vendor' name="V"></select>
+            </div>
+            <div class="form-group col-md-2">
+                <label>Est Completion <span id="est-uom"></span></label>
+                <div class="btn-group">
+                    <input type="text" class="form-control" name="Q">
+                    <button type="button" class="btn btn-danger dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <span class="sr-only">Toggle Dropdown</span>
+                    </button>
+                    <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(183px, 34px, 0px); top: 0px; left: 0px; will-change: transform;">
+                        <a class="dropdown-item ser-uom" href="#" data-val="No.">No.</a>
+                        <a class="dropdown-item ser-uom" href="#" data-val="Hrs">Hrs</a>
+                        <a class="dropdown-item ser-uom" href="#" data-val="Days">Days</a>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group col-md-2">
+                <label>Gst</label>
+                <input type="text" class="form-control rat-cal tax coma" name="T">
+            </div>
+            <div class="form-group col-md-2">
+                <label>Total <select name="C"><option value="Rs">Rs</option><option value="$">$</option><option value="£">£</option></select> </label>
+                <input type="text" class="form-control rat-cal rate" name="R">
+            </div>
+            <div class="form-group col-md-2">
+                <label>Grand Total</label>
+                <input type="text" class="form-control ttl-rate" name="R" readonly />
+            </div>
+            <div class="form-group col-md-6">
+                <label>Remarks</label>
+                <input type="text" class="form-control rems" name="Rem">
+            </div>
+            <div class="form-group col-md-3">
+                <label>Attachments</label>
+                <input type="file" id="files">
+            </div>
+            <input name="U" type="hidden" id="ser-uom" />
+        </div>
+    </div>*@
+@*
+    <script>
+        $('#q-qty, #q-rate').change(function () {
+            var q_qty = parseFloat($('#q-qty').val()) || 0;
+            var q_rate = parseFloat($('#q-rate').val()) || 0;
+            $('#q-amount').val(q_rate * q_qty);
+        });*@
+
+
+@*//$(document).on('click', '.ser-uom', function () {
+    //    var val = $(this).data("val");
+    //    $("#ser-uom").val(val)
+    //    $('#est-uom').text(" /" + val);
+    //});
+    // Rate & qty calc
+    //$(document).on('keyup', '.rat-cal', function () {
+
+    //    var tax = Number(RemoveComma($(".tax").val()));
+    //    var rate = Number(RemoveComma($(".rate").val()));
+    //    $(".ttl-rate").val(Number(tax + rate).toLocaleString());
+    //});*@
+@*$(function () {
+            $('.vendor').select2({
+                dropdownParent: $('#Modal'),
+                placeholder: "Search for item",
+                ajax: {
+                    url: '/Vendor/GetVendorsForAutoComplete/',
+                    dataType: 'json',
+                    params: {
+                        contentType: 'application/json; charset=utf-8'
+                    },
+                    quietMillis: 100,
+                    data: function (params) {
+                        return {
+                            q: params.term// search term
+                        };
+                    },
+                    processResults: function (data) {
+                        return {
+                            results: data.items
+                        };
+                    }
+                }
+            });
+            $('.modal-footer').append(' <button type="button" class="btn btn-primary add-ser-quot-btn">Add Quote</button>');
+        });
+
+    </script>*@

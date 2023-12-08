@@ -1,0 +1,24 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Sp_Get_CancelFilesReport_Result>
+    <table>
+        <thead>
+            <tr>
+                <th>Plot Size</th>
+                <th>File Num</th>
+                <th>Received AMt</th>
+                <th>Deduction</th>
+                <th>Payables</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.OrderBy(x=> x.Plot_Size))
+            {
+            <tr>
+                <td>@item.Plot_Size</td>
+                <td>@item.fileformnum</td>
+                <td>@item.ReceivedAmt</td>
+                <td>@item.Deduction</td>
+                <td>@item.Payable</td>
+            </tr>
+            }
+        </tbody>
+    </table>

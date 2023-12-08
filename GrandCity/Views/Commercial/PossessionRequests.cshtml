@@ -1,0 +1,56 @@
+﻿
+@{ Layout = "~/Views/Shared/_StaffLayout.cshtml"; }
+<div class="col-md-12">
+    <div class="default-div-bg bd bdrs-3 p-20 mB-20">
+        <h4 class="heading-lgt-onDark mB-20">Possession Letter Requests</h4>
+    </div>
+</div>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-2 bdrs-3 ov-h default-div-bg ml-0 bd">
+            <ul class="nav flex-column mx-0">
+                <li class="nav-item sas col-md-12 my-1 my-active">
+                    <a class="nav-link nav-fdfdsjk" href="javascript:void(0)" data-tp="0">Pending</a>
+                </li>
+                <li class="nav-item sas col-md-12 my-1">
+                    <a class="nav-link nav-fdfdsjk" href="javascript:void(0)" data-tp="1">Printed</a>
+                </li>
+            </ul>
+        </div>
+        <hr />
+        <div class="col-md-10 bdrs-3 ov-h default-div-bg bd" id="customtable" style="padding-top:10px;">
+            <div class="container-fluid rec-hldr-jkl">
+                @{Html.RenderAction("PossessionList", new { tp = 0 });}
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $('.nav-fdfdsjk').click(function () {
+        //yahan pe table populate krana hai
+
+        if ($(this).parent().hasClass('my-active')) {
+            return;
+        }
+
+        let dttp = parseInt($(this).attr('data-tp'));
+        let that = this;
+        showLoader();
+        $('.rec-hldr-jkl').load('/Commercial/PossessionList/', { type: dttp }, function () {
+            $(that).parent().prevAll('.my-active').removeClass('my-active');
+            $(that).parent().nextAll('.my-active').removeClass('my-active');
+            $(that).parent().addClass('my-active');
+            hideLoader();
+        });
+    });
+</script>
+
+<style>
+    .my-active {
+        background-color: #1E1B39;
+        text-align: center;
+        color: #fff;
+    }
+</style>

@@ -1,0 +1,32 @@
+﻿@*@model IEnumerable<MeherEstateDevelopers.Models.Sp_Get_All_Employess_Salaries_Result>*@
+@*@{ Layout = "~/Views/Shared/_StaffLayout.cshtml"; }*@
+
+<div class="row bgc-white bd bdrs-3 p-20 mB-20">
+    <div class="col-md-12">
+        <ul class="nav nav-tabs" role="tablist" id="myTabs">
+            <li class="nav-item"><a class="nav-link asset-link" role="tab" data-toggle="tab" data-link="/Salaries/SalariedPersonnels" id="pen-ap" href="#saltab">Salary Report</a></li>
+            <li class="nav-item"><a class="nav-link asset-link" role="tab" data-toggle="tab" data-link="/Salaries/StipendPersonnels" id="pen" href="#saltab">Stipend Report</a></li>
+        </ul>
+        <div class="tab-content">
+            <div role="tabpanel" id="saltab" class="tab-pane active p-20 table-responsive"></div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        SASLoad($('#saltab'));
+        $('#saltab').load('/Salaries/SalariedPersonnels', function () {
+            SASUnLoad($('#saltab'));
+        });
+        $("#pen-ap").addClass('active');
+    });
+    $(document).on("Click", ".asset-link", function () {
+        var address = $(this).attr('data-link');
+        var id = $(this).attr('id');
+        SASLoad($('#saltab'));
+        $('#saltab').load(address, function () {
+            SASUnLoad($('#saltab'));
+        });
+        $("#" + id).addClass('active');
+    });
+</script>

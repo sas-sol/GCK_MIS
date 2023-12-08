@@ -1,0 +1,62 @@
+﻿@{
+    String sDate = DateTime.Now.ToString();
+    DateTime datevalue = (Convert.ToDateTime(sDate.ToString()));
+    String mn = datevalue.Month.ToString();
+    String yy = datevalue.Year.ToString();
+}
+<h4 class="c-grey-900 mT-10 mB-30">Search</h4>
+<div class="col-md-12">
+    <div class="form-row">
+        <div class="col-md-1">
+            <label>Month</label>
+            <select class="form-control" id="m__ser">
+                <option value="">Choose..</option>
+                <option value="1">January</option>
+                <option value="2">February</option>
+                <option value="3">March</option>
+                <option value="4">April</option>
+                <option value="5">May</option>
+                <option value="6">June</option>
+                <option value="7">July</option>
+                <option value="8">August</option>
+                <option value="9">September</option>
+                <option value="10">October</option>
+                <option value="11">November</option>
+                <option value="12">December</option>
+
+            </select>
+        </div>
+        <div class="col-md-1">
+            <label>Year</label>
+            <select class="form-control" id="ye__ser">
+                <option value="">Choose..</option>
+                <option value="2017">2017</option>
+                <option value="2018">2018</option>
+                <option value="2019">2019</option>
+                <option value="2020">2020</option>
+                <option value="2021">2021</option>
+                <option value="2022">2022</option>
+                <option value="2023">2023</option>
+            </select>
+        </div>
+        <div class="col-md-1">
+            <button class="btn btn-primary" id="cbp__arr" style="margin-top:29px">Search</button>
+        </div>
+    </div>
+</div>
+<hr />
+<div class="container-fluid" id="cb__app">
+    <h4 class="c-grey-900 mT-10 mB-30"></h4>
+    <ul class="nav nav-tabs" id="myTabs">
+        @{ string activeclass = "active";}
+        <li class="nav-item"><a class="nav-link @activeclass" data-toggle="tab" role="tab" data-link="/ArrearsSalaries/FinanceSalariesSlip/" href="#gendis">Payable</a></li>
+        @{ activeclass = ""; }
+        <li class="nav-item"><a class="nav-link @activeclass" data-toggle="tab" role="tab" data-link="/ArrearsSalaries/DistributorDetail/" href="#gendis">Daily Distribution</a></li>
+    </ul>
+    <!-- Tab panes -->
+    <div class="tab-content">
+        <div id="gendis" class="tab-pane active">
+            @{ Html.RenderAction("FinanceSalariesSlip", "ArrearsSalaries");}
+        </div>
+    </div>
+</div>

@@ -1,0 +1,446 @@
+﻿<div class="container-fluid" id="grad1">
+    <div class="row justify-content-center mt-0">
+        <div class=" col-md-6 card ">
+            <h2><strong>New Project Configuration</strong></h2>
+            <p>Fill all form field to go to next step</p>
+            <div class="row">
+                <div class="col-md-12 mx-0">
+                    <div id="msform">
+                        <ul id="progressbar">
+                            <li class="active" id="Project"><strong>Project</strong></li>
+                            <li id="Phase"><strong>Phase</strong></li>
+                            <li id="Block"><strong>Block</strong></li>
+                            <li id="Plot"><strong>Plot</strong></li>
+                        </ul>
+                        <fieldset>
+                            <div class="form-card ">
+                                <div class="col-md-12" id="project">
+                                </div>
+                            </div>
+                            <input type="button" name="next" class=" btn btn-primary next action-button" value="Next Step" />
+                        </fieldset>
+                        <fieldset>
+                            <div class="form-card">
+                                <div class="col-md-12" id="phase">
+                                </div>
+                            </div>
+                            <input type="button" name="previous" class=" btn btn-primary previous action-button-previous" value="Previous" /> <input type="button" name="next" class="btn btn-primary next action-button" value="Next Step" />
+                        </fieldset>
+                        <fieldset>
+                            <div class="form-card">
+                                <div class="col-md-12" id="block">
+                                </div>
+                            </div>
+                            <input type="button" name="previous" class=" btn btn-primary previous action-button-previous" value="Previous" /> <input type="button" name="make_Block" class=" btn btn-primary next action-button" value="Next Step" />
+                        </fieldset>
+                        <fieldset>
+                            <div class="form-card">
+                                <div class="col-md-12" id="plot">
+                                </div>
+                            </div>
+                            <input type="button" name="previous" class=" btn btn-primary previous action-button-previous" value="Previous" /> <input type="button" name="make_Plot" class="btn btn-primary next action-button" value="Confirm" />
+                        </fieldset>
+                        <fieldset>
+                            <div class="form-card">
+                                <h2 class="fs-title text-center">Success !</h2> <br><br>
+                                <div class="row justify-content-center">
+                                </div> <br><br>
+                                <div class="row justify-content-center">
+                                    <div class="col-7 text-center">
+                                        <h5>completed</h5>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6" id="graphical" style="margin-top:220px;">
+        </div>
+    </div>
+</div>
+<script>
+    $(function () {
+        SASLoad($('#project'));
+        $('#project').load('/RealEstateProjects/create', function () {
+            SASUnLoad($('#project'));
+        });
+
+    });
+    $(function () {
+        SASLoad($('#graphical'));
+        $('#graphical').load('/RealEstateProjects/ProjectList/', function () {
+            SASUnLoad($('#graphical'));
+        });
+    });
+    $(document).on("submit", "#p-c", function (e) {
+        debugger
+        e.preventDefault();
+        $("#submit-button").prop("disabled", true);
+        $.ajax({
+            type: "POST",
+            url: $("#p-c").attr('action'),
+            data: $("#p-c").serialize(),
+            success: function (data) {
+                if (data > 0) {
+                    SASLoad($('#graphical'));
+                    $('#graphical').load('/RealEstateProjects/ProjectList/', function () {
+                        SASUnLoad($('#graphical'));
+                    });
+                    alert("Project Has been Initiated COmin here");
+                }
+                else {
+                    alert("This Project is already Initiated");
+                }
+            }
+            , error: function (xmlhttprequest, textstatus, message) {
+                if (textstatus === "timeout") {
+                    alert("got timeout");
+                } else {
+                    alert(textstatus);
+                }
+            }
+        });
+    });
+    // Phase Creation
+    $(document).on("submit", "#ph-c", function (e) {
+        debugger
+        e.preventDefault();
+        $.ajax({
+            type: "POST",
+            url: $("#ph-c").attr('action'),
+            data: $("#ph-c").serialize(),
+            success: function (data) {
+                if (data > 0) {
+                    SASLoad($('#graphical'));
+                    $('#graphical').load('/RealEstateProjects/ProjectList/', function () {
+                        SASUnLoad($('#graphical'));
+                    });
+                    alert("Phase has been created");
+
+                }
+                else {
+                    alert("This Phase already exists in this Project");
+                }
+            }
+            , error: function (xmlhttprequest, textstatus, message) {
+                if (textstatus === "timeout") {
+                    alert("got timeout");
+                } else {
+                    alert(textstatus);
+                }
+            }
+        });
+    });
+    // block Creation
+    $(document).on("submit", "#bl-c", function (e) {
+        debugger
+        e.preventDefault();
+        $.ajax({
+            type: "POST",
+            url: $("#bl-c").attr('action'),
+            data: $("#bl-c").serialize(),
+            success: function (data) {
+                if (data > 0) {
+                    SASLoad($('#graphical'));
+                    $('#graphical').load('/RealEstateProjects/ProjectList/', function () {
+                        SASUnLoad($('#graphical'));
+                    });
+                    alert("Block has been created");
+
+                }
+                else {
+                    alert("This Block already exists in this Phase");
+                }
+            }
+            , error: function (xmlhttprequest, textstatus, message) {
+                if (textstatus === "timeout") {
+                    alert("got timeout");
+                } else {
+                    alert(textstatus);
+                }
+            }
+        });
+    });
+
+
+
+
+    $(document).ready(function () {
+
+        var current_fs, next_fs, previous_fs; //fieldsets
+        var opacity;
+
+        $(".next").click(function () {
+
+            current_fs = $(this).parent();
+            next_fs = $(this).parent().next();
+
+            //Add Class Active
+            $("#progressbar li").eq($("fieldset").index(next_fs)).addClass("active");
+
+            //show the next fieldset
+            next_fs.show();
+            //hide the current fieldset with style
+            current_fs.animate({ opacity: 0 }, {
+                step: function (now) {
+                    // for making fielset appear animation
+                    opacity = 1 - now;
+
+                    current_fs.css({
+                        'display': 'none',
+                        'position': 'relative'
+                    });
+                    next_fs.css({ 'opacity': opacity });
+                },
+                duration: 600
+            });
+            SASLoad($('#phase'));
+            $('#phase').load('/RealEstatePhases/Create/', function () {
+                SASUnLoad($('#phase'));
+            });
+            SASLoad($('#block'));
+            $('#block').load('/RealEstateBlocks/Create/', function () {
+                SASUnLoad($('#block'));
+            });
+            SASLoad($('#plot'));
+            $('#plot').load('/Plots/CreatePlotInventory/', function () {
+                SASUnLoad($('#plot'));
+            });
+        });
+
+        $(".previous").click(function () {
+
+            current_fs = $(this).parent();
+            previous_fs = $(this).parent().prev();
+
+            //Remove class active
+            $("#progressbar li").eq($("fieldset").index(current_fs)).removeClass("active");
+
+            //show the previous fieldset
+            previous_fs.show();
+
+            //hide the current fieldset with style
+            current_fs.animate({ opacity: 0 }, {
+                step: function (now) {
+                    // for making fielset appear animation
+                    opacity = 1 - now;
+
+                    current_fs.css({
+                        'display': 'none',
+                        'position': 'relative'
+                    });
+                    previous_fs.css({ 'opacity': opacity });
+                },
+                duration: 600
+            });
+        });
+
+
+        $(".submit").click(function () {
+            return false;
+        })
+
+    });
+</script>
+<style>
+
+
+    #msform {
+        text-align: center;
+        position: relative;
+        margin-top: 20px
+    }
+
+        #msform fieldset .form-card {
+            background: white;
+            border: 0 none;
+            border-radius: 0px;
+            box-shadow: 0 2px 2px 2px rgba(0, 0, 0, 0.2);
+            padding: 20px 40px 30px 40px;
+            box-sizing: border-box;
+            width: 94%;
+            margin: 0 3% 20px 3%;
+            position: relative
+        }
+
+        #msform fieldset {
+            background: white;
+            border: 0 none;
+            border-radius: 0.5rem;
+            box-sizing: border-box;
+            width: 100%;
+            margin: 0;
+            padding-bottom: 20px;
+            position: relative
+        }
+
+            #msform fieldset:not(:first-of-type) {
+                display: none
+            }
+
+            #msform fieldset .form-card {
+                text-align: left;
+                color: #9E9E9E
+            }
+
+        #msform input,
+        #msform textarea {
+            padding: 0px 8px 4px 8px;
+            border: none;
+            border-bottom: 1px solid #ccc;
+            border-radius: 0px;
+            margin-bottom: 25px;
+            margin-top: 2px;
+            width: 100%;
+            box-sizing: border-box;
+            color: #2C3E50;
+            letter-spacing: 1px
+        }
+
+            #msform input:focus,
+            #msform textarea:focus {
+                -moz-box-shadow: none !important;
+                -webkit-box-shadow: none !important;
+                box-shadow: none !important;
+                border: none;
+                border-bottom: 2px solid skyblue;
+                outline-width: 0
+            }
+
+        #msform .action-button {
+            width: 100px;
+            /*background: transparent linear-gradient(151deg, #082044 4%, #36132C 24%, #5E0918 45%, #76020C 61%, #800008 70%) 0% 0% no-repeat padding-box;*/
+            color: white;
+            border: 0 none;
+            border-radius: .25rem;
+            cursor: pointer;
+            padding: 10px 5px;
+            margin: 10px 5px
+        }
+
+        /*#msform .action-button:hover,
+            #msform .action-button:focus {
+                box-shadow: 0 0 0 2px white, 0 0 0 3px #5E0918
+            }*/
+
+        #msform .action-button-previous {
+            width: 100px;
+            /*background: transparent linear-gradient(151deg, #800008 70%, #76020C 61%, #5E0918 45%, #36132C 24%, #082044 4%) 0% 0% no-repeat padding-box;*/
+            color: white;
+            border: 0 none;
+            border-radius: .25rem;
+            cursor: pointer;
+            padding: 10px 5px;
+            margin: 10px 5px
+        }
+
+    /*#msform .action-button-previous:hover,
+            #msform .action-button-previous:focus {
+                box-shadow: 0 0 0 2px white, 0 0 0 3px #76020C
+            }*/
+
+    select.list-dt {
+        border: none;
+        outline: 0;
+        border-bottom: 1px solid #ccc;
+        padding: 2px 5px 3px 5px;
+        margin: 2px
+    }
+
+        select.list-dt:focus {
+            border-bottom: 2px solid #76020C
+        }
+
+    .card {
+        z-index: 0;
+        border: none;
+        border-radius: 0.5rem;
+        position: relative
+    }
+
+    .fs-title {
+        color: #2C3E50;
+        margin-bottom: 10px;
+        text-align: left
+    }
+
+    #progressbar {
+        margin-bottom: 30px;
+        overflow: hidden;
+        color: lightgrey
+    }
+
+        #progressbar .active {
+            color: #000000
+        }
+
+        #progressbar li {
+            list-style-type: none;
+            font-size: 12px;
+            width: 25%;
+            float: left;
+            position: relative
+        }
+
+        #progressbar #Project:before {
+            font-family: FontAwesome;
+            content: "\f215"
+        }
+
+        #progressbar #Phase:before {
+            font-family: FontAwesome;
+            content: "\f1b2"
+        }
+
+        #progressbar #Block:before {
+            font-family: FontAwesome;
+            content: "\f1b3"
+        }
+
+        #progressbar #Plot:before {
+            font-family: FontAwesome;
+            content: "\f247"
+        }
+
+        #progressbar li:before {
+            width: 50px;
+            height: 50px;
+            line-height: 45px;
+            display: block;
+            font-size: 18px;
+            color: #ffffff;
+            background: lightgray;
+            border-radius: 50%;
+            margin: 0 auto 10px auto;
+            padding: 2px
+        }
+
+        #progressbar li:after {
+            content: '';
+            width: 100%;
+            height: 2px;
+            background: lightgray;
+            position: absolute;
+            left: 0;
+            top: 25px;
+            z-index: -1
+        }
+
+        #progressbar li.active:before,
+        #progressbar li.active:after {
+            background: transparent linear-gradient(151deg, #082044 4%, #36132C 24%, #5E0918 45%, #76020C 61%, #800008 70%) 0% 0% no-repeat padding-box;
+        }
+
+
+
+    .fit-image {
+        width: 100%;
+        object-fit: cover
+    }
+
+    .inputfieldcreate {
+        border: 2px solid;
+    }
+</style>

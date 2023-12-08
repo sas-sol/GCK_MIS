@@ -1,0 +1,238 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Sp_Get_Dealerships_Result>
+@{
+    if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+}
+<script>
+    $(document).ready(function () {
+        var groupColumn = 0;
+        var table = $('#dealer').DataTable({
+            dom: 'Bfrtip',
+            "order": [[groupColumn, 'asc']],
+            "displayLength": 10,
+            "drawCallback": function (settings) {
+                var api = this.api();
+                var rows = api.rows({ page: 'current' }).nodes();
+                var last = null;
+
+                api.column(groupColumn, { page: 'current' }).data().each(function (group, i) {
+                    if (last !== group) {
+                        $(rows).eq(i).before(
+                            '<tr class="group"><th colspan="4">' + group + '</th></tr>'
+                        );
+
+                        last = group;
+                    }
+                });
+            },
+            "columnDefs": [
+                { "targets": groupColumn, "visible": false, }
+            ]
+        });
+        // Order by the grouping
+        $('#dealer tbody').on('click', 'tr.group', function () {
+            var currentOrder = table.order()[0];
+            if (currentOrder[0] === groupColumn && currentOrder[1] === 'asc') {
+                table.order([groupColumn, 'desc']).draw();
+            }
+            else {
+                table.order([groupColumn, 'asc']).draw();
+            }
+        });
+    });
+</script>
+<div class="col-md-12">
+    <div class="bgc-white bd bdrs-3 p-20 mB-20">
+        <h4 class="c-grey-900" style="text-align:center"> All Dealerships</h4>
+        <div class="form-row">
+            @foreach (var g in Model.GroupBy(x => new { x.Id, x.Dealership_Name, x.Registeration_Date.Value.Date, x.Status }))
+            {
+                string col = "";
+                if (g.Key.Status == "Suspended" || g.Key.Status == "Terminated") { col = "bgc-red-50"; }
+                else if (g.Key.Status == "") { col = "bgc-red-50"; }
+                <div class="col-md-3">
+                    <div class="profile-sidebar pointer dea-data " id="@g.Key.Id">
+                        <div class="profile-userpic">
+                            @*<img src="~/images/homeicon.png" class="img-responsive" alt="">*@
+                            <img src="~/images/del-placeholder.png" class="img-responsive" alt="">
+                        </div>
+                        <div class="profile-usertitle">
+                            <div class="profile-usertitle-name">
+                                @g.Key.Dealership_Name
+                            </div>
+                            <div class="profile-usertitle-job">
+                                @string.Format("{0:dd-MMM-yyyy}", g.Key.Date)
+                            </div>
+                        </div>
+                        <div class="profile-usermenu">
+                            <h5><u>Dealers</u></h5>
+                            <ul class="nav">
+                                @foreach (var item in g)
+                                {
+                                    <li style="width:100%;font-size: 15px;margin-left: 15px;">
+                                        @item.Name
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+
+
+
+
+@*<table id="dealer" class="table table-striped table-bordered" cellspacing="0" width="100%">
+        <thead>
+            <tr>
+                <th>Dealership</th>
+                <th>Name</th>
+                <th>Father Name</th>
+                <th>CNIC</th>
+                <th>Mobile</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                if (Model.Any())
+                {
+                    int dealercounter = 1;
+                    foreach (var item in Model)
+                    {
+                        string col = "";
+                        if (item.Status == "Suspended" || item.Status == "Terminated") { col = "bgc-red-50"; }
+                        else if (item.Status == "") { col = "bgc-red-50"; }
+                        <tr class="pointer dea-data @col" id="@item.Id">
+                            <td>@item.Dealership_Name -  @string.Format("{0:dd-MMM-yyyy}", item.Registeration_Date) - @item.Status</td>
+                            <td>@item.Name</td>
+                            <td>@item.Father_Name</td>
+                            <td>@item.CNIC_NICOP</td>
+                            <td>@item.Mobile_1</td>
+                        </tr>
+                        dealercounter++;
+                    }
+                }
+            }
+        </tbody>
+    </table>*@
+
+
+<style>
+    .profile {
+        margin: 20px 0;
+    }
+
+    /* Profile sidebar */
+    .profile-sidebar {
+        padding: 20px 0 10px 0;
+        background: #fff;
+        box-shadow: rgb(0 0 0 / 80%) 0 0 10px;
+        border: 1px solid #ccc;
+        margin: 10px 10px;
+        height: 450px;
+    }
+
+    .profile-userpic {
+        display: flex;
+        justify-content: center;
+    }
+
+
+        .profile-userpic img {
+            float: none;
+            margin: 0 auto;
+            width: 50%;
+            height: 50%;
+            -webkit-border-radius: 50% !important;
+            -moz-border-radius: 50% !important;
+            border-radius: 50% !important;
+            border: 1px solid black;
+        }
+
+    .profile-usertitle {
+        text-align: center;
+        margin-top: 20px;
+    }
+
+    .profile-usertitle-name {
+        color: #5a7391;
+        font-size: 16px;
+        font-weight: 600;
+        margin-bottom: 7px;
+    }
+
+    .profile-usertitle-job {
+        text-transform: uppercase;
+        color: #5b9bd1;
+        font-size: 12px;
+        font-weight: 600;
+        margin-bottom: 15px;
+    }
+
+    .profile-userbuttons {
+        text-align: center;
+        margin-top: 10px;
+    }
+
+        .profile-userbuttons .btn {
+            text-transform: uppercase;
+            font-size: 11px;
+            font-weight: 600;
+            padding: 6px 15px;
+            margin-right: 5px;
+        }
+
+            .profile-userbuttons .btn:last-child {
+                margin-right: 0px;
+            }
+
+    .profile-usermenu {
+        margin-top: 30px;
+        padding: 5px 10px;
+    }
+
+        .profile-usermenu ul li {
+            border-bottom: 1px solid #f0f4f7;
+        }
+
+            .profile-usermenu ul li:last-child {
+                border-bottom: none;
+            }
+
+            .profile-usermenu ul li a {
+                color: #93a3b5;
+                font-size: 14px;
+                font-weight: 400;
+            }
+
+                .profile-usermenu ul li a i {
+                    margin-right: 8px;
+                    font-size: 14px;
+                }
+
+                .profile-usermenu ul li a:hover {
+                    background-color: #fafcfd;
+                    color: #5b9bd1;
+                }
+
+            .profile-usermenu ul li.active {
+                border-bottom: none;
+            }
+
+                .profile-usermenu ul li.active a {
+                    color: #5b9bd1;
+                    background-color: #f6f9fb;
+                    border-left: 2px solid #5b9bd1;
+                    margin-left: -2px;
+                }
+</style>

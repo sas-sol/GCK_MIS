@@ -1,0 +1,95 @@
+﻿@model MeherEstateDevelopers.Models.Lead
+@using (Html.BeginForm("CreatePremiumLeads", "Leads", FormMethod.Post, new { @id = "c-pre-led", @class = "", role = "form" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="row">
+        <div class="form-group col-md-3">
+            <label>Name</label>
+            @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control", required = "" } })
+        </div>
+        <div class="form-group col-md-3">
+            <label>Father/Husband Name</label>
+            @Html.EditorFor(model => model.Father_Husband, new { htmlAttributes = new { @class = "form-control", required = "" } })
+        </div>
+        <div class="form-group col-md-3">
+            <label>Mobile</label>
+            @Html.EditorFor(model => model.Mobile_1, new { htmlAttributes = new { @class = "form-control", required = "" } })
+        </div>
+        <div class="form-group col-md-5">
+            <label>Address</label>
+            @Html.EditorFor(model => model.Address, new { htmlAttributes = new { @class = "form-control" } })
+        </div>
+    </div>
+    <hr />
+    <div class="row">
+
+    </div>
+    <div class="row">
+        <div class="form-group col-md-2">
+            <label>Source</label>
+            <select class="form-control" name="Source">
+                <option value="Walkin">Walk-in</option>
+                <option value="Social Media">Social Media</option>
+                <option value="UAN">UAN</option>
+                <option value="Reference">Reference</option>
+                <option value="Zameen Leads">Zameen Leads</option>
+            </select>
+        </div>
+        <div class="form-group col-md-2" style="display:none;">
+            <label>Status</label>
+            <select class="form-control" name="LeadStatus" id="LeadStatus" value="Initial_Discussion">
+                <option value="Initial_Discussion">Initial Discussion</option>
+                <option value="Token">Token</option>
+                <option value="Mature">Mature</option>
+                <option value="Loose">Loose</option>
+            </select>
+        </div>
+        <div class="form-group col-md-5">
+            <label>Remarks</label>
+            <textarea class="form-control" name="Description" rows="3" required></textarea>
+        </div>
+    </div>
+}
+<script>
+    $(function () {
+        $('.modal-footer').append('<button class="btn btn-primary" id="cra-premium-lead" type="button">Create Lead</button>');
+        $(".modal-header").text("Create Lead");
+    });
+    $(document).on("click", "#cra-premium-lead", function (e) {
+        e.preventDefault();
+        var name = $("#Name").val();
+        var f_name = $("#Father_Husband").val();
+        var mob = $("#Mobile_1").val();
+
+        if (name == "" || name == null) {
+            alert("Please Enter Name")
+            return false;
+        }
+        else if (f_name == "" || f_name == null) {
+            alert("Please Father Name")
+            return false;
+        }
+        else if (mob == "" || mob == null) {
+            alert("Please Mobile Number")
+            return false;
+        }
+        if (confirm("Are you sure you want to create Lead")) {
+            $.ajax({
+                type: "POST",
+                url: $('#c-pre-led').attr("action"),
+                data: $('#c-pre-led').serialize(),
+                success: function (data) {
+                    window.location.reload();
+                },
+                error: function (data) {
+                }
+            });
+        }
+
+    });
+</script>
+<style>
+    .fil, .r-plt {
+        display: none;
+    }
+</style>

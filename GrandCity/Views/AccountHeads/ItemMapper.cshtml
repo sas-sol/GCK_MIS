@@ -1,0 +1,59 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Sp_Get_COAMapper_Vendor_Result>
+<hr />
+<h4 style="text-align:center">Vendor Management</h4>
+<hr />
+<div class="col-md-12">
+    <div class="form-row row">
+        <div class="col-md-6">
+            <h5>Payables List</h5>
+            @foreach (var item in Model)
+            {
+                <div class="form-row dealdiv" id="@item.Vendor_Id">
+                    <div class="form-group col-md-6">
+                        <h6>@item.Company</h6>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <select class="form-control sel-plug ven-pay">
+                            @if (item.AccountId != null)
+                            {
+                                <option value="@item.AccountId">@item.AccountCode - @item.Head_Name</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+            }
+        </div>
+
+    </div>
+</div>
+<script>
+    $('.sel-plug').select2({
+        placeholder: "Search for Account",
+        ajax: {
+            url: '/AccountHeads/GetHead/',
+            dataType: 'json',
+            params: {
+                contentType: 'application/json; charset=utf-8'
+            },
+            data: function (params) {
+                return {
+                    q: params.term// search term
+                };
+            },
+            processResults: function (data) {
+                // Transforms the top-level key of the response object from 'items' to 'results'
+                return {
+                    results: $.map(data.items, function (item) {
+                        return {
+                            text: item.Parent,
+                            children: [{
+                                id: item.id,
+                                text: item.text
+                            }]
+                        }
+                    })
+                };
+            }
+        }
+    });
+</script>

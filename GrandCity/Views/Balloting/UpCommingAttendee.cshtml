@@ -1,0 +1,77 @@
+﻿@model MeherEstateDevelopers.Models.AttendeeMonitorModel
+@{ if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+}
+<div class="col-md-12 bgc-white pt-md-3">
+    <div class="panel-heading central-text-align">
+        <h5>Customer Entrance</h5>
+    </div>
+    <div class="col-md-12 mt-md-3">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th colspan="3"> Guests Summary </th>
+                </tr>
+                <tr>
+                    <th>Adults</th>
+                    <th>Children</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>@Model.GuestsList.Sum(x => x.Adults)</td>
+                    <td>@Model.GuestsList.Sum(x => x.Children)</td>
+                    <td>@(Model.GuestsList.Sum(x => x.Adults) + Model.GuestsList.Sum(x => x.Children))</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <table class="table table-borderless fhjksdga">
+        <thead>
+            <tr>
+                <th>Sr#</th>
+                <th>File#</th>
+                <th>CNIC</th>
+                <th>Time Of Entry</th>
+                <th>Adults</th>
+                <th>Children</th>
+                <th>Total Guests</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{int count = 1;}
+            @if (Model.GuestsList.Any())
+            {
+                foreach (var v in Model.GuestsList)
+                {
+                    <tr>
+                        <td>@(count++)</td>
+                        <td>@v.File_Number</td>
+                        <td>@v.Entry_CNIC</td>
+                        <td>@v.EntranceTime.Value</td>
+                        <td>@v.Adults</td>
+                        <td>@v.Children</td>
+                        <td>@(v.Children + v.Adults)</td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="6" class="central-text-align">No Guests Entered Yet !</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+</div>
+<script>
+    $('.fhjksdga').DataTable();
+</script>

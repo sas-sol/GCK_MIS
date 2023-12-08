@@ -1,0 +1,115 @@
+﻿<div class="col-md-12">
+    <div id="prj-ganttchart" style="max-width:100%"></div>
+</div>
+<script>
+    var startDate;
+    var deadLine;
+    var tskdata;
+    var prjdata;
+    var milestonecount = 0;
+    $(function () {
+        var tskUrl = "@Url.Action("getGanttChart",new{ Prj_Id= ViewBag.id })";
+        $.getJSON(tskUrl, function (data) {
+            data = JSON.parse(data);
+            tskdata = data;
+
+        });
+    });
+    $(function () {
+        var prjUrl = "@Url.Action("getPrjData", new{ Id= ViewBag.id})";
+        $.getJSON(prjUrl, function (data) {
+            data = JSON.parse(data);
+            prjdata = data;
+        });
+    });
+
+    startDate = Date.parse(prjdata.Datetime);
+    deadLine = Date.parse(prjdata.Deadline);
+    var mainobj = {};
+    var seriesg = [];
+    var datag = [];
+    var counter = 0;
+    var counters = 0;
+    for (var i = 0; i < tskdata.length; i++) {
+        if (tskdata[i].Type == "Milestone") {
+            datag.push({
+                name: tskdata[i].Title,
+                id: tskdata[i].Id.toString(),
+                start: Date.parse(tskdata[i].Start_Date),
+                end: Date.parse(tskdata[i].Deadline)
+            });
+            for (var j = 0; j < tskdata.length; j++) {
+                if (tskdata[i].Id == tskdata[j].MTS_Id && tskdata[j].Type=="Task") {
+                    datag.push({
+                        name: tskdata[j].Description,
+                        id: tskdata[j].Id.toString(),
+                        dependency: tskdata[i].Id.toString(),
+                        parent: tskdata[i].Id.toString(),
+                        start: Date.parse(tskdata[j].Start_Date),
+                        end: Date.parse(tskdata[j].Deadline)
+                    });
+                    for (var k = 0; k < tskdata.length; k++) {
+                        if (tskdata[j].Id == tskdata[k].MTS_Id && tskdata[k].Type == "SubTask") {
+                            datag.push({
+                                name: tskdata[k].Description,
+                                id: tskdata[k].Id.toString(),
+                                dependency: tskdata[j].Id.toString(),
+                                parent: tskdata[j].Id.toString(),
+                                start: Date.parse(tskdata[j].Start_Date),
+                                end: Date.parse(tskdata[j].Deadline)
+                            });
+
+                        }
+                    }
+                }
+            }
+
+        }
+
+    }
+
+
+    var today = new Date(),
+        day = 1000 * 60 * 60 * 24,
+
+        dateFormat = Highcharts.dateFormat,
+        defined = Highcharts.defined,
+        isObject = Highcharts.isObject, reduce = Highcharts.reduce;
+
+
+    today.setUTCHours(0);
+    today.setUTCMinutes(0);
+    today.setUTCSeconds(0);
+    today.setUTCMilliseconds(0);
+    today = startDate;
+    var obj = {
+        series: [
+            {
+                name:prjdata.Budget,
+                data: [
+                    {
+                        name: prjdata.Name,
+                        id: prjdata.Id.toString,
+                        start: (startDate + day),
+                        end: deadLine,
+                    }]
+            },{
+
+                name: prjdata.Name,
+                data:datag
+            },
+        ],
+
+        title: {
+            text: prjdata.Name
+        },
+        xAxis: {
+            currentDateIndicator: true,
+            min: (startDate + day),
+            max: deadLine
+        }
+    };
+    Highcharts.ganttChart('prj-ganttchart',
+        obj);
+
+</script>

@@ -1,0 +1,142 @@
+﻿@model MeherEstateDevelopers.Models.OnlineBankAccountsMapper
+<script>
+    var banks = @Html.Raw(Json.Encode(ViewBag.Bank));
+</script>
+<h4 style="text-align:center">Online Bank Account Numbers</h4>
+<div class="col-md-12">
+    <div class="form-row row">
+        <div class="col-md-5" @*id="bankaccount"*@>
+            <h5>Online Bank Accounts Mapping</h5>
+            @foreach (var g in Model.OnlineBankAccountsCOA.GroupBy(x => x.Bank))
+            {
+                <div>
+                    <h6>@g.Key</h6>
+                    @foreach (var item in g)
+                    {
+                        <div class="form-row dealdiv" id="@item.Bank_Id">
+                            <div class="form-group col-md-6">
+                                <h6>@item.Account_No</h6>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <select class="form-control bank-coa bank-on-acc-set">
+                                    @if (item.AccountId != null)
+                                    {
+                                        <option value="@item.AccountId">@item.AccountCode - @item.Head_Name</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+        </div>
+        <div class="col-md-7">
+            <div class="from-row row p-20">
+                <div class="col-md-12">
+                    <h5>Add Online Bank account</h5>
+                </div>
+                <div class="form-group col-md-4">
+                    <label>Bank</label>
+                    <script>
+                    $("#Bank").append('<option value="">Select Bank</option>');
+                    var u_bank = banks.reduce((r, a) => {
+                        r[a.Bank] = [...r[a.Bank] || [], a];
+                        return r;
+                    }, {});
+                    $.each(u_bank, function (key) {
+                        $("#Bank").append('<option value="' + key + '">' + key + '</option>');
+                    });
+                    </script>
+                    <select class="form-control" name="Bank" id="Bank"></select>
+                </div>
+                <div class="form-group col-md-5">
+                    <label>Account Number</label>
+                    <select class="form-control accnum" name="Deposit_Bank_Acc_Number"></select>
+                </div>
+                <div class="form-group col-md-3">
+                    <input class="btn btn-primary" type="button" style="margin-top:29px" id="sav-ban-onl-acc" value="Add" />
+                </div>
+            </div>
+            <div id="bankaccount">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Bank</th>
+                            <th>Account Number</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var g in Model.OnlineBankAccounts.GroupBy(x => x.Bank))
+                        {
+                            int i = 1;
+                            foreach (var item in g)
+                            {
+                                <tr>
+                                    @if (i == 1)
+                                    {
+                                        <td rowspan="@g.Count()">@g.Key</td>
+                                        <td>@item.Account_No</td>
+                                        <td>
+                                            <i class="fas fa-trash-alt Bank-on-rmv pointer" id="@item.Id"></i>
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td>@item.Account_No</td>
+                                        <td>
+                                            <i class="fas fa-trash-alt Bank-on-rmv pointer" id="@item.Id"></i>
+                                        </td>
+                                    }
+
+                                </tr>
+                                i++;
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).on("change", "#Bank", function () {
+        var val = $(this).val();
+        var a = banks.filter(x => x.Bank == val);
+        $('.accnum').empty();
+        $.each(a, function (b) {
+            $(".accnum").append('<option value="' + a[b].Account_Number + '">' + a[b].Account_Number + '</option>');
+        });
+
+    });
+
+    $('.bank-coa').select2({
+        placeholder: "Search for Account",
+        ajax: {
+            url: '/AccountHeads/GetHead/',
+            dataType: 'json',
+            params: {
+                contentType: 'application/json; charset=utf-8'
+            },
+            data: function (params) {
+                return {
+                    q: params.term// search term
+                };
+            },
+            processResults: function (data) {
+                // Transforms the top-level key of the response object from 'items' to 'results'
+                return {
+                    results: $.map(data.items, function (item) {
+                        return {
+                            text: item.Parent,
+                            children: [{
+                                id: item.id,
+                                text: item.text
+                            }]
+                        }
+                    })
+                };
+            }
+        }
+    });
+</script>

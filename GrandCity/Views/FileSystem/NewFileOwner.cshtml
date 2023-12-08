@@ -1,0 +1,148 @@
+﻿<input type="hidden" class="flid" value="@ViewBag.fileId" />
+<div class="form-row new-file-owner-data-nsdjk">
+    <input type="hidden" class="file-trans-id" />
+    <div class="form-group col-md-2">
+        <label>Name</label>
+        <input type="text" class="form-control Name" />
+    </div>
+    <div class="form-group col-md-2">
+        <label>Father's/Husband's Name</label>
+        <input type="text" class="form-control Father_Husband" />
+    </div>
+    <div class="form-group col-md-4">
+        <label>Postal Address</label>
+        <input type="text" class="form-control Postal_Address" />
+    </div>
+    <div class="form-group col-md-4">
+        <label>Residential Address</label>
+        <input type="text" class="form-control Residential_Address">
+    </div>
+    <div class="form-group col-md-2">
+        <label>City</label>
+        <input type="text" class="form-control City">
+    </div>
+    <div class="form-group col-md-1">
+        <label>Date Of Birth</label>
+        <input type="text" class="form-control Date_Of_Birth" />
+    </div>
+    <div class="form-group col-md-2">
+        <label>CNIC / NICOP</label>
+        <input type="text" class="form-control CNIC_NICOP">
+    </div>
+    <div class="form-group col-md-2">
+        <label>Occupation</label>
+        <input type="text" class="form-control Occupation">
+    </div>
+    <div class="form-group col-md-2">
+        <label>Nationality</label>
+        <input type="text" class="form-control Nationality">
+    </div>
+    <div class="form-group col-md-2">
+        <label>Email</label>
+        <input type="text" class="form-control Email">
+    </div>
+    <div class="form-group col-md-2">
+        <label>Phone Office</label>
+        <input type="text" class="form-control Phone_Office">
+    </div>
+    <div class="form-group col-md-2">
+        <label>Residential</label>
+        <input type="text" class="form-control Residential">
+    </div>
+    <div class="form-group col-md-2">
+        <label>Mobile 1</label>
+        <input type="text" class="form-control Mobile_1">
+    </div>
+    <div class="form-group col-md-2">
+        <label>Mobile 2</label>
+        <input type="text" class="form-control Mobile_2">
+    </div>
+    <div class="form-group col-md-2">
+        <label>Ownership Date</label>
+        <input type="text" class="form-control DateTime" data-provide="datepicker">
+    </div>
+    <div class="form-group col-md-2">
+        <label>Ownership Status</label>
+        <select class="form-control owner-stat-jfkldgf">
+            <option value="Owner">Owner</option>
+            <option value="Transfer" selected>Transferred</option>
+        </select>
+    </div>
+</div>
+
+<hr />
+<h6 class="c-grey-900">Nominee</h6>
+<div class="mT-30 up-info">
+    <div class="form-row">
+        <div class="form-group col-md-2">
+            <label>Name</label>
+            <input type="text" class="form-control Nominee_Name" readonly>
+        </div>
+        <div class="form-group col-md-2">
+            <label>CNIC / NICOP</label>
+            <input type="text" class="form-control Nominee_CNIC_NICOP" readonly>
+        </div>
+        <div class="form-group col-md-2">
+            <label>Relation</label>
+            <input class="form-control Nominee_Relation" readonly>
+        </div>
+        <div class="form-group col-md-5">
+            <label>Address</label>
+            <input type="text" class="form-control Nominee_Address" readonly>
+        </div>
+    </div>
+</div>
+
+<div class="col-md-12 central-text-align">
+    <button class="btn btn-success add-new-owner-rec-dsffskfs">Save Owner</button>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('.add-new-owner-rec-dsffskfs').unbind().click(function () {
+            //collect the data here
+            let actualRow = $('.new-file-owner-data-nsdjk');
+            var od = {
+                Id: $(actualRow).find('.file-trans-id').val()
+                , Name: $(actualRow).find('.Name').val()
+                , Father_Husband: $(actualRow).find('.Father_Husband').val()
+                , Postal_Address: $(actualRow).find('.Postal_Address').val()
+                , Residential_Address: $(actualRow).find('.Residential_Address').val()
+                , Phone_Office: $(actualRow).find('.Phone_Office').val()
+                , Residential: $(actualRow).find('.Residential').val()
+                , Mobile_1: $(actualRow).find('.Mobile_1').val()
+                , Mobile_2: $(actualRow).find('.Mobile_2').val()
+                , Email: $(actualRow).find('.Email').val()
+                , Occupation: $(actualRow).find('.Occupation').val()
+                , Nationality: $(actualRow).find('.Nationality').val()
+                , Date_Of_Birth: $(actualRow).find('.Date_Of_Birth').val()
+                , CNIC_NICOP: $(actualRow).find('.CNIC_NICOP').val()
+                , Nominee_Name: $(actualRow).find('.Nominee_Name').val()
+                , Nominee_Relation: $(actualRow).find('.Nominee_Relation').val()
+                , Nominee_Address: $(actualRow).find('.Nominee_Address').val()
+                , Nominee_CNIC_NICOP: $(actualRow).find('.Nominee_CNIC_NICOP').val()
+                , DateTime: $(actualRow).find('.DateTime').val()
+                , City: $(actualRow).find('.City').val()
+                , Ownership_Status: $(actualRow).find('.owner-stat-jfkldgf option:selected').val()
+                , FileId: $('.flid').val()
+            };
+            $.ajax({
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                url: '/FileSystem/SaveNewFileOwner/',
+                data: JSON.stringify(od),
+                success: function (data) {
+                    $("#upd-info").show();
+                    $(".updt-exstng-owner-rec-dsffskfs").hide();
+                    $(".up-info :input").prop("readonly", true);
+                    $(".owner-stat-jfkldgf").prop("disabled", true);
+                    alert("Data Updated");
+                    closeModal();
+                    $('.owners-trail-fjhdsf').load('/FileSystem/FileOwnersData/', { fileId: od.FileId });
+                },
+                error: function (data) {
+                }
+            });
+        });
+    });
+</script>

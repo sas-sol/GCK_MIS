@@ -1,0 +1,108 @@
+@model IEnumerable<MeherEstateDevelopers.Models.Sp_Get_LandRecords_Result>
+
+@{ if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+}
+
+<div class="col-md-12 bgc-white p-10">
+    <div class="panel-heading central-text-align">
+        <h4 style="text-align:center">Land Record</h4>
+    </div>
+    <div class="row mt-md-3 mb-md-3">
+        <div class="col-md-10">
+            <div class='col-md-5'>
+                <div class="layers bd bgc-white p-10 mt-2">
+                    <div class="layer w-100">
+                        <div class="peers ai-sb fxw-nw">
+                            <div class="peer peer-greed">
+                                <h6 class="lh-1">Total Land Own</h6>
+                            </div>
+                            <div class="peer">
+                                <span class="d-ib lh-0 va-m fw-600 bdrs-10em pX-15 pY-15 bgc-green-50 c-green-500">0 Sqft</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2">
+            @if (User.IsInRole("Add New Land Record") || User.IsInRole("Administrator"))
+            {
+                <button class="btn btn-success new-land-rec">Add New Land Record</button>
+            }
+        </div>
+    </div>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Sr.</th>
+                <th>Name</th>
+                <th>Moza No</th>
+                <th>Marabba No</th>
+                <th>Acre No.</th>
+                <th>Kanal</th>
+                <th>Marla</th>
+                <th>SFt</th>
+            </tr>
+        </thead>
+        @{ var ii = 1; }
+        @foreach (var a in Model.GroupBy(x => new { x.Deal_Id}))
+        {
+
+            int i = 1;
+
+            foreach (var item in a)
+            {
+                <tr>
+                    @if (i == 1)
+                    {
+                    <td style="vertical-align: middle" rowspan="@a.Count()">
+                        @(ii) &ensp; &ensp;
+                        @if (User.IsInRole("Update Land Record") || User.IsInRole("Administrator"))
+                        {
+                            <i data-dealid="@item.Deal_Id" class="fas fa-pencil-alt edt_recrd"></i>
+                        }&ensp; &ensp;
+                        @if (User.IsInRole("Delete Land Record") || User.IsInRole("Administrator"))
+                        {
+                            <i data-dealid="@item.Deal_Id" class="fas fa-trash-alt dlt-recrd"></i>
+                        }
+                    </td>
+                        <td style="vertical-align: middle" rowspan="@a.Count()">
+                            @item.Party_Name
+                        </td>
+                        <td style="vertical-align: middle" rowspan="@a.Count()">
+                            @item.Moza_No
+                        </td>
+                        <td style="vertical-align: middle" rowspan="@a.Count()">
+                            @item.Marraba_No
+                        </td>
+                    }
+                    <td>
+                        @item.Khasra_No
+                    </td>
+                    <td>
+                        @item.Kannal
+                    </td>
+                    <td>
+                        @item.Marla
+                    </td>
+                    <td>
+                        @item.SFT
+                    </td>
+
+                </tr>
+
+                i++;
+            }
+            ii++;
+        }
+
+
+    </table>
+</div>

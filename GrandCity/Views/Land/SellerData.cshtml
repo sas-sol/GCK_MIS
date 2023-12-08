@@ -1,0 +1,35 @@
+﻿
+<style>
+    #add-seller-data {
+        float: right;
+    }
+</style>
+
+<div>
+    <div class="row">
+        <div class="col-md-4">
+            <label>Seller Name:</label>
+            <input type="text" class="form-control" id="seller-name" placeholder="Seller Name" autocomplete="off" required>
+        </div>
+
+        <div class="col-md-4">
+            <label>CNIC :</label>
+            <input type="text" class="form-control" pattern="[0-9+]{5}-[0-9+]{7}-[0-9]{1}|[0-9+]{6}-[0-9+]{6}-[0-9]{1}" id="id-card-no" placeholder="CNIC" required>
+        </div>
+    </div>
+
+    <div class="row" style="margin-top:2%;">
+        <div class="col-md-4">
+            <label>Mobile No :</label>
+            <input type="text" class="form-control" pattern="^0\d{10}" id="mobile-no" placeholder="Mobile No" required>
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+    $('.modal-footer').append('<button class="btn btn-primary" id="add-seller-data">Submit</button>');
+
+</script>

@@ -1,0 +1,23 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guest - MIS</title>
+    <script src="~/Scripts/jquery-3.3.1.min.js"></script>
+    <link href="~/Content/style.css" rel="stylesheet" />
+    <link href="~/Content/SharedCss.css" rel="stylesheet" />
+    <link rel="icon" type="image/png" href="https://meharestate.com/wp-content/uploads/2022/09/cropped-Untitled-design-1-32x32.png">
+</head>
+<body class="app">
+    @{Html.RenderAction("GuestHeader", "SideWidgets"); }
+    <main class="main-content bgc-grey-100">
+        <div id="mainContent">
+            @RenderBody()
+        </div>
+    </main>
+    @{Html.RenderAction("Footer", "SideWidgets"); }
+    <script type="text/javascript" src="~/Scripts/vendor.js"></script>
+    <script type="text/javascript" src="~/Scripts/bundle.js"></script>
+</body>
+</html>

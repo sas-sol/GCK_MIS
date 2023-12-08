@@ -1,0 +1,84 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Sp_Get_wbd_Resource_Result>
+
+<table class="table table-bordered" id="mts-table" cellspacing="0" style="width:100%;table-layout:fixed">
+    <thead>
+        <tr>
+            <th width="5%">Sr.</th>
+            <th width="15%">Title</th>
+            <th width="30%">Name</th>
+            @*<th width="7%">Type</th>*@
+            <th width="8%">Qty</th>
+            <th width="8%">Rate</th>
+            <th width="8%">Amount</th>
+            <th width="7%">UOM</th>
+           
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            decimal? Total_Amount = 0;
+            if (Model.Any())
+            {
+                int srcounter = 1;
+                foreach (var G in Model.GroupBy(x => x.Material_Type).OrderBy(x => x.Key))
+                {
+                    <tr colspan="2">
+                        <td colspan="2"></td>
+                        <td style="text-align:center;font-size:x-large">@G.Key</td>
+                    </tr>
+
+                    foreach (var item in G)
+                    {
+                        Total_Amount += item.Amount;
+                        <tr>
+                            <td>@srcounter</td>
+                            <td>@item.Title</td>
+                            <td>@item.Item_Name</td>
+                            @*<td>@item.Material_Type</td>*@
+                            <td>@string.Format("{0:0,0.##}", item.Qty)</td>
+                            <td>@string.Format("{0:0,0.##}", item.Rate)</td>
+                            <td>@string.Format("{0:0,0.##}", item.Amount)</td>
+                            <td>@item.UOM</td>
+                        </tr>
+
+
+                        srcounter++;
+                    }
+                }
+            }
+            else
+            {
+                <tr><td colspan="12" align="center">No Activity has been created</td></tr>
+            }
+        }
+    </tbody>
+    @*<tfoot class="sum-det-jkh">
+            <tr class="thead-dark">
+                <td colspan="7" style="text-align:right"><b>Total</b></td>
+                <td>@string.Format("{0:0,0.##}", Total_Amount)</td>
+                <td></td>
+                <td></td>
+        </tfoot>*@
+</table>
+
+<script>
+    $(document).ready(function () {
+        $('#wbd-Resource').DataTable({
+            dom: 'Bfrtip',
+            buttons: [
+                'copy', 'excel', 'pdf', 'print'
+            ]
+        });
+    });
+</script>
+<style>
+    .del-mts {
+        display: none
+    }
+
+    .mts-div:hover .del-mts {
+        display: block
+    }
+
+    
+</style>

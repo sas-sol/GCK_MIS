@@ -1,0 +1,42 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Sms_Draft>
+
+
+<h6 class="c-grey-900">All Saved Drafts</h6>
+
+
+@foreach (var msg in Model.GroupBy(x => x.Group_Tag))
+{
+    var id = 1;
+    <div class="row p-5" id="msgsg">
+        <div class="col-md-1">
+            <input type="radio" id="@msg.Key" name="MsgDraft" value="@id">
+        </div>
+        <div class="col-md-9">
+            <textarea class="form-control msgbdy" id="@msg.Key" rows="6" readonly>
+                @foreach (var text in msg.OrderBy(x=>x.Line))
+                {@text.Msg_Text
+                                    
+                    @text.Msg_Data
+                                       
+                }
+                                    
+
+            </textarea>
+        </div>
+        <div class="col-md-2">
+            <i class=" fa fa-pencil pointer editdraft" id="@msg.Key">Edit</i>
+        </div>
+
+    </div>
+
+}
+
+<script>
+    $(document).on("click", ".editdraft", function (e) {
+        var rp = $(this).attr('id');
+        window.open("/Sms/CreateDraft?group_tag=" + rp, '_blank');
+
+    });
+</script>
+
+

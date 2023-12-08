@@ -1,0 +1,63 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Sp_Get_MTS_Req_Count_Result>
+
+<div class="col-md-12 p-5 " >
+    <h6>Update Requests</h6>
+    @if (Model.Any())
+    {
+        foreach (var g in Model.GroupBy(x => x.Type))
+        {
+            <div class="layers bd bgc-white p-5">
+                <div class="layer w-100 mB-10">
+                    <h6 class="lh-1">@g.Key</h6>
+                </div>
+                @foreach (var item in g)
+                {
+                    if (item.Current_Status == "Pending")
+                    {
+                        <div class="layer w-100">
+                            <div class="peers ai-sb fxw-nw mts-stat-det pointer" data-stat="Pending" data-type="@g.Key" data-toggle="modal" data-target="#Modal">
+                                <div class="peer peer-greed">
+                                    Pending
+                                </div>
+                                <div class="peer">
+                                    <span class="d-ib lh-0 va-m fw-600 bdrs-10em pX-15 pY-15 bgc-yellow-50 c-orange-500">@item.Total</span>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    else if (item.Current_Status == "Approved")
+                    {
+                        <div class="layer w-100">
+                            <div class="peers ai-sb fxw-nw mts-stat-det pointer" data-stat="Approved" data-type="@g.Key" data-toggle="modal" data-target="#Modal">
+                                <div class="peer peer-greed">
+                                    Approved
+                                </div>
+                                <div class="peer">
+                                    <span class="d-ib lh-0 va-m fw-600 bdrs-10em pX-15 pY-15 bgc-green-50 c-green-500">@item.Total</span>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    else if (item.Current_Status == "Rejected")
+                    {
+                        <div class="layer w-100">
+                            <div class="peers ai-sb fxw-nw mts-stat-det pointer" data-stat="Rejected" data-type="@g.Key" data-toggle="modal" data-target="#Modal">
+                                <div class="peer peer-greed">
+                                    Rejected
+                                </div>
+                                <div class="peer">
+                                    <span class="d-ib lh-0 va-m fw-600 bdrs-10em pX-15 pY-15 bgc-red-50 c-red-500">@item.Total</span>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+            </div>
+        }
+    }
+    else
+    {
+        <hr />
+        <p>No Update Requests</p>
+    }
+</div>

@@ -1,0 +1,37 @@
+﻿@{
+    /**/
+
+    if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+}
+
+
+
+
+<div class="container-fluid">
+    <h4 class="c-grey-900 mT-10 mB-30"></h4>
+    <ul class="nav nav-tabs" id="myTabs">
+        @{ string activeclass = "active";}
+        <li class="nav-item"><a class="nav-link @activeclass" data-toggle="tab" data-link="/Loan/Summary/" href="#bld">Summary</a></li>
+        @{ activeclass = ""; }
+        <li class="nav-item"><a class="nav-link @activeclass" data-toggle="tab" data-link="/Loan/LoanList" href="#bld">Payables Loans</a></li>
+        @{ activeclass = ""; }
+        <li class="nav-item"><a class="nav-link @activeclass" data-toggle="tab" data-link="/Loan/AdvanceList" href="#bld">Payable Advance</a></li>
+        @{ activeclass = ""; }
+        <li class="nav-item"><a class="nav-link @activeclass" data-toggle="tab" data-link="/Loan/ArchiveOrReceivable?Status=Paid" href="#bld">Archive</a></li>
+        @{ activeclass = ""; }
+        <li class="nav-item"><a class="nav-link @activeclass" data-toggle="tab" data-link="/Loan/ArchiveOrReceivable?Status=Pending" href="#bld">Receivables</a></li>
+    </ul>
+    <!-- Tab panes -->
+    <div class="tab-content">
+        <div id="bld" class="tab-pane active">
+            @{ Html.RenderAction("Summary", "Loan");}
+        </div>
+    </div>
+</div>

@@ -1,0 +1,51 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Sp_Get_Salary_Variance_Result>
+@{ Layout = "~/Views/Shared/_StaffLayout.cshtml"; }
+<style>
+    table thead tr th, table tbody tr td {
+        font-size: 12px;
+    }
+
+    .scrolling-box {
+        height: 740px;
+        overflow-y: scroll;
+        overflow-x: scroll;
+        width: 100%;
+    }
+</style>
+<div class="scrolling-box">
+    <div class="bgc-white bdrs-3  mB-20">
+        <h4 class="c-grey-900 mB-20">Employess salaries</h4>
+        <table id="salary-dat" class="table table-striped table-bordered " cellspacing="0" width="100%">
+            @{
+                foreach (var g in Model.GroupBy(x => new { x.Name }))
+                {
+                    <thead class="">
+                        <tr>
+                            <th colspan="6" style="font-size:21px;text-align:center"> @g.Key.Name</th>
+                        </tr>
+                        <tr>
+                            <th>Name</th>
+                            <th>CNIC</th>
+                            <th>Previous Month Salary</th>
+                            <th>Current Month Salary</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in g.GroupBy(y => new { y.Emp_Id, y.Employee_Name, y.CNIC }))
+                        {
+                            <tr>
+                                <td>@item.Key.Employee_Name</td>
+                                <td>@item.Key.CNIC</td>
+                                @foreach (var item2 in item)
+                                {
+                                    <td>@String.Format("{0:n0}", item2.Basic_salary) </td>
+                                }
+                            </tr>
+                        }
+                    </tbody>
+                }
+            }
+        </table>
+    </div>
+</div>
+

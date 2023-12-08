@@ -1,0 +1,1105 @@
+﻿@{ Layout = "~/Views/Shared/_StaffLayout.cshtml"; }
+<div class="row gap-20 pos-r">
+    <datalist id="dealersList">
+        @foreach(var v in (SelectList)ViewBag.Dealership)
+        {
+            <option value="@v.Text"></option>
+        }
+    </datalist>
+    <div class="col-md-8">
+        <div class="bgc-white p-20 bd">
+            <h6 class="c-grey-900">Plot Transfer</h6>
+            <div class="mT-30">
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="form-row" id="plot-trans-alert"></div>
+                        <div class="form-row">
+                            <div class="form-group col-md-4">
+                                <label>Block</label>
+                                @Html.DropDownList("Block", null, "Choose..", new { @class = "form-control blk-plots", required = "" })
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label>Type</label>
+                                <select class="form-control blk-plots" id="plot-type">
+                                    <option value="Residential">Residential</option>
+                                    <option value="Commercial">Commercial</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label>Plot No</label>
+                                <select class="form-control" id="plot-details">
+                                    <option>Select Block</option>
+                                </select>
+                            </div>
+                            <div class="col-md-1 form-group">
+                                <button id="sea-plot-data-trans-req-new" style="margin-top: 29px;" class="btn btn-primary">Search</button>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-3">
+                                <label>Plot No.</label>
+                                <h5 id="plt-no"></h5>
+                                <input type="hidden" class="form-control" id="plt-id" name="Plot_Id" value="" readonly>
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label>Block</label>
+                                <h5 id="plt-blk"></h5>
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label>Plot Size</label>
+                                <h5 id="plt-size"></h5>
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label>Type</label>
+                                <h5 id="plt-type"></h5>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label>Dimension</label>
+                                <h5 id="plt-dim"></h5>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label>Status</label>
+                                <h5 id="plt-status"></h5>
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label>Road</label>
+                                <h5 id="plt-road"></h5>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label>Area</label>
+                                <h5 id="plt-area"></h5>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label>Location</label>
+                                <h5 id="plt-loc"></h5>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label>Development Charges</label>
+                                <h5 id="dev-ch"></h5>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4" id="chat-his">
+
+                    </div>
+                </div>
+            </div>
+            <hr />
+            <div class="form-row">
+                <div class="col-md-4">
+                    <h6 class="c-grey-900">Personal Information</h6>
+                </div>
+            </div>
+
+            <hr />
+            <div class="form-row">
+                <div class="col-md-2">
+                    <label>Booking Price</label>
+                    <h6 class="c-grey-900" id="plt-bk-price"></h6>
+                </div>
+                <div class="col-md-2">
+                    <label>Received</label>
+                    <h6 class="c-grey-900" id="rece-amt"></h6>
+                </div>
+                <div class="col-md-2">
+                    <label>Discount</label>
+                    <h6 class="c-grey-900" id="disc-amt"></h6>
+                </div>
+                <div class="col-md-2">
+                    <label>Over Due</label>
+                    <h6 class="c-grey-900" id="due-amt"></h6>
+                </div>
+            </div>
+
+            <div class="plot-owns-fsdhjk">
+
+            </div>
+
+            <hr />
+
+            <div class="mT-30">
+                <div class="form-row">
+                    <div class="col-md-6">
+                        <table class="table table-striped table-bordered" cellspacing="0" width="100%" style="margin-bottom:0px">
+                            <thead class="thead-dark">
+                                <tr><th>Sr.</th></tr>
+                            </thead>
+                        </table>
+                        <div style="min-height:0px; max-height:500px;overflow:auto" class=" ps--active-y">
+                            <table class="table table-striped table-bordered" id="all-instments" cellspacing="0" width="100%">
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <table class="table table-striped table-bordered" cellspacing="0" width="100%" style="margin-bottom:0px">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th>Receipt No.</th>
+                                    <th>Amount</th>
+                                    <th>Date</th>
+                                    <th>Type</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                        </table>
+                        <div style="min-height:0px; max-height:500px;overflow:auto" class=" ps--active-y">
+                            <table class="table table-striped table-bordered" id="rec-amts" cellspacing="0" width="100%">
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="bgc-white p-20 bd">
+            <div class="mT-30">
+                <div class="form-row">
+                    <h5>Transfer To:</h5>
+                    <input type="hidden" id="plot-id" name="Plot_Id">
+                    <input type="hidden" id="plot-size" name="Plot_Size">
+                    <input type="hidden" id="TransactionId" value="@ViewBag.serial" name="TransactionId">
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <h6 style="width: auto;float: left;margin: 7px;">Dealing Dealership</h6>
+                        <input type="text" class="form-control dealing-dealer" list="dealersList" />
+                    </div>
+                    <div class="form-group col-md-6">
+                        <h6 style="width: auto;float: left;margin: 7px;">Employee Transfer</h6>
+                        <label class="switch"><input type="checkbox" id="emp-trans"><span class="slider round"></span></label>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <h6 style="width: auto;float: left;margin: 7px;">Dealership Transfer</h6>
+                        <label class="switch"><input type="checkbox" id="dealer-trans"><span class="slider round"></span></label>
+                    </div>
+
+                    <div class="form-group col-md-6">
+                        <h6 style="width: auto;float: left;margin: 7px;">Exempt Buyer Tax</h6>
+                        <label class="switch"><input type="checkbox" id="ExemptBuyerTax"><span class="slider round"></span></label>
+                    </div>
+                    <div class="form-group col-md-6 buy-tax-exe-rzn-area" style="display:none;">
+                        <input type="text" class="form-control rzn-buy-exe" placeholder="Reason for Buyer Exemption" />
+                    </div>
+                    <div class="form-group col-md-6">
+                        <h6 style="width: auto;float: left;margin: 7px;">Exempt Seller Tax</h6>
+                        <label class="switch"><input type="checkbox" id="ExemptSellerTax"><span class="slider round"></span></label>
+                    </div>
+                    <div class="form-group col-md-6 sel-tax-exe-rzn-area" style="display:none;">
+                        <input type="text" class="form-control rzn-slr-exe" placeholder="Reason for Seller Exemption" />
+                    </div>
+                    <input type="hidden" name="Dealer_Req" />
+                    <input type="hidden" name="Employee_Req" />
+                    <div class="form-group col-md-6">
+                        @Html.DropDownList("Dealership", null, "Choose..", new { @class = "form-control dealers-detail", style = "display:none" })
+                    </div>
+                    <div class="form-group col-md-10 dea-info" style="display:none">
+                        <label>Dealers</label>
+                        <select class="form-control" id="dealers"></select>
+                    </div>
+                </div>
+                <input type="hidden" id="Plot_Price" value="0" required>
+                <input type="hidden" id="DC_Plot_Price" value="0" required>
+                <hr />
+                <div class="col-md-12">
+                    <h5>Min. Plot Price : <span class="dc-rate-plt-prc-sjdfhkl">0</span></h5>
+                </div>
+                <hr />
+                <div class="row">
+                    <div class="col-md-4">
+                        <h5>Plot Price</h5>
+                    </div>
+                    <div class="col-md-8">
+                        <input type="text" class="form-control coma trnsfr-plt-prc" value="0" />
+                    </div>
+                </div>
+                <hr />
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <input type="checkbox" class="isCompanyProperty" />&nbsp;Company Property
+                        </div>
+                        <div class="col-md-5"></div>
+                        <div class="col-md-1" style="text-align:right;">
+                            <i class="fa fa-plus fa-2x pointer add-new-own-sfdjkh-jhgfsd" style="color:lawngreen" title="Add Another Buyer"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="owns-info">
+                    <div class="panel panel-default buy-inf-dfshjgk">
+                        <div class="panel-heading">
+                            <h5 class="panel-title">
+                                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#transown1" aria-expanded="true"></a>
+                                Buyer <span class="own-count-info">1</span>
+                            </h5>
+                        </div>
+                        <div class="panel-collapse collapse in show" id="transown1">
+                            <div class="form-row">
+                                <div class="col-md-12 form-group comp-prop-fld" style="display:none;">
+                                    <label>Company Name</label>
+                                    <input type="text" class="form-control comp-Name" required>
+                                </div>
+                                <div class="form-group col-md-6 deflt-fld">
+                                    <label>Name</label>
+                                    <input type="text" class="form-control Name autfil-name" required>
+                                </div>
+                                <div class="form-group col-md-6 deflt-fld">
+                                    <label>Father's/Husband's Name</label>
+                                    <input type="text" class="form-control Father_Husband autfil-father" required>
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <label>Postal Address</label>
+                                    <input type="text" class="form-control Postal_Address autfil-postal" placeholder="1234 Main St" required>
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <label>Residential Address</label>
+                                    <input type="text" class="form-control Residential_Address autfil-residential" placeholder="Apartment, Plot, or floor" required>
+                                </div>
+                                <div class="form-group col-md-5">
+                                    <label>City</label>
+                                    @Html.DropDownList("City", null, "Choose..", new { @class = "form-control City autfil-city", required = "" })
+                                </div>
+                                <div class="form-group col-md-4 deflt-fld">
+                                    <label>Date Of Birth</label>
+                                    <input type="text" class="form-control Date_Of_Birth autfil-dob" placeholder="mm/dd/yyyy" data-provide="datepicker" required>
+                                </div>
+                                <div class="form-group col-md-4 comp-prop-fld" style="display:none;">
+                                    <label>Date Of Incorp.</label>
+                                    <input type="text" class="form-control comp-Date_Of_Birth autfil-dob" placeholder="mm/dd/yyyy" data-provide="datepicker" required>
+                                </div>
+                                <div class="form-group col-md-5 deflt-fld">
+                                    <label>CNIC / NICOP</label>
+                                    <input type="text" class="form-control CNIC_NICOP autfil-cnic" pattern="[0-9+]{5}-[0-9+]{7}-[0-9]{1}|[0-9+]{6}-[0-9+]{6}-[0-9]{1}" placeholder="12345-1234567-1   or   123456-123456-1" required>
+                                </div>
+                                <div class="form-group col-md-5 comp-prop-fld" style="display:none;">
+                                    <label>NTN</label>
+                                    <input type="text" class="form-control comp-CNIC_NICOP autfil-cnic" pattern="[0-9+]{5}-[0-9+]{7}-[0-9]{1}|[0-9+]{6}-[0-9+]{6}-[0-9]{1}" placeholder="12345-1234567-1   or   123456-123456-1" required>
+                                </div>
+                                <div class="form-group col-md-6" style="margin:auto;">
+                                    <h6 style="width: auto;float: left;margin: 7px;">Filer</h6>
+                                    <label class="switch"><input type="checkbox" class="filerCheck"><span class="slider round"></span></label>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label>Occupation</label>
+                                    <input type="text" class="form-control Occupation" required>
+                                </div>
+                                <div class="form-group col-md-4 deflt-fld">
+                                    <label>Nationality</label>
+                                    <input type="text" class="form-control Nationality" required>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label>Email</label>
+                                    <input type="text" class="form-control Email">
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label>Phone Office</label>
+                                    <input type="text" class="form-control Phone_Office">
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label>Residential</label>
+                                    <input type="text" class="form-control Residential">
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label>Mobile 1</label>
+                                    <input type="text" class="form-control Mobile_1 autfil-moba" pattern="^0\d{10}" placeholder="03121234567" required>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label>Mobile 2</label>
+                                    <input type="text" class="form-control Mobile_2 autfil-mobb" pattern="^0\d{10}" placeholder="03121234567">
+                                </div>
+                            </div>
+
+                            <hr />
+                            <h6 class="c-grey-900 nomin-heading">Nominee</h6>
+                            <div class="mT-40">
+                                <div class="form-row">
+                                    <div class="form-group col-md-4">
+                                        <label>Name</label>
+                                        <input type="text" class="form-control Nominee_Name" required>
+                                    </div>
+                                    <div class="f orm-group col-md-4">
+                                        <label>CNIC / NICOP</label>
+                                        <input type="text" class="form-control Nominee_CNIC_NICOP" pattern="[0-9+]{5}-[0-9+]{7}-[0-9]{1}|[0-9+]{6}-[0-9+]{6}-[0-9]{1}" placeholder="12345-1234567-1   or   123456-123456-1" required>
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label>Relation</label>
+                                        <input class="form-control Nominee_Relation" placeholder="" required>
+                                    </div>
+                                    <div class="form-group col-md-10">
+                                        <label>Address</label>
+                                        <input type="text" class="form-control Nominee_Address" placeholder="1234 Main St" required>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <hr style="border-top:13px solid red" />
+            <h3 style="text-align:center">Tax Calculations</h3>
+            <hr style="border-top:13px solid red" />
+
+            <hr style="border-top:3px solid green" />
+            <h3 style="text-align:center">Buyer Tax Calculations</h3>
+            <hr style="border-top:3px solid green" />
+            <div class="row sel-tax-dat">
+
+
+            </div>
+
+            <hr style="border-top:3px solid green" />
+            <h3 style="text-align:center">Seller's Tax Calculations</h3>
+            <hr style="border-top:3px solid green" />
+            <div class="row buy-tax-dat">
+
+
+            </div>
+
+            <div class="form-row" id="trns-btn">
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    let __Buyer__filerRate = @Html.Raw(Json.Encode(ViewBag.Buyer_filerRate));
+    let __Buyer__non_filerRate = @Html.Raw(Json.Encode(ViewBag.Buyer_nonFilerRate));
+    let __Seller___filerRate = @Html.Raw(Json.Encode(ViewBag.Seller_filerRate));
+    let __Seller___non_filerRate = @Html.Raw(Json.Encode(ViewBag.Seller_nonFilerRate));
+    let ExpDay = @Html.Raw(Json.Encode(ViewBag.ExpDays));
+    let isExp = @Html.Raw(Json.Encode(ViewBag.isExp));
+
+
+    let Buyer_filerRate = parseFloat(__Buyer__filerRate);
+    let Buyer_non_filerRate = parseFloat(__Buyer__non_filerRate);
+    let Seller_filerRate = parseFloat(__Seller___filerRate);
+    let Seller_non_filerRate = parseFloat(__Seller___non_filerRate);
+
+
+
+    $(document).ready(function () {
+
+        $('.City').select2();
+
+        $('#ExemptBuyerTax').unbind().change(function () {
+            if ($(this).is(':checked')) {
+                //area show kro
+                $('.buy-tax-exe-rzn-area').show();
+            }
+            else {
+                //area hide kro
+                $('.buy-tax-exe-rzn-area').hide();
+            }
+
+            updateTaxDetails();
+        });
+
+        $('#ExemptSellerTax').unbind().change(function () {
+            if ($(this).is(':checked')) {
+                //area show kro
+                $('.sel-tax-exe-rzn-area').show();
+            }
+            else {
+                //area hide kro
+                $('.sel-tax-exe-rzn-area').hide();
+            }
+
+            updateTaxDetails();
+        });
+
+        $('.isCompanyProperty').unbind().change(function () {
+            //lets hook up the event listener here
+            if ($(this).is(':checked')) {
+                $('.comp-prop-fld').show();
+                $('.deflt-fld').hide();
+                $('.nomin-heading').text('Board Resolution');
+            }
+            else {
+                $('.comp-prop-fld').hide();
+                $('.deflt-fld').show();
+                $('.nomin-heading').text('Nominee');
+            }
+        });
+    });
+    let ownsCount = 2;
+    $('.add-new-own-sfdjkh-jhgfsd').unbind().click(function () {
+        let strct = `<div class="panel panel-default buy-inf-dfshjgk">
+                        <div class="panel-heading">
+                            <h5 class="panel-title">
+                                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#transown${ownsCount}" aria-expanded="true"></a>
+                                    Buyer <span class="own-count-info">${($('.panel-default').length)}</span> &nbsp;&nbsp;&nbsp;<i class="fa fa-trash pointer rmv-owns-khsdjf" title="Remove this Owner"></i>
+                            </h5>
+                        </div>
+                        <div class="panel-collapse collapse in show" id="transown${ownsCount}"">
+                            <div class="form-row">
+                                <div class="col-md-12 form-group comp-prop-fld" style="display:none;">
+                                    <label>Company Name</label>
+                                    <input type="text" class="form-control comp-Name" required>
+                                </div>
+                                <div class="form-group col-md-6 deflt-fld">
+                                    <label>Name</label>
+                                    <input type="text" class="form-control Name" required>
+                                </div>
+                                <div class="form-group col-md-6 deflt-fld">
+                                    <label>Father's/Husband's Name</label>
+                                    <input type="text" class="form-control Father_Husband" required>
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <label>Postal Address</label>
+                                    <input type="text" class="form-control Postal_Address" placeholder="1234 Main St" required>
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <label>Residential Address</label>
+                                    <input type="text" class="form-control Residential_Address" placeholder="Apartment, Plot, or floor" required>
+                                </div>
+                                <div class="form-group col-md-5">
+                                    <label>City</label>
+                                    <select class = "form-control City">${citylist}</select>
+                                </div>
+                                <div class="form-group col-md-4 deflt-fld">
+                                    <label>Date Of Birth</label>
+                                    <input type="text" class="form-control Date_Of_Birth" placeholder="mm/dd/yyyy" data-provide="datepicker" required>
+                                </div>
+                                <div class="form-group col-md-4 comp-prop-fld" style="display:none;">
+                                    <label>Date Of Incorp.</label>
+                                    <input type="text" class="form-control Date_Of_Birth autfil-dob" placeholder="mm/dd/yyyy" data-provide="datepicker" required>
+                                </div>
+                                <div class="form-group col-md-5 deflt-fld">
+                                    <label>CNIC / NICOP</label>
+                                    <input type="text" class="form-control CNIC_NICOP" pattern="[0-9+]{5}-[0-9+]{7}-[0-9]{1}|[0-9+]{6}-[0-9+]{6}-[0-9]{1}" placeholder="12345-1234567-1   or   123456-123456-1" required>
+                                </div>
+                                <div class="form-group col-md-5 comp-prop-fld" style="display:none;">
+                                    <label>NTN</label>
+                                    <input type="text" class="form-control CNIC_NICOP autfil-cnic" pattern="[0-9+]{5}-[0-9+]{7}-[0-9]{1}|[0-9+]{6}-[0-9+]{6}-[0-9]{1}" placeholder="12345-1234567-1   or   123456-123456-1" required>
+                                </div>
+                                <div class="form-group col-md-6" style="margin:auto;">
+                                    <h6 style="width: auto;float: left;margin: 7px;">Filer</h6>
+                                    <label class="switch"><input type="checkbox" class="filerCheck"><span class="slider round"></span></label>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label>Occupation</label>
+                                    <input type="text" class="form-control Occupation" required>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label>Nationality</label>
+                                    <input type="text" class="form-control Nationality" required>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label>Email</label>
+                                    <input type="text" class="form-control Email">
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label>Phone Office</label>
+                                    <input type="text" class="form-control Phone_Office">
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label>Residential</label>
+                                    <input type="text" class="form-control Residential">
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label>Mobile 1</label>
+                                    <input type="text" class="form-control Mobile_1" pattern="^0\d{10}" placeholder="03121234567" required>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label>Mobile 2</label>
+                                    <input type="text" class="form-control Mobile_2" pattern="^0\d{10}" placeholder="03121234567">
+                                </div>
+                            </div>
+
+                            <hr />
+                            <h6 class="c-grey-900">Nominee</h6>
+                            <div class="mT-40">
+                                <div class="form-row">
+                                    <div class="form-group col-md-4">
+                                        <label>Name</label>
+                                        <input type="text" class="form-control Nominee_Name" required>
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label>CNIC / NICOP</label>
+                                        <input type="text" class="form-control Nominee_CNIC_NICOP" pattern="[0-9+]{5}-[0-9+]{7}-[0-9]{1}|[0-9+]{6}-[0-9+]{6}-[0-9]{1}" placeholder="12345-1234567-1   or   123456-123456-1" required>
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label>Relation</label>
+                                        <input class="form-control Nominee_Relation" placeholder="" required>
+                                    </div>
+                                    <div class="form-group col-md-10">
+                                        <label>Address</label>
+                                        <input type="text" class="form-control Nominee_Address" placeholder="1234 Main St" required>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>`
+
+        $('.owns-info').append(strct);
+
+        if ($('.isCompanyProperty').is(':checked')) {
+            $('.comp-prop-fld').show();
+            $('.deflt-fld').hide();
+        }
+        $(document).on('change', '.filerCheck', function () {
+            updateTaxDetails();
+        });
+        $('.City').last().select2();
+
+        ownsCount++;
+        updateTaxDetails();
+    });
+
+    $(document).on('click', '.rmv-owns-khsdjf', function () {
+        let confi = confirm('Are you sure you want to remove this owner?');
+        if (!confi) {
+            return;
+        }
+        $(this).closest('.panel-default').remove();
+
+        $('.panel-default').each(function (ind, val) {
+            $(this).find('.own-count-info').text((ind));
+        });
+
+        updateTaxDetails();
+    });
+
+    $(document).on('click', '.plt-trans-btn-dhjksf', function () {
+
+        //After Multi owner implementation
+        //push the data to the server via new technique now
+        let _newOwnersData_ = [];
+        let transId = $('#TransactionId').val();
+        let pltSize = $('#plot-size').val();
+        let pltId = $('#plot-id').val();
+        let dealer = $('#dealer-trans').is(':checked');
+        let emp = $('#emp-trans').is(':checked');
+        let pp = $('#Plot_Price').val();
+        let dealingdlr = $('.dealing-dealer').val();
+        let isSubmissionValid = true;
+
+        let BuyerExempted = $('#ExemptBuyerTax').is(':checked');
+        let SellerExempted = $('#ExemptSellerTax').is(':checked');
+        let buyExeRzn = $('.rzn-buy-exe').val();
+        let selExeRzn = $('.rzn-slr-exe').val();
+
+        let enteredAmt = parseFloat(RemoveComma($('.trnsfr-plt-prc').val()));
+        let dcAmt = parseFloat($('#DC_Plot_Price').val());
+
+        if (enteredAmt < dcAmt) {
+            alert('Plot price cannot be less than dc rate.');
+            return;
+        }
+        pp = enteredAmt;
+
+        var isCompPropCheck = $('.isCompanyProperty').is(':checked');
+
+        $('.buy-inf-dfshjgk').each(function (ind, val) {
+            let ownName = (isCompPropCheck) ? $(this).find('.comp-Name').val() : $(this).find('.Name').val();
+            let ownFatherName = (isCompPropCheck) ? '' : $(this).find('.Father_Husband').val();
+            let ownPostAddr = $(this).find('.Postal_Address').val();
+            let ownResAddr = $(this).find('.Residential_Address').val();
+            let ownCity = $(this).find('.City option:selected').val();
+            let ownDob = (isCompPropCheck) ? $(this).find('.comp-Date_Of_Birth').val() : $(this).find('.Date_Of_Birth').val();
+            let ownCNIC = (isCompPropCheck) ? $(this).find('.comp-CNIC_NICOP').val() : $(this).find('.CNIC_NICOP').val();
+            let ownFiler = $(this).find('.filerCheck').is(':checked');
+            let ownOccupation = $(this).find('.Occupation').val();
+            let ownNational = $(this).find('.Nationality').val();
+            let ownEmail = $(this).find('.Email').val();
+            let ownPhoneOff = $(this).find('.Phone_Office').val();
+            let ownResi = $(this).find('.Residential').val();
+            let ownMobile1 = $(this).find('.Mobile_1').val();
+            let ownMobile2 = $(this).find('.Mobile_2').val();
+            let ownNomineeName = $(this).find('.Nominee_Name').val();
+            let ownNomineeCNIC = $(this).find('.Nominee_CNIC_NICOP').val();
+            let ownNomineeRelation = $(this).find('.Nominee_Relation').val();
+            let ownNomineeAddr = $(this).find('.Nominee_Address').val();
+            let gpTg = $(this).find('.GroupTag').val();
+            let filerCh = $(this).find('.filerCheck').is(':checked');
+
+            if (isCompPropCheck) {
+                if (ownName == '' || ownMobile1 == '' || ownCNIC == '' || ownPostAddr == '') {
+                    isSubmissionValid = false;
+                }
+            }
+            else {
+                if (ownName == '' || ownFatherName == '' || ownMobile1 == '' || ownCNIC == '' || ownPostAddr == '') {
+                    isSubmissionValid = false;
+                }
+            }
+
+            _newOwnersData_.push({
+                Name: ownName,
+                Father_Husband: ownFatherName,
+                Postal_Address: ownPostAddr,
+                Residential_Address: ownResAddr,
+                City: ownCity,
+                Date_Of_Birth: ownDob,
+                CNIC_NICOP: ownCNIC,
+                IsFiler: ownFiler,
+                Occupation: ownOccupation,
+                Nationality: ownNational,
+                Email: ownEmail,
+                Phone_Office: ownPhoneOff,
+                Residential: ownResi,
+                Mobile_1: ownMobile1,
+                Mobile_2: ownMobile2,
+                Nominee_Name: ownNomineeName,
+                Nominee_CNIC_NICOP: ownNomineeCNIC,
+                Nominee_Relation: ownNomineeRelation,
+                Nominee_Address: ownNomineeAddr,
+                IsFiler: filerCh,
+                Deal_Dealership: dealingdlr,
+                GroupTag: gpTg,
+                IsCompanyProperty: isCompPropCheck
+            });
+        });
+
+        if (isSubmissionValid == false) {
+            alert('Please fill all client data before forwarding request.');
+            return;
+        }
+        //push the data to server via ajax Now
+
+        if (confirm('Are you sure you want to submit this transfer request?')) {
+            $.ajax({
+                type: "POST",
+                url: "/Transfer/SavePlotTransferRequest/",
+                contentType: "application/json",
+                traditional: true,
+                beforeSend: function () {
+
+                },
+                complete: function () {
+
+                },
+                data: JSON.stringify({ Plotdata: _newOwnersData_, TransactionId: transId, Plot_Id: pltId, Plot_Size: pltSize, Dealership: dealer, Plot_Price: pp, Employee_Req: emp, buyExe: SellerExempted, buyExeRzn: buyExeRzn, sellExe: BuyerExempted, sellExeRzn: selExeRzn }),
+            }).done(function (data) {
+                if (data.Status == true) {
+                    alert(data.Msg);
+                    window.location.reload();
+                    window.open("/Transfer/PlotNDCForm?SerialNum=" + data.Transcation, '_Blank');
+                }
+                else {
+                    alert(data.Msg);
+                }
+            });
+        }
+    });
+
+    $(document).on('change', '.filerCheck', function () {
+        updateTaxDetails();
+    });
+
+    $('.trnsfr-plt-prc').unbind().change(function () {
+        updateTaxDetails();
+    });
+
+    $(document).on('change', '.Name', function () {
+        updateTaxDetails();
+    });
+
+    function updateTaxDetails() {
+
+        //updating sellers tax details
+        let BuyerExempted = $('#ExemptBuyerTax').is(':checked');
+        let SellerExempted = $('#ExemptSellerTax').is(':checked');
+        let buyExeRzn = $('.rzn-buy-exe').val();
+        let selExeRzn = $('.rzn-slr-exe').val();
+
+        let strc = ``;
+        let buyStrc = ``;
+        let ttlSels = $('.buy-inf-dfshjgk').length;
+        let ttlBuyrs = $('.own-inf-kjhsdf').length;
+        $('.buy-inf-dfshjgk').each(function (ind, val) {
+
+            let nm = $(this).find('.Name').val();
+            let flr = $(this).find('.filerCheck').is(':checked');
+
+            if (nm == null || nm == '') {
+                return;
+            }
+            let taxCalc = parseInt(RemoveComma($('.trnsfr-plt-prc').val()));
+            if (BuyerExempted) {
+                strc += `<div class="col-md-6">
+                        <label>${nm} (Tax Exempted):</label>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label><b>${buyExeRzn}</b></label>
+                    </div>`;
+            }
+            else {
+                if (flr) {
+                    taxCalc = Math.ceil((taxCalc / ttlSels) * Buyer_filerRate);
+                }
+                else {
+                    taxCalc = Math.ceil((taxCalc / ttlSels) * Buyer_non_filerRate);
+                }
+
+                strc += `<div class="col-md-6">
+                        <label>${nm} :</label>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label><b>${taxCalc.toLocaleString()} </b></label>
+                    </div>`;
+            }
+        });
+
+        $('.sel-tax-dat').empty();
+        $('.sel-tax-dat').append(strc);
+
+        //For Seller   plot-owns-fsdhjk
+        $('.own-inf-kjhsdf').each(function (ind, val) {
+            let nm = $(this).find('#Name').val();
+            let flr = $(this).find('.filerCheck').is(':checked');
+			let ttlOwnYrs = parseInt($(this).find('.ttl-yrs-own').val());
+
+            if (nm == null || nm == '') {
+                return;
+            }
+
+            if (SellerExempted) {
+                buyStrc += `<div class="col-md-6">
+                        <label>${nm} (Tax Exempted) :</label>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label><b>${selExeRzn} </b></label>
+                    </div>`;
+            }
+            else {
+                if (isExp) {
+                    if (ttlOwnYrs <= ExpDay) {
+
+                        let taxCalc = parseInt(RemoveComma($('.trnsfr-plt-prc').val()));
+                        if (flr) {
+                            taxCalc = Math.ceil((taxCalc / ttlBuyrs) * Seller_filerRate);
+                        }
+                        else {
+                            taxCalc = Math.ceil((taxCalc / ttlBuyrs) * Seller_non_filerRate);
+                        }
+
+                        buyStrc += `<div class="col-md-6">
+                            <label>${nm} :</label>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label><b>${taxCalc.toLocaleString()} </b></label>
+                        </div>`;
+                    }
+                    else {
+                        buyStrc += `<div class="col-md-6">
+                            <label>${nm} (Tax Exempted since own duration > ${ExpDay} Days) :</label>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label><b>${0} </b></label>
+                        </div>`;
+                    }
+                }
+                else {
+                    let taxCalc = parseInt(RemoveComma($('.trnsfr-plt-prc').val()));
+                    if (flr) {
+                        taxCalc = Math.ceil((taxCalc / ttlBuyrs) * Seller_filerRate);
+                    }
+                    else {
+                        taxCalc = Math.ceil((taxCalc / ttlBuyrs) * Seller_non_filerRate);
+                    }
+
+                    buyStrc += `<div class="col-md-6">
+                            <label>${nm} :</label>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label><b>${taxCalc.toLocaleString()} </b></label>
+                        </div>`;
+                }
+
+            }
+        });
+
+        $('.buy-tax-dat').empty();
+        $('.buy-tax-dat').append(buyStrc);
+    }
+
+    $(document).on("click", "#sea-plot-data-trans-req-new", function () {
+        var id = $("#plot-details").val();
+        $.ajax({
+            type: "POST",
+            url: '/Plots/LastestPlotDetailsData/',
+            data: { Plotid: id },
+            success: function (data) {
+                if (data == false) {
+                    alert("No Result found");
+                }
+                else {
+                    $("#plot-trans-alert").html("");
+                    $("#oth-inst tbody").empty();
+                    $("#all-instments tbody").empty();
+                    $("#rec-amts tbody").empty();
+                    $("#trns-btn").html("");
+                    $('#plt-no').text(data.PlotData.Plot_No);
+                    $('#plt-blk').text(data.PlotData.Block_Name);
+                    $('#plt-id').val(data.PlotData.Id);
+                    $('#plt-size').text(data.PlotData.Plot_Size);
+                    $('#plot-id').val(data.PlotData.Id);
+                    $('#plot-size').val(data.PlotData.Plot_Size);
+                    $('#plt-type').text(data.PlotData.Type);
+                    $('#plt-dim').text(data.PlotData.Dimension);
+                    $('#plt-status').text(data.PlotData.Develop_Status.replace('_', ' '));
+                    $('#plt-road').text(data.PlotData.Road_Type);
+                    $('#plt-area').text(data.PlotData.Area + " Sq-Ft");
+                    $('#plt-loc').text(data.PlotData.Plot_Location);
+                    if (data.PlotData.Development_Charges == true) {
+                        $('#dev-ch').text("With Development Charges");
+                    }
+                    else if (data.PlotData.Development_Charges == false) {
+                        $('#dev-ch').text("Non Development Charges");
+                    }
+                    else if (data.PlotData.Development_Charges == null && data.PlotData.Block_Name == "Sher Afghan") {
+                        $('#dev-ch').text("To Be Announced");
+                    }
+                    else {
+                        $('#dev-ch').text("");
+                    }
+
+                    $('.trnsfr-plt-prc').val(data.Plot_Price_DC_Rate.toLocaleString());
+                    $('#DC_Plot_Price').val(data.Plot_Price_DC_Rate);
+                    $('.dc-rate-plt-prc-sjdfhkl').text(data.Plot_Price_DC_Rate.toLocaleString());
+                    $("#chat-his").load("/Messages/PlotsComments/", { Plotid: data.PlotData.Id });
+                    $('.plot-owns-fsdhjk').load('/Plots/PlotOwners/', { plotId: data.PlotData.Id, current: true });
+                    var instserialno = 1, overduetotal = 0;
+                    var bokamt = 0;
+                    var totalamt = 0;
+                    $.each(data.PlotInstallments, function (i) {
+                        var statuscolor = "";
+                        if (data.PlotInstallments[i].Status == "NotPaid") {
+                            statuscolor = "bgc-red-50";
+                            totalamt = totalamt + data.PlotInstallments[i].Amount;
+                        }
+                        else if (data.PlotInstallments[i].Status == "Paid") {
+                            statuscolor = "bgc-green-50";
+                        }
+                        var html = '<tr class=' + statuscolor + ' id="' + data.PlotInstallments[i].Id + '" ><td scope="row">' + instserialno + '</td>' +
+                            '<td>' + data.PlotInstallments[i].Installment_Name + '</td>' +
+                            '<td>' + moment(data.PlotInstallments[i].DueDate).format("MMMM YYYY") + '</td>' +
+                            '<td>' + data.PlotInstallments[i].Amount + '</td>' +
+                            '<td>' + data.PlotInstallments[i].Status + '</td></tr>';
+                        bokamt = bokamt + data.PlotInstallments[i].Amount;
+                        $("#all-instments tbody").append(html);
+                        instserialno++;
+                    });
+                    bokamt = parseFloat(bokamt).toFixed(0);
+                    $("#plt-bk-price").text(Number(bokamt).toLocaleString());
+                    var rec = 0
+                    $.each(data.PlotReceipts, function (i) {
+
+                        var html = '<tr id="' + data.PlotReceipts[i].Id + '" >' +
+                            '<td scope="row">' + data.PlotReceipts[i].ReceiptNo + '</td>' +
+                            '<td>' + data.PlotReceipts[i].Amount + '</td>' +
+                            '<td>' + moment(data.PlotReceipts[i].DateTime).format("DD-MMM-YYYY") + '</td>' +
+                            '<td>' + data.PlotReceipts[i].PaymentType + '</td></tr>';
+                        $("#rec-amts tbody").append(html);
+                        if (data.PlotReceipts[i].Status == "Approved" || data.PlotReceipts[i].Status == null) {
+                            rec = rec + data.PlotReceipts[i].Amount;
+                        }
+                    });
+                    rec = parseFloat(totalamt).toFixed(0);
+                    $("#rece-amt").text(Number(rec).toLocaleString());
+
+                    var html1 = '<tr><td>Total</td><td colspan="4">' + rec + '</td></tr>';
+                    $("#rec-amts tbody").append(html1);
+
+
+                    var disc = 0;
+                    $.each(data.Discounts, function (i) {
+                        disc = disc + data.Discounts[i].Discount_Amount;
+                    });
+                    disc = parseFloat(disc).toFixed(0);
+                    $("#disc-amt").text(Number(disc).toLocaleString());
+
+
+                    overduetotal = totalamt;
+
+                    overduetotal = parseFloat(overduetotal).toFixed(0);
+                    $("#due-amt").text(Number(overduetotal).toLocaleString())
+                    var overdue = parseFloat(overduetotal);
+                    if (data.PlotData.Registry == true) {
+                        var html = '<div class="col-md-10"><div class="alert alert-danger" role="alert">Registry Plot</div></div>';
+                        $("#plot-trans-alert").append(html);
+                    }
+                    if (data.PlotData.Status == "Disputed") {
+                        var html = '<div class="col-md-10"><div class="alert alert-danger" role="alert">This Plot is DISPUTED</div></div>';
+                        $("#plot-trans-alert").append(html);
+                        return false;
+                    }
+                    if (overduetotal > 0) {
+                        var html = '<div class="col-md-10"><div class="alert alert-danger" role="alert">This Plot Can not be Transfer Due to pending OVER DUE Amount</div></div>';
+                        $("#plot-trans-alert").append(html);
+                        if (data.PlotData.Verified != true) {
+                            var html = '<div class="col-md-10"><div class="alert alert-danger" role="alert">This Plot is not Verified</div></div>' +
+                                '<div class="col-md-12"><h6 style="width: auto;float: left;margin: 7px;">Request For Verifcation</h6>' +
+                                '<label class="switch"><input type="checkbox" id="veri-req"><span class="slider round"></span></label></div>';
+                            $("#plot-trans-alert").append(html);
+                        }
+                    }
+                    else {
+                        if (data.PlotData.Status == "Registered") {
+
+                        if (data.PlotData.Verified == true ) {
+                            var btn = '<button class="btn btn-primary plt-trans-btn-dhjksf" type="submit" id="trans-frm" style="width:100%" >Generate Transfer Request</button>';
+                            $("#trns-btn").html(btn);
+                        }
+                        else {
+                            var html = '<div class="col-md-10"><div class="alert alert-danger" role="alert">This Plot is not Verified</div></div>' +
+                                '<div class="col-md-12"><h6 style="width: auto;float: left;margin: 7px;">Request For Verifcation</h6>' +
+                                '<label class="switch"><input type="checkbox" id="veri-req"><span class="slider round"></span></label></div>';
+                            $("#plot-trans-alert").append(html);
+                        }
+                        }
+                    }
+
+                    if (data.TransferPending != null && data.TransferPending != undefined && data.TransferPending.length > 0) {
+                        $('.buy-inf-dfshjgk').remove();
+                        $('.trnsfr-plt-prc').val(data.TransferPending[0].Plot_Price.toLocaleString());
+
+                        if (data.TransferPending[0].TaxExempted == true) {
+                            $('#ExemptBuyerTax').prop('checked', true);
+                            $('.rzn-buy-exe').val((data.TransferPending[0].TaxExemptReason));
+                            $('.buy-tax-exe-rzn-area').show();
+                        }
+
+                        if (data.TransferPending[0].Filer_NonFiler == 'Exempted') {
+                            $('#ExemptSellerTax').prop('checked', true);
+                            $('.sel-buy-exe').val((data.TransferPending[0].SellExemptReason));
+                            $('.sel-tax-exe-rzn-area').show();
+                        }
+
+                        $.each(data.TransferPending, function (i, v) {
+                            let strct = `<div class="panel panel-default buy-inf-dfshjgk">
+                        <div class="panel-heading">
+                            <h5 class="panel-title">
+                                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#transown${ownsCount}" aria-expanded="true"></a>
+                                    Buyer <span class="own-count-info">${($('.panel-default').length + 1)}</span> &nbsp;&nbsp;&nbsp;<i class="fa fa-trash pointer rmv-owns-khsdjf" title="Remove this Owner"></i>
+                            </h5>
+                        </div>
+                        <div class="panel-collapse collapse in show" id="transown${ownsCount}"">
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label>Name</label>
+                                    <input type="text" class="form-control Name" value="${v.Name}" required>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>Father's/Husband's Name</label>
+                                    <input type="text" class="form-control Father_Husband" value="${v.Father_Husband}" required>
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <label>Postal Address</label>
+                                    <input type="text" class="form-control Postal_Address" value="${v.Postal_Address}" placeholder="1234 Main St" required>
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <label>Residential Address</label>
+                                    <input type="text" class="form-control Residential_Address" value="${v.Postal_Address}" placeholder="Apartment, Plot, or floor" required>
+                                </div>
+                                <div class="form-group col-md-5">
+                                    <label>City</label>
+                                    <select class = "form-control City">${citylist}</select>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label>Date Of Birth</label>
+                                    <input type="text" class="form-control Date_Of_Birth" value="${v.Date_Of_Birth}" placeholder="mm/dd/yyyy" data-provide="datepicker" required>
+                                </div>
+                                <div class="form-group col-md-5">
+                                    <label>CNIC / NICOP</label>
+                                    <input type="text" class="form-control CNIC_NICOP" value=${v.CNIC_NICOP} pattern="[0-9+]{5}-[0-9+]{7}-[0-9]{1}|[0-9+]{6}-[0-9+]{6}-[0-9]{1}" placeholder="12345-1234567-1   or   123456-123456-1" required>
+                                </div>
+                                <div class="form-group col-md-6" style="margin:auto;">
+                                    <h6 style="width: auto;float: left;margin: 7px;">Filer</h6>
+                                    <label class="switch"><input type="checkbox" class="filerCheck"><span class="slider round"></span></label>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label>Occupation</label>
+                                    <input type="text" class="form-control Occupation" value="${v.Occupation}" required>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label>Nationality</label>
+                                    <input type="text" class="form-control Nationality" value="${v.Nationality}" required>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label>Email</label>
+                                    <input type="text" class="form-control Email" value="${v.Email}">
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label>Phone Office</label>
+                                    <input type="text" class="form-control Phone_Office" value="${v.Phone_Office}">
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label>Residential</label>
+                                    <input type="text" class="form-control Residential" value="${v.Residential}">
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label>Mobile 1</label>
+                                    <input type="text" class="form-control Mobile_1" value="${v.Mobile_1}" pattern="^0\d{10}" placeholder="03121234567" required>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label>Mobile 2</label>
+                                    <input type="text" class="form-control Mobile_2" value="${v.Mobile_2}" pattern="^0\d{10}" placeholder="03121234567">
+                                    <input type="hidden" class="GroupTag" value="${v.GroupTag}">
+                                </div>
+                            </div>
+
+                            <hr />
+                            <h6 class="c-grey-900">Nominee</h6>
+                            <div class="mT-40">
+                                <div class="form-row">
+                                    <div class="form-group col-md-4">
+                                        <label>Name</label>
+                                        <input type="text" class="form-control Nominee_Name" value="${v.Nominee_Name}" required>
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label>CNIC / NICOP</label>
+                                        <input type="text" class="form-control Nominee_CNIC_NICOP" value="${v.Nominee_CNIC_NICOP}" pattern="[0-9+]{5}-[0-9+]{7}-[0-9]{1}|[0-9+]{6}-[0-9+]{6}-[0-9]{1}" placeholder="12345-1234567-1   or   123456-123456-1" required>
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label>Relation</label>
+                                        <input class="form-control Nominee_Relation" value="${v.Nominee_Relation}" placeholder="" required>
+                                    </div>
+                                    <div class="form-group col-md-10">
+                                        <label>Address</label>
+                                        <input type="text" class="form-control Nominee_Address" value="${v.Nominee_Address}" placeholder="1234 Main St" required>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>`
+
+                            $('.owns-info').append(strct);
+                            if (v.IsFiler == true) {
+                                $('.owns-info').last().find('.filerCheck').prop('checked', true);
+                            }
+                        });
+                    }
+                }
+            },
+            error: function (data) {
+                alert("Error Occured Try Again")
+            }
+        });
+    });
+//
+
+</script>
+
+<style>
+    .fa-trash:hover {
+        color: #d0232a;
+    }
+</style>

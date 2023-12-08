@@ -1,0 +1,163 @@
+﻿@model MeherEstateDevelopers.Models.Sp_Get_ElecBill_ById_Result
+
+<head>
+    <script>
+        var met_chg_billDets = @Html.Raw(Json.Encode(Model));
+    </script>
+</head>
+<div class="col-md-12">
+    <table class="table table-bordered">
+        <thead>
+            <tr class="central-text-align thead-dark">
+                <th colspan="7">Old Meter Details</th>
+            </tr>
+            <tr class="central-text-align">
+                <th>Plot No.</th>
+                <th>Block</th>
+                <th>Meter No.</th>
+                <th>Current Reading</th>
+                <th>Last Bill Reading</th>
+                <th>Last Bill Amount</th>
+                <th>Last Paid Amount</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr class="central-text-align">
+                <td>@Model.Plot_No</td>
+                <td>@Model.Block</td>
+                <td>@Model.Meter_No</td>
+                <td>@Model.Current_Reading</td>
+                <td>@Model.Previous_Reading</td>
+                <td>@Model.Net_Total</td>
+                <td>@Model.Amount_Paid</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="row central-text-align mt-md-3">
+        <div class="col-md-2">
+            <label>New Meter No.</label>
+            <input type="number" class="form-control met-no-tyui" placeholder="New Meter No."/>
+        </div>
+
+        <div class="col-md-2">
+            <label>New Meter Reading</label>
+            <input type="number" class="form-control met-read-uiy" placeholder="New meter Reading"/>
+        </div>
+
+        <div class="col-md-2">
+            <label>Old Meter Reading</label>
+            <input type="number" class="form-control old-met-read-hjk" placeholder="Old Meter Reading" value="@Model.Current_Reading"/>
+        </div>
+
+        <div class="col-md-2">
+            <label>Old Meter Bill</label>
+            <input type="text" class="form-control old-met-bill-amt-ghujk" readonly value="0"/>
+        </div>
+
+        <div class="col-md-2">
+            <label>New Meter Charges</label>
+            <input type="number" class="form-control new-met-chrgs-ghjk" placeholder="Replacement Charges"/>
+        </div>
+    </div>
+
+    <div class="row mt-md-4 central-text-align">
+        <div class="col-md-5">
+            <label>Remarks</label>
+            <textarea rows="5" class="form-control met-chg-rems-hjg"></textarea>
+        </div>
+    </div>
+
+    <div class="col-md-12">
+        <button class="btn btn-primary met-change-btn-fdjksha" style="float:right;">Submit Request</button>
+    </div>
+</div>
+
+<script>
+    $('.met-change-btn-fdjksha').unbind().click(function () {
+        let conf = confirm('Are you sure you want to sumit this request?');
+        if (!conf) {
+            return;
+        }
+        showLoader();
+        let new_met_no = $('.met-no-tyui').val();
+        let new_met_read = $('.met-read-uiy').val();
+        let old_met_read = $('.old-met-read-hjk').val();
+        let old_met_bill = parseFloat($('.old-met-bill-amt-ghujk').val());
+        let met_replacement_charges = parseFloat($('.new-met-chrgs-ghjk').val());
+        let met_chg_rems = $('.met-chg-rems-hjg').val();
+
+        if (new_met_no == '') {
+            alert('Please fill all the fields');
+            return;
+        }
+        else if (new_met_read == '') {
+            alert('Please fill all the fields');
+            return;
+        }
+        else if (old_met_read == '') {
+            alert('Please fill all the fields');
+            return;
+        }
+        else if (isNaN(old_met_bill)) {
+            alert('Please fill all the fields');
+            return;
+        }
+        else if (isNaN(met_replacement_charges)) {
+            alert('Please fill all the fields');
+            return;
+        }
+        else if (met_chg_rems == '') {
+            alert('Please fill all the fields');
+            return;
+        }
+
+        let Meter_Dets = {
+            Plot_Id: met_chg_billDets.Plot_Id,
+            Plot_No: met_chg_billDets.Plot_No,
+            Block_Name: met_chg_billDets.Block,
+            Old_Meter_No: met_chg_billDets.Meter_No,
+            Old_Mtr_Last_Bld_Rdng: met_chg_billDets.Current_Reading,
+            Old_Mtr_Curr_Rdng: old_met_read,
+            Old_Meter_Amount: old_met_bill,
+            Old_Meter_Id: met_chg_billDets.Meter_Id,
+            New_Mtr_Curr_Rdng: new_met_read,
+            Requested_By_Remarks: met_chg_rems,
+            New_Meter_No: new_met_no,
+            ReplacementCharges: met_replacement_charges
+        };
+
+        $.ajax({
+            type: "POST",
+            url: "/ServiceCharges/SaveMeterChangeReq/",
+            contentType: "application/json",
+            traditional: true,
+            beforeSend: function () {
+
+            },
+            complete: function () {
+                hideLoader();
+            },
+            data: JSON.stringify({ dets: Meter_Dets }),
+        }).done(function (data) {
+            if (data == true) {
+                alert('Request has been forwarded successfully.');
+                closeModal();
+            }
+            else {
+                alert('Failed to forward this request at the moment. Please try again later.');
+            }
+        });
+    });
+
+    $('.old-met-read-hjk').unbind().change(function () {
+        let old_met_read = parseInt($('.old-met-read-hjk').val());
+        if (old_met_read < met_chg_billDets.Current_Reading || (old_met_read == 0)) {
+            alert('Invalid Meter Reading.');
+            $('.old-met-read-hjk').val(met_chg_billDets.Current_Reading);
+            return;
+        }
+        $('.old-met-bill-amt-ghujk').val(((old_met_read - met_chg_billDets.Current_Reading) * 16.0));
+    });
+</script>

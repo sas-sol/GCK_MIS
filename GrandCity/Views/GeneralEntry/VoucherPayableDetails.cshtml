@@ -1,0 +1,470 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Sp_Get_JournalEntriesPayable_Parameter_Result>
+@{ if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+    var groupid = Model.Select(x => x.GroupId).FirstOrDefault();
+    var amount = Model.Select(x => x).FirstOrDefault();
+    var Paid_Amt = Model.Select(x => x.RecordedBy_Name).FirstOrDefault();
+    var Remaing = Model.Select(x => x.RecordedBy_Name).FirstOrDefault();
+    var rec_name = Model.Select(x => x.RecordedBy_Name).FirstOrDefault();
+    var rec_date = Model.Select(x => x.RecordedBy_Date).FirstOrDefault();
+    var Supvise_by = Model.Select(x => x.Supvise_by).FirstOrDefault();
+    var Sup_Name = Model.Select(x => x.Supviseby_Name).FirstOrDefault();
+    var Sup_Date = Model.Select(x => x.Supviseby_Date).FirstOrDefault();
+    var Total_Amt = ViewBag.Remaining;
+}
+<input type="hidden" value="@ViewBag.TransactionId" id="trans-id" />
+<input type="hidden" value="@rec_name" id="recoby" />
+<input type="hidden" value="@Sup_Name" id="supby" />
+<div class="col-md-12 bgc-white p-20">
+    <div class="row">
+        <div class="acc-pg-head col-md-12">
+            <div class="col-md-4 acc-pg-title"><h4>Bill Payment</h4></div>
+        </div>
+    </div>
+    <div class="row col-md-12" style="margin-top:4px">
+        <div class="col-md-3" style="display:none">
+            <select class="form-control vendor-eml"></select>
+        </div>
+        <div class="col-md-3">
+            <input type="text" class="form-control" id="HeadName" value="@ViewBag.HeadName" readonly />
+        </div>
+
+        <div class="col-md-3">
+            @*<select class="form-control bank-heads-slcxn">
+            </select>*@
+            @Html.DropDownList("BanksList", null, null, new { @class = "form-control BanksList" })
+        </div>
+        <div class="col-md-3"></div>
+        <div class="col-md-3">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="row">
+                        <label class="big-head-info-lbl">AMOUNT DUE</label>
+                    </div>
+                    <div class="row">
+                        <label class="pmnt-big-font">Rs. @String.Format("{0:n0}", ViewBag.TotalRemaining)</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row paychqdetails">
+        <div class="form-group col-md-2">
+            <label>Instrument Type</label>
+            <select class="form-control vpd-paytype-select" id="cah-chq-bak" name="PaymentType">
+                <option value="BankDraft">Bank Draft</option>
+                <option value="Cheque">Cheque</option>
+                <option value="PayOrder">Pay Order</option>
+                <option value="Online_Cheque">Online - Cheque</option>
+                <option value="Online_Payorder">Online - PayOrder</option>
+                <option value="Online_Bankdraft">Online - BankDraft</option>
+            </select>
+        </div>
+        <div class="form-group col-md-3 vpdpaymentinfo">
+            <label id="vpd-paytypelabel">Bank Draft No.</label>
+            <input type="text" class="form-control" id="vpd-paymenttype" name="PayChqNo" placeholder="">
+        </div>
+        <div class="form-group col-md-2 vpdpaymentinfo">
+                <label>Date</label>
+                <input type="text" class="form-control" data-provide="datepicker" id="vpd_Ch_bk_Pay_Date" name="Ch_bk_Pay_Date" placeholder="mm/dd/yyyy" required>
+            </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="row">
+                <div class="col-md-5 form-group">
+                    <label>Mailing address</label>
+                    <textarea class="form-control" id="mail-address" rows="5" style="resize:none;"></textarea>
+                </div>
+                <div class="col-md-5 form-group">
+                    <label>Amount Received By</label>
+                    <input type="text" class="form-control" id="amount-received-by" />
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="clearfix"></div>
+            <div class="col-md-4 form-group float-md-left" style="margin-top:15%;">
+                <label>Amount</label>
+                <input type="text" class="form-control coma" id="total-payable-amount" value="00" />
+            </div>
+            <div class="col-md-4 form-group float-md-left" style="margin-top:15%;">
+                <label>Tax Account</label>
+                <select class="form-control tax-accounts"></select>
+            </div>
+            <div class="col-md-4 form-group float-md-left" style="margin-top:15%;">
+                <label>Tax Amount</label>
+                <input type="text" class="form-control coma tax-amt" placeholder="Tax" style="text-align:right;" />
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        
+    </div>
+
+    <div class="row">
+        <h5>Outstanding Transactions</h5>
+        <table class="table table-borderless">
+            <thead>
+                <tr>
+                    <th><input type="checkbox" id="cb-all-payable" /></th>
+                    <th>DESCRIPTION</th>
+                    <th>DUE DATE</th>
+                    @if (ViewBag.PO_Total_Val != 0)
+                    {
+                        <th>Total PO Value</th>
+                    }
+                    <th>Bill AMOUNT</th>
+                    <th>PAID AMOUNT</th>
+                    <th>REMAINING</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                <tr data-grpid="@item.GroupId" data-head="@item.Head_Id" data-amount="@ViewBag.Remaining">
+                    <td class="ispayable"><input type="checkbox" class="cb-item-payable" /></td>
+                    <td class="narration">@item.Naration</td>
+                    <td class="due-date">@item.RecordedBy_Date.ToString("MMMM dd, yyyy")</td>
+                    @if (ViewBag.PO_Total_Val != 0)
+                    {
+                        <td class="po-amount">@String.Format("{0:n0}", ViewBag.PO_Total_Val)</td>
+                    }
+                    <td class="original-amount">@String.Format("{0:n0}", ViewBag.Amount)</td>
+                    <td class="open-amount">@String.Format("{0:n0}", ViewBag.Paid_Amount)</td>
+                    <td class="payment">@String.Format("{0:n0}", ViewBag.Remaining)</td>
+                </tr>
+                }
+            </tbody>
+        </table>
+
+        <div class="col-md-12">
+            <div class="col-md-6 float-right" style="text-align:right;">
+                <div class="row">
+                    <div class="col-md-8">
+                        <b>Amount to Apply</b>
+                    </div>
+                    <div class="col-md-4">
+                        <label id="amount-to-apply">0.00</label>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="clearfix"></div>
+        </div>
+    </div>
+
+    <div class="row mt-md-5">
+
+        <div class="col-md-2">
+        </div>
+        <div class="col-md-7"></div>
+        <div class="col-md-3">
+            <div class="btn-group float-right">
+                <button type="button" class="btn btn-primary rec-payable-entry">Pay Now</button>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+</div>
+
+
+<style>
+    .paymentotherinfo {
+        display: none;
+    }
+
+    .acc-pg-head {
+        background-color: #466a93;
+        color: white;
+    }
+
+    .pmnt-big-font {
+        font-size: 40px;
+        font-weight: bolder;
+        color: #000;
+        text-align: right;
+        width: 100%;
+    }
+
+    .big-head-info-lbl {
+        color: #c2c3c7;
+        font-size: 13px;
+        text-align: right;
+        width: 100%;
+        margin-bottom: 0px;
+    }
+</style>
+
+<script>
+    $(document).ready(function () {
+        $('.tax-accounts').select2({
+            placeholder: "Search for Tax Account",
+            ajax: {
+                url: '/AccountHeads/GetHeadTaxAccounts/',
+                dataType: 'json',
+                params: {
+                    contentType: 'application/json; charset=utf-8'
+                },
+                data: function (params) {
+                    return {
+                        q: params.term// search term
+                        //code: '/1/1/1/%'
+                    };
+                },
+                processResults: function (data) {
+                    // Transforms the top-level key of the response object from 'items' to 'results'
+                    return {
+                        results: $.map(data.items, function (item) {
+                            return {
+
+                                text: item.Parent,
+                                children: [{
+                                    id: item.id,
+                                    text: item.text
+                                }]
+                            }
+                        })
+                    };
+                }
+            }
+        });
+        $('#cb-all-payable').prop('checked', true);
+        $('#cb-all-payable').trigger('change');
+        $('.paychqdetails').hide();
+        $('.vendor-eml').select2({
+            //dropdownParent: $('#Modal'),
+            placeholder: "Choose a Payee",
+            ajax: {
+                url: '/AccountHeads/GetHeadLiabilities/',
+                dataType: 'json',
+                params: {
+                    contentType: 'application/json; charset=utf-8'
+                },
+                quietMillis: 100,
+                data: function (params) {
+                    return {
+                        q: params.term// search term
+                    };
+                },
+                processResults: function (data) {
+                    return {
+                        results: $.map(data.items, function (item) {
+                            return {
+
+                                text: item.Parent,
+                                children: [{
+                                    id: item.id,
+                                    text: item.text + ' - ' + item.head
+                                }]
+                            }
+                        })
+                    };
+                }
+            }
+        });
+        //$('.bank-heads-slcxn').select2({
+        //    //dropdownParent: $('#Modal'),
+        //    placeholder: "Choose Account",
+        //    ajax: {
+        //        url: '/AccountHeads/GetHeadCashBanks/',
+        //        dataType: 'json',
+        //        params: {
+        //            contentType: 'application/json; charset=utf-8'
+        //        },
+        //        quietMillis: 100,
+        //        data: function (params) {
+        //            return {
+        //                q: params.term// search term
+        //            };
+        //        },
+        //        processResults: function (data) {
+        //            return {
+        //                results: $.map(data.items, function (item) {
+        //                    return {
+        //                        text: item.Parent,
+        //                        children: [{
+        //                            id: item.id,
+        //                            text: item.text + ' - ' + item.head
+        //                        }]
+        //                    }
+        //                })
+        //            };
+        //        }
+        //    }
+        //});
+    });
+
+    $('.vendor-eml').change(function () {
+        $.ajax({
+            type: "POST",
+            url: '/GeneralEntry/GetPayableBalance/',
+            data: { HeadId: $('.vendor-eml').val() },
+            success: function (data) {
+                $('#pmnt-big-font').text('Rs. ' + data);
+            },
+            error: function () {
+            }
+        });
+    });
+    
+    $('#total-payable-amount').change(function () {
+        debugger;
+        var payableAmnt = RemoveComma($('#total-payable-amount').val());
+        if (payableAmnt > @ViewBag.Remaining) {
+            alert("Amount cannot exceed the total remiaining amount");
+            $(this).val(@ViewBag.Remaining);
+            $(this).trigger('keyup');
+        }
+        $('#amount-to-apply').text($(this).val());
+    });
+    $('#cb-all-payable').change(function () {
+        if ($(this).is(':checked')) {
+            $('.cb-item-payable').prop('checked', true);
+        }
+        else {
+            $('.cb-item-payable').prop('checked', false);
+        }
+        var payment = 0.0;
+        $('.cb-item-payable').each(function () {
+            if ($(this).is(':checked')) {
+                payment += parseFloat(RemoveComma($(this).closest('tr').attr('data-amount')));
+            }
+        });
+        $('#total-payable-amount').val(payment);
+        $('#total-payable-amount').trigger('keyup');
+        $('#amount-to-apply').text(payment.toLocaleString());
+    });
+    $('.cb-item-payable').change(function () {
+        var payment = 0.0;
+        $('.cb-item-payable').each(function () {
+            if ($(this).is(':checked')) {
+                payment += parseFloat(RemoveComma($(this).closest('tr').attr('data-amount')));
+            }
+        });
+        $('#total-payable-amount').val(payment);
+        $('#total-payable-amount').trigger('keyup');
+        $('#amount-to-apply').text(payment.toLocaleString());
+    });
+    $('.rec-payable-entry').click(function () {
+        var billcount = 0;
+        $('.cb-item-payable').each(function () {
+            if ($(this).is(':checked')) {
+                billcount++;
+            }
+        });
+        if (billcount <= 0) {
+            alert("Please select Bill(s) to pay");
+            return false;
+        }
+        var accountname = "";
+        var accountId = $('.BanksList option:selected').val();
+        if (accountId == "" || accountId == null) {
+            alert("Please select Paying Account");
+            return false;
+        }
+        else {
+            accountname = $('.BanksList option:selected').text();
+        }
+        var mailAddr = $('#mail-address').val();
+        var transid = $('#trans-id').val();
+        var recoby = $('#recoby').val();
+        var supby = $('#supby').val();
+        var paydate = $('.payable-payment-date').val();
+        //if (paydate == "" || paydate == null) {
+        //    alert("Please Select Payment Date");
+        //    return false;
+        //}
+        var amountreceivedby = $('#amount-received-by').val();
+        if (amountreceivedby == null || amountreceivedby == "") {
+            alert("Please Enter Receiver's Name");
+            return false;
+        }
+        var instType = $('#cah-chq-bak option:selected').val();
+        var instrumentNo = $('#vpd-paymenttype').val();
+        var paychqDate = $('#vpd_Ch_bk_Pay_Date').val();
+        var branch = $('#vpd_Branch').val();
+        var payableAmnt = RemoveComma($('#total-payable-amount').val());
+        if (payableAmnt == 0 || payableAmnt == null) {
+            alert("Please select items to Pay");
+            return false;
+        }
+        var allpayables = [];
+        $('.cb-item-payable').each(function () {
+            var payableitems = { HeadId: "", GroupId: "", Narration: "" };
+            if ($(this).is(':checked')) {
+                allpayables.push({
+                    HeadId: $(this).closest('tr').attr('data-head'),
+                    GroupId: $(this).closest('tr').attr('data-grpid'),
+                    Narration: $(this).closest('tr').find('.narration').text(),
+                });
+            }
+        });
+        var taxName = "";
+        var tax_id = $('.tax-accounts option:selected').val();
+        if (tax_id != "") {
+            taxName = $('.tax-accounts option:selected').text();
+        }
+        var taxamount = RemoveComma($('.tax-amt').val());
+        if (taxamount == "" || taxamount == null || payableAmnt < 0) {
+            taxamount = 0;
+        }
+        if (taxamount > 0 && taxName == "") {
+            alert("Please Select Tax Account");
+            return false;
+        }
+        var led_amt = Number( RemoveComma($('.pmnt-big-font').text()));
+        var totalamt = Number(payableAmnt) + Number(taxamount);
+        //if (totalamt > led_amt) {
+        //    alert("Amount cannot be greater the balance Amount");
+        //    return false;
+        //}
+        var conf = confirm("Are you Sure You want to Add this Payable Entry")
+        if (conf) {
+            $.ajax({
+                type: "POST",
+                url: '/GeneralEntry/AddNewPayable/',
+                data: { vpi: allpayables, payAccId: accountId, receivedBy: amountreceivedby, instNo: instrumentNo, instDate: paychqDate, branch: branch, payType: instType, Amount: payableAmnt, TransactionId: transid, TaxAmount: taxamount, TaxAccount: tax_id, Recorded_By: recoby, Supervised_By: supby },
+                success: function (data) {
+                    if (data.Status) {
+                        alert(data.Msg);
+                        window.close();
+                        window.open("/Vouchers/Voucher?GroupId=" + transid, '_blank');
+                    }
+                    else {
+                        alert(data.Msg);
+                    }
+                },
+                error: function () {
+                    alert("Error Occured");
+                    $('#gen-rec').attr("disabled", false);
+                }
+            });
+        }
+    });
+    $(document).on("change", ".vpd-paytype-select", function () {
+        var res = $(this).val();
+        var text = $("option:selected", this).text();
+        $(" .vpdpaymentinfo").css("display", "block");
+        $(" .vpdpaymentinfo :input").attr("disabled", false);
+        $("#vpd-paytypelabel").text(text + " No.");
+        $(" #paymenttype").attr("placeholder", text);
+
+    });
+    $('.BanksList').on('change', function (e) {
+        if ($('.BanksList option:selected').text() != 'Cash') {
+            $('.paychqdetails').show();
+        }
+        else {
+            $('.paychqdetails').hide();
+        }
+    });
+
+</script>

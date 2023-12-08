@@ -1,0 +1,74 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.VoucherRequest>
+
+@{ if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="bdrs-3 ov-h bgc-white p-10 bd">
+            <div class="form-row">
+                <h5>Payments Requests</h5>
+            </div>
+            <div class="form-row">
+                <div class="table-responsive" id="report">
+                    <table id="result" class="table table-striped table-bordered" cellspacing="0" width="100%">
+                        <thead>
+                            <tr>
+                                <th class="col-date">Sr.</th>
+                                <th class="col-date">Date</th>
+                                <th class="col-rece">Payment For</th>
+                                <th class="col-size">Reason</th>
+                                <th class="col-file">Name</th>
+                                <th class="col-amt">Father Name</th>
+                                <th class="col-mod">Module</th>
+                                <th class="col-deal">Type</th>
+                                <th class="col-type">Amount</th>
+                                <th class="col-deal">Requested By</th>
+                                <th class="col-deal">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                if (Model.Any())
+                                {
+                                    int i = 1;
+                                    foreach (var item in Model)
+                                    {
+                                        <tr class="pointer req-rec-det" id="@item.Id">
+                                            <td class="col-date">@i</td>
+                                            <td class="col-date">@string.Format("{0:MM/dd/yyyy}", item.RequestedBy_Date)</td>
+                                            <td class="col-rece">@item.Voucher_For</td>
+                                            <td class="col-file">@item.Remarks</td>
+                                            <td class="col-mod">@item.Name</td>
+                                            <td class="col-type">@item.Father_Name</td>
+                                            <td class="col-size">@item.Module</td>
+                                            <td class="col-deal">@item.Type</td>
+                                            <td class="col-amt">@string.Format("{0:n0}", item.Amount)</td>
+                                            <td class="col-deal">@item.Requested_By</td>
+                                            <td class="col-deal">@item.Status</td>
+                                            <td><i class="fas fa-money-check rels-pay"></i></td>
+                                        </tr>
+                                    }
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td colspan="10">No Record Found</td>
+                                    </tr>
+                                }
+                            }
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

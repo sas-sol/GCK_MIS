@@ -1,0 +1,42 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Bank_Accounts>
+@if (Model.Any())
+{
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Bank</th>
+                <th>Account Number</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var g in Model.GroupBy(x => x.Bank))
+            {
+                int i = 1;
+                foreach (var item in g)
+                {
+                    <tr>
+                        @if (i == 1)
+                        {
+                            <td rowspan="@g.Count()">@g.Key</td>
+                            <td>@item.Account_Number</td>
+                            <td>
+                                <i class="fas fa-trash-alt Bank-rmv pointer" id="@item.Id"></i>
+                            </td>
+                        }
+                        else
+                        {
+                            <td>@item.Account_Number</td>
+                            <td>
+                                <i class="fas fa-trash-alt Bank-rmv pointer" id="@item.Id"></i>
+                            </td>
+                        }
+
+                    </tr>
+                    i++;
+                }
+            }
+        </tbody>
+    </table>
+
+}

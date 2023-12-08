@@ -1,0 +1,75 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Sp_Get_PattyCashItems_Result>
+@{ 
+    var stat = Model.Select(x => x.Status).FirstOrDefault();
+    var Date = Model.Select(x => x.CreatedBy_Date).FirstOrDefault();
+    var Name = Model.Select(x => x.CreatedBy_Name).FirstOrDefault();
+    var ap_Date = Model.Select(x => x.ApprovedBy_Date).FirstOrDefault();
+    var ap_Name = Model.Select(x => x.ApprovedBy_Name).FirstOrDefault();
+}
+    <table class="table table-bordered">
+        <thead>
+            <tr style='height:18px; border:none'>
+                <td colspan="21" style="text-align:center">
+                    <img width="200" height="100" src="~/assets/static/images/SagVoucher/customer.jpg" />
+                </td>
+            </tr>
+            <tr style='height:18px;border:none'>
+                <th colspan="21" style="text-align:center">
+                    Petty Cash Settlement Report
+                </th>
+            </tr>
+            <tr>
+                <th width="5%">Sr</th>
+                <th>Description</th>
+                <th width="10%">Amount</th>
+                <th width="10%">Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{ int sr = 1;}
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@sr</td>
+                    <td>@item.Description</td>
+                    <td>@string.Format("{0:n0}", item.Amount)</td>
+                    <td>@string.Format("{0:dd-MMM-yyyy}", item.Date)</td>
+                </tr>
+                sr++;
+            }
+        </tbody>
+        <tfoot>
+            <tr>
+                <th colspan="2" style="text-align:right;margin-right:5px">Grand Total</th>
+                <th colspan="3" id="total-amt">@string.Format("{0:n0}", Model.Sum(x => x.Amount))</th>
+            </tr>
+        </tfoot>
+    </table>
+    <table width="100%">
+        <thead>
+            <tr>
+                <th width="25%">Prepared By <br />@Name <br />@string.Format("{0:dd-MMM-yyyy}", Date)</th>
+                <th width="25%">Approved By <br />@ap_Name <br />@string.Format("{0:dd-MMM-yyyy}", ap_Date)</th>
+                <th width="25%">Director Signature </th>
+                <th width="25%">CEO Signature </th>
+            </tr>
+        </thead>
+    </table>
+<style>
+    .text-box {
+        width: 100%;
+        border: none;
+    }
+    @@media all {
+        td {
+            padding: 1px !important;
+            text-align: center;
+            vertical-align: middle !important;
+            font-size: 13px
+        }
+    }
+    .highlight_row {
+        background-color: #CCC;
+        color: #000;
+    }
+</style>

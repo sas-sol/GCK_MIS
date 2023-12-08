@@ -1,0 +1,95 @@
+﻿<div class="row">
+    <div class="col-md-5"><label>Project Name</label><input class="form-control" id="prj-name" required></div>
+    <div class="col-md-1">
+        <h6 style="width: auto;float: left;">Recurring</h6>
+        <label class="switch">
+            <input type="checkbox" id="prj-tp">
+            <span class="slider round"></span>
+        </label>
+    </div>
+    <div class="col-md-5">
+        <label style="width:100%">Departments</label>
+        <select class="form-control" id="deps" multiple></select>
+    </div>
+    <div class="col-md-5"><h4 style="margin-top:5%" id="prj-id-nam"></h4></div>
+    <div class="col-md-1">
+        <h6 style="width: auto;float: left;">Offsite</h6>
+        <label class="switch">
+            <input type="checkbox" id="offsite">
+            <span class="slider round"></span>
+        </label>
+    </div>
+    <div class="col-md-5 dep-us"></div>
+    <div class="col-md-5">
+        <label>Expense Account</label>
+        <select class="form-control" id="coAccounts"></select>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $('#deps').select2();
+        $('#coAccounts').select2({
+            dropdownParent: $('#Modal'),
+            placeholder: "Search for Account",
+            ajax: {
+                url: '/AccountHeads/GetHead/',
+                dataType: 'json',
+                params: {
+                    contentType: 'application/json; charset=utf-8'
+                },
+                data: function (params) {
+                    return {
+                        q: params.term// search term
+                    };
+                },
+                processResults: function (data) {
+                    // Transforms the top-level key of the response object from 'items' to 'results'
+                    return {
+                        results: $.map(data.items, function (item) {
+                            return {
+
+                                text: item.Parent,
+                                children: [{
+                                    id: item.id,
+                                    text: item.text
+                                }]
+                            }
+                        })
+                    };
+                }
+            }
+        });
+    });
+    $('#deps').on('select2:select', function (e) {
+        var s = e.params.data;
+        $.ajax({
+            type: "POST",
+            url: '/HumanResource/SearchEmployee_Dep/',
+            data: { d: s.id },
+            success: function (data) {
+                var formate = `<div class="p-10 dep-grp-${s.id}">
+                                    <h6>${s.text}</h6>
+                                    <select class="form-control dep-sel-${s.id}" multiple></select>
+                                </div>`;
+                $(".dep-us").append(formate);
+                $.each(data, function (key, value) {
+                    $(".dep-sel-" + s.id).append('<option value="' + value.Id + '">' + value.Name+ '</option>');
+                });
+                $(".dep-sel-" + s.id).select2();
+            }
+            , error: function (xmlhttprequest, textstatus, message) {
+                if (textstatus === "timeout") {
+                    alert("got timeout");
+                } else {
+                    alert(textstatus);
+                }
+            }
+        });
+    });
+    $('#deps').on('select2:unselect', function (e) {
+        var s = e.params.data;
+        $(".dep-sel-" + s.id).select2("destroy");
+        $(".dep-grp-" + s.id).remove();
+
+    });
+</script>

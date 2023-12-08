@@ -1,0 +1,79 @@
+﻿@model MeherEstateDevelopers.Models.ReceivableMappers
+<h4>Blocks Receivable Management</h4>
+
+<div class="col-md-12">
+    <div class="form-row row">
+        <div class="col-md-6">
+            <h5>Residential</h5>
+            @foreach (var item in Model.Residential)
+            {
+                <div class="form-row blkdiv" id="@item.Block_Id" data-type="Plots_Receivables_Residential">
+                    <div class="form-group col-md-6">
+                        <h6>@item.Block_Name</h6>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <select class="form-control sel-plug blk-rec">
+                            @if (item.AccountId != null)
+                            {
+                                <option value="@item.AccountId">@item.AccountCode - @item.Head_Name</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+            }
+        </div>
+        <div class="col-md-6">
+            <h5>Commercial</h5>
+            @foreach (var item in Model.Commercial)
+            {
+                <div class="form-row blkdiv" id="@item.Block_Id" data-type="Plots_Receivables_Commercial">
+                    <div class="form-group col-md-6">
+                        <h6>@item.Block_Name</h6>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <select class="form-control sel-plug blk-rec">
+                            @if (item.AccountId != null)
+                            {
+                                <option value="@item.AccountId">@item.AccountCode - @item.Head_Name</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+<script>
+    $('.sel-plug').select2({
+        placeholder: "Search for Account",
+        ajax: {
+            url: '/AccountHeads/GetHead/',
+            dataType: 'json',
+            params: {
+                contentType: 'application/json; charset=utf-8'
+            },
+            data: function (params) {
+                return {
+                    q: params.term// search term
+                };
+            },
+            processResults: function (data) {
+                // Transforms the top-level key of the response object from 'items' to 'results'
+                return {
+                    results: $.map(data.items, function (item) {
+                        return {
+                            text: item.Parent,
+                            children: [{
+                                id: item.id,
+                                text: item.text
+                            }]
+                        }
+                    })
+                };
+            }
+        }
+    });
+
+
+
+</script>

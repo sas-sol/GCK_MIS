@@ -1,0 +1,71 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Sp_Get_Trial_Balance_New_Result>
+
+@{ if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+    int sr = 1;
+}
+<div class=" bgc-white bd bdrs-3 mB-20 row" style="justify-content:center;">
+
+    <div class="col-md-12">
+        <h4 style="text-align:center !important;">TRIAL BALANCE</h4>
+        <h6 style="text-align:center;">All Dates</h6>
+    </div>
+
+    <div class="col-md-8">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th style="text-align:center;">Sr.</th>
+                    <th style="text-align:center;">Code</th>
+                    <th style="text-align:center;">Head Name</th>
+                    <th style="text-align:center;">Debit</th>
+                    <th style="text-align:center;">Credit</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                @foreach (var item in Model)
+                {
+                    if (item.Balance == 0)
+                    {
+                        continue;
+                    }
+                    <tr>
+                        <td style="text-align:center;">@sr</td>
+                        <td style="text-align:center;">@item.Head_Code</td>
+                        <td>@item.Head_Name</td>
+                        @{
+                            if (item.Balance > 0)
+                            {
+                                <td>@string.Format("{0:n0}", item.Balance)</td>
+                                <td>0</td>
+                            }
+                            else
+                            {
+                                <td>0</td>
+                                <td>@string.Format("{0:n0}", -(item.Balance))</td>
+                            }
+                        }
+                    </tr>
+                    sr++;
+                }
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th></th>
+                    <th>TOTAL</th>
+                    <th></th>
+                    <th style="text-align:right;">@string.Format("{0:n0}", Model.Where(x => x.Balance > 0).Sum(x => x.Balance))</th>
+                    <th style="text-align:right;">@string.Format("{0:n0}", -(Model.Where(x => x.Balance < 0).Sum(x => x.Balance)))</th>
+                </tr>
+            </tfoot>
+        </table>
+        <hr style="border:2px solid black;" />
+    </div>
+</div>

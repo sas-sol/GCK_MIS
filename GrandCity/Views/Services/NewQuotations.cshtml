@@ -1,0 +1,96 @@
+﻿@model MeherEstateDevelopers.Models.PurchaseRequisitons
+@{
+    string activeclass = "";
+}
+<script src="~/Scripts/Inv.js"></script>
+<div class="form-row bgc-white bd bdrs-3 p-20 mB-20">
+    <div class="row">
+        <h5>Service Requisitions</h5>
+    </div>
+    <div class="col-md-12">
+        <ul class="nav nav-tabs" id="myTabs">
+            @if (User.IsInRole("Purchase Requisition Approval") || User.IsInRole("Administrator"))
+            {
+                <li class="nav-item"><a class="nav-link" role="tab" data-toggle="tab" data-link="/Services/PendingApproval" id="pen-ap" href="#coahead">Pending Requisitions</a></li>
+            }
+            @if (User.IsInRole("Pending Purchase Requisition") || User.IsInRole("Administrator"))
+            {
+                <li class="nav-item"><a class="nav-link" role="tab" data-toggle="tab" data-link="/Services/Pending_PR" id="pen" href="#coahead">Approved Requisitions</a></li>
+            }
+            @if (User.IsInRole("Purchase Requisition Approval") || User.IsInRole("Administrator"))
+            {
+                <li class="nav-item"><a class="nav-link" role="tab" data-toggle="tab" data-link="/Services/QuotationFinalize" id="q-f" href="#coahead">Comparetive Statment</a></li>
+            }
+            @if (User.IsInRole("Purchase Order List") || User.IsInRole("Administrator"))
+            {
+                <li class="nav-item"><a class="nav-link" role="tab" data-toggle="tab" data-link="/Services/Gen_Po" id="po" href="#coahead">Work Orders</a></li>
+            }
+            @if (User.IsInRole("Complete Purchase Orders") || User.IsInRole("Administrator"))
+            {
+                <li class="nav-item"><a class="nav-link" role="tab" data-toggle="tab" data-link="/Services/GeneratedPurchaseOrders" id="p-o" href="#coahead">Completed Purchase Orders</a></li>
+            }
+        </ul>
+        <div class="tab-content">
+            <div id="coahead" class="tab-pane active p-20 table-responsive"></div>
+        </div>
+    </div>
+</div>
+@if (User.IsInRole("Purchase Requisition Approval"))
+{
+    <script>
+        $(function () {
+            $('#coahead').load('/Services/PendingApproval/');
+            $("#pen-ap").addClass('active')
+            GetSerCount();
+        });
+    </script>
+}
+else if (User.IsInRole("Pending Purchase Requisition"))
+{
+    <script>
+        $(function () {
+            $('#coahead').load('/Services/Pending_PR/');
+            $("#pen").addClass('active')
+            GetSerCount();
+        });
+    </script>
+}
+else if (User.IsInRole("Purchase Comparative Report"))
+{
+    <script>
+        $(function () {
+            $('#coahead').load('/Services/QuotationFinalize/');
+            $("#q-f").addClass('active')
+            GetSerCount();
+        });
+    </script>
+}
+else if (User.IsInRole("Purchase Order List"))
+{
+    <script>
+        $(function () {
+            $('#coahead').load('/Services/Gen_Po/');
+            $("#po").addClass('active')
+            GetSerCount();
+        });
+    </script>
+}
+
+<style>
+    .DemadnOrder tr.odd td:first-child,
+    .DemadnOrder tr.even td:first-child {
+        padding-left: 4em;
+    }
+
+    .dtrg-level-0 {
+        font-size: 20px;
+        text-align: center;
+        font-weight: bold;
+    }
+
+    .dtrg-level-1 {
+        font-size: 16px;
+        text-align: left;
+        font-weight: bold;
+    }
+</style>

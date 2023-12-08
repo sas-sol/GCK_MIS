@@ -1,0 +1,72 @@
+﻿@using (Html.BeginForm("FinalPlotCancelation", "Plots", FormMethod.Post, new { @id = "plt-fin-can", @class = "", role = "form", autocomplete = "off" }))
+{
+    @Html.AntiForgeryToken()
+
+    <input type="hidden" id="trans-id" value="@ViewBag.TransactionId" name="TransactionId" />
+    <input type="hidden" id="can-id" name="Id" />
+    <input type="hidden" id="can-type" name="Type" />
+    <input type="hidden" id="plt-c-id" name="PlotId" />
+    <input type="hidden" id="imge" name="FileImage" />
+    <input type="hidden" id="Status" name="Status" value="true" />
+    <div class="form-row">
+        <div class="form-group col-md-3">
+            <label>Approval Status</label>
+            <select class="form-control" name="Status" id="stat">
+                <option>Choose..</option>
+                <option value="true">Approved</option>
+                <option value="false">Rejected</option>
+            </select>
+        </div>
+        <div class="form-group col-md-4">
+            <label>Remarks</label><textarea class="form-control" name="Remarks" id="Remarks"></textarea>
+        </div>
+        <div class="form-group col-md-4">
+            <label>Desciption Written on Voucher</label><textarea class="form-control" name="Description" id="Remarks"></textarea>
+        </div>
+    </div>
+    <hr />
+    <div class="form-row">
+        <div class="form-group col-md-2">
+            <label>Amount</label>
+            <input class="form-control coma" placeholder="50,000" required>
+            <input type="hidden" id="amt" name="Amount" class="amt" required>
+        </div>
+        <div class="form-group col-md-2">
+            <label>Payment Type</label>
+            @Html.DropDownList("payAccId", null, null, new { @class = "form-control BanksList" })
+        </div>
+        <div class="row col-md-12 paychqdetails">
+            <div class="form-group col-md-2">
+                <label>Instrument Type</label>
+                <select class="form-control vpd-paytype-select" id="cah-chq-bak" name="payType">
+                    <option value="BankDraft">Bank Draft</option>
+                    <option value="Cheque">Cheque</option>
+                    <option value="PayOrder">Pay Order</option>
+                    <option value="Online_Cheque">Online - Cheque</option>
+                    <option value="Online_Payorder">Online - PayOrder</option>
+                    <option value="Online_Bankdraft">Online - BankDraft</option>
+                </select>
+            </div>
+            <div class="form-group col-md-3 vpdpaymentinfo">
+                <label id="vpd-paytypelabel">Bank Draft No.</label>
+                <input type="text" class="form-control" id="vpd-paymenttype" name="instNo" placeholder="">
+            </div>
+            <div class="form-group col-md-2 vpdpaymentinfo">
+                <label>Date</label>
+                <input type="text" class="form-control" data-provide="datepicker" id="vpd_Ch_bk_Pay_Date" name="instDate" placeholder="mm/dd/yyyy" required>
+            </div>
+        </div>
+        <div class="form-group col-md-1 paymentotherinfo">
+            <label>Scan File </label>
+            <button class=" btn btn-primary" data-v="1" type="button" id="scanbtn">Scan</button>
+        </div>
+        <div id="images-1" class="col-md-2"></div>
+    </div>
+}
+<script>
+    $(document).ready(function () {
+        $("#can-id").val($("#can-req-id").val());
+        $("#can-type").val($("#type").val());
+        $("#plt-c-id").val($("#plt-id").val());
+    });
+</script>

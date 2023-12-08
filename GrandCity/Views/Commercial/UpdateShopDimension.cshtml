@@ -1,0 +1,32 @@
+﻿@using (Html.BeginForm("UpdateShopDimension1", "Commercial", FormMethod.Post, new { @id = "up-plot-dime-c", @class = "", role = "form", autocomplete = "off" }))
+{
+    @Html.AntiForgeryToken()
+    <input type="hidden" name="Id" id="ShopId" />
+    <div class="form-row">
+        <div class="form-group col-md-2">
+            <label>Previous Shop Size</label>
+            <h5 id="shp-sz"></h5>
+        </div>
+        <div class="form-group col-md-2">
+            <label>Dimension</label>
+            <h5 id="shp-dim"></h5>
+        </div>
+        <div class="form-group col-md-3">
+            <label>New Dimension</label>
+            @Html.DropDownList("Dimension", null, "Choose..", new { @class = "form-control" })
+        </div>
+        <div class="form-group col-md-2">
+            <label>Area</label>
+            <input type="text" class="form-control" id="shp-are" name="Area">
+        </div>
+    </div>
+}
+<script>
+    $(function () {
+        $('.modal-footer').append('<button class="btn btn-primary" id="up-plt-dim-c" type="button">Update</button>');
+        $("#ShopId").val($("#shp-id").val());
+        $("#shp-sz").text($("#shp-size").text());
+        $("#shp-dim").text($("#shop-dim").text());
+        $("#shp-are").val($("#sp-size").val());
+    });
+</script>

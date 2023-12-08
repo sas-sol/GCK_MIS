@@ -1,0 +1,47 @@
+@model IEnumerable<MeherEstateDevelopers.Models.Sp_Get_IssuedItems_Monthly_Result>
+
+<table id="inv" class="table table-striped table-bordered " cellspacing="0" style="margin-left:0%; width:1300px">
+    <thead class="notiny-theme-dark">
+        <tr>
+            <td>Sr.</td>
+            <td>Item Code</td>
+            <td>Item Name</td>
+            <td>UOM</td>
+            <td>Issued Items</td>
+
+        </tr>
+    </thead>
+
+    <tbody>
+        @{
+
+            int sr = 1;
+            foreach (var v in Model.GroupBy(x=> x.CMonth))
+            {
+                DateTime dt = new DateTime(Convert.ToInt32(v.Select(x => x.CYear).FirstOrDefault()), Convert.ToInt32(v.Select(x => x.CMonth).FirstOrDefault()), 1);
+                    <tr>
+                        <td colspan="5" style="text-align: center;font-weight: bold;">@string.Format("{0:MMMM - yyyy}", dt)</td>
+                    </tr>
+                
+                foreach (var item in v)
+                {
+
+                        <tr>
+                            <td>@sr</td>
+                            <td>@item.SKU</td>
+                            <td>@item.Complete_Name</td>
+                            <td>@item.UOM</td>
+                            <td>@item.ItemCount</td>
+                        </tr>
+
+                    }
+                sr++;
+            }
+
+            
+        }
+    </tbody>
+</table>
+<script>
+    $('#inv').dataTable();
+</script>

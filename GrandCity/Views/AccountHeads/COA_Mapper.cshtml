@@ -1,0 +1,42 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Sp_Get_GeneralEntries_TrialBalance_Result>
+@{ if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+}
+<div class=" bgc-white bd bdrs-3 mB-20 row">
+    <div class="col-md-12">
+        <h4>Accounts Configuration</h4>
+    </div>
+    <div class="col-md-12">
+        <ul class="nav nav-tabs" id="myTabs">
+            <li class="nav-item"><a class="nav-link active" data-toggle="tab" role="tab" data-link="/Banking/BankAndAccount" href="#coahead">Cash & Banks</a></li>
+            <li class="nav-item"><a class="nav-link" data-toggle="tab" role="tab" data-link="/Banking/OnlineBankAccount" href="#coahead">Online Bank Mapping</a></li>
+            <li class="nav-item"><a class="nav-link" data-toggle="tab" role="tab" data-link="/AccountHeads/PayableMapper" href="#coahead">Payable</a></li>
+            <li class="nav-item"><a class="nav-link" data-toggle="tab" role="tab" data-link="/AccountHeads/VendorMapper" href="#coahead">Vendors</a></li>
+            <li class="nav-item"><a class="nav-link" data-toggle="tab" role="tab" data-link="/AccountHeads/DealersMapper" href="#coahead">Dealership</a></li>
+            <li class="nav-item"><a class="nav-link" data-toggle="tab" role="tab" data-link="/AccountHeads/ReceivableMapper" href="#coahead">Blocks Receviable</a></li>
+            <li class="nav-item"><a class="nav-link" data-toggle="tab" role="tab" data-link="/AccountHeads/SalesMapper" href="#coahead">Blocks Sales</a></li>
+            <li class="nav-item"><a class="nav-link" data-toggle="tab" role="tab" data-link="/AccountHeads/OtherIncomMapper" href="#coahead">Other Income</a></li>
+            <li class="nav-item"><a class="nav-link" data-toggle="tab" role="tab" data-link="/AccountHeads/ServiceElectricMapper" href="#coahead">Service & Electricity Charges</a></li>
+            <li class="nav-item"><a class="nav-link" data-toggle="tab" role="tab" data-link="/AccountHeads/PrjMapper" href="#coahead">Projects</a></li>
+            <li class="nav-item"><a class="nav-link" data-toggle="tab" role="tab" data-link="/AccountHeads/HRMapper" href="#coahead">Human Resource</a></li>
+            <li class="nav-item"><a class="nav-link" data-toggle="tab" role="tab" data-link="/AccountHeads/PettyCash_Config" href="#coahead">Petty Cash</a></li>
+            @*<li class="nav-item"><a class="nav-link" data-toggle="tab" role="tab" data-link="" href="#coahead">Salaries</a></li>
+        <li class="nav-item"><a class="nav-link" data-toggle="tab" role="tab" data-link="" href="#coahead">Sales</a></li>
+        <li class="nav-item"><a class="nav-link " data-toggle="tab" role="tab" data-link="" href="#coahead">Payables</a></li>*@
+        </ul>
+        <div class="tab-content">
+            <div id="coahead" class="tab-pane active p-20"></div>
+        </div>
+    </div>
+</div>
+<script>
+    $(function () {
+        $('#coahead').load('/Banking/BankAndAccount/');
+    });
+</script>

@@ -1,0 +1,112 @@
+﻿@using (Html.BeginForm("PayInstallmentTest", "Installments", FormMethod.Post, new { @id = "re-ins", @class = "", role = "form" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <h4>Balance : <span id="bal"></span></h4>
+            <input type="hidden" id="bal-val" name="Balance" />
+            <input type="hidden" id="amt-file-id" name="Filefromid" />
+            <input type="hidden" id="amt-file-no" name="File_Plot_Number" />
+            <input type="hidden" id="amt-in-wrds" name="AmountInWords" />
+            <input type="hidden" id="mbl" name="Mobile_1" />
+            <input type="hidden" id="fth-husbad" name="Father_Husband" />
+            <input type="hidden" id="name" name="Name" />
+            <input type="hidden" id="total-amt" name="TotalAmount" />
+            <input type="hidden" id="prj-name" name="Project_Name" />
+            <input type="hidden" id="rate" name="Rate" />
+            <input type="hidden" id="plt-size" name="Plot_Size" />
+            <input type="hidden" id="devchar" name="DevCharges" />
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-2">
+            <label>Amount</label>
+            <input type="text" class="form-control" id="amt" name="Amount">
+        </div>
+        <div class="form-group col-md-2">
+            <label>Receipt No.</label>
+            <input type="text" class="form-control" id="Receipt" name="ReceiptNo">
+        </div>
+        <div class="form-group col-md-2">
+            <label>Receipt Date</label>
+            <input type="text" class="form-control" data-provide="datepicker" id="Date" name="Date">
+        </div>
+        <div class="form-group col-md-2">
+            <label>Payment Type</label>
+            <select class="form-control" name="PaymentType">
+                <option value="Booking">Booking</option>
+                <option value="Installment">Installment</option>
+                <option value="Transfer">Transfer</option>
+            </select>
+        </div>
+        <div class="form-group col-md-2">
+            <label>Cash / Bank</label>
+            <select class="form-control paytypesel-test" id="cah-chq-bak" name="PaymentType">
+                <option value="Cash">Cash</option>
+                <option value="BankDraft">Bank Draft</option>
+                <option value="Cheque">Cheque</option>
+                <option value="PayOrder">Pay Order</option>
+                <option value="Online_Cash">Online - Cash</option>
+                <option value="Online_Cheque">Online - Cheque</option>
+                <option value="Online_Payorder">Online - PayOrder</option>
+                <option value="Online_Bankdraft">Online - BankDraft</option>
+                <option value="Debit/Credit Card">Debit/Credit Card</option>
+            </select>
+        </div>
+        <div class="form-group col-md-3 paymentotherinfo">
+            <label id="paytypelabel"></label>
+            <input type="text" class="form-control" id="paymenttype" name="PayChqNo" placeholder="" disabled>
+        </div>
+        <div class="form-group col-md-3 paymentotherinfo">
+            <label>Bank</label>
+            @Html.DropDownList("Bank", null, "Choose..", new { @class = "form-control", disabled = "" })
+        </div>
+        <div class="form-group col-md-2 paymentotherinfo">
+            <label>Branch </label>
+            <input type="text" class="form-control" id="Branch" name="Branch" placeholder="Mall Rd" disabled>
+        </div>
+        <div class="form-group col-md-2 paymentotherinfo">
+            <label>Date</label>
+            <input type="text" class="form-control" data-provide="datepicker" name="Ch_bk_Pay_Date" placeholder="mm/dd/yyyy" disabled required>
+        </div>
+    </div>
+}
+<div class="form-row">
+    <table class="table table-borderless clickable-rows" id="avail-inst" cellspacing="0" width="100%">
+        <thead>
+            <tr>
+                <th>Installment</th>
+                <th>Amount</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</div>
+
+<script>
+    $(function () {
+        $('.modal-footer').append('<button class="btn btn-success" id="gen-rec-test" type="submit">Update</button>');
+        $("#bal").html($("#bal-amt").text());
+        $("#bal-val").val(RemoveComma( $("#bal-amt").text()));
+        $("#amt-file-id").val($("#file-id").val());
+        $("#amt-file-no").val($("#app-num").val());
+        $("#mbl").val($("#Mobile_1").val());
+        $("#fth-husbad").val($("#Father_Husband").val());
+        $("#name").val($("#Name").val());
+        $("#total-amt").val($("#ttl-amt").val());//
+        $("#prj-name").val($("#prj").val());
+        $("#rate").val($("#file-rate").val());//
+        $("#plt-size").val($("#pl-size").val());
+        $("#devchar").val($("#dev-char").text());
+    });
+</script>
+<style>
+    .paymentotherinfo {
+        display: none;
+    }
+
+    #inst-stat {
+        height: 1245px;
+        overflow-y: scroll;
+    }
+</style>

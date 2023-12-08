@@ -1,0 +1,77 @@
+﻿@model MeherEstateDevelopers.Models.OverdueQualifying_Plots
+@*<p><span style="font-family: 'Abadi',sans-serif;">&nbsp;</span></p>
+    <p><span style="font-family: 'Abadi',sans-serif;">&nbsp;</span></p>
+    <p><span style="font-family: 'Abadi',sans-serif;">&nbsp;</span></p>
+    <p><span style="font-family: 'Abadi',sans-serif;">&nbsp;</span></p>
+    <p><span style="font-family: 'Abadi',sans-serif;">&nbsp;</span></p>*@
+<div class="main-lt-cont">
+    <div class="lh-head" style="display: flex; justify-content: center; align-items: center; padding-top:2%;">
+
+        <img src="~/images/LH-Head.png" style="width:15%; height:15%;" />
+    </div>
+    <div class="lt-cont">
+        <p style="text-align: center;"><strong><u><span style="font-size: 14.0pt; font-family: 'Abadi',sans-serif;">@Model.Block_Name – Plot Cancellation Letter</span></u></strong></p>
+        <p><strong><span style="font-family: 'Abadi',sans-serif;">Respected Customer,</span></strong></p>
+        <p style="line-height:1"><span style="font-family: 'Abadi',sans-serif;">Hope you are having a great day!</span></p>
+
+        <p style="text-align: justify; text-justify: inter-ideograph;line-height:1.3"><span style="font-family: 'Abadi',sans-serif;">This is to inform you that your plot in @Model.Block_Name Block, Meher Estate Developers has been cancelled on account of a considerable remaining amount due on your part. You have been reminded two times before via written notices dated @string.Format("{0:dd-MMMM-yyyy}", Model.FirstNotice) & @string.Format("{0:dd-MMMM-yyyy}", Model.SecNotice) followed up by an SMS as well by the society, however, despite these notices, you haven’t paid your remaining amount.</span></p>
+
+        <p style="text-align: justify; text-justify: inter-ideograph;line-height:1"><span style="font-family: 'Abadi',sans-serif;">Name: @Model.Name</span></p>
+        <p style="text-align: justify; text-justify: inter-ideograph;line-height:1"><span style="font-family: 'Abadi',sans-serif;">Plot Number: @Model.Plot_No - @Model.Type - @Model.Block_Name</span></p>
+        <p style="text-align: justify; text-justify: inter-ideograph;line-height:1"><span style="font-family: 'Abadi',sans-serif;">Plot Size: @Model.Plot_Size</span></p>
+        <p style="text-align: justify; text-justify: inter-ideograph;line-height:1"><span style="font-family: 'Abadi',sans-serif;">Balance Amount: @string.Format("{0:n0}", Math.Round(Convert.ToDecimal(Model.OverDueAmount)))</span></p>
+        <p style="text-align: justify; text-justify: inter-ideograph;line-height:1"><span style="font-family: 'Abadi',sans-serif;">Due Installments: @Model.Installments</span></p>
+        <p style="text-align: justify; text-justify: inter-ideograph;line-height:1"><span style="font-family: 'Abadi',sans-serif;">First Warning Date: @string.Format("{0:dd-MMMM-yyyy}", Model.CancelNotice)</span></p>
+        <p style="text-align: justify; text-justify: inter-ideograph;line-height:1.3"><span style="font-family: 'Abadi',sans-serif;">Therefore; in accordance with terms and conditions applied by Meher Estate Developers your plot has been cancelled. You are kindly requested to visit out Head Office and submit your complete documents for the processing of your refund.</span></p>
+
+        <p style="line-height:1.3"><strong><span style="font-family: 'Abadi',sans-serif;">Note: If there is any ambiguity in this case, please visit our Head Office along with the complete file and receipts in 7 days’ time for rectification.</span></strong></p>
+
+        <p></p>
+        <p><span style="font-family: 'Abadi',sans-serif;">Regards,</span></p>
+        <p><span style="font-family: 'Abadi',sans-serif;">&nbsp;</span></p>
+        <p style="line-height:1"><span style="font-family: 'Abadi',sans-serif;">_________________</span></p>
+        <p style="line-height:1"><span style="font-family: 'Abadi',sans-serif;">Muhammad Naeem, </span></p>
+        <p style="line-height:1"><span style="font-family: 'Abadi',sans-serif;">Manager Plots,</span></p>
+        <p style="line-height:1"><span style="font-family: 'Abadi',sans-serif;">Date: @string.Format("{0:dd-MMMM-yyyy}", DateTime.Now)</span></p>
+        <p style="line-height:1;font-size:20px"><span style="font-family: 'Abadi',sans-serif;"><b>042-111-724-786</b></span></p>
+    </div>
+    @*<div class="lh-foot"><img src="~/images/LH-Footer.png" style="width:100%" /></div>*@
+</div>
+
+<style>
+    @@page {
+        margin: 0 !important;
+    }
+
+    p {
+        color: black !important;
+        font-size: 14px
+    }
+
+    .lt-cont {
+        padding: 10px 2% !important
+    }
+
+    .main-lt-cont {
+        width: 60%;
+    }
+
+    @@media print {
+        @@Page {
+            size: A4
+        }
+
+        .main-lt-cont {
+            width: 100%;
+        }
+
+        .lh-foot {
+            position: fixed;
+            bottom: 0;
+        }
+
+        .lt-cont {
+            padding: 10px 2% !important
+        }
+    }
+</style>

@@ -1,0 +1,339 @@
+﻿@model MeherEstateDevelopers.Models.LeaveRequisition
+
+@{ Layout = "~/Views/Shared/_StaffLayout.cshtml"; }
+
+<head>
+    @*<script src="https://cdnjs.cloudflare.com/ajax/libs/datepicker/0.6.5/datepicker.js"></script>*@
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link href="~/Content/Leave.css" rel="stylesheet" />
+    <link href="~/Content/JqueryStepsCss/aurstyle.css" rel="stylesheet" />
+
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script>
+
+
+    </script>
+</head>
+
+<div class="">
+    @using (Ajax.BeginForm("ApplLeaveForPerson", "Leave", new AjaxOptions { OnSuccess = "", OnFailure = "", HttpMethod = "Post" }, htmlAttributes: new { id = "leaveform" }))
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="col-md-12">
+            <div class="form-row">
+
+                <div class="form-group col-md-1">
+                    <label>From</label>
+                    @Html.EditorFor(model => model.StartDate, new { htmlAttributes = new { @class = "date_picker form-control", data_provide = "datepicker", id = "fromleave", onchange = "checkdates(); ", required = "required", @readonly = "" } })
+                </div>
+
+                <div class="form-group col-md-1">
+                    <label>To</label>
+                    @Html.EditorFor(model => model.EndDate, new { htmlAttributes = new { @class = "date_picker form-control", id = "toleave", data_provide = "datepicker", onchange = "checkdates(); ", required = "required", @readonly = "" } })
+                </div>
+                <div class="form-group col-md-2">
+                    <label id="ttldays">Number of days : 0</label>
+                    @Html.HiddenFor(x => x.NoOfDays)
+                </div>
+                <div class="form-group col-md-4">
+                    <label>Reason</label>
+                    <textarea class="createleave form-control" id="leaveReason" name="Reason" onkeyup="" rows="1" cols="1" required></textarea>
+                </div>
+                <div class="form-group col-md-3" id="Per-1">
+                    <label>Apply For a Person</label>
+                    @Html.DropDownList("AppliedBy", null, "Choose..", new { @class = "form-control" })
+                </div>
+
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-3">
+                    <label>Leave Type  : </label>
+                    <input type="radio" id="LeaveType" name="LeaveType" value="1" class="" onchange="leaveTypeChanged()" checked> Causual
+                    <input type="radio" id="LeaveType" name="LeaveType" value="2" class="" onchange="leaveTypeChanged()"> Sick
+                    <input type="radio" id="LeaveType" name="LeaveType" value="3" class="" onchange="leaveTypeChanged()"> Annual   |
+                </div>
+                <div class="form-group col-md-3">
+                    <label id="RemDisp">Remaining 0 out of 0</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="container" style="width:50%">
+            <div class="full-callender-div ">
+                <div class="leave-cal">
+                    <div id="datepickerfullyear"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row" style="margin-top:5%">
+            <input type="checkbox" id="terms" onchange="" required="required" />
+            <p>I Accept the terms of the Official Leave Requisition Policy</p>
+
+            @*<button class="anchor-btn btn-cancel form-control" data-dismiss="modal">Cancel</button>*@
+            <div class="form-group col-md-1">
+
+                <button class="anchor-btn btn-ok form-control btn btn-success" type="submit" id="leaveSubmt">Create</button>
+            </div>
+        </div>
+
+
+        <div class="clear"></div>
+        <hr class="leave-req-hr">
+        <div class="footer">
+            <div class="pop-row" style="padding : 15px 0px">
+                <div style="float : left;">
+                    <p>Total leaves in fiscal year | @(Convert.ToInt32(ViewBag.LeaveCountAL) + Convert.ToInt32(ViewBag.LeaveCountSL) + Convert.ToInt32(ViewBag.LeaveCountCL)) out of @(Convert.ToInt32(ViewBag.TotalAllocatedAL) + Convert.ToInt32(ViewBag.TotalAllocatedSL) + Convert.ToInt32(ViewBag.TotalAllocatedCL))  </p>
+                </div>
+                @*<div style="float : left; margin-left : 40px;">
+                        <div class="small-circle yel"></div>
+                        <p style="float : left">Casual</p>
+                    </div>
+                    <div style="float : left; margin-left : 40px;">
+                        <div class="small-circle yel"></div>
+                        <p style="float : left">Sick leaves</p>
+                    </div>
+                    <div style="float : left; margin-left : 40px;">
+                        <div class="small-circle red"></div>
+                        <p style="float : left">Annual Leaves</p>
+                    </div>
+                    <div style="float : left; margin-left : 40px;">
+                        <div class="small-circle grn"></div>
+                        <p style="float : left">Official Leaves</p>
+                    </div>*@
+
+            </div>
+        </div>
+    }
+</div>
+<style>
+    #LeaveType {
+        margin-left: 5%;
+    }
+
+    #RemDisp {
+        margin-left: 10%;
+    }
+</style>
+<script>
+
+            //$(function () {
+            //    InitUser(1)
+            //});
+    //$(document).ready(function () {
+    //    $(".date_picker").datepicker({
+    //        minDate: -3,
+    //        dateFormat: "mm/dd/yy",
+    //        dayNamesMin: ['Sun', 'Mon', 'Tus', 'Wed', 'Thu', 'Fri', 'Sat'],
+    //    });
+    //    $('.modal-title').html('Leave Requisition');
+    //});
+            $(document).ready(function () {
+                $('#leaveSubmt').prop('disabled', false);
+        $.ajax({
+            url: "/Leave/LeaveRequest/",
+            type: "GET",
+            contentType: "application/json;charset=utf-8",
+            dataType: "json",
+            data: {userid: @ViewBag.Userid },
+            success: function (result) {
+                
+                var OfficialdisabledDays = new Array();
+                //My code to map Leaves according to LeaveTypes on Calender goes here
+                var disabledDaysAL = new Array();
+                var disabledDaysSCL = new Array();
+                var disabledDaysCL = new Array();
+                for (var i = 0; i < result.startDateAL.length; i++) {
+                    var dates = result.startDateAL[i];
+                    var parsedDate = new Date(parseInt(dates.substr(6)));
+                    var jsDate = new Date(parsedDate);
+                    var myday = jsDate.getDate();
+                    var mymonth = jsDate.getMonth() + 1;
+                    var year = jsDate.getFullYear();
+                    var myfulldate = year + '-' + mymonth + '-' + myday;
+                    disabledDaysAL.push(myfulldate);
+                }
+                for (var i = 0; i < result.startDateSCL.length; i++) {
+                    var dates = result.startDateSCL[i];
+                    var parsedDate = new Date(parseInt(dates.substr(6)));
+                    var jsDate = new Date(parsedDate);
+                    var myday = jsDate.getDate();
+                    var mymonth = jsDate.getMonth() + 1;
+                    var year = jsDate.getFullYear();
+                    var myfulldate = year + '-' + mymonth + '-' + myday;
+                    disabledDaysSCL.push(myfulldate);
+                }
+                for (var i = 0; i < result.startDateCL.length; i++) {
+                    var dates = result.startDateSCL[i];
+                    var parsedDate = new Date(parseInt(dates.substr(6)));
+                    var jsDate = new Date(parsedDate);
+                    var myday = jsDate.getDate();
+                    var mymonth = jsDate.getMonth() + 1;
+                    var year = jsDate.getFullYear();
+                    var myfulldate = year + '-' + mymonth + '-' + myday;
+                    disabledDaysCL.push(myfulldate);
+                }
+                for (var i = 0; i < result.officialDates.length; i++) {
+                    var dates = result.officialDates[i];
+                    var parsedDate = new Date(parseInt(dates.substr(6)));
+                    var jsDate = new Date(parsedDate);
+                    var myday = jsDate.getDate();
+                    var mymonth = jsDate.getMonth() + 1;
+                    var year = jsDate.getFullYear();
+                    var myfulldate = year + '-' + mymonth + '-' + myday;
+                    OfficialdisabledDays.push(myfulldate);
+                }
+                var date = new Date();
+                $("#datepickerfullyear").datepicker({
+
+                    dateFormat: "mm/dd/yy",
+                    dayNamesMin: ['S', 'M', 'T', 'W', 'T', 'F', 'S'],
+                    numberOfMonths: [3, 4],
+                    minDate: new Date(2019,   0-1, 31),
+                    maxDate: new Date(2019, 12-1, 31),
+                    beforeShowDay: function (date) {
+
+                        var m = date.getMonth(), d = date.getDate(), y = date.getFullYear();
+                        for (i = 0; i < disabledDaysAL.length; i++) {
+
+                            if ($.inArray(y + '-' + (m + 1) + '-' + d, disabledDaysAL) != -1) {
+                                return [true, 'ui-state-selectedAL', ''];//ANNUAL leaves taken wala scene hai ye
+                            }
+                        }
+                        for (i = 0; i < disabledDaysSCL.length; i++) {
+
+                            if ($.inArray(y + '-' + (m + 1) + '-' + d, disabledDaysSCL) != -1) {
+                                return [true, 'ui-state-selected', ''];//SICK/CASUAL leaves taken wala scene hai ye
+                            }
+                        }
+                        //for (i = 0; i < OfficialdisabledDays.length; i++) {
+
+                        //    if ($.inArray(y + '-' + (m + 1) + '-' + d, OfficialdisabledDays) != -1) {
+                        //        return [true, 'ui-state-selected1', ''];//official leave wala scene hai ye
+                        //    }
+                        //}
+                        for (i = 0; i < disabledDaysCL.length; i++) {
+
+                            if ($.inArray(y + '-' + (m + 1) + '-' + d, disabledDaysCL) != -1) {
+                                return [true, 'ui-state-selected1', ''];// causual leva
+                            }
+                        }
+
+                        return [true];
+                    }
+                });
+
+            },
+            error: function (response) {
+                alert('eror');
+            }
+        });
+    });
+    function leaveTypeChanged()
+    {
+        var it = $("input[name='LeaveType']:checked").val();
+        // annul
+        if(it==3){
+            $('#RemDisp').html( 'Remaining: ' + @(Math.Max(Convert.ToInt32(ViewBag.TotalAllocatedAL) - Convert.ToInt32(ViewBag.LeaveCountAL),0))+ ' out of ' + @ViewBag.TotalAllocatedAL);
+        }
+        //sick leave
+        else if(it==2){
+            $('#RemDisp').html( 'Remaining: ' + @(Math.Max(Convert.ToInt32(ViewBag.TotalAllocatedSL) - Convert.ToInt32(ViewBag.LeaveCountSL),0)) + ' out of ' + @ViewBag.TotalAllocatedSL);
+        }
+          // causual leave
+        else if(it==1){
+            $('#RemDisp').html( 'Remaining: ' + @(Math.Max(Convert.ToInt32(ViewBag.TotalAllocatedCL) - Convert.ToInt32(ViewBag.LeaveCountCL),0)) + ' out of ' + @ViewBag.TotalAllocatedCL);
+        }
+        else
+        {
+            $('#RemDisp').html(  'Remaining: 0 out of 0');
+        }
+            }
+
+
+
+
+            function checkdates() {
+                var start = $('#fromleave').val();
+                var from = new Date(start);
+                var end = $('#toleave').val();
+                var To = new Date(end)
+                var daysCount = dateDifference(from, To) + 1;
+                if (!dateCorrect()) {
+                    alertBox('Error', 'Check Dates From & To.', false, 0);
+                    //$.alert({ title: 'Warning', content: 'Check From & To Dates.', animation: 'zoom', closeAnimation: 'zoom', type: 'orange', animationBounce: '1.5' });
+                    $('#ttldays').text('Number of days : ' + daysCount);
+                    $('#NoOfDays').val(daysCount);
+                }
+                else {
+                    $('#ttldays').text('Number of days : ' + daysCount);
+                    $('#NoOfDays').val(daysCount);
+                }
+            }
+            function dateCorrect() {
+                var date = new Date();
+                var from = $('#fromleave').val();
+                from = new Date(from);
+                var To = $('#toleave').val();
+                To = new Date(To);
+                if (To.getFullYear() >= from.getFullYear()) {
+                    if (To.getMonth() == from.getMonth()) {
+                        if (To.getDate() < from.getDate()) {
+                            return false;
+                        }
+                    }
+                    else if (To.getMonth() < from.getMonth()) {
+                        return false;
+                    }
+                }
+                return true;
+            }
+            //function checkdates() {
+            //    var from = moment($('#fromleave').val());
+            //    var To = moment($('#toleave').val());
+            //    var curdate = moment().startOf('day');
+            //    var daysCount = dateDifference(from, To) + 1;
+            //    if (daysCount < 0) {
+            //        alertBox('Warning', 'Check Date From To.', false, 0);
+            //        //$.alert({ title: 'Warning', content: 'Check Date From To.', animation: 'zoom', closeAnimation: 'zoom', type: 'red', animationBounce: '1.5' });
+            //    }
+            //    else {
+            //        $('#noofdays').text('Number of days : ' + daysCount);
+            //    }
+            //}
+            function CheckSubmission(e) {
+                var from = moment($('#fromleave').val());
+                var To = moment($('#toleave').val());
+                var daysCount = dateDifference(from, To) + 1;
+                if (daysCount < 0) {
+                    alertBox('Warning', 'Check Date From To.', false, 0);
+                    return false;
+                }
+                else {
+                    return true;
+                }
+            }
+            function dateDifference(start, end) {
+                var s = new Date(start);
+                var e = new Date(end);
+                s.setHours(12, 0, 0, 0);
+                e.setHours(12, 0, 0, 0);
+                var totalDays = Math.round((e - s) / 8.64e7);
+                var wholeWeeks = totalDays / 7 | 0;
+                var days = wholeWeeks * 5;
+                if (totalDays % 7) {
+                    s.setDate(s.getDate() + wholeWeeks * 7);
+                    while (s < e) {
+                        s.setDate(s.getDate() + 1);
+                        if (s.getDay() != 0 && s.getDay() != 6) {
+                            ++days;
+                        }
+                    }
+                }
+                return days;
+            }
+
+
+</script>

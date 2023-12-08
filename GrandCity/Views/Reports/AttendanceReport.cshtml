@@ -1,0 +1,77 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Sp_Get_Attendance_Report_Graphical_Result>
+<script>
+    $(document).ready(function(){
+        let cats = [];
+    let sers = [];
+    let attModelData = @Html.Raw(Json.Encode(Model));
+    $.each(attModelData, function (index, value) {
+        cats.push(value.AttendanceDayString);
+    });
+
+    sers.push({
+        name: 'Present',
+        data: attModelData.map(x => x.Presents)
+    });
+    sers.push({
+        name: 'Absents',
+        data: attModelData.map(x => x.Absents)
+    });
+    sers.push({
+        name: 'Shift waiting',
+        data: attModelData.map(x => x.Shiftwaiting)
+    });
+    sers.push({
+        name: 'Weekly off',
+        data: attModelData.map(x => x.Weeklyoff)
+    });
+    sers.push({
+        name: 'Leave',
+        data: attModelData.map(x => x.Leave)
+    });
+    sers.push({
+        name: 'Late Comers',
+        data: attModelData.map(x => x.LateComings)
+    });
+    sers.push({
+        name: 'Early Checkouts',
+        data: attModelData.map(x => x.EarlyCheckOuts)
+    });
+   
+
+    Highcharts.chart('att_rep-ghjd', {
+
+        chart: {
+            type: 'column'
+        },
+
+        title: {
+            text: 'Attendance Report'
+        },
+
+        xAxis: {
+            categories: cats,
+        },
+        yAxis: {
+            allowDecimals: false,
+            min: 0,
+            title: {
+                text: ''
+            }
+        },
+        tooltip: {
+            formatter: function () {
+                return '<b>' + this.x + '</b><br/>' +
+                    this.series.name + ': ' + Number(this.y).toLocaleString() + '<br/>'
+            }
+        },
+        plotOptions: {
+            column: {
+                pointPadding: 0.2,
+                borderWidth: 0
+            }
+        },
+        series: sers
+    });
+    });
+
+</script>

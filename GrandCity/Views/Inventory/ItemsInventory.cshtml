@@ -1,0 +1,50 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Sp_Get_Inventory_List_With_Departments_Result>
+
+@{ if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+}
+
+
+<h4 class="center" style="text-align:center">All Inventory</h4>
+<table class="table table-borderless inv-tbl" id="tbl-full-tagger">
+    <thead>
+        <tr>
+            <th>Sr.</th>
+            <th>Complete Name</th>
+            <th>QTY</th>
+            <th>UOM</th>
+            <th>SKU</th>
+            <th>Category</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @{ int sr = 1; }
+        @foreach (var v in Model.GroupBy(x => x.Id))
+        {
+            <tr>
+                <td>@sr</td>
+                <td>@v.Select(x => x.Complete_Name).FirstOrDefault()</td>
+                <td>@v.Select(x => x.TotalQty).FirstOrDefault()</td>
+                <td>@v.Select(x => x.UOM).FirstOrDefault()</td>
+                <td>@v.Select(x => x.SKU).FirstOrDefault()</td>
+                <td>@v.Select(x => x.Category_Name).FirstOrDefault()</td>
+            </tr>
+            sr++;
+        }
+    </tbody>
+</table>
+
+
+<script>
+    $(document).ready(function () {
+        
+        $('.inv-tbl').DataTable();
+    });
+</script>

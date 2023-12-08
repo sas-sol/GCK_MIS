@@ -1,0 +1,196 @@
+﻿
+<input type="hidden" value="@ViewBag.filid" id="fileID" />
+<input type="hidden" value="@ViewBag.grp" id="group" />
+<div class="row">
+    <div class="col-md-12" style="border-right:1px solid rgba(0,0,0,0.1)">
+        @* <div class="col-md-12 header-underline-top">
+                <h5>Owner Details &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@*<i class="fa fa-plus pointer add-new-own-inf-fl-fsdjhg" data-grp="@owns_item.Id" title="Add New Owner" style="color:limegreen;"></i></h5>
+            </div>
+        *@
+        <div class="row mt-md-4 mb-md-4">
+            <div class="col-md-4">
+                <img style="margin-top:10px" src=" " id="own_img" />
+            </div>
+            <div class="col-md-8">
+                <div class="row">
+                    <div class="col-md-6">
+                        <label>Name</label>
+
+                        <input type="text" class="form-control  own-info-feild-fl" name="Name" id="nName">
+                    </div>
+
+                    <div class="col-md-6">
+                        <label>Father's/Husband's Name</label>
+
+                        <input type="text" class="form-control   own-info-feild-fl" name="Father_Husband" id="nFather_Husband">
+                    </div>
+
+                    <div class="col-md-6 mt-md-5">
+                        <label>CNIC / NICOP</label>
+
+                        <input type="text" class="form-control   own-info-feild-fl" name="CNIC_NICOP" v placeholder="12345-1234567-1   or   123456-123456-1" id="nCNIC_NICOP">
+                    </div>
+
+                    <div class="col-md-6 mt-md-5">
+                        <label>Date Of Birth</label>
+
+                        <input type="text" class="form-control   own-info-feild-fl" data-provide="datepicker" placeholder="mm/dd/yyyy" name="Date_Of_Birth" id="nDate_Of_Birth">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-md-4">
+
+            <div class="col-md-4">
+                <label>Postal Address</label>
+                <input type="text" class="form-control   own-info-feild-fl" name="Postal_Address" placeholder="1234 Main St" id="nPostal_Address">
+            </div>
+            <div class="col-md-4">
+                <label>Residential Address</label>
+                <input type="text" class="form-control  own-info-feild-fl" name="Residential_Address" placeholder="Apartment, Plot, or floor" id="nResidential_Address">
+            </div>
+
+            <div class="col-md-4">
+                <label>City</label>
+                <input type="text" class="form-control  own-info-feild-fl" id="nCity">
+            </div>
+        </div>
+
+        <div class="row mb-md-4">
+
+            <div class="col-md-4">
+                <label>Occupation</label>
+                <input type="text" class="form-control   own-info-feild-fl" name="Occupation" id="nOccupation">
+            </div>
+            <div class="col-md-4">
+                <label>Nationality</label>
+                <input type="text" class="form-control  own-info-feild-fl" name="Nationality" id="nNationality">
+            </div>
+            <div class="col-md-4">
+                <label>Email</label>
+                <input type="text" class="form-control  own-info-feild-fl" name="Email" id="nEmail">
+            </div>
+        </div>
+
+        <div class="row mb-md-4">
+
+            <div class="form-group col-md-4">
+                <label>Phone Office</label>
+                <input type="text" class="form-control  own-info-feild-fl" name="Phone_Office" id="nPhone_Office">
+            </div>
+            <div class="col-md-4">
+                <label>Residential</label>
+                <input type="text" class="form-control   own-info-feild-fl" name="Residential" id="nResidential">
+            </div>
+
+            <div class="col-md-4">
+                <label>Mobile 1</label>
+                <input type="text" class="form-control   own-info-feild-fl" placeholder="03121234567" name="Mobile_1" id="nMobile_1">
+            </div>
+        </div>
+
+        <div class="row mb-md-4">
+            <div class="col-md-4">
+                <label>Mobile 2</label>
+                <input type="text" class="form-control   own-info-feild-fl" pattern="^0\d{10}" placeholder="03121234567" name="Mobile_2" id="nMobile_2">
+            </div>
+            <div class="col-md-4">
+                <label>Ownership Date</label>
+                <input type="text" data-provide="datepicker" class="form-control   own-info-feild-fl" placeholder="MM-dd-yyyy" name="DateTime" id="nDateTime">
+            </div>
+        </div>
+
+    </div>
+
+
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+
+
+        <div class="col-md-12 header-underline-top">
+            <h5>Nominee Details</h5>
+        </div>
+        <div class="row">
+
+            <div class=" col-md-4">
+                <label>Name</label>
+                <input type="text" class="form-control   own-info-feild-fl" name="Nominee_Name" id="nNominee_Name">
+            </div>
+
+            <div class=" col-md-4">
+                <label>CNIC / NICOP</label>
+                <input type="text" class="form-control   own-info-feild-fl" placeholder="12345-1234567-1 or 123456-123456-1" name="Nominee_CNIC_NICOP" id="nNominee_CNIC_NICOP">
+            </div>
+
+            <div class=" col-md-4">
+                <label>Relation</label>
+                <input type="text" class="form-control   own-info-feild-fl" name="Nominee_Relation" placeholder="" id="nNominee_Relation">
+            </div>
+
+            <div class=" col-md-4">
+                <label>Address</label>
+                <input type="text" class="form-control   own-info-feild-fl" name="Nominee_Address" placeholder="1234 Main St" id="nNominee_Address">
+            </div>
+            <div class="col-md-4" style="margin-top:25px;">
+                <button class="btn btn-success sv-fll-owner-inf"><i class="fa fa-save"></i>&nbsp;&nbsp;Add Owner</button>
+            </div>
+        </div>
+
+
+    </div>
+
+</div>
+<script>
+
+    $('.sv-fll-owner-inf').unbind().click(function () {
+        //collect the data here
+
+        let flId = $('#fileID').val();
+        let grp = $('#group').val();
+
+        var od = {
+            Name: $('#nName').val()
+            , Father_Husband: $( '#nFather_Husband').val()
+            , Postal_Address: $('#nPostal_Address').val()
+            , Residential_Address: $('#nResidential_Address').val()
+            , Phone_Office: $('#nPhone_Office').val()
+            , Residential: $('#nResidential').val()
+            , Mobile_1: $('#nMobile_1').val()
+            , Mobile_2: $('#nMobile_2').val()
+            , Email: $('#nEmail').val()
+            , Occupation: $('#nOccupation').val()
+            , Nationality: $('#nNationality').val()
+            , Date_Of_Birth: $('#nDate_Of_Birth').val()
+            , CNIC_NICOP: $('#nCNIC_NICOP').val()
+            , Nominee_Name: $('#nNominee_Name').val()
+            , Nominee_Relation: $('#nNominee_Relation').val()
+            , Nominee_Address: $('#nNominee_Address').val()
+            , Nominee_CNIC_NICOP: $('#nNominee_CNIC_NICOP').val()
+            , DateTime: $('#nDateTime').val()
+            , City: $('#nCity').val()
+            , FileId: flId
+            , Group_Tag: grp
+        };
+        $.ajax({
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            url: '/FileSystem/AddOwnergrp/',
+            data: JSON.stringify(od),
+            success: function (data) {
+                alert("Owner information Added");
+                SASLoad($('.file-owners-detls'));
+                $('.file-owners-detls').load('/FileSystem/FileOwnerDetail/', { FileId: $("#fileID").val() }, function () {
+                    SASUnLoad($('.file-owners-detls'));
+                });
+
+            },
+            error: function (data) {
+                alert('Failed to Add owner\'s information. Please try again.');
+
+            }
+        });
+    });
+</script>

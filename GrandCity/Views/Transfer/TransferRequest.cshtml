@@ -1,0 +1,605 @@
+﻿@model MeherEstateDevelopers.Models.FileDetails
+@{ Layout = "~/Views/Shared/_StaffLayout.cshtml"; }
+<input type="hidden" value="@Model.FileData.Id" id="file-id" />
+<div class="row gap-20 pos-r">
+    <datalist id="dealerships">
+        @foreach (var item in Model.Dealers)
+        {
+            <option id="@item.Id" value="@item.Dealership_Name"></option>
+        }
+    </datalist>
+    <div class="col-md-6">
+        <div class="bgc-white p-20 bd">
+            <div class="form-row row">
+                <div class="col-md-9">
+                    <div class="form-row">
+                        @if (Model.FileData.Verified != true)
+                        {
+                            <div class="alert alert-danger" role="alert">This File is not Verified</div>
+                        }
+                        @if (Model.Balance.Balance_Amount < 0)
+                        {
+                            <div class="alert alert-danger" role="alert">This File Can not be Transfer Due to pending OVERDUE Amount</div>
+                        }
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            <label>File Form No.</label>
+                            <h5>@Model.FileData.FileFormNumber</h5>
+                        </div>
+                        <div class="form-group col-md-5">
+                            <label>Dealership</label>
+                            <h5>@Model.FileData.Dealership_Name</h5>
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label>Plot Size</label>
+                            <h5>@Model.FileData.Plot_Size</h5>
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label>Block</label>
+                            <h5>@Model.FileData.Block</h5>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-4">
+                            File Status : &nbsp;<h5><span id="status">@Model.FileData.Status</span></h5>
+                        </div>
+                        <div class="col-md-4">
+                            Development Charges : &nbsp;
+                            <h5 id="dev-char">@Model.FileData.Development_Charges</h5>
+                        </div>
+                        <div class="col-md-4">
+                            Balance : &nbsp;<h5><span id="bal-amt">@Model.Balance.Balance_Amount</span></h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr />
+            <div class="form-row">
+                <h6 class="c-grey-900">Customer Information</h6>
+            </div>
+            <div class="mT-30">
+                @foreach (var item in Model.FilesOwners)
+                {
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label>Name</label>
+                            <h5>@item.Name</h5>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label>Father's/Husband's Name</label>
+                            <h5>@item.Father_Husband</h5>
+                        </div>
+                        <div class="form-group col-md-12">
+                            <label>Postal Address</label>
+                            <h5>@item.Postal_Address</h5>
+                        </div>
+                        <div class="form-group col-md-12">
+                            <label>Residential Address</label>
+                            <h5>@item.Residential_Address</h5>
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label>City</label>
+                            <h5>@item.City</h5>
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label>Date Of Birth</label>
+                            <h5>@item.Date_Of_Birth</h5>
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label>CNIC / NICOP</label>
+                            <h5>@item.CNIC_NICOP</h5>
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label>Occupation</label>
+                            <h5>@item.Occupation</h5>
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label>Nationality</label>
+                            <h5>@item.Nationality</h5>
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label>Email</label>
+                            <h5>@item.Email</h5>
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label>Phone Office</label>
+                            <h5>@item.Phone_Office</h5>
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label>Residential</label>
+                            <h5>@item.Residential</h5>
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label>Mobile 1</label>
+                            <h5>@item.Mobile_1</h5>
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label>Mobile 2</label>
+                            <h5>@item.Mobile_2</h5>
+                        </div>
+                    </div>
+                    <hr />
+                    <h6 class="c-grey-900">Nominee</h6>
+                    <div class="mT-30">
+                        <div class="form-row">
+                            <div class="form-group col-md-4">
+                                <label>Name</label>
+                                <h5>@item.Nominee_Name</h5>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label>CNIC / NICOP</label>
+                                <h5>@item.Nominee_CNIC_NICOP</h5>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label>Relation</label>
+                                <h5>@item.Nominee_Relation</h5>
+                            </div>
+                            <div class="form-group col-md-12">
+                                <label>Address</label>
+                                <h5>@item.Nominee_Address</h5>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+            <hr />
+            <div class="form-row">
+                <div class="col-md-6">
+                    <h6 class="c-grey-900">Installments </h6>
+                </div>
+            </div>
+            <div class="mT-30">
+                <div class="form-row">
+                    <div class="col-md-12">
+                        <table class="table table-striped table-bordered" cellspacing="0" width="100%" style="margin-bottom:0px">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th>Installment</th>
+                                    <th>Amount</th>
+                                    <th>Due Date</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+                                    foreach (var item in Model.FileInstallments)
+                                    {
+                                        var statuscolor = "";
+                                        if (item.Status == "NotPaid")
+                                        {
+                                            statuscolor = "bgc-red-50";
+                                        }
+                                        else if (item.Status == "Paid")
+                                        {
+                                            statuscolor = "bgc-green-50";
+                                        }
+                                        <tr class="@statuscolor">
+                                            <td>@item.Installment_Name</td>
+                                            <td>@string.Format("{0:n0}", item.Amount)</td>
+                                            <td>@string.Format("{0:dd-MMM-yyyy}", item.Due_Date)</td>
+                                            <td>@item.Status</td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-md-12">
+                        <table class="table table-striped table-bordered instrecviewfile" cellspacing="0" width="100%" style="margin-bottom:0px">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th>Sr.</th>
+                                    <th>Receipt No.</th>
+                                    <th>Inst No.</th>
+                                    <th>Type</th>
+                                    <th>Status</th>
+                                    <th>Amount</th>
+                                    <th>Date</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{ int srcount = 1;
+                                    string[] Types = { "Booking", "Installment", "Advance" };
+                                    foreach (var g in Model.FileReceipts.Where(x => Types.Contains(x.Type)).GroupBy(x => x.Type))
+                                    {
+                                        <tr><td colspan="8" style="text-align:center;font-size:15px"><b>@g.Key</b></td></tr>
+                                        foreach (var item in g)
+                                        {
+                                            string stat = "";
+                                            if (item.Status == "Pending")
+                                            {
+                                                stat = "bgc-yellow-50";
+                                            }
+                                            else if (item.Status == "Dishonored")
+                                            {
+                                                stat = "bgc-red-50";
+                                            }
+                                            else if (item.Status == "Approved")
+                                            {
+                                                stat = "bgc-green-50";
+                                            }
+                                            else if (item.Status == "Deposited")
+                                            {
+                                                stat = "bgc-orange-50";
+                                            }
+                                            else
+                                            {
+                                                stat = "";
+                                            }
+                                            <tr class="@stat" id="@item.Id">
+                                                <td>@srcount</td>
+                                                @if (((item.ReceiptNo.Contains("-DIB") || item.ReceiptNo.Contains("-HBL")) && item.Userid != 0))
+                                                {
+                                                    <td>
+                                                        @item.ReceiptNo
+                                                        <br>
+                                                        Manual
+                                                    </td>
+                                                }
+                                                else
+                                                {
+                                                    <td>@item.ReceiptNo</td>
+                                                }
+                                                <td>@string.Format("{0:n0}", item.Ch_Pay_Draft_No)</td>
+                                                <td>@item.PaymentType</td>
+                                                <td>@item.Status</td>
+                                                <td>@string.Format("{0:n0}", item.Amount)</td>
+                                                <td>@string.Format("{0:dd-MMM-yyyy}", item.DateTime)</td>
+                                                <td>
+                                                    @{
+                                                        if (item.Verified == true)
+                                                        {
+                                                            <i class="ti-check" style="color:green"></i>
+                                                        }
+                                                    }
+                                                </td>
+                                            </tr>
+                                            srcount++;
+                                        }
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="bgc-white p-20 bd">
+            <div class="form-row">
+                <h5>Transfer Details</h5>
+            </div>
+            <div class="new-owns-area">
+                <h4 style="text-align:center">Transfer To:</h4>
+                <div class="form-row">
+                    <div class="col-md-12">
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <input type="checkbox" class="isCompanyProperty">&nbsp;Company Property
+                            </div>
+                            <div class="col-md-5"></div>
+                            <div class="col-md-1">
+                                <i class="fa fa-plus pointer add-new-own" title="Add another owner" style="color:limegreen"></i>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label>Party Dealership</label>
+                                <input type="text" class="form-control Party_Dealership" list="dealerships" name="PartyDealership" required>
+                            </div>
+                        </div>
+                    </div>
+                    <input type="hidden" id="trans_Id" value="@ViewBag.serial" name="TransactionId">
+                </div>
+                <div class="form-row sel-inf-dfshjgk-file">
+                    <div class="col-md-12 form-group comp-prop-fld" style="display:none;">
+                        <label>Company Name</label>
+                        <input type="text" class="form-control comp-Name" required>
+                    </div>
+                    <div class="form-group col-md-6 deflt-fld">
+                        <label>Name</label>
+                        <input type="text" class="form-control Name" name="Name" required>
+                    </div>
+                    <div class="form-group col-md-6 deflt-fld">
+                        <label>Father's/Husband's Name</label>
+                        <input type="text" class="form-control Father_Husband" name="Father_Husband" required>
+                    </div>
+                    <div class="form-group col-md-12">
+                        <label>Postal Address</label>
+                        <input type="text" class="form-control Postal_Address" name="Postal_Address" placeholder="1234 Main St" required>
+                    </div>
+                    <div class="form-group col-md-12">
+                        <label>Residential Address</label>
+                        <input type="text" class="form-control Residential_Address" name="Residential_Address" placeholder="Apartment, Plot, or floor" required>
+                    </div>
+                    <div class="form-group col-md-5">
+                        <label>City</label>
+                        @Html.DropDownList("City", null, "Choose..", new { @class = "form-control", required = "" })
+                    </div>
+                    <div class="form-group col-md-4 deflt-fld">
+                        <label>Date Of Birth</label>
+                        <input type="text" class="form-control Date_Of_Birth" placeholder="mm/dd/yyyy" data-provide="datepicker" name="Date_Of_Birth" required>
+                    </div>
+                    <div class="form-group col-md-4 comp-prop-fld" style="display:none;">
+                        <label>Date Of Incorp.</label>
+                        <input type="text" class="form-control comp-Date_Of_Birth autfil-dob" placeholder="mm/dd/yyyy" data-provide="datepicker" required>
+                    </div>
+                    <div class="form-group col-md-5 deflt-fld">
+                        <label>CNIC / NICOP</label>
+                        <input type="text" class="form-control CNIC_NICOP" name="CNIC_NICOP" pattern="[0-9+]{5}-[0-9+]{7}-[0-9]{1}|[0-9+]{6}-[0-9+]{6}-[0-9]{1}" placeholder="12345-1234567-1   or   123456-123456-1" required>
+                    </div>
+                    <div class="form-group col-md-5 comp-prop-fld" style="display:none;">
+                        <label>NTN</label>
+                        <input type="text" class="form-control comp-CNIC_NICOP autfil-cnic" pattern="[0-9+]{5}-[0-9+]{7}-[0-9]{1}|[0-9+]{6}-[0-9+]{6}-[0-9]{1}" placeholder="12345-1234567-1   or   123456-123456-1" required>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label>Occupation</label>
+                        <input type="text" class="form-control Occupation" name="Occupation" required>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label>Nationality</label>
+                        <input type="text" class="form-control Nationality" name="Nationality" required>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label>Email</label>
+                        <input type="text" class="form-control Email" name="Email">
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label>Phone Office</label>
+                        <input type="text" class="form-control Phone_Office" name="Phone_Office">
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label>Residential</label>
+                        <input type="text" class="form-control Residential" name="Residential">
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label>Mobile 1</label>
+                        <input type="text" class="form-control Mobile_1" pattern="^0\d{10}" placeholder="03121234567" name="Mobile_1" required>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label>Mobile 2</label>
+                        <input type="text" class="form-control Mobile_2" pattern="^0\d{10}" placeholder="03121234567" name="Mobile_2">
+                    </div>
+
+                    <hr />
+                    <h6 class="c-grey-900 nomin-heading">Nominee</h6>
+                    <div class="mT-40">
+                        <div class="form-row">
+                            <div class="form-group col-md-4">
+                                <label>Name</label>
+                                <input type="text" class="form-control Nominee_Name" name="Nominee_Name" required>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label>CNIC / NICOP</label>
+                                <input type="text" class="form-control Nominee_CNIC_NICOP" pattern="[0-9+]{5}-[0-9+]{7}-[0-9]{1}|[0-9+]{6}-[0-9+]{6}-[0-9]{1}" placeholder="12345-1234567-1   or   123456-123456-1" name="Nominee_CNIC_NICOP" required>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label>Relation</label>
+                                <input class="form-control Nominee_Relation" name="Nominee_Relation" placeholder="" required>
+                            </div>
+                            <div class="form-group col-md-7">
+                                <label>Address</label>
+                                <input type="text" class="form-control Nominee_Address" name="Nominee_Address" placeholder="1234 Main St" required>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-row" id="trns-btn">
+                @if (Model.Balance.Balance_Amount > 0 && Model.FileData.Status == 1 && Model.FileData.Verified == true)
+                {
+                    <button class="btn btn-primary" type="submit" id="trans-frm" style="width:100%">Generate Transfer Request</button>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('.add-new-own').unbind().click(function () {
+            let cities = $('.sel-inf-dfshjgk-file').first().find('#City').html();
+            let strc = `<div class="mT-30 sel-inf-dfshjgk-file">
+<div class="form-row">
+    <i class="pointer fa fa-trash rmv-own-ajdhksf" title="Remove this owner"></i>
+</div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label>Name</label>
+                            <input type="text" class="form-control Name" name="Name" required>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label>Father's/Husband's Name</label>
+                            <input type="text" class="form-control Father_Husband" name="Father_Husband" required>
+                        </div>
+                        <div class="form-group col-md-12">
+                            <label>Postal Address</label>
+                            <input type="text" class="form-control Postal_Address" name="Postal_Address" placeholder="1234 Main St" required>
+                        </div>
+                        <div class="form-group col-md-12">
+                            <label>Residential Address</label>
+                            <input type="text" class="form-control Residential_Address" name="Residential_Address" placeholder="Apartment, Plot, or floor" required>
+                        </div>
+                        <div class="form-group col-md-5">
+                            <label>City</label>
+                            <select class='form-control' id='City'>${cities}</select>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label>Date Of Birth</label>
+                            <input type="text" class="form-control Date_Of_Birth" placeholder="mm/dd/yyyy" data-provide="datepicker" name="Date_Of_Birth" required>
+                        </div>
+                        <div class="form-group col-md-5">
+                            <label>CNIC / NICOP</label>
+                            <input type="text" class="form-control CNIC_NICOP" name="CNIC_NICOP" pattern="[0-9+]{5}-[0-9+]{7}-[0-9]{1}|[0-9+]{6}-[0-9+]{6}-[0-9]{1}" placeholder="12345-1234567-1   or   123456-123456-1" required>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label>Occupation</label>
+                            <input type="text" class="form-control Occupation" name="Occupation" required>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label>Nationality</label>
+                            <input type="text" class="form-control Nationality" name="Nationality" required>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label>Email</label>
+                            <input type="text" class="form-control Email" name="Email">
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label>Phone Office</label>
+                            <input type="text" class="form-control Phone_Office" name="Phone_Office">
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label>Residential</label>
+                            <input type="text" class="form-control Residential" name="Residential">
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label>Mobile 1</label>
+                            <input type="text" class="form-control Mobile_1" pattern="^0\d{10}" placeholder="03121234567" name="Mobile_1" required>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label>Mobile 2</label>
+                            <input type="text" class="form-control Mobile_2" pattern="^0\d{10}" placeholder="03121234567" name="Mobile_2">
+                        </div>
+                    </div>
+
+                    <hr />
+                    <h6 class="c-grey-900">Nominee</h6>
+                    <div class="mT-40">
+                        <div class="form-row">
+                            <div class="form-group col-md-4">
+                                <label>Name</label>
+                                <input type="text" class="form-control Nominee_Name" name="Nominee_Name" required>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label>CNIC / NICOP</label>
+                                <input type="text" class="form-control Nominee_CNIC_NICOP" pattern="[0-9+]{5}-[0-9+]{7}-[0-9]{1}|[0-9+]{6}-[0-9+]{6}-[0-9]{1}" placeholder="12345-1234567-1   or   123456-123456-1" name="Nominee_CNIC_NICOP" required>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label>Relation</label>
+                                <input class="form-control Nominee_Relation" name="Nominee_Relation" placeholder="" required>
+                            </div>
+                            <div class="form-group col-md-7">
+                                <label>Address</label>
+                                <input type="text" class="form-control Nominee_Address" name="Nominee_Address" placeholder="1234 Main St" required>
+                            </div>
+                        </div>
+                    </div>
+                </div>`;
+            $('.new-owns-area').append(strc);
+
+            $('.rmv-own-ajdhksf').last().unbind().click(function () {
+                if (!confirm('Are you sure you want to remove this owner?')) {
+                    return;
+                }
+                else {
+                    $(this).closest('.sel-inf-dfshjgk-file').remove();
+                }
+            });
+
+        });
+
+        $('.isCompanyProperty').unbind().change(function () {
+            //lets hook up the event listener here
+            if ($(this).is(':checked')) {
+                $('.comp-prop-fld').show();
+                $('.deflt-fld').hide();
+                $('.nomin-heading').text('Board Resolution');
+            }
+            else {
+                $('.comp-prop-fld').hide();
+                $('.deflt-fld').show();
+                $('.nomin-heading').text('Nominee');
+            }
+        });
+    });
+
+    $(document).on('click', '#trans-frm', function () {
+        //After Multi owner implementation
+        //push the data to the server via new technique now
+        let _newOwnersData_ = [];
+        let transId = $('#trans_Id').val();
+        let file_id = $('#file-id').val();
+        let partyDealer = $('.Party_Dealership').val();
+        let isSubmissionValid = true;
+        var isCompPropCheck = $('.isCompanyProperty').is(':checked');
+        $('.sel-inf-dfshjgk-file').each(function (ind, val) {
+            let ownName = (isCompPropCheck) ? $(this).find('.comp-Name').val() : $(this).find('.Name').val();
+            let ownFatherName = (isCompPropCheck) ? '' : $(this).find('.Father_Husband').val();
+            let ownPostAddr = $(this).find('.Postal_Address').val();
+            let ownResAddr = $(this).find('.Residential_Address').val();
+            let ownCity = $(this).find('#City option:selected').val();
+            let ownDob = (isCompPropCheck) ? $(this).find('.comp-Date_Of_Birth').val() : $(this).find('.Date_Of_Birth').val();
+            let ownCNIC = (isCompPropCheck) ? $(this).find('.comp-CNIC_NICOP').val() : $(this).find('.CNIC_NICOP').val();
+            let ownOccupation = $(this).find('.Occupation').val();
+            let ownNational = $(this).find('.Nationality').val();
+            let ownEmail = $(this).find('.Email').val();
+            let ownPhoneOff = $(this).find('.Phone_Office').val();
+            let ownResi = $(this).find('.Residential').val();
+            let ownMobile1 = $(this).find('.Mobile_1').val();
+            let ownMobile2 = $(this).find('.Mobile_2').val();
+            let grp = $(this).find('.Group_Tag').val();
+            let ownNomineeName = $(this).find('.Nominee_Name').val();
+            let ownNomineeCNIC = $(this).find('.Nominee_CNIC_NICOP').val();
+            let ownNomineeRelation = $(this).find('.Nominee_Relation').val();
+            let ownNomineeAddr = $(this).find('.Nominee_Address').val();
+            if (ownName == '' || (ownFatherName == '' && isCompPropCheck == false) || ownMobile1 == '' || ownCNIC == '' || ownPostAddr == '') {
+                isSubmissionValid = false;
+            }
+            _newOwnersData_.push({
+                Name: ownName,
+                Father_Husband: ownFatherName,
+                Postal_Address: ownPostAddr,
+                Residential_Address: ownResAddr,
+                City: ownCity,
+                Date_Of_Birth: ownDob,
+                CNIC_NICOP: ownCNIC,
+                Occupation: ownOccupation,
+                Nationality: ownNational,
+                Email: ownEmail,
+                Phone_Office: ownPhoneOff,
+                Residential: ownResi,
+                Mobile_1: ownMobile1,
+                Mobile_2: ownMobile2,
+                Nominee_Name: ownNomineeName,
+                Nominee_CNIC_NICOP: ownNomineeCNIC,
+                Nominee_Relation: ownNomineeRelation,
+                Nominee_Address: ownNomineeAddr,
+                Group_Tag: grp,
+                IsCompanyProperty: isCompPropCheck
+            });
+        });
+        if (isSubmissionValid == false) {
+            alert('Please fill all client data before forwarding request.');
+            return;
+        }
+        //push the data to server via ajax Now
+        if (confirm('Are you sure you want to submit this transfer request?')) {
+            $('#trans-frm').prop('disabled', true);
+            $.ajax({
+                type: "POST",
+                url: "/Transfer/FileTransferRequest/",
+                contentType: "application/json",
+                traditional: true,
+                beforeSend: function () {
+                },
+                complete: function () {
+                },
+                data: JSON.stringify({ filedatas: _newOwnersData_, File_Plot_Number: file_id, TransactionId: transId, dealingDealership: partyDealer }),
+            }).done(function (data) {
+                if (data != null) {
+                    window.location.reload();
+                    window.open("/Transfer/TransferReqForm?SerialNum=" + data, "_blank");
+                    window.open("/Transfer/FileTransferRequestDetails?Id=" + @Model.FileData.Id, "_blank");
+                }
+                else {
+                    alert(data.Msg);
+                }
+            });
+        }
+    });
+</script>

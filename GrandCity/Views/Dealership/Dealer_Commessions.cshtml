@@ -1,0 +1,71 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Dealer_Commession>
+@{
+    /**/
+
+    if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+}
+
+@{
+    var Dealership = Model.Select(x => x.Dealer_Name).FirstOrDefault();
+}
+<div class="col-md-12">
+    <div class="bgc-white bd bdrs-3 p-20 mB-20">
+        <h4 class="c-grey-900 mB-20"> @Dealership Commission Details </h4>
+        <table id="loan-list" class="table table-striped table-bordered asset-dat" cellspacing="0" width="100%">
+            <thead class="">
+                <tr>
+                    <th>Sr.</th>
+                    <th>Text</th>
+                    <th>Amount</th>
+                    <th>Date</th>
+                    <th>Commission Due on</th>
+                    <td></td>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    int sr = 1;
+                    foreach (var g in Model.OrderByDescending(x=> x.Datetime))
+                    {
+                        <tr id="@g.Id">
+                            <td>@sr</td>
+                            <td data-modid="@g.File_Plot_Id" data-mod="@g.Module">@g.Text</td>
+                            <td>@string.Format("{0:n0}", g.Com_Amount)</td>
+                            <td>@string.Format("{0:dd-MMM-yyyy}", g.Datetime)</td>
+                            <td>@string.Format("{0:n0}", g.Com_Maturity)%</td>
+                            <td>
+                                @if (!g.Process)
+                                {
+                                    <button class="btn btn-primary prc-com">Process</button>
+                                }
+                                else
+                                {
+                                    <i class="fas fa-check"></i>
+                                }
+                            </td>
+                        </tr>
+                        sr++;
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $('#loan-list').DataTable({
+            dom: 'Bfrtip',
+            order:false
+            
+        });
+    });
+</script>
+
+

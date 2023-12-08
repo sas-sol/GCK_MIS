@@ -1,0 +1,41 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.RealEstate_Projects>
+@{ if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+}
+<div class="row gap-20  pos-r">
+
+    <div class="col-md-2">
+        <div class="bgc-white bd bdrs-3 p-10 mB-20">
+            <h6 class="c-grey-900">Projects</h6>
+            <div class="mT-30">
+               
+                    <h6 id="me-type"></h6>
+                    <table class="table table-striped table-bordered dataTable no-footer">
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr class="pointer com-lst" id="@item.Id">
+                                    <td class="blk-nam">@item.Project_Name</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                    <hr />
+               
+            </div>
+        </div>
+    </div>
+    <div class="col-md-10 ">
+        <div id="res-com-lst">
+            <h5>Project Not Selected</h5>
+        </div>
+    
+    </div>
+  
+</div>

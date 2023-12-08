@@ -1,0 +1,125 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Sp_Get_DemandOrder_Details_Result>
+<input type="hidden" id="grp" value="@ViewBag.Group_Id" />
+@foreach (var item in Model.GroupBy(x => new { x.Group_Id, x.DemandOrder_No, x.Prj_Name, x.RequestedBy_Name, x.Requested_Date }))
+{
+    <input type="hidden" value="@item.Key.Group_Id" id="deman-grp-id" />
+    <div class="col-md-12" id="inv-assign-row">
+        <div class="form-row assign ml-md-4">
+            <div class="form-group col-md-2">
+                <label>Demand Order No.</label>
+                <h6>@item.Key.DemandOrder_No</h6>
+            </div>
+            <div class="form-group col-md-2" style="display: block;">
+                <label>Project</label>
+                <h6>@item.Key.Prj_Name</h6>
+            </div>
+            <div class="form-group col-md-2" style="display: block;">
+                <label>Requested By</label>
+                <h6>@item.Key.RequestedBy_Name</h6>
+            </div>
+
+            <div class="form-group col-md-3" style="display: block;">
+                <label>Requested Date</label>
+                <h6>@string.Format("{0:dd-MMM-yyyy}", item.Key.Requested_Date)</h6>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <table class="table" width="100%">
+                <thead>
+                    <tr>
+                        <th>Code</th>
+                        <th>Item Name</th>
+                        <th>Required Qty</th>
+                        <th>Uom</th>
+                        <th style="border-right:1px solid">Issue To</th>
+                        <th style="text-align:center">Warehouse Qty  @*<span style="float:right"><input type="checkbox" class="mark-all" /> Mark All</span>*@ </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item1 in item)
+                    {
+
+                        <tr class="do-items" id="@item1.Item_Id">
+                            <td>@item1.SKU</td>
+                            <td>@item1.Complete_Name</td>
+                            <td class="reqqty">@item1.Qty</td>
+                            <td>@item1.UOM</td>
+                            <td style="border-right:1px solid">@item1.IssueTo_Name</td>
+                            @*<td>
+                                    @if (item1.STATUS == "Delivered")
+                                    {
+                                        <i class="fas fa-shipping-fast" style="color:green"></i>
+                                    }
+                                    else
+                                    {
+                                        <i class="ti-check-box do-item"></i>
+                                    }
+                                </td>*@
+                            <td style="padding:0px;">
+                                <table class="table-borderless" style="width:100%">
+                                    @{ int i = 1;}
+                                    @foreach (var g in item1.Warehouse_Rep)
+                                    {
+                                        <tr class="ware">
+                                            <input type="hidden" class="wid" value="@g.Warehouse_Id" />
+                                            <input type="hidden" class="wnam" value="@g.Warehouse_Name" />
+                                            <td >@g.Warehouse_Name</td>
+                                            <td class="ware-qty">@string.Format("{0:0,0.##}", g.Remaining)</td>
+                                            @if (i == 1)
+                                            {
+                                                <td width="100px"><input type="text" class="form-control ware-re-qty" value="@string.Format("{0:0,0.##}", item1.Qty)" /></td>
+                                            }
+                                            else
+                                            {
+                                                <td width="100px"><input type="text" class="form-control ware-re-qty" /></td>
+                                            }
+                                        </tr>
+                                        i++;
+                                    }
+                                </table>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+}
+@{
+    var status = Model.GroupBy(x => x.STATUS);
+    if (status.Count() == 1)
+    {
+        var stat = status.Select(x => x.Key).FirstOrDefault();
+        if (stat != "Delivered")
+        {
+            <script>
+                $('.modal-footer').append('<button type="button" class="btn btn-primary" id="res-dem-or">Generate Issue Note</button>');
+                $('.modal-footer').append('<button type="button" style="float:left" class="btn btn-success" id="prnt-dem-or">View Demand Order</button>');
+            </script>
+        }
+        else
+        {
+            <script>
+                $('.modal-footer').append('<button type="button" class="btn btn-success" id="prnt-dem-or">RePrint Demand Order</button>');
+            </script>
+        }
+    }
+    else
+    {
+        <script>
+            $('.modal-footer').append('<button type="button" class="btn btn-primary" id="res-dem-or">Release Demand Order</button>');
+            $('.modal-footer').append('<button type="button" class="btn btn-success" id="prnt-dem-or">Print Demand Order</button>');
+        </script>
+    }
+}
+
+
+<script>
+    $(document).ready(function () {
+        $('#prnt-dem-or').unbind().click(function () {
+            let grpData = $('#deman-grp-id').val();
+            window.open('/Inventory/DemandOrderPrint?Group_Id=' + grpData);
+        });
+    });
+</script>

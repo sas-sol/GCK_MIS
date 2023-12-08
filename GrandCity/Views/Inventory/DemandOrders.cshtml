@@ -1,0 +1,30 @@
+﻿@{ if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+}
+<script src="~/Scripts/Inv.js"></script>
+<div class="form-row">
+    <div class="col-md-12 bgc-white bd bdrs-3 p-20 mB-20">
+        <ul class="nav nav-tabs" id="myTabs">
+            @{ string activeclass = "active";}
+            <li class="nav-item"><a class="nav-link @activeclass" data-toggle="tab" role="tab" data-link="/Inventory/DemandOrdersList" href="#report">Pending Demand Orders</a></li>
+            @{ activeclass = ""; }
+            <li class="nav-item"><a class="nav-link @activeclass" data-toggle="tab" role="tab" data-link="/Inventory/ArchiveList" href="#report">Archive</a></li>
+        </ul>
+        <!-- Tab panes -->
+        <div class="tab-content">
+            <div id="report" class="tab-pane active p-20">
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(function () {
+        $("#report").load("/Inventory/DemandOrdersList/");
+    });
+</script>

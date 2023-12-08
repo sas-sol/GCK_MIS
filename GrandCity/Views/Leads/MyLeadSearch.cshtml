@@ -1,0 +1,58 @@
+﻿<div class="bgc-white bd bdrs-3 p-20 mB-20">
+    <div class="col-md-12">
+        <ul class="nav nav-tabs" role="tablist" id="myTabs">
+            <li class="nav-item"><a class="nav-link leads-data active " data-lead="2" role="tab" data-toggle="tab" data-link="/Leads/MyLeadsDetails?type=0" id="proj" href="#coahead">Walk-In</a></li>
+            <li class="nav-item"><a class="nav-link leads-data" data-lead="2" role="tab" data-toggle="tab" data-link="/Leads/MyLeadsDetails?type=1" id="proj" href="#coahead">UAN</a></li>
+            <li class="nav-item"><a class="nav-link leads-data" data-lead="2" role="tab" data-toggle="tab" data-link="/Leads/MyLeadsDetails?type=2" id="proj" href="#coahead">Social Media</a></li>
+            <li class="nav-item"><a class="nav-link leads-data" data-lead="2" role="tab" data-toggle="tab" data-link="/Leads/MyLeadsDetails?type=3" id="proj" href="#coahead">Zameen.com</a></li>
+            <li class="nav-item"><a class="nav-link leads-data" data-lead="2" role="tab" data-toggle="tab" data-link="/Leads/MyLeadsDetails?type=4" id="proj" href="#coahead">Reference</a></li>
+            <li class="nav-item"><a class="nav-link leads-data" data-lead="2" role="tab" data-toggle="tab" data-link="/Leads/MyLeadsDetails?type=5" id="proj" href="#coahead">Other Deals</a></li>
+        </ul>
+        <div class="tab-content">
+            <div role="tabpanel" id="coahead" class="tab-pane active p-20 table-responsive">
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+
+    $(function () {
+        var Lead_User = $('.lead_user').val();
+        var SPE_lead_Status = $("#SAM_Lead_Status option:selected").val();
+        var to = $('#SAM-lead-to').val();
+        var from = $('#SAM-lead-from').val();
+        var phone = $('#leadphone').val();
+
+        SASLoad($('#coahead'));
+
+        $('#coahead').load('/Leads/MyLeadsDetails?type=0', { From: from, To: to, LeadStatus: SPE_lead_Status, LeadUser: Lead_User, Phone: phone }, function () {
+            SASUnLoad($('#coahead'));
+        });
+    });
+
+
+
+    // Load data in tab container
+    $(document).on("click", ".leads-data", function (e) {
+        var $this = $(this),
+            targ = $this.attr('href'),
+            loadurl = $this.attr('data-link');
+        var Lead_User = $('.lead_user').val();
+        var SPE_lead_Status = $("#SAM_Lead_Status option:selected").val();
+        var to = $('#SAM-lead-to').val();
+        var phone = $('#leadphone').val();
+        var from = $('#SAM-lead-from').val();
+
+        SASLoad(targ);
+        $(targ).load(loadurl, { From: from, To: to, LeadStatus: SPE_lead_Status, LeadUser: Lead_User, Phone: phone }, function () {
+            SASUnLoad(targ);
+            $('#myTabs .active').removeClass("active");
+            $this.addClass("active");
+        });
+
+    });
+</script>
+
+
+
+

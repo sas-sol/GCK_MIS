@@ -1,0 +1,133 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Sp_Reports_MonthlyOverdue_Result>
+<h4 class="mt-2">@ViewBag.Title</h4>
+<div class="col-md-12 mt-2">
+    <div class="row mt-2">
+        <div class=" col-md-2">
+            <label>Month</label>
+            <select class="form-control" id="months">
+                <option value="" selected disabled>Choose Month</option>
+                <option value="1">January</option>
+                <option value="2">February</option>
+                <option value="3">March</option>
+                <option value="4">April</option>
+                <option value="5">May</option>
+                <option value="6">June</option>
+                <option value="7">July</option>
+                <option value="8">August</option>
+                <option value="9">September</option>
+                <option value="10">October</option>
+                <option value="11">November</option>
+                <option value="12">December</option>
+            </select>
+        </div>
+        <div class="col-md-2">
+            <label>Years</label>
+            <select class="form-control" id="year">
+                <option value="" selected disabled>Choose Year</option>
+                <option value="2019">2019</option>
+                <option value="2020">2020</option>
+                <option value="2021">2021</option>
+                <option value="2022">2022</option>
+                <option value="2023">2023</option>
+                <option value="2024">2024</option>
+            </select>
+        </div>
+        <div class="col-md-2">
+            <label>Search</label>
+            <button class="btn btn-primary month-due-ser ">Search</button>
+        </div>
+    </div>
+    <div class="row mt-2">
+        <div class="col-md-4"></div>
+        <div class="col-md-4">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Plot Size</th>
+                        <th>Total</th>
+                        <th>Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var g in Model.GroupBy(x => x.Plot_Size))
+                    {
+                        <tr>
+                            <td>@g.Key</td>
+                            <td>@g.Count()</td>
+                            <td>@string.Format("{0:0,0.##}", Math.Round(Convert.ToDouble(g.Sum(x => x.Due_Amount))))</td>
+                        </tr>
+                    }
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th></th>
+                        <th>@string.Format("{0:0,0.##}", Model.Count())</th>
+                        <th>@string.Format("{0:0,0.##}", Math.Round(Convert.ToDouble(Model.Sum(x => x.Due_Amount))))</th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+        <div class="col-md-4"></div>
+    </div>
+</div>
+<div class="col-md-12 mt-2">
+    <table class="table stripe table-bordered ovedue1 mt-2">
+        <thead class="thead-dark">
+            <tr>
+                <th width="40px">Sr</th>
+                <th width="150px">Plot No</th>
+                <th width="150px">Plot Type</th>
+                <th width="100px">Plot Size</th>
+                <th width="100px">Dealership</th>
+                <th width="250px">Client Name</th>
+                <th width="250px">Father/Husband Name</th>
+                <th width="150px">Mobile 1</th>
+                <th width="150px">Mobile 2</th>
+                <th width="100px">Due Amount</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                int i = 1;
+            }
+            @foreach (var item in Model.Where(x => x.Status == 1).OrderBy(x => x.Due_Amount))
+            {
+                <tr id="@item.Id">
+                    <td>@i</td>
+                    <td>@item.FileFormNumber <i style="float:right; z-index:1111111" class="ti-info-alt cust-info"></i></td>
+                    <td>@item.Type</td>
+                    <td>@item.Plot_Size</td>
+                    <td>@item.Dealership_Name</td>
+                    <td>@item.Name</td>
+                    <td>@item.Father_Husband</td>
+                    <td>@item.Mobile_1</td>
+                    <td>@item.Mobile_2</td>
+                    <td>@string.Format("{0:0,0.##}", Math.Round(Convert.ToDouble(item.Due_Amount)))</td>
+                </tr>
+                i++;
+            }
+
+        </tbody>
+        <tfoot>
+            <tr>
+                <th colspan="8"></th>
+                <th>@string.Format("{0:0,0.##}", Math.Round(Convert.ToDouble(Model.Sum(x => x.Due_Amount))))</th>
+            </tr>
+        </tfoot>
+    </table>
+</div>
+<script>
+    $(document).ready(function () {
+        $('table.ovedue1').DataTable({
+            dom: 'Bfrtip',
+            aaSorting: [],
+            scrollY: "500px",
+            scrollX: true,
+            scrollCollapse: true,
+            paging: false,
+            fixedColumns: {
+                leftColumns: 2
+            }
+        });
+    });
+</script>

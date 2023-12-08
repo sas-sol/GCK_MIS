@@ -1,0 +1,107 @@
+﻿@model List<MeherEstateDevelopers.Models.Sp_Get_CashBankBook_Closing_Result>
+<div id="result" class="col-md-12">
+    <table class="table table-striped table-bordered" cellspacing="0" width="100%">
+        <thead>
+            <tr>
+                <td colspan="16">Daily Cash Book</td>
+            </tr>
+            <tr>
+                <th><input type="checkbox" id="select-all" /></th>
+                <th>Sr.</th>
+                <th>Date</th>
+                <th>Voucher No</th>
+                <th>Narration</th>
+                <th>Head</th>
+                <th>Debit</th>
+                <th>Credit</th>
+                <th>Cashier Name</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                if (Model.Any())
+                {
+                    int srcount = 1;
+                    foreach (var g in Model.GroupBy(x => x.GroupId))
+                    {
+                        foreach (var item in g)
+                        {
+                            <tr id="@g.Key">
+                                <td>
+                                    <input type="checkbox" class="tik-entry" />
+                                </td>
+                                <td>
+                                    @srcount
+                                </td>
+                                <td>@string.Format("{0:dd-MMM-yyy}", item.RecordedBy_Date)</td>
+                                <td>@item.Voucher_No</td>
+                                <td>@item.Naration</td>
+                                <td>@item.Head_Name</td>
+                                <td class="deb">@string.Format("{0:n0}", item.Debit)</td>
+                                <td class="crd">@string.Format("{0:n0}", item.Credit)</td>
+                                <td>@item.Rec_Name</td>
+                            </tr>
+
+                        }
+                        srcount++;
+                    }
+                }
+            }
+            <tr>
+                <th></th>
+                <th></th>
+                <th>Total</th>
+                <th></th>
+                <td></td>
+                <td></td>
+                <td id="deb-ttl"></td>
+                <td id="crd-ttl"></td>
+                <th id="bal"></th>
+            </tr>
+        </tbody>
+    </table>
+    <div class="form-row">
+        <div class="col-md-2 form-group">
+            <button class="btn btn-info" id="day-close">Supervise</button>
+        </div>
+    </div>
+</div>
+<style>
+    table tr td, table tr th {
+        padding: 2px !important;
+        font-size: 12px;
+    }
+</style>
+<script>
+    //
+    $(document).on("click", "#select-all", function () {
+        var checked = this.checked;
+        $('input[type="checkbox"]').each(function () {
+            this.checked = checked;
+        })
+        CalculateDebitCredit();
+    });
+    //
+    $(document).on("click", ".tik-entry", function () {
+        CalculateDebitCredit();
+    });
+    //
+    function CalculateDebitCredit() {
+        var debt = 0, crdt = 0;
+        $('.tik-entry').each(function () {
+            var t = $(this).is(":checked");
+            if (t) {
+                var deb = Number(RemoveComma($(this).closest('tr').find('.deb').text()));
+                var crd = Number(RemoveComma($(this).closest('tr').find('.crd').text()));
+                debt += deb;
+                crdt += crd;
+            }
+        });
+        var bal = debt - crdt;
+        $('#deb-ttl').text(Number(debt).toLocaleString());
+        $('#crd-ttl').text(Number(crdt).toLocaleString());
+        $('#bal').text(Number(bal).toLocaleString());
+    }
+
+
+</script>

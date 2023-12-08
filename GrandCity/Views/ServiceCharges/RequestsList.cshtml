@@ -1,0 +1,74 @@
+﻿@{ if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+}
+
+<div class="container-fluid">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light row bdrs-3 ov-h bgc-white  bd">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse px-0 mx-0 row col-md-11" id="navbarSupportedContent">
+            <div class="navbar-nav mx-0 px-0">
+                <div class="nav-item mx-0 pt-2">
+                    <h5>Waiver Requests</h5>
+                </div>
+            </div>
+        </div>
+    </nav>
+</div>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-2 bdrs-3 ov-h bgc-white ml-0 bd">
+            <ul class="nav flex-column mx-0">
+                <li class="nav-item sas col-md-12 my-1 my-active">
+                    <a class="nav-link cust-nav" href="javascript:void(0)" data-tp="1">Pending</a>
+                </li>
+                <li class="nav-item sas col-md-12 my-1">
+                    <a class="nav-link cust-nav" href="javascript:void(0)" data-tp="2">Approved</a>
+                </li>
+                <li class="nav-item sas col-md-12 my-1">
+                    <a class="nav-link cust-nav" href="javascript:void(0)" data-tp="3">Rejected</a>
+                </li>
+            </ul>
+        </div>
+        <hr />
+        <div class="col-md-10 bdrs-3 ov-h bgc-white bd" id="customtable" style="padding-top:10px;">
+            <div class="container-fluid rec-hldr-jkl">
+                @{Html.RenderAction("PermissionsView", new { typ = ViewBag.type, module = ViewBag.mod, cat = 1 });}
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $('.cust-nav').click(function () {
+        //yahan pe table populate krana hai
+
+        if ($(this).parent().hasClass('my-active')) {
+            return;
+        }
+
+        let dttp = parseInt($(this).attr('data-tp'));
+        let that = this;
+        showLoader();
+        $('.rec-hldr-jkl').load('/ServiceCharges/PermissionsView/', { cat: dttp }, function () {
+            $(that).parent().prevAll('.my-active').removeClass('my-active');
+            $(that).parent().nextAll('.my-active').removeClass('my-active');
+            $(that).parent().addClass('my-active');
+            hideLoader();
+        });
+    });
+</script>
+
+<style>
+    .my-active {
+        background-color: aliceblue;
+        text-align: center;
+    }
+</style>

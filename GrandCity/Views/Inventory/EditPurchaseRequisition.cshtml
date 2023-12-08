@@ -1,0 +1,300 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Inventory_Purchase_Req>
+@{
+    if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+}
+
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+<script src="~/Scripts/Inv.js"></script>
+<div class="bgc-white p-20 bd">
+    <div style="text-align:center">
+        <h3>Requisitions</h3>
+    </div>
+    
+        <div style="text-align:left" class="row">
+            <h4 class="col-md-3">Reason To Send Back:</h4>
+            <h5 class="col-md-5" style="margin-left: -8%; margin-top: .3%;">@Model.Select(x => x.Reason).FirstOrDefault()</h5>
+        </div>
+    
+
+    @if (Model != null)
+    {
+        <input type="hidden" value="@Model.FirstOrDefault().Group_Id" id="dr" />
+    }
+    <input type="hidden" class="grpId" value="@ViewBag.Group_Id" />
+    <div class="col-md-12 mt-md-3 row">
+        <div class="form-group col-md-6">
+            <label>Project Name</label>
+            @Html.DropDownList("Project", null, "Choose..", new { @class = "form-control Project col-md-8" })
+        </div>
+        <div class="form-group col-md-6">
+            <label>Expected Delivery Date (min 5 days)</label>
+            <input class="form-control col-md-8" data-provide="datepicker" id="del-date" value="@Model.Select(x=>x.Deliver_Date).FirstOrDefault().Value.ToShortDateString()"/>
+        </div>
+    </div>
+  
+    <div class="col-md-12 " id="ad-demand">
+
+        @if (Model != null)
+        {
+            int i = 1;
+            foreach (var g in Model)
+            {
+                <div class="cal item-pur-req-row" style="margin-top:5px; box-shadow: rgba(0,0,0,0.8) 0 0 3px;border-radius: 5px;">
+                    <div class="form-row col-md-12 dm-stat" style="justify-content:center">
+                    </div>
+                    <div class="form-row">
+                        <div class="col-md-1">
+                            <div class="sr"> @i</div>
+                        </div>
+                        <div class="form-group col-md-1">
+                            <label>Code</label>
+                            <input class="form-control item-code" readonly value="@g.Item_Id">
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label>Item</label>
+                            <input type="text" class="form-control Product" id="Product" required placeholder="Product" value="@g.Item_Name" />
+                            <input hidden class="Product-id" readonly value="@g.Item_Id" />
+                        </div>
+                        <div class="form-group col-md-1">
+                            <label>UOM</label>
+                            <input class="form-control item-uom" name="UOM" readonly value="@g.UOM">
+                        </div>
+                        <div class="form-group col-md-1">
+                            <label>Available Qty</label>
+                            <input class="form-control av-qty" readonly>
+                        </div>
+                        <div class="form-group col-md-1">
+                            <label>Req Qty</label>
+                            <input class="form-control coma" placeholder="12,345" required value="@g.Qty">
+                            <input type="hidden" id="" name="Quantity" class="amt Quantity" required value="@g.Qty">
+                        </div>
+                        <div class="col-md-1" style="padding-top:2.5%">
+                            <i class="ti-trash rmv-pur-req-row rmv" style="font-size:20px"></i> | <i class="fa fa-plus-circle toggle_icon" style="font-size:20px"></i>&nbsp;&nbsp; | &nbsp;&nbsp;
+                        </div>
+                        <div class="col-md-2">
+                            <input type="hidden" class="atch-id" />
+                            <input type="hidden" class="stat" />
+                            <form action="/Inventory/UploadRef" method="post" enctype="multipart/form-data">
+                                Refrences:
+                                <input type="hidden" value="@ViewBag.Group_Id" name="Group_ref" />
+                                @*<label for="file-input">
+                                    <i class="fa fa-paperclip fa-lg" aria-hidden="true"></i>
+                                </label>*@
+                                <input type="file" class=" ref-file" name="file-input" id="file-input">
+                            </form>
+                            <div class="filename-container hide"></div>
+                        </div>
+                    </div>
+                    <div class="form-row toggle_text" style="display:none">
+                        <div class="col-md-1"></div>
+                        <div class="form-group row col-md-8">
+                            <label class="col-sm-2 col-form-label">Details</label>
+                            <textarea class="form-control descr col-md-10" rows="1" cols="5" placeholder="Details">@g.Description</textarea>
+                        </div>
+                    </div>
+                </div>
+            }
+
+        }
+
+
+    </div>
+    <hr />
+    <div class="row">
+        <div class="col-md-2">
+            <button type="button" id="add-new-pr-row" class="btn btn-success">Add Another Product</button>
+        </div>
+        <div class="col-md-2">
+            <button type="submit" id="reg-edit-PurReq" class="btn btn-primary">Submit</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    
+    var prdctThat = $(".Product").first();
+    $(".Product").autocomplete({
+        source: function (request, response) {
+            $(prdctThat).closest('.item-pur-req-row').find('.Product-id').val('');
+            $(prdctThat).closest('.item-pur-req-row').find('.item-uom').val('');
+            $(prdctThat).closest('.item-pur-req-row').find('.item-code').val('');
+            $(prdctThat).closest('.item-pur-req-row').find('.stat').val('');
+            $(prdctThat).closest('.item-pur-req-row').find('.av-qty').val('');
+            $(prdctThat).closest('.item-pur-req-row').find('.dm-stat').empty();
+            $.ajax({
+                type: "POST",
+                url: '/Inventory/GetSearchValue/',
+                dataType: "json",
+                data: { search: $(prdctThat).val() },
+                success: function (data) {
+                    response($.map(data, function (item) {
+                        return { label: item.Complete_Name, value: item.Complete_Name, Id: item.Id };
+                    }));
+                },
+                error: function (xhr, status, error) {
+                    alert("Unable to select this item. Please try again or contact SA Systems Team");
+                }
+            });
+        },
+        select: function (event, ui) {
+            var $this = this;
+            $.ajax({
+                type: "Post",
+                url: '/Inventory/GetInventoryItemById/',
+                dataType: "json",
+                data: { Id: ui.item.Id },
+                success: function (data) {
+                    if (data.InvDeps.length == 0) {
+                        alert("Contact Warehouse for Item Department Tagging");
+                    }
+                    else {
+                        if (!data.Status) {
+                            var html = `<span class="dem-div">Demand Requisition - <b> ${data.InvDeps[0].Dep_Name} </b></span>`;
+                            $(prdctThat).closest('.item-pur-req-row').find('.dm-stat').html(html);
+                        }
+                    }
+
+                    $($this).closest('.item-pur-req-row').find('.Product-id').val(data.Inventory.Id);
+                    $($this).closest('.item-pur-req-row').find('.item-uom').val(data.Inventory.UOM);
+                    $($this).closest('.item-pur-req-row').find('.item-code').val(data.Inventory.SKU);
+                    $($this).closest('.item-pur-req-row').find('.stat').val(data.Status);
+                    $($this).closest('.item-pur-req-row').find('.av-qty').val(Number(data.Inventory.Total_In_Qty - data.Inventory.Total_Out_Qty));
+                },
+                error: function (xhr, status, error) {
+                    alert("Unable to select this item. Please try again or contact SA Systems Team");
+                }
+            });
+
+        }
+    });
+
+    $(document).on("change", ".ref-file", function (e) {
+        e.preventDefault();
+        var $this = $(this);
+        var form = $(this).closest('form');
+        var data = new FormData();
+        var files = $(this).get(0).files;
+        if (files.length == 0) {
+            return;
+        }
+        data.append("Files", files[0]);
+        $.each(form.serializeArray(), function (key, input) {
+
+            data.append(input.name, input.value);
+        });
+        $.ajax({
+            type: "POST",
+            processData: false,
+            contentType: false,
+            url: $(form).attr('action'),
+            data: data,
+            success: function (data) {
+                if (data.Status) {
+                    $file = $($this).val();
+                    $file = $file.replace(/.*[\/\\]/, ''); //grab only the file name not the path
+                    //$($this).closest('.item-pur-req-row').find('.filename-container').empty().append($file + '<i class="fa fa-check"></i>').show();
+                    $($this).closest('.item-pur-req-row').find('.filename-container').empty().append('Uploaded <i class="fa fa-check" style="color:green"></i>').show();
+                    $($this).closest('.item-pur-req-row').find('.atch-id').val(data.Id);
+                }
+                else {
+                    alert(data.Msg)
+                }
+            }
+        });
+
+    });
+
+    $(document).on("blur", "#del-date", function () {
+        var date = $(this).val();
+        var date1 = moment();
+        var date2 = moment(date);
+        var diff = date2.diff(date1, 'days');
+        diff++;
+        if (diff < 5) {
+            alert("Minimum 5 days are required for delivery");
+            $(this).val('');
+        }
+    });
+    $(document).on("click", ".toggle_icon", function () {
+        if ($(this).hasClass('fa-plus-circle')) {
+            $(this).removeClass('fa-plus-circle');
+            $(this).addClass('fa-minus-circle');
+            $(this).closest('.cal').find('.toggle_text').slideToggle();
+        }
+        else {
+            $(this).removeClass('fa-minus-circle');
+            $(this).addClass('fa-plus-circle');
+            $(this).closest('.cal').find('.toggle_text').slideToggle();
+        }
+    });
+
+</script>
+<style>
+
+    .rmv-pur-req-row:hover {
+        color: #d0232A;
+        cursor: pointer;
+    }
+
+    .left-mar-temp {
+        margin-left: 6rem !important;
+    }
+
+    .sr {
+        text-align: center;
+        margin-top: 35px;
+    }
+
+    .rounded {
+        height: 30px;
+        border-radius: 4px;
+        padding: 4px;
+    }
+
+    .in1 {
+        width: 120px;
+    }
+
+    .in2 {
+        width: 350px;
+    }
+
+    i {
+        margin: 0 8px;
+    }
+
+
+    .filename {
+        display: inline-block;
+        padding: 0 10px;
+        margin-right: 10px;
+        background-color: #ccc;
+        border: 1px solid black;
+        border-radius: 15px;
+        height: 20px;
+        line-height: 20px;
+        text-align: center;
+        font-weight: 700;
+        font-size: 12px;
+        font-family: 'verdana', sans-serif;
+    }
+
+    /*.hide {
+        display: none;
+    }*/
+    .dem-div {
+        width: auto;
+        margin: 10px 0;
+        padding: 10px;
+        background: lightgoldenrodyellow;
+    }
+</style>

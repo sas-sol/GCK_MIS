@@ -1,0 +1,34 @@
+﻿<div class="row">
+    <div class="col-md-12">
+        <div class="bdrs-3 ov-h bgc-white p-10 bd">
+            <div class="form-row">
+                <h5>Purchase Orders List</h5>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-2">
+                    <label>From</label>
+                    <input type="text" id="from-d" data-provide="datepicker" class="form-control" />
+                </div>
+                <div class="form-group col-md-2">
+                    <label>To</label>
+                    <input type="text" id="to-d" data-provide="datepicker" class="form-control" />
+                </div>
+                <div class="form-group col-md-2">
+                    <button class="btn btn-info sea-p-o" style="margin-top:29px">Search</button>
+                </div>
+            </div>
+            <div id="report"></div>
+        </div>
+    </div>
+</div>
+<script>
+    var from = $("#from-d").val();
+    var to = $("#to-d").val();
+    $("#report").load("/Procurement/Dep_PurchaseOrder_Search/", { From: from, To: to });
+
+    $('.sea-p-o').click(function () {
+        var from = $("#from-d").val();
+        var to = $("#to-d").val();
+        $("#report").load("/Procurement/Dep_PurchaseOrder_Search/", { From: from, To: to });
+    });
+</script>

@@ -1,0 +1,156 @@
+﻿@{
+    if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+}
+<div class="col-md-12 bgc-white">
+    <h4 style="text-align:center;">Plot Adjustment</h4>
+    <div class="row">
+        <div class="col-md-2">
+            <select class="form-control rh-plt"></select>
+        </div>
+        <div class="col-md-2">
+            <select class="form-control lh-plt"></select>
+        </div>
+        <div class="col-md-1">
+            <button class="btn btn-primary add-nw-swp">Add</button>
+            @*<i class="fa fa-plus add-nw-row-swp pointer" style="color:limegreen;" title="Add another"></i>&nbsp;&nbsp;| &nbsp;&nbsp;<i class="fa fa-trash pointer rmv-nw-row-swp" title="Remove this Swap" style="color:#d0232a;"></i>*@
+        </div>
+    </div>
+    <div class="col-md-12 swp-req-area mt-md-5">
+        <div class="row">
+            <div class="col-md-3">
+                <label><b>From Plot #</b></label>
+            </div>
+            <div class="col-md-4">
+                <label><b>Owner</b></label>
+            </div>
+            <div class="col-md-3">
+                <label><b>To Plot #</b></label>
+            </div>
+            <div class="col-md-1">
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <button class="btn btn-success snd-req-swp-btn">Send Request</button>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $('.rh-plt').select2({
+            ajax: {
+                url: '/Plots/GetPlots_ForSelect_Plot_Adj/',
+                data: function (params) {
+                    var query = {
+                        s: params.term,
+                        typ: true,
+                        type: 'public'
+                    }
+                    // Query parameters will be ?search=[term]&type=public
+                    return query;
+                },
+                processResults: function (data) {
+                    // Transforms the top-level key of the response object from 'items' to 'results'
+                    return {
+                        results: data
+                    };
+                }
+            }
+        });
+        $('.lh-plt').select2({
+            ajax: {
+                url: '/Plots/GetPlots_ForSelect_Plot_Adj/',
+                data: function (params) {
+                    var query = {
+                        s: params.term,
+                        typ: false,
+                        type: 'public'
+                    }
+                    // Query parameters will be ?search=[term]&type=public
+                    return query;
+                },
+                processResults: function (data) {
+                    // Transforms the top-level key of the response object from 'items' to 'results'
+                    return {
+                        results: data
+                    };
+                }
+            }
+        });
+        $('.add-nw-swp').unbind().click(function () {
+            var fromPlt = $('.rh-plt option:selected').val();
+            var fromPltNum = $('.rh-plt option:selected').text();
+            var toPlt = $('.lh-plt option:selected').val();
+            var toPltNum = $('.lh-plt option:selected').text();
+            var strctr = `<div class="row swp-req-row">
+            <input type="hidden" class="fromPltId" value="${fromPlt}" />
+            <input type="hidden" class="toPltId" value="${toPlt}"/>
+            <input type="hidden" class="fromPltNum" value="${fromPltNum}"/>
+            <input type="hidden" class="toPltNum" value="${toPltNum}"/>
+            <input type="hidden" class="OwnName" value="-" />
+            <div class="col-md-3">
+                <label><b>${fromPltNum}</b></label>
+            </div>
+            <div class="col-md-4">
+                <label><b>${'-'}</b></label>
+            </div>
+            <div class="col-md-3">
+                <label><b>${toPltNum}</b></label>
+            </div>
+            <div class="col-md-1">
+                <i class="pointer swp-req-rmv fa fa-trash" title="Remove this Adjust Request" style="color:#d0232a;"></i>
+            </div>
+        </div>`;
+            $('.swp-req-area').append(strctr);
+            $('.rh-plt, .lh-plt').val('').trigger('change');
+            $('.swp-req-rmv').last().unbind().click(function () {
+                if (!confirm('Are you sure you want to remove this Ajustment request?')) {
+                    return;
+                }
+                $(this).closest('.swp-req-row').remove();
+            });
+        });
+        $('.snd-req-swp-btn').unbind().click(function () {
+            //yahan pe request apply krni hai
+            if (!confirm('Are you sure you want to forward this request?')) {
+                return;
+            }
+            let swpsData = [];
+            $('.swp-req-row').each(function () {
+                swpsData.push({
+                    FromPlot: $(this).find('.fromPltId').val(),
+                    FromPlotNum: $(this).find('.fromPltNum').val(),
+                    ToPlot: $(this).find('.toPltId').val(),
+                    ToPlotNum: $(this).find('.toPltNum').val()
+                });
+            });
+            $.ajax({
+                type: "POST",
+                url: '/Plots/SaveAdjRequest/',
+                data: { swaps: swpsData },
+                success: function (data) {
+                    if (data) {
+                        alert("Adjustment request has been placed successfully.");
+                        window.location.reload(true)
+                    }
+                    else {
+                        alert("Failed to place this request at the moment. Please try again later.");
+                    }
+                }
+                , error: function (xmlhttprequest, textstatus, message) {
+                    if (textstatus === "timeout") {
+                        alert("got timeout");
+                    } else {
+                        alert(textstatus);
+                    }
+                }
+            });
+        });
+    });
+</script>

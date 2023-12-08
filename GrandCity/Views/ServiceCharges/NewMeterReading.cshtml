@@ -1,0 +1,30 @@
+﻿@{
+    Layout = "~/Views/Shared/_StaffLayout.cshtml";
+}
+<div class="row gap-20 pos-r">
+    <div class="col-md-12">
+        <div class="bgc-white p-20 bd">
+            <div class="mT-30">
+                <div class="form-row row">
+                    <div class="col-md-12">
+                        <div class="form-row">
+                            <div class="form-group col-md-2">
+                                <label>Block</label>
+                                @Html.DropDownList("PlotMeters", null, "Choose..", new { @class = "form-control", required = "" })
+                            </div>
+                            <div class="col-md-1 form-group">
+                              
+                                <button id="New__elec__rea__plt__lst" class="btn btn-primary" style="margin-top:29px">Search</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="mT-30">
+                <div class="form-row row">
+                    <div class="col-md-12" id="plot__det__New"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

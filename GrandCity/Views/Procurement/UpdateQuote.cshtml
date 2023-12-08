@@ -1,0 +1,45 @@
+﻿@model MeherEstateDevelopers.Models.Inventory_Bidding
+@using (Html.BeginForm("UpdateQuote", "Procurement", FormMethod.Post, new { @id = "up-quo", @class = "", role = "form", autocomplete = "off" }))
+{
+    <input type="hidden" name="Id" id="bid-id" value="@Model.Id" />
+    <div class="col-md-12">
+        <div class="form-row">
+            <div class="form-group col-md-12">
+                <h6>@ViewBag.Item</h6>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-3">
+                <label>Vendor</label>
+                <select class='form-control vendor' name="V">
+                    <option value="@Model.Vendor_Id" >@Model.Vendor_Name</option>
+                </select>
+            </div>
+            <div class="form-group col-md-2">
+                <label>Quantity</label>
+                <input type="number" class="form-control qty qty-rate" value="@Model.Qty" name="Q" required />
+            </div>
+            <div class="form-group col-md-2">
+                <label>Rate</label>
+                <input type="email" class="form-control rate-p-uom qty-rate" value="@Model.PurchaseRate" name="R">
+            </div>
+            <div class="form-group col-md-3">
+                <label>Total</label>
+                <input type="text" class="form-control ttl-rate" value="@string.Format("{0:n2}",Model.Qty * Model.PurchaseRate)" readonly>
+            </div>
+            <div class="form-group col-md-5">
+                <label>Remarks</label>
+                <input type="text" class="form-control rems" name="Rem" value="@Model.Description">
+            </div>
+            <div class="form-group col-md-3">
+                <label>Attachments</label>
+                <input type="file" id="files">
+            </div>
+        </div>
+    </div>
+}
+<div class="col-md-12" id="po-terms">
+    @{ 
+        Html.RenderAction("POTerms", "Procurement", new { Id = Model.Id });
+    }
+</div>

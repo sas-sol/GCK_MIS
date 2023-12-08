@@ -1,0 +1,141 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.HOH_Inventory>
+<script src="~/Scripts/hoh.js"></script>
+@{ if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+}
+<input type="hidden" value="@ViewBag.ShopID" id="shpid" />
+<div class="bgc-white bd bdrs-3 p-20 mB-20">
+    <div class="row">
+        <div class="col-md-4">
+            <h4 class="c-grey-900 mB-20">Warehouse Inventory List</h4>
+        </div>
+        <div class="col-md-8" style="text-align:right">
+
+            <a type="button" class="btn btn-primary" data-toggle="modal" data-target="#Modal" id="add-invent-popup-hoh" style="color:white">Add Inventory</a>
+            <a type="button" class="btn btn-primary" href="~/HOH/Categories/" target="_blank">Inventory Category</a>
+        </div>
+    </div>
+
+    <style>
+        table thead tr th, table tbody tr td {
+            font-size: 12px;
+        }
+    </style>
+
+    <table id="Inventory-list" class="table table-striped table-bordered " cellspacing="0" width="100%" style="margin-left:0%">
+        <thead class="thead-dark">
+            <tr>
+                <th>Sr.</th>
+                <th>Name</th>
+                <th>UOM</th>
+                <th>Code</th>
+                <th>Stock In</th>
+                <th>Stock Out</th>
+                <th>Balance</th>
+                <th>Rate</th>
+                <th>Stock Values</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                if (Model.Any())
+                {
+                    int i = 1;
+                    foreach (var item in Model)
+                    {
+                        <tr id="@item.Id">
+                            <td>@i</td>
+                            <td>@item.Item_Name</td>
+                            <td>@item.UOM</td>
+                            <td>@item.SKU</td>
+                            <td>@item.Total_In</td>
+                            <td>@item.Total_Out</td>
+                            <td>@item.Balance</td>
+                            <td>@string.Format("{0:0,0.##}",item.AvgRate) </td>
+                            <td>@string.Format("{0:0,0.##}",item.StockValue)</td>
+
+                            <td>
+                                @if (User.IsInRole("Update HOH Inventory") || User.IsInRole("Administrator"))
+                                {
+                                    <i data-toggle="modal" data-target="#Modal" id="@item.Shop_Id" class="edit-Inventory-hoh ti-pencil"></i>
+                                }
+
+                                <i class="fa fa-trash del-inv-hoh" id="@item.Id"></i>
+                            </td>
+                        </tr>
+                        i++;
+                    }
+                }
+            }
+        </tbody>
+    </table>
+</div>
+<style>
+    #inv tr.odd td:first-child,
+    #inv tr.even td:first-child {
+        padding-left: 4em;
+    }
+
+    .dtrg-level-0 {
+        font-size: 20px;
+        text-align: center;
+        font-weight: bold;
+    }
+
+    .dtrg-level-1 {
+        font-size: 16px;
+        text-align: center;
+        font-weight: bold;
+    }
+
+    .dtrg-level-2 {
+        font-size: 14px;
+        font-weight: bold;
+    }
+</style>
+<script>
+    $(document).ready(function () {
+        $('#Inventory-list').DataTable({
+            dom: 'Bfrtip',
+            buttons: [
+                'copy', 'excel', 'pdf', 'print'
+            ]
+        });
+    });
+</script>
+
+<style>
+    tr.group,
+    tr.group:hover {
+        background-color: #ddd !important;
+    }
+</style>
+<script>
+    $(".navproject").click(function () {
+        var list = $(".navproject")
+        $(this).css("background-color", "ghostwhite");
+        $(".currentclass").css("background-color", "white");
+        $(".currentclass").removeClass("currentclass");
+        $(this).addClass('currentclass');
+    });
+
+    $(document).ready(function () {
+        $(".currentclass").css("background-color", "ghostwhite");
+
+    });
+
+    $(document).on("click", "#add-invent-popup-hoh", function () {
+        EmptyModel();
+        var id = $('#shpid').val();
+        $('#ModalLabel').text("New Inventory Item");
+        $('#modalbody').load('/HOH/AddInventory?ShopId=' + id);
+    })
+
+</script>

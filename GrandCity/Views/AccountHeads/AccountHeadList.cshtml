@@ -1,0 +1,293 @@
+﻿
+    @{ if (User.IsInRole("Administrator"))
+        {
+            Layout = "~/Views/Shared/_AdminLayout.cshtml";
+        }
+        else
+        {
+            Layout = "~/Views/Shared/_StaffLayout.cshtml";
+        }
+    }
+    <script>
+       @*var AccHead = @Html.Raw(Json.Encode(ViewBag.Head));*@
+    </script>
+    <link href="~/Content/jstree/jstree.css" rel="stylesheet" />
+    <div class=" bgc-white bd bdrs-3 mB-20 row">
+        <div class="col-md-12">
+            <h3>Chart of Accounts</h3>
+        </div>
+        <div class="col-md-4" style="border-right:1px solid #ccc;overflow:scroll; height:700px">
+            <div class="form-group col-md-12" id="ad-nod">
+                <input id="search-input" placeholder=" Search Head or Sub Head" class="search-input form-control" style="display:none;" />
+            </div>
+            <div class="col-md-12" id="html1">
+                @*@FolderTree(Model)*@
+            </div>
+            <div class="col-md-12" id="myHtml" style="display:none;">
+                
+            </div>
+        </div>
+
+        <div class="col-md-8 hd-led"></div>
+    </div>
+    <script src="~/Scripts/jstree.js"></script>
+    <script>
+        var _Acc_Heads_List_Loaded_Structured_ = [];
+        var _Acc_Heads_List_Loaded_Linear_ = [];
+        $(function () {
+            $('#html1')
+                // listen for event
+                .on('changed.jstree', function (e, data) {
+                    var code = $.trim(data.node.text.split('-')[0]);
+                    var head = $.trim(data.node.text.split('-')[1]);
+                    //var ledche = code.split("/");
+                    //if (ledche.length == 7) {
+                    SASLoad(".hd-led");
+                    $(".hd-led").load("/AccountHeads/HeadLedger/", { Code: code, Head: head }, function () {
+                        SASUnLoad(".hd-led");
+                    });
+                    //}
+                })
+                .on('hover_node.jstree', function (e, data) {
+                    $("#" + data.node.id + " .fa-cog").show();
+                })
+                .on('dehover_node.jstree', function (e, data) {
+                    $("#" + data.node.id + " .fa-cog").hide();
+                })
+                .on('search.jstree', function (e, data) {
+                })
+                .jstree({
+                    'core': {
+                        'data': {
+                            'url': function (node) {
+                                return node.id === '#' ?
+                                    'GetNodes_Tree' :
+                                    'GetNodes_Tree';
+                            },
+                            'data': function (node) {
+                                return { 'node': node.id };
+                            }
+                        }
+                    }
+                });
+        });
+
+        $(document).ready(function () {
+            $(".search-input").keyup(function () {
+                var searchString = $(this).val();
+                searchString = $.trim(searchString);
+                if ((searchString == '' || searchString == undefined) || searchString.length < 3) {
+                    $('#html1').show();
+                    if ($('#myHtml').jstree(true)) {
+                        $('#myHtml').jstree(true).destroy();
+                    }
+                    $('#myHtml').hide();
+                }
+                else {
+                    SerchAndShow(searchString);
+                }
+            });
+
+            //sending an ajax request to the server to get list of all accounts
+            $(function () {
+                $.ajax({
+                    type: "POST",
+                    url: '/AccountHeads/GetAllHeads/',
+                    data: {},
+                    success: function (data) {
+                        if (data != null) {
+                            _Acc_Heads_List_Loaded_Structured_ = data.StructuredData;
+                            _Acc_Heads_List_Loaded_Linear_ = data.LinearData;
+                            $('.search-input').show();
+                        }
+                        else {
+                        }
+                    }
+                    , error: function (xmlhttprequest, textstatus, message) {
+                        if (textstatus === "timeout") {
+                            alert("got timeout");
+                        } else {
+                            alert(textstatus);
+                        }
+                    }
+                });
+            });
+        });
+
+
+        //Just a testing function at the moment.. Implementation might change later during the development phase
+        function SerchAndShow(d) {
+            //1st step is to crate copies of the data sources
+            //Creating deep copies of the sources the easiest way ;)
+            let __linear__source = JSON.parse(JSON.stringify(_Acc_Heads_List_Loaded_Linear_));
+            let __structured__source = JSON.parse(JSON.stringify(_Acc_Heads_List_Loaded_Structured_));
+
+            let __foundDataFull__ = [];
+            let __foundDataTemp__ = [];
+            let __foundDataCodes__ = [];
+            let __foundDataHeads__ = [];
+
+            let __Array_Runtime_Structure__ = [];
+
+            __foundDataCodes__ = __linear__source.filter(x => x.Code.toLowerCase().includes(d.toLowerCase()));
+            __foundDataHeads__ = __linear__source.filter(x => x.Head.toLowerCase().includes(d.toLowerCase()));
+
+            __foundDataTemp__.push(...__foundDataCodes__);
+            __foundDataTemp__.push(...__foundDataHeads__);
+
+            //Second step is to remove duplicates
+            $.each(__foundDataTemp__, function (i, el) {
+                if (__foundDataFull__.find(x => x.Id == el.Id) == undefined) {
+                    __foundDataFull__.push(el);
+                }
+            });
+
+            //Third step is to filter array data
+            $.each(__foundDataFull__, function (i, v) {
+                let heads = v.Code.split("/").filter(x => x != "");
+                let Obj_Temp = __structured__source[0];
+                let Last_Obj_Temp = __structured__source[0];
+                $.each(heads, function (ii, vv) {
+                    Obj_Temp = Obj_Temp.Decendants[parseInt(vv) - 1];
+                    if (ii == 0) {
+                        //This means this node is root node
+                        if (__Array_Runtime_Structure__.find(x => x.Id == Obj_Temp.Id) == undefined) {
+                            //This parent is the found first time
+                            __Array_Runtime_Structure__.push({
+                                Id: Obj_Temp.Id,
+                                Head: Obj_Temp.Head,
+                                Code: Obj_Temp.Code,
+                                ParentId: null,
+                            });
+                        }
+                        else {
+                            //This parent has already been found so no need to push this path
+                        }
+                    }
+                    else {
+                        //This means that this node has a parent
+                        if (__Array_Runtime_Structure__.find(x => x.Id == Obj_Temp.Id) == undefined) {
+                            //This parent is the found first time
+                            __Array_Runtime_Structure__.push({
+                                Id: Obj_Temp.Id,
+                                Head: Obj_Temp.Head,
+                                Code: Obj_Temp.Code,
+                                ParentId: Last_Obj_Temp.Id,
+                            });
+                        }
+                        else {
+                            //This parent has already been found so no need to push this path
+                        }
+                    }
+                    Last_Obj_Temp = Obj_Temp;
+                });
+            });
+
+            //console.log(JSON.stringify(__Array_Runtime_Structure__));
+            let delts_s = GetStructrure(__Array_Runtime_Structure__.filter(x => x.ParentId == null), __Array_Runtime_Structure__);
+            //console.log(delts_s);
+
+            if ($("#myHtml").jstree(true)) {
+                $('#myHtml').jstree(true).destroy();
+                $('#myHtml').empty().append(delts_s);
+                $('#myHtml')
+                    // listen for event
+                    .on('changed.jstree', function (e, data) {
+
+                        var node = data.instance.get_node(data.selected[0]).text;
+                        var code = $(node).attr("id");
+                        var head = $(node).data("head");
+                        //var html = '<button class="btn btn-primary up-add-node" data-toggle="modal" data-target="#Modal" data-id="'+id+'">Configure Head :  ' + node + '</button>';
+                        //$('#ad-nod').html(html);
+
+                        SASLoad(".hd-led");
+                        $(".hd-led").load("/AccountHeads/HeadLedger/", { Code: code, Head: head }, function () {
+                            SASUnLoad(".hd-led");
+                        });
+
+
+                    })
+                    .on('hover_node.jstree', function (e, data) {
+                        $("#" + data.node.id + " .fa-cog").show();
+                    })
+                    .on('dehover_node.jstree', function (e, data) {
+                        $("#" + data.node.id + " .fa-cog").hide();
+                    })
+                    .bind("loaded.jstree", function (event, data) {
+                        $(this).jstree("open_all");
+                    })
+                    .jstree();
+            }
+            else {
+                $('#html1').hide();
+
+                $('#myHtml').empty().append(delts_s);
+
+                $('#myHtml').show();
+                $('#myHtml')
+                    // listen for event
+                    .on('changed.jstree', function (e, data) {
+
+                        var node = data.instance.get_node(data.selected[0]).text;
+                        var code = $(node).attr("id");
+                        var head = $(node).data("head");
+                        //var html = '<button class="btn btn-primary up-add-node" data-toggle="modal" data-target="#Modal" data-id="'+id+'">Configure Head :  ' + node + '</button>';
+                        //$('#ad-nod').html(html);
+
+                        SASLoad(".hd-led");
+                        $(".hd-led").load("/AccountHeads/HeadLedger/", { Code: code, Head: head }, function () {
+                            SASUnLoad(".hd-led");
+                        });
+                    })
+                    .on('hover_node.jstree', function (e, data) {
+                        $("#" + data.node.id + " .fa-cog").show();
+                    })
+                    .on('dehover_node.jstree', function (e, data) {
+                        $("#" + data.node.id + " .fa-cog").hide();
+                    })
+                    .bind("loaded.jstree", function (event, data) {
+                        $(this).jstree("open_all");
+                    })
+                    .jstree();
+            }
+        }
+
+        function GetStructrure(children,realArr) {
+            if (children == null || children == undefined) {
+                return ``;
+            }
+            let strc = `<ul>`;
+            $.each(children, function (i, v) {
+                strc += '<li>';
+                strc += `<span class="folder" id="${v.Code}" data-head="${v.Head}">${v.Code} -  ${v.Head} <i class="fas fa-cog up-add-node" data-toggle="modal" data-target="#Modal" data-id="${v.Id}"></i></span>`;
+                strc += GetStructrure(realArr.filter(x => x.ParentId == v.Id), realArr);
+            });
+            strc += `</ul>`;
+
+            return strc;
+        }
+    </script>
+    @*@helper FolderTree(IEnumerable<Management_Information_System.Models.HierarchicalNode> subFolders)
+    {
+        <ul>
+            @foreach (var folder in subFolders)
+            {
+                <li>
+                    @if (folder.Decendants.Count > 0)
+                    {
+                        <span class="folder" id="@folder.Code" data-head="@folder.Head">@folder.Head <i class="fas fa-cog up-add-node" data-toggle="modal" data-target="#Modal" data-id="@folder.Id"></i></span>
+                        @FolderTree(folder.Decendants)
+                    }
+                    else
+                    {
+                        <span class="leaf" id="@folder.Code" data-head="@folder.Head">@folder.Head <i class="fas fa-cog up-add-node" data-toggle="modal" data-target="#Modal" data-id="@folder.Id"></i></span>
+                    }
+                </li>
+            }
+        </ul>
+    }*@
+    <style>
+        .fa-cog{
+            display:none;
+        }
+    </style>

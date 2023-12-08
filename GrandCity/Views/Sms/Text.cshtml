@@ -1,0 +1,307 @@
+﻿@model MeherEstateDevelopers.Models.RealEstate_Projects
+@{ Layout = "~/Views/Shared/_StaffLayout.cshtml"; }
+<div class="row gap-20 pos-r">
+    <div class="col-md-6">
+        <div class="bgc-white p-20 bd">
+            <h6 class="c-grey-900">Customer Communication</h6>
+            <a href="/Sms/CreateDraft/" style="float:right">Create New Draft</a>
+            <div class="mT-30 drafts">
+                @*@using (Html.BeginForm("sendtext", "Sms", FormMethod.Post, new { @id = "s-sms", @class = "", role = "form" }))
+            {
+                @Html.AntiForgeryToken()
+                <div class="form-group col-md-12">
+                    <label for="inputAddress2">SMS Body</label>
+                    <textarea class="form-control" id="text" name="Description" placeholder="Write SMS here .." rows="10"></textarea>
+                </div>
+            }
+                *@
+
+            </div>
+        </div>
+        
+    </div>
+    <div class="col-md-6">
+        <div class="bgc-white p-20 bd">
+            <h6 class="c-grey-900">SMS Type</h6>
+            <div class="form-row mT-30">
+                <div class="form-group col-md-6">
+                    <select class="form-control s-tar">
+                        <option>Choose..</option>
+                        <option value="Broadcast">Broadcast SMS</option>
+                        <option value="Target">Target SMS</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-row ini" style="display:none">
+                <div class="form-group col-md-6">
+                    <select class="form-control brd-slec">
+                        <option>Choose..</option>
+                        <option value="Customers">All Customers</option>
+                        <option value="Dealers">All Dealers</option>
+                    </select>
+                </div>
+                <div class="col-md-12 form-row">
+                    <button class=" btn btn-primary snd-sms">Send SMS</button>
+                </div>
+            </div>
+            <div class="form-row targ" style="display:none">
+                <div class="form-group col-md-6">
+                    <label>Select Target</label>
+                    <select class="form-control tar">
+                        <option>Choose..</option>
+                        <option value="Block">Block</option>
+                        <option value="indivi">Individual Plot</option>
+                        <option value="dealer">Dealer</option>
+                    </select>
+                </div>
+                <div class="col-md-12 on-blk" style="display:none">
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            <label>Block</label>
+                            @Html.DropDownList("Block1", null, "Choose..", new { @class = "form-control", required = "" })
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-check col-md-4">
+                            <label class="form-check-label"><input class="form-check-input" type="radio" name="Sms-type" data-label="Broadcast SMS" id="gridRadios1" value="option1">Anouncement SMS to All Block Members</label>
+                        </div>
+                        <div class="form-check col-md-4">
+                            <label class="form-check-label"><input class="form-check-input" type="radio" name="Sms-type" data-label="Overdue Amount SMS" id="gridRadios1" dta-lbl="over" value="option1">Overdue Amount SMS</label>
+                        </div> 
+                        <div class="form-check col-md-4">
+                            <label class="form-check-label"><input class="form-check-input" type="radio" name="Sms-type" data-label="Due Amount SMS" id="gridRadios1" dta-lbl="due" value="option1">Due Amount SMS</label>
+                        </div>
+                    </div>
+                    <div class="form-row on-over" style="display:none;">
+                         
+                        <div class="form-check col-md-6">
+                            <label class="">Overdue Amount SMS</label>
+                            <input class="form-control installmentsnum" type="number" name="installments" placeholder="How Many Pending Installments ">
+                        </div>
+                    </div>
+                    
+                    <div class="form-row ">
+                        <div class="form-group col-md-12 conf-lab" style="text-align:center"></div>
+                    </div>
+                    <div class="form-row">
+                        <button class="btn btn-info conf">Confirm</button>
+                    </div>
+                </div>
+                
+            </div>
+            <div class="col-md-12 on-plt" style="display:none">
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label>Block</label>
+                        @Html.DropDownList("Block", null, "Choose..", new { @class = "form-control blk-plots", required = "" })
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label>Type</label>
+                        <select class="form-control blk-plots-tpe" id="plot-type">
+                            <option value="Residential">Residential</option>
+                            <option value="Commercial">Commercial</option>
+                        </select>
+                    </div>
+                        <div class="form-group col-md-4 plt-field">
+                            <label>Plot No</label>
+                            <select class="form-control" id="plot-details">
+                                <option>Select Block</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-4 file-field"  >
+                            <label>File Number</label>
+                            <input class="form-control" id="file_num" />
+                        </div>
+                </div>
+                <div class="form-row ">
+                    <div class="form-group col-md-12 conf-lab " style="text-align:center"></div>
+                </div>
+                <div class="form-row">
+                    <button class="btn btn-info conf">Confirm</button>
+                </div>
+            </div>
+            <div class="col-md-12 on-dealer" style="display:none">
+                <label class="">Select Dealer</label>
+                <div class="col-md-6">
+                    <select class="form-control dlrs-lst"></select>
+                </div>
+                <div class="form-row ">
+                    <div class="form-group col-md-12 conf-lab " style="text-align:center"></div>
+                </div>
+                <div class="form-row">
+                    <button class="btn btn-info conf">Confirm</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).on("change", ".s-tar", function (e) {
+        var val = $(this).val();
+        if (val == "Target") {
+            $(".targ").show();
+            $(".ini").hide();
+        }
+        else {
+            $(".ini").show();
+            $(".targ").hide();
+        }
+    });
+    $(document).on("change", ".tar", function (e) {
+        var val = $(this).val();
+        if (val == "Block") {
+            $(".on-blk").show();
+            $(".on-plt").hide();
+            $(".on-dealer").hide();
+
+        }
+        else if (val == "indivi") {
+            $(".on-blk").hide();
+            $(".on-plt").show();
+            $(".on-dealer").hide();
+
+        }
+        else {
+            $(".on-blk").hide();
+            $(".on-plt").hide();
+            $(".on-dealer").show();
+        }
+    });
+    $(document).on("click", ".conf", function (e) {
+        $(".conf-lab").text('');
+        var val = $(this).parent().parent().hasClass("on-blk");
+        if (val) {
+            var a1 = $(".s-tar :selected").text();
+            var a2 = $(".tar :selected").text();
+            var a3 = $("#Block1 :selected").text();
+            var a4 = $('input[name=Sms-type]:checked').closest('label').text();
+            if (a4 == 'Overdue Amount SMS') {
+                $('.on-over').show();
+                var a5 = $('.installmentsnum').val();
+                if (a5 != null)
+                    a5 = a5 + " Installments";
+            }
+            var radin = $('input[name=MsgDraft]:checked').attr('id');
+            var msg = '';
+            $('.msgbdy').each(function () {
+                if ($(this).attr('id') == radin) {
+                    msg = $(this).text();
+                }
+            });
+            if (a5 != null) {
+                var text = `<h5> ${a1} > ${a2} > ${a3} > ${a4}  > ${a5}</h5>`;
+
+            }
+            else {
+                var text = `<h5> ${a1} > ${a2} > ${a3} > ${a4}  </h5>`;
+
+            }
+            var text1 = `<button class="btn btn-primary snd-sms">Send SMS</button>`;
+            $(".conf-lab").append(text);
+            $(".conf-lab").append(text1);
+        }
+        else if ($(this).parent().parent().hasClass("on-plt")) {
+            var a1 = $(".s-tar :selected").text();
+            var a2 = $(".tar :selected").text();
+            var a3 = $("#Block :selected").text();
+            var a4 = $('#plot-details :selected').text();
+            var radin = $('input[name=MsgDraft]:checked').attr('id');
+            var msg = '';
+            $('.msgbdy').each(function () {
+                if ($(this).attr('id') == radin) {
+                    msg = $(this).text();
+                }
+            });
+            var text = `<h5> ${a1} > ${a2} > ${a3} > ${a4}  </h5>`;
+            var text1 = `<button class="btn btn-primary snd-sms">Send SMS</button>`;
+            $(".conf-lab").append(text);
+            $(".conf-lab").append(text1);
+        }
+        else{
+            var a1 = $(".s-tar :selected").text();
+            var a2 = $(".tar :selected").text();
+            var a3 = $(".dlrs-lst :selected").text();
+            
+             
+            var text = `<h5> ${a1} > ${a2} > ${a3}   </h5>`;
+            var text1 = `<button class="btn btn-primary snd-sms">Send SMS</button>`;
+            $(".conf-lab").append(text);
+            $(".conf-lab").append(text1);
+        }
+    });
+    $(document).on("click", ".snd-sms", function (e) {
+        e.preventDefault();
+        var Block = 0;
+        var star = $(".s-tar :selected").val();
+        var broadcast = $(".brd-slec :selected").val();
+        var target = $(".tar :selected").val();
+        if (target == "Block") {
+            Block = $("#Block1 :selected").val();
+        }
+        else {
+            Block = $("#Block :selected").val();
+        }
+        var blkmsgType = $('input[name=Sms-type]:checked').closest('label').text();
+        var installmnet = $('.installmentsnum').val();
+        var plt_type = $('.blk-plots-tpe :selected').val();
+        var file_plot = $("#plot-details :selected").val();
+        var dealer = $('.dlrs-lst :selected').val();
+        var file = $('.file-field').val();
+        var grouptag = $('input[name=MsgDraft]:checked').attr('id');
+        var draftmsg = '';
+        if (grouptag == null) {
+            alert("No Msg Draft Selected!");
+            return;
+        };
+        $('.msgbdy').each(function () {
+            if ($(this).attr('id') == grouptag) {
+                draftmsg = $(this).text();
+            }
+
+        });
+        var ranin = Math.random();
+        var x = prompt("Are you sure you want to Send SMS With this Format!" + draftmsg + "Type " + ranin + " in Box to Send", "");
+        if (x == ranin) {
+            $.ajax({
+                type: "POST",
+                url: '/Sms/TextSmsFInal/',
+                data: { star: star, broadcast: broadcast, target: target, Block: Block, blkmsgType: blkmsgType, installmnet: installmnet, plt_type: plt_type, file_plot: file_plot, dealer: dealer, grouptag: grouptag, filenum: file },
+                success: function (data) {
+                    alert("Sent");
+                }
+                , error: function (xmlhttprequest, textstatus, message) {
+                    alert("No Msg Draft or Something Else is missing!!");
+                }
+            });
+
+        }
+        else {
+            alert("Error!")
+        }
+    });
+    $('.drafts').load('/Sms/DisplayDraft/');
+    $(document).ready(function () {
+        $('.dlrs-lst').select2({
+            ajax: {
+                url: '/Dealership/GetDealers_ForSelect/',
+                data: function (params) {
+                    var query = {
+                        s: params.term,
+                        type: 'public'
+                    }
+
+                    // Query parameters will be ?search=[term]&type=public
+                    return query;
+                },
+                processResults: function (data) {
+                    // Transforms the top-level key of the response object from 'items' to 'results'
+                    return {
+                        results: data
+                    };
+                }
+            }
+        });
+
+
+    });
+</script>

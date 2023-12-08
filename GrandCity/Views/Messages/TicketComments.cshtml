@@ -1,0 +1,62 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Sp_Get_Ticket_Comments_Result>
+<div class="peer peer-greed">
+    <div class="layer w-100">
+        <h3>History</h3>
+    </div>
+    <div class="layer w-100 bd gapY-15 fxg-1 bgc-grey-200 pos-r">
+        <div class="p-20 layers ai-fe gapY-10 chat-box-height" id="chat-msg">
+            @{
+                if (Model.Any())
+                {
+                    foreach (var item in Model)
+                    {
+                        string color = "";
+                        <div class="layer">
+                            <div class="peers fxw-nw ai-c pY-3 pX-10 bgc-white bdrs-2 lh-3/2 @color">
+                                <div class="peer-greed ord-0">
+                                    @if (item.Type == "file")
+                                    {
+                                        <img src="/Repository/Tickets/@item.Ticket_Id/@item.Comment" width="200" height="200" />
+                                    }
+                                    else
+                                    {
+                                        <span>@item.Comment</span>
+                                    }
+                                </div>
+                            </div>
+                            <div class="peers fxw-nw ai-c pY-3 pX-10 bgc-white @color">
+                                <div class="peer-greed ord-0">
+                                    <span>@item.Assigned_To</span>
+                                </div>
+                                <div class="peer mL-10 ord-1">
+                                    <small>@string.Format("{0:d MMM yyy, h:mm tt}", item.Datetime)</small>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+            }
+        </div>
+    </div>
+    <div class="layer w-100">
+        <!-- Chat Send -->
+        <div class="bdT bgc-white" style="padding-top:2.5%">
+            @using (Html.BeginForm("TicketComment", "Messages", FormMethod.Post, new { @id = "T-comt", @class = "", role = "form", enctype = "multipart/form-data" }))
+            {
+                <input type="hidden" name="Ticket_Id" value="@ViewBag.TicketId" />
+                <div class="pos-r">
+                    <textarea type="text" name="Comment" class="chat-comment-box form-control m-0 fl-text" style="width:90%; padding-right:10%" placeholder="Add Comment"></textarea>
+                    <button type="submit" class="btn btn-primary w-2r p-0 h-2r pos-a r-1 t-1" style="margin-top:10px">
+                        <i class="fa fa-paper-plane-o"></i>
+                    </button>
+                    <input type="file" id="files" name="Files" style="margin:10px;" />
+                </div>
+            }
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        ChatBottom();
+    });
+</script>

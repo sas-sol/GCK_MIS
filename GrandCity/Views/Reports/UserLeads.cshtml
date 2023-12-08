@@ -1,0 +1,49 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Booking_Report>
+
+<div id="use-cont" style="min-width: 310px; height: 400px; max-width: 600px; margin: 0 auto"></div>
+
+<script>
+
+// Build the chart
+    Highcharts.chart('use-cont', {
+    chart: {
+        plotBackgroundColor: null,
+        plotBorderWidth: null,
+        plotShadow: false,
+        type: 'pie'
+    },
+    title: {
+        text: 'Leads by Users'
+    },
+    tooltip: {
+        pointFormat: '{series.name}: <b>{point.y:1f}</b>'
+    },
+    plotOptions: {
+        pie: {
+            allowPointSelect: true,
+            cursor: 'pointer',
+            dataLabels: {
+                enabled: true,
+                format: '<b>{point.name}</b>: {point.y:1f}',
+                style: {
+                    color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                },
+                connectorColor: 'silver'
+            }
+        }
+    },
+    series: [{
+        name: 'User',
+        data: @Html.Raw(Json.Encode(Model))
+    }]
+    });
+
+</script>
+@*[
+        { name: 'Badar', y: 61.41 },
+        { name: 'Internet Explorer', y: 11.84 },
+        { name: 'Firefox', y: 10.85 },
+        { name: 'Edge', y: 4.67 },
+        { name: 'Safari', y: 4.18 },
+        { name: 'Other', y: 7.05 }
+    ]*@

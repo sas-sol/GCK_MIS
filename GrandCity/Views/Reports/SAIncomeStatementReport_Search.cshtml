@@ -1,0 +1,119 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Sp_Get_Income_Statment_Result>
+
+@{decimal income = 0; }
+@{decimal expense = 0; }
+@{decimal sum = 0; }
+<style>
+    table thead tr th, table tbody tr td {
+        font-size: 12px;
+    }
+</style>
+@*<table class="table table-striped table-bordered " cellspacing="0" width="100%" style="margin-left:0%">
+
+    <tbody>
+        <tr>
+            <td colspan="9"></td>
+            <td id="total_Income"></td>
+            <td id="total_Expense"></td>
+            <td id="Net_Income"></td>
+        </tr>
+    </tbody>
+</table>*@
+<div class="form-row">
+    <div class="col-md-12">
+        <table id="Income" class="table table-striped table-bordered " cellspacing="0" width="100%" style="margin-left:0%">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Sr.</th>
+                    <th>Head </th>
+                    <th>Amount</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    if (Model.Any())
+                    {
+                        int i = 1;
+                        foreach (var item in Model)
+                        {
+                            <tr id="">
+                                <td>@i</td>
+                                <td>@item.Head</td>
+                                <td>@String.Format("{0:n0}", item.Total)</td>
+                            </tr>
+
+                            { sum = sum + Convert.ToDecimal(item.Total); }
+                            if (item.Head == "Income")
+                            {
+
+                                { income = income + Convert.ToDecimal(item.Total); }
+                            }
+                            if (item.Head == "Expenses")
+                            {
+
+                                { expense = expense + Convert.ToDecimal(item.Total); }
+                            }
+                            i++;
+                        }
+                    <tfoot>
+                        <tr>
+                            <td colspan="2">Total</td>
+                            <td>@String.Format("{0:n0}", sum)</td>
+                        </tr>
+                    </tfoot>
+                }
+                }
+                </tbody>
+            </table>
+
+        </div>
+        <input id="Income" value="@String.Format("{0:n0}", income)" hidden />
+        <input id="Expense" value="@String.Format("{0:n0}", expense)" hidden />
+
+        <table class="table table-striped table-bordered " cellspacing="0" width="100%" style="margin-left:0%">
+            <tbody>
+                <tr>
+                    <td><b>Income</b></td>
+                    <td>@String.Format("{0:n0}", income)</td>
+                    <td><b> Expense</b></td>
+                    <td>@String.Format("{0:n0}", expense)</td>
+                    <td><b>Net Profit / Loss</b></td>
+                    @{var total = income - expense;}
+                    <td>@String.Format("{0:n0}", total)</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <script>
+        //$(document).ready(function () {
+
+        //    debugger
+        //    $('#total_Income').text($('#Income').val());
+        //    $('#total_Expense').text($('#Expense').val());
+
+        //    var i=$('#Income').val();
+        //    var e = $('#Expense').val();
+        //    var total = i - e;
+        //$('#Net_Income').text(total);
+
+        //});
+
+        $(document).ready(function () {
+            $('#Income').DataTable({
+                dom: 'Bfrtip',
+                buttons: [
+                    'copy', 'excel', 'pdf', 'print'
+                ]
+            });
+        });
+     
+
+    </script>
+
+    <style>
+        tr.group,
+        tr.group:hover {
+            background-color: #ddd !important;
+        }
+    </style>
+

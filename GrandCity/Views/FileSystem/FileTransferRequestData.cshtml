@@ -1,0 +1,651 @@
+﻿@model MeherEstateDevelopers.Models.TransferRequestDetails
+<div class="row gap-20 pos-r">
+    <div class="col-md-12">
+        <div class="bgc-white p-20 bd">
+            <h6 class="c-grey-900">Application File Form</h6>
+            <div class="mT-30">
+                <div class="form-row row">
+                    <div class="col-md-12">
+                        <div class="form-row">
+                            <div class="form-group col-md-2">
+                                <label>File Form No.</label>
+                                <input type="text" value="@Model.File.File_Form_Number" class="form-control" id="app-num" readonly>
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label>Dealership</label>
+                                <input type="text" class="form-control" value="@Model.File.Dealership_Name" id="deal-nam" readonly>
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label>Plot Size</label>
+                                <input type="text" class="form-control" value="@Model.File.Plot_Size" id="pl-size" readonly>
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label>Project</label>
+                                <input type="text" class="form-control" value="@Model.File.Project_Name" id="prj" readonly>
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label>Phase</label>
+                                <input type="text" class="form-control" value="@Model.File.Phase_Name" id="phs" readonly>
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label>Block</label>
+                                <input type="text" class="form-control" id="blk" value="@Model.File.Block_Name" readonly>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="col-md-3">
+                                <h5>File Status : &nbsp; @Model.File.Status</h5>
+                            </div>
+                            <div class="col-md-5">
+                                @{
+                                    var dev = "";
+                                    if (Model.File.Development_Charges_Val == true) { dev = "With Development Charges"; } else if (Model.File.Development_Charges_Val == false) { dev = "Non Development Charges"; }
+                                }
+                                <h3 id="dev-char">@dev</h3>
+                            </div>
+                            <div class="col-md-4">
+                                <h5>Balance : &nbsp;@string.Format("{0:n0}", Model.File.Balance_Amount)</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="bgc-white p-20 bd">
+
+            <h6 class="c-grey-900">Personal Information</h6>
+            <div class="mT-30">
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label>Name</label>
+                        <input type="text" class="form-control" value="@Model.File.Name" id="Name" readonly>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label>Father's/Husband's Name</label>
+                        <input type="text" class="form-control" id="Father_Husband" value="@Model.File.Father_Husband" readonly>
+                    </div>
+                    <div class="form-group col-md-12">
+                        <label>Postal Address</label>
+                        <input type="text" class="form-control" id="Postal_Address" value="@Model.File.Postal_Address" readonly>
+                    </div>
+                    <div class="form-group col-md-12">
+                        <label>Residential Address</label>
+                        <input type="text" class="form-control" id="Residential_Address" value="@Model.File.Residential_Address" readonly>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label>City</label>
+                        <input type="text" class="form-control" id="City" value="@Model.File.City" readonly>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label>Date Of Birth</label>
+                        <input type="text" class="form-control" id="Date_Of_Birth" value="@Model.File.Date_Of_Birth" readonly>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label>CNIC / NICOP</label>
+                        <input type="text" class="form-control" id="CNIC_NICOP" value="@Model.File.CNIC_NICOP" readonly>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label>Occupation</label>
+                        <input type="text" class="form-control" id="Occupation" value="@Model.File.Occupation" readonly>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label>Nationality</label>
+                        <input type="text" class="form-control" id="Nationality" value="@Model.File.Nationality" readonly>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label>Email</label>
+                        <input type="text" class="form-control" id="Email" value="@Model.File.Email" readonly>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label>Phone Office</label>
+                        <input type="text" class="form-control" id="Phone_Office" value="@Model.File.Phone_Office" readonly>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label>Residential</label>
+                        <input type="text" class="form-control" id="Residential" value="@Model.File.Residential" readonly>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label>Mobile 1</label>
+                        <input type="text" class="form-control" id="Mobile_1" value="@Model.File.Mobile_1" readonly>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label>Mobile 2</label>
+                        <input type="text" class="form-control" id="Mobile_2" value="@Model.File.Mobile_2" readonly>
+                    </div>
+                </div>
+            </div>
+            <hr />
+            <h6 class="c-grey-900">Nominee</h6>
+            <div class="mT-30">
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label>Name</label>
+                        <input type="text" class="form-control" id="Nominee_Name" value="@Model.File.Nominee_Name" readonly>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label>CNIC / NICOP</label>
+                        <input type="text" class="form-control" id="Nominee_CNIC_NICOP" value="@Model.File.Nominee_CNIC_NICOP" readonly>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label>Relation</label>
+                        <input class="form-control" id="Nominee_Relation" value="@Model.File.Nominee_Relation" readonly>
+                    </div>
+                    <div class="form-group col-md-12">
+                        <label>Address</label>
+                        <input type="text" class="form-control" id="Nominee_Address" value="@Model.File.Nominee_Address" readonly>
+                    </div>
+                </div>
+            </div>
+            <hr />
+            <h6 class="c-grey-900">Installments</h6>
+            <div class="mT-30">
+                <div class="form-row">
+                    <div class="col-md-12">
+                        <table class="table table-striped table-bordered" cellspacing="0" width="100%" style="margin-bottom:0px">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th>Sr.</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                        </table>
+                        <div style="min-height:0px; max-height:500px;overflow:auto" class=" ps--active-y">
+                            <table class="table table-striped table-bordered" id="all-instments" cellspacing="0" width="100%">
+                                <tbody>
+                                    @{ int serno = 1; }
+                                    @foreach (var item in Model.Installments)
+                                    {
+                                        string statuscolor = "";
+                                        if (item.Status == "NotPaid")
+                                        {
+                                            statuscolor = "bgc-red-50";
+                                        }
+                                        else if (item.Status == "Paid")
+                                        {
+                                            statuscolor = "bgc-green-50";
+                                        }
+                                        <tr class="@statuscolor" id="@item.Id">
+                                            <td>@serno</td>
+                                            <td>@string.Format("{0:MMMM yyyy}", item.Due_Date), @item.Installment_Name</td>
+                                            <td>@string.Format("{0:n0}", item.Amount)</td>
+                                            <td>@item.Status</td>
+                                        </tr>
+                                        serno++;
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div style="min-height:0px; max-height:500px;overflow:auto" class=" ps--active-y">
+                            <table class="table table-striped table-bordered" id="oth-inst" cellspacing="0" width="100%">
+                                <thead class="thead-dark">
+                                    <tr>
+                                        <th>Sr.</th>
+                                        <th>Installment Name</th>
+                                        <th>Amount</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{ int serno1 = 1; }
+                                    @foreach (var item in Model.OtherInstallments)
+                                    {
+                                        string statuscolor = "";
+                                        if (item.Status == "NotPaid")
+                                        {
+                                            statuscolor = "bgc-red-50";
+                                        }
+                                        else if (item.Status == "Paid")
+                                        {
+                                            statuscolor = "bgc-green-50";
+                                        }
+                                        <tr class="@statuscolor" id="@item.Id">
+                                            <td>@serno1</td>
+                                            <td>@string.Format("{0:MMMM yyyy}", item.Due_Date), @item.Installment_Name</td>
+                                            <td>@string.Format("{0:n0}", item.Amount)</td>
+                                            <td>@item.Status</td>
+                                        </tr>
+                                        serno1++;
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                        <div style="min-height:0px; max-height:500px;overflow:auto" class=" ps--active-y">
+                            <table class="table table-striped table-bordered" id="rec-amts" cellspacing="0" width="100%">
+                                <thead class="thead-dark">
+                                    <tr>
+                                        <th>Receipt No.</th>
+                                        <th>Amount</th>
+                                        <th>Date</th>
+                                        <th>Type</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model.ReceivedAmounts)
+                                    {
+                                        <tr>
+                                            <td>@item.ReceiptNo</td>
+                                            <td>@string.Format("{0:n0}", item.Amount)</td>
+                                            <td>@string.Format("{0:dd-MMM-yyyy}", item.DateTime)</td>
+                                            <td>@item.PaymentType</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="bgc-white p-20 bd">
+            <div class="form-row">
+                <h5>Transfer To:</h5>
+            </div>
+            @if (Model.TransferTo.Any(x => x.Transfer_Success != true))
+            {
+                <button class="btn btn-danger send-bk-req" data-reqId="@Model.TransferTo.Select(x => x.Id).FirstOrDefault()" data-mod="FileManagement">Send Back to Plots Manager</button>
+            }
+            <div class="form-row">
+                @if (Model.TransferTo.Any(x => x.Blood_Realation == true))
+                {
+                    <script>
+                    var pltsize = "@Model.File.Plot_Size";
+                    var fee = 0;
+                            var pltsize = pltsize.split(" ");
+                            var fees = pltsize[0] * fee;
+                        $("#transfer-fees").val(fees);
+                        $("#tras-fee").html(Number(fees).toLocaleString());
+                            $("#amt-in-words").val(InWords(fees) + " --  Due To Blood Relation");
+                    </script>
+
+                }
+                else if (Model.TransferTo.Any(x => x.Wave_Off == true))
+                {
+                    <script>
+                    var pltsize = "@Model.File.Plot_Size";
+                    var rema = "@Model.TransferTo.Select(x => x.Remarks).FirstOrDefault()";
+
+                    var fee = 0;
+                            var pltsize = pltsize.split(" ");
+                            var fees = pltsize[0] * fee;
+                            $("#transfer-fees").val(fees);
+                        $("#tras-fee").html(fees + "-" + rema );
+                        $("#amt-in-words").val(InWords(fees) + "-" + rema );
+                    </script>
+
+                }
+
+                else if (Model.TransferTo.Any(x => x.Dealer_Req == true))
+                {
+                    <script>
+                    var pltsize = "@Model.File.Plot_Size";
+                    var fee = @ViewBag.TransferRate;
+                        var pltsize = pltsize.split(" ");
+                        var fees = parseFloat(pltsize[0] * fee).toFixed(0);
+                            $("#transfer-fees").val(fees);
+                        $("#tras-fee").html(Number(fees).toLocaleString());
+                            $("#amt-in-words").val(InWords(fees));
+                    </script>
+
+                }
+                else if (Model.TransferTo.Any(x => x.Other_Transfer_Charges == true))
+                {
+                    <script>
+                    var pltsize = "@Model.File.Plot_Size";
+                        var fee = @Model.TransferTo.Select(x => x.Amount).FirstOrDefault();
+                            var pltsize = pltsize.split(" ");
+                        var fees = parseFloat(pltsize[0] * fee).toFixed(0);
+                            $("#transfer-fees").val(fees);
+                        $("#tras-fee").html(Number(fees).toLocaleString());
+                            $("#amt-in-words").val(InWords(fees));
+                    </script>
+
+                }
+                else if (Model.TransferTo.Any(x => x.Employee_Req == true))
+                {
+                    <script>
+                    var pltsize = "@Model.File.Plot_Size";
+                    var fee = 1000;
+                        var pltsize = pltsize.split(" ");
+                        var fees = parseFloat(pltsize[0] * fee).toFixed(0);
+                            $("#transfer-fees").val(fees);
+                        $("#tras-fee").html(Number(fees).toLocaleString());
+                            $("#amt-in-words").val(InWords(fees));
+                    </script>
+
+                }
+                else
+                {
+                    <script>
+                            var pltsize = "@Model.File.Plot_Size";
+                            var pltsize = pltsize.split(" ");
+                            var fees = pltsize[0] * @ViewBag.TransferRate;
+                            $("#transfer-fees").val(fees);
+                        $("#tras-fee").html(Number(fees).toLocaleString());
+                            $("#amt-in-words").val(InWords(fees));
+                    </script>
+                }
+
+                <input type="hidden" id="trans-id" name="TransactionId" value="@ViewBag.TransactionId" />
+                <h5 style="width:100%">NDC Serial No: @Model.TransferTo.Select(x => x.TransferReqNo).FirstOrDefault()</h5>
+                <h5>Transfer Fees: <span id="tras-fee"></span></h5>
+
+                <input type="hidden" id="transfer-fees" name="Amount">
+                <input type="hidden" id="req-id" value="@Model.TransferTo.Select(x => x.Id).FirstOrDefault()" name="Req_Id">
+                <input type="hidden" id="file-id" value="@Model.File.Id" name="File_Form_Id">
+                <input type="hidden" id="file-rate" value="@Model.File.Rate" name="Rate">
+                <input type="hidden" id="ttl-amt" value="@Model.File.TotalPlotVal" name="Total">
+                <input type="hidden" id="grd-ttl" value="@Model.File.GrandTotal" name="GrandTotal">
+                <input type="hidden" id="blk-id" value="@Model.File.Block_Id" name="Block_Id">
+                <input type="hidden" id="ph-id" value="@Model.File.Phase_Id" name="Phase_Id">
+                <input type="hidden" id="plt-size" value="@Model.File.Plot_Size" name="Plot_Size">
+                <input type="hidden" id="plt-pref" value="@Model.File.Plot_Prefrence" name="Plot_Prefrence">
+                <input type="hidden" id="qr_Id" value="@Model.File.QR_Id" name="QR_Code">
+                <input type="hidden" id="amt-in-words" name="AmountInWords">
+                <input type="hidden" id="fp-num" value="@Model.File.File_Form_Number" name="File_Plot_Number">
+                <input type="hidden" id="prj-nam" value="@Model.File.Project_Name" name="Project_Name">
+                <input type="hidden" id="devchar" value="@Model.File.Development_Charges" name="DevCharges">
+                <input type="hidden" id="grpTagnew" value="@Model.TransferTo.Select(x=>x.Group_Tag).FirstOrDefault()" name="">
+                <input type="hidden" id="transReqNumNew" value="@Model.TransferTo.Select(x=>x.TransferReqNo).FirstOrDefault()" name="">
+                <input type="hidden" value="Cash" name="PaymentType">
+            </div>
+            @{int cnt = 1;}
+            @foreach (var item in Model.TransferTo)
+            {
+            <h5 style="text-align:center;">Owner # @(cnt++)</h5>
+            <hr />
+            <div class="form-row new_own_data">
+                @if (Model.TransferTo.Any(x => x.IsCompanyProperty == true))
+                {
+                    <div class="form-group col-md-6">
+                        <label>Company Name</label>
+                        <input type="text" class="form-control Name" value="@item.Name" name="Name" id="Name" readonly>
+                    </div>
+                }
+                else
+                {
+                    <div class="form-group col-md-4">
+                        <label>Name</label>
+                        <input type="text" class="form-control Name" value="@item.Name" name="Name" id="Name" readonly>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label>Father's/Husband's Name</label>
+                        <input type="text" class="form-control Father_Husband" id="Father_Husband " name="Father_Husband" value="@item.Father_Husband" readonly>
+                    </div>
+                }
+                <div class="form-group col-md-10">
+                    <label>Postal Address</label>
+                    <input type="text" class="form-control Postal_Address" name="Postal_Address" id="Postal_Address" value="@item.Postal_Address" readonly>
+                </div>
+                <div class="form-group col-md-10">
+                    <label>Residential Address</label>
+                    <input type="text" class="form-control Postal_Address" name="Residential_Address" id="Residential_Address" value="@item.Residential_Address" readonly>
+                </div>
+                <div class="form-group col-md-4">
+                    <label>City</label>
+                    <input type="text" class="form-control City" id="City" name="City" value="@item.City" readonly>
+                </div>
+                @if (Model.TransferTo.Any(x => x.IsCompanyProperty == true))
+                {
+                    <div class="form-group col-md-3">
+                        <label>Date Of Incorp</label>
+                        <input type="text" class="form-control Date_Of_Birth" id="Date_Of_Birth" name="Date_Of_Birth" value="@item.Date_Of_Birth" readonly>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label>NTN</label>
+                        <input type="text" class="form-control CNIC_NICOP" id="CNIC_NICOP" name="CNIC_NICOP" value="@item.CNIC_NICOP" readonly>
+                    </div>
+                }
+                else
+                {
+                    <div class="form-group col-md-3">
+                        <label>Date Of Birth</label>
+                        <input type="text" class="form-control Date_Of_Birth" id="Date_Of_Birth" name="Date_Of_Birth" value="@item.Date_Of_Birth" readonly>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label>CNIC / NICOP</label>
+                        <input type="text" class="form-control CNIC_NICOP" id="CNIC_NICOP" name="CNIC_NICOP" value="@item.CNIC_NICOP" readonly>
+                    </div>
+                }
+                <div class="form-group col-md-4">
+                    <label>Occupation</label>
+                    <input type="text" class="form-control Occupation" id="Occupation" name="Occupation" value="@item.Occupation" readonly>
+                </div>
+                <div class="form-group col-md-4">
+                    <label>Nationality</label>
+                    <input type="text" class="form-control Nationality" id="Nationality" name="Nationality" value="@item.Nationality" readonly>
+                </div>
+                <div class="form-group col-md-4">
+                    <label>Email</label>
+                    <input type="text" class="form-control Email" id="Email" name="Email" value="@item.Email" readonly>
+                </div>
+                <div class="form-group col-md-3">
+                    <label>Phone Office</label>
+                    <input type="text" class="form-control Phone_Office" id="Phone_Office" name="Phone_Office" value="@item.Phone_Office" readonly>
+                </div>
+                <div class="form-group col-md-3">
+                    <label>Residential</label>
+                    <input type="text" class="form-control Residential" id="Residential" name="Residential" value="@item.Residential" readonly>
+                </div>
+                <div class="form-group col-md-3">
+                    <label>Mobile 1</label>
+                    <input type="text" class="form-control Mobile_1" id="Mobile_1" name="Mobile_1" value="@item.Mobile_1" readonly>
+                </div>
+                <div class="form-group col-md-3">
+                    <label>Mobile 2</label>
+                    <input type="text" class="form-control Mobile_2" id="Mobile_2" name="Mobile_2" value="@item.Mobile_2" readonly>
+                </div>
+
+                <hr />
+                @if (Model.TransferTo.Any(x => x.IsCompanyProperty == true))
+                {
+                    <h6 class="c-grey-900">Board Resolution</h6>
+                }
+                else
+                {
+                    <h6 class="c-grey-900">Nominee</h6>
+                }
+                <div class="mT-40">
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            <label>Name</label>
+                            <input type="text" class="form-control Nominee_Name" id="Nominee_Name" name="Nominee_Name" value="@item.Nominee_Name" readonly>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label>CNIC / NICOP</label>
+                            <input type="text" class="form-control Nominee_CNIC_NICOP" id="Nominee_CNIC_NICOP" name="Nominee_CNIC_NICOP" value="@item.Nominee_CNIC_NICOP" readonly>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label>Relation</label>
+                            <input class="form-control Nominee_Relation" id="Nominee_Relation" name="Nominee_Relation" value="@item.Nominee_Relation" readonly>
+                        </div>
+                        <div class="form-group col-md-10">
+                            <label>Address</label>
+                            <input type="text" class="form-control Nominee_Address" id="Nominee_Address" name="Nominee_Address" value="@item.Nominee_Address" readonly>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            }
+            @if (Model.TransferTo.Any(x=>x.Transfer_Success != true))
+            {
+            <hr style="border-top:13px solid red" />
+            <h3 style="text-align:center">Check List of NDC</h3>
+            <hr style="border-top:13px solid red" />
+            <div class="form-row" style="margin:15px">
+                <div class="col-md-6">
+                    <div class="checkbox checkbox-circle checkbox-info peers ai-c">
+                        @{
+                            if (Model.TransferTo.Any(x => x.AllDocuments == true))
+                            {
+                                <input type="checkbox" class="peer" checked>
+                            }
+                            else
+                            {
+                                <input type="checkbox" class="peer">
+                            }
+                        }
+                        <label class="peers peer-greed js-sb ai-c">
+                            <span class="peer peer-greed ser-ch-nam" style="font-weight:bold"> All Documments Verified </span>
+                        </label>
+                    </div>
+
+                </div>
+                <div class="col-md-6">
+                    <div class="checkbox checkbox-circle checkbox-info peers ai-c">
+                        @{
+                            if (Model.TransferTo.Any(x => x.ComputerRecord == true))
+                            {
+                                <input type="checkbox" class="peer " checked>
+                            }
+                            else
+                            {
+                                <input type="checkbox" class="peer ">
+                            }
+                        }
+                        <label class="peers peer-greed js-sb ai-c">
+                            <span class="peer peer-greed ser-ch-nam" style="font-weight:bold"> Computer Record Updated </span>
+                        </label>
+                    </div>
+
+                </div>
+            </div>
+            <div class="form-row" style="margin:15px">
+                <div class="col-md-6">
+                    <div class="checkbox checkbox-circle checkbox-info peers ai-c">
+                        @{
+                            if (Model.TransferTo.Any(x => x.CashPayments == true))
+                            {
+                                <input type="checkbox" class="peer " checked>
+                            }
+                            else
+                            {
+                                <input type="checkbox" class="peer ">
+                            }
+                        }
+                        <label class="peers peer-greed js-sb ai-c">
+                            <span class="peer peer-greed ser-ch-nam" style="font-weight:bold"> Cash Payments Verified </span>
+                        </label>
+                    </div>
+
+                </div>
+                <div class="col-md-6">
+                    <div class="checkbox checkbox-circle checkbox-info peers ai-c">
+                        @{
+                            if (Model.TransferTo.Any(x => x.Cheques_dd_po == true))
+                            {
+                                <input type="checkbox" class="peer " readonly checked>
+                            }
+                            else
+                            {
+                                <input type="checkbox" class="peer ">
+                            }
+                        }
+                        <label class="peers peer-greed js-sb ai-c">
+                            <span class="peer peer-greed ser-ch-nam" style="font-weight:bold"> Cheques / Pay Orders / Demand Drafts </span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-row" id="trns-btn">
+                @if (Model.TransferTo.Any(x => x.Cheques_dd_po == true) && Model.TransferTo.Any(x => x.CashPayments == true) && Model.TransferTo.Any(x => x.ComputerRecord == true) && Model.TransferTo.Any(x => x.AllDocuments == true) && !Model.TransferTo.Any(x => x.Status != 1))
+                {
+                    <button class="btn btn-success" type="submit" id="trans-frm" style="width:100%;margin-top:10px">Transfer</button>
+                }
+            </div>
+            }
+        </div>
+    </div>
+</div>
+
+<script>
+        $('#trans-frm').unbind().click(function () {
+            let confi = confirm('Are you sure you want to finalize transfer?');
+            if (!confi) {
+                return;
+            }
+
+            let ownsData = [];
+            let transReqNum = $("#transReqNumNew").val();
+            let transaction = $('#trans-id').val();
+            let grp_tag = $('#grpTagnew').val();
+            let plt_ref = $("#plt-pref").val();
+            let plt_szz = $("#pl-size").val();
+            let blk_nm = "@Model.File.Block_Name";
+            $('.new_own_data').each(function () {
+                var prnt = $(this);
+                var fileowndata = {
+                    Plot_Size: plt_szz,
+                    Name: $(prnt).find(".Name").val(),
+                    Father_Husband: $(prnt).find(".Father_Husband").val(),
+                    Postal_Address: $(prnt).find(".Postal_Address").val(),
+                    Residential_Address: $(prnt).find(".Residential_Address").val(),
+                    Phone_Office: $(prnt).find(".Phone_Office").val(),
+                    Residential: $(prnt).find(".Residential").val(),
+                    Mobile_1: $(prnt).find(".Mobile_1").val(),
+                    Mobile_2: $(prnt).find(".Mobile_2").val(),
+                    Email: $(prnt).find(".Email").val(),
+                    Occupation: $(prnt).find(".Occupation").val(),
+                    Nationality: $(prnt).find(".Nationality").val(),
+                    Date_Of_Birth: $(prnt).find(".Date_Of_Birth").val(),
+                    CNIC_NICOP: $(prnt).find(".CNIC_NICOP").val(),
+                    Nominee_Name: $(prnt).find(".Nominee_Name").val(),
+                    Nominee_Relation: $(prnt).find(".Nominee_Relation").val(),
+                    Nominee_Address: $(prnt).find(".Nominee_Address").val(),
+                    Nominee_CNIC_NICOP: $(prnt).find(".Nominee_CNIC_NICOP").val(),
+                    Plot_Prefrence: $("#plt-pref").val(),
+                    File_Form_Id: $("#file-id").val(),
+                    Phase_Id: $("#ph-id").val(),
+                    Block_Id: $("#blk-id").val(),
+                    Rate: $("#file-rate").val(),
+                    Total: $("#ttl-amt").val(),
+                    GrandTotal: $("#grd-ttl").val(),
+                    City: $(prnt).find("#City").val(),
+                }
+                ownsData.push(fileowndata);
+            });
+
+            let receiptData = {
+                AmountInWords: $('#amt-in-words').val(),
+                Amount: $('#transfer-fees').val(),
+                File_Plot_Number: $('#fp-num').val(),
+                Plot_Size: $('#plt-size').val(),
+                FilePlotNumber: $('#file-id').val(),
+                Block: blk_nm,
+            };
+
+            $.ajax({
+                type: "POST",
+                url: "/FileSystem/FileTransferr/",
+                contentType: "application/json",
+                traditional: true,
+                beforeSend: function () {
+
+                },
+                complete: function () {
+
+                },
+                data: JSON.stringify({ filedatas: ownsData, Plot_Prefrence: plt_ref, rd: receiptData, Req_Id:grp_tag , TransactionId: transaction  }),
+            }).done(function (data) {
+                if (data == false) {
+                    alert('unable to process the transfer');
+                }
+                else {
+                    alert('Transfer has been completed.');
+
+
+                    window.open('/Banking/TransferReceipt?Id=' + data.Receiptid + '&Token=' + data.Token);
+
+                    window.location.reload();
+                }
+            });
+
+        });
+
+</script>

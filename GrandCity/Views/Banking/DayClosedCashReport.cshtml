@@ -1,0 +1,31 @@
+﻿
+<div class="row">
+    <div class="col-md-12">
+        <div class="bdrs-3 ov-h bgc-white p-10 bd">
+            <div class="form-row">
+                <h5>Custom Search Filters</h5>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-2">
+                    <label>From</label>
+                    <input type="text" id="from" class="form-control" data-provide="datepicker" />
+                </div>
+                <div class="form-group col-md-2">
+                    <label>To</label>
+                    <input type="text" id="to" class="form-control" data-provide="datepicker" />
+                </div>
+                <div class="form-group col-md-2">
+                    <button style="margin-top:29px" class="btn btn-info day-close-rec-sea-res">Search</button>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="table-responsive" id="report"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var from = $("#from").val();
+    var to = $("#to").val();
+    $("#report").load("/Banking/SearchDayClosedCashReport/", { From: from, To: to });
+</script>

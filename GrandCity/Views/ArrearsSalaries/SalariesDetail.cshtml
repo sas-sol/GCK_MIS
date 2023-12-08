@@ -1,0 +1,102 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Sp_Get_Arrear_Salary_Details_Result>
+
+
+<h5>Allownces & Bouns</h5>
+<input type="hidden" value="@ViewBag.Salaryid" class="arr-sal-id" />
+<div class="col-md-12">
+    <div id="arr-al-ad-bo">
+        @if (Model.Any())
+        {
+            foreach (var item in Model.Where(x => x.Type == "AllowncesAndBonus"))
+            {
+                @*<input type="hidden" class="AllowncesAndBonusSalaries" value="@item.Salaries_id" />*@
+                <div class="from-row row">
+
+                    <div class="form-group col-md-3">
+                        <label>@item.Description</label>
+                    </div>
+                    <div class="form-group col-md-3">
+
+                        <label>@String.Format("{0:n0}", item.Amount)</label>
+                    </div>
+                    @if (item.Userid == ViewBag.userid)
+                    {
+                        <div class="form-group">
+                            <i class="ti-minus rmv-al-arr bgc-red-50 pointer" id="@item.Id"></i>
+                        </div>
+                    }
+
+
+                </div>
+
+            }
+        }
+    </div>
+    <div class="form-row row">
+        <div class="col-md-8">
+            <hr />
+        </div>
+    </div>
+    <div class="from-row row">
+        <div class="form-group col-md-3">
+            <label>Description</label>
+            <input class="form-control detail_descrip" id="" />
+        </div>
+        <div class="form-group col-md-3">
+            <label>Amount</label>
+            <input class="form-control coma" placeholder="12,345" required>
+            <input type="hidden" id="" name="Amount" class="amt sala_amt" required>
+        </div>
+        <div class="form-group col-md-1">
+            <label>-----</label>
+            <button class="btn btn-primary" type="submit" id="sv-al-bn-arr" value="">Add</button>
+        </div>
+    </div>
+</div>
+
+
+<h5>Deductions & Tax</h5>
+<div class="col-md-12">
+    <div id="arr-de-ad-tx">
+        @if (Model.Any())
+        {
+            foreach (var item in Model.Where(x => x.Type == "DeductionAndTaxes"))
+            {
+                <div class="from-row row">
+                    <div class="form-group col-md-3">
+                        <label>@item.Description</label>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label>@String.Format("{0:n0}", item.Amount*(-1))</label>
+                    </div>
+                    @if (item.Description != "Absentee" && item.Description != "Tax" && item.Userid == ViewBag.userid)
+                    {
+                        <div class="form-group">
+                            <i class="ti-minus rmv-ded-taxes-arr bgc-red-50 pointer" id="@item.Id"></i>
+                        </div>
+                    }
+                </div>
+            }
+        }
+    </div>
+    <div class="form-row row">
+        <div class="col-md-8">
+            <hr />
+        </div>
+    </div>
+    <div class="from-row row">
+        <div class="form-group col-md-3">
+            <label>Description</label>
+            <input class="form-control " type="text" id="detail_descrip" />
+        </div>
+        <div class="form-group col-md-3">
+            <label>Amount</label>
+            <input class="form-control coma" placeholder="12,345" required>
+            <input type="hidden" id="sala_amt" name="Amount" class="amt" required>
+        </div>
+        <div class="form-group col-md-1">
+            <label>-----</label>
+            <button class="btn btn-primary" type="submit" id="sv-de-an-tx-arr" value="">Add</button>
+        </div>
+    </div>
+</div>

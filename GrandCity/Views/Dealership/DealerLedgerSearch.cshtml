@@ -1,0 +1,188 @@
+﻿@model List<MeherEstateDevelopers.Models.Sp_Get_JournalLedger_Result>
+<div id="result" class="col-md-12">
+
+    <table class="table table-bordered ">
+        <thead>
+            <tr align="center">
+                <th colspan="7">@Model.Select(x => x.Head).FirstOrDefault()</th>
+            </tr>
+            <tr>
+                <th width="15%">Date</th>
+                <th>Voucher No</th>
+                <th>Type</th>
+                <th>Inst No</th>
+                <th>Inst Date</th>
+                <th>Description</th>
+                <th width="10%">Debit</th>
+                <th width="10%">Credit</th>
+                <th width="10%">Current Bal</th>
+                <th width="10%">Available Bal</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                decimal? Cur_bal_n = 0, Avl_bal_n = 0;
+            }
+            @foreach (var item in Model)
+            {
+                if (ViewBag.LedgerNature == "Assets" || ViewBag.LedgerNature == "Income")
+                {
+                    if (item.Balance == "Current")
+                    {
+                        if (item.Voucher_Type == "CPV" || item.Voucher_Type == "CRV")
+                        {
+                            Avl_bal_n += (item.Debit == null) ? 0 : item.Debit;
+                            Avl_bal_n += (item.Credit == null) ? 0 : -(item.Credit);
+                        }
+                        else if ((item.Voucher_Type == "BPV" || item.Voucher_Type == "BRV") && (item.Inst_Status == "Pending" || item.Inst_Status == "Deposited"))
+                        {
+                            Avl_bal_n += (item.Debit == null) ? 0 : item.Debit;
+                            Avl_bal_n += (item.Credit == null) ? 0 : -(item.Credit);
+                        }
+                        else if ((item.Voucher_Type == "BPV" || item.Voucher_Type == "BRV") && (item.Inst_Status == "Approved"))
+                        {
+                            Avl_bal_n += (item.Debit == null) ? 0 : item.Debit;
+                            Avl_bal_n += (item.Credit == null) ? 0 : -(item.Credit);
+                        }
+                        else
+                        {
+                            Avl_bal_n += (item.Debit == null) ? 0 : item.Debit;
+                            Avl_bal_n += (item.Credit == null) ? 0 : -(item.Credit);
+                        }
+                    }
+                    else
+                    {
+                        if (item.Voucher_Type == "CPV" || item.Voucher_Type == "CRV")
+                        {
+                            Cur_bal_n += (item.Debit == null) ? 0 : item.Debit;
+                            Cur_bal_n += (item.Credit == null) ? 0 : -(item.Credit);
+
+                            Avl_bal_n += (item.Debit == null) ? 0 : item.Debit;
+                            Avl_bal_n += (item.Credit == null) ? 0 : -(item.Credit);
+                        }
+                        else if ((item.Voucher_Type == "BPV" || item.Voucher_Type == "BRV") && (item.Inst_Status == "Pending" || item.Inst_Status == "Deposited"))
+                        {
+                            Avl_bal_n += (item.Debit == null) ? 0 : item.Debit;
+                            Avl_bal_n += (item.Credit == null) ? 0 : -(item.Credit);
+                        }
+                        else if ((item.Voucher_Type == "BPV" || item.Voucher_Type == "BRV") && (item.Inst_Status == "Approved"))
+                        {
+                            Cur_bal_n += (item.Debit == null) ? 0 : item.Debit;
+                            Cur_bal_n += (item.Credit == null) ? 0 : -(item.Credit);
+
+                            Avl_bal_n += (item.Debit == null) ? 0 : item.Debit;
+                            Avl_bal_n += (item.Credit == null) ? 0 : -(item.Credit);
+                        }
+                        else
+                        {
+                            Cur_bal_n += (item.Debit == null) ? 0 : item.Debit;
+                            Cur_bal_n += (item.Credit == null) ? 0 : -(item.Credit);
+
+                            Avl_bal_n += (item.Debit == null) ? 0 : item.Debit;
+                            Avl_bal_n += (item.Credit == null) ? 0 : -(item.Credit);
+                        }
+                    }
+                }
+                else if (ViewBag.LedgerNature == "Liability" || ViewBag.LedgerNature == "Expense")
+                {
+                    if (item.Balance == "Current")
+                    {
+                        if (item.Voucher_Type == "CPV" || item.Voucher_Type == "CRV")
+                        {
+                            Avl_bal_n += (item.Debit == null) ? 0 : -(item.Debit);
+                            Avl_bal_n += (item.Credit == null) ? 0 : item.Credit;
+                        }
+                        else if ((item.Voucher_Type == "BPV" || item.Voucher_Type == "BRV") && (item.Inst_Status == "Pending" || item.Inst_Status == "Deposited"))
+                        {
+                            Avl_bal_n += (item.Debit == null) ? 0 : -(item.Debit);
+                            Avl_bal_n += (item.Credit == null) ? 0 : item.Credit;
+                        }
+                        else if ((item.Voucher_Type == "BPV" || item.Voucher_Type == "BRV") && (item.Inst_Status == "Approved"))
+                        {
+                            Avl_bal_n += (item.Debit == null) ? 0 : -(item.Debit);
+                            Avl_bal_n += (item.Credit == null) ? 0 : item.Credit;
+                        }
+                        else
+                        {
+                            Avl_bal_n += (item.Debit == null) ? 0 : -(item.Debit);
+                            Avl_bal_n += (item.Credit == null) ? 0 : item.Credit;
+                        }
+                    }
+                    else
+                    {
+                        if (item.Voucher_Type == "CPV" || item.Voucher_Type == "CRV")
+                        {
+                            Cur_bal_n += (item.Debit == null) ? 0 : -(item.Debit);
+                            Cur_bal_n += (item.Credit == null) ? 0 : item.Credit;
+
+                            Avl_bal_n += (item.Debit == null) ? 0 : -(item.Debit);
+                            Avl_bal_n += (item.Credit == null) ? 0 : item.Credit;
+                        }
+                        else if ((item.Voucher_Type == "BPV" || item.Voucher_Type == "BRV") && (item.Inst_Status == "Pending" || item.Inst_Status == "Deposited"))
+                        {
+                            Avl_bal_n += (item.Debit == null) ? 0 : -(item.Debit);
+                            Avl_bal_n += (item.Credit == null) ? 0 : item.Credit;
+                        }
+                        else if ((item.Voucher_Type == "BPV" || item.Voucher_Type == "BRV") && (item.Inst_Status == "Approved"))
+                        {
+                            Cur_bal_n += (item.Debit == null) ? 0 : -(item.Debit);
+                            Cur_bal_n += (item.Credit == null) ? 0 : item.Credit;
+
+                            Avl_bal_n += (item.Debit == null) ? 0 : -(item.Debit);
+                            Avl_bal_n += (item.Credit == null) ? 0 : item.Credit;
+                        }
+                        else
+                        {
+                            Cur_bal_n += (item.Debit == null) ? 0 : -(item.Debit);
+                            Cur_bal_n += (item.Credit == null) ? 0 : item.Credit;
+
+                            Avl_bal_n += (item.Debit == null) ? 0 : -(item.Debit);
+                            Avl_bal_n += (item.Credit == null) ? 0 : item.Credit;
+                        }
+                    }
+                }
+
+            <tr class="op-gen-entr" data-toggle="modal" data-target="#Modal" id="@item.GroupId">
+                <td>@string.Format("{0:dd-MMM-yyyy}", item.RecordedBy_Date)</td>
+                <td>@item.Voucher_No</td>
+                <td>@item.Voucher_Type</td>
+                <td>@item.Inst_No</td>
+                @if (item.Inst_Date == null)
+                {
+                    <td>-</td>
+                }
+                else
+                {
+                    <td>@string.Format("{0:dd-MMM-yyyy}", item.Inst_Date)</td>
+                }
+                <td>@item.Naration</td>
+                <td>@string.Format("{0:n0}", item.Debit)</td>
+                <td>@string.Format("{0:n0}", item.Credit)</td>
+                @if (Cur_bal_n < 0)
+                {
+                    <td>(@string.Format("{0:n0}", -(Cur_bal_n)))</td>
+                }
+                else
+                {
+                    <td>@string.Format("{0:n0}", Cur_bal_n)</td>
+                }
+                @if (Avl_bal_n < 0)
+                {
+                    <td>(@string.Format("{0:n0}", -(Avl_bal_n)))</td>
+                }
+                else
+                {
+                    <td>@string.Format("{0:n0}", Avl_bal_n)</td>
+                }
+            </tr>
+
+            }
+        </tbody>
+    </table>
+</div>
+<style>
+    table tr td, table tr th {
+        padding: 2px !important;
+        font-size: 12px;
+    }
+</style>

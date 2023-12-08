@@ -1,0 +1,324 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.SP_Get_MaterialStatement_Result>
+    @{ 
+        decimal? total = 0;
+        if (Model.Any())
+        {
+            total = Model.Sum(x => x.Amount);
+        }
+    }
+<div class="col-md-12 mt-3" style="float:right;">
+    <button class="btn btn-success up-mtst" data-toggle="modal" data-target="#Modal">Upload Material Statement</button>
+</div>
+<div class="container-fluid pl-0 ml-0 pr-0 mr-0">
+    <div class="form-group col-md-12">
+        <table class="table table-bordered" style="font-size:10px">
+            <thead>
+                <tr>
+                    <th>Milestone</th>
+                    <th>Material</th>
+                    @*<th>L</th>
+                    <th>W</th>
+                    <th>H</th>
+                    <th>D</th>*@
+                    <th>Qty</th>
+                    <th>Rate</th>
+                    <th>Amount</th>
+                    <th>UOM</th>
+                    <th>Remarks</th>
+                    <th>Description</th>
+                    <th></th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @if (Model.Count() > 0)
+                {
+                    string oldMile = string.Empty;
+                    bool same = false;
+                    foreach (var item in Model.OrderBy(x => x.MilestoneName))
+                    {
+                        same = (oldMile == item.MilestoneName);
+                <tr>
+                    @if (!same)
+                    {
+                        <td rowspan="@Model.Count(x => x.MilestoneName == item.MilestoneName)" class="mile-name-mat">@item.MilestoneName</td>
+                    }
+                    <td>@item.RequestedItemName</td>
+                    @*<td>@item.Length</td>
+        <td>@item.Width</td>
+        <td>@item.Height</td>
+        <td>@item.Dia</td>*@
+                    <td>@item.RequestedItemQty</td>
+                    <td>@String.Format("{0:0,0.##}", item.Rate)</td>
+                    <td>@String.Format("{0:0,0.##}", item.Amount)</td>
+                    <td>@item.RequestedItemQtyType</td>
+                    <td>@item.Remarks</td>
+                    <td>@item.Description</td>
+
+                    <td>
+                        <ul style="list-style:none;margin-left:0px;">
+                            <li class="dropdown">
+                                <a href="" class="dropdown-toggle no-after peers " data-toggle="dropdown">
+                                    <i class="ti-more-alt  c-grey-900" style="transform:rotate(90deg);"></i>
+                                </a>
+                                <ul class="dropdown-menu" style="padding:10px;width:auto !important">
+                                    <li><a id="@item.ID" class="del-mat-stat pointer"><span>Delete</span></a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+                        oldMile = item.MilestoneName;
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="10" style="text-align:center;"> No Record Yet !!!</td>
+                    </tr>
+                }
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="4" style="text-align:right;"><b>Total</b></td>
+                    <td><b>@String.Format("{0:0,0.##}", total)</b></td>
+                    <td colspan="4"></td>
+                </tr>
+            </tfoot>
+
+        </table>
+    </div>
+</div>
+<div class="container-fluid pl-0 ml-0 pr-0 mr-0">
+    <h4 class="text-center">Material Statment For Milestone</h4>
+    <div class="form-group col-md-4">
+        @Html.DropDownList("Milestones", null, "Select Milestone", new { @class = "form-control", required = "" })
+    </div>
+</div>
+<div class="container-fluid ml-0 pr-0 mr-0 main-ms in-active">
+    <div class="form-row msi-row">
+        <div class="form-group col-md-1 ift-m justify-content-center align-items-center d-flex">
+            <i class="fas fa-plus-square ad-ms-row fa-lg pointer"></i>
+        </div>
+
+        <div class="form-group col-md-3">
+            <input type="text" class="form-control mile-item" id="mile-nm-item-1" required placeholder="Material" />
+        </div>
+        <div class="form-group col-md-1">
+            <input type="text" name="name" value="" placeholder="UOM" class="form-control mile-ms-unit" id="mile-ms-unit-1" />
+        </div>
+        <div class="form-group col-md-1">
+            <input type="number" class="form-control mile-qty-item" id="mile-len-item-1" placeholder="Length" autocomplete="off" maxLength='5'>
+        </div>
+        <div class="form-group col-md-1">
+            <input type="number" class="form-control mile-qty-item" id="mile-wid-item-1" placeholder="Width" autocomplete="off" maxLength='5'>
+        </div>
+        <div class="form-group col-md-1">
+            <input type="number" class="form-control mile-qty-item" id="mile-hei-item-1" placeholder="Height" autocomplete="off" maxLength='5'>
+        </div>
+        <div class="form-group col-md-1">
+            <input type="number" class="form-control mile-qty-item" id="mile-dia-item-1" placeholder="Dia" autocomplete="off" maxLength='5'>
+        </div>
+        <div class="form-group col-md-1">
+            <input type="number" class="form-control mile-qty-item" id="mile-qty-item-1" placeholder="Quantity" autocomplete="off" maxLength='5'>
+        </div>
+        <div class="form-group col-md-1">
+            <input type="number" class="form-control mile-qty-item" id="mile-rate-item-1" placeholder="Rate" autocomplete="off" maxLength='5'>
+        </div>
+        <div class="form-group col-md-1">
+            <input type="number" class="form-control mile-qty-item" id="mile-amount-item-1" placeholder="Amount" autocomplete="off" maxLength='5'>
+        </div>
+
+        <div class="col-md-1"></div>
+        <div class="form-group col-md-6 ift">
+            <textarea class="form-control mt-2 other" rows="2" placeholder="Description" id="mile-desc-item-1"></textarea>
+        </div>
+        <div class="form-group col-md-4 ift">
+            <textarea class="form-control mt-2 other" rows="2" placeholder="Remarks" id="mile-rem-item-1"></textarea>
+        </div>
+
+    </div>
+</div>
+<div class="form-group col-md-12 justify-content-end d-flex px-0 mt-2">
+    <button class="btn btn-primary col-md-2" onclick="SubmitData();">Save</button>
+</div>
+<script>
+    $(document).ready(function () {
+
+
+        $('#Milestones').on('change', function () {
+            var selectedCountry = $(this).children("option:selected").val();
+            console.log(selectedCountry);
+            if ((selectedCountry != undefined) && (selectedCountry != '')) {
+                if ($('.main-ms').css('display') == 'none') {
+                    $('.main-ms').slideToggle(300);
+                }
+            }
+            else {
+                console.log('hello');
+                $('.main-ms').slideToggle(300);
+            }
+        });
+    });
+
+
+    function SubmitData() {
+        let materialsData = [];
+        let totalMats = $('.msi-row').length;
+        let mileID = $('#Milestones option:selected').val();
+        let prj = $("#Prj_Id").val();
+        let i = 1;
+        for (i = 1; i <= totalMats; i++) {
+            //Get all the fields data first now;
+            let itemNm = $('#mile-nm-item-' + i).val();
+            let itemLen = $('#mile-len-item-' + i).val();
+            let itemWid = $('#mile-wid-item-' + i).val();
+            let itemHei = $('#mile-hei-item-' + i).val();
+            let itemDia = $('#mile-dia-item-' + i).val();
+            let itemRat = $('#mile-rate-item-' + i).val();
+            let itemAmnt = $('mile-amount-item-' + i).val();
+            let itemQty = $('#mile-qty-item-' + i).val();
+            let itemUni = $('#mile-ms-unit-' + i).val();
+            let itemRem = $('#mile-rem-item-' + i).val();
+            let itemDesc = $('#mile-desc-item-' + i).val();
+
+            //let itemNm = $('#mile-nm-item-' + i).val();
+
+            materialsData.push({
+                item: itemNm,
+                qty: itemQty,
+                qtyTp: itemUni,
+                len: itemLen,
+                wid: itemWid,
+                hei: itemHei,
+                dia: itemDia,
+                Rate: itemRat,
+                Amount: itemAmnt,
+                remarks: itemRem,
+                description: itemDesc
+            });
+        }
+        $.ajax({
+            type: "POST",
+            url: "/ConstructProjectManagement/CreateMaterialStatement/",
+            contentType: "application/json",
+            traditional: true,
+            beforeSend: function () {
+
+            },
+            complete: function () {
+
+            },
+            data: JSON.stringify({ materials: materialsData, MileId: mileID, ProjId: prj }),
+        }).done(function (data) {
+            if (data == true) {
+                alert('data has been saved');
+
+                let prj = $("#Prj_Id").val();
+                $('#prjdetails').load('/ConstructProjectManagement/NewMaterialStatement?proj=' + prj, function () {
+
+                });
+            }
+            else {
+                alert('unable to save the data');
+            }
+        });
+    }
+
+    var prdctThat = $(".mile-item").first();
+    $(".mile-item").autocomplete({
+        source: function (request, response) {
+            $(prdctThat).closest('.item-pur-req-row').find('.item-uom').val('');
+            $.ajax({
+                type: "POST",
+                url: '/Inventory/GetSearchValue/',
+                dataType: "json",
+                data: { search: $(prdctThat).val() },
+                success: function (data) {
+                    response($.map(data, function (item) {
+                        return { label: item.Complete_Name, value: item.Complete_Name, Id: item.Id };
+                    }));
+                },
+                error: function (xhr, status, error) {
+                    alert("Unable to select this item. Please try again or contact SA Systems Team");
+                }
+            });
+        },
+        select: function (event, ui) {
+            var $this = this;
+            $.ajax({
+                type: "Post",
+                url: '/Inventory/GetInventoryItemById/',
+                dataType: "json",
+                data: { Id: ui.item.Id },
+                success: function (data) {
+                    $($this).closest('.msi-row').find('.mile-ms-unit').val(data.Inventory.UOM);
+                },
+                error: function (xhr, status, error) {
+                    alert("Unable to select this item. Please try again or contact SA Systems Team");
+                }
+            });
+
+        }
+    });
+
+    $(document).on("click", ".up-mtst", function () {
+        EmptyModel();
+        $('#modalbody').load('/ConstructProjectManagement/UploadMaterialStatement/');
+    });
+
+    $(document).ready(function () {
+        //var qty = $('.mile-qty-item').val();
+        //var rate = $('#mile-rate-item-1').val();
+        //var amount = (qty * rate);
+
+    
+
+        $(function () {
+
+            $('#mile-qty-item-1').on("change", function () {
+                calculateAmount();
+            });
+            $('#mile-rate-item-1').on("change", function () {
+                calculateAmount();
+            });
+
+            function calculateAmount() {
+                var qty = $('#mile-qty-item-1').val();
+                var rate = $('#mile-rate-item-1').val();
+                if (qty != "" && rate != "") {
+                    var amount = (qty * rate);
+                }
+                $('#mile-amount-item-1').val(amount.toFixed(2));
+            }
+        });
+    });
+</script>
+<style>
+    .invisi {
+        visibility: hidden;
+    }
+
+    .in-active {
+        display: none;
+    }
+
+    textarea {
+        resize: none;
+    }
+
+    .msi-row {
+        border-bottom: .1em solid #dddcdc;
+        margin-top: 10px;
+    }
+
+    .mile-name-mat {
+        font-size: 30px;
+        text-align: center;
+        vertical-align:middle !important;
+    }
+
+    .other {
+        margin-top: 0px !important;
+    }
+</style>

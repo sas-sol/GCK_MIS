@@ -1,0 +1,44 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.ReceiptRequest>
+@{
+    Layout = "~/Views/Shared/_StaffLayout.cshtml";
+}
+
+<div class="bgc-white row gap-20 pos-r">
+    <h2 style="text-align:center">Commercial Project Payment Request</h2>
+    <div class="col-md-12">
+        <div class="p-20 bd">
+           <div class="table-responsive">
+                <table class="table table-bordered table-striped" id="mytable3">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>Sr No.</th>
+                            <th>Unit No.</th>
+                            <th>Name</th>
+                            <th>Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            int sr = 1;
+                            foreach (var v in Model)
+                            {
+                                <tr class="pointer prem-pay-req" id="@v.Id" data-toggle="modal" data-target="#Modal">
+                                    <td>@sr</td>
+                                    <td>@v.Voucher_For</td>
+                                    <td>@v.Name</td>
+                                    <td>@v.Amount</td>
+                                </tr>
+                                sr++;
+                            }
+                        }
+                    </tbody>
+                </table>
+           </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $('#mytable3').DataTable();
+    });
+</script>

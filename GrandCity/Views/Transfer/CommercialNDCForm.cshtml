@@ -1,0 +1,166 @@
+﻿@model MeherEstateDevelopers.Models.NDC_View_Commercial
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <style>
+        body {
+            font-family: Roboto,-apple-system,system-ui,BlinkMacSystemFont,Segoe UI,Oxygen,Ubuntu,Cantarell,Fira Sans,Droid Sans,Helvetica Neue,Arial,sans-serif;
+        }
+    </style>
+</head>
+<body>
+    @if (Model.CurrentTransferRequest.Any(x => x.Transfer_Success == true))
+    {
+        <h2 style="font-weight:bold">
+            This is Already Transfered
+        </h2>
+    }
+
+    <table cellspacing="0" border="0" style="width:1000px">
+        <tr>
+            <td width="300px" align="center" valign=bottom style="font-weight:bold"><b>Serial No.</b> @Model.CurrentTransferRequest.Select(x => x.TransferRequestNo).FirstOrDefault()</td>
+            <td width="600px" align="center" valign=bottom style="font-weight:bold"><font size="7">@Model.PreviousOwners.Select(x=> x.Type).FirstOrDefault() TRANSFER</font></td>
+            <td width="200px" align="center" valign=bottom style="font-weight:bold"></td>
+        </tr>
+    </table>
+    <table cellspacing="0" border="0" style="width:1000px">
+        <tr>
+            <td width="200px" align="center" valign="bottom"></td>
+            <td width="600px" align="center" valign="bottom"><font size="6">REQUEST FORM</font></td>
+            <td width="200px" align="center" valign="bottom"></td>
+        </tr>
+    </table>
+    <table cellspacing="0" border="0" style="width:1000px;font-size: 21px;margin-top: 50px;">
+        <tr>
+            <td align="left" valign=bottom style="line-height: 44px;">
+                <p>
+                    <b>I</b> &nbsp; <u> @string.Join(",", Model.PreviousOwners.Select(x => x.From_Name))</u> &nbsp; <b>S/O, W/O</b> &nbsp; <u>@string.Join(",", Model.PreviousOwners.Select(x => x.From_FatherName))</u>  &nbsp; <b>CNIC-NICOP</b> &nbsp; <u>@string.Join(",", Model.PreviousOwners.Select(x => x.From_CNIC_NICOP))</u> &nbsp;
+                    <b>Contact</b> &nbsp; <u>@string.Join(",", Model.PreviousOwners.Select(x => x.From_Mobile1))</u> &nbsp; <b>Owner Of @Model.PreviousOwners.Select(x=> x.Type).FirstOrDefault() No</b> &nbsp; <u>@Model.PreviousOwners.Select(x => x.shop_n).FirstOrDefault() @Model.PreviousOwners.Select(x => x.Type).FirstOrDefault()</u> &nbsp; <b>Floor</b> &nbsp; <u>@Model.PreviousOwners.Select(x => x.Floor).FirstOrDefault()</u> &nbsp; <b>Area</b>
+                    &nbsp; <u>@Model.PreviousOwners.Select(x => x.Area).FirstOrDefault() Sq-Ft</u> &nbsp; <b>Want to sell my @Model.PreviousOwners.Select(x=> x.Type).FirstOrDefault() to</b> &nbsp; <u>@string.Join(",", Model.CurrentTransferRequest.Select(x => x.Name).ToList())</u> &nbsp;
+                    @if (Model.CurrentTransferRequest.Any(x => x.IsCompanyProperty == true))
+                    {
+                        <b>NTN &nbsp;</b> <u>@string.Join(",", Model.CurrentTransferRequest.Select(x => x.CNIC_NICOP))</u>
+                    }
+                    else
+                    {
+                        <b>S/O, W/O &nbsp;</b> <u>@string.Join(",", Model.CurrentTransferRequest.Select(x => x.Father_Husband))</u> <span>&nbsp;</span>
+                        <b>CNIC-NICOP &nbsp;</b> <u>@string.Join(",", Model.CurrentTransferRequest.Select(x => x.CNIC_NICOP))</u>
+                    }
+                    &nbsp; <b>Contact</b> &nbsp; <u>@string.Join(",", Model.CurrentTransferRequest.Select(x => x.Mobile_1))</u> &nbsp;
+                    <b>Nominee Name</b> &nbsp; <u>@string.Join(",", Model.CurrentTransferRequest.Select(x => x.Nominee_Name))</u> &nbsp;
+                    <b>Nominee CNIC</b> &nbsp; <u>@string.Join(",", Model.CurrentTransferRequest.Select(x => x.Nominee_CNIC_NICOP))</u> &nbsp;
+                    <b>Address</b> &nbsp; <u>@string.Join(",", Model.CurrentTransferRequest.Select(x => x.Postal_Address)) </u> &nbsp;
+                    @*<b>at Price</b> <u>Rs @string.Format("{0:n0}", Model.CurrentTransferRequest.Select(x => x.Plot_Price).FirstOrDefault())</u>*@<br />
+                    <b>Please issue Transfer Request Form for this @Model.PreviousOwners.Select(x=> x.Type).FirstOrDefault().</b>
+                </p>
+            </td>
+        </tr>
+    </table>
+    <table cellspacing="0" border="0" style="width:1000px;font-size: 19px;margin: 5px 0 40px 0">
+        <tr>
+            <td width="1000px" align="left" valign=bottom style="font-weight:bold">I HEREBY CONFIRM THAT TILL DATE, ALL THE INSTALLMENTS HAVE BEEN PAID & NO DUES ARE PENDING.</td>
+        </tr>
+    </table>
+    <table cellspacing="0" border="0" style="width:1000px;font-size: 22px;">
+        <tr>
+            <td width="350px" align="left" valign=bottom style="font-weight:bold;border-top:1px solid">Name & Signature of Buyer</td>
+            <td width="270px" align="right" valign=bottom></td>
+            <td width="200px" align="right" valign=bottom style="font-weight:bold">Date</td>
+            <td width="200px" align="center" valign=bottom style="border-bottom:1px solid;font-size: 17px;">@string.Format("{0:ddd, MMMM dd yyyy}", DateTime.Now)</td>
+        </tr>
+    </table>
+    <table cellspacing="0" border="0" style="width:1000px;font-size: 22px;margin-top: 50px;">
+        <tr>
+            <td width="350px" align="left" valign=bottom style="font-weight:bold;border-top:1px solid">Name & Signature of Applicant</td>
+            <td width="270px" align="right" valign=bottom></td>
+            <td width="200px" align="right" valign=bottom style="font-weight:bold">Transfer Date</td>
+            <td width="200px" align="center" valign=bottom style="border-bottom:1px solid"></td>
+        </tr>
+    </table>
+    <table cellspacing="0" border="0" style="width:1000px;font-size: 23px;margin-top: 35px;">
+        <tr>
+            <td width="300px" align="right" valign=bottom style="border-bottom: 13px solid red;"></td>
+            <td width="350px" align="center" valign="baseline"><b>FOR OFFICE USE ONLY</b></td>
+            <td width="300px" align="right" valign=bottom style="border-bottom: 13px solid red;"></td>
+        </tr>
+    </table>
+    <table cellspacing="0" border="0" style="width:1000px;font-size: 25px;margin-top: 30px;">
+        <tr>
+            <td width="1000px" align="left" valign=bottom><b>NO DEMAND CERTIFICATE</b></td>
+        </tr>
+    </table>
+    <table cellspacing="0" border="0" style="width:1000px;font-size: 22px;margin-top: 30px;">
+        <tr>
+            <td width="500px" align="left" valign=bottom><b>All Documents in File</b></td>
+            <td width="500px" align="left" valign=bottom><b>Cash Payments Verified</b></td>
+        </tr>
+    </table>
+    <table cellspacing="0" border="0" style="width:1000px;font-size: 22px;margin-top: 20px;">
+        <tr>
+            <td width="150px" align="left" valign=bottom><input type="checkbox" /> Yes</td>
+            <td width="300px" align="left" valign=bottom><input type="checkbox" /> No</td>
+            <td width="150px" align="left" valign=bottom><input type="checkbox" /> Yes</td>
+            <td width="300px" align="left" valign=bottom><input type="checkbox" /> No</td>
+        </tr>
+    </table>
+    <table cellspacing="0" border="0" style="width:1000px;font-size: 22px;margin-top: 30px;">
+        <tr>
+            <td width="500px" align="left" valign=bottom><b>Computer Record Updated</b></td>
+            <td width="500px" align="left" valign=bottom><b>Cheques / Demand Drafts / Payorders Verified</b></td>
+        </tr>
+    </table>
+    <table cellspacing="0" border="0" style="width:1000px;font-size: 22px;margin-top: 20px;">
+        <tr>
+            <td width="150px" align="left" valign=bottom><input type="checkbox" /> Yes</td>
+            <td width="300px" align="left" valign=bottom><input type="checkbox" /> No</td>
+            <td width="150px" align="left" valign=bottom><input type="checkbox" /> Yes</td>
+            <td width="300px" align="left" valign=bottom><input type="checkbox" /> No</td>
+        </tr>
+    </table>
+    <table cellspacing="0" border="0" style="width:1000px;font-size: 22px;margin-top: 35px;">
+        <tr>
+            <td width="1000px" align="left" valign=bottom><b>DOCUMENTS REQUIRED</b></td>
+        </tr>
+    </table>
+    <table cellspacing="0" border="0" style="width:1000px;font-size: 22px;margin-top: 10px;">
+        <tr>
+            <td width="1000px" align="left" valign=bottom>- Original Documents</td>
+        </tr>
+    </table>
+    <table cellspacing="0" border="0" style="width:1000px;font-size: 22px;margin-top: 10px;">
+        <tr>
+            <td width="1000px" align="left" valign=bottom>- @Model.PreviousOwners.Select(x=>x.Type).FirstOrDefault() Transfer Payment Receipts</td>
+        </tr>
+    </table>
+    <table cellspacing="0" border="0" style="width:1000px;font-size: 22px;margin-top: 10px;">
+        <tr>
+            <td width="1000px" align="left" valign=bottom>- @Model.PreviousOwners.Select(x => x.Type).FirstOrDefault() Transfer Tax Challan</td>
+        </tr>
+    </table>
+    <table cellspacing="0" border="0" style="width:1000px;font-size: 22px;margin-top: 10px;">
+        <tr>
+            <td width="1000px" align="left" valign=bottom>- CNIC copy of buyer & Seller & 2 Pictures of Buyer</td>
+        </tr>
+    </table>
+    <table cellspacing="0" border="0" style="width:1000px;font-size: 22px;margin-top: 10px;">
+        <tr>
+            <td width="1000px" align="left" valign=bottom>- Copy of file application form with aggreement on Rs. 100/- stamp paper</td>
+        </tr>
+    </table>
+    <table cellspacing="0" border="0" style="width:1000px;font-size: 22px;margin-top: 10px;">
+        <tr>
+            <td width="1000px" align="left" valign=bottom>- Copy of last payment Receipt</td>
+        </tr>
+    </table>
+    <table cellspacing="0" border="0" style="width:1000px;font-size: 22px;margin-top: 10px;">
+        <tr>
+            <td width="1000px" align="center" valign=bottom style="padding-right: 95px;">
+                <img src="~/assets/static/images/footer_urdu_logo.png" width=450 height=125>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>

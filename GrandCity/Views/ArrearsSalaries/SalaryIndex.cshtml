@@ -1,0 +1,72 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Sp_Get_Employee_Result>
+@*@{ Layout = "~/Views/Shared/_StaffLayout.cshtml"; }*@
+
+<div class="col-md-12">
+    <div class="bgc-white bd bdrs-3 p-20 mB-20">
+        <h4 class="c-grey-900 mB-20">All Employees</h4>
+        <table id="emp-dat" class="table table-striped table-bordered" cellspacing="0" width="100%">
+            <thead class="">
+                <tr>
+                    <th>Code</th>
+                    <th>Name</th>
+                    <th>Father Name</th>
+                    <th>CNIC</th>
+                    <th>Date Of Joining</th>
+                    <th>Basic Salary</th>
+                    <th>Department- Designation</th>
+                    <th>City</th>
+                    <th>Mobile </th>
+                    <th>Process</th>
+
+                </tr>
+            </thead>
+            <tbody>
+
+                @foreach (var item in Model)
+                {
+                <tr class="" id="@item.Id">
+                    <td>@item.Employee_Code</td>
+                    <td>@item.Name</td>
+                    <td>@item.Father_Name</td>
+                    <th>@item.CNIC</th>
+                    <td>@string.Format("{0: dd-MMM-yyyy}", item.Date_Of_Joining)</td>
+                    <td>@string.Format("{0:n0}", item.Basic_Salary)</td>
+                    <td>@item.Department_Designation</td>
+                    <td>@item.City</td>
+                    <td>@item.Mobile_1</td>
+                    <td class="rev-chk"><input type="checkbox" class="checkbox arr-salaries"></td>
+                </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <h4 class="c-grey-900 mB-20">Arrears Salary Selection</h4>
+    <button type="submit" class="btn btn-primary finalize-arrears-salary" value="">Finalize</button>
+    <table id="arrears-salary" class="table table-striped table-bordered" cellspacing="0" width="100%">
+        <thead class="">
+            <tr>
+                <th>Code</th>
+                <th>Name</th>
+                <th>Father Name</th>
+                <th>CNIC</th>
+                <th>Date Of Joining</th>
+                <th>Basic Salary</th>
+                <th>Department- Designation</th>
+                <th>City</th>
+                <th>Mobile </th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</div>
+<script>
+        $(document).ready(function () {
+            $('#emp-dat').DataTable({
+                dom: 'Bfrtip',
+                buttons: [
+                    'copy', 'csv', 'excel', 'pdf', 'print'
+                ]
+            });
+        });
+
+    </script>

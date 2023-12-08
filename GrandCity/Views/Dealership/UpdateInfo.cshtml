@@ -1,0 +1,34 @@
+﻿@model MeherEstateDevelopers.Models.Dealership
+<div class="form-row">
+    <div class="form-group col-md-5">
+        <label>Dealership Name</label>
+        <input type="text" class="form-control" value="@Model.Dealership_Name" id="deal-nam">
+    </div>
+    <div class="form-group col-md-2">
+        <label>Registeration Date</label>
+        <input type="text" class="form-control" value="@string.Format("{0:MM/dd/yyyy}",Model.Registeration_Date)" data-provide="datepicker" id="reg-dat">
+    </div>
+    <div class="form-group col-md-2">
+        <label>Status</label>
+        <select class="form-control" id="stat">
+            <option value="Registered">Registered</option>
+            <option value="Terminated">Terminated</option>
+        </select>
+    </div>
+    <script>
+        var val = "@Model.Status";
+        $("#stat").val(val);
+    </script>
+    <div class="form-group col-md-2">
+        <button class="btn btn-primary" id="del-update" style="margin-top:29px">Update</button>
+    </div>
+</div>
+<input type="hidden" value="@Model.Id" id="deal-id" />
+<div class="form-row">
+    <div class="form-group col-md-6">
+        <button type="button" class="btn btn-info" id="add-part">Add Partner</button>
+    </div>
+</div>
+<div class="form-row" id="deler-info">
+    @{ Html.RenderAction("DealersData", "Dealership", new { Id = Model.Id });}
+</div>

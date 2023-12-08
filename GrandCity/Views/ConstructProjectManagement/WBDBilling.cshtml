@@ -1,0 +1,87 @@
+﻿
+
+<div class="container-fluid pl-0 ml-0 pr-0 mr-0">
+    <h4 class="text-center">Billing</h4>
+    <hr />
+</div>
+
+<div class="container-fluid ml-0 pr-0 mr-0">
+    <div class="form-row ">
+        <div class="col-md-10 form-row">
+            @*<div class="form-group col-md-3">
+                    <label>Title</label>
+                    <input type="text" class="form-control" id="wbd-title" autocomplete="off">
+                </div>*@
+            <div class="form-group col-md-2">
+                <label>Type</label>
+                <select class="form-control wbd-blng-btn select2" name="type" id="type" required>
+                    <option value="Measurement">Measurement</option>
+                    <option value="Percentage">Percentage</option>
+                </select>
+            </div>
+            @*<div class="form-group col-md-3" id="vndr">
+                <label>Vendors</label>
+                @Html.DropDownList("Vendors", null, "Select Vendor ", new { Name = "Id", @class = "form-control select2" })
+            </div>*@
+
+           <div class="form-group col-md-1" style="margin-top: 28px">
+                <button class="btn btn-primary DCopy_wbd_billing">Refresh</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="col-md-12 mt-2" id="WBDBilling">
+
+</div>
+
+<script>
+    $(document).ready(function () {
+
+        $('.wbd-blng-btn').on('change', function () {
+            var selectedType = $(this).children("option:selected").val();
+            console.log(selectedType);
+            debugger
+            if ((selectedType != undefined) && (selectedType != '')) {
+                if (selectedType == 'Measurement') 
+                {
+                    var prjId = $("#Prj_Id").val();
+                    $("#WBDBilling").load("/ConstructProjectManagement/Get_WBDMeasurementBillingList", { Prj_Id: prjId });
+                }
+                if (selectedType == 'Percentage')
+                {
+                    var prjId = $("#Prj_Id").val();
+                    $("#WBDBilling").load("/ConstructProjectManagement/Get_WBDPercentageBillingList", { Prj_Id: prjId });
+                }
+              
+            }
+            else {
+                console.log('hello');
+                $('.main-ms').slideToggle(300);
+            }
+        });
+    });
+
+
+    function wbdblngprctgbtn() {
+        alert("Hello");
+    }
+    $(function () {
+        var prjId = $("#Prj_Id").val();
+        $("#WBDBilling").load("/ConstructProjectManagement/Get_WBDMeasurementBillingList", { Prj_Id: prjId });
+    });
+    $(document).on("click", ".wbd-blng-prctg-btn", function (e) {
+        var prjId = $("#Prj_Id").val();
+        debugger
+        $("#WBDBilling").load("/ConstructProjectManagement/Get_WBDPercentageBillingList", { Prj_Id: prjId });
+    });
+
+    $(document).on("click", ".wbd-blng-Msrmnt-btn", function () {
+        var prjId = $("#Prj_Id").val();
+        debugger
+        $("#WBDBilling").load("/ConstructProjectManagement/Get_WBDMeasurementBillingList", { Prj_Id: prjId });
+    });
+
+
+
+</script>

@@ -1,0 +1,91 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Sp_Get_All_Employess_Salaries_Result>
+<style>
+    table tr, table td, table th {
+        padding: 2px !important;
+        color: black !important;
+        font-family: Arial, Helvetica, sans-serif;
+    }
+
+    @@media print {
+        table.salary-id tr td, table.print-friendly tr th {
+            page-break-inside: avoid;
+        }
+
+        #sumary {
+            font-size: 13px
+        }
+    }
+</style>
+<div style="width:100%">
+    <img src="~/assets/static/images/meherestate-simple.png" style="float:left;margin: 1%;width: 100px;" />
+    <span style="float:right;width:150px;text-align:center">Powered by<img src="~/assets/static/images/sas.png" style="width:100px;height:60px;margin:0.5%" /></span>
+</div>
+<div id="">
+    @foreach (var g in Model.Where(x => x.Stipend > 0).GroupBy(x => new { x.CompanyName, x.CompanyId }))
+    {
+        <table id="salary-dat" class="table table-striped table-bordered " cellspacing="0" width="100%">
+            <thead class="thead-light">
+                <tr>
+                    @{
+                        var month = DateTime.Now;
+                    }
+                    <th colspan="7" style="text-align:center"><font size="5">Stipend Report <br /> @string.Format("{0:MMMM yyyy}", month)</font></th>
+                </tr>
+                <tr>
+                    <th>Department</th>
+                    <th>Stipend</th>
+                    <th>Allownces/Bonus</th>
+                    <th>Gross Payable</th>
+                    <th>Loan</th>
+                    <th>Advance</th>
+                    <th>Net Payable</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in g.GroupBy(h => new { h.Stipend_Dep_Id, h.Stipend_Dep_Name }).OrderByDescending(y => y.Sum(x => Math.Round(Convert.ToDecimal(x.Stipend_Gross_Salary)))))
+                {
+                    <tr>
+                        @if (string.IsNullOrEmpty(item.Key.Stipend_Dep_Name) || string.IsNullOrWhiteSpace(item.Key.Stipend_Dep_Name))
+                        {
+                            <td>Executive</td>
+                        }
+                        else
+                        {
+                            <td>@item.Key.Stipend_Dep_Name</td>
+                        }
+                        <td align="right">@string.Format("{0:n0}", item.Sum(x => Math.Round(Convert.ToDecimal(x.Stipend))))</td>
+                        <td align="right">@string.Format("{0:n0}", item.Sum(x => Math.Round(Convert.ToDecimal(x.Allownces))) + item.Sum(x => Math.Round(Convert.ToDecimal(x.Bonus)))) </td>
+                        <td align="right">@string.Format("{0:n0}", item.Sum(x => Math.Round(Convert.ToDecimal(x.Stipend_Gross_Salary)))) </td>
+                        <td align="right">@string.Format("{0:n0}", item.Where(x => x.Basic_salary == 0 && x.Stipend > 0).Sum(x => Math.Round(Convert.ToDecimal(x.Ded_Loan)))) </td>
+                        <td align="right">@string.Format("{0:n0}", item.Where(x => x.Basic_salary == 0 && x.Stipend > 0).Sum(x => Math.Round(Convert.ToDecimal(x.Ded_Advance)))) </td>
+                        @{
+                            var a = item.Where(x => x.Basic_salary > 0 && x.Stipend > 0).Sum(x => x.Stipend);
+                            var b = item.Where(x => x.Basic_salary == 0 && x.Stipend > 0).Sum(x => x.Stipend_Grand_Total);
+                        }
+                        <td align="right">@string.Format("{0:n0}", Math.Round(Convert.ToDecimal(a + b)))</td>
+                    </tr>
+                }
+            <tr>
+                <th>Grand Total</th>
+                <th style="text-align:right">@string.Format("{0:n0}", g.Sum(x => Math.Round(Convert.ToDecimal(x.Stipend))))</th>
+                <th style="text-align:right">@string.Format("{0:n0}", g.Sum(x => Math.Round(Convert.ToDecimal(x.Allownces))) + g.Sum(x => Math.Round(Convert.ToDecimal(x.Bonus)))) </th>
+                <th style="text-align:right">@string.Format("{0:n0}", g.Sum(x => Math.Round(Convert.ToDecimal(x.Stipend_Gross_Salary)))) </th>
+                <th style="text-align:right">@string.Format("{0:n0}", g.Where(x => x.Basic_salary == 0 && x.Stipend > 0).Sum(x => Math.Round(Convert.ToDecimal(x.Ded_Loan)))) </th>
+                <th style="text-align:right">@string.Format("{0:n0}", g.Where(x => x.Basic_salary == 0 && x.Stipend > 0).Sum(x => Math.Round(Convert.ToDecimal(x.Ded_Advance)))) </th>
+                @{
+                    var c = g.Where(x => x.Basic_salary > 0 && x.Stipend > 0).Sum(x => x.Stipend);
+                    var d = g.Where(x => x.Basic_salary == 0 && x.Stipend > 0).Sum(x => x.Stipend_Grand_Total);
+                }
+                <td align="right">@string.Format("{0:n0}", Math.Round(Convert.ToDecimal(c + d)))</td>
+            </tr>
+                <tr style="height:60px;vertical-align: bottom;">
+                    <td colspan="2" style="vertical-align:bottom;">Prepared By &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;___________________________________</td>
+                    <td colspan="2" style="vertical-align:bottom;">Accounts &nbsp;&nbsp;&nbsp;_______________________________________</td>
+                    <td colspan="2" style="vertical-align:bottom;">Director HR ___________________________________</td>
+                    <td colspan="2" style="vertical-align:bottom;">CEO &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;________________________________________</td>
+                    <td colspan="2" style="vertical-align:bottom;">Chairman  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;________________________________________</td>
+	         </tr>
+            </tbody>
+        </table>
+    }
+</div>

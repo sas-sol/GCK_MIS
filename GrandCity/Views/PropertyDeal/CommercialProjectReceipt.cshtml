@@ -1,0 +1,90 @@
+﻿@model MeherEstateDevelopers.Models.Sp_Get_Commercial_Receipt_Request_Result
+<div class="bgc-white p-20 bd form-row">
+    <div class="col-md-12">
+        @*<input type="hidden" value="@Model.Lead_Id" id="l_id" />*@
+        <input type="hidden" value="@Model.Id" id="id" />
+        <input type="hidden"value="@ViewBag.TransactionId"id="trans"/>
+        <input type="hidden" value="@ViewBag.Status" id="stat"/>
+        @*<input type="hidden" value="@Model.Module_Id" id="room_id" />*@
+        <div class="row">
+            <div class="form-group col-md-3">
+                <label>Name</label>
+                <h4>@Model.Name</h4>
+            </div>
+            <div class="form-group col-md-3">
+                <label>Father / Husband Name</label>
+                <h4>@Model.Father_Name</h4>
+            </div>
+            <div class="form-group col-md-3">
+                <label>Mobile</label>
+                <h4>@Model.Contact</h4>
+            </div>
+            <div class="form-group col-md-3">
+                <label>Project</label>
+                <h4>@Model.Project</h4>
+            </div>
+            <div class="form-group col-md-5">
+                <label>Apartment</label>
+                <h4>@Model.Voucher_For</h4>
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="form-group col-md-2">
+                <label>Cash / Bank</label>
+                <select class="form-control paytypesel" id="cah-chq-bak" disabled >
+                    <option value="Cash">Cash</option>
+                    <option value="BankDraft">Bank Draft</option>
+                    <option value="Cheque">Cheque</option>
+                    <option value="PayOrder">Pay Order</option>
+                    <option value="Online_Cash">Online - Cash</option>
+                    <option value="Online_Cheque">Online - Cheque</option>
+                    <option value="Online_Payorder">Online - PayOrder</option>
+                    <option value="Online_Bankdraft">Online - BankDraft</option>
+                </select>
+            </div>
+            <div class="form-group col-md-2">
+                <label>Amount</label>
+                <input class="form-control coma" placeholder="250,000" value="@String.Format("{0:n0}", Model.Amount)" disabled >
+                <input type="hidden" id="Amount" class="amt" value="@Model.Amount" >
+            </div>
+            <div class="form-group col-md-2 paymentotherinfo">
+                <label id="paytypelabel">-</label>
+                <input type="text" class="form-control" id="paymenttype" placeholder="" disabled required>
+            </div>
+            <div class="form-group col-md-2 paymentotherinfo">
+                <label>Date</label>
+                <input type="text" class="form-control" id="cbp-date" data-provide="datepicker" placeholder="mm/dd/yyyy" disabled required>
+            </div>
+            <div class="form-group col-md-2 paymentotherinfo">
+                <label>Bank</label>
+                <select class="form-control" id="bank" disabled>
+                    <option>Choose..</option>
+                </select>
+            </div>
+            <div class="form-group col-md-2 paymentotherinfo">
+                <label>Branch </label>
+                <input type="text" class="form-control" id="Branch" placeholder="Mall Rd" disabled required>
+            </div>
+            @*<div class="form-group col-md-1 paymentotherinfo">
+                <label>Scan File </label>
+                <button class=" btn btn-block" data-v="1" type="button" id="scanbtn">Scan</button>
+            </div>
+            <div id="images-1" class="col-md-1 images"></div>*@
+        </div>
+    </div>
+</div>
+<style>
+    .paymentotherinfo {
+        display: none;
+    }
+</style>
+<script>
+    $(function () {
+        var stat = $('#stat').val();
+        if (stat == "Available_For_Sale") {
+            $('.modal-footer').append('<button class="btn btn-success" id="gen-prem-rec" type="submit">Generate Receipt</button>');
+        }
+    });
+    
+</script>

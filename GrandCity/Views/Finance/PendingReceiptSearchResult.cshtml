@@ -1,0 +1,69 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Sp_Get_Receipt_Pending_Result>
+<table id="result" class="table table-borderless clickable-rows" cellspacing="0" width="100%">
+    <thead>
+        <tr class="thead-dark">
+            <th><input type="checkbox" class="all-plt-rec-pnd" /></th>
+            <th class="col-date">Date</th>
+            <th class="col-name">Name</th>
+            <th class="col-rece">Receipt No</th>
+            <th class="col-file">File/Plot</th>
+            <th class="col-amt">Amount</th>
+            <th class="col-mod">Mode</th>
+            <th class="col-type">Type</th>
+            <th class="col-size">Size</th>
+            <th class="col-deal"></th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            if (Model.Any())
+            {
+                foreach (var G in Model.GroupBy(x => x.Module))
+                {
+                    <tr>
+                        <td colspan="4"></td>
+                        <td>
+                            <h3>
+                                @if (G.Key == "FileManagement")
+                                {
+                                     <label> File Management</label>
+                                }
+                                else
+                                {
+                                     <label> Plot Management</label>
+                                    
+                                }
+                            </h3>
+                        </td>
+                    </tr>
+                    foreach (var item in G)
+                    {
+                        <tr>
+                            <th><input type="checkbox" class="all-pnd" data-id="@item.Id" /></th>
+                            <td class="col-date">@string.Format("{0:MM/dd/yyyy}", item.DateTime)</td>
+                            <td class="col-name">@item.Name</td>
+                            <td class="col-rece">@item.ReceiptNo</td>
+                            <td class="col-file">@item.File_Plot_Number</td>
+                            <td class="col-amt">@string.Format("{0:n0}", item.Amount)</td>
+                            <td class="col-mod">@item.PaymentType</td>
+                            <td class="col-type">@item.Type</td>
+                            <td class="col-size">@item.Size</td>
+                        </tr>
+                    }
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="10">No Record Found</td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+<button type="button" class="btn btn-success supervis_pnd">Supervise</button>
+<script>
+    $('.all-plt-rec-pnd').click(function () {
+        $(this).closest('table').find(' input:checkbox').prop('checked', this.checked);
+    });
+</script>

@@ -1,0 +1,2928 @@
+﻿<link href="~/Content/bootstrap-material-datetimepicker.css" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<script src="~/Scripts/bootstrap-material-datetimepicker.min.js"></script>
+<link rel="stylesheet" href="~/Content/select2.css" />
+<script src="~/Scripts/select2.js"></script>
+
+<style>
+    .info-blocks > li {
+        min-width: 0px !important;
+        margin: 0px !important;
+    }
+</style>
+<script>
+    var date = "@DateTime.Now";
+</script>
+<div class="row">
+    <h4 class="c-grey-900">Attendance</h4>
+    <div class="col-md-12 bgc-white">
+        @*@{ Html.RenderAction("HomeWidget", "Attendance");}*@
+    </div>
+    @if (User.IsInRole("Plot_Discount") || User.IsInRole("Employee_Data_Updation") || User.IsInRole("Reinstate_With_Fine") || User.IsInRole("PlotAdjustment"))
+    {
+        <div class="col-md-12 bgc-white">
+            <h4 class="c-grey-900">Requests</h4>
+            @{ Html.RenderAction("RequestsView", "Home");}
+        </div>
+    }
+    <ul class="info-blocks">
+        @{
+            if (ViewBag.Dash == "home")
+            {
+                <li>
+                    <div style="width:160px">
+                        <a href="/Tickets/MyTickets">
+                            <img src="~/assets/static/images/Tileicons/my-tick.png" style="width:100%" />
+                        </a>
+                    </div>
+                </li>
+                <hr />
+                if (User.IsInRole("Financial Dashboard"))
+                {
+                    <div class="form-row">
+                        <div class="form-group col-md-3">
+                            <label>Start Date</label>
+                            <input type="text" class="form-control" data-provide="datepicker" onchange="getbookingdata();" id="startdate" name="startdate" placeholder="mm/dd/yyyy" required>
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label>End Date</label>
+                            <input type="text" class="form-control" data-provide="datepicker" onchange="getbookingdata();" id="enddate" name="enddate" placeholder="mm/dd/yyyy" required>
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label>Choose Last Booking Records</label>
+                            <select class="form-control" id="opt" onchange="getoptions();">
+                                <option selected disabled>Choose...</option>
+                                <option value="weekly">Weekly</option>
+                                <option value="monthly">Monthly</option>
+                                <option value="6months">6 Month</option>
+                                <option value="yearly">Yearly</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-md-6" id="bookin">
+                        </div>
+                        <div class="col-md-6" id="bk-det">
+                        </div>
+                    </div>
+                    <hr />
+
+                    @* Transfer *@
+                    <div class="form-row">
+                        <div class="form-group col-md-3">
+                            <label>Start Date</label>
+                            <input type="text" class="form-control" data-provide="datepicker" onchange="gettransferdata();" id="transferstartdate" name="transferstartdate" placeholder="mm/dd/yyyy" required>
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label>End Date</label>
+                            <input type="text" class="form-control" data-provide="datepicker" onchange="gettransferdata();" id="transferenddate" name="transferenddate" placeholder="mm/dd/yyyy" required>
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label>Choose Last Transfer Records</label>
+                            <select class="form-control" id="opttransfer" onchange="gettransferoptions();">
+                                <option selected disabled>Choose...</option>
+                                <option value="weekly">Weekly</option>
+                                <option value="monthly">Monthly</option>
+                                <option value="6months">6 Month</option>
+                                <option value="yearly">Yearly</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-md-6" id="transferplot">
+                        </div>
+                        <div class="col-md-6" id="tans-plt-lst">
+                        </div>
+                    </div>
+                    <hr />
+                }
+                if (User.IsInRole("Revenue Report"))
+                {
+                    @* Sunburst Revenue Report *@
+                    <div class="form-row">
+                        <div class="form-group col-md-3">
+                            <label>Start Date</label>
+                            <input type="text" class="form-control" data-provide="datepicker" onchange="getrevenuedata();" id="revenuestartdate" name="revenuestartdate" placeholder="mm/dd/yyyy" required>
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label>End Date</label>
+                            <input type="text" class="form-control" data-provide="datepicker" onchange="getrevenuedata();" id="revenueenddate" name="revenueenddate" placeholder="mm/dd/yyyy" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-md-12" id="revreport">
+                        </div>
+                    </div>
+                    <hr />
+
+                    @* Sunburst Payments Report *@
+                    <div class="form-row">
+                        <div class="form-group col-md-3">
+                            <label>Start Date</label>
+                            <input type="text" class="form-control" data-provide="datepicker" onchange="getpaydata();" id="p-st-dat" placeholder="mm/dd/yyyy" required>
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label>End Date</label>
+                            <input type="text" class="form-control" data-provide="datepicker" onchange="getpaydata();" id="p-end-dat" placeholder="mm/dd/yyyy" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-md-12" id="paymentreport"></div>
+                    </div>
+                    <hr />
+                    @* Expected Monthly Recovery of Sher Afghan *@
+                    <div class="form-row" id="allmonthinst">            </div>
+
+                    <hr />
+
+                    @* Monthly Inflow & outflow *@
+                    <div class="form-row">
+                        <div class="form-group col-md-3">
+                            <label>From</label>
+                            <input type="text" class="form-control" data-provide="datepicker" onchange="getmonthiodata();" id="iofrom" placeholder="mm/dd/yyyy">
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label>To</label>
+                            <input type="text" class="form-control" data-provide="datepicker" onchange="getmonthiodata();" id="ioto" placeholder="mm/dd/yyyy">
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label>Choose Last Records</label>
+                            <select class="form-control monthifofrep">
+                                <option selected disabled>Choose...</option>
+                                <option value="twomonth">Last 2 Months</option>
+                                <option value="thremonth">Last 3 Months</option>
+                                <option value="6months">6 Month</option>
+                                <option value="yearly">Yearly</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-md-12" id="ifof-div">
+                        </div>
+                    </div>
+                    <hr />
+
+                    @* Daily Recovery Day wise *@
+                    <div class="form-row">
+                        <div class="form-group col-md-3">
+                            <label>From</label>
+                            <input type="text" class="form-control" data-provide="datepicker" onchange="get_rec_rep();" id="f-res" placeholder="mm/dd/yyyy">
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label>To</label>
+                            <input type="text" class="form-control" data-provide="datepicker" onchange="get_rec_rep();" id="t-res" placeholder="mm/dd/yyyy">
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label>Choose Last Records</label>
+                            <select class="form-control monthinstrep">
+                                <option selected disabled>Choose...</option>
+                                <option value="O_Week">Last 1 Week</option>
+                                <option value="T_Week">Last 2 Week</option>
+                                <option value="C_mon">This Month</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-md-12" id="dail-cash-rep">
+                        </div>
+                    </div>
+                    <hr />
+
+                    @* All Blocks Receiable *@
+                    <div class="form-row">
+                        <div class="form-group col-md-3">
+                            <label>Start Date</label>
+                            <input type="text" class="form-control" onchange="GetBlkRecov()" data-provide="datepicker" id="blk-rec-start" name="revenuestartdate" placeholder="mm/dd/yyyy" required>
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label>End Date</label>
+                            <input type="text" class="form-control" onchange="GetBlkRecov()" data-provide="datepicker" id="blk-rec-to" name="revenueenddate" placeholder="mm/dd/yyyy" required>
+                        </div>
+
+                    </div>
+                    <div class="form-row">
+                        <div class="col-md-12" id="blk-recovery"></div>
+                    </div>
+                    <hr />
+
+                    <div class="form-row">
+                        <div class="col-md-12" id="file-year">
+                        </div>
+                    </div>
+                    <script>
+                        $(function () {
+                            var date = "@DateTime.Now";
+                            $("#blk-recovery").load('/Reports/PlotsRecovery/', { From: null, To: null});
+                            $("#allmonthinst").load('/Reports/AllMonthlyInstallment/');
+                            $("#ifof-div").load('/Graph/MonthlyInflow_Outflow/', { From: date, To: date });
+                            $("#dail-cash-rep").load('/Graph/DailyCollectionSearch/', { From: null, To: null });
+                            $("#paymentreport").load('/Reports/RevenueReport/', { From: date, To: date });
+                            $("#revreport").load('/Reports/RevenueReport/', { From: date, To: date });
+                            $("#transferbarplot").load('/Reports/PlotTransferBarGraph/', { Startdate: date, Enddate: date });
+                            $("#transferplot").load('/Reports/PlotTranfer/', { Startdate: date, Enddate: date });
+                            $("#bookingplot").load('/Reports/PlotBookingBarGraph/', { Startdate: date, Enddate: date });
+                            $("#bookin").load('/Reports/PlotBooking/', { Startdate: date, Enddate: date });
+                        });
+                    </script>
+                }
+            }
+            if (ViewBag.Dash == "dealer")
+            {
+                if (User.IsInRole("Generate File"))
+                {
+                    <li>
+                        <div class="hexagon bg-red">
+                            <div class="text" style="">
+                                <i class="fas fa-address-card fa-3x"></i>
+                                <br />
+                                <a style="color:white !important" href="/Dealership/DealerFormAssociation/">Generate Dealer<br /> Application Form</a>
+                            </div>
+                        </div>
+                    </li>
+                }
+                if (User.IsInRole("Generate Dealers Plots"))
+                {
+                    <li>
+                        <div class="hexagon bg-blue">
+                            <div class="text" style="">
+                                <i class="fas fa-feed fa-3x"></i>
+                                <br />
+                                <a style="color:white !important" href="/Dealership/PlotsAssignment/">New Deals</a>
+                            </div>
+                        </div>
+                    </li>
+                }
+                if (User.IsInRole("Dealers Deal"))
+                {
+                    <li>
+                        <div class="hexagon bg-yellow">
+                            <div class="text" style="">
+                                <i class="fas fa-shopping-cart fa-3x"></i>
+                                <br />
+                                <a style="color:white !important" href="/Dealership/DealershipDeals/">Dealership Deals</a>
+                            </div>
+                        </div>
+                    </li>
+                }
+
+                <hr style="margin: 5% 0" />
+                if (User.IsInRole("Dealership Information"))
+                {
+                    <li>
+                        <div class="hexagon bg-grey">
+                            <div class="text" style="">
+                                <i class="fas fa-address-book fa-3x"></i>
+                                <br />
+                                <a style="color:white !important" href="/Dealership/AllDealerships/">All Dealerships</a>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="hexagon bg-green">
+                            <div class="text" style="">
+                                <i class="fas fa-address-book fa-3x"></i>
+                                <br />
+                                <a style="color:white !important" href="/Dealership/CommessionList/">Commission Lists</a>
+                            </div>
+                        </div>
+                    </li>
+                }
+                <hr style="margin: 5% 0" />
+                if (User.IsInRole("Create Installment Structure"))
+                {
+                    <li>
+                        <div class="hexagon bg-blue">
+                            <div class="text" style="">
+                                <i class="fas fa-address-book fa-3x"></i>
+                                <br />
+                                <a style="color:white !important" href="/Installments/CreateInstallmentStructure/">Installment Structure</a>
+                            </div>
+                        </div>
+                    </li>
+                }
+                if (User.IsInRole("Plot Installment Association"))
+                {
+                    <li>
+                        <div class="hexagon bg-blue">
+                            <div class="text" style="">
+                                <i class="fas fa-address-book fa-3x"></i>
+                                <br />
+                                <a style="color:white !important" href="/Installments/PlotsAssociation/">Plot Installment Association</a>
+                            </div>
+                        </div>
+                    </li>
+                }
+            }
+            else if (ViewBag.Dash == "cash counter")
+            {
+                <h5>New Booking</h5>
+                <li>
+                    <div style="width:160px">
+                        <a href="/FileSystem/RegisterFile">
+                            <img src="~/assets/static/images/Tileicons/file-reg.png" style="width:100%" />
+                        </a>
+                    </div>
+                </li>
+                <li>
+                    <div style="width:160px">
+                        <a href="/Plots/PlotOwnership">
+                            <img src="~/assets/static/images/Tileicons/plt-reg.png" style="width:100%" />
+                        </a>
+                    </div>
+                </li>
+                <li>
+                    <div style="width:160px">
+                        <a href="/Commercial/CommercialRegisteration/">
+                            <img src="~/assets/static/images/Tileicons/sa-prem-rec.png" style="width:100%" />
+                        </a>
+                    </div>
+                </li>
+
+                if (User.IsInRole("Open File Customer Registeration"))
+                {
+                    <hr style="margin: 5% 0" />
+                    <li>
+                        <div class="hexagon bg-red">
+                            <div class="text" style="">
+                                <i class="fas fa-shopping-cart fa-3x"></i>
+                                <br />
+                                <a style="color:white !important" href="/Plots/PlotBooking/">Dealers Plots Booking</a>
+                            </div>
+                        </div>
+                    </li>
+                }
+
+                if (User.IsInRole("Biding Plots"))
+                {
+                    <li>
+                        <div style="width:160px">
+                            <a href="/Plots/BidingRegisterPlots">
+                                <img src="~/assets/static/images/Tileicons/Biding-Plots-Registeration.png" style="width:100%" />
+                            </a>
+                        </div>
+                    </li>
+                }
+                <hr>
+                <h5>Installments</h5>
+                <li>
+                    <div style="width:160px">
+                        <a href="/Installments/InstallmentPortal">
+                            <img src="~/assets/static/images/Tileicons/rec-inst.png" style="width:100%" />
+                        </a>
+                    </div>
+                </li>
+                <li>
+                    <div style="width:160px">
+                        <a href="/AdminFacilities/CashCOunterDetail">
+                            <img src="~/assets/static/images/Tileicons/Members-Monthly-Fee.png" style="width:100%" />
+                        </a>
+                    </div>
+                </li>
+                <hr>
+
+                <h5>Transfer</h5>
+                <li>
+                    <div style="width:160px">
+                        <a href="/FileSystem/FileTransfer">
+                            <img src="~/assets/static/images/Tileicons/fil-trs.png" style="width:100%" />
+                        </a>
+                    </div>
+                </li>
+                <li>
+                    <div style="width:160px">
+                        <a href="/Transfer/PlotTransfer">
+                            <img src="~/assets/static/images/Tileicons/plt-trs.png" style="width:100%" />
+                        </a>
+                    </div>
+                </li>
+                <li>
+                    <div class="hexagon bg-grey">
+                        <div class="text" style="">
+                            <i class="fas fa-hamsa fa-3x"></i>
+                            <br />
+                            <a style="color:white !important" href="/Transfer/CommercialTransfer/">Commercial Units Transfer</a>
+                        </div>
+                    </div>
+                </li>
+                <hr>
+            }
+            else if (ViewBag.Dash == "Files Plots")
+            {
+                if (User.IsInRole("Audit Dashboard"))
+                {
+                    <div class="bgc-white bd bdrs-3 p-20 mB-20 row">
+                        @{ Html.RenderAction("AuditorsHome", "Home"); }
+                    </div>
+                }
+
+                <h5>Files Management</h5>
+                if (User.IsInRole("File Information"))
+                {
+                    <li>
+                        <div style="width:160px">
+                            <a href="/FileSystem/FileInformation">
+                                <img src="~/assets/static/images/Tileicons/fil-info.png" style="width:100%" />
+                            </a>
+                        </div>
+                    </li>
+                }
+                if (User.IsInRole("Update File Information"))
+                {
+                    <li>
+                        <div style="width:160px">
+                            <a href="/FileSystem/UpdateInformation">
+                                <img src="~/assets/static/images/Tileicons/up-fil-info.png" style="width:100%" />
+                            </a>
+                        </div>
+                    </li>
+                }
+                if (User.IsInRole("Overdue Files"))
+                {
+                    <li>
+                        <div style="width:160px">
+                            <a href="/FileSystem/OverDueFiles">
+                                <img src="~/assets/static/images/Tileicons/ov-fil.png" style="width:100%" />
+                            </a>
+                        </div>
+                    </li>
+                }
+                if (User.IsInRole("Files Cancelations Requests"))
+                {
+                    <li>
+                        <div style="width:160px">
+                            <a href="/FileSystem/CancellationReqs">
+                                <img src="~/assets/static/images/Tileicons/fil-can-req.png" style="width:100%" />
+                            </a>
+                        </div>
+                    </li>
+                }
+                if (User.IsInRole("Extra Amount Refund"))
+                {
+                    <li>
+                        <div style="width:160px">
+                            <a href="/FileSystem/ExtraAmountRefundFiles">
+                                <img src="~/assets/static/images/Tileicons/rec-ref-req.png" style="width:100%" />
+                            </a>
+                        </div>
+                    </li>
+                }
+                if (User.IsInRole("Generate File Transfer Letter"))
+                {
+                    <li>
+                        <div style="width:160px">
+                            <a href="/Transfer/FilesTransfersList">
+                                <img src="~/assets/static/images/Tileicons/fil-trs.png" style="width:100%" />
+                            </a>
+                        </div>
+                    </li>
+                }
+                if (User.IsInRole("Transfer Request"))
+                {
+                    <li>
+                        <div style="width:160px">
+                            <a href="/FileSystem/TransferRequest">
+                                <img src="~/assets/static/images/Tileicons/fil-trs-req.png" style="width:100%" />
+                            </a>
+                        </div>
+                    </li>
+                }
+
+                <h5>Plots Management</h5>
+                if (User.IsInRole("Plots Information"))
+                {
+                    <li>
+                        <div style="width:160px">
+                            <a href="/Plots/PlotInformation">
+                                <img src="~/assets/static/images/Tileicons/plt-info.png" style="width:100%" />
+                            </a>
+                        </div>
+                    </li>
+                }
+                if (User.IsInRole("Plots Registeration"))
+                {
+                    <li>
+                        <div class="hexagon bg-grey">
+                            <div class="text" style="">
+                                <i class="fas fa-directions fa-3x"></i>
+                                <br />
+                                <a style="color:white !important" href="/Plots/PlotOwnership/">Plots Registration</a>
+                            </div>
+                        </div>
+                    </li>
+                }
+                if (User.IsInRole("Plots Information Update"))
+                {
+                    <li>
+                        <div style="width:160px">
+                            <a href="/Plots/UpdatePlotInformation">
+                                <img src="~/assets/static/images/Tileicons/plt-up-info.png" style="width:100%" />
+                            </a>
+                        </div>
+                    </li>
+                }
+                if (User.IsInRole("Plots Transfer List"))
+                {
+                    <li>
+                        <div style="width:160px">
+                            <a href="/Plots/TransferList">
+                                <img src="~/assets/static/images/Tileicons/Transfer-List.png" style="width:100%" />
+                            </a>
+                        </div>
+                    </li>
+                }
+                if (User.IsInRole("Allotment Letters"))
+                {
+                    <li>
+                        <div style="width:160px">
+                            <a href="/Plots/AllotmentLettersList">
+                                <img src="~/assets/static/images/Tileicons/all-list.png" style="width:100%" />
+                            </a>
+                        </div>
+                    </li>
+                }
+                if (User.IsInRole("Plots Transfer Request List"))
+                {
+                    <li>
+                        <div style="width:160px">
+                            <a href="/Transfer/PlotTransferRequestList">
+                                <img src="~/assets/static/images/Tileicons/plt-trs-req.png" style="width:100%" />
+                            </a>
+                        </div>
+                    </li>
+                }
+                if (User.IsInRole("Allotment Letter Tracking"))
+                {
+                    <li>
+                        <div style="width:160px">
+                            <a href="/Plots/AllotmentTrackingViews">
+                                <img src="~/assets/static/images/Tileicons/all-trac.png" style="width:100%" />
+                            </a>
+                        </div>
+                    </li>
+                }
+                if (User.IsInRole("Plot Cancellation"))//Rename karna hai
+                {
+                    <li>
+                        <div style="width:160px">
+                            <a href="/Plots/CancellationReqs">
+                                <img src="~/assets/static/images/Tileicons/plt-can-req.png" style="width:100%" />
+                            </a>
+                        </div>
+                    </li>
+                }
+                if (User.IsInRole("Extra Amount Refund"))
+                {
+                    <li>
+                        <div style="width:160px">
+                            <a href="/Plots/ExtraAmountRefund">
+                                <img src="~/assets/static/images/Tileicons/rec-ref-req.png" style="width:100%" />
+                            </a>
+                        </div>
+                    </li>
+                }
+                if (User.IsInRole("Overdue Plots")) //Rename karna hai Plots Overdue par
+                {
+                    <li>
+                        <div style="width:160px">
+                            <a href="/Plots/OverDuePlots">
+                                <img src="~/assets/static/images/Tileicons/ov-plt.png" style="width:100%" />
+                            </a>
+                        </div>
+                    </li>
+                }
+                if (User.IsInRole("Possession Requests"))
+                {
+                    <li>
+                        <div style="width:160px">
+                            <a href="/Plots/PossessionRequests">
+                                <img src="~/assets/static/images/Tileicons/pos-let-req.png" style="width:100%" />
+                            </a>
+                        </div>
+                    </li>
+                }
+                if (User.IsInRole("Plot Transfer Request"))
+                {
+                    <li>
+                        <div style="width:160px">
+                            <a href="/Transfer/PlotTransferRequest">
+                                <img src="~/assets/static/images/Tileicons/plt-trs-reqs.png" style="width:100%" />
+                            </a>
+                        </div>
+                    </li>
+                }
+                if (User.IsInRole("Deliver File"))
+                {
+                    <li>
+                        <div style="width:160px">
+                            <a href="/FileSystem/FileDelivery">
+                                <img src="~/assets/static/images/Tileicons/fil-del.png" style="width:100%" />
+                            </a>
+                        </div>
+                    </li>
+                }
+                if (User.IsInRole("Generate Plots Transfer Letter"))
+                {
+
+                    <li>
+                        <div style="width:160px">
+                            <a href="/Transfer/PlotsTransfersList">
+                                <img src="~/assets/static/images/Tileicons/plt-trs.png" style="width:100%" />
+                            </a>
+                        </div>
+                    </li>
+                }
+                if (User.IsInRole("Allotment Letter Delivery"))
+                {
+                    <li>
+                        <div style="width:160px">
+                            <a href="/Plots/AllotmentLetterDelivery">
+                                <img src="~/assets/static/images/Tileicons/Allotment-letter-delivery.png" style="width:100%" />
+                            </a>
+                        </div>
+                    </li>
+                }
+                if (User.IsInRole("Rental Properties"))
+                {
+                    <li>
+                        <div style="width:160px">
+                            <a href="/Rental/Index">
+                                <img src="~/assets/static/images/Tileicons/ren-prop.png" style="width:100%" />
+                            </a>
+                        </div>
+                    </li>
+                }
+                if (User.IsInRole("Plot Swap Requester"))
+                {
+                    <li>
+                        <div class="hexagon bg-green">
+                            <div class="text" style="">
+                                <i class="fas fa-exchange fa-3x"></i>
+                                <br />
+                                <a style="color:white !important" href="/Plots/SwapPlot/">Plots Swap</a>
+                            </div>
+                        </div>
+                    </li>
+                }
+                if (User.IsInRole("Plot Adjustment Requester"))
+                {
+                    <li>
+                        <div class="hexagon bg-green">
+                            <div class="text" style="">
+                                <i class="fas fa-exchange fa-3x"></i>
+                                <br />
+                                <a style="color:white !important" href="/Plots/AdjustPlotToOtherPlot/">Plots Adjustment</a>
+                            </div>
+                        </div>
+                    </li>
+                }
+                if (User.IsInRole("Employee Files & Plots"))
+                {
+                    <li>
+                        <div class="hexagon bg-red">
+                            <div class="text" style="">
+                                <i class="fas fa-inbox fa-3x"></i>
+                                <br />
+                                <a style="color:white !important" href="/Plots/EmployeeFile/">Employee Plots</a>
+                            </div>
+                        </div>
+                    </li>
+                }
+
+                if (User.IsInRole("SA Plot Sale Report"))
+                {
+                    <li>
+                        <div class="hexagon bg-grey">
+                            <div class="text" style="">
+                                <i class="fas fa-list fa-3x"></i>
+                                <br />
+                                <a style="color:white !important" href="/Reports/SAPlotSalesReport/">SA Plot Sales Report</a>
+                            </div>
+                        </div>
+                    </li>
+                }
+            }
+            else if (ViewBag.Dash == "building")
+            {
+                if (User.IsInRole("Add Commercial Inventory"))
+                {
+                    <li>
+                        <div class="hexagon bg-grey">
+                            <div class="text" style="">
+                                <i class="fas fa-dolly-flatbed fa-3x"></i>
+                                <br />
+                                <a style="color:white !important" href="/Commercial/AddShopOrApartment/">Add Inventory</a>
+                            </div>
+                        </div>
+                    </li>
+                }
+                if (User.IsInRole("Building Information"))
+                {
+                    <li>
+                        <div class="hexagon bg-grey">
+                            <div class="text" style="">
+                                <i class="fas fa-hamsa fa-3x"></i>
+                                <br />
+                                <a style="color:white !important" href="/Commercial/CommercialInfo/">Detail Information</a>
+                            </div>
+                        </div>
+                    </li>
+                }
+                if (User.IsInRole("Transfer Request"))
+                {
+                    <li>
+                        <div class="hexagon bg-grey">
+                            <div class="text" style="">
+                                <i class="fas fa-hamsa fa-3x"></i>
+                                <br />
+                                <a style="color:white !important" href="/Transfer/CommercialTransferRequest/">Transfer Request</a>
+                            </div>
+                        </div>
+                    </li>
+                }
+                if (User.IsInRole("Generate Plots Transfer Letter"))
+                {
+                    <li>
+                        <div class="hexagon bg-grey">
+                            <div class="text" style="">
+                                <i class="fas fa-hamsa fa-3x"></i>
+                                <br />
+                                <a style="color:white !important" href="/Transfer/CommercialTransferRequestList/">Transfers List</a>
+                            </div>
+                        </div>
+                    </li>
+                }
+                if (User.IsInRole("Commercial Registeration-M"))
+                {
+                    <li>
+                        <div class="hexagon bg-grey">
+                            <div class="text" style="">
+                                <i class="fas fa-directions fa-3x"></i>
+                                <br />
+                                <a style="color:white !important" href="/Commercial/CommercialMannualRegisteration/">Commercial Registration</a>
+                            </div>
+                        </div>
+                    </li>
+                }
+                if (User.IsInRole("Update Commercial Record"))
+                {
+                    <li>
+                        <div class="hexagon bg-green">
+                            <div class="text" style="">
+                                <i class="fas fa-info-circle fa-3x"></i>
+                                <br />
+                                <a style="color:white !important" href="/Commercial/UpdateCommercialInformation/">Update Information</a>
+                            </div>
+                        </div>
+                    </li>
+                }
+                if (User.IsInRole("Commercial Possession"))
+                {
+                    <li>
+                        <div class="hexagon bg-green">
+                            <div class="text" style="">
+                                <i class="far fa-file-alt fa-3x"></i>
+                                <br />
+                                <a style="color:white !important" href="/Commercial/PossessionRequests/">Possession Requests</a>
+                            </div>
+                        </div>
+                    </li>
+                }
+                if (User.IsInRole("Commercial Cancellation Requests"))
+                {
+                    <li>
+                        <div class="hexagon bg-yellow">
+                            <div class="text" style="">
+                                <i class="fa fa-check fa-3x"></i>
+                                <br />
+                                <a style="color:white !important" href="/Commercial/CancellationReqs/">Cancellation Requests</a>
+                            </div>
+                        </div>
+                    </li>
+                }
+                if (User.IsInRole("Commercial Possesion Requests"))
+                {
+                    <li>
+                        <div class="hexagon bg-dark">
+                            <div class="text" style="">
+                                <i class="fa fa-home fa-3x"></i>
+                                <br />
+                                <a style="color:white !important" href="/Commercial/PossessionRequests/">Possession Requests</a>
+                            </div>
+                        </div>
+                    </li>
+                }
+                if (User.IsInRole("Commercial Overdue Properties"))
+                {
+                    <li>
+                        <div class="hexagon bg-blue">
+                            <div class="text" style="">
+                                <i class="fa fa-clock-o fa-3x"></i>
+                                <br />
+                                <a style="color:white !important" href="/Commercial/OverDueShop/">Overdue Properties</a>
+                            </div>
+                        </div>
+                    </li>
+                }
+            }
+            else if (ViewBag.Dash == "land")
+            {
+                if (User.IsInRole("Land Records"))
+                {
+                    <li>
+                        <div class="hexagon bg-grey">
+                            <div class="text" style="">
+                                <i class="fas fa-map fa-3x"></i>
+                                <br />
+                                <a style="color:white !important" href="/Land/LandRecords/">Land Records</a>
+                            </div>
+                        </div>
+                    </li>
+                }
+                if (User.IsInRole("Land Seller Parties"))
+                {
+                    <li>
+                        <div class="hexagon bg-yellow">
+                            <div class="text" style="">
+                                <i class="fas fa-users fa-3x"></i>
+                                <br />
+                                <a style="color:white !important" href="/Land/LandSellers/">Seller Parties</a>
+                            </div>
+                        </div>
+                    </li>
+                }
+            }
+            else if (ViewBag.Dash == "makepayment")
+            {
+                if (User.IsInRole("Payables Make Payment"))
+                {
+                    <li>
+                        <div class="hexagon bg-grey">
+                            <div class="text" style="">
+                                <i class="fas fa-map fa-3x"></i>
+                                <br />
+                                <a style="color:white !important" href="/Procurement/AllBillsVendor/">Bill Payments</a>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="hexagon bg-red">
+                            <div class="text" style="">
+                                <i class="fas fa-users fa-3x"></i>
+                                <br />
+                                <a style="color:white !important" href="/Dealership/DealershipPayment/">Dealer Payable</a>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="hexagon bg-yellow">
+                            <div class="text" style="">
+                                <i class="fas fa-users fa-3x"></i>
+                                <br />
+                                <a style="color:white !important" href="/Finance/PayPattyCash/">Petty Cash Payable</a>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="hexagon bg-green">
+                            <div class="text" style="">
+                                <i class="fas fa-users fa-3x"></i>
+                                <br />
+                                <a style="color:white !important" href="/Finance/TaxPayment/">Tax Payable</a>
+                            </div>
+                        </div>
+                    </li>
+                }
+            }
+            else if (ViewBag.Dash == "prj management")
+            {
+                if (User.IsInRole("Projects List"))
+                {
+                    <li>
+                        <div style="width:160px">
+                            <a href="/ConstructProjectManagement/ProjectsList">
+                                <img src="~/assets/static/images/Tileicons/prj.png" style="width:100%" />
+                            </a>
+                        </div>
+                    </li>
+                }
+            }
+            else if (ViewBag.Dash == "tickets")
+            {
+
+                if (User.IsInRole("All Tickets"))
+                {
+                    <li>
+                        <div style="width:160px">
+                            <a href="/Tickets/AllTickets">
+                                <img src="~/assets/static/images/Tileicons/al-tick.png" style="width:100%" />
+                            </a>
+                        </div>
+                    </li>
+                                }
+                                //if (User.IsInRole("Customer Tickets"))
+                                //{
+                    <li>
+                        <div style="width:160px">
+                            <a href="/Tickets/ReceptionTicketing">
+                                <img src="~/assets/static/images/Tileicons/rec-tick.png" style="width:100%" />
+                            </a>
+                        </div>
+                    </li>
+                                //}
+            }
+            else if (ViewBag.Dash == "accounts")
+            {
+                if (User.IsInRole("Cheques"))
+                {
+                    <li>
+                        <div style="width:160px">
+                            <a href="/Banking/BankingInstrument">
+                                <img src="~/assets/static/images/Tileicons/all-ins.png" style="width:100%" />
+                            </a>
+                        </div>
+                    </li>
+                }
+                if (User.IsInRole("Dishounered Cheques"))
+                {
+                    <li>
+                        <div style="width:160px">
+                            <a href="/Banking/DishonoredCheqs">
+                                <img src="~/assets/static/images/Tileicons/Dishounered-Cheques.png" style="width:100%" />
+                            </a>
+                        </div>
+                    </li>
+                }
+                if (User.IsInRole("Cheques"))
+                {
+                    @*<li>
+                            <div style="width:160px">
+                                <a href="/Finance/FinancialAdjustList">
+                                    <img src="~/assets/static/images/Tileicons/ven.png" style="width:100%" />
+                                </a>
+                            </div>
+                        </li>*@
+                    <li>
+                        <div class="hexagon bg-green">
+                            <div class="text" style="">
+                                <i class="fas fa-money-bill-wave fa-3x"></i>
+                                <br />
+                                <a style="color:white !important" href="/Finance/FinancialAdjustList/">Receipts Adjustment Requests</a>
+                            </div>
+                        </div>
+                    </li>
+                }
+                if (User.IsInRole("Recovery Reports"))
+                {
+                    <li>
+                        <div style="width:160px">
+                            <a href="/Reports/RecoveryReport">
+                                <img src="~/assets/static/images/Tileicons/al-rec-rep.png" style="width:100%" />
+                            </a>
+                        </div>
+                    </li>
+                }
+                if (User.IsInRole("Receipt Update Approval"))
+                {
+                    <li>
+                        <div style="width:160px">
+                            <a href="/Finance/UpdateRequests">
+                                <img src="~/assets/static/images/Tileicons/rece-up.png" style="width:100%" />
+                            </a>
+                        </div>
+                    </li>
+                }
+                if (User.IsInRole("Receipt Update Approval"))
+                {
+                    <li>
+                        <div style="width:160px">
+                            <a href="/Finance/MarketingUpdateRequests">
+                                <img src="~/assets/static/images/Tileicons/Marketing-Receipt-Updations.png" style="width:100%" />
+                            </a>
+                        </div>
+                    </li>
+                }
+                if (User.IsInRole("Receipt Cancelations Requests"))
+                {
+                    <li>
+                        <div style="width:160px">
+                            <a href="/Finance/AllCancelRequests">
+                                <img src="~/assets/static/images/Tileicons/rec-can-req.png" style="width:100%" />
+                            </a>
+                        </div>
+                    </li>
+                    <li>
+                        <div style="width:160px">
+                            <a href="/Finance/MarketingAllCancelRequests">
+                                <img src="~/assets/static/images/Tileicons/Marketing-Receipt-Cancelations-Requests.png" style="width:100%" />
+                            </a>
+                        </div>
+                    </li>
+                }
+                if (User.IsInRole("SAM Instruments"))
+                {
+                    <li>
+                        <div style="width:160px">
+                            <a href="/Banking/LeadAllBankPayments?Company=SAM">
+                                <img src="~/assets/static/images/Tileicons/sam-inst.png" style="width:100%" />
+                            </a>
+                        </div>
+                    </li>
+                }
+                if (User.IsInRole("SAM Instruments"))
+                {
+                    <li>
+                        <div style="width:160px">
+                            <a href="/Banking/LeadAllBankPayments?Company=SPE">
+                                <img src="~/assets/static/images/Tileicons/spe-inst.png" style="width:100%" />
+                            </a>
+                        </div>
+                    </li>
+                }
+                if (User.IsInRole("SAM Recovery Reports"))
+                {
+                    <li>
+                        <div style="width:160px">
+                            <a href="/Reports/SAMRecoveryReport">
+                                <img src="~/assets/static/images/Tileicons/rec-repo.png" style="width:100%" />
+                            </a>
+                        </div>
+                    </li>
+                }
+                if (User.IsInRole("Banks Collection"))
+                {
+                    <li>
+                        <div style="width:160px">
+                            <a href="/Banking/BanksMIS">
+                                <img src="~/assets/static/images/Tileicons/on-bnk-rec.png" style="width:100%" />
+                            </a>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="hexagon bg-blue">
+                            <div class="text" style="">
+                                <i class="fas fa-money-bill-wave fa-3x"></i>
+                                <br />
+                                <a style="color:white !important" href="/Finance/PendingReceiptWithoutFileId/">Suspense Receipts</a>
+                            </div>
+                        </div>
+                    </li>
+                }
+                if (User.IsInRole("Receipt Adjustment Requests"))
+                {
+                    <li>
+                        <div style="width:160px">
+                            <a href="/Finance/RecordAdjustment">
+                                <img src="~/assets/static/images/Tileicons/Receipts-Adjustment-Requests.png" style="width:100%" />
+                            </a>
+                        </div>
+                    </li>
+                }
+                if (User.IsInRole("Finance Manager") || User.IsInRole("Salary Tax Configuration"))
+                {
+                    <li>
+                        <div class="hexagon bg-green">
+                            <div class="text" style="">
+                                <i class="fas fa-money-bill-wave fa-3x"></i>
+                                <br />
+                                <a style="color:white !important" href="/Salaries/SalaryTaxConfig/">Salary Tax Configuration</a>
+                            </div>
+                        </div>
+                    </li>
+                }
+                if (User.IsInRole("Employee Bank Accounts") || User.IsInRole("Administrator"))
+                {
+                    <li>
+                        <div style="width:160px">
+                            <a href="/Salaries/SalaryBankConfig/">
+                                <img src="~/assets/static/images/Tileicons/Employee-Bank-Accounts.png" style="width:100%" />
+                            </a>
+                        </div>
+                    </li>
+                }
+                @*<hr />
+                    if (User.IsInRole("Chart of Accounts"))
+                    {
+                        <li>
+                            <div style="width:160px">
+                                <a href="/AccountHeads/AccountHeadList">
+                                    <img src="~/assets/static/images/Tileicons/ch-of-acc.png" style="width:100%" />
+                                </a>
+                            </div>
+                        </li>
+                    }
+                    if (User.IsInRole("Trail Balance"))
+                    {
+                        <li>
+                            <div style="width:160px">
+                                <a href="/AccountHeads/TrailBalance">
+                                    <img src="~/assets/static/images/Tileicons/trl-bal.png" style="width:100%" />
+                                </a>
+                            </div>
+                        </li>
+                    }
+                    <hr />
+                    if (User.IsInRole("General Entry"))
+                    {
+                        @*<li>
+                        <div style="width:160px">
+                            <a href="/GeneralEntry/RecordedEntries">
+                                <img src="~/assets/static/images/Tileicons/ven.png" style="width:100%" />
+                            </a>
+                        </div>
+                    </li>
+                        <li class="bg-info">
+                            <div class="top-info">
+                                <a href="javascript:void(0);" class="get-link text-white" data-link="/GeneralEntry/RecordedEntries/">My Journal Entries</a>
+                            </div>
+                        </li>
+                        <li>
+                            <div style="width:160px">
+                                <a href="/GeneralEntry/ForUpdations">
+                                    <img src="~/assets/static/images/Tileicons/Update-General-Entry.png" style="width:100%" />
+                                </a>
+                            </div>
+                        </li>
+                    }
+                    if (User.IsInRole("General Entry"))
+                    {
+                        <li>
+                            <div style="width:160px">
+                                <a href="/GeneralEntry/GeneralEntry">
+                                    <img src="~/assets/static/images/Tileicons/gen-ent.png" style="width:100%" />
+                                </a>
+                            </div>
+                        </li>
+                    }
+                    if (User.IsInRole("Supervision of General Entry"))
+                    {
+                        <li>
+                            <div style="width:160px">
+                                <a href="/GeneralEntry/PendingEntries">
+                                    <img src="~/assets/static/images/Tileicons/pen-vouc.png" style="width:100%" />
+                                </a>
+                            </div>
+                        </li>
+                    }
+                    if (User.IsInRole("Payable Voucher"))
+                    {
+                        <li>
+                            <div style="width:160px">
+                                <a href="/GeneralEntry/PayableVouchers">
+                                    <img src="~/assets/static/images/Tileicons/pay-vouc.png" style="width:100%" />
+                                </a>
+                            </div>
+                        </li>
+                    }
+                    if (User.IsInRole("Direct Voucher"))
+                    {
+                        <li>
+                            <div style="width:160px">
+                                <a href="/GeneralEntry/DirectTempVoucher">
+                                    <img src="~/assets/static/images/Tileicons/Direct-Cash-Payment-Voucher.png" style="width:100%" />
+                                </a>
+                            </div>
+                        </li>
+                    }*@
+
+            }
+            else if (ViewBag.Dash == "audit")
+            {
+                if (User.IsInRole("Audit Dashboard"))
+                {
+                    <div class="row">
+                        @{ Html.RenderAction("AuditorsHome", "Home"); }
+                    </div>
+                }
+                if (User.IsInRole("Verify File"))
+                {
+                    <li>
+                        <div class="hexagon bg-yellow">
+                            <div class="text" style="">
+                                <i class="fas fa-check fa-3x"></i>
+                                <br />
+                                <a style="color:white !important" href="/FileSystem/FileVerification/">Files Verification</a>
+                            </div>
+                        </div>
+                    </li>
+                }
+                if (User.IsInRole("Plots Verification Request"))
+                {
+                    <li>
+                        <div class="hexagon bg-green">
+                            <div class="text" style="">
+                                <i class="fas fa-check-double fa-3x"></i>
+                                <br />
+                                <a style="color:white !important" href="/Plots/ReqVerificationList/">Plots Verification Requests</a>
+                            </div>
+                        </div>
+                    </li>
+                }
+                if (User.IsInRole("Files Verification Requests"))
+                {
+                    <li>
+                        <div class="hexagon bg-grey">
+                            <div class="text" style="">
+                                <i class="fa fa-check-square fa-3x"></i>
+                                <br />
+                                <a style="color:white !important" href="/FileSystem/VerificationRequested/">File Verification Requests</a>
+                            </div>
+                        </div>
+                    </li>
+                }
+                if (User.IsInRole("Building Verification"))
+                {
+                    <li>
+                        <div class="hexagon bg-blue">
+                            <div class="text" style="">
+                                <i class="fas fa-archway fa-3x"></i>
+                                <br />
+                                <a style="color:white !important" href="/Commercial/VerifcationRequests/">Building Verifications</a>
+                            </div>
+                        </div>
+                    </li>
+                }
+
+
+
+                @*if (User.IsInRole("Allotment Letter Requests"))
+                    {
+                        <li>
+                            <div style="width:160px">
+                                <a href="/Plots/AllotmentRequest">
+                                    <img src="~/assets/static/images/Tileicons/all-reqs.png" style="width:100%" />
+                                </a>
+                            </div>
+                        </li>
+                    }*@
+                @*if (User.IsInRole("Pre-Verification of Plots"))
+                    {
+                        <li>
+                            <div style="width:160px">
+                                <a href="/Plots/PostPlotVerification">
+                                    <img src="~/assets/static/images/Tileicons/Pre-Verification-of-Plots.png" style="width:100%" />
+                                </a>
+                            </div>
+                        </li>
+                    }*@
+
+            }
+            else if (ViewBag.Dash == "service charges")
+            {
+                <div class="bgc-white bd bdrs-3 p-20 mB-20" id="sc-short">        </div>
+                <div class="bgc-white bd bdrs-3 p-20 mB-20" id="ec-short">        </div>
+                <script>
+                    $(function () {
+                        $("#sc-short").load('/Reports/ServiceChargesBills_Short/');
+                        $("#ec-short").load('/Reports/ElectricityChargesBill_Short/');
+                    });
+                </script>
+                if (User.IsInRole("Add Meter Reading"))
+                {
+                    <li>
+                        <div style="width:160px">
+                            <a href="/ServiceCharges/NewMeterReading">
+                                <img src="~/assets/static/images/Tileicons/ad-me-rea.png" style="width:100%" />
+                            </a>
+                        </div>
+                    </li>
+
+                }
+                if (User.IsInRole("Service Charges Details"))
+                {
+                    <li>
+                        <div style="width:160px">
+                            <a href="/ServiceCharges/Bills">
+                                <img src="~/assets/static/images/Tileicons/sc-det.png" style="width:100%" />
+                            </a>
+                        </div>
+                    </li>
+                }
+                if (User.IsInRole("Electricity Charges Details"))
+                {
+                    <li>
+                        <div style="width:160px">
+                            <a href="/ServiceCharges/ElectricityBill">
+                                <img src="~/assets/static/images/Tileicons/elc-ch-det.png" style="width:100%" />
+                            </a>
+                        </div>
+                    </li>
+                }
+                if (User.IsInRole("Manage Service Charges"))
+                {
+                    <li>
+                        <div style="width:160px">
+                            <a href="/ServiceCharges/ManageServiceCharges">
+                                <img src="~/assets/static/images/Tileicons/man-sc.png" style="width:100%" />
+                            </a>
+                        </div>
+                    </li>
+                }
+                if (User.IsInRole("Utilities Manager"))
+                {
+                    <hr />
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <li>
+                        <div style="width:160px">
+                            <a href="/ServiceCharges/MeterChangeRequests/">
+                                <img src="~/assets/static/images/Tileicons/Meter-Change-Requests.png" style="width:100%" />
+                            </a>
+                        </div>
+                    </li>
+
+                    <li>
+                        <div style="width:160px">
+                            <a href="/ServiceCharges/InstallmentRequests/">
+                                <img src="~/assets/static/images/Tileicons/Bill-Installment-Requests.png" style="width:100%" />
+                            </a>
+                        </div>
+                    </li>
+
+                    <li>
+                        <div style="width:160px">
+                            <a href="/ServiceCharges/RequestsList?typ=Fine_Waiver&mod=Plot">
+                                <img src="~/assets/static/images/Tileicons/Request-Waiver.png" style="width:100%" />
+                            </a>
+                        </div>
+                    </li>
+
+                    @*<li>
+                            <div class="hexagon bg-info font-white">
+                                <span class="my-dot">
+                                    <label class="met-red-count">0</label>
+                                </span>
+                                <div class="text" style="text-align: center;font-size: 17px;">
+                                    <i class="fa fa-list-alt heavyFont"></i>
+                                    <br />
+                                    <br />
+                                    <a class="" href="/ServiceCharges/ManualMeterReadingRequests/">Meter Reading Requests</a>
+                                </div>
+                            </div>
+                        </li>*@
+                }
+            }
+
+            else if (ViewBag.Dash == "hr")
+            {
+                if (User.IsInRole("Attendance Report"))
+                {
+                    <hr />
+                    <div class="form-row">
+                        <div class="col-md-12">
+                            <div class="row" style="align-items: flex-end;">
+                                <div class="col-md-3">
+                                    <div class="col-md-6">From :</div>
+                                    <div class="col-md-10">
+                                        <input type="text" class="form-control st-dt-khjdf" placeholder="From Date" />
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <div class="col-md-6">To :</div>
+                                    <div class="col-md-10">
+                                        <input type="text" class="form-control en-dt-khjdf" placeholder="To Date" />
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <div class="col-md-10">Department :</div>
+                                    <div class="col-md-10">
+                                        <select class="form-control dep-att-lst-gskfskj" multiple="multiple">
+                                            <option>All</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-2">
+                                    <button class="btn btn-primary get-att-rep-btn-fkajh">Update</button>
+                                    <button class="btn btn-primary dets-att-rep-btn-fkajh">Details</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12" id="att-rep-data">
+                        </div>
+                    </div>
+                }
+
+                if (User.IsInRole("Payroll Report"))
+                {
+                    <hr />
+                    <div class="form-row">
+                        <div class="col-md-12">
+                            <div class="row" style="align-items: flex-end;">
+                                <div class="col-md-3">
+                                    <div class="col-md-5">From :</div>
+                                    <div class="col-md-10">
+                                        <input type="text" class="form-control st-dt-dfhjgs" placeholder="From Date" />
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <div class="col-md-5">To :</div>
+                                    <div class="col-md-10">
+                                        <input type="text" class="form-control en-dt-fkjdghs" placeholder="To Date" />
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <div class="col-md-10">Department :</div>
+                                    <div class="col-md-10">
+                                        <select class="form-control dep-payrl-lst-dsfjk">
+                                            <option>All</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-2">
+                                    <button class="btn btn-primary get-payrl-rep-btn-fdljk">Update</button>
+                                    <button class="btn btn-primary dets-payrl-rep-btn-fdljk">Details</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12" id="payrl-rep-data">
+                        </div>
+                    </div>
+                }
+
+                if (User.IsInRole("Payroll Report"))
+                {
+                    <hr />
+                    <div class="form-row">
+                        <div class="col-md-12">
+                            <div class="row" style="align-items: flex-end;">
+                                <div class="col-md-2">
+                                    <div class="col-md-8">From :</div>
+                                    <div class="col-md-12">
+                                        <input type="text" class="form-control st-dt-skdfj-sdfhjg" placeholder="From Date" />
+                                    </div>
+                                </div>
+
+                                <div class="col-md-2">
+                                    <div class="col-md-8">To :</div>
+                                    <div class="col-md-12">
+                                        <input type="text" class="form-control en-dt-hsfdgvhjs-asdhjgv" placeholder="To Date" />
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <div class="col-md-12">Compare :</div>
+                                    <div class="col-md-12">
+                                        <select class="form-control cmprsn-typ-fdshjksdjfhk">
+                                            <option value="AllComps">All Companies</option>
+                                            <option value="SelectedComps">Selected Companies</option>
+                                            <option value="AllDepts">All Departments</option>
+                                            <option value="SelectedDepts">Selected Departments</option>
+                                            <option value="AllDesigs">All Designations</option>
+                                            <option value="SelectedDesigs">Selected Designations</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4 last-opt-sal-rep-kjfhsd" style="display:none;">
+                                    <div class="col-md-10">Department :</div>
+                                    <div class="col-md-10">
+                                        <select class="form-control comp-sal-typ-dsfjk sel-typ" multiple>
+                                            <option>All</option>
+                                        </select>
+                                        @*<select class="form-control dep-sal-typ-dsfjk sel-typ">
+                                                <option>All</option>
+                                            </select>
+                                            <select class="form-control desig-sal-typ-dsfjk sel-typ">
+                                                <option>All</option>
+                                            </select>*@
+                                    </div>
+                                </div>
+
+                                <div class="col-md-1">
+                                    <button class="btn btn-primary get-sal-rep-btn-fdljk">Update</button>
+                                    @*<button class="btn btn-primary dets-payrl-rep-btn-fdljk">Details</button>*@
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12" id="sal-rep-data">
+                        </div>
+                    </div>
+                }
+
+                if (User.IsInRole("Payroll Report"))
+                {
+                    <div class="row">
+                        <div class="col-md-3">
+                            @{ Html.RenderAction("LateCommersWidget", "Attendance");}
+                        </div>
+                        <div class="col-md-6">
+                            @{ Html.RenderAction("ProbationEndEmployeesWidget", "HumanResource");}
+                        </div>
+                        <div class="col-md-12">
+                            @{ Html.RenderAction("HiringFiringGraph", "HumanResource");}
+                        </div>
+                    </div>
+                }
+                if (User.IsInRole("Company Configuration"))
+                {
+                    <h4>Company Structure</h4>
+                    <li>
+                        <div style="width:160px">
+                            <a href="/Company/CompanyHierarchy">
+                                <img src="~/assets/static/images/Tileicons/Company-Hierarchy.png" style="width:100%" />
+                            </a>
+                        </div>
+                    </li>
+                    <li>
+                        <div style="width:160px">
+                            <a href="/Company/AddCompany">
+                                <img src="~/assets/static/images/Tileicons/ad-com.png" style="width:100%" />
+                            </a>
+                        </div>
+                    </li>
+                    <li>
+                        <div style="width:160px">
+                            <a href="/Company/AddDepartments">
+                                <img src="~/assets/static/images/Tileicons/ad-dep.png" style="width:100%" />
+                            </a>
+                        </div>
+                    </li>
+                    <li>
+                        <div style="width:160px">
+                            <a href="/Company/AddDesignation">
+                                <img src="~/assets/static/images/Tileicons/Add-Designation.png" style="width:100%" />
+                            </a>
+                        </div>
+                    </li>
+                    <li>
+                        <div style="width:160px">
+                            <a href="/Company/UpdateParentCompany">
+                                <img src="~/assets/static/images/Tileicons/hie-ch.png" style="width:100%" />
+                            </a>
+                        </div>
+                    </li>
+                    <li>
+                        <div style="width:160px">
+                            <a href="/Company/UpdateCompanyDepartmentDesignation">
+                                <img src="~/assets/static/images/Tileicons/up-com-dep.png" style="width:100%" />
+                            </a>
+                        </div>
+                    </li>
+                }
+
+
+                <hr />
+                if (User.IsInRole("Employee List"))
+                {
+                    <li>
+                        <div style="width:160px">
+                            <a href="/HumanResource/EmployeesList">
+                                <img src="~/assets/static/images/Tileicons/emp-lst.png" style="width:100%" />
+                            </a>
+                        </div>
+                    </li>
+                }
+                if (User.IsInRole("Employee Addition"))
+                {
+                    <li>
+                        <div style="width:160px">
+                            <a href="/HumanResource/AddEmployee">
+                                <img src="~/assets/static/images/Tileicons/add-emp.png" style="width:100%" />
+                            </a>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="hexagon bg-green">
+                            <div class="text" style="">
+                                <i class="fab fa-hire-a-helper fa-3x"></i>
+                                <br />
+                                <a style="color:white !important" href="/HumanResource/HRHiringReport/">Hiring &amp; Firing Report</a>
+                            </div>
+                        </div>
+                    </li>
+                }
+                if (User.IsInRole("Organization Chart"))
+                {
+                    <li>
+                        <div style="width:160px">
+                            <a href="/HumanResource/MakeOrgano">
+                                <img src="~/assets/static/images/Tileicons/org-chart.png" style="width:100%" />
+                            </a>
+                        </div>
+                    </li>
+                }
+                if (User.IsInRole("Probation List"))
+                {
+                    <li>
+                        <div style="width:160px">
+                            <a href="/HumanResource/ProbationEndEmployees">
+                                <img src="~/assets/static/images/Tileicons/Probation-Employees.png" style="width:100%" />
+                            </a>
+                        </div>
+                    </li>
+                }
+                if (User.IsInRole("Probation List"))
+                {
+                    <li>
+                        <div style="width:160px">
+                            <a href="/HumanResource/Gratuity">
+                                <img src="~/assets/static/images/Tileicons/grat.png" style="width:100%" />
+                            </a>
+                        </div>
+                    </li>
+                }
+                if (User.IsInRole("Form Setter"))
+                {
+                    <li>
+                        <div style="width:160px">
+                            <a href="/HumanResource/SetQuestionnaire">
+                                <img src="~/assets/static/images/Tileicons/Set-Questionnaire.png" style="width:100%" />
+                            </a>
+                        </div>
+                    </li>
+                    <li>
+                        <div style="width:160px">
+                            <a href="/HumanResource/PendingQuestionnaires">
+                                <img src="~/assets/static/images/Tileicons/Questionnaires.png" style="width:100%" />
+                            </a>
+                        </div>
+                    </li>
+                }
+                if (User.IsInRole("Fuel Sheet"))
+                {
+                    <li>
+                        <div style="width:160px">
+                            <a href="/HumanResource/FuelSheet">
+                                <img src="~/assets/static/images/Tileicons/fu-det.png" style="width:100%" />
+                            </a>
+                        </div>
+                    </li>
+                }
+                <hr />
+                if (User.IsInRole("Salary 1st Stage") || User.IsInRole("Salary 2nd Stage") || User.IsInRole("Salary 3rd Stage") || User.IsInRole("Salary 4th Stage") || User.IsInRole("Salary Search"))
+                {
+                    <li>
+                        <div style="width:160px">
+                            <a href="/Salaries/SalaryManagement">
+                                <img src="~/assets/static/images/Tileicons/sal-lst.png" style="width:100%" />
+                            </a>
+                        </div>
+                    </li>
+                }
+                if (User.IsInRole("Salary Report"))
+                {
+                    <li>
+                        <div style="width:160px">
+                            <a href="/Salaries/SalariesReports">
+                                <img src="~/assets/static/images/Tileicons/Salary-Variance-Report.png" style="width:100%" />
+                            </a>
+                        </div>
+                    </li>
+                    <li class="bg-info">
+                        <div class="top-info">
+                            <a href="javascript:void(0);" class="get-link text-white" data-link="/Salaries/VarianceOfNewHiringAndBasic/">Salary Variance</a>
+                        </div>
+                    </li>
+                }
+                <hr />
+                if (User.IsInRole("Employee Arrears") || User.IsInRole("Arrears Approval") || User.IsInRole("Finance Arrears Approval") || User.IsInRole("Arrears Distribution") || User.IsInRole("Arrears All"))
+                {
+                    <li>
+                        <div style="width:160px">
+                            <a href="/ArrearsSalaries/ArrearsManagement">
+                                <img src="~/assets/static/images/Tileicons/gen-ar.png" style="width:100%" />
+                            </a>
+                        </div>
+                    </li>
+                }
+                if (User.IsInRole("Arrears All"))
+                {
+                    <li>
+                        <div style="width:160px">
+                            <a href="/HumanResource/ArrearsSummary">
+                                <img src="~/assets/static/images/Tileicons/Arrears_Report.png" style="width:100%" />
+                            </a>
+                        </div>
+                    </li>
+                }
+                <hr />
+                if (User.IsInRole("Employee Loans"))
+                {
+                    <li>
+                        <div style="width:160px">
+                            <a href="/Loan/BalanceDetail">
+                                <img src="~/assets/static/images/Tileicons/la-app.png" style="width:100%" />
+                            </a>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="hexagon bg-green">
+                            <div class="text" style="">
+                                <i class="fas fa-comments-dollar fa-3x"></i>
+                                <br />
+                                <a style="color:white !important" href="/Loan/LoanSettlement/">Loan Settlement</a>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="hexagon bg-green">
+                            <div class="text" style="">
+                                <i class="fas fa-dharmachakra fa-3x"></i>
+                                <br />
+                                <a style="color:white !important" href="/Loan/DepartmentLoanReport/">Dept. Loans Report</a>
+                            </div>
+                        </div>
+                    </li>
+                }
+                if (User.IsInRole("HR Manager"))
+                {
+                    <li>
+                        <div class="hexagon bg-grey" style="margin-top: 50px;">
+                            <div class="text" style="">
+                                <i class="fas fa-map fa-3x"></i>
+                                <br />
+                                <a style="color:white !important" href="/HumanResource/WarningLetter/">Warning Letters</a>
+                            </div>
+                        </div>
+                    </li>
+                }
+
+            }
+            else if (ViewBag.Dash == "call center")
+            {
+                if (User.IsInRole("Call Agent"))
+                {
+                    <li>
+                        <div style="width:160px">
+                            <a href="/CallCenter/OverdueInstallments">
+                                <img src="~/assets/static/images/Tileicons/cal-cen.png" style="width:100%" />
+                            </a>
+                        </div>
+                    </li>
+                }
+                if (User.IsInRole("Customer Portal"))
+                {
+                    <li>
+                        <div style="width:160px">
+                            <a href="/Home/AllCustomersPortal">
+                                <img src="~/assets/static/images/Tileicons/Customer-Portal-Users.png" style="width:100%" />
+                            </a>
+                        </div>
+                    </li>
+                }
+            }
+            else if (ViewBag.Dash == "com")
+            {
+                if (User.IsInRole("Customer Comunication"))
+                {
+                    <li>
+                        <div class="hexagon bg-grey">
+                            <div class="text" style="">
+                                <i class="fas fa-list fa-3x"></i>
+                                <br />
+                                <a style="color:white !important" href="/Sms/Text/">Customer SMS</a>
+                            </div>
+                        </div>
+                    </li>
+                }
+            }
+            else if (ViewBag.Dash == "asset")
+            {
+                <li>
+                    <div style="width:160px">
+                        <a href="/Assets/AssetsTracker/">
+                            <img src="~/assets/static/images/Tileicons/as-det.png" style="width:100%" />
+                        </a>
+                    </div>
+                </li>
+            }
+            else if (ViewBag.Dash == "vehical")
+            {
+                if (User.IsInRole("Vehical Addition"))
+                {
+                    <li>
+                        <div style="width:160px">
+                            <a href="/Company/AddVehical">
+                                <img src="~/assets/static/images/Tileicons/veh-det.png" style="width:100%" />
+                            </a>
+                        </div>
+                    </li>
+                    <li>
+                        <div style="width:160px">
+                            <a href="/Company/FuelDetails">
+                                <img src="~/assets/static/images/Tileicons/fu-det.png" style="width:100%" />
+                            </a>
+                        </div>
+                    </li>
+                }
+
+                @*<li class="bg-primary text-white">
+                        <div class="top-info">
+                            <a href="javascript:void(0);" class="get-link text-white" data-link="/Company/AssetLogsList/">Assets Log List</a>
+                        </div>
+                    </li>*@
+
+            }
+            else if (ViewBag.Dash == "sa marketing")
+            {
+                if (User.IsInRole("Pending Files"))
+                {
+                    <div class='col-md-2'>
+                        <div class="layers bd bgc-white p-10 mt-2" data-toggle="tooltip" data-placement="top" title="" data-original-title="Application Forms which are still in market for registeration">
+                            <div class="layer w-100">
+                                <div class="peers ai-sb fxw-nw">
+                                    <div class="peer peer-greed">
+                                        <h6 class="lh-1">Pending Application Form</h6>
+                                    </div>
+                                    <div class="peer">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layer w-100">
+                                <a href="/FileSystem/FileStatusView?status=2">View all</a>
+                            </div>
+                        </div>
+                    </div>
+                }
+
+                if (User.IsInRole("All Leads"))
+                {
+                    <li>
+                        <div style="width:160px">
+                            <a href="/Leads/SAMLead">
+                                <img src="~/assets/static/images/Tileicons/al-led.png" style="width:100%" />
+                            </a>
+                        </div>
+                    </li>
+                    <li>
+                        <div style="width:160px">
+                            <a href="/leads/DealsReport">
+                                <img src="~/assets/static/images/Tileicons/lead-led-rep.png" style="width:100%" />
+                            </a>
+                        </div>
+                    </li>
+                }
+                if (User.IsInRole("User Leads"))
+                {
+                    <li>
+                        <div style="width:160px">
+                            <a href="/Leads/MyLeads">
+                                <img src="~/assets/static/images/Tileicons/Leads.png" style="width:100%" />
+                            </a>
+                        </div>
+                    </li>
+                }
+                if (User.IsInRole("Leads Reports"))
+                {
+                    <li>
+                        <div style="width:160px">
+                            <a href="/Reports/LeadsReports">
+                                <img src="~/assets/static/images/Tileicons/led-rep.png" style="width:100%" />
+                            </a>
+                        </div>
+                    </li>
+                }
+                if (User.IsInRole("Property Deals"))
+                {
+                    <li>
+                        <div style="width:160px">
+                            <a href="/PropertyDeal/AllDeales">
+                                <img src="~/assets/static/images/Tileicons/pd-all.png" style="width:100%" />
+                            </a>
+                        </div>
+                    </li>
+                }
+                if (User.IsInRole("Leads Reports"))
+                {
+                    <li>
+                        <div style="width:160px">
+                            <a href="/Dealership/SAMarketingData?Id=82">
+                                <img src="~/assets/static/images/Tileicons/SA-Marketing-Files-Reports.png" style="width:100%" />
+                            </a>
+                        </div>
+                    </li>
+                }
+                if (User.IsInRole("SA Premium Homes"))
+                {
+                    <hr style="margin:50px 0" />
+                    <br />
+                    <li>
+                        <div class="hexagon bg-grey">
+                            <div class="text" style="">
+                                <i class="fas fa-outdent fa-3x"></i>
+                                <br />
+                                <a style="color:white !important" href="/PropertyDeal/PremiumUnassignedLeads/">SA Premium Homes Leads</a>
+                            </div>
+                        </div>
+                    </li>
+                }
+                if (User.IsInRole("Leads Creation"))
+                {
+                    <li>
+                        <div class="hexagon bg-red">
+                            <div class="text" style="">
+                                <i class="fas fa-house-damage fa-3x"></i>
+                                <br />
+                                <a style="color:white !important" href="/PropertyDeal/SAGardenUnassignedLeads/">Meher Estate Developers Leads</a>
+                            </div>
+                        </div>
+                    </li>
+                }
+
+            }
+            else if (ViewBag.Dash == "ballot")
+            {
+                if (User.IsInRole("Perform Ballot"))
+                {
+                    <li>
+                        <div class="hexagon bg-grey">
+                            <div class="text" style="">
+                                <i class="fas fa-directions fa-3x"></i>
+                                <br />
+                                <a style="color:white !important" href="/Balloting/Ballot">Perform Ballot</a>
+                            </div>
+                        </div>
+                    </li>
+                }
+                if (User.IsInRole("Intimation Letter"))
+                {
+                    <li>
+                        <div class="hexagon bg-grey">
+                            <div class="text" style="">
+                                <i class="fas fa-directions fa-3x"></i>
+                                <br />
+                                <a style="color:white !important" href="/Balloting/BallotedPlots">Intimation Letter</a>
+                            </div>
+                        </div>
+                    </li>
+                }
+                if (User.IsInRole("Balloted Summary"))
+                {
+                    <li>
+                        <div class="hexagon bg-grey">
+                            <div class="text" style="">
+                                <i class="fas fa-directions fa-3x"></i>
+                                <br />
+                                <a style="color:white !important" href="/Balloting/BallotInventory/">Balloted Summary</a>
+                            </div>
+                        </div>
+                    </li>
+                }
+            }
+            else if (ViewBag.Dash == "reports")
+            {
+                if (User.IsInRole("Good Receive Note List") || User.IsInRole("Purchase Order Report") || User.IsInRole("Inventory Report"))
+                {
+                    <h6 style="margin:50px 0">Procurement/Inventory</h6>
+
+                    if (User.IsInRole("Good Receive Note List"))
+                    {
+                        <li>
+                            <div class="hexagon bg-grey">
+                                <div class="text" style="">
+                                    <i class="fas fa-outdent fa-3x"></i>
+                                    <br />
+                                    <a style="color:white !important" href="/Inventory/GRNList/">Good Receive Note List</a>
+                                </div>
+                            </div>
+                        </li>
+                    }
+                    if (User.IsInRole("Purchase Order Report"))
+                    {
+                        <li>
+                            <div class="hexagon bg-red">
+                                <div class="text" style="">
+                                    <i class="fas fa-shopping-cart fa-3x"></i>
+                                    <br />
+                                    <a style="color:white !important" href="/Inventory/Received_Items/">Purchase Order List</a>
+                                </div>
+                            </div>
+                        </li>
+                    }
+                    if (User.IsInRole("Purchase Requisition Report"))
+                    {
+                        <li>
+                            <div class="hexagon bg-grey">
+                                <div class="text" style="">
+                                    <i class="fas fa-list fa-3x"></i>
+                                    <br />
+                                    <a style="color:white !important" href="/Procurement/PrReport/">PR Report</a>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="hexagon bg-grey">
+                                <div class="text" style="">
+                                    <i class="fas fa-list fa-3x"></i>
+                                    <br />
+                                    <a style="color:white !important" href="/Reports/PurchaseReqReport/">Purchase Req Status</a>
+                                </div>
+                            </div>
+                        </li>
+
+                        <li>
+                            <div class="hexagon bg-grey">
+                                <div class="text" style="">
+                                    <i class="fas fa-list fa-3x"></i>
+                                    <br />
+                                    <a style="color:white !important" href="/Reports/PurchaseReqPndReport/">Pending Requisition List</a>
+                                </div>
+                            </div>
+                        </li>
+
+                        <li>
+                            <div class="hexagon bg-grey">
+                                <div class="text" style="">
+                                    <i class="fas fa-list fa-3x"></i>
+                                    <br />
+                                    <a style="color:white !important" href="/Reports/PurchaseReqItemReport/">Purchase Item Requested</a>
+                                </div>
+                            </div>
+                        </li>
+
+                        <li>
+                            <div class="hexagon bg-grey">
+                                <div class="text" style="">
+                                    <i class="fas fa-list fa-3x"></i>
+                                    <br />
+                                    <a style="color:white !important" href="/Reports/PurchaseOrderReport/">Purchase Order Report</a>
+                                </div>
+                            </div>
+                        </li>
+
+
+                    }
+                    if (User.IsInRole("Inventory Report"))
+                    {
+                        <hr />
+                        <li>
+                            <div class="hexagon bg-grey">
+                                <div class="text" style="">
+                                    <i class="fas fa-dolly-flatbed fa-3x"></i>
+                                    <br />
+                                    <a style="color:white !important" href="/Inventory/InventoryReport/">Inventory Report</a>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="hexagon bg-green">
+                                <div class="text" style="">
+                                    <i class="fas fa-arrow-right fa-3x"></i>
+                                    <br />
+                                    <a style="color:white !important" href="/Inventory/MaterialShift/">Material Shift Report</a>
+                                </div>
+                            </div>
+                        </li>
+                    }
+
+                }
+                if (User.IsInRole("Plot Outstanding Report"))
+                {
+                    <h6 style="margin:50px 0">Plots Management</h6>
+                    if (User.IsInRole("Plot Outstanding Report"))
+                    {
+                        <li>
+                            <div class="hexagon bg-yellow">
+                                <div class="text" style="">
+                                    <i class="fas fa-store-alt fa-3x"></i>
+                                    <br />
+                                    <a style="color:white !important" href="/Reports/PlotsOutstanding/">Plots Outstanding Report</a>
+                                </div>
+                            </div>
+                        </li>
+                    }
+                    if (User.IsInRole("Balloting Report"))
+                    {
+                        <li>
+                            <div class="hexagon bg-blue">
+                                <div class="text" style="">
+                                    <i class="fas fa-store-alt fa-3x"></i>
+                                    <br />
+                                    <a style="color:white !important" href="/Balloting/BallotingReport/">Balloting Report</a>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="hexagon bg-red">
+                                <div class="text" style="">
+                                    <i class="fas fa-store-alt fa-3x"></i>
+                                    <br />
+                                    <a style="color:white !important" href="/Plots/SpecialPrefrencesCharges/">Special Preferences Charges Report</a>
+                                </div>
+                            </div>
+                        </li>
+                    }
+                    if (User.IsInRole("Overdue Files Report"))
+                    {
+                        <li>
+                            <div class="hexagon bg-green">
+                                <div class="text" style="">
+                                    <i class="fas fa-file-alt fa-3x"></i>
+                                    <br />
+                                    <a style="color:white !important" href="/Reports/OverDueFiles/">Overdue Files Report</a>
+                                </div>
+                            </div>
+                        </li>
+                    }
+
+                    if (User.IsInRole("Files Summary Report"))
+                    {
+                        <li>
+                            <div class="hexagon bg-green">
+                                <div class="text" style="">
+                                    <i class="fas fa-file-alt fa-3x"></i>
+                                    <br />
+                                    <a style="color:white !important" href="/Filesystem/FilesPlotsReport/">Files Summary Report</a>
+                                </div>
+                            </div>
+                        </li>
+                    }
+                    <hr style="margin:50px 0" />
+                }
+                if (User.IsInRole("Service Charges Report") || User.IsInRole("Electricity Charges Report"))
+                {
+                    <h6 style="margin:50px 0">Service Charges</h6>
+                    if (User.IsInRole("Service Charges Report"))
+                    {
+                        <li>
+                            <div class="hexagon bg-green">
+                                <div class="text" style="">
+                                    <i class="fab fa-servicestack fa-3x"></i>
+                                    <br />
+                                    <a style="color:white !important" href="/Reports/ServiceChargesBills/">Service Charges Report</a>
+                                </div>
+                            </div>
+                        </li>
+                    }
+                    if (User.IsInRole("Electricity Charges Report"))
+                    {
+                        <li>
+                            <div class="hexagon bg-blue">
+                                <div class="text" style="">
+                                    <i class="fas fa-plug fa-3x"></i>
+                                    <br />
+                                    <a style="color:white !important" href="/Reports/ElectricityCharges/">Electricity Charges Report</a>
+                                </div>
+                            </div>
+                        </li>
+                    }
+                    <hr style="margin:50px 0" />
+                }
+                if (User.IsInRole("WHT Handler"))
+                {
+                    <h6 style="margin:50px 0">Tax Report</h6>
+                    if (User.IsInRole("WHT Handler"))
+                    {
+                        <li>
+                            <div class="hexagon bg-grey">
+                                <div class="text" style="">
+                                    <i class="fas fa-balance-scale-left fa-3x"></i>
+                                    <br />
+                                    <a style="color:white !important" href="/Receipts/TaxCollection/">WHT u/236</a>
+                                </div>
+                            </div>
+                        </li>
+                    }
+                    <hr style="margin:50px 0" />
+                }
+                if (User.IsInRole("Plot Outstanding Report"))
+                {
+                    <h6 style="margin:50px 0">Building Management</h6>
+                    <li>
+                        <div class="hexagon bg-green">
+                            <div class="text" style="">
+                                <i class="fab fa-servicestack fa-3x"></i>
+                                <br />
+                                <a style="color:white !important" href="/Commercial/CommercialReceivableReport/">Ayan Center Receivable Report</a>
+                            </div>
+                        </div>
+                    </li>
+                    <hr style="margin:50px 0" />
+                }
+                if (User.IsInRole("SA Premium Sales Report"))
+                {
+                    <li>
+                        <div class="hexagon bg-grey">
+                            <div class="text" style="">
+                                <i class="fas fa-list fa-3x"></i>
+                                <br />
+                                <a style="color:white !important" href="/Reports/SAPremiumSalesReport/">SA Premium Sales Report</a>
+                            </div>
+                        </div>
+                    </li>
+                }
+            }
+
+            else if (ViewBag.Dash == "Admin Facilities")
+            {
+                if (User.IsInRole("Architecture Receipt Requester"))
+                {
+                    <li>
+                        <div style="width:160px">
+                            <a href="/Receipts/ArchiCustomers/">
+                                <img src="~/assets/static/images/Tileicons/archi-rec-req.png" style="width:100%" />
+                            </a>
+                        </div>
+                    </li>
+                }
+
+                if (User.IsInRole("Architecture Receipt Requests"))
+                {
+                    <li>
+                        <div style="width:160px">
+                            <a href="/Receipts/ArchitectureFeeRequests">
+                                <img src="~/assets/static/images/Tileicons/archi-rec-req.png" style="width:100%" />
+                            </a>
+                        </div>
+                    </li>
+                }
+                if (User.IsInRole("Members Registeration"))
+                {
+                    <li class="bg-success">
+                        <div class="top-info">
+                            <a href="javascript:void(0);" class="get-link text-white" data-link="/AdminFacilities/Registration/">Member Registration</a>
+                        </div>
+                    </li>
+                }
+                if (User.IsInRole("Admin Monthly Collection Details"))
+                {
+                    <li class="bg-info">
+                        <div class="top-info">
+                            <a href="javascript:void(0);" class="get-link text-white" data-link="/AdminFacilities/Detail/">Fee</a>
+                        </div>
+                    </li>
+                }
+                if (User.IsInRole("Members List"))
+                {
+                    <li class="bg-info">
+                        <div class="top-info">
+                            <a href="javascript:void(0);" class="get-link text-white" data-link="/AdminFacilities/MemberListingproject/">All Member</a>
+                        </div>
+                    </li>
+                }
+                if (User.IsInRole("New Admin Project"))
+                {
+                    <li class="bg-success">
+                        <div class="top-info">
+                            <a href="javascript:void(0);" class="get-link text-white" data-link="/AdminFacilities/Project/">Projects</a>
+                        </div>
+                    </li>
+                }
+            }
+            else if (ViewBag.Dash == "Inventory")
+            {
+                if (User.IsInRole("Department Inventory"))
+                {
+                    <li>
+                        <div class="hexagon bg-grey">
+                            <div class="text" style="">
+                                <i class="fas fa-directions fa-3x"></i>
+                                <br />
+                                <a style="color:white !important" href="/ConstructProjectManagement/ProjectInventory/">Department Inventory</a>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="hexagon bg-blue">
+                            <div class="text" style="">
+                                <i class="fas fa-id-card-alt fa-3x"></i>
+                                <br />
+                                <a style="color:white !important" href="/Inventory/User_Demand_Orders/">Demand Orders</a>
+                            </div>
+                        </div>
+                    </li>
+                }
+                if (User.IsInRole("All Inventory"))
+                {
+                    <li>
+                        <div class="hexagon bg-yellow">
+                            <div class="text" style="">
+                                <i class="fas fa-directions fa-3x"></i>
+                                <br />
+                                <a style="color:white !important" href="/Inventory/InventoryList/">All Inventory</a>
+                            </div>
+                        </div>
+                    </li>
+                }
+                if (User.IsInRole("Receive Items"))
+                {
+                    <li>
+                        <div class="hexagon bg-red">
+                            <div class="text" style="">
+                                <i class="fas fa-id-card-alt fa-3x"></i>
+                                <br />
+                                <a style="color:white !important" href="/Inventory/ReceiveItems/">Receive Items</a>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="hexagon bg-green">
+                            <div class="text" style="">
+                                <i class="fas fa-directions fa-3x"></i>
+                                <br />
+                                <a style="color:white !important" href="/Inventory/InventoryReturn/">Return Items</a>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="hexagon bg-grey">
+                            <div class="text" style="">
+                                <i class="fas fa-directions fa-3x"></i>
+                                <br />
+                                <a style="color:white !important" href="/Inventory/InventoryReport/">Inventory Report</a>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="hexagon bg-green">
+                            <div class="text" style="">
+                                <i class="fas fa-truck fa-3x"></i>
+                                <br />
+                                <a style="color:white !important" href="/Inventory/MaterialShifting/">Material Shifting</a>
+                            </div>
+                        </div>
+                    </li>
+                }
+                if (User.IsInRole("Demand Orders"))
+                {
+                    <li>
+                        <div class="hexagon bg-blue">
+                            <div class="text" style="">
+                                <i class="fas fa-id-card-alt fa-3x"></i>
+                                <br />
+                                <a style="color:white !important" href="/Inventory/DemandOrders/">All Demand Orders</a>
+                            </div>
+                        </div>
+                    </li>
+                }
+                if (User.IsInRole("Stock Taking"))
+                {
+                    <li>
+                        <div class="hexagon bg-red">
+                            <div class="text" style="">
+                                <i class="fas fa-id-card-alt fa-3x"></i>
+                                <br />
+                                <a style="color:white !important" href="/Inventory/StockTaking/">Stock Taking</a>
+                            </div>
+                        </div>
+                    </li>
+                }
+                <hr />
+                if (User.IsInRole("Direct Issuance"))
+                {
+                    <li>
+                        <div class="hexagon bg-yellow">
+                            <div class="text" style="">
+                                <i class="fas fa-directions fa-3x"></i>
+                                <br />
+                                <a style="color:white !important" href="/Inventory/DirectItems/">Direct Issuance</a>
+                            </div>
+                        </div>
+                    </li>
+                }
+                if (User.IsInRole("GRN Supervision"))
+                {
+                    <li>
+                        <div class="hexagon bg-red">
+                            <div class="text" style="">
+                                <i class="fas fa-surprise fa-3x"></i>
+                                <br />
+                                <a style="color:white !important" href="/Inventory/GRNNeedSupervision/">GRN Supervision</a>
+                            </div>
+                        </div>
+                    </li>
+                }
+                if (User.IsInRole("Issuance Supervision"))
+                {
+                    <li>
+                        <div class="hexagon bg-blue">
+                            <div class="text" style="">
+                                <i class="fas fa-address-book fa-3x"></i>
+                                <br />
+                                <a style="color:white !important" href="/Inventory/IssuanceNeedSupervision/">Issuance Need Supervision</a>
+                            </div>
+                        </div>
+                    </li>
+                }
+            }
+            else if (ViewBag.Dash == "Procurement")
+            {
+                if (User.IsInRole("Projects List"))
+                {
+                    <li>
+                        <div class="hexagon bg-green">
+                            <div class="text" style="">
+                                <i class="fas fa-dharmachakra fa-3x"></i>
+                                <br />
+                                <a style="color:white !important" href="/Procurement/Purchases/">Purchase Management</a>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="hexagon bg-grey">
+                            <div class="text" style="">
+                                <i class="fa fa-clock-o fa-3x"></i>
+                                <br />
+                                <a style="color:white !important" href="/Services/Services/">Service Management</a>
+                            </div>
+                        </div>
+                    </li>
+                }
+                if (User.IsInRole("Delivery Note Supervision"))
+                {
+                    <li>
+                        <div class="hexagon bg-blue">
+                            <div class="text" style="">
+                                <i class="fas fa-vote-yea fa-3x"></i>
+                                <i class="fa fa-clock-o "></i>
+                                <br />
+                                <a style="color:white !important" href="/Inventory/DeliveryNoteNeedSupervision/">Delivery Note Supervision</a>
+                            </div>
+                        </div>
+                    </li>
+                }
+
+                @*if (User.IsInRole("Petty Cash"))
+                    {
+                        <li>
+                            <div class="hexagon bg-blue">
+                                <div class="text" style="">
+                                    <i class="fas fa-vote-yea fa-3x"></i>
+                                    <i class="fa fa-clock-o "></i>  
+                                    <br />
+                                    <a style="color:white !important" href="/Finance/AllPattyCash/">Petty Cash</a>
+                                </div>
+                            </div>
+                        </li>
+                    }*@
+
+                if (User.IsInRole("Vendors"))
+                {
+                    <li>
+                        <div class="hexagon bg-red">
+                            <div class="text" style="">
+                                <i class="fas fa-user-friends fa-3x"></i>
+                                <br />
+                                <a style="color:white !important" href="/Vendor/VendorList/">Vendors</a>
+                            </div>
+                        </div>
+                    </li>
+                }
+                if (User.IsInRole("Service Contract"))
+                {
+                    <li>
+                        <div class="hexagon bg-blue">
+                            <div class="text" style="">
+                                <i class="fas fa-vote-yea fa-3x"></i>
+                                <br />
+                                <a style="color:white !important" href="/Services/ServicesContract/">Service Contract</a>
+                            </div>
+                        </div>
+                    </li>
+                }
+
+            }
+        }
+
+        @if (User.IsInRole("Utilities Staff"))
+        {
+            <li>
+                <div style="width:160px">
+                    <a href="/ServiceCharges/Bills">
+                        <img src="~/assets/static/images/Tileicons/sc-det.png" style="width:100%" />
+                    </a>
+                </div>
+            </li>
+            <li>
+                <div style="width:160px">
+                    <a href="/ServiceCharges/ElectricityBill">
+                        <img src="~/assets/static/images/Tileicons/elc-ch-det.png" style="width:100%" />
+                    </a>
+                </div>
+            </li>
+            <li>
+                <div style="width:160px">
+                    <a href="/ServiceCharges/ManageServiceCharges">
+                        <img src="~/assets/static/images/Tileicons/man-sc.png" style="width:100%" />
+                    </a>
+                </div>
+            </li>
+            <br />
+            <br />
+            <li>
+                <div class="panel-heading">
+                    <h5>Electricity Bills</h5>
+                </div>
+                <br />
+                <br />
+            </li>
+            <br />
+            <br />
+            <li>
+                <div class="hexagon bg-purple font-white">
+                    <div class="text" style="text-align: center;font-size: 17px;">
+                        <i class="fa fa-address-card heavyFont"></i>
+                        <br />
+                        <br />
+                        <a class="jkhfd-wefyuig" href="/ServiceCharges/BillInstallments?tp=1">Bill Actions</a>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <div class="hexagon bg-red font-white">
+                    <div class="text" style="text-align: center;font-size: 17px;">
+                        <i class="fa fa-exchange heavyFont"></i>
+                        <br />
+                        <br />
+                        <a href="/ServiceCharges/FineWaiverRequest?tp=1">Request Waiver</a>
+                    </div>
+                </div>
+            </li>
+
+
+            <li>
+                <div class="hexagon bg-dark font-white">
+                    <div class="text" style="text-align: center;font-size: 17px;">
+                        <i class="fa fa-history heavyFont"></i>
+                        <br />
+                        <br />
+                        <a class="" href="/ServiceCharges/RequestsList/" data-sertype="1">Waiver History</a>
+                    </div>
+                </div>
+            </li>
+
+            <li>
+                <div class="hexagon bg-primary font-white">
+                    <div class="text" style="text-align: center;font-size: 17px;">
+                        <i class="fa fa-th-large heavyFont"></i>
+                        <br />
+                        <br />
+                        <a class="" href="/ServiceCharges/InstallmentRequests/" data-sertype="1">Bill Installment Requests</a>
+                    </div>
+                </div>
+            </li>
+
+            <li>
+                <div class="hexagon bg-info font-white">
+                    <div class="text" style="text-align: center;font-size: 17px;">
+                        <i class="fa fa-tachometer heavyFont"></i>
+                        <br />
+                        <br />
+                        <a href="/ServiceCharges/MeterChangeRequests/" data-sertype="1">Meter Change Requests</a>
+                    </div>
+                </div>
+            </li>
+
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+
+            <li>
+                <div class="panel-heading">
+                    <h5>Service Charges</h5>
+                </div>
+            </li>
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <li>
+                <div class="hexagon bg-purple font-white">
+                    <div class="text" style="text-align: center;font-size: 17px;">
+                        <i class="fa fa-address-card heavyFont"></i>
+                        <br />
+                        <br />
+                        <a class="jkhfd-wefyuig" href="/ServiceCharges/BillInstallments?tp=0">Bill Actions</a>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <div class="hexagon bg-red font-white">
+                    <div class="text" style="text-align: center;font-size: 17px;">
+                        <i class="fa fa-exchange heavyFont"></i>
+                        <br />
+                        <br />
+                        <a href="/ServiceCharges/FineWaiverRequest?tp=0" data-sertype="0">Request Waiver</a>
+                    </div>
+                </div>
+            </li>
+
+            <li>
+                <div class="hexagon bg-success font-white">
+                    <div class="text" style="text-align: center;font-size: 17px;">
+                        <i class="fa fa-history heavyFont"></i>
+                        <br />
+                        <br />
+                        <a class="" href="/ServiceCharges/RequestsList/" data-sertype="1">Waiver History</a>
+                    </div>
+                </div>
+            </li>
+
+            <li>
+                <div class="hexagon bg-warning font-white">
+                    <div class="text" style="text-align: center;font-size: 17px;">
+                        <i class="fa fa-th-large heavyFont"></i>
+                        <br />
+                        <br />
+                        <a class="" href="/ServiceCharges/InstallmentRequests?tp=0" data-sertype="1">Bill Installment Requests</a>
+                    </div>
+                </div>
+            </li>
+        }
+    </ul>
+</div>
+<script>
+    $('.hexagon').on('click', function () {
+        let _ele = $(this).find('a');
+        if (_ele.length <= 0) {
+            return;
+        }
+
+        $(_ele).get(0).click();
+        //console.log();
+    });
+</script>
+<style>
+    .a {
+        color: #592a88;
+    }
+
+    .hexagon a {
+        font-size: 10px;
+        font-weight: bold;
+    }
+
+    .text {
+        position: absolute;
+        z-index: 1000;
+        width: 100%;
+        text-align: center;
+        font-size: 17px;
+    }
+
+    .hexagon {
+        position: relative;
+        width: 160px;
+        height: 90px;
+        border-left: solid 2px transparent;
+        border-right: solid 2px transparent;
+        cursor: pointer;
+        padding-top: 10px;
+    }
+
+        .hexagon:before,
+        .hexagon:after {
+            content: "";
+            position: absolute;
+            z-index: 1;
+            width: 113px;
+            height: 113px;
+            -webkit-transform: scaleY(0.5774) rotate(-45deg);
+            -ms-transform: scaleY(0.5774) rotate(-45deg);
+            transform: scaleY(0.5774) rotate(-45deg);
+            background-color: inherit;
+            left: 21.5px;
+            transition: .3s ease-out;
+        }
+
+        .hexagon:before {
+            top: -57px;
+            border-top: solid transparent;
+            border-right: solid transparent;
+        }
+
+        .hexagon:after {
+            bottom: -57px;
+            border-bottom: solid transparent;
+            border-left: solid transparent;
+            transition: .1s ease-out;
+        }
+
+    .heavyFont {
+        font-size: 30px;
+    }
+
+    .bg-red {
+        background-color: #d0232A;
+        color: white;
+    }
+
+    .bg-grey {
+        background-color: #777777;
+        color: white;
+    }
+
+    .bg-green {
+        background-color: #79c944;
+        color: white;
+    }
+
+    .bg-blue {
+        background-color: #2572ff;
+        color: white;
+    }
+
+    .bg-yellow {
+        background-color: #fb8f02;
+        color: #000;
+    }
+
+    .font-white {
+        color: white;
+    }
+</style>
+
+<script>
+    $(document).ready(function () {
+        $("#att-rep-data").load('/Reports/AttendanceReport/');
+        $("#payrl-rep-data").load('/Reports/PayrollReport/');
+        $("#sal-rep-data").load('/Reports/SalaryComparativeReport?typ=AllComps');
+    });
+    $('.jkhfd-wefyuig').click(function () {
+        let t = $(this).attr('data-sertype');
+        showLoader();
+        EmptyModel();
+        $('#ModalLabel').text("Waiver Request");
+        $('#modalbody').load('/ServiceCharges/FineWaiverRequest/', { tp: t }, function () {
+            hideLoader();
+        });
+    });
+
+    $('.yutidfs-fdhjgks').click(function () {
+        let t = $(this).attr('data-sertype');
+        showLoader();
+        EmptyModel();
+        $('#ModalLabel').text("Bill Waiver Request");
+        $('#modalbody').load('/ServiceCharges/BillWaiverRequest/', { tp: t }, function () {
+            hideLoader();
+        });
+    });
+
+    $('.jhkfds-yiortu').click(function () {
+        let t = $(this).attr('data-sertype');
+        showLoader();
+        EmptyModel();
+        $('#ModalLabel').text("Arrear Waiver Request");
+        $('#modalbody').load('/ServiceCharges/ArrearsWaiverRequest/', { tp: t }, function () {
+            hideLoader();
+        });
+    });
+
+    $('.st-dt-khjdf').bootstrapMaterialDatePicker({ weekStart: 0, time: false, format: 'MM-DD-YYYY' }).on('change', function (e, date) {
+        $('.en-dt-khjdf').bootstrapMaterialDatePicker('setMinDate', date);
+    });
+    $('.en-dt-khjdf').bootstrapMaterialDatePicker({ weekStart: 0, time: false, format: 'MM-DD-YYYY' });
+
+    $('.st-dt-dfhjgs').bootstrapMaterialDatePicker({ weekStart: 0, time: false, format: 'MM-DD-YYYY' }).on('change', function (e, date) {
+        $('.en-dt-fkjdghs').bootstrapMaterialDatePicker('setMinDate', date);
+    });
+    $('.en-dt-fkjdghs').bootstrapMaterialDatePicker({ weekStart: 0, time: false, format: 'MM-DD-YYYY' });
+
+    $('.get-att-rep-btn-fkajh').unbind().click(function () {
+        let stDt = $('.st-dt-khjdf').val();
+        let enDt = $('.en-dt-khjdf').val();
+        let dep = $('.dep-att-lst-gskfskj').val();
+
+        $('#att-rep-data').load('/Reports/AttendanceReport/', { start: stDt, end: enDt, depart: dep });
+    });
+
+    $('.st-dt-skdfj-sdfhjg').bootstrapMaterialDatePicker({ weekStart: 0, time: false, format: 'MM-DD-YYYY' }).on('change', function (e, date) {
+        $('.en-dt-hsfdgvhjs-asdhjgv').bootstrapMaterialDatePicker('setMinDate', date);
+    });
+    $('.en-dt-hsfdgvhjs-asdhjgv').bootstrapMaterialDatePicker({ weekStart: 0, time: false, format: 'MM-DD-YYYY' });
+
+    $('.get-payrl-rep-btn-fdljk').unbind().click(function () {
+        let stDt = $('.st-dt-dfhjgs').val();
+        let enDt = $('.en-dt-fkjdghs').val();
+        let dep = $('.dep-payrl-lst-dsfjk').val();
+
+        $('#payrl-rep-data').load('/Reports/PayrollReport/', { start: stDt, end: enDt, depart: dep });
+    });
+
+    $('.dets-att-rep-btn-fkajh').unbind().click(function () {
+        let stDt = $('.st-dt-khjdf').val();
+        let enDt = $('.en-dt-khjdf').val();
+        let dep = $('.dep-att-lst-gskfskj').val();
+        let depNam = $.trim($('.dep-att-lst-gskfskj').text());
+        window.open('/Reports/DetailedAttendanceReport?start=' + stDt + '&end=' + enDt + '&depart=' + dep + '&typ=' + depNam);
+    });
+
+    $('.dets-payrl-rep-btn-fdljk').unbind().click(function () {
+        let stDt = $('.st-dt-dfhjgs').val();
+        let enDt = $('.en-dt-fkjdghs').val();
+        let dep = $('.dep-payrl-lst-dsfjk').val();
+        let depNam = $.trim($('.dep-payrl-lst-dsfjk').text());
+        window.open('/Reports/DetailedPayrollReport?start=' + stDt + '&end=' + enDt + '&depart=' + dep + '&typ=' + depNam);
+    });
+
+    $('.get-sal-rep-btn-fdljk').unbind().click(function () {
+        let st = $('.st-dt-skdfj-sdfhjgcv').val();
+        let en = $('.en-dt-hsfdgvhjs-asdhjgv').val();
+        let typ = $('.cmprsn-typ-fdshjksdjfhk option:selected').val();
+        let colle = $('.comp-sal-typ-dsfjk').val();
+        $('#sal-rep-data').load('/Reports/SalaryComparativeReport/', { start: st, end: en, typ: typ, ids: colle }, function () {
+
+        });
+        //$.ajax({
+        //    type: "POST",
+        //    url: "/Reports/SalaryComparativeReport/",
+        //    contentType: "application/json",
+        //    traditional: true,
+        //    beforeSend: function () {
+
+        //    },
+        //    complete: function () {
+
+        //    },
+        //    data: JSON.stringify({ start: st, end: en, typ: typ, ids:colle }),
+        //}).done(function (data) {
+        //    if (data == true) {
+        //        alert('data has been saved');
+
+        //        let prj = $("#Prj_Id").val();
+
+        //    }
+        //    else {
+        //        alert('unable to save the data');
+        //    }
+        //});
+    });
+
+    $('.dep-payrl-lst-dsfjk').select2({
+        ajax: {
+            url: '/HumanResource/GetDepartmentsList/',
+            data: function (params) {
+                var query = {
+                    search: params.term,
+                    type: 'public'
+                }
+
+                // Query parameters will be ?search=[term]&type=public
+                return query;
+            },
+            processResults: function (data) {
+                console.log(data);
+                // Transforms the top-level key of the response object from 'items' to 'results'
+                return {
+                    results: data
+                };
+            }
+        }
+    });
+
+    $('.dep-att-lst-gskfskj').select2({
+        ajax: {
+            url: '/HumanResource/GetDepartmentsList/',
+            data: function (params) {
+                var query = {
+                    search: params.term,
+                    type: 'public'
+                }
+
+                // Query parameters will be ?search=[term]&type=public
+                return query;
+            },
+            processResults: function (data) {
+                console.log(data);
+                // Transforms the top-level key of the response object from 'items' to 'results'
+                return {
+                    results: data
+                };
+            }
+        }
+    });
+
+    $('.comp-sal-typ-dsfjk').select2({
+        ajax: {
+            url: '/HumanResource/CompDepsDesigs_Select2/',
+            data: function (params) {
+                var query = {
+                    s: params.term,
+                    t: $('.cmprsn-typ-fdshjksdjfhk option:selected').val()
+                }
+
+                // Query parameters will be ?search=[term]&type=public
+                return query;
+            },
+            processResults: function (data) {
+                console.log(data);
+                // Transforms the top-level key of the response object from 'items' to 'results'
+                return {
+                    results: data
+                };
+            },
+            maximumSelectionLength: 200
+        }
+    });
+
+    $('.cmprsn-typ-fdshjksdjfhk').change(function () {
+        let txt = $('.cmprsn-typ-fdshjksdjfhk option:selected').val();
+        $('.comp-sal-typ-dsfjk').val(null).trigger('change');
+        if (txt == 'SelectedComps' || txt == 'SelectedDepts' || txt == 'SelectedDesigs') {
+            $('.last-opt-sal-rep-kjfhsd').show();
+        }
+        else {
+            $('.last-opt-sal-rep-kjfhsd').hide();
+        }
+    });
+</script>

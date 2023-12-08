@@ -1,0 +1,64 @@
+﻿@using (Html.BeginForm("AddPlotCategory1", "Plots", FormMethod.Post, new { @id = "add-cat", @class = "", role = "form", autocomplete = "off" }))
+{
+
+    <div class="form-row">
+        <div class="form-group col-md-2">
+            <label>Front</label>
+            <input type="text" class="form-control" name="front">
+        </div>
+        <div class="form-group col-md-2">
+            <label>Back</label>
+            <input type="text" class="form-control" name="back">
+        </div>
+        <div class="form-group col-md-2">
+            <label>Left 1</label>
+            <input type="text" class="form-control" name="left">
+        </div>
+        <div class="form-group col-md-2">
+            <label>Left 2</label>
+            <input type="text" class="form-control" name="right">
+        </div>
+        <div class="form-group col-md-2">
+            <label>Left 3</label>
+            <input type="text" class="form-control" name="north_east">
+        </div>
+        <div class="form-group col-md-2">
+            <label>Right 1</label>
+            <input type="text" class="form-control" name="north_west">
+        </div>
+        <div class="form-group col-md-2">
+            <label>Right 2</label>
+            <input type="text" class="form-control" name="south_east">
+        </div>
+        <div class="form-group col-md-2">
+            <label>Right 3</label>
+            <input type="text" class="form-control" name="south_west">
+        </div>
+        <div class="form-group col-md-2" style="padding-top:28px;">
+            <button class="btn btn-primary" id="add-dim-cat" type="button">Add Category</button>
+        </div>
+    </div>
+}
+
+<script>
+    $(document).on("click", "#add-dim-cat", function (e) {
+        debugger
+        e.preventDefault();
+        $.ajax({
+            type: "POST",
+            url: $("#add-cat").attr('action'),
+            data: $("#add-cat").serialize(),
+            success: function (result) {
+                alert(result);
+            }
+            , error: function (xmlhttprequest, textstatus, message) {
+               
+                if (textstatus === "timeout") {
+                    alert("got timeout");
+                } else {
+                    alert(textstatus);
+                }
+            }
+        });
+    });
+</script>

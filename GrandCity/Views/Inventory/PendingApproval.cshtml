@@ -1,0 +1,139 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Sp_Get_Stock_In_Userid_Result>
+<table class="table table-bordered pen-app" style="width:30%">
+    <thead>
+        <tr>
+            <td>Sr.</td>
+            <td>Department</td>
+            <td>Total</td>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            int iii = 1;
+            var res = Model.GroupBy(x => new { x.Group_Id, x.Dep_Name }).Select(x => new { x.Key.Group_Id, x.Key.Dep_Name }).ToList();
+        }
+        @foreach (var item in res.GroupBy(x => new {  x.Dep_Name }).OrderByDescending(x => x.Count()))
+        {
+            <tr>
+                <td>@(iii++)</td>
+                <td>@item.Key.Dep_Name</td>
+                <td>@item.Count()</td>
+            </tr>
+        }
+    </tbody>
+</table>
+<hr />
+<table class="table table-striped table-bordered DemadnOrder" cellspacing="0" width="100%">
+    <thead class="thead-dark">
+        <tr>
+            <th width="50px">Sr.</th>
+            <th width="90px">Department</th>
+            <th width="90px">Month</th>
+            <th width="90px">Project</th>
+            <th width="650px">Requested Item</th>
+            <th width="90px">Date</th>
+            <th width="90px"></th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            if (Model.Any())
+            {
+                int i = 1;
+                foreach (var item in Model.GroupBy(x => new { x.Group_Id,x.Prj_Name, x.Dep_Name ,x.Project_Department, x.Requested_Date }).OrderByDescending(x => x.Key.Requested_Date.Value.Year).ThenByDescending(x => x.Key.Requested_Date.Value.Month).ThenByDescending(x => x.Key.Dep_Name).ThenByDescending(x => x.Key.Requested_Date))
+                {
+                    int ii = 1;
+                    <tr class="single-row po-det-wk" id="@item.Key.Group_Id">
+                        <td style="max-width:50px">@i</td>
+                        <td class="pur-req-prdct-name">@item.Key.Dep_Name</td>
+                        <td class="pur-req-prdct-name">@string.Format("{0:MMMM - yyyy}", item.Key.Requested_Date)</td>
+                        <td class="pur-req-prdct-name">
+                            @item.Key.Prj_Name
+                            <br />
+                            <br />
+                            @item.Key.Project_Department
+                        </td>
+                        <td class="tdscrol">
+                            <table class="table" style="margin-bottom:0px; border:none">
+                                <thead>
+                                    <tr>
+                                        <th style="max-width:50px">Sr.</th>
+                                        <th>Code</th>
+                                        <th>Item Name</th>
+                                        <th>UOM</th>
+                                        <th>Qty</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                    @foreach (var a in item)
+                                    {
+                                        string col = "";
+                                        if (!a.PurReq_DemReq)
+                                        {
+                                            col = "bgc-yellow-50";
+                                        }
+                                        <tr data-req-id="@a.Id" class="@col" data-req-typ="@a.PurReq_DemReq">
+                                            <td>@ii</td>
+                                            <td>@a.SKU</td>
+                                            @if (a.PurReq_DemReq)
+                                            {
+                                                <td>
+                                                    @a.Item_Name
+                                                    <br />
+                                                    @if (!string.IsNullOrEmpty(a.Description))
+                                                    {
+                                                        <b>Details: </b>@a.Description
+                                                    }
+                                                </td>
+                                            }
+                                            else
+                                            {
+                                                <td>
+                                                    @a.Item_Name
+                                                    <br />
+                                                    <b>Details: </b> @a.Description
+                                                    <hr /><span><b>Demand Request: </b> @a.ReqTo_Dep </span>
+                                                </td>
+
+                                            }
+                                            <td>@a.UOM</td>
+                                            <td>@string.Format("{0:0,0.##}", a.Qty)</td>
+                                        </tr>
+                                        ii++;
+                                    }
+                                </tbody>
+                            </table>
+                        </td>
+                        <td>@string.Format("{0:dd-MMM-yyyy}", item.Key.Requested_Date)</td>
+                        <td>
+                            <span class="req-app-edit pointer "  grp-id="@item.Key.Group_Id" style="display:block; float:left;text-align:center"><i class="fa fa-pencil"></i></span>
+                            <br />
+                            <span class="req-app pointer bgc-green-50" style="display:block;width:50px;float:left;text-align:center"><i class="fas fa-check"></i></span>
+                            <br />
+                            <span class="rem-req-pur pointer bgc-red-50" style="display:block;width:50px;float:right;text-align:center" data-id="@item.Key.Group_Id"> <i class="fas fa-trash"></i></span>
+                        </td>
+                    </tr>
+                    i++;
+                }
+            }
+        }
+    </tbody>
+</table>
+<script>
+    $(function () {
+        $(".DemadnOrder").DataTable({
+            ordering: false,
+            //order: [[1, 'asc'], [0, 'asc']],
+            rowGroup: {
+                dataSrc: [2, 1]
+            },
+            columnDefs: [{ targets: 4, type: "date-eu" }],
+            columnDefs: [{ targets: [2, 1], visible: false }]
+        });
+        $('.pen-app').DataTable({
+            "searching": false,
+            "pageLength": 5
+        });
+    });
+</script>

@@ -1,0 +1,32 @@
+﻿<div class="form-row col-md-12">
+    <div class="form-group col-md-1">
+        <label>From</label>
+        <input type="text" class="form-control" data-provide="datepicker" onchange="getmonthdata();" id="monthdate" placeholder="mm/dd/yyyy">
+    </div>
+    <div class="form-group col-md-1">
+        <label>To</label>
+        <input type="text" class="form-control" data-provide="datepicker" onchange="getmonthdata();" id="monthtodate" placeholder="mm/dd/yyyy">
+    </div>
+    <div class="form-group col-md-2">
+        <label>-</label>
+        @Html.DropDownList("Type", null, null, new { @class = "form-control blk-type bc" })
+    </div>
+
+    <div class="form-group col-md-2">
+        <button class="btn btn-primary src-inst-rep" style="margin-top:29px">Search</button>
+    </div>
+</div>
+<div class="form-row col-md-12">
+    <div class="col-md-12" id="instrep"></div>
+</div>
+<script>
+    $(document).ready(function () {
+        $('.bc').select2();
+        SASLoad($('#instrep'));
+        $("#instrep").load('/Reports/MonthlyInstallment/', { Type="0", TypeName: "All" }, function () {
+            SASUnLoad($("#instrep"));
+        });
+    });
+
+
+</script>

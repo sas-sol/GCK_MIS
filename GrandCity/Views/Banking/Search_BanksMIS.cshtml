@@ -1,0 +1,81 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.SP_Reports_BANK_MIS_Result>
+<table id="result" class="table table-striped table-bordered" cellspacing="0" width="100%">
+    <thead>
+        <tr>
+            <th class="col-date">Date</th>
+            <th class="col-rece">Receipt No</th>
+            <th class="col-file">File No</th>
+            <th class="col-amt">Amount</th>
+            <th class="col-size">Size</th>
+            <th class="col-name">Name</th>
+            <th class="col-name">Father Name</th>
+            <th class="col-name">Contact</th>
+            @if (User.IsInRole("Print Duplicate Receipt") || User.IsInRole("Payment Chargeback"))
+            {
+                <th></th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            if (Model.Any())
+            {
+                foreach (var item in Model)
+                {
+                    <tr class="pointer">
+                        <td class="col-date">@string.Format("{0:MM/dd/yyyy}", item.DATETIME)</td>
+                        <td class="col-rece">@item.ReceiptNo</td>
+                        <td class="col-file">@item.File_Plot_Number</td>
+                        <td class="col-amt">@string.Format("{0:n0}", item.Amount)</td>
+                        <td class="col-size">@item.Size</td>
+                        <td class="col-name">@item.Name</td>
+                        <td class="col-mod">@item.Father_Name</td>
+                        <td class="col-type">@item.Contact</td>
+                        @if (User.IsInRole("Print Duplicate Receipt"))
+                        {
+                            <td>
+                                <ul style="list-style:none;margin-left:0px;">
+                                    <li class="dropdown">
+                                        <a href="" class="dropdown-toggle no-after peers " data-toggle="dropdown">
+                                            <i class="ti-more-alt  c-grey-900" style="transform:rotate(90deg);"></i>
+                                        </a>
+                                        <ul class="dropdown-menu">
+                                            @*<li><a class="pointer orig-rece" id="@item.Id"><span>Original</span></a></li>*@
+                                            <li><a class="pointer dup-rece" id="@item.Id"><span>Duplicate</span></a></li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </td>
+                        }
+                        else if (User.IsInRole("Payment Chargeback"))
+                        {
+                            <td>
+                                <ul style="list-style:none;margin-left:0px;">
+                                    <li class="dropdown">
+                                        <a href="" class="dropdown-toggle no-after peers " data-toggle="dropdown">
+                                            <i class="ti-more-alt  c-grey-900" style="transform:rotate(90deg);"></i>
+                                        </a>
+                                        <ul class="dropdown-menu">
+                                            @*<li><a class="pointer orig-rece" id="@item.Id"><span>Original</span></a></li>*@
+                                            <li><a class="pointer ch-bk-pay" id="@item.Id"><span>ChargeBack</span></a></li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </td>
+                        }
+                    </tr>
+                }
+                <tr>
+                    <td colspan="2">Total</td>
+                    <td colspan="6">@string.Format("{0:n0}", Model.Sum(x => x.Amount))</td>
+                </tr>
+            }
+            else
+            {
+                <tr>
+                    <td colspan="10">No Record Found</td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>

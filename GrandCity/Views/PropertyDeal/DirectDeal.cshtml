@@ -1,0 +1,78 @@
+﻿@model MeherEstateDevelopers.Models.PropertyDeal
+
+@{
+    var sel = Model.Parties.Where(x => x.Type == "Seller" && x.Status == MeherEstateDevelopers.Models.LeadsStatus.Close.ToString()).SingleOrDefault();
+    var buy = Model.Parties.Where(x => x.Type == "Buyer" && x.Status == MeherEstateDevelopers.Models.LeadsStatus.Close.ToString()).SingleOrDefault();
+}
+@using (Html.BeginForm("DirectPayment", "PropertyDeal", FormMethod.Post, new { @id = "prop-del-di-req", @class = "", role = "form" }))
+{
+    <input type="hidden" name="Deal_Id" value="@buy.Deal_Id" />
+    <input type="hidden" id="Total_Amt" value="@Model.Receipts.Sum(x=> x.Amount)" />
+    <div class="row">
+        <div class="col-md-3">
+            <div class="row">
+                <div class="form-group col-md-12">
+                    <label>@buy.Type Name</label>
+                    <input class="form-control text-box single-line" id="Name" name="Name" required="" type="text" value="@buy.Name">
+                    <input type="hidden" name="BuyerId" value="@buy.Id" />
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6" style="border-left:1px solid #ccc;border-right:1px solid #ccc;">
+            <div class="row" id="pay-1">
+                <div class="form-group col-md-4">
+                    <label>Bank</label>
+                    <select class="form-control paytypesel" name="PaymentType" id="cah-chq-bak" required>
+                        <option value="BankDraft">Bank Draft</option>
+                        <option value="Cheque">Cheque</option>
+                        <option value="PayOrder">Pay Order</option>
+                        <option value="Online_Cash">Online - Cash</option>
+                        <option value="Online_Cheque">Online - Cheque</option>
+                        <option value="Online_Payorder">Online - PayOrder</option>
+                        <option value="Online_Bankdraft">Online - BankDraft</option>
+                    </select>
+                </div>
+                <div class="form-group col-md-4">
+                    <label>Amount</label>
+                    <input class="form-control coma" placeholder="250,000" value="" required>
+                    <input type="hidden" id="Amount" name="Amount" class="amt" required>
+                </div>
+                <div class="form-group col-md-4 paymentotherinfo">
+                    <label id="paytypelabel">Bank Draft No</label>
+                    <input type="text" class="form-control" id="paymenttype" name="PayChqNo" placeholder="Bank Draft" required>
+                </div>
+                <div class="form-group col-md-4 paymentotherinfo">
+                    <label>To</label>
+                    <input type="text" class="form-control" id="paymenttype" value="@sel.Name" name="ch_Pay_Draft_To" placeholder="" required>
+                </div>
+                <div class="form-group col-md-4 paymentotherinfo">
+                    <label>Date</label>
+                    <input type="text" class="form-control" id="cbp-date" name="Ch_bk_Pay_Date" data-provide="datepicker" placeholder="mm/dd/yyyy" required>
+                </div>
+                <div class="form-group col-md-4 paymentotherinfo">
+                    <label>Bank</label>
+                    @Html.DropDownList("Bank", null, "Choose..", new { id = "bank", @class = "form-control" })
+                </div>
+                <div class="form-group col-md-4 paymentotherinfo">
+                    <label>Branch </label>
+                    <input type="text" class="form-control" id="Branch" name="Branch" placeholder="Mall Rd" required>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="row">
+                <div class="form-group col-md-12">
+                    <label>@sel.Type Name</label>
+                    <input class="form-control text-box single-line" id="Name" name="Name" required="" type="text" value="@sel.Name">
+                    <input type="hidden" name="SellerId" value="@sel.Id" />
+                </div>
+            </div>
+        </div>
+    </div>
+}
+<script>
+    $(function () {
+        $('.modal-footer').append('<button class="btn btn-primary" id="gen-dire-pay" type="button">Direct Pay</button>');
+        $(".modal-header").text("Direct Payment");
+    });
+</script>

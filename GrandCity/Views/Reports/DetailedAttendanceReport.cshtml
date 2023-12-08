@@ -1,0 +1,252 @@
+﻿@model MeherEstateDevelopers.Models.DetailedAttendanceReportView
+@{ if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+}
+<script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+<link href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="https://cdn.datatables.net/buttons/1.5.2/css/buttons.dataTables.min.css" rel="stylesheet" />
+<style>
+    table thead tr th, table tbody tr td {
+        font-size: 12px;
+    }
+
+    .scrolling-box {
+        height: 740px;
+        overflow-y: scroll;
+        overflow-x: scroll;
+        width: 100%;
+        position: sticky;
+        top: 0;
+    }
+
+    .tableFixHead {
+        overflow: auto;
+        min-height: 100px;
+        height: 500px;
+    }
+
+        .tableFixHead .ka th {
+            position: sticky;
+            top: 0;
+            background-color: white;
+        }
+</style>
+<div class="col-md-12 bgc-white">
+    <div class="panel-heading central-text-align">
+        <h5>
+            Attendance Report Of <span style="color:#d0232A;"><u>@ViewBag.typDep</u></span> Department FROM <span style="color:#d0232A;"><u>@ViewBag.start</u></span> TO <span style="color:#d0232A;"><u>@ViewBag.end</u></span>
+        </h5>
+    </div>
+    <div class="">
+        <button class="btn btn-info" id="prnt_Atten_data">Print</button>
+    </div>
+
+
+
+
+
+    <div class="col-md-12">
+        <table class="table tableg table-bordered table-responsive table-responsive-lg table-responsive-md table-responsive-sm table-responsive-xl att_data" style="max-height:500px;   ">
+            <thead class="ka">
+                <tr>
+                    <th class="toPrint">Employee Name</th>
+                    <th class="toPrint">Employee Code</th>
+                    <th class="toPrint">Presents</th>
+                    <th class="toPrint">Absents</th>
+                    <th class="toPrint">Leaves</th>
+                    <th>Lates</th>
+                    @for (DateTime t = Model.StartDate.Value; t <= Model.EndDate.Value; t = t.AddDays(1))
+                    {
+                        <th width="20">@t.ToShortDateString() <span style="font-size:10px">(@t.DayOfWeek.ToString())</span></th>
+                    }
+                </tr>
+            </thead>
+
+            <tbody>
+                @{ var allAtt = Model.Attendance.GroupBy(x => new { x.DeptID, x.DeptName });}
+                @if (allAtt.Any())
+                {
+                    foreach (var item in allAtt)
+                    {
+                        <tr>
+                            <td style="background-color:rgba(0,0,0,0.5);Color:white; text-align:center;" colspan="5" >@item.Key.DeptName</td>
+                            <td style="background-color:rgba(0,0,0,0.5);Color:white; display:none;"></td>
+                            <td style="background-color:rgba(0,0,0,0.5);Color:white; display:none;"></td>
+                            <td style="background-color:rgba(0,0,0,0.5);Color:white; display:none;"></td>
+                            <td style="background-color:rgba(0,0,0,0.5);Color:white; display:none;"></td>
+                            @for (DateTime t = Model.StartDate.Value; t <= Model.EndDate.Value; t = t.AddDays(1))
+                            {
+                                <td style="background-color:rgba(0,0,0,0.5);">-</td>
+                            }
+                            <td style="background-color:rgba(0,0,0,0.5);">-</td>
+                        </tr>
+                        foreach (var v in item.GroupBy(x => new { x.Employee_Id, x.Employee_Code, x.Employee_Name }))
+                        {
+                            int frdys = (from d in (Enumerable.Range(0, 1 + Model.EndDate.Value.Subtract(Model.StartDate.Value).Days).Select(offset => Model.StartDate.Value.AddDays(offset)).ToArray()) where d.DayOfWeek == DayOfWeek.Friday select d).Count();
+                            int abs = v.Count(x => x.Check_In_Time == null && x.Employee_Id == v.Key.Employee_Id) - (int)Model.AppliedLeaves.Where(x => x.EmpId == v.Key.Employee_Id).Sum(x => x.NoOfDays) - frdys;
+                            abs = (abs < 0) ? 0 : abs;
+                            <tr>
+                                <td>@v.Key.Employee_Name</td>
+                                <td>@v.Key.Employee_Code</td>
+                                <td>@v.Count(x => x.Check_In_Time != null && x.Employee_Id == v.Key.Employee_Id)</td>
+                                <td>@abs</td>
+                                <td>@Model.AppliedLeaves.Where(x => x.EmpId == v.Key.Employee_Id).Sum(x => x.NoOfDays)</td>
+                                <td>@v.Count(x => x.Late < -1 && x.Employee_Id == v.Key.Employee_Id)</td>
+                                @for (DateTime t = Model.StartDate.Value; t <= Model.EndDate.Value; t = t.AddDays(1))
+                                {
+                                    <td class="central-text-align no-print">
+                                        @{
+                                            var foundAtt = v.Where(x => (x.AttendanceDate.Value.Date.Day == t.Date.Day && x.AttendanceDate.Value.Date.Month == t.Date.Month && x.AttendanceDate.Value.Date.Year == t.Date.Year) && x.Employee_Id == v.Key.Employee_Id).FirstOrDefault();
+                                            TimeSpan diff = new TimeSpan();
+                                            if (foundAtt != null && foundAtt.Check_In_Time != null && foundAtt.Check_Out_Time != null)
+                                            {
+                                                diff = (foundAtt == null) ? new TimeSpan() : (foundAtt.Check_Out_Time.Value - foundAtt.Check_In_Time.Value);
+                                            }
+
+                                        }
+                                        @if (foundAtt != null && foundAtt.Check_In_Time != null)
+                                        {
+                                            <span style="color:greenyellow; font-size:20px;">- P -</span>
+                                            <br />
+                                            <span style="color:#d0232A; font-size:10px;">@(String.Format("{0}:{1}:{2}",foundAtt.Check_Out_Time.Value.Subtract(foundAtt.Check_In_Time.Value).Hours.ToString("d2"), foundAtt.Check_Out_Time.Value.Subtract(foundAtt.Check_In_Time.Value).Minutes.ToString("d2"), foundAtt.Check_Out_Time.Value.Subtract(foundAtt.Check_In_Time.Value).Seconds.ToString("d2")))</span>//total time jo spend kiya hai us din company main.. means total working hour that day
+                                            if (foundAtt.Late < -1)
+                                            {
+                                                <br />
+                                                <span style="color:#d0232A; font-size:10px;">Late Checkin</span>
+                                            }
+
+                                            if (foundAtt.Excess > 0)
+                                            {
+                                                <br />
+                                                <span style="color:#d0232A; font-size:10px;">Early Checkout</span>
+                                            }
+
+                                            @*if (foundAtt != null)
+                                                {
+                                                    <br />
+                                                    <span style="color:#d0232A; font-size:10px;">@(diff.Hours):@diff.Minutes:@diff.Seconds</span>
+                                                }*@
+
+                                            //check for late coming
+                                            //check for early out
+                                            //check for total hours spent
+                                        }
+                                        else
+                                        {
+                                            if (foundAtt != null)
+                                            {
+                                                if (Model.RostersTemplatesInfo.Where(x => x.Id == foundAtt.WorkCode).FirstOrDefault().ShiftMap.Where(x => x.WeekDay == t.DayOfWeek.ToString()).Select(x => x.IsWeekend).FirstOrDefault() == true)
+                                                {
+                                                    <span style="color:dodgerblue; font-size:20px;">- W -</span>
+                                                }
+                                                else if (Model.AppliedLeaves.Any(x => x.EmpId == foundAtt.Employee_Id && (t.Date >= x.StartDate && t <= x.EndDate)))
+                                                {
+                                                    <span style="color:lawngreen; font-size:20px;">- L -</span>
+                                                }
+                                                else if (foundAtt.IsInvalid == 1)
+                                                {
+                                                    <span style="color:coral; font-size:20px;">- E -</span>
+                                                }
+                                                else
+                                                {
+                                                    <span style="color:#d0232A; font-size:20px;">- A -</span>
+                                                }
+                                            }
+                                            else
+                                            {
+                                                <span style="color:#d0232A; font-size:20px;">- A -</span>
+                                            }
+                                            //just check for leave
+                                        }
+
+                                    </td>
+                                }
+                            </tr>
+                        }
+                    }
+                }
+                else
+                {
+                    <tr class="bgc-red-50 central-text-align">
+                        <td colspan="3">No Record Exists</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+<style>
+    .box {
+        float: left;
+        height: 20px;
+        width: 20px;
+        margin-bottom: 15px;
+        border: 1px solid black;
+        clear: both;
+    }
+
+    .red {
+        background-color: red;
+    }
+    @@media print{
+        .no-print, .no-print * {
+            display:none !important;
+        }
+    }
+</style>
+
+<script>
+    $(document).ready(function () {
+        var table = $('.tableg').DataTable({
+            dom: 'Bfrtip',
+            buttons: [
+                'copy', 'csv', 'excel', 'pdf', 'print'
+            ],
+            "order": [],
+            paging: false
+        });
+    });
+    $(document).on('click', '#prnt_Atten_data', function () {
+        
+        var column = $(".att_data .toPrint");
+        if (column.length) {
+            var newTable = html("<table></table>");
+            var newHead = html("<thead/>").appendTo(newTable);
+            var newBody = html("<tbody/>").appendTo(newTable);
+            var ths = column.map(function () { return '<th>' + $(this).parent().text() + '</th>' }).get();
+            newHead.append('<tr>' + ths + '</tr>');
+            var rows = $(".att_data tbody").find('tr').length;
+            for (var i = 0; i < rows; i++) {
+                var row = $("<tr/>");
+                for (var j = 0; j < column.length; j++) {
+                    row.append("<td/>");
+                }
+                newBody.append(row);
+            }
+            column.each(function (i) {
+                var colIdx = $(this).parent().index() + 1;
+                var row = $('<tr/>')
+                $('table tr td:nth-child(' + colIdx + ')').each(function () {
+                    $("tr td:nth-child(" + (i + 1) + ")", newBody).html($(this).html())
+                })
+            });
+            var div = $("<div/>").append(newTable);
+        /* uncomment this on your server */
+            var w = window.open("","_newwin");
+            if (w) {
+              w.document.write('<body onload="window.focus(); window.print()">'+div.html()+'</body>');
+              w.document.close();
+              setTimeout(function(){w.close();},10);
+            }
+            
+        }
+    });
+</script>

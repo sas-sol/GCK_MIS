@@ -1,0 +1,52 @@
+﻿@model MeherEstateDevelopers.Models.MIS_Reminders
+
+    <div class="col-md-12">
+        <div class="row">
+            <div class="col-md-2">
+                <b>Reminder #  </b>
+            </div>
+
+            <div class="col-md-10">
+                <b>@Model.RemindOn</b> &nbsp;&nbsp; <a href="/Reminders/ReminderDetails?rem=@Model.Id">View Full Details</a>
+            </div>
+        </div>
+        <div class="row mt-md-2">
+            <div class="col-md-2">
+                <b>Title : </b>
+            </div>
+
+            <div class="col-md-10">
+                @Model.Title
+            </div>
+        </div>
+
+        <div class="row mt-md-2">
+            <div class="col-md-2">
+                <b>Status : </b>
+            </div>
+
+            <div class="col-md-10">
+                @Model.Status
+            </div>
+        </div>
+
+        <div class="row mt-md-2">
+            <div class="col-md-2">
+                <b>Remind At : </b>
+            </div>
+
+            <div class="col-md-10">
+                @Model.RemindOn.ToString()
+            </div>
+        </div>
+
+        <div class="row mt-md-2">
+            <div class="col-md-2">
+                <b>Details : </b>
+            </div>
+
+            <div class="col-md-10">
+                @Html.Raw(Model.Description)
+            </div>
+        </div>
+    </div>

@@ -1,0 +1,170 @@
+﻿@model MeherEstateDevelopers.Models.ServiceChargesConfig
+
+@{ if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+}
+<head>
+    <script>
+        var blcksData = @Html.Raw(Json.Encode(Model.BlockFines));
+    </script>
+</head>
+<div class="col-md-12 bg-white p-5">
+    <div class="panel-heading central-text-align mb-md-3">
+        <h5>Configuration Panel</h5>
+    </div>
+
+    <div class="col-md-12">
+        <table class="table table-bordered">
+            <thead>
+                <tr class="central-text-align thead-dark">
+                    <th colspan="3">Fines For Blocks</th>
+                </tr>
+                <tr class="central-text-align">
+                    <th>Sr.</th>
+                    <th>Block Name</th>
+                    <th>Fine Percentage</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{ int count = 1;}
+                @foreach (var v in Model.BlockFines)
+                {
+                    <tr class="central-text-align row-fdsjakh">
+                        <td>@(count++)</td>
+                        <td class="blk-name" data-tr="@v.Id">@v.BlockName</td>
+                        <td><input type="number" class="borderless-Input fine-perc" value="@v.FinePercentage" /></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <div class="col-md-12">
+        <table class="table table-bordered">
+            <thead>
+                <tr class="central-text-align thead-dark">
+                    <th colspan="3">Fines For Blocks</th>
+                </tr>
+                <tr class="central-text-align">
+                    <th>Sr.</th>
+                    <th>Block Name</th>
+                    <th>Fine Percentage</th>
+                </tr>
+            </thead>
+            <tbody class="ser-chg-segg-lst central-text-align">
+                @if (Model.ServiceChargesBreakUp is null)
+                {
+                    <tr class="kjhhjkhjk">
+                        <td colspan="3">No Data Added Yet</td>
+                    </tr>
+                }
+                else
+                {
+                    foreach (var ii in Model.ServiceChargesBreakUp)
+                    {
+            <tr>
+                <td><i class="ti-trash"></i><label><b>1.</b></label></td>
+                <td><input type="text" class="chg-name borderless-Input" placeholder="Service" /></td>
+                <td><input type="text" class="chg-amt borderless-Input" placeholder="Charges" /></td>
+            </tr>
+                    }
+                }
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td class="central-text-align" colspan="3"><i class="ti-plus pointer add-row-hfkjdsa-fsda"></i></td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4">
+            <label>Last Day Of Month For Bill</label>
+            <input type="number" class="form-control due-dt" value="@Model.DueDay_ForBill" />
+        </div>
+    </div>
+
+    <div class="col-md-12">
+        <button class="btn btn-success save-btn-jghfasd" style="float:right;">Save</button>
+        <div class="clearfix"></div>
+    </div>
+</div>
+
+<script>
+    $('.save-btn-jghfasd').unbind().click(function () {
+        let blockFine = [];
+        let svcsSegg = [];
+
+        let conf = confirm('Are you sure you want to save this?');
+        if (!conf) {
+            return;
+        }
+        let dte = $('.due-dt').val();
+        showLoader();
+        $('.row-fdsjakh').each(function () {
+            let blkId = $(this).find('.blk-name').attr('data-tr');
+            let blkNm = $.trim($(this).find('.blk-name').text());
+            let blkFine = $(this).find('.fine-perc').val();
+
+            blockFine.push({
+                Id: blkId,
+                FinePercentage: blkFine,
+                BlockName: blkNm
+            });
+        });
+        $('.tyewiuor').each(function () {
+            let blkId = $(this).find('.chg-amt').val();
+            let blkNm = $.trim($(this).find('.chg-name').val());
+            svcsSegg.push({
+                FinePercentage: blkId,
+                BlockName: blkNm
+            });
+        });
+
+        $.ajax({
+            type: "POST",
+            url: "/ServiceCharges/UpdateConfig/",
+            contentType: "application/json",
+            traditional: true,
+            beforeSend: function () {
+            },
+            complete: function () {
+                hideLoader();
+            },
+            data: JSON.stringify({ Config: blockFine, due: dte, SvcBrk: svcsSegg }),
+        }).done(function (data) {
+            if (data == true) {
+                alert('Updated Successfully.');
+                window.location.reload();
+            }
+            else {
+                alert('Failed to update. Please try again.');
+            }
+        });
+    });
+
+    //yahan pe ajax hit maaro
+
+
+
+    $(document).on('click', '.add-row-hfkjdsa-fsda', function () {
+        if ($('.kjhhjkhjk').length > 0) {
+            $('.kjhhjkhjk').remove();
+        }
+        let cnt = $('.tyewiuor').length;
+        let strc = `<tr class = "tyewiuor">
+                            <td><i class="ti-trash"></i><label><b>${cnt + 1}.</b></label></td>
+                            <td><input type="text" class="chg-name borderless-Input" placeholder="Service"/></td>
+                            <td><input type="text" class="chg-amt borderless-Input" placeholder="Charges"/></td>
+                        </tr>`;
+
+        $('.ser-chg-segg-lst').append(strc);
+    });
+</script>

@@ -1,0 +1,211 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Inventory_PurchaseOrder>
+@{
+    var group = Model.Select(x => x.Group_Id).FirstOrDefault();
+    var vendor = Model.Select(x => x.Vendor_Id).FirstOrDefault();
+    var vendor_Name = Model.Select(x => x.Vendor_Name).FirstOrDefault();
+    var bid_id = Model.Select(x => x.Bid_Id).FirstOrDefault();
+    var PO_num = Model.Select(x => x.PO_Number).FirstOrDefault();
+    var PO_date = Model.Select(x => x.DateTime).FirstOrDefault();
+    var Dep_Id = Model.Select(x => x.Dep_Id).FirstOrDefault();
+    var Dep_Name = Model.Select(x => x.Dep_Name).FirstOrDefault();
+    var Prj_Id = Model.Select(x => x.Prj_Id).FirstOrDefault();
+    var Prj_Name = Model.Select(x => x.Prj_Name).FirstOrDefault();
+}
+@{ if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+}
+<script src="~/Scripts/Inv.js"></script>
+<script>
+    var shelves = @Html.Raw(Json.Encode(ViewBag.shelf));
+    var warehouses = @Html.Raw(Json.Encode(ViewBag.warehouse));
+</script>
+<div class="bgc-white bd bdrs-3 p-20 mB-20">
+    <h5 style="text-align:center">Goods Receiving Note</h5>
+    <hr />
+    <div class="col-md-12">
+        <div class="col-md-10">
+            <input type="hidden" value="@group" class="grpId" />
+            <input type="hidden" class="trans-id" value="@ViewBag.TransactionId" />
+            <input type="hidden" class="form-control Bid_Number" name="Bid_Number" placeholder="Bid Number" readonly value="@bid_id">
+            <div class="form-row">
+                <div class="form-group col-md-3">
+                    <label>Vendor</label>
+                    <h5>@vendor_Name</h5>
+                    <input type="hidden" id="vendors" value="@vendor_Name" />
+                    <input type="hidden" id="vendId" value="@vendor" />
+                </div>
+                <div class="form-group col-md-2">
+                    <label>PO Number</label>
+                    <h5>@PO_num</h5>
+                    <input type="hidden" class="PO_Number" name="PO_Number" value="@PO_num">
+                </div>
+                <div class="form-group col-md-2">
+                    <label>PO Date</label>
+                    <h5>@string.Format("{0:dd-MMM-yyyy}", PO_date)</h5>
+                    <input type="hidden" class="PO_Date" placeholder="mm/dd/yyyy" name="PO_Date" value="@Model.Select(x=>x.DateTime).FirstOrDefault().Value.ToShortDateString()">
+                </div>
+                <div class="form-group col-md-3">
+                    <label>Department</label>
+                    <h5>@Dep_Name</h5>
+                    <input type="hidden" id="dep-name" value="@Dep_Name">
+                    <input type="hidden" id="dep-id" value="@Dep_Id">
+                </div>
+                <div class="form-group col-md-3">
+                    <label>Project</label>
+                    <h5>@Prj_Name</h5>
+                    <input type="hidden" id="prj-name" value="@Prj_Name">
+                    <input type="hidden" id="prj-id" value="@Prj_Id">
+                </div>
+                <div class="form-group col-md-3" style="display: block;">
+                    <label>Quality Check By</label>
+                    @Html.DropDownList("Employees", null, "Choose..", new { @class = "form-control" })
+                </div>
+                <div class="form-group col-md-3">
+                    <label>Invoice No.</label>
+                    <input type="text" class="form-control txt-inv-no" id="InvoiceNo" required placeholder="Invoice No." />
+                </div>
+                
+                <div class="form-group col-md-3">
+                    <form action="/Inventory/InvoiceRefFile" method="post" enctype="multipart/form-data">
+                        Refrences:
+                        <input type="hidden" value="@ViewBag.TransactionId" name="Group_ref" />
+                        <input type="file" class=" ref-file-Invoice" name="file-input" id="file-input">
+                    </form>
+                    <div class="filename-container hide"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr />
+    @if (Model.Any())
+    {
+        int sr = 1;
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th width="5%">Sr.</th>
+                    <th width="15%">Code</th>
+                    <th width="30%">Item</th>
+                    <th width="5%">PO Qty</th>
+                    <th width="5%">Rcvd Qty</th>
+                    <th width="10%">Qty</th>
+                    @*<th width="10%">Rate</th>*@
+                    @*<th width="10%">Total</th>*@
+                    <th width="5%">UOM</th>
+                    <th width="15%">Warehouse</th>
+                    <th width="12%">Expiry</th>
+                    <th width="13%">Remarks</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var v in Model.Where(x => x.OtherCharges == null))
+                {
+                    <tr class="main-inv-rec cal">
+                        <input type="hidden" class="po-id" value="@v.Id" />
+                        <input type="hidden" class="inv-rate" value="@v.Purchase_Rate" />
+                        <input type="hidden" class="comp_Id" value="@v.Comp_Id" />
+                        <td>@(sr++)</td>
+                        <td class="">@v.SKU</td>
+                        <td class="invs" data-slval='@v.Item_Id'>@v.Item_Name</td>
+                        <td class="ttl-qty">@string.Format("{0:0,0.##}", v.Qty)</td>
+                        <td class="rcvd-qty">@( string.Format("{0:0,0.##}", (v.ReceivedQuantity is null) ? "0" : v.ReceivedQuantity.ToString()))</td>
+                        <td><input type="number" class="form-control qty" value="@(  v.Qty - ( (v.ReceivedQuantity is null) ? 0 : v.ReceivedQuantity))"></td>
+                        @*<td>@v.Purchase_Rate</td>*@
+                        @*<td>@v.ReceivedQuantity</td>*@
+                        <td>@v.UOM</td>
+                        <td><select class="form-control warehouse"></select></td>
+                        <td><input class="form-control expiry" data-id="1" data-provide="datepicker" placeholder="Date"></td>
+                        <td style="padding:0px"><textarea class="form-control rems" placeholder="remarks" rows="2" cols="5" style="resize:none;border:none"></textarea></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    <div class="row">
+        <div class="form-row col-md-12 mt-md-2">
+            @*<div class="col-md-4 form-group righty">
+                 Invoice Numbers: 
+                <input type="text" class="col-md-10 form-control" />
+            </div>
+            <div class="col-md-4 form-group">
+                Attach Invoices: 
+                <input type="file" id="files" multiple>
+            </div>*@
+            <div class="col-md-2 righty form-group">
+                <button class="btn btn-success save-to-inv">Generate GRN</button>
+            </div>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+</div>
+<script>
+    $(document).on('focusout', '.qty', function () {
+        let qty = parseFloat($(this).val());
+        let rt = parseFloat( $.trim($(this).closest('.cal').find('.inv-rate').text()));
+        let rcvd = parseFloat($.trim($(this).closest('.cal').find('.rcvd-qty').text()));
+        let mainQty = parseFloat($.trim(RemoveComma( $(this).closest('.cal').find('.ttl-qty').text())));
+        var ttl = Number( (rcvd) + (qty));
+        if ( ttl > (mainQty)) {
+            alert('Quantity error. Quantity cannot exceed PO quantity');
+            qty = 0;
+            $(this).val(0);
+        }
+        $(this).closest('.cal').find('.ttl-prc').text(qty * rt);
+    });
+
+    function PopulateWareHouses(_ele) {
+        $.each(warehouses, function (key, value) {
+            $(_ele).append('<option value="' + value.Id + '">' + value.Name + '</option>');
+        });
+    }
+
+    $(function () {
+        $('.warehouse').each(function () {
+            PopulateWareHouses($(this));
+        });
+    })
+</script>
+
+<style>
+    .centralText {
+        text-align: center;
+    }
+
+    .warningText {
+        position: absolute;
+        left: 50%;
+        right: 50%;
+        /*font-size: 20px;*/
+        animation-name: warning;
+        animation-duration: .6s;
+        animation-iteration-count: infinite;
+    }
+
+    @@keyframes warning {
+        0% {
+            font-size: 15px;
+        }
+
+        25% {
+            font-size: 20px;
+        }
+
+        50% {
+            font-size: 25px;
+        }
+
+        70% {
+            font-size: 20px;
+        }
+
+        100% {
+            font-size: 15px;
+        }
+    }
+</style>

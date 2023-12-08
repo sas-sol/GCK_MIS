@@ -1,0 +1,284 @@
+﻿
+@{ if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+}
+
+<link rel="stylesheet" href="~/Content/select2.css" />
+<script src="~/Scripts/select2.js"></script>
+
+<div class="col-md-12 bgc-white pt-md-3">
+    <div class="panel-heading central-text-align">
+        <h5>Manual Plots Assignment</h5>
+    </div>
+
+    <div class="col-md-12 main-asgnmnt-area mt-md-3">
+        <div class="row">
+            <div class="col-md-2">
+                <label><b>Plot :</b></label>
+            </div>
+            <div class="col-md-3">
+                <select class="form-control srch-plot-hjgfsd"></select>
+            </div>
+
+            @*<div class="col-md-1"></div>*@
+
+            <div class="col-md-2">
+                <label><b>File :</b></label>
+            </div>
+            <div class="col-md-3">
+                <select class="form-control srch-file-hjkfsd"></select>
+            </div>
+            <div class="col-md-1">
+                <button class="btn btn-primary add-btn-asngmnt-fsdjkl"><i class="fa fa-plus"></i>&nbsp; Add</button>
+            </div>
+        </div>
+    </div>
+
+    <hr />
+
+    <div class="col-md-12 final-content-area-lsdkfjh pb-md-5">
+        <div class="panel-heading central-text-align hdng-sfdhjk" style="display:none;">
+            <h5>Added Plots</h5>
+        </div>
+
+        <div class="row header-row-fjklds mt-md-2" style="display:none;">
+            <div class="col-md-2">
+                <label><b>Plot</b></label>
+            </div>
+
+            <div class="col-md-2">
+                <label><b>File</b></label>
+            </div>
+
+            <div class="col-md-4">
+                <label><b>Size/Dimensions</b></label>
+            </div>
+
+            <div class="col-md-2">
+                <label><b>Location</b></label>
+            </div>
+
+            <div class="col-md-1">
+                <label><b>Plot Status</b></label>
+            </div>
+
+            <div class="col-md-1">
+                <label><b>Action</b></label>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-12 row mt-md-3 pb-md-3 sv-row">
+        <div class="col-md-10"></div>
+        <div class="col-md-2">
+            <button class="btn btn-success sv-rqst-btn-dfskhj"><i class="fa fa-arrow-right"></i>&nbsp; Forward Request</button>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    $(document).ready(function () {
+        $('.srch-file-hjkfsd').select2({
+            dropdownParent: $('.main-asgnmnt-area'),
+            ajax: {
+                url: '/Balloting/SearchFile/',
+                data: function (params) {
+                    var query = {
+                        s: params.term
+                    }
+
+                    // Query parameters will be ?search=[term]&type=public
+                    return query;
+                },
+                processResults: function (data) {
+                    // Transforms the top-level key of the response object from 'items' to 'results'
+                    return {
+                        results: data
+                    };
+                }
+            }
+        });
+
+        $('.srch-plot-hjgfsd').select2({
+            dropdownParent: $('.main-asgnmnt-area'),
+            ajax: {
+                url: '/Balloting/SearchPlot/',
+                data: function (params) {
+                    var query = {
+                        s: params.term
+                    }
+
+                    // Query parameters will be ?search=[term]&type=public
+                    return query;
+                },
+                processResults: function (data) {
+                    // Transforms the top-level key of the response object from 'items' to 'results'
+                    return {
+                        results: data
+                    };
+                }
+            }
+        });
+    });
+
+    $('.add-btn-asngmnt-fsdjkl').unbind().click(function () {
+        let plt = $('.srch-plot-hjgfsd option:selected').val();
+        let fil = $('.srch-file-hjkfsd option:selected').val();
+        let filNum = $('.srch-file-hjkfsd option:selected').text();
+
+
+        if (!confirm('Are you sure you want to add this plot assignment to request list?')) {
+            return;
+        }
+
+        let _strc_ = `<div class="row asgn-req mt-md-3"></div>`;
+        $('.srch-file-hjkfsd').val(null).trigger('change');
+        $('.srch-plot-hjgfsd').val(null).trigger('change');
+        $('.final-content-area-lsdkfjh').append(_strc_);
+        let last_added_item = $('.asgn-req').last();
+
+        SASLoad($(last_added_item));
+
+        $.ajax({
+            type: "POST",
+            url: '/Balloting/AddPlotRequest/',
+            data: { pltId: plt, fileNo: filNum, fileId: fil },
+            success: function (data) {
+                if (data.status == true) {
+                    $('.hdng-sfdhjk').show();
+                    $('.header-row-fjklds').show();
+                    $('.sv-row').show();
+                    SASUnLoad($(last_added_item));
+                    let _strc_temp = `<input type="hidden" class="file-id" value="${data.FileId}" />
+                        <input type="hidden" class="plot-id" value = "${data.plotInfo.Id}" />
+                        <input type="hidden" class="file-nm" value="${data.FileNum}" />
+                        <input type="hidden" class="plot-nm" value="${data.plotInfo.PlotNo} - ${data.plotInfo.Sector} (${data.plotInfo.Block})" />
+
+                        <div class="col-md-2">
+                            <label>${data.plotInfo.PlotNo} ${data.plotInfo.Sector} ${data.plotInfo.Block}</label>&nbsp;&nbsp; <i class="fa fa-info-circle pointer"></i>
+                        </div>
+
+                        <div class="col-md-2">
+                            <label>${data.FileNum}</label> &nbsp;&nbsp; <i class="fa fa-info-circle pointer"></i>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label>${data.plotInfo.PlotArea} Marla (${data.plotInfo.PlotSize} Sq. Ft.)</label>
+                        </div>
+
+                        <div class="col-md-2">
+                            <label>${data.plotInfo.PlotType}</label>
+                        </div>
+
+                        <div class="col-md-1">
+                            <label>${data.plotInfo.Status}</label>
+                        </div>
+
+                        <div class="col-md-1">
+                            <i class="fa fa-trash pointer rmv-row-hjksfgduiret"></i>
+                        </div>
+                        <hr class = "stylised-hr" />`;
+
+                    $(last_added_item).append(_strc_temp);
+
+                    $('.rmv-row-hjksfgduiret').unbind().click(function () {
+                        if (!confirm('Are you sure you want to remove this row?')) {
+                            return;
+                        }
+
+                        $(this).closest('.asgn-req').remove();
+                        if ($('.asgn-req').length <= 0) {
+                            $('.hdng-sfdhjk').hide();
+                            $('.sv-row').hide();
+                            $('.header-row-fjklds').hide();
+                        }
+                    });
+                }
+                else {
+                    alert("Failed To validate this entry");
+                    $(last_added_item).remove();
+                }
+            }
+            , error: function (xmlhttprequest, textstatus, message) {
+                if (textstatus === "timeout") {
+                    alert("Internet Timeout");
+                } else {
+                    alert(textstatus);
+                }
+            }
+        });
+
+    });
+
+    $('.sv-rqst-btn-dfskhj').unbind().click(function () {
+        if (!confirm('Are you sure you want to forward this request?')) {
+            return;
+        }
+
+        //collecting data
+        let _collectedData_ = [];
+        let _requestValid_ = true;
+
+        $('.asgn-req').each(function () {
+            let flNm = $(this).find('.file-nm').val();
+            let flId = $(this).find('.file-id').val();
+            let pltNm = $(this).find('.plot-nm').val();
+            let pltId = $(this).find('.plot-id').val();
+            //if (_collectedData_.find(x => x.plotId == pltId) != undefined) {
+            //    _requestValid_ = false;
+            //}
+
+            //if (_collectedData_.find(x => x.fileId == flId) != undefined) {
+            //    _requestValid_ = false;
+            //}
+            _collectedData_.push({
+                plotId: pltId,
+                fileId: flId,
+                FileName: flNm,
+                PlotName: pltNm
+            });
+        });
+
+        if (!_requestValid_) {
+            alert('Duplication of entries. Please check your added files and plots again');
+            return;
+        }
+        //sending data to the server
+        ShowFullScreenLoader();
+        $.ajax({
+            type: "POST",
+            url: '/Balloting/SaveManualPlotAssign/',
+            data: { reqs: _collectedData_, rems: "Tattay bandh k bund lete hue ;)" },
+            success: function (data) {
+                if (data == true) {
+                    HideFullScreenLoader();
+                }
+                else {
+                    alert("Failed To forward this request");
+                }
+            }
+            , error: function (xmlhttprequest, textstatus, message) {
+                if (textstatus === "timeout") {
+                    alert("Internet Timeout");
+                } else {
+                    alert(textstatus);
+                }
+            }
+        });
+    });
+</script>
+
+<style>
+    .stylised-hr {
+        border-top: 1px solid rgba(0,0,0,0.1);
+        height: 5px;
+        width: 100%;
+    }
+</style>

@@ -1,0 +1,133 @@
+﻿@model MeherEstateDevelopers.Models.PO_Completed_With_GRN
+<table class="table table-bordered potbl">
+    <thead class="thead-dark">
+        <tr>
+            <th>Po#</th>
+            <th>Date</th>
+            <th>Total PO Value</th>
+            <th>Complete PO Value</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.PO.Any())
+        {
+            foreach (var po in Model.PO.GroupBy(x => new { x.Group_Id, x.PO_Number, x.PO_Date, x.Vendor_Name }).ToList())
+            {
+                var reqNo = "";
+                if (Model.REQ != null)
+                {
+                    foreach (var ind in po)
+                    {
+                        foreach (var re in Model.REQ)
+                        {
+                            if (re.deptId == ind.Group_Id)
+                            {
+                                reqNo = re.deptName;
+                                break;
+                            }
+                        }
+
+                    }
+                }
+
+                decimal? Receivedval = 0;
+                foreach (var a in po)
+                {
+                    var it = Model.GRN.Where(x => x.Item_Id == a.Item_Id && x.PO_Number == po.Key.PO_Number).FirstOrDefault();
+                    if (it != null)
+                    {
+                        Receivedval += it.R_Qty * a.Purchase_Rate;
+                    }
+                }
+                @*if (Receivedval != po.Sum(x => x.Total))
+                    {
+                        <tr>
+                            <td colspan="6" class="bgc-red-50">Po is Partially Received.</td>
+                        </tr>
+                        continue;
+                    }*@
+
+                <tr>
+                    <td class="pointer" data-po="@po.Key.PO_Number">
+                        <a href="/Inventory/PrintPurchaseOrder?poNum=@po.Key.PO_Number" target="_blank"> @po.Key.PO_Number</a>
+                        <br />
+                        <hr />
+                        <label id="@reqNo">@reqNo</label>
+                        <br />
+                        <a href="/Inventory/BidsListing?Group=@po.Key.Group_Id" target="_blank">Requisition Details</a>
+                        <br />
+                        <br />
+                        @*<a href="javascript:void(0)" class="up-pur-order" data-toggle="modal" data-target="#Modal" data-bidIden="@po.Key.PO_Number">
+                            <i class="ti-pencil"></i>&nbsp;&nbsp;Revise
+                        </a>*@
+                    </td>
+                    <td>
+                        @string.Format("{0:dd-MMM-yyyy}", po.Key.PO_Date)
+                    </td>
+                    <td>@string.Format("{0:n0}", po.Sum(x => x.Total))</td>
+                  
+                    <td>
+                        @string.Format("{0:n0}", Receivedval)
+                    </td>
+                    <td class="tdscrol">
+                        <table class="table" style="margin-bottom:0px; border:none">
+                            <thead>
+                                <tr>
+                                    <th width="50px">GRN</th>
+                                    <th width="50px">Date</th>
+                                    <th width="250px"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var v in Model.GRN.Where(x => x.PO_Number == po.Key.PO_Number).GroupBy(x => new { x.GRN, x.St_Date }))
+                                {
+                                    int ii = 1;
+                                    <tr class="">
+                                        <td><a href="/Inventory/GoodReceiveNotePrint?Id=@v.Key.GRN" target="_blank">@v.Key.GRN</a> </td>
+                                        <td>@string.Format("{0:dd-MMM-yyyy}", v.Key.St_Date)</td>
+                                        <td class="tdscrol">
+                                            <table class="table" style="margin-bottom:0px; border:none">
+                                                <thead>
+                                                    <tr>
+                                                        <th style="max-width:50px">Sr</th>
+                                                        <th>Item</th>
+                                                        <th>Qty</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach (var item in v)
+                                                    {
+                                                        <tr>
+                                                            <td>@ii</td>
+                                                            <td>@item.Complete_Name</td>
+                                                            <td>@item.R_Qty</td>
+                                                        </tr>
+                                                        ii++;
+                                                    }
+                                                </tbody>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="5">No Record Exists</td>
+            </tr>
+        }
+    </tbody>
+</table>
+<script>
+    $(function () {
+        $(".potbl").DataTable({
+            ordering: false
+        });
+    });
+</script>

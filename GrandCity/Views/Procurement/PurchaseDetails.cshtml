@@ -1,0 +1,174 @@
+﻿@model MeherEstateDevelopers.Models.PO_Req
+@{
+    if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else if (User.IsInRole("CEO"))
+    {
+        Layout = "~/Views/Shared/_CEOLayout.cshtml";
+    }
+    else if (User.IsInRole("Staff"))
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+    var reqno = Model.Req.Select(x => x.Requisition_No).FirstOrDefault();
+    var cret = Model.PO.Select(x => x.CreatedBy_Name).FirstOrDefault();
+    var Dep_Name = Model.Req.Select(x => x.Dep_Name).FirstOrDefault();
+    var Date = Model.Req.Select(x => x.DateTime).FirstOrDefault();
+    var prj = Model.Req.Select(x => x.Prj_Name).FirstOrDefault();
+    var grp = Model.Req.Select(x => x.Group_Id).FirstOrDefault();
+    var v_Id = Model.PO.Select(x => x.Vendor_Id).FirstOrDefault();
+    var v_name = Model.PO.Select(x => x.Vendor_Name).FirstOrDefault();
+    var v_comp = Model.PO.Select(x => x.Vendor_Comp).FirstOrDefault();
+    var po = Model.PO.Select(x => x.PO_Number).FirstOrDefault();
+}
+<script src="~/Scripts/Inv.js"></script>
+<input type="hidden" value="@grp" id="Group_Id" />
+<input type="hidden" value="@v_Id" id="Vend_Id" />
+<input type="hidden" value="@v_name" id="Vend_Name" />
+<input type="hidden" value="@v_comp" id="Vend_Comp" />
+<input type="hidden" value="@po" id="po_num" />
+<div class="bgc-white bd bdrs-3 p-20 mB-20">
+    @if (Model.Req.Any())
+    {
+    <div class="row">
+        <div class="col-md-2">
+            <label>Department</label>
+            <h4>@Dep_Name</h4>
+        </div>
+        <div class="col-md-3">
+            <label>Project</label>
+            <h4>@prj</h4>
+        </div>
+        <div class="col-md-2">
+            <label>Requisition No</label>
+            <h4>@reqno</h4>
+        </div>
+        <div class="col-md-2">
+            <label>Date</label>
+            <h4>@String.Format("{0:dd-MMM-yyyy}", Date)</h4>
+        </div>
+        <div class="col-md-2">
+            <label>PO Number</label>
+            <h4>@po</h4>
+        </div>
+
+        <div class="col-md-2">
+            <button class="up-pur-order mt-1 btn btn-primary" data-toggle="modal" data-target="#Modal" data-bidIden="@po"><i class="ti-pencil"></i>&nbsp;&nbsp;Revise</button>
+        </div>
+    </div>
+        <div class="row" style="border:1px solid #ccc">
+            <div class="col-md-2 p-20">
+                <lable>Vendor : <b> @v_name </b></lable>
+            </div>
+            <div class="col-md-10 p-0">
+                <table class="table-bordered table">
+                    <thead>
+                        <tr class="thTextHeading">
+                            <th width="50px">Sr.</th>
+                            <th width="100px">Code</th>
+                            <th width="350px">Item</th>
+                            <th width="350px">Payment TimeLine</th>
+                            <th width="100px">QTY</th>
+                            <th width="100px">Rate/UOM</th>
+                            <th width="100px">Gst</th>
+                            <th width="100px">Total</th>
+                        </tr>
+                    </thead>
+                    <tbody class="quotes-rec">
+                        @{int sr = 1; }
+                        @foreach (var v in Model.PO.Where(x => x.OtherCharges == null))
+                        {
+                            //string dims = string.Empty;
+                            //if (!(v.Length is null))
+                            //{
+                            //    dims += " /Len - " + v.Length + v.L_UOM;
+                            //}
+                            //if (!(v.Width is null))
+                            //{
+                            //    dims += " /Wid - " + v.Width + v.W_UOM;
+                            //}
+                            //if (!(v.Heigth is null))
+                            //{
+                            //    dims += " /Hei - " + v.Heigth + v.H_UOM;
+                            //}
+                            //if (!(v.Diameter is null))
+                            //{
+                            //    dims += " /Dia - " + v.Diameter + v.D_UOM;
+                            //}
+                            //if (!(v.Size is null))
+                            //{
+                            //    dims += " /Size - " + v.Size + v.S_UOM;
+                            //}
+                            <tr class="exst-item-bid-info">
+                                <td class="">
+                                    @sr
+                                </td>
+                                <td class="">@v.SKU</td>
+                                <td class="">@v.Item_Name</td>
+                                <td class="">@v.PaymentTime</td>
+                                <td class="">@string.Format("{0:0,0.##}", v.Qty)</td>
+                                <td class="">@string.Format("{0:0,0.##}", v.Purchase_Rate) / @v.UOM</td>
+                                <td class="">@v.Tax</td>
+                                <td class=""><span class="ccy">@v.Currency </span> @string.Format("{0:0,0.##}", v.TotalVal)</td>
+                            </tr>
+                            sr++;
+                        }
+                        <tr>
+                            <td colspan="7">Other Charges</td>
+                        </tr>
+                        @foreach (var v in Model.PO.Where(x => x.OtherCharges == true))
+                        {
+                            
+                            <tr class="exst-item-bid-info">
+                                <td class="">
+                                    @sr
+                                </td>
+                                <td colspan="4">@v.Item_Name</td>
+                                <td class=""><span class="ccy">@v.Currency</span> @string.Format("{0:0,0.##}", v.TotalVal)</td>
+                            </tr>
+                            sr++;
+                        }
+                    </tbody>
+                    <tfoot>
+                        <tr class="exst-item-bid-info">
+                            <td colspan="6">
+                                <div style="float:left" class="add-oth-ch pointer" id="@grp-new-quo" data-toggle="modal" data-target="#Modal"><i class="fa fa-plus-circle"></i>&nbsp; Add Other Charges</div>
+                            </td>
+                            <th class=""><span class="ccy">@Model.PO.Select(x=> x.Currency).FirstOrDefault() </span> @string.Format("{0:0,0.##}", Model.PO.Sum(x => x.TotalVal))</th>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+            <div>
+                @if (cret == null)
+                {
+                    <button type="button" class="btn btn-primary gen-po" id="@grp">Print Purchase Orders</button>
+                }
+                else
+                {
+                    <h5>Purchase order generated</h5>
+                }
+
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="col-md-12">
+            <h5>It appears to have occurred some sort of error. Please try again or contact SA Systems Team.</h5>
+        </div>
+    }
+</div>
+<style>
+    tr th {
+        font-size: 13px;
+        padding: 5px !important;
+    }
+
+    .thTextHeading {
+        color: #FFF;
+        background-color: #212529;
+    }
+</style>

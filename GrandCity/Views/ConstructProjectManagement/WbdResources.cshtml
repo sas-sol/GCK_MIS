@@ -1,0 +1,63 @@
+﻿
+
+<div class="container-fluid">
+    <h4 class="c-grey-900 mT-10 mB-30">Work Break Down Resource</h4>
+
+    <div class="">
+        <div class="vertical-menu">
+            <a class=" sideLink WbdrscMaterial active">Material</a>
+            <a class=" sideLink nav WbdrscLabour" >Labour</a>
+            <a class=" sideLink WbdrscEquipment ">Equipment</a>
+
+        </div>
+    </div>
+    <input id="Proj_Id" value="@ViewBag.Proj_Id" hidden />
+    @*WbdRsrc
+        Tab panes*@
+    <div class="tab-content">
+        <div id="" class="tab-pane active Wbddetails">
+            @{Html.RenderAction("WbdResourcesMaterial", "ConstructProjectManagement");}
+        </div>
+    </div>
+</div>
+
+
+<script>
+    $('.sideLink').unbind().click(function () {
+        if (!$(this).hasClass('active')) {
+            $(this).addClass('active');
+            $(this).prevAll('.sideLink').removeClass('active');
+            $(this).nextAll('.sideLink').removeClass('active');
+            let typeOfLink = $(this).attr('data-typ');
+            SASLoad($('#empdetail'));
+            $('#empdetail').load(typeOfLink, function () {
+                SASUnLoad($('#empdetail'));
+            });
+        }
+    });
+</script>
+<style>
+    .vertical-menu {
+        /*width: 200px;*/
+        display: flex;
+        justify-content: flex-start;
+    }
+
+        .vertical-menu a {
+            background-color: #eee;
+            color: black;
+            display: block;
+            padding: 12px;
+            text-decoration: none;
+            min-width: 10%;
+        }
+
+            .vertical-menu a:hover {
+                background-color: #ccc;
+            }
+
+            .vertical-menu a.active {
+                background-color: #D0232A;
+                color: white !important;
+            }
+</style>

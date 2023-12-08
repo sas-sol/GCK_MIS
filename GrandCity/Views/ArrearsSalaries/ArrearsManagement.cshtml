@@ -1,0 +1,94 @@
+﻿
+@{ Layout = "~/Views/Shared/_StaffLayout.cshtml"; }
+
+<div class="row default-div-bg bd bdrs-3 p-20 mB-20">
+    <div class="col-md-12">
+        <ul class="nav nav-tabs" id="myTabs">
+            @if (User.IsInRole("Employee Arrears") || User.IsInRole("Administrator"))
+            {
+            <li class="nav-item"><a class="nav-link sal-lnker" data-toggle="bankstabs" data-link="/ArrearsSalaries/SalaryIndex" id="pen-ap" href="javascript:void(0)">Generate Arrears</a></li>
+            <li class="nav-item"><a class="nav-link sal-lnker" data-toggle="bankstabs" data-link="/ArrearsSalaries/AllSalaries" id="p-o-z" href="javascript:void(0)">HR Approval</a></li>
+            }
+            @if (User.IsInRole("Arrears Approval") || User.IsInRole("Administrator"))
+            {
+            <li class="nav-item"><a class="nav-link sal-lnker" data-toggle="bankstabs" data-link="/ArrearsSalaries/InProcessSalariesSlip" id="pen" href="javascript:void(0)">HR Manager Approval</a></li>
+            }
+            @if (User.IsInRole("Finance Arrears Approval") || User.IsInRole("Administrator"))
+            {
+            <li class="nav-item"><a class="nav-link sal-lnker" data-toggle="bankstabs" data-link="/ArrearsSalaries/FinanceApproved" id="q-f" href="javascript:void(0)">Finance Approval</a></li>
+            }
+            @if (User.IsInRole("Arrears Distribution") || User.IsInRole("Administrator"))
+            {
+            <li class="nav-item"><a class="nav-link sal-lnker" data-toggle="bankstabs" data-link="/ArrearsSalaries/DistrbutorAndGenerate" id="p-o" href="javascript:void(0)">Arrear Distribution</a></li>
+            }
+            @if (User.IsInRole("Arrears History") || User.IsInRole("Administrator"))
+            {
+            <li class="nav-item"><a class="nav-link sal-lnker" data-toggle="bankstabs" data-link="/ArrearsSalaries/ArchiveArrears" id="p-o-z" href="javascript:void(0)">Archive</a></li>
+            }
+        </ul>
+        <div class="tab-content">
+            <div id="coahead" class="tab-pane active p-20"></div>
+        </div>
+    </div>
+</div>
+
+@if (User.IsInRole("Employee Arrears") || User.IsInRole("Administrator"))
+{
+    <script>
+        $(function () {
+            $('#coahead').load('/ArrearsSalaries/SalaryIndex');
+            $("#pen-ap").addClass('active');
+        });
+    </script>
+}
+else if (User.IsInRole("Arrears Approval"))
+{
+    <script>
+        $(function () {
+            $('#coahead').load('/ArrearsSalaries/InProcessSalariesSlip');
+            $("#pen").addClass('active');
+        });
+    </script>
+}
+else if (User.IsInRole("Finance Arrears Approval"))
+{
+    <script>
+        $(function () {
+            $('#coahead').load('/ArrearsSalaries/FinanceApproved');
+            $("#q-f").addClass('active')
+        });
+    </script>
+}
+else if (User.IsInRole("Arrears Distribution"))
+{
+    <script>
+        $(function () {
+            $('#coahead').load('/ArrearsSalaries/DistrbutorAndGenerate');
+            $("#po").addClass('active')
+        });
+    </script>
+}
+
+else if (User.IsInRole("Employee Arrears"))
+{
+    <script>
+        $(function () {
+            $('#coahead').load('/ArrearsSalaries/AllSalaries');
+            $("#po").addClass('active')
+        });
+    </script>
+}
+
+<script>
+    $(document).ready(function () {
+        $('.sal-lnker').unbind().click(function () {
+            let link = $(this).attr('data-link');
+            showLoader();
+            $('#coahead').load(link, function () {
+                $('.sal-lnker').removeClass('active');
+                $(this).addClass('active');
+                hideLoader();
+            });
+        });
+    });
+</script>

@@ -1,0 +1,31 @@
+﻿@{
+    if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else if (User.IsInRole("Staff"))
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+}
+<div class="bgc-white bd bdrs-3 p-20 mB-20">
+    <div class="col-md-12">
+        <ul class="nav nav-tabs" role="tablist" id="myTabs">
+            <li class="nav-item"><a class="nav-link active " role="tab" data-toggle="tab" data-link="/RealEstateProjects/NewProject/" id="proj" href="#coahead">New Project</a></li>
+            <li class="nav-item"><a class="nav-link " role="tab" data-toggle="tab" data-link="/RealEstateProjects/ProjectsDetail/" id="proj" href="#coahead">Project List</a></li>
+            @*<li class="nav-item"><a class="nav-link " role="tab" data-toggle="tab" data-link="/Plots/PlotsModuleConfiguration/" id="proj" href="#coahead">Project List</a></li>*@
+        </ul>
+        <div class="tab-content">
+            <div role="tabpanel" id="coahead" class="tab-pane active p-20 table-responsive">
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(function () {
+        SASLoad($('#coahead'));
+        $('#coahead').load('/RealEstateProjects/NewProject/', function () {
+            SASUnLoad($('#coahead'));
+        });
+    });
+</script>

@@ -1,0 +1,143 @@
+﻿@model MeherEstateDevelopers.Models.PlotTransfer_ConfigView
+    <div class="col-md-12">
+        <fieldset class="p-20" style="border:1px solid #ddc">
+            <legend> Transfer Fee Tax Configuration</legend>
+            <div class="row">
+                <div class="col-md-3">
+                    <b>Buyer Filer Tax Percentage</b>
+                    <input type="number" class="form-control b-filerPerc" value="@Model.ConfigInfo.Buyer_FilerPercent" />
+                </div>
+                <div class="col-md-3">
+                    <b>Buyer Non Filer Tax Percentage</b>
+                    <input type="number" class="form-control b-nonFilerPerc" value="@Model.ConfigInfo.Buyer_NonFilerPercent" />
+                </div>
+                <div class="col-md-3">
+                    <b>Seller Filer Tax Percentage</b>
+                    <input type="number" class="form-control s-filerPerc" value="@Model.ConfigInfo.Seller_FilerPercent" />
+                </div>
+                <div class="col-md-3">
+                    <b>Seller Non Filer Tax Percentage</b>
+                    <input type="number" class="form-control s-nonFilerPerc" value="@Model.ConfigInfo.Seller_NonFilerPercent" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3">
+                    <b>Tax Exemption Day</b>
+                    <input type="number" class="form-control ex-days" value="@Model.ConfigInfo.Tax_Exemption_Days" />
+                </div>
+                <div class="col-md-3">
+                    <b>Tax Exemption Is Applicable</b>
+                    <div class="col-md-2">
+                        @if (Model.ConfigInfo.Tax_Exemption_Applicable)
+                        {
+                            <input type="checkbox" class="ex-IsApplicable" checked /> <label>&nbsp;Tax applicable</label>
+                        }
+                        else
+                        {
+                            <input type="checkbox" class="ex-IsApplicable" /> <label>&nbsp;Tax applicable</label>
+                        }
+                    </div>
+                </div>
+            </div>
+            <hr />
+            <div class="row mt-md-3">
+                <div class="col-md-3">
+                    <label>Block Name</label>
+                </div>
+                <div class="col-md-3">
+                    <label>Commercial DC Marla Rate</label>
+                </div>
+                <div class="col-md-3">
+                    <label>Residential DC Marla Rate</label>
+                </div>
+                <div class="col-md-2">
+                    <label>Tax Applicable ?</label>
+                </div>
+            </div>
+            @foreach (var v in Model.ConfigInfo.FeeInfo)
+            {
+                <div class="row mt-md-3 blk-tax-rt-shjkdglf">
+                    <input type="hidden" value="@v.BlockId" class="BlockId" name="BlockId" />
+                    <input type="hidden" value="@v.BlockName" class="BlockName" name="BlockName" />
+                    <div class="col-md-3">
+                        <label>@v.BlockName</label>
+                    </div>
+                    <div class="col-md-3">
+                        <input type="text" class="form-control coma DC_Rate_Per_Marla_Commercial" value="@string.Format("{0:n0}", v.DC_Rate_Per_Marla_Commercial)" />
+                    </div>
+                    <div class="col-md-3">
+                        <input type="text" class="form-control coma DC_Rate_Per_Marla_Residential" value="@string.Format("{0:n0}", v.DC_Rate_Per_Marla_Residential)" />
+                    </div>
+                    <div class="col-md-2">
+                        @if (v.IsApplicable)
+                        {
+                            <input type="checkbox" class="IsApplicable" checked /> <label>&nbsp;Tax applicable</label>
+                        }
+                        else
+                        {
+                            <input type="checkbox" class="IsApplicable" /> <label>&nbsp;Tax applicable</label>
+                        }
+                    </div>
+                </div>
+            }
+            <div class="col-md-12 central-text-align mt-md-5">
+                <button class="btn btn-success sv-config-fdshjkl" type="submit">Update</button>
+            </div>
+        </fieldset>
+    </div>
+<script>
+    $('.sv-config-fdshjkl').unbind().click(function () {
+        let confi = confirm('Are you sure you want to update configuration?');
+        if (!confi) {
+            return;
+        }
+        let blksTax = [];
+
+        let b_FilerRate = $('.b-filerPerc').val();
+        let b_NonFilerRate = $('.b-nonFilerPerc').val();
+        let s_FilerRate = $('.s-filerPerc').val();
+        let s_NonFilerRate = $('.s-nonFilerPerc').val();
+
+        let ex_days = $('.ex-days').val();
+        let ex_app = $('.ex-IsApplicable').is(':checked');
+
+
+        $('.blk-tax-rt-shjkdglf').each(function (ind, val) {
+            let blkId = $(this).find('.BlockId').val();
+            let blkNm = $(this).find('.BlockName').val();
+            let resRate = RemoveComma($(this).find('.DC_Rate_Per_Marla_Residential').val());
+            let commRate = RemoveComma( $(this).find('.DC_Rate_Per_Marla_Commercial').val());
+            let applyTax = $(this).find('.IsApplicable').is(':checked');
+            blksTax.push({
+                BlockId: blkId,
+                BlockName: blkNm,
+                DC_Rate_Per_Marla_Commercial: commRate,
+                DC_Rate_Per_Marla_Residential: resRate,
+                IsApplicable: applyTax
+            });
+        });
+        //upload the data to server here
+        $.ajax({
+            type: "POST",
+            url: "/Plots/SaveTransferFeeConfig/",
+            contentType: "application/json",
+            traditional: true,
+            beforeSend: function () {
+            },
+            complete: function () {
+            },
+            data: JSON.stringify({
+                ptc: blksTax,
+                B_filer: b_FilerRate, B_nonFiler: b_NonFilerRate, S_filer: s_FilerRate, S_nonFiler: s_NonFilerRate,
+                Exemp_Day: ex_days , Tax_Emp: ex_app }),
+        }).done(function (data) {
+            if (data == true) {
+                alert('Configuration has been updated successfully');
+                window.location.reload();
+            }
+            else {
+                alert('unable to save the data');
+            }
+        });
+    });
+</script>

@@ -1,0 +1,39 @@
+﻿@model MeherEstateDevelopers.Models.Report_Amounts_Stack
+<div id="file_year" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+<script>
+    Highcharts.chart('file_year', {
+
+        chart: {
+            type: 'column',
+            backgroundColor: '#212639'
+        },
+
+        title: {
+            text: 'Blocks All Recovery'
+        },
+
+        xAxis: {
+            categories: @Html.Raw( Json.Encode(Model.Categories)) ,
+        },
+        yAxis: {
+            allowDecimals: false,
+            min: 0,
+            title: {
+                text: 'Recovery'
+            }
+        },
+        tooltip: {
+            formatter: function () {
+                return '<b>' + this.x + '</b><br/>' +
+                    this.series.name + ': ' + Number(this.y).toLocaleString() + '<br/>' +
+                    'Total: ' + Number(this.point.stackTotal).toLocaleString();
+            }
+        },
+        plotOptions: {
+            column: {
+                stacking: 'normal'
+            }
+        },
+        series:  @Html.Raw( Json.Encode(Model.Series))
+    });
+</script>

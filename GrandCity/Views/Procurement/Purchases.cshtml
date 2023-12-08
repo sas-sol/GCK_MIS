@@ -1,0 +1,66 @@
+﻿@{
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+}
+
+<div class="form-row">
+    <div class="col-md-2">
+        <button class="btn btn-primary prj-req" style="width: 100%;font-size: 15px;    height: 50px;"><i class="fas fa-clipboard-list"></i> New Requisition</button>
+    </div>
+    <div class="col-md-10">
+        <div class="vertical-menu">
+            <a href="javascript:void(0)" class="active sideLink" data-typ="/Inventory/NewQuotations/">Purchase Process</a>
+            <a href="javascript:void(0)" class="sideLink" data-typ="/Procurement/Dep_PurchaseReq/">Requisitions</a>
+            <a href="javascript:void(0)" class="sideLink" data-typ="/Procurement/Dep_PurchaseOrder/">Purchase Orders</a>
+            <a href="javascript:void(0)" class="sideLink" data-typ="/Inventory/DemandReq/">Demand Requisitions</a>
+        </div>
+    </div>
+</div>
+<div class="form-row">
+
+    <div class="col-md-12">
+        <div id="empdetail" class="tab-pane">
+            @{ Html.RenderAction("NewQuotations", "Inventory");}
+        </div>
+    </div>
+</div>
+
+<script>
+    $('.sideLink').unbind().click(function () {
+        if (!$(this).hasClass('active')) {
+            $(this).addClass('active');
+            $(this).prevAll('.sideLink').removeClass('active');
+            $(this).nextAll('.sideLink').removeClass('active');
+            let typeOfLink = $(this).attr('data-typ');
+            SASLoad($('#empdetail'));
+            $('#empdetail').load(typeOfLink, function () {
+                SASUnLoad($('#empdetail'));
+            });
+        }
+    });
+</script>
+
+<style>
+    .vertical-menu {
+        /*width: 200px;*/
+        display: flex;
+        justify-content: center;
+    }
+
+        .vertical-menu a {
+            background-color: #eee;
+            color: black;
+            display: block;
+            padding: 12px;
+            text-decoration: none;
+            min-width: 10%;
+        }
+
+            .vertical-menu a:hover {
+                background-color: #ccc;
+            }
+
+            .vertical-menu a.active {
+                background-color: #D0232A;
+                color: white !important;
+            }
+</style>

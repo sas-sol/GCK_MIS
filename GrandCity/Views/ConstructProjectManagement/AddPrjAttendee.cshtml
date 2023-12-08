@@ -1,0 +1,46 @@
+﻿<div class="row">
+    <div class="col-md-5">
+        <label style="width:100%">Departments</label>
+        @Html.DropDownList("deps", null, "Department..", new { @class = "form-control" , multiple =""})
+    </div>
+    <div class="col-md-6 dep-us"></div>
+</div>
+<script>
+    $(document).ready(function () {
+        $('#deps').select2();
+
+    });
+    $('#deps').on('select2:select', function (e) {
+        var s = e.params.data;
+        $.ajax({
+            type: "POST",
+            url: '/HumanResource/SearchEmployee_Dep/',
+            data: { d: s.id },
+            success: function (data) {
+                var formate = `<div class="dep-grp-${s.id}">
+                                    <h6>${s.text}</h6>
+                                    <select class="form-control dep-sel-${s.id}" multiple></select>
+                                </div>`;
+                $(".dep-us").append(formate);
+                $.each(data, function (key, value) {
+                    $(".dep-sel-" + s.id).append('<option value="' + value.Id + '">' + value.Name+ '</option>');
+                });
+                $(".dep-sel-" + s.id).select2();
+            }
+            , error: function (xmlhttprequest, textstatus, message) {
+                if (textstatus === "timeout") {
+                    alert("got timeout");
+                } else {
+                    alert(textstatus);
+                }
+            }
+        });
+
+    });
+    $('#deps').on('select2:unselect', function (e) {
+        var s = e.params.data;
+        $(".dep-sel-" + s.id).select2("destroy");
+        $(".dep-grp-" + s.id).remove();
+
+    });
+</script>

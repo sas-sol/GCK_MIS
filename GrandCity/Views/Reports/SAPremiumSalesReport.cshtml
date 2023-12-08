@@ -1,0 +1,91 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Sp_Get_ComProj_SalesReport_Result>
+@{ if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="bdrs-3 ov-h bgc-white p-10 bd">
+            <div class="">
+                <h2 style="text-align:center;">SA Premium Homes Sales Report</h2>
+            </div>
+            <div>
+                <table class="table table-borderless table-striped" id="com-tab-rep" width="100%">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>Sr No.</th>
+                            <th>Unit No.</th>
+                            <th>Floor</th>
+                            <th>Owner Name</th>
+                            <th>Booking Date</th>
+                            <th>Total Price</th>
+                            <th>Discount</th>
+                            <th>Net Total</th>
+                            <th>Booking Amount</th>
+                            <th>Installments Amount</th>
+                            <th>Received Amount</th>
+                            <th>Remaining Amount</th>
+                        </tr>
+                    </thead>
+                    @if (Model.Any())
+                    {
+                        <tbody>
+                            @{
+                                int sr = 1;
+                                foreach (var v in Model)
+                                {
+                                    <tr data-unit="@v.Id">
+                                        <td>@sr</td>
+                                        <td>@v.ApplicationNo</td>
+                                        <td>@v.Floor</td>
+                                        <td>@((v.Name == null)? "-":v.Name)</td>
+                                        <td>@((v.Due_Date == null)? "-": String.Format("{0:dd/MM/yyyy}", v.Due_Date))</td>
+                                        <td>@String.Format("{0:n0}", v.Total_Amount)</td>
+                                        <td>@String.Format("{0:n0}", v.TotalDiscounts)</td>
+                                        <td>@String.Format("{0:n0}", v.Total_Amount - v.TotalDiscounts)</td>
+                                        <td>@String.Format("{0:n0}", v.BookingAmount)</td>
+                                        <td>@String.Format("{0:n0}", (v.Total_Amount - v.TotalDiscounts) - v.BookingAmount)</td>
+                                        <td>@String.Format("{0:n0}", v.Received_Amount)</td>
+                                        <td>@String.Format("{0:n0}", v.Total_Amount - (v.Received_Amount + v.TotalDiscounts))</td>
+                                    </tr>
+                                    sr++;
+                                }
+                            }
+                        </tbody>
+                                }
+                                else
+                                {
+                                    <tfoot>
+                                        <tr>
+                                            <td colspan="11" style="background-color:indianred">Record Not Found</td>
+                                        </tr>
+                                    </tfoot>
+                                }
+
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $('#com-tab-rep').dataTable({
+            dom: 'Bfrtip',
+            buttons: [
+                'copy', 'csv', 'excel', 'pdf', 'print'
+            ],
+
+            aaSorting: [],
+            scrollY: "500px",
+            scrollX: false,
+            scrollCollapse: true,
+            paging: false,
+        });
+    });
+</script>

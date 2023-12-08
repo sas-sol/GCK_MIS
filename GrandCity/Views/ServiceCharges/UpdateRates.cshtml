@@ -1,0 +1,35 @@
+﻿@model MeherEstateDevelopers.Models.Sp_Get_ElectricUnitRate_Parameter_Result
+<div class="row gap-20  pos-r">
+            @using (Html.BeginForm("UpdateElectricRate", "ServiceCharges", FormMethod.Post, new { @id = "up-elec-rat", @class = "", role = "form", autocomplete = "off" }))
+            {
+                @Html.AntiForgeryToken()
+                @Html.HiddenFor(m => m.Id)
+                @Html.HiddenFor(m => m.Levels)
+                @Html.HiddenFor(m => m.Meter_Type)
+                <div class="form-row">
+                    <h6 id="meter-type"></h6>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-3">
+                        <label for="inputCity">Start Range</label>
+                        @Html.EditorFor(model => model.Start_Range, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="inputCity">End Range</label>
+                        @Html.EditorFor(model => model.End_Range, new { htmlAttributes = new { @class = "form-control" } })
+
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="inputCity">Rates</label>
+                        @Html.EditorFor(model => model.Unit_Rate, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                </div>
+            }
+        </div>
+<script>
+    $(function () {
+        $('.modal-footer').append('<button class="btn btn-primary" id="up-elc-uni-btn" type="button">Update</button>');
+        $(".modal-header").text("Update");
+        $("#meter-type").text($("#me-type").text())
+    });
+</script>

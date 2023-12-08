@@ -1,0 +1,70 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Sp_Get_LeadInstrument_MultiParamter_Result>
+@using (Html.BeginForm("LeadUpdateCbp", "Banking", FormMethod.Post, new { @id = "up-cbp", @class = "", role = "form" }))
+{
+    @Html.AntiForgeryToken()
+
+    foreach (var g in Model.GroupBy(x => new { x.PaymentType, x.Ch_Pay_Draft_No, x.Bank, x.Ch_Pay_Draft_Date, x.Posted_Date, x.Status, x.Clearance_Date, x.Deposit_Bank, x.Deposit_Bank_Acc_Number }))
+    {
+
+        <div class="form-row">
+            <div class="form-group col-md-2">
+                <label>@g.Key.PaymentType No.</label>
+                <h6> @g.Key.Ch_Pay_Draft_No</h6>
+            </div>
+            <div class="form-group col-md-3">
+                <label>Date</label>
+                <h6>@string.Format("{0:D}", g.Key.Ch_Pay_Draft_Date)</h6>
+            </div>
+            <div class="form-group col-md-3">
+                <label>Bank</label>
+                <h6> @g.Key.Bank</h6>
+            </div>
+            <div class="form-group col-md-1">
+                <label>Amount </label>
+                <h6> @string.Format("{0:n0}", g.Sum(x => x.Amount))</h6>
+            </div>
+        </div>
+        foreach (var item in g)
+        {
+            <input type="hidden" name="Id" value="@item.Id" />
+        }
+        <div class="form-row">
+            <div class="form-group col-md-2">
+                <label>Diposite Date</label>
+                <input type="text" class="form-control" value="@string.Format("{0:MM/dd/yyyy}", g.Key.Posted_Date)" data-provide="datepicker" name="Posted_Date" />
+            </div>
+            <div class="form-group col-md-3">
+                <label>Deposited Bank</label>
+                <script>
+                    var a = "@g.Key.Deposit_Bank";
+                    $("#Bank").val(a);
+                </script>
+                @Html.DropDownList("Bank", null, "Choose..", new { @class = "form-control" })
+            </div>
+            <div class="form-group col-md-2">
+                <label>Account Number</label>
+                <input class="form-control" name="Deposit_Bank_Acc_Number" value="@g.Key.Deposit_Bank_Acc_Number" />
+            </div>
+            <div class="form-group col-md-2">
+                <label>Status</label>
+                @Html.DropDownList("Status", null, "Choose..", new { id = "ch-stat", @class = "form-control" })
+            </div>
+            <div class="form-group col-md-2">
+                <label>Clearance Date</label>
+                <input type="text" class="form-control" data-provide="datepicker" name="Clearance_Date" />
+            </div>
+        </div>
+        <div class="form-row" id="dis-rea" style="display:none">
+            <div class="form-group col-md-4">
+                <label>Reason</label>
+                @Html.DropDownList("Reason", null, "Choose..", new { @class = "form-control" })
+            </div>
+        </div>
+    }
+}
+<script>
+    $(function () {
+        $('.modal-footer').append('<button class="btn btn-primary" id="up-ld-cbp-btn" type="button">Update</button>');
+        $(".modal-header").text("Update Information");
+    });
+</script>

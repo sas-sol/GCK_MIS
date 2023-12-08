@@ -1,0 +1,58 @@
+﻿@model MeherEstateDevelopers.Models.Plot_Rental
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <style>
+        body {
+            font-family: Roboto,-apple-system,system-ui,BlinkMacSystemFont,Segoe UI,Oxygen,Ubuntu,Cantarell,Fira Sans,Droid Sans,Helvetica Neue,Arial,sans-serif;
+        }
+        .tfoot{
+            bottom:0;
+            position:fixed
+        }
+    </style>
+</head>
+<body>
+    <table  style="width:1000px;font-size: 22px;">
+            <tr>
+                <td width="333px"></td>
+                <td width="333px"></td>
+                <td width="333px"></td>
+            </tr>
+            <tr>
+                <td colspan="3" align="center" valign=bottom style="font-weight:bold; text-align:center"><font size="7">NOC - Rental House / Shop</font></td>
+            </tr>
+            <tr >
+                <td colspan="3" align="left" valign=bottom style="line-height: 44px;padding-top:30%">
+                    <p>
+                        <b>It is certified that Mr. </b> &nbsp; <u> @Model.Name</u> &nbsp; <b>S/O, W/O</b> &nbsp; <u>@Model.Father_Husband</u>  &nbsp; <b>CNIC</b> &nbsp; <u>@Model.CNIC_NICOP</u> &nbsp;
+                        <b>is permitted to shift on Rent at </b> &nbsp; <u>@Model.Current_Rental_Info</u> &nbsp; <b> of Meher Estate Developers.</b> &nbsp;
+                    </p>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3" align="right" valign=bottom style="font-weight:bold; padding-top:10%">
+                    -------------------------------------
+                    <br />
+                    GM
+                    <br />
+                    Safety & Security
+                    <br />
+                    Col (R) Arshad Saeed Butt
+                    <br />
+                    @string.Format("{0:D}", DateTime.Now)
+                </td>
+            </tr>
+            <tr class="tfoot">
+                <td width="333px"></td>
+                <td width="333px" align="center" valign=bottom style="">
+                    <img src="~/assets/static/images/footer_urdu_logo.png" width=450 height=125>
+                </td>
+                <td width="333px"></td>
+            </tr>
+    </table>
+</body>
+</html>

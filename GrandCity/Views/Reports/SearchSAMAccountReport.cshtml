@@ -1,0 +1,248 @@
+﻿@model MeherEstateDevelopers.Models.DailySAMCashRep
+<div id="result">
+    <h6>Receipts</h6>
+    <table class="table table-striped table-bordered" cellspacing="0" width="100%">
+        <thead>
+            <tr>
+                <th>Name: </th>
+                <td colspan="14">Plot Recovery</td>
+            </tr>
+            <tr>
+                <th>Sr.</th>
+                <th>Amount</th>
+                <th>Receipt No.</th>
+                <th>Plot No.</th>
+                <th>Block</th>
+                <th>Company</th>
+                <th>Cash/Bank</th>
+                <th>Bank</th>
+                <th>No.</th>
+                <th>inst Date</th>
+                <th>Name</th>
+                <th>Contact</th>
+                <th>Type</th>
+                <th>Project</th>
+                <th>Cashier</th>
+                <th>Time</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                if (Model.PlotCollection.Any())
+                {
+                    int srcount = 1;
+                    foreach (var item in Model.PlotCollection)
+                    {
+            <tr>
+                <td>@srcount</td>
+                <td>@string.Format("{0:n0}", item.Amount)</td>
+                <td>@item.ReceiptNo</td>
+                <td>@item.File_Plot_Number</td>
+                <td>@item.Block</td>
+                <td>@item.Dealership_Name</td>
+                <td>@item.PaymentType</td>
+                <td>@item.Bank</td>
+                <td>@item.Ch_Pay_Draft_No</td>
+                <td>@item.Ch_Pay_Draft_Date</td>
+                <td>@item.Name</td>
+                <td>@item.Contact</td>
+                <td>@item.Type</td>
+                <td>@item.Project</td>
+                <td>@item.Cashier_Name</td>
+                <td>@string.Format("{0:dd-MMM-yy hh:mm tt}", item.DateTime)</td>
+                @if (User.IsInRole("Print Duplicate Receipt"))
+                {
+                    <td>
+                        <ul style="list-style:none;margin-left:0px;">
+                            <li class="dropdown">
+                                <a href="" class="dropdown-toggle no-after peers " data-toggle="dropdown">
+                                    <i class="ti-more-alt  c-grey-900" style="transform:rotate(90deg);"></i>
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="pointer orig-rece-mar" id="@item.Id"><span>Original</span></a></li>
+                                    <li><a class="pointer dup-rece-mar" id="@item.Id"><span>Duplicate</span></a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </td>
+
+                }
+                @if (User.IsInRole("Refund Deal Receipt"))
+                {
+                    <td>
+                        <ul style="list-style:none;margin-left:0px;">
+                            <li class="dropdown">
+                                <a href="" class="dropdown-toggle no-after peers " data-toggle="dropdown">
+                                    <i class="ti-more-alt  c-grey-900" style="transform:rotate(90deg);"></i>
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="pointer ref-del-rec" id="@item.Id"><span>Refund</span></a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </td>
+
+                }
+            </tr>
+                        srcount++;
+                    }
+                }
+            }
+            <tr>
+                <th>Total</th>
+                <td>@string.Format("{0:n0}", Model.Plot_Total)</td>
+                <th>Cash</th>
+                <td>@string.Format("{0:n0}", Model.Plot_Cash)</td>
+                <th>Cheques</th>
+                <td>@string.Format("{0:n0}", Model.Plot_Cheque)</td>
+                <th>Payorders</th>
+                <td>@string.Format("{0:n0}", Model.Plot_PayOrder)</td>
+                <th>Bank Draft</th>
+                <td>@string.Format("{0:n0}", Model.Plot_BankDraft)</td>
+                <th>Online</th>
+                <td>@string.Format("{0:n0}", Model.Plot_Online)</td>
+                <td colspan="3"></td>
+            </tr>
+        </tbody>
+    </table>
+    <hr />
+    <table class="table table-striped table-bordered">
+        <thead>
+            <tr><th colspan="10">Grand Total</th></tr>
+            <tr>
+                <th>Total</th>
+                <td>@string.Format("{0:n0}", Model.Total)</td>
+                <th>Cash</th>
+                <td>@string.Format("{0:n0}", Model.Cash)</td>
+                <th>Cheques</th>
+                <td>@string.Format("{0:n0}", Model.Cheque)</td>
+                <th>Payorders</th>
+                <td>@string.Format("{0:n0}", Model.PayOrder)</td>
+                <th>Bank Draft</th>
+                <td>@string.Format("{0:n0}", Model.BankDraft)</td>
+                <th>Online</th>
+                <td>@string.Format("{0:n0}", Model.Online)</td>
+            </tr>
+        </thead>
+    </table>
+    <hr />
+    <h6>Payment Vouchers</h6>
+    <table class="table table-striped table-bordered" cellspacing="0" width="100%">
+        <thead>
+            <tr>
+                <th>Name: </th>
+                <td colspan="14">Plot Voucher</td>
+            </tr>
+            <tr>
+                <th>Sr.</th>
+                <th>Amount</th>
+                <th>Receipt No.</th>
+                <th>Plot No.</th>
+                <th>Block</th>
+                <th>Company</th>
+                <th>Cash/Bank</th>
+                <th>Bank</th>
+                <th>No.</th>
+                <th>inst Date</th>
+                <th>Name</th>
+                <th>Contact</th>
+                <th>Type</th>
+                <th>Project</th>
+                <th>Cashier</th>
+                <th>Time</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                if (Model.PlotVoucher.Any())
+                {
+                    int srcount = 1;
+                    foreach (var item in Model.PlotVoucher)
+                    {
+                        <tr>
+                            <td>@srcount</td>
+                            <td>@string.Format("{0:n0}", item.Amount)</td>
+                            <td>@item.ReceiptNo</td>
+                            <td>@item.File_Plot_Number</td>
+                            <td>@item.Block</td>
+                            <td>@item.Dealership_Name</td>
+                            <td>@item.PaymentType</td>
+                            <td>@item.Bank</td>
+                            <td>@item.Ch_Pay_Draft_No</td>
+                            <td>@item.Ch_Pay_Draft_Date</td>
+                            <td>@item.Name</td>
+                            <td>@item.Contact</td>
+                            <td>@item.Type</td>
+                            <td>@item.Project</td>
+                            <td>@item.Cashier_Name</td>
+                            <td>@string.Format("{0:dd-MMM-yy hh:mm:tt}", item.DateTime)</td>
+
+                        </tr>
+                        srcount++;
+                    }
+                }
+            }
+            <tr>
+                <th>Total</th>
+                <td>@string.Format("{0:n0}", Model.V_Plot_Total)</td>
+                <th>Cash</th>
+                <td>@string.Format("{0:n0}", Model.V_Plot_Cash)</td>
+                <th>Cheques</th>
+                <td>@string.Format("{0:n0}", Model.V_Plot_Cheque)</td>
+                <th>Payorders</th>
+                <td>@string.Format("{0:n0}", Model.V_Plot_PayOrder)</td>
+                <th>Bank Draft</th>
+                <td>@string.Format("{0:n0}", Model.V_Plot_BankDraft)</td>
+                <th>Online</th>
+                <td>@string.Format("{0:n0}", Model.V_Plot_Online)</td>
+                <td colspan="3"></td>
+            </tr>
+        </tbody>
+    </table>
+    <hr />
+    <table class="table table-striped table-bordered">
+        <thead>
+            <tr><th colspan="10">Grand Total</th></tr>
+            <tr>
+                <th>Total</th>
+                <td>@string.Format("{0:n0}", Model.V_Total)</td>
+                <th>Cash</th>
+                <td>@string.Format("{0:n0}", Model.V_Cash)</td>
+                <th>Cheques</th>
+                <td>@string.Format("{0:n0}", Model.V_Cheque)</td>
+                <th>Payorders</th>
+                <td>@string.Format("{0:n0}", Model.V_PayOrder)</td>
+                <th>Bank Draft</th>
+                <td>@string.Format("{0:n0}", Model.V_BankDraft)</td>
+                <th>Online</th>
+                <td>@string.Format("{0:n0}", Model.V_Online)</td>
+            </tr>
+        </thead>
+    </table>
+    <hr />
+    <table class="table table-striped table-bordered">
+        <thead>
+            <tr><th colspan="10">Net Total</th></tr>
+            <tr>
+                <th>Total</th>
+                <td>@string.Format("{0:n0}", Model.Total + Model.V_Total)</td>
+                <th>Cash</th>
+                <td>@string.Format("{0:n0}", Model.Cash + Model.V_Cash)</td>
+                <th>Cheques</th>
+                <td>@string.Format("{0:n0}", Model.Cheque + Model.V_Cheque)</td>
+                <th>Payorders</th>
+                <td>@string.Format("{0:n0}", Model.PayOrder + Model.V_PayOrder)</td>
+                <th>Bank Draft</th>
+                <td>@string.Format("{0:n0}", Model.BankDraft + Model.V_BankDraft)</td>
+                <th>Online</th>
+                <td>@string.Format("{0:n0}", Model.Online + Model.V_Online)</td>
+            </tr>
+        </thead>
+    </table>
+</div>
+<style>
+    table tr td, table tr th {
+        padding: 2px !important;
+    }
+</style>

@@ -1,0 +1,160 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.FileData>
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        @@page {
+            margin: 0;
+            size: A4
+        }
+
+        .bg {
+            height: 1555px;
+            width: 1186px;
+            margin-left: 0%;
+            background-image: url(../../assets/static/images/Dealership.jpg);
+            background-size: 1186px 1620px;
+            font-family: sans-serif;
+            margin-bottom: 70px;
+            color: black;
+            background-repeat: no-repeat;
+        }
+
+        .section1233 {
+            margin-top: -53%;
+            margin-left: 557%;
+            width: 7%;
+        }
+
+        .section1 {
+            margin-top: 2%;
+            margin-left: 24%;
+            width: 7%;
+        }
+
+        .section12 {
+            width: 17%;
+            float: left;
+            margin-left: 5%;
+        }
+
+        .uppersec {
+            margin-left: 22%;
+            margin-top: 27.5%;
+            font-size: 18px;
+        }
+
+        .uppersec1 {
+            margin-left: 30%;
+            margin-top: 0;
+            font-size: 16px;
+        }
+
+        .uppersec3 {
+            width: 70%;
+            text-align: center;
+            margin-left: 21%;
+            margin-top: 5.5%;
+            font-size: 18px;
+        }
+
+        .uppersec4 {
+            margin: 16% 0 0 0%;
+            color: black;
+            width: 100%;
+            text-align: center;
+            font-size: 18px;
+        }
+
+        .imageqr {
+            width: 220px;
+            height: 228px;
+            float: left;
+            margin-top: -5%;
+            margin-left: 20px;
+        }
+
+        .imageqrs {
+            width: 100%
+        }
+
+        .mar {
+            margin-top: 1%;
+        }
+
+        .pagebreak {
+            page-break-before: always;
+        }
+
+        .deal-sec {
+            width: 50%;
+            margin-left: 4%;
+            float: left
+        }
+    </style>
+</head>
+<body>
+    @foreach (var item in Model)
+    {
+        string img = item.File_Form_Number + ".png";
+        <div class="bg">
+            <div class="mar"></div>
+            <label class="uppersec">@item.File_Form_Number</label>
+            <label class="uppersec1">1115</label>
+            <div class="deal-sec">
+                <label class="uppersec3">@item.Dealership_Name</label>
+            </div>
+            <div class="section12">
+                <label class="uppersec4">@item.Plot_Size</label>
+            </div>
+            <div class="imageqr">
+                <img class="imageqrs" src="~/QR Codes/@img" />
+            </div>
+            <div style="margin-top:17%;width:78%;float:left">
+                <div style="width:100%">
+                    <label style="width: 28%;margin-left: 14%;text-align: center;">@item.Name</label>
+                    <label style="width: 33%;margin-left: 23%;text-align: center;">@item.Father_Husband</label>
+                </div>
+                <div style="width:100%;margin-top:1% ">
+                    <label style="width: 73%;margin-left: 23%;text-align: center;">@item.Postal_Address</label>
+                </div>
+                <div style="width:100%; margin-top:1.5%">
+                    <label style="width: 73%;margin-left: 23%;text-align: center;">@item.Residential_Address</label>
+                </div>
+                <div style="width:100%;margin-top:1%">
+                    <label style="width: 25%;margin-left: 16%;text-align: center;">@item.Phone_Office</label>
+                    <label style="width: 27%;margin-left: 6%;text-align: center;">@item.Residential</label>
+                    <label style="width: 14%;margin-left: 10%;text-align: center;">@item.Mobile_1</label>
+                </div>
+                <div style="width:100%;margin-top:1.5%">
+                    <label style="width: 23%;margin-left: 17%;text-align: center;">@item.Mobile_2</label>
+                    <label style="width: 50%;margin-left: 7%;text-align: center;">@item.Email</label>
+                </div>
+                <div style="width:100%;margin-top:1.5%">
+                    <label style="width: 43%;margin-left: 20%;text-align: center;">@item.Occupation</label>
+                    <label style="width: 24%;margin-left: 11%;text-align: center;">@item.Nationality</label>
+                </div>
+            </div>
+            <div style="width: 16%;margin-top: 15.5%;float: left;">
+                <img style="width: 100%;" src="~/images/Choti.jpg" />
+            </div>
+            
+            <div style="margin-top:1%">
+                <label style="width: 18%;margin-left: 16%;text-align: center;">@string.Format("{0:dd-MMM-yyyy}", item.Date_Of_Birth)</label>
+                <label style="width: 32%;margin-left: 15%;text-align: left;font-size:25px;margin-top:0.5%">@item.CNIC_NICOP</label>
+            </div>
+            <div style="margin-top:3.5%">
+                <label style="width: 34%;margin-left: 13%;text-align: center;">@item.Nominee_Name</label>
+                <label style="width: 39%;margin-left: 7%;text-align: center;">@item.Nominee_Relation</label>
+            </div>
+            <div style="margin-top:1%">
+                <label style="width: 71%;margin-left: 23%;text-align: center;">@item.Nominee_Address</label>
+            </div>
+            <div style="margin-top:0.5%">
+                <label style="width: 32%;margin-left: 18%;text-align: left;font-size:25px">@item.Nominee_CNIC_NICOP</label>
+            </div>
+        </div>
+        <div class="pagebreak"></div>
+    }
+</body>
+</html>

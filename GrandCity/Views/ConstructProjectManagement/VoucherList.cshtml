@@ -1,0 +1,66 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Sp_Get_Prj_VouchersList_Result>
+@if (ViewBag.Status == "Approved")
+{
+
+    <h4 class="text-center">Approved Vouchers List</h4>
+}
+else
+{
+    <h4 class="text-center">Pending Vouchers List</h4>
+}
+<hr />
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">Sr.</th>
+            <th scope="col">Date</th>
+            <th scope="col">Description</th>
+            <th scope="col">Amount</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{ int i = 1;}
+        @foreach (var g in Model.GroupBy(x => new { x.Group_Id, x.Date }))
+        {
+            <tr class="pointer vouc-req-det" data-toggle="modal" data-target="#Modal" id="@g.Key.Group_Id">
+                <td style="vertical-align:middle">@i</td>
+                <td style="vertical-align:middle">@string.Format("{0: dd-MMM-yyyy}", g.Key.Date)</td>
+                <td>
+                    <table class="table table-bordered">
+                        @foreach (var gg in g.GroupBy(x => new { x.Milestone, x.Milestone_Id }))
+                        {
+                            int count = 1;
+                            foreach (var item in gg)
+                            {
+                                if (count == 1)
+                                {
+                                    <tr class="pointer" id="@item.Id">
+                                        <td rowspan="@gg.Count()">@gg.Key.Milestone</td>
+                                        <td>@item.Description</td>
+                                        <td>@item.Unit</td>
+                                        <td>@string.Format("{0:n2}", item.Qty)</td>
+                                        <td>@string.Format("{0:n2}", item.Rate)</td>
+                                        <td>@string.Format("{0:n2}", item.Amount)</td>
+                                    </tr>
+                                }
+                                else
+                                {
+                                    <tr class="pointer " id="@item.Id">
+                                        <td>@item.Description</td>
+                                        <td>@item.Unit</td>
+                                        <td>@string.Format("{0:n2}", item.Qty)</td>
+                                        <td>@string.Format("{0:n2}", item.Rate)</td>
+                                        <td>@string.Format("{0:n2}", item.Amount)</td>
+                                    </tr>
+                                }
+                                count++;
+                            }
+                        }
+                    </table>
+                </td>
+                <td style="vertical-align:middle"><b>@string.Format("{0:n2}", g.Sum(x => x.Amount))</b></td>
+            </tr>
+            i++;
+        }
+    </tbody>
+</table>

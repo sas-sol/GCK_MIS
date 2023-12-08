@@ -1,0 +1,71 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Sp_Get_Deals_Result>
+
+@{
+    if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+}
+<div class="row">
+    <div class="col-md-12">
+        <div class="bgc-white bd bdrs-3 p-20 mB-20">
+            <h4 class="c-grey-900 mB-20">Deal List</h4>
+            <table id="dataTable" class="table table-striped table-bordered" cellspacing="0" width="100%">
+                <thead>
+                    <tr>
+                        <th>Dealership</th>
+                        <th>Block</th>
+                        <th>Total Deal Amount</th>
+                        <th>Pending Deposit</th>
+                        <th>Advance</th>
+                        <th>Rebate</th>
+                        @*<th></th>*@
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        if (Model.Any())
+                        {
+                            int dealercounter = 1;
+                            foreach (var item in Model)
+                            {
+                                <tr class="pointer deal_details_open" id="@item.Id">
+                                    <td>@item.Dealer_Name</td>
+                                    <td>@item.Block_Name</td>
+                                    <td>@string.Format("{0:n0}", item.Deal_Total_Amount)</td>
+                                    <td>@string.Format("{0:n0}", item.Deposit)</td>
+                                    <td>@item.Advance%</td>
+                                    <td>@item.Rebate%</td>
+                                    @*<td>
+                                        <ul style="list-style:none;margin-left:0px;">
+                                            <li class="dropdown">
+                                                <a href="" class="dropdown-toggle no-after peers " data-toggle="dropdown">
+                                                    <i class="ti-more-alt  c-grey-900" style="transform:rotate(90deg);"></i>
+                                                </a>
+                                                <ul class="dropdown-menu">
+                                                    <li><a id="@item.Id" class="pointer dea-data-up"><span>Update</span></a></li>
+                                                    <li role="separator" class="divider"></li>
+                                              
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                    </td>*@
+                                </tr>
+                                dealercounter++;
+                            }
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+    @*<div class="col-md-6">
+        <div class="bgc-white bd bdrs-3 p-20 mB-20" id="dea-data-up" style="min-height:500px">
+        </div>
+    </div>*@
+</div>
+

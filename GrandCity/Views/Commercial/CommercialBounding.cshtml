@@ -1,0 +1,316 @@
+﻿@model Management_Information_System.Models.CommercialPossessionDataModel
+
+<div class="form-row">
+    <div class="col-md-6">
+        <div class="col-md-12">
+            @if (Model.CommercialOwnersDetails.Any(x=>x.Possession_Letter != 3))
+            {
+                <button class="btn btn-primary comm__post__up" style="float:right" id="@Model.CommercialDetails.Id" data-target="#Modal" data-toggle="modal">Update</button>
+            }
+        </div>
+        <div class="row">
+            <p>1. Possession is taken over as under.</p>
+        </div>
+        <table class="table table-bordered" width="100%">
+            <thead>
+                <tr>
+                    <th>Positions</th>
+                    <th>Bounded</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Positions)
+                {
+                    string f = "";
+                    if (item.North != null && item.North != Convert.ToDecimal(0.00))
+                    {
+                        <tr>
+                            <td>
+                                @if (item.North != null)
+                                {
+                                    if (item.Front == "North")
+                                    {
+                                        f = "(Front)";
+                                    }
+                                    <span>North @f: @item.North RFt   </span>
+                                    f = "";
+                                }
+                            </td>
+                            <td>
+                                @if (item.North != null)
+                                {
+                                    var a = string.Join(" , ", Model.ShopBoundings.Where(i => i.Position == "North").Select(x => x.BoundedLocationName + " - " + x.Project_Name));
+
+                                    <lable>@a</lable>
+                                    f = "";
+                                }
+                            </td>
+                        </tr>
+                    }
+                    if (item.East != null && item.East != Convert.ToDecimal(0.00))
+                    {
+                        <tr>
+                            <td>
+                                @if (item.East != null)
+                                {
+                                    if (item.Front == "East")
+                                    {
+                                        f = "(Front)";
+                                    }
+                                    <span>East @f: @item.East  RFt </span>
+                                    f = "";
+                                }
+                            </td>
+                            <td>
+                                @if (item.East != null)
+                                {
+                                    var a = string.Join(" , ", Model.ShopBoundings.Where(i => i.Position == "East").Select(x => x.BoundedLocationName + " - " + x.Project_Name));
+
+                                    <lable>@a</lable>
+                                    f = "";
+                                }
+                            </td>
+                        </tr>
+                    }
+
+                    if (item.West != null && item.West != Convert.ToDecimal(0.00))
+                    {
+                        <tr>
+                            <td>
+                                @if (item.West != null)
+                                {
+                                    if (item.Front == "West")
+                                    {
+                                        f = "(Front)";
+                                    }
+                                    <span>West @f: @item.West RFt</span>
+                                    f = "";
+                                }
+                            </td>
+                            <td>
+                                @if (item.West != null)
+                                {
+                                    var a = string.Join(" , ", Model.ShopBoundings.Where(i => i.Position == "West").Select(x => x.BoundedLocationName + " - " + x.Project_Name));
+
+                                    <lable>@a</lable>
+                                    f = "";
+                                }
+                            </td>
+                        </tr>
+                    }
+                    if (item.South != null && item.South != Convert.ToDecimal(0.00))
+                    {
+                        <tr>
+                            <td>
+                                @if (item.South != null)
+                                {
+                                    if (item.Front == "South")
+                                    {
+                                        f = "(Front)";
+                                    }
+                                    <span>South @f: @item.South RFt  </span>
+                                    f = "";
+                                }
+                            </td>
+                            <td>
+                                @if (item.South != null)
+                                {
+                                    var a = string.Join(" , ", Model.ShopBoundings.Where(i => i.Position == "South").Select(x => x.BoundedLocationName + " - " + x.Project_Name));
+
+                                    <lable>@a</lable>
+                                    f = "";
+                                }
+                            </td>
+                        </tr>
+                    }
+                    if (item.North_East != null && item.North_East != Convert.ToDecimal(0.00))
+                    {
+                        <tr>
+                            <td>
+                                @if (item.North_East != null)
+                                {
+                                    if (item.Front == "North_East")
+                                    {
+                                        f = "(Front)";
+                                    }
+                                    <span>North East @f: @item.North_East RFt </span>
+                                    f = "";
+                                }
+                            </td>
+                            <td>
+                                @if (item.North_East != null)
+                                {
+                                    var a = string.Join(" , ", Model.ShopBoundings.Where(i => i.Position == "North_East").Select(x => x.BoundedLocationName + " - " + x.Project_Name));
+
+                                    <lable>@a</lable>
+                                    f = "";
+                                }
+                            </td>
+                        </tr>
+                    }
+                    if (item.North_West != null && item.North_West != Convert.ToDecimal(0.00))
+                    {
+                        <tr>
+                            <td>
+                                @if (item.North_West != null)
+                                {
+                                    if (item.Front == "North_West")
+                                    {
+                                        f = "(Front)";
+                                    }
+                                    <span>North West @f: @item.North_West RFt </span>
+                                    f = "";
+                                }
+                            </td>
+                            <td>
+                                @if (item.North_West != null)
+                                {
+                                    var a = string.Join(" , ", Model.ShopBoundings.Where(i => i.Position == "North_West").Select(x => x.BoundedLocationName + " - " + x.Project_Name));
+
+                                    <lable>@a</lable>
+                                    f = "";
+                                }
+                            </td>
+                        </tr>
+                    }
+                    if (item.South_East != null && item.South_East != Convert.ToDecimal(0.00))
+                    {
+                        <tr>
+                            <td>
+                                @if (item.South_East != null)
+                                {
+                                    if (item.Front == "Souh_East")
+                                    {
+                                        f = "(Front)";
+                                    }
+                                    <span>South East @f: @item.South_East RFt </span>
+                                    f = "";
+                                }
+                            </td>
+                            <td>
+                                @if (item.South_East != null)
+                                {
+                                    var a = string.Join(" , ", Model.ShopBoundings.Where(i => i.Position == "Souh_East").Select(x => x.BoundedLocationName + " - " + x.Project_Name));
+
+                                    <lable>@a</lable>
+                                    f = "";
+                                }
+                            </td>
+                        </tr>
+                    }
+                    if (item.South_West != null && item.South_West != Convert.ToDecimal(0.00))
+                    {
+                        <tr>
+                            <td>
+                                @if (item.South_West != null)
+                                {
+                                    if (item.Front == "South_West")
+                                    {
+                                        f = "(Front)";
+                                    }
+                                    <span>South West @f: @item.South_West RFt</span>
+                                    f = "";
+                                }
+                            </td>
+                            <td>
+                                @if (item.South_West != null)
+                                {
+                                    var a = string.Join(" , ", Model.ShopBoundings.Where(i => i.Position == "South_West").Select(x => x.BoundedLocationName + " - " + x.Project_Name));
+                                    <lable>@a</lable>
+                                    f = "";
+                                }
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+        <div class="row">
+            <p>2. Total area<u>&nbsp;&nbsp;&nbsp;@string.Format("{0:n}", Math.Round(Convert.ToDecimal(Model.CommercialDetails.Area)))&nbsp;&nbsp;&nbsp;</u>   SFt</p>
+            <p style="width:100%;">3. All dues have been cleared upto date.</p>
+            <p>
+                4. I will not indulge in any unauthorised encroachments & violation of SA Systems as well as TMA/LDA Byelaws. Original state will be restored
+                in the event of any default  besides penal action imposed by management under the byelaws.
+            </p>
+            <p>
+                5. I will construct the boundary wall conforming to above demarcation, prior to underaking construction of main building.
+            </p>
+            <p>
+                6. Plot No. <input type="text" class="mat-altd-plt" /> alotted for material.
+            </p>
+        </div>
+    </div>
+    @if (Model.CommercialOwnersDetails.Any(x=>x.Possession_Letter == 2 || x.Possession_Letter == 3))
+    {
+        var str = Model.CommercialDetails.Id + ".png";
+        <div class="col-md-6">
+            <div style="width:100%">
+                <img src="~/Repositery/PlotsData/Commercials/@Model.CommercialDetails.Id/SitePlan/@str" style="width:300px;" />
+            </div>
+        </div>
+    }
+    @if (Model.CommercialOwnersDetails.Any(x=>x.Possession_Letter == 2 || x.Possession_Letter == 3))
+    {
+        if (Model.CommercialOwnersDetails.Any(x=>x.Possession_Letter == 3))
+        {
+            var str = Model.CommercialDetails.Id + ".png";
+            <div class="col-md-6">
+                <div style="width:550px;height:370px">
+                    <img style="margin-top:0px;width:100%;height:100%" src="~/Repositery/PlotsData/Commercials/@Model.CommercialDetails.Id/DesignHouse/@str" id="own_img__new" name="" />
+                </div>
+            </div>
+        }
+    }
+    @if (Model.CommercialOwnersDetails.Any(x=>x.Possession_Letter != 3))
+    {
+        <div class="col-md-6">
+            @using (Html.BeginForm("CommercialPossessionGenerate", "Commercial", FormMethod.Post, new { @id = "plt-imge", @class = "", role = "form", enctype = "multipart/form-data" }))
+            {
+                <input type="hidden" name="roomId" value="@Model.CommercialDetails.Id" />
+                <input type="hidden" name="mat_altd_plt" id="mat_altd_plt" />
+                <div class="col-md-6">
+                    <div style="width:550px;height:370px">
+                        <img style="margin-top:0px;width:100%;height:100%" src="/assets/static/images/no-img.png" id="own_img__new" name="" />
+                    </div>
+                    @if (Model.ShopBoundings.Any())
+                    {
+                        if (Model.CommercialOwnersDetails.Any(x=>x.Possession_Letter == 1))
+                        {
+                            <button class="btn btn-success" style="margin-top:10px" type="submit" id="">Save</button>
+                        }
+                        if (Model.CommercialOwnersDetails.Any(x=>x.Possession_Letter == 2))
+                        {
+                            <input type="hidden" name="Check" value="200__ok__gen" />
+                            <button class="btn btn-success btn_gen__poss" style="margin-top:10px" type="submit" name="" value="">Generate Possession Letter</button>
+                        }
+                        <input type="file" id="files" name="Files" style="margin:10px;" accept="image/x-png,image/gif,image/jpeg" />
+                    }
+                    else
+                    {
+                        <lable class="h5">Please Bound the plot first</lable>
+                    }
+                </div>
+            }
+        </div>
+    }
+</div>
+
+<style>
+    .mat-altd-plt {
+        border-top: none;
+        border-left: none;
+        border-right: none;
+        border-bottom: 1px solid #000;
+    }
+</style>
+
+<script>
+    $(document).ready(function () {
+        $('.comm__post__up').click(function () {
+            var id = $(this).attr("id");
+            EmptyModel();
+            $('#ModalLabel').text("Update Positions");
+            $('#modalbody').load('/Commercial/CommercialPositions/', { id: id });
+        });
+    });
+</script>

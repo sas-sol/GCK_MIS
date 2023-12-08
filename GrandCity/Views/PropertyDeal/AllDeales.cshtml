@@ -1,0 +1,82 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Sp_Get_PropertyDeals_Result>
+@{ Layout = "~/Views/Shared/_StaffLayout.cshtml"; }
+<div class=" bgc-white bd bdrs-3 p-20 mB-20 row">
+    @*<div class="col-md-6">
+            <h4 class="c-grey-900 mB-20">Deals</h4>
+        </div>*@
+    <div class="col-md-12" style="text-align:center"><button data-toggle="modal" data-target="#Modal" class="cr-deal btn btn-info">Create a Deal</button></div>
+    @*<div class="col-md-12">
+            <div class="form-row">
+                <div class="form-group col-md-2">
+                    <label>Company</label>
+                    <select class="form-control" name="Com_Lead" id="Com_Lead" value="">
+                        <option value="">Choose..</option>
+                        <option value="SPE">SPE</option>
+                        <option value="SAM">SAM</option>
+                    </select>
+                </div>
+                <div class="form-group col-md-2">
+                    <label>From</label>
+                    <input type="text" class="form-control " id="lead-from" placeholder="mm/dd/yyyy" data-provide="datepicker" name="" required>
+                </div>
+                <div class="form-group col-md-2">
+                    <label>To</label>
+                    <input type="text" class="form-control " id="lead-to" placeholder="mm/dd/yyyy" data-provide="datepicker" name="" required>
+                </div>
+                <div class="form-group col-md-1">
+                    <label>---------</label>
+                    <button type="button" class="btn btn-primary " id="lead-from-to">Search</button>
+                </div>
+            </div>
+        </div>*@
+
+    <div class="col-md-12">
+        <table id="allleads" class="table table-striped table-bordered" cellspacing="0" width="100%">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Sr.</th>
+                    <th>Plot Number</th>
+                    <th>Block</th>
+                    <th>Plot Size</th>
+                    <th>Status</th>
+                    <th>Type</th>
+                    <th>Project</th>
+                    <th>Created by</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    if (Model.Any())
+                    {
+                        int srcounter = 1;
+                        foreach (var item in Model)
+                        {
+                            string statuscolor = "";
+                            if (item.Status == MeherEstateDevelopers.Models.LeadsStatus.Close.ToString()) { statuscolor = "bgc-green-50"; }
+                            <tr class="pointer @statuscolor deal-dets" id="@item.Id">
+                                <td>@srcounter</td>
+                                <td>@item.File_Plot_Number</td>
+                                <td>@item.Block</td>
+                                <td>@item.Size</td>
+                                <td>@item.Status.Replace('_', ' ')</td>
+                                <td>@item.Type.Replace('_', ' ')</td>
+                                <td>@item.Project</td>
+                                <td>@item.Created_By</td>
+                                <td>@string.Format("{0:dd MMM yyyy}", item.Datetime)</td>
+                            </tr>
+                            srcounter++;
+                        }
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $('#allleads').DataTable({
+        });
+    });
+
+</script>

@@ -1,0 +1,87 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Sp_Get_Project_Detials_Result>
+<hr />
+<div class="form-row">
+    @foreach (var dd in Model.GroupBy(x => new { x.Type }))
+    {
+        <div class="col-md-3">
+            <ul class="p-20 nav flex-column">
+                <li class="nav-item">
+                    <div class="peers ai-c jc-sb">
+                        <div class="peer peer-greed">
+                            <span>Total&nbsp; @dd.Key.Type</span>
+                        </div>
+                        <div class="peer" style="float:right">
+                            <span class="badge badge-pill bgc-blue-50 c-blue-700"><label>@dd.Count()</label> </span>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    }
+</div>
+<div class="form-row">
+    @foreach (var d in Model.GroupBy(x => new { x.Status, x.Type }))
+    {
+        <div class="col-md-3">
+            <ul class="p-20 nav flex-column">
+                <li class="nav-item">
+                    <div class="peers ai-c jc-sb">
+                        <div class="peer peer-greed">
+                            <span>Total&nbsp; @d.Key.Status.Replace("_", " ")  @d.Key.Type</span>
+                        </div>
+                        <div class="peer" style="float:right">
+                            <span class="badge badge-pill bgc-blue-50 c-blue-700"><label>@d.Count()</label> </span>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    }
+</div>
+<hr />
+<div class="row">
+    @foreach (var g in Model.GroupBy(x => new { x.Floor }))
+    {
+        <div class="col-md-3">
+
+            <div class="panel-group" id="accordion">
+                @{
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h5 class="panel-title">
+                                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#" aria-expanded="true">
+
+                                    @g.Key.Floor
+
+                                </a>
+                            </h5>
+                        </div>
+                        <div id="@g.Key.Floor" class="panel-collapse collapse in show" aria-expanded="true" style="">
+                            <div class="panel-body">
+                                <div class="own-det row">
+                                    <ul class="p-20 nav flex-column">
+                                        @foreach (var item in g.GroupBy(x => new { x.Status, x.Type }))
+                                        {
+                                            <li class="nav-item">
+                                                <div class="peers ai-c jc-sb">
+                                                    <div class="peer peer-greed">
+                                                        <span>@item.Key.Status.Replace("_", " ") @item.Key.Type</span>
+                                                    </div>
+                                                    <div class="peer" style="float:right">
+                                                        <span class="badge badge-pill bgc-blue-50 c-blue-700">@item.Count() </span>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        }
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    }
+</div>
+
+

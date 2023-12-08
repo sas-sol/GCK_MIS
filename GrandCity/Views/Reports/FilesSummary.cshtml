@@ -1,0 +1,65 @@
+﻿
+
+@model MeherEstateDevelopers.Models.AuditorHome_Report
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<div id="transfercontainer544" ></div>
+
+<script>
+     // Build the chart 2
+    $(document).ready(function () {
+        const fsum = Highcharts.chart('transfercontainer544', {
+            chart: {
+                plotBackgroundColor: null,
+                plotBorderWidth: null,
+                plotShadow: false,
+                type: 'pie',
+                height: 250,
+                backgroundColor: '#212639'
+            },
+            title: {
+                text: 'Files Summary'
+            },
+            tooltip: {
+                pointFormat: '{series.name}: <b>{point.y:1f}</b>'
+            },
+            plotOptions: {
+                pie: {
+                    allowPointSelect: true,
+                    cursor: 'pointer',
+                    dataLabels: {
+                        enabled: false,
+                        format: '<b>{point.name}</b>: {point.y:1f}',
+                        style: {
+                            color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                        },
+                        connectorColor: 'silver'
+                    }
+                }
+            },
+            series: [{
+                name: 'Summary',
+                data: @Html.Raw(Json.Encode(Model.Counter2))
+    }]
+        });
+
+        $.ajax({
+            type: "POST",
+            url: '/Reports/GetCompanyOwnPropsCount/',
+            data: {},
+            success: function (data) {
+                if (data != null) {
+                    $('.comp-owned').text(data);
+                }
+                else {
+                    $('.comp-owned').text('0');
+                }
+            }
+            , error: function (xmlhttprequest, textstatus, message) {
+                $('.comp-owned').text('0');
+            }
+        });
+        __high_chrts_instances.push(fsum);
+    });
+
+</script>

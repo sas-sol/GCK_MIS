@@ -1,0 +1,41 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Prj_Milestone_Tasks_SubTasks>
+    @{ 
+        decimal Total = Model.Count();
+        decimal Completed = Model.Where(x => x.Current_Status == "Completed").Count();
+        decimal Progress = (Completed / Total) * 100;
+    }
+<div class="card border-secondary mb-3">
+    <div class="card-header">
+        Milestones
+        <h3 class="badge badge-secondary pull-right">@Completed/@Total</h3>
+    </div>
+    <div class="card-body p-0 text-secondary">
+        <ul class="list-group p-0 list-group-flush">
+            <li class="list-group-item">
+                <div class="row pb-0">
+                    <div class="col-md-12">
+                        <div class="progress mt-1 " style="height: 20px;">
+                            <div class="progress-bar" role="progressbar" style="width: @Progress%;" aria-valuenow="@Progress" aria-valuemin="0" aria-valuemax="100">@string.Format("{0:n2}", Progress)%</div>
+                        </div>
+                    </div>
+                </div>
+            </li>
+            @foreach (var item in Model)
+            {
+                <li class="list-group-item pb-0">
+                    <div class="row">
+                        <div class="col-md-10 pb-0">
+                            <p>@item.Title</p>
+                        </div>
+                        <div class="col-md-2">
+                            @if (item.Current_Status == "Completed")
+                            {
+                                <i class="fas fa-check" style="color:green"></i>
+                            }
+                        </div>
+                    </div>
+                </li>
+            }
+        </ul>
+    </div>
+</div>

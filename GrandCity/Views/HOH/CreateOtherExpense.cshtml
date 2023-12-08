@@ -1,0 +1,156 @@
+﻿@using Microsoft.AspNet.Identity;
+@{ if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+}
+            
+<input type="text" id="ShopId" value="@ViewBag.Shop_Id" hidden class="form-control" />
+<input type="hidden" value="@ViewBag.Transaction_Id" id="tran-id" />
+<input type="hidden" value="@User.Identity.GetUserId()" id="user-id" />
+<div class="bgc-white bd bdrs-3 p-20 mB-20">
+    <div class="col-md-12">
+        <div class="form-row">
+            <div class="form-group col-md-12">
+                <h2>House Of Heritage Expense Settlement</h2>
+            </div>
+        </div>
+    </div>
+    <table class="table table-bordered hoh-line">
+        <thead>
+            <tr>
+                <th width="5%">Sr</th>
+                <th>Description</th>
+                <th width="10%">Amount</th>
+                <th width="10%">Date</th>
+                <th width="10%">Delete</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="it-lin"><td class="sr">1</td><td><input type="text" class="text-box tex" /></td><td><input type="text" class="text-box coma" /></td><td><input type="text" class="text-box date" data-provide="datepicker" /></td><td><i class="rm-row-hoh fa fa-times"></i></td></tr>
+            <tr class="it-lin"><td class="sr">2</td><td><input type="text" class="text-box tex" /></td><td><input type="text" class="text-box coma" /></td><td><input type="text" class="text-box date" data-provide="datepicker" /></td><td><i class="rm-row-hoh fa fa-times"></i></td></tr>
+            <tr class="it-lin"><td class="sr">3</td><td><input type="text" class="text-box tex" /></td><td><input type="text" class="text-box coma" /></td><td><input type="text" class="text-box date" data-provide="datepicker" /></td><td><i class="rm-row-hoh fa fa-times"></i></td></tr>
+            <tr class="it-lin"><td class="sr">4</td><td><input type="text" class="text-box tex" /></td><td><input type="text" class="text-box coma" /></td><td><input type="text" class="text-box date" data-provide="datepicker" /></td><td><i class="rm-row-hoh fa fa-times"></i></td></tr>
+            <tr class="it-lin"><td class="sr">5</td><td><input type="text" class="text-box tex" /></td><td><input type="text" class="text-box coma" /></td><td><input type="text" class="text-box date" data-provide="datepicker" /></td><td><i class="rm-row-hoh fa fa-times"></i></td></tr>
+
+        </tbody>
+        <tfoot>
+            <tr>
+                <th colspan="2"><span class="add-row-hoh"><i class="fa fa-plus-circle "></i> Add Row </span> <span style="float:right;margin-right:5px">Grand Total</span></th>
+                <th colspan="3" id="total-amt"></th>
+            </tr>
+        </tfoot>
+    </table>
+    <div class="foot-row row">
+        <div class="col-md-12 mt-md-2">
+            <div class="col-md-2 righty">
+                <button class="btn btn-success sv-hoh">Submit</button>
+            </div>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+</div>
+<script>
+    $(document).on("click", ".add-row-hoh", function () {
+        var html = `<tr class="it-lin"><td class="sr">2</td><td><input type="text" class="text-box tex" /></td><td><input type="text" class="text-box coma" /></td><td><input type="text" class="text-box date" data-provide="datepicker" /></td><td> <i class="rm-row fa fa-times"></i></td></tr>`;
+        $('.hoh-line tbody').append(html);
+        resetsr();
+    });
+    $(document).on("click", ".rm-row-hoh", function () {
+        $(this).closest('tr').remove();
+        resetsr();
+    });
+    $(document).on("click", ".sv-hoh", function () {
+        debugger
+        let tran = $('#tran-id').val();
+        var Shop_Id = $("#ShopId").val();
+        var newline = []
+        var nook = false;
+        var userid = $("#user-id").val();
+        $('.it-lin').each(function () {
+            var text = $(this).find(".tex").val();
+            var date = $(this).find(".date").val();
+            var val = Number(RemoveComma($(this).find(".coma").val()));
+            if (isBlank(text) || isEmpty(text)) {
+                nook = true;
+                alert("Please Review highlighted Entry Description");
+                $(this).closest('tr').addClass('highlight_row');
+            }
+            if (isBlank(text) || isEmpty(text)) {
+                nook = true;
+                alert("Please Review highlighted Entry Description");
+                $(this).closest('tr').addClass('highlight_row');
+            }
+            var line = { Description: text, Amount: val, Date: date };
+            newline.push(line);
+        });
+        if (nook) {
+            alert("Item's Value Limit Exceeded");
+            return false;
+        }
+        if (confirm("Are you sure you want to Submit this Settlement")) {
+            $.ajax({
+                type: "POST",
+                url: "/HOH/SaveOtherExpense/",
+                dataType: 'json',
+                beforeSend: function () { },
+                complete: function () { },
+                data: { items: newline, Transaction_Id: tran, Shop_Id: Shop_Id },
+                success: function (data) {
+                    if (data) {
+                        alert('Submitted Successfully');
+                        window.location.reload();
+                    }
+                    else {
+                        alert('Error');
+                    }
+                }
+            });
+        }
+    });
+    $('.tex,.coma,.date').focus(function () {
+        $(this).closest('tr').addClass('highlight_row');
+    });
+    $('.tex,.coma,.date').blur(function () {
+        $(this).closest('tr').removeClass('highlight_row');
+    });
+    $(document).on("keyup", ".coma", function () {
+        calttl();
+    })
+    function calttl() {
+        var ttl = 0
+        $('.coma').each(function () {
+            ttl += Number(RemoveComma($(this).val()))
+        });
+        $('#total-amt').text(ttl.toLocaleString());
+    }
+    function resetsr() {
+        var sr = 1;
+        $('.sr').each(function () {
+            $(this).text(sr);
+            sr++;
+        });
+    }
+</script>
+<style>
+    .text-box {
+        width: 100%;
+        border: none;
+        height: 40px;
+    }
+
+    td {
+        padding: 1px !important;
+        text-align: center;
+        vertical-align: middle !important;
+    }
+
+    .highlight_row {
+        background-color: #CCC;
+        color: #000;
+    }
+</style>

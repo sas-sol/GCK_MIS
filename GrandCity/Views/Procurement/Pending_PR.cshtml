@@ -1,0 +1,177 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Inventory_Purchase_Req>
+
+<table class="table table-bordered sumtab" style="width:30%">
+    <thead class="thead-dark">
+        <tr>
+            <td>Sr.</td>
+            <td>Department</td>
+            <td>Total</td>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            int iii = 1;
+            var res = Model.GroupBy(x => new { x.Group_Id, x.Dep_Name }).Select(x => new { x.Key.Group_Id, x.Key.Dep_Name }).ToList();
+        }
+        @foreach (var item in res.GroupBy(x => new { x.Dep_Name }).OrderByDescending(x => x.Count()))
+        {
+            <tr>
+                <td>@(iii++)</td>
+                <td>@item.Key.Dep_Name</td>
+                <td>@item.Count()</td>
+            </tr>
+        }
+    </tbody>
+</table>
+<hr />
+<table class="table table-striped table-bordered DemadnOrder" cellspacing="0" width="100%">
+    <thead class="thead-dark">
+        <tr>
+            <th style="max-width:50px">Sr.</th>
+            <th width="90px">Department</th>
+            <th width="90px">Month</th>
+            <th width="90px">Project</th>
+            <th width="650px">Requested Item</th>
+            <th width="90px">Req Date</th>
+            <th width="90px">Approved Date</th>
+
+            <th width="90px">Req No</th>
+            <th width="90px">Req By</th>
+            <th width="90px">Delivery Date</th>
+            <th width="60px"></th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            if (Model.Any())
+            {
+                int i = 1;
+                foreach (var g in Model.GroupBy(x => new { x.Requisition_No, x.Group_Id, x.Dep_Id, x.Dep_Name, x.Prj_Name, x.Project_Department, x.RequestedBy_Name, x.DateTime, x.Deliver_Date, x.ApprovedBy_Date }).OrderByDescending(x => x.Key.DateTime.Value.Year).ThenByDescending(x => x.Key.DateTime.Value.Month).ThenByDescending(x => x.Key.Dep_Name).ThenByDescending(x => x.Key.DateTime).ThenByDescending(x => x.Key.Deliver_Date))
+                {
+                    int ii = 1;
+                    <tr style="z-index:0;">
+                        <td>
+                            @i
+                        </td>
+                        <th>@g.Key.Dep_Name</th>
+                        <td>@string.Format("{0:MMMM - yyyy}", g.Key.DateTime)</td>
+                        <th>
+                            @g.Key.Prj_Name
+                            <br />
+                            <br />
+                            @g.Key.Project_Department
+                        </th>
+                        <td class="tdscrol">
+                            <table class="table" style="margin-bottom:0px; border:none">
+                                <thead>
+                                    <tr>
+                                        <th colspan="2"></th>
+                                        <th colspan="2" style="text-align:center;"><button class="btn btn-outline-secondary prnt-req" data-grp="@g.Key.Group_Id">Print Requisition</button></th>
+                                        <th></th>
+                                    </tr>
+                                    <tr>
+                                        <th style="max-width:50px">Sr</th>
+                                        <th width="50px">Code</th>
+                                        <th width="350px">Item Name</th>
+                                        <th width="50px">UOM</th>
+                                        <th width="50px">Qty</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in g)
+                                    {
+                                        <tr class="single-row">
+                                            <td>@ii</td>
+                                            <td>@item.SKU</td>
+                                            <td>@item.Item_Name</td>
+                                            <td>@item.UOM</td>
+                                            <td>@item.Qty</td>
+                                        </tr>
+                                        ii++;
+                                    }
+
+                                </tbody>
+                            </table>
+                        </td>
+                        <td>@string.Format("{0:dd-MMM-yyyy}", g.Key.DateTime)</td>
+                        <td>@string.Format("{0:dd-MMM-yyyy}", g.Key.ApprovedBy_Date)</td>
+                        <td>@g.Key.Requisition_No</td>
+                        <td>@g.Key.RequestedBy_Name</td>
+                        <td>@string.Format("{0:dd-MMM-yyyy}", g.Key.Deliver_Date)</td>
+                        <td>
+                            <ul style="list-style:none;margin-left:0px; z-index:9999;">
+                                <li class="dropdown">
+                                    <a href="" class="dropdown-toggle no-after peers" data-toggle="dropdown">
+                                        <i class="ti-more-alt  c-grey-900" style="transform:rotate(90deg);"></i>
+                                    </a>
+                                    <ul class="dropdown-menu" style="padding:10px;min-width:210px !important">
+                                        <li class="bid-pur-req-row mt-1 pointer" id="@g.Key.Group_Id"><i class="ti-panel"></i>&nbsp;&nbsp;Add Quotations </li>
+                                        @if (!User.IsInRole("View All Requisitions"))
+                                        {
+                                            <li class="back-pur-req-row mt-1 pointer " id="@g.Key.Group_Id"><i class="ti-panel"></i>&nbsp;&nbsp;Send Back </li>
+                                        }
+                                        @if (User.IsInRole("Delete Purchase Requisition"))
+                                        {
+                                            <li class="del-pr mt-1" id="@g.Key.Group_Id"><i class="ti-panel"></i>&nbsp;&nbsp;Delete PR </li>
+                                        }
+                                    </ul>
+                                </li>
+                            </ul>
+                        </td>
+                    </tr>
+                    i++;
+                }
+            }
+        }
+    </tbody>
+</table>
+<script>
+    $(document).ready(function () {
+        $('.prnt-req').unbind().click(function () {
+            let grp = $(this).attr('data-grp');
+            window.open('/Procurement/PurchaseRequisitionPrint?Group_Id=' + grp);
+        });
+        $('.DemadnOrder').DataTable({
+            //order: [[2, 'asc'], [0, 'asc']],
+            rowGroup: {
+                dataSrc: [2, 1]
+            },
+            columnDefs: [{ targets: 4, type: "date-eu" }],
+            columnDefs: [{ targets: [2, 1], visible: false }]
+        });
+        $('.sumtab').DataTable({
+            "searching": false,
+            "pageLength": 5
+        });
+
+        $(document).on('click', '.del-pr', function () {
+            let grp_Id = $(this).attr('id');
+            var reason = prompt('Reason to Delete', "");
+            if (reason != null && reason != "") {
+                $.ajax({
+                    type: "POST",
+                    url: "/Procurement/DeletePR/",
+                    contentType: "application/json; charset=utf-8",
+                    data: JSON.stringify({ grp_Id: grp_Id, reason: reason }),
+                    success: function (data) {
+                        if (data) {
+                            alert('Purchase requisition deleted successfully');
+                            SASLoad($('#coahead'));
+                            $('#coahead').load("/Procurement/Pending_PR/", function () {
+                                SASUnLoad($('#coahead'));
+                            });
+                        }
+                        else {
+                            alert(data.Msg);
+                        }
+                    },
+                    error: function (data) {
+                        alert("An Error occured Try Again");
+                    }
+                });
+            }
+        });
+
+        
+    });
+</script>

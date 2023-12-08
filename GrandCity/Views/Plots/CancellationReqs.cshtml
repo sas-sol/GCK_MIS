@@ -1,0 +1,92 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Sp_Get_PlotCancelation_Req_Result>
+@{ Layout = "~/Views/Shared/_StaffLayout.cshtml"; }
+<div class="col-md-12">
+    <div class="default-div-bg bd bdrs-3 p-20 mB-20">
+        <h4 class="heading-lgt-onDark mB-20">Plot Cancellation Request</h4>
+        <table class="table table-borderless clickable-rows" id="plt-can" cellspacing="0" width="100%">
+            <thead class="thead-new-dark">
+                <tr>
+                    <th>Plot No</th>
+                    <th>Block</th>
+                    <th>Size</th>
+                    <th>Name</th>
+                    <th>Date</th>
+                    <th>Type</th>
+                    <th>Requested By</th>
+                    <th>Reason</th>
+                    <th>Plot Manager</th>
+                    <th>Finance Manager</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    if (Model.Any())
+                    {
+                        foreach (var item in Model)
+                        {
+                            string rol = "";
+                            if(User.IsInRole("Finance Manager") || User.IsInRole("Plots Manager") || User.IsInRole("Administrator") &&!(User.IsInRole("ReadOnly")))
+                            {
+                                rol = "plot-can-det";
+                            }
+                            <tr class="pointer @rol" data-pltid="@item.PlotId" id="@item.Id">
+                                <td>@item.Plot_No</td>
+                                <td>@item.Block</td>
+                                <td>@item.Plot_Size</td>
+                                <td>@item.Name</td>
+                                <td>@string.Format("{0:dd MMM yyyy}", item.Datetime)</td>
+                                <td>@item.Type</td>
+                                <td>@item.RequestedBy</td>
+                                <td>@item.Remarks</td>
+                                @if (item.PlotsMang_Approval == true)
+                                {
+                                    <td><i class="ti-check" style="color:green"></i></td>
+                                }
+                                else if (item.PlotsMang_Approval == false)
+                                {
+                                    <td><i class="ti-close" style="color:red"></i></td>
+                                }
+                                else
+                                {
+                                    <td>-</td>
+                                }
+                                @if (item.FinancMang_Approval == true)
+                                {
+                                    <td><i class="ti-check" style="color:green"></i></td>
+                                }
+                                else if (item.FinancMang_Approval == false)
+                                {
+                                    <td><i class="ti-close" style="color:red"></i></td>
+                                }
+                                else
+                                {
+                                    <td>-</td>
+                                }
+                                @if (item.Status == true)
+                                {
+                                    <td><i class="ti-check" style="color:green"></i></td>
+                                }
+                                else if (item.Status == false)
+                                {
+                                    <td><i class="ti-close" style="color:red"></i></td>
+                                }
+                                else
+                                {
+                                    <td>-</td>
+                                }
+                            </tr>
+                        }
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+<script>
+    $(function () {
+        $("#plt-can").DataTable({
+            "ordering":false
+        });
+    });
+</script>

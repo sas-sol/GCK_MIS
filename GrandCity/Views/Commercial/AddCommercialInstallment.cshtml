@@ -1,0 +1,124 @@
+﻿<script src="~/Scripts/webcam.min.js"></script>
+@using (Html.BeginForm("PayCommercialInstallment", "Installments", FormMethod.Post, new { @id = "pay-com-ins", @class = "", role = "form", autocomplete = "off" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <input type="hidden" id="plotid" name="PlotId" value="@ViewBag.shopid" />
+            <input type="hidden" id="amt-plot-no" name="File_Plot_Number" />
+            <input type="hidden" id="amt-shp-no" name="FilePlotNumber" />
+            <input type="hidden" id="amt-in-wrds" name="AmountInWords" />
+            <input type="hidden" id="mbl" name="Mobile_1" value="@ViewBag.Mobile" />
+            <input type="hidden" id="fth-husbad" name="Father_Husband" value="@ViewBag.Father" />
+            <input type="hidden" id="name" name="Name" value="@ViewBag.Name" />
+            <input type="hidden" id="total-amt" name="TotalAmount" />
+            <input type="hidden" id="prj-name" name="Project_Name" value="" />
+            <input type="hidden" id="rate" name="Rate" />
+            <input type="hidden" id="plot-size" name="Plot_Size" />
+            <input type="hidden" id="rec-Block" name="Block" />
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-2">
+            <label>Receipt No.</label>
+            <input type="text" class="form-control" id="Receipt" name="ReceiptNo">
+        </div>
+        <div class="form-group col-md-2">
+            <label>Cash / Bank</label>
+            <select class="form-control paytypesel-test" id="cah-chq-bak" name="PaymentType">
+                <option value="Cash">Cash</option>
+                <option value="BankDraft">Bank Draft</option>
+                <option value="Cheque">Cheque</option>
+                <option value="PayOrder">Pay Order</option>
+                <option value="Online_Cash">Online - Cash</option>
+                <option value="Online_Cheque">Online - Cheque</option>
+                <option value="Online_Payorder">Online - PayOrder</option>
+                <option value="Online_Bankdraft">Online - BankDraft</option>
+            </select>
+        </div>
+
+        <div class="form-group col-md-2">
+            <label>Amount</label>
+            <input class="form-control coma" placeholder="850,000" required>
+            <input type="hidden" id="amt" name="Amount" class="amt" required>
+        </div>
+
+        <div class="form-group col-md-2">
+            <label>Receipt Date</label>
+            <input type="text" class="form-control" data-provide="datepicker" id="Date" name="Date">
+        </div>
+        <div class="form-group col-md-2">
+            <label>Type</label>
+            <select class="form-control" id="Module" name="Module">
+                <option value="Booking">Booking</option>
+                <option value="Installment">Installment</option>
+                <option value="Transfer">Transfer</option>
+            </select>
+        </div>
+        <div class="form-group col-md-3 paymentotherinfo">
+            <label id="paytypelabel"></label>
+            <input type="text" class="form-control" id="paymenttype" name="PayChqNo" placeholder="" disabled>
+        </div>
+        <div class="form-group col-md-3 paymentotherinfo">
+            <label>Bank</label>
+            @Html.DropDownList("Bank", null, "Choose..", new { @class = "form-control", disabled = "" })
+        </div>
+        <div class="form-group col-md-2 paymentotherinfo">
+            <label>Branch </label>
+            <input type="text" class="form-control" id="Branch" name="Branch" placeholder="Mall Rd" disabled>
+        </div>
+        <div class="form-group col-md-2 paymentotherinfo">
+            <label>Date</label>
+            <input type="text" class="form-control" data-provide="datepicker" name="Ch_bk_Pay_Date" placeholder="mm/dd/yyyy" disabled required>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-3">
+            <input type="file" id="files" name="Files" style="margin:10px;" />
+        </div>
+    </div>
+}
+
+<script>
+    $(function () {
+        $('.modal-footer').append('<button class="btn btn-info" id="sav-com-rece" type="submit">Save</button>');
+        $('.modal-Header').text('Plot Installment');
+        var project = $("#Projects option:selected").text();
+        project = project.replace(/(\r\n\t|\n|\r\t)/gm, "");
+        $("#total-amt").val($("#plt-pric").val());
+        $("#plot-size").val($("#pl-size").val());
+        $("#prj-name").val(project);
+
+        var fileplotid = $("#shp-lst").val();
+        if (fileplotid == "" || fileplotid == null) {
+            $("#amt-plot-no").val($("#plot-details").val());
+        }
+        else {
+            $("#amt-plot-no").val(fileplotid);
+        }
+        var floor = $("#phase-type option:selected").text();
+        var shopno = $("#shp-lst option:selected").text();
+
+        $("#amt-shp-no").val(shopno + '-' + floor);
+
+        $("#amt-file-id").val($("#shp-id").val());
+    });
+</script>
+<style>
+    .paymentotherinfo {
+        display: none;
+    }
+
+    #inst-stat {
+        height: 1245px;
+        overflow-y: scroll;
+    }
+
+    video {
+        -webkit-transform: rotate(180deg);
+        -moz-transform: rotate(180deg);
+        -o-transform: rotate(180deg);
+        -ms-transform: rotate(180deg);
+        transform: rotate(180deg);
+    }
+</style>

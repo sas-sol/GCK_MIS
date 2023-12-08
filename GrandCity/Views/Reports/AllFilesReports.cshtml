@@ -1,0 +1,7 @@
+﻿<div class="row">
+    <div class="col-md-6">
+        @{
+            Html.RenderAction("MonthlyFilesRecovery", "Reports", new { Month = DateTime.Now });
+        }
+    </div>
+</div>

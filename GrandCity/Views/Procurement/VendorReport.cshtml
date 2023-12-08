@@ -1,0 +1,125 @@
+﻿
+@model IEnumerable<MeherEstateDevelopers.Models.Sp_Get_Vendor_report_Result>
+
+@if (User.IsInRole("Administrator"))
+{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+else if (User.IsInRole("CEO"))
+{
+    Layout = "~/Views/Shared/_CEOLayout.cshtml";
+}
+else if (User.IsInRole("Staff"))
+{
+    Layout = "~/Views/Shared/_StaffLayout.cshtml";
+}
+
+
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/sunburst.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+<script src="https://code.highcharts.com/modules/export-data.js"></script>
+<script src="https://code.highcharts.com/modules/accessibility.js"></script>
+
+<br />
+<br />
+<div id="Ven_Report" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+
+<div class="col-md-12">
+    <div class="row bgc-white">
+        <div class="col-md-12">
+            <div class="panel-heading central-text-align">
+                <h5>Purchase Requisitions</h5>
+            </div>
+        </div>
+
+        <div class="data" style="margin:auto;">
+            <table class="table table-borderless">
+                <thead>
+                    <tr class="central-text-align thead-dark">
+                        <th>Sr#</th>
+                        <th>Vendor Name</th>
+                        <th>No. of Orders</th>
+                        <th>Item Name</th>
+                        <th>Total Quantity</th>
+                        
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @if (Model.Any())
+                    {
+                        var sr = 1;
+                        foreach (var v in Model)
+                        {
+                            <tr class="central-text-align">
+                                <td>@sr</td>
+                                <td>@v.Vendor_Name</td>
+                                <td>@v.Orders</td>
+                                <td>@v.Item_Name</td>
+                                <td>@v.Total_Quantity</td>
+                            </tr>
+                            sr++;
+
+                        }
+                    }
+                    else
+                    {
+                        <tr class="bgc-red-50 central-text-align">
+                            <td colspan="6">No Record Found</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+<script>
+
+    $(document).ready(function () {
+
+        Highcharts.chart('Ven_Report', {
+            chart: {
+                type: 'column'
+            },
+            title: {
+                text: 'Vendor Orders'
+            },
+
+            xAxis: {
+                categories: @Html.Raw(Json.Encode(Model.Select(x=>x.Vendor_Name))),
+                crosshair: true
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                    text: 'Total Ordered Quantity'
+                }
+            },
+            tooltip: {
+                headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                    '<td style="padding:0"><b>{point.y:.1f} </b></td></tr>',
+                footerFormat: '</table>',
+                shared: true,
+                useHTML: true
+            },
+            plotOptions: {
+                column: {
+                    pointPadding: 0.2,
+                    borderWidth: 0
+                }
+            },
+            series: [{
+                data:@Html.Raw(Json.Encode(Model.Select(x=>x.Total_Quantity).ToList()))
+
+            }]
+        });
+
+
+
+
+    });
+
+</script>

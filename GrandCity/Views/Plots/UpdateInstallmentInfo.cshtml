@@ -1,0 +1,122 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Plot_Installments>
+
+<div class="row">
+    <div class="col-md-2"><b>Total Plot Price:</b></div>
+    <div class="col-md-2 totalamount">
+        <div class="ttl" style="height: 50px; width: 160px; background-color:lightblue; color: black;  border-radius: 10px; text-align: center; padding-top: 12px; position: fixed" ><i>Total Amount:</i> </div>
+    </div>
+</div>
+<br/><br/><br/>
+<div class="row">
+    <div class="col-md-9">
+        <div class="installmentStructure" style="overflow-y:scroll; overflow-x:hidden; height:400px; width:1000px;">
+            <input type="hidden" id="com_id" name="comId" value="@ViewBag.id" />
+            @foreach (var r in Model)
+            {
+                <div class="row arrElements" id="allbody">
+                    <div class="col-md-3 ">
+                        @*Hidden Fields*@
+                        <input type="hidden" class="Ins-id" value="@r.Id" />
+                        @*<input type="hidden" class="Ins-PlotId" value="@r.Plot_Id" />*@
+                        @*<input type="hidden" class="Ins-OwnId" value="@r.Owner_Id" />*@
+                        <input type="hidden" class="Ins-type" value="@r.Installment_Type" />
+
+                        <input type="text" class="form-control insName" name="name" value="@r.Installment_Name" />
+                    </div>
+                    <div class="col-md-2">
+                        <input type="text" class="form-control amunt" name="amount" value="@string.Format("{0:n0}", r.Amount)" />
+                    </div>
+                    <div class="col-md-3">
+                        <input type="text" class="form-control insStatus" name="status" value=@r.Status />
+                    </div>
+                    <div class="col-md-2">
+                        @{ var date = @String.Format("{0:MM/dd/yyyy}", r.DueDate); }
+                        <input type="text" class="form-control datTim" data-provide="datepicker" value="@date" />
+                    </div>
+                    <div class="col-md-1">
+                        <a href="javascript:void(0);" class="btnRemove"><i class="fas fa-minus-circle"></i></a>
+                    </div>
+                </div>
+            }
+        </div>
+        <br />
+        <div class="col-md-1">
+            <button id="btnAppend" class="btn btn-primary">Add Row</button>
+        </div>
+    </div>
+    @*<div class="col-md-2 totalamount">
+        <div class="ttl" style="height: 60px; width: 160px; background-color:lightblue; color: black;  border-radius: 10px; text-align: center; padding-top: 16px; position: fixed"><i>Total Amount:</i> </div>
+    </div>*@
+</div>
+<script>
+
+    $(document).ready(function () {
+        var total = 0;
+        $('.amunt').each(function () {
+            total = total + parseFloat(RemoveComma($(this).val()));
+        });
+        $(".ttl").text(total.toLocaleString());
+        $('.modal-footer').append('<button class="btn btn-success upInsInf" type="submit">Update Installment Info</button>');
+    });
+    $(document).on('click', '#btnAppend', function () {
+        $(".installmentStructure").append(
+
+            '<div class="row arrElements">' +
+            '<div class="col-md-3">' +
+            '<input type="text" class="form-control insName" name="name" Placeholder="Installment Name"/>' +
+            '</div>' +
+            '<div class="col-md-2">' +
+            ' <input type="text" class="form-control amunt" name="amount" Placeholder="Amount" />' +
+            '</div>' +
+            '<div class="col-md-3"><select class="form-control Ins-type"><option>Select Type</option><option value = "3" >Advance</option><option value="1">Installments</option>' +
+            '<option value="6">Confirmation</option><option value = "4" > Possession</option><option value="2">Development Charges</option><option value="1">After Time</option><option value="0">Other Charges</option></select></div>'+
+            '<div class="col-md-2">' +
+            '<input type="text" class="form-control datTim" data-provide="datepicker" Placeholder="MM/DD/YYYY" />' +
+            '</div>' +
+            '<div class="col-md-1">' +
+            '<a href="javascript:void(0);" class="btnRemove" ><i class="fas fa-minus-circle"></i></a>' +
+            '</div>' +
+            '</div>');
+    });
+
+    $(document).on("click", ".upInsInf", function () {
+        debugger
+        var id = $("#com_id").val();
+        var arr = [];
+        $('.arrElements').each(function () {
+            //var ins_Id = $(this).find('.Ins-id').val();
+            var name = $(this).find('.insName').val();
+            var amnt = RemoveComma($(this).find('.amunt').val());
+            var date = $(this).find('.datTim').val();
+            var installmentType = $(this).find('.Ins-type').val();
+            //var OwnId = $(this).find('.Ins-type').val();
+            arr.push({
+                Installment_Type: installmentType,
+                Installment_Name: name,
+                Amount: amnt,
+                //Owner_Id: OwnId,
+                DueDate: date
+            });
+
+        });
+
+        var con = confirm("Are You sure you want to Update the Instalments");
+        if (con) {
+            $.ajax({
+                type: "POST",
+                url: '/Plots/UpdateInstallmentInfoPlot/',
+                dataType: "json",
+                data: { id: id, installmentData: arr },
+                success: function (data) {
+                    alert('Successfully done');
+                    window.location.reload();
+                    //window.open("/Salaries/DepartmentReport/");
+                },
+                error: function () {
+                    alert("Error Occured");
+                }
+            });
+        }
+    });
+</script>
+

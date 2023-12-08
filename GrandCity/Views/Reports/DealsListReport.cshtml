@@ -1,0 +1,185 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Sp_Get_DealLedger_Parameter_Result>
+<div class=" bgc-white bd bdrs-3 p-20 mB-20 row">
+    <div class="col-md-12">
+        <h2>Deals Report</h2>
+    </div>
+    <div class="col-md-3"></div>
+    <div class="col-md-6">
+        <h4>Summary @string.Format("{0:dd-MMM-yyyy}", ViewBag.From) -  @string.Format("{0:dd-MMM-yyyy}", ViewBag.To)</h4>
+        <hr />
+        @{
+            decimal? Resale_Deb = Model.Where(x => x.Type == "Resale").Sum(x => x.Debit);
+            decimal? Resale_Cre = Model.Where(x => x.Type == "Resale").Sum(x => x.Credit);
+            decimal? Res_Bal = Resale_Deb - Resale_Cre;
+
+            decimal? NewLead_Deb = Model.Where(x => x.Type == "New_Lead").Sum(x => x.Debit);
+            decimal? NewLead_Cre = Model.Where(x => x.Type == "New_Lead").Sum(x => x.Credit);
+            decimal? New_Bal = NewLead_Deb - NewLead_Cre;
+
+            decimal? Lead_Deb = Model.Where(x => x.Type == "").Sum(x => x.Debit);
+            decimal? Lead_Cre = Model.Where(x => x.Type == "").Sum(x => x.Credit);
+            decimal? Led_Bal = Lead_Deb - Lead_Cre;
+
+        }
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Debit</th>
+                    <th>Credit</th>
+                    <th>Balance</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th>Resale</th>
+                    <td>@string.Format("{0:n0}", Resale_Deb)</td>
+                    <td>@string.Format("{0:n0}", Resale_Cre)</td>
+                    <td>@string.Format("{0:n0}", Res_Bal)</td>
+                </tr>
+                <tr>
+                    <th>New Lead</th>
+                    <td>@string.Format("{0:n0}", NewLead_Deb)</td>
+                    <td>@string.Format("{0:n0}", NewLead_Cre)</td>
+                    <td>@string.Format("{0:n0}", New_Bal)</td>
+                </tr>
+                <tr>
+                    <th>Open Leads</th>
+                    <td>@string.Format("{0:n0}", Lead_Deb)</td>
+                    <td>@string.Format("{0:n0}", Lead_Cre)</td>
+                    <td>@string.Format("{0:n0}", Led_Bal)</td>
+                </tr>
+                <tr>
+                    <th></th>
+                    <th>@string.Format("{0:n0}", Lead_Deb + Resale_Deb + NewLead_Deb)</th>
+                    <th>@string.Format("{0:n0}", Lead_Cre + Resale_Cre + NewLead_Cre)</th>
+                    <th>@string.Format("{0:n0}", Led_Bal + Res_Bal + New_Bal)</th>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+    <div class="col-md-3"></div>
+
+    <div class="col-md-12 " id="SAMLeads">
+        <div class="col-md-12">
+            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                @{ int i = 1;}
+                @foreach (var item in Model.GroupBy(x => x.Created_By).OrderBy(x => x.Key))
+                {
+                    if (i == 1)
+                    {
+                        <li class="nav-item"><a class="nav-link active" role="tab" data-toggle="tab" aria-controls="home" aria-selected="true" href="#@item.Key.Replace(" ","_")">@item.Key</a></li>
+                    }
+                    else
+                    {
+                        <li class="nav-item"><a class="nav-link" role="tab" data-toggle="tab" aria-controls="home" aria-selected="true" href="#@item.Key.Replace(" ","_")">@item.Key</a></li>
+                    }
+                    i++;
+                }
+            </ul>
+            <div class="tab-content">
+                @{ i = 1; string active = "";}
+                @foreach (var gg in Model.GroupBy(x => x.Created_By).OrderBy(x => x.Key))
+                {
+                    if (i == 1)
+                    {
+                        active = "active";
+                    }
+                    else
+                    {
+                        active = "";
+                    }
+                    <div id="@gg.Key.Replace(" ","_")" class="tab-pane @active">
+                        <div class="p-20">
+                            <table id="allleadss" class="table table-striped table-bordered" cellspacing="0" width="100%">
+                                <thead class="thead-dark">
+                                    <tr>
+                                        <th width="20%">Date</th>
+                                        <th width="20%">Receipt/Voucher No</th>
+                                        <th width="20%">Block</th>
+                                        <th width="20%">Plot Number</th>
+                                        <th width="20%">Payment Type</th>
+                                        <th width="20%">Cheque No</th>
+                                        <th width="20%">Debit</th>
+                                        <th width="20%">Credit</th>
+                                        <th width="20%">Balance</th>
+                                        <th width="20%">Name</th>
+                                        <th width="20%">Contact</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{
+                                        if (Model.Any())
+                                        {
+                                            foreach (var g in gg.GroupBy(x => x.Lead))
+                                            {
+                                                decimal? Balance = 0;
+                                                foreach (var item in g)
+                                                {
+                                                    decimal? debit = 0;
+                                                    debit = (item.STATUS == "Approved" || ((item.STATUS == "Pending" || item.STATUS == null) && item.PaymentType == "Cash")) ? item.Debit : 0;
+                                                    Balance += debit - item.Credit;
+                                                    string col = "";
+                                                    if (item.STATUS == "Approved")
+                                                    {
+                                                        col = "bgc-green-50";
+                                                    }
+                                                    else if (item.STATUS == "Dishonored")
+                                                    {
+                                                        col = "bgc-green-50";
+                                                    }
+                                                    else if (item.STATUS == "Pending" && item.PaymentType != "Cash")
+                                                    {
+                                                        col = "bgc-yellow-50";
+                                                    }
+                                                    <tr class="pointer @col" id="@item.Lead" data-type="@item.Lead_Deal">
+                                                        <td>@string.Format("{0:dd-MMM-yyyy}", item.DATETIME)</td>
+                                                        <td>@item.Receipt_Voucher_No</td>
+                                                        <td>@item.Block</td>
+                                                        <td class="pl-ld">@item.Plot_num</td>
+                                                        <td>@item.PaymentType</td>
+                                                        <td>@item.Ch_Pay_Draft_No</td>
+                                                        <td>@string.Format("{0:n0}", item.Debit)</td>
+                                                        <td>@string.Format("{0:n0}", item.Credit)</td>
+                                                        <td>@string.Format("{0:n0}", Balance)</td>
+                                                        <td>@item.Name</td>
+                                                        <td>@item.Contact</td>
+                                                    </tr>
+                                                }
+                                                <tr>
+                                                    <th colspan="6" style="text-align:right"></th>
+                                                    <th>@string.Format("{0:n0}", g.Sum(x => x.Debit))</th>
+                                                    <th>@string.Format("{0:n0}", g.Sum(x => x.Credit))</th>
+                                                    <th colspan="5"><b>@string.Format("{0:n0}", Balance)</b></th>
+                                                </tr>
+                                            }
+                                        }
+                                    }
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td colspan="6"></td>
+                                        <th>@string.Format("{0:n0}", gg.Sum(x => x.Debit))</th>
+                                        <th>@string.Format("{0:n0}", gg.Sum(x => x.Credit))</th>
+                                        <th>@string.Format("{0:n0}", gg.Sum(x => x.Debit) - gg.Sum(x => x.Credit))</th>
+                                        <td colspan="4"></td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                    i++;
+                }
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+    .table tr td {
+        padding: 2px;
+    }
+</style>
+<script>
+
+</script>

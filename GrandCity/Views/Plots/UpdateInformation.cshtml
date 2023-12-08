@@ -1,0 +1,768 @@
+﻿@model MeherEstateDevelopers.Models.PlotDetailData
+@{
+    var CNo = ViewBag.currencyNo;
+}
+<div class="bgc-white p-20 bd">
+    <div class="form-row row">
+        <div class="col-md-12">
+            <h6 class="c-grey-900">Plot information</h6>
+            <div class="form-row">
+                <div class="form-group col-md-1">
+                    <label>Plot No.</label>
+                    <h6 id="plt-no">@Model.PlotData.Plot_No</h6>
+                    <input type="hidden" class="form-control" id="module" value="PlotManagement">
+                    <input type="hidden" class="form-control" id="plt-id" name="Plot_Id" value="@Model.PlotData.Id" readonly>
+                    <input type="hidden" class="form-control" id="plt-stat" name="Plot_Stat" value="@Model.PlotData.Status" readonly>
+                </div>
+                <div class="form-group col-md-1">
+                    <label>Plot Size</label>
+                    <h6 id="plt-size">@Model.PlotData.Plot_Size</h6>
+                    <input type="hidden" id="pl-size" value="@Model.PlotData.Plot_Size" />
+                </div>
+                <div class="form-group col-md-2">
+                    <label>Type</label>
+                    <h6 id="plt-type">@Model.PlotData.Type</h6>
+                </div>
+                <div class="form-group col-md-2">
+                    <label>Dimension</label>
+                    <h6 id="plt-dim">@Model.PlotData.Dimension</h6>
+                    <input type="hidden" id="plt-dim-id" value="@Model.PlotData.Plot_Category" />
+                </div>
+                <div class="form-group col-md-2">
+                    <label>Status</label>
+                    <select class="form-control developstat">
+
+                        @if (Model.PlotData.Develop_Status == "Constructed")
+                        {
+                            <option value="Constructed" selected>Constructed</option>
+                            <option value="Non Constructed">Non Constructed</option>
+                        }
+                        else
+                        {
+                            <option value="Constructed">Constructed</option>
+                            <option value="Non Constructed" selected>Non Constructed</option>
+                        }
+
+                    </select>
+                    @{ var stat = Model.PlotData.Develop_Status.Replace('_', ' ');}
+                    @*<h6 id="plt-status">@stat</h6>*@
+                </div>
+                <div class="form-group col-md-1">
+                    <label>Road</label>
+                    <h6 id="plt-road">@Model.PlotData.Road_Type</h6>
+                </div>
+                <div class="form-group col-md-1">
+                    <label>Area</label>
+                    <h6 id="plt-area">@Convert.ToDecimal(Model.PlotData.Area).ToString("0.##")</h6>
+                </div>
+                <div class="form-group col-md-2">
+                    <label>Location</label>
+                    <h6 id="plt-loc">@Model.PlotData.Plot_Location</h6>
+                </div>
+                <div class="form-group col-md-2">
+                    <input type="button" class="btn btn-primary up-dim" data-toggle="modal" data-target="#Modal" value="Update Dimension" />
+                </div>
+                <div class="form-group col-md-2">
+                    <input type="button" class="btn btn-primary add-dim" data-toggle="modal" data-target="#Modal" value="Add New Dimension" />
+                </div>
+                @if (User.IsInRole("Change Plot Status") || User.IsInRole("Administrator"))
+                {
+                    <div class="form-group col-md-2">
+                        <input type="button" class="btn btn-primary up-stat" data-toggle="modal" data-target="#Modal" value="Update Plot Status" />
+                    </div>
+                }
+                <div class="col-md-4">
+                    <div class="checkbox checkbox-circle checkbox-info peers ai-c">
+                        @{
+                            if (Model.PlotData.Registry == true)
+                            {
+                                <input type="checkbox" value="@Model.PlotData.Id" class="peer regis-plt" checked>
+                            }
+                            else
+                            {
+                                <input type="checkbox" value="@Model.PlotData.Id" class="peer regis-plt">
+                            }
+                        }
+                        <label class="peers peer-greed js-sb ai-c">
+                            <span class="peer peer-greed ser-ch-nam" style="font-weight:bold">Registry Plot </span>
+                        </label>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="checkbox checkbox-circle checkbox-info peers ai-c">
+                        @{
+                            if (Model.PlotData.Mortgage == true)
+                            {
+                                <input type="checkbox" value="@Model.PlotData.Id" class="Mortgaged-plt" checked>
+                            }
+                            else
+                            {
+                                <input type="checkbox" value="@Model.PlotData.Id" class="Mortgaged-plt">
+                            }
+                        }
+                        <label>
+                            <span style="font-weight:bold">Mark Plot as Mortgaged </span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr />
+
+    <div class="mT-30">
+        <div class="Tran-own">
+            @{ int ownercount = Model.PlotOwners.Count();
+                int count = ownercount - ownercount + 1;
+                            long? GroupTag = Model.PlotOwners.FirstOrDefault().GroupTag;
+                            foreach (var item in Model.PlotOwners.OrderBy(x => x.Ownership_DateTime).GroupBy(x => x.GroupTag))
+                            {
+                    <div class="panel-heading central-text-align mb-md-3" style="background-color: grey; color: white; align-items: center; text-align: center; ">
+                        <h5>@item.Select(x => x.Ownership_Status).FirstOrDefault()                                                  (s) Information</h5>
+                    </div>
+                    foreach (var own in item)
+                    {
+                        if (ownercount == 1)
+                        {
+                            <script>
+                                var pltprice = " @own.Total_Price";
+                        var a = pltprice.replace(/\D/g, '').replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+                                $("#plt-price").val(a);
+                                $("#plt-price").val(pltprice);
+                            </script>
+                        }
+        <div class="row">
+            <div class="col-md-2">
+                <h6 class="c-grey-900">@count Owner Information</h6>
+            </div>
+            @*<div class="col-md-2">
+            <input type="button" class="btn btn-primary plot-inst-btn" data-toggle="modal" data-target="#Modal" value="Receive Installments" />
+        </div>*@
+            @if (own.Allotment_Letter != 1)
+            {
+                <div class="col-md-2">
+                    <input type="button" class="btn btn-primary all-let-del-pre" data-toggle="modal" data-ownid="@own.Id" data-target="#Modal" value="Delivered Allotment Letter" />
+                </div>
+            }
+            @*@if (User.IsInRole("Delete Ownership") || User.IsInRole("Administrator"))
+        {
+            <i class="ti-trash pointer De__Owner__from__plts" data-id="@own.Id" style="float:right"></i>
+        }*@
+            @if (User.IsInRole("Add Plot Owner") || User.IsInRole("Administrator"))
+            {
+                @*<i class="fa fa-plus pointer add__Owner__from__plts" data-id="@own.GroupTag" style="float:right; color:greenyellow; margin-left:35px"></i>*@
+            }
+        </div>
+                        <div class="own-det @own.GroupTag" id="@own.Id">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-row">
+                                        <div class="form-group col-md-3">
+                                            <label>Ownership Status</label>
+                                            <select class="form-control" id="Ownership_Status" name="Ownership_Status" readonly>
+                                                <option value="">Select Ownership</option>
+                                                <option value="Owner">Owner</option>
+                                                <option value="Transfered">Transfered</option>
+                                                <option value="Cancelled">Cancelled</option>
+                                                <option value="Pending">Pending</option>
+                                            </select>
+                                        </div>
+                                        <script>
+                                            var a = '@own.Ownership_Status';
+                                            $("#"+@own.Id+" #Ownership_Status").val(a);
+                                        </script>
+                                        <div class="form-group col-md-3">
+                                            <label>Currency Note #</label>
+                                            <input type="text" class="form-control" name="CNo" value="@CNo" readonly>
+                                        </div>
+                                        <div class="form-group col-md-3">
+                                            <label>Name</label>
+                                            <input type="text" class="form-control" name="Name" value="@own.Name" readonly>
+                                        </div>
+                                        <div class="form-group col-md-3">
+                                            <label>Father's/Husband's Name</label>
+                                            <input type="text" class="form-control" name="Father_Husband" value="@own.Father_Husband" readonly>
+                                        </div>
+                                        <div class="form-group col-md-3">
+                                            <label>CNIC / NICOP</label>
+                                            <input type="text" class="form-control" name="CNIC_NICOP" value="@own.CNIC_NICOP" placeholder="12345-1234567-1   or   123456-123456-1" readonly>
+                                        </div>
+                                        <div class="form-group col-md-2">
+                                            <label>Date Of Birth</label>
+                                            <input type="text" class="form-control" data-provide="datepicker" value="@own.Date_Of_Birth" placeholder="mm/dd/yyyy" name="Date_Of_Birth" readonly>
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <label>Postal Address</label>
+                                            <input type="text" class="form-control" name="Postal_Address" value="@own.Postal_Address" placeholder="1234 Main St" readonly>
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <label>Residential Address</label>
+                                            <input type="text" class="form-control" name="Residential_Address" value="@own.Residential_Address" placeholder="Apartment, Plot, or floor" readonly>
+                                        </div>
+                                        <div class="form-group col-md-2">
+                                            <label>City</label>
+                                            <input type="text" class="form-control" id="City" value="@own.City" readonly>
+                                        </div>
+                                        <div class="form-group col-md-3">
+                                            <label>Occupation</label>
+                                            <input type="text" class="form-control" value="@own.Occupation" name="Occupation" readonly>
+                                        </div>
+                                        <div class="form-group col-md-2">
+                                            <label>Nationality</label>
+                                            <input type="text" class="form-control" value="@own.Nationality" name="Nationality" readonly>
+                                        </div>
+                                        <div class="form-group col-md-3">
+                                            <label>Email</label>
+                                            <input type="text" class="form-control" value="@own.Email" name="Email" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group col-md-3">
+                                            <label>Phone Office</label>
+                                            <input type="text" class="form-control" value="@own.Phone_Office" name="Phone_Office" readonly>
+                                        </div>
+                                        <div class="form-group col-md-3">
+                                            <label>Residential</label>
+                                            <input type="text" class="form-control" value="@own.Residential" name="Residential" readonly>
+                                        </div>
+
+                                        <div class="form-group col-md-3">
+                                            <label>Mobile 1</label>
+                                            <input type="text" class="form-control" value="@own.Mobile_1"  name="Mobile_1" readonly>
+                                        </div>
+
+                                        <div class="form-group col-md-3">
+                                            <label>Mobile 2</label>
+                                            <input type="text" class="form-control" value="@own.Mobile_2" pattern="^0\d{10}"  name="Mobile_2" readonly>
+                                        </div>
+                                        <div class="form-group col-md-3">
+                                            <label>Date of Ownership</label>
+                                            <input type="text" class="form-control" data-provide="datepicker" value="@string.Format("{0:MM/dd/yyyy}", own.Ownership_DateTime)" name="Ownership_DateTime" readonly>
+                                        </div>
+                                        <div class="form-group col-md-6" style="margin:auto;">
+                                            <h6 style="width: auto;float: left;margin: 7px;">Filer</h6>
+                                            @if (own.IsFiler == true)
+                                            {
+                                                <label class="switch"><input type="checkbox" class="IsFiler" checked><span class="slider round"></span></label>
+                                            }
+                                            else
+                                            {
+                                                <label class="switch"><input type="checkbox" class="IsFiler"><span class="slider round"></span></label>
+                                            }
+                                        </div>
+                                    </div>
+                                    <h6 class="c-grey-900">Nominee</h6>
+                                    <div class="form-row">
+                                        <div class="form-group col-md-3">
+                                            <label>Name</label>
+                                            <input type="text" class="form-control" value="@own.Nominee_Name" name="Nominee_Name" readonly>
+                                        </div>
+                                        <div class="form-group col-md-2">
+                                            <label>CNIC / NICOP</label>
+                                            <input type="text" class="form-control" value="@own.Nominee_CNIC_NICOP" placeholder="12345-1234567-1 or 123456-123456-1" name="Nominee_CNIC_NICOP" readonly>
+                                        </div>
+                                        <div class="form-group col-md-2">
+                                            <label>Relation</label>
+                                            <input class="form-control" value="@own.Nominee_Relation" name="Nominee_Relation" placeholder="" readonly>
+                                        </div>
+                                        <div class="form-group col-md-5">
+                                            <label>Address</label>
+                                            <input type="text" class="form-control" value="@own.Nominee_Address" name="Nominee_Address" placeholder="1234 Main St" readonly>
+                                        </div>
+                                    </div>
+                                    @using (Html.BeginForm("FiesImageUploader", "Plots", FormMethod.Post, new { @id = "plt-up-imge", @class = "", role = "form", enctype = "multipart/form-data" }))
+                                    {
+                                        <div class="form-row">
+
+                                            <div class="col-md-3" id="1">
+                                                <input type="hidden" name="imgID" class="img_id" value="1" />
+                                                <input type="hidden" name="Plot_Id" class="Plot_id" value="@Model.PlotData.Id" />
+                                                <input type="hidden" name="OwnerId" class="owner_id" value="@own.Id" />
+                                                <input type="file" id="file1" name="File"><br>
+                                                @if (own.Owner_Img == "1.jpg")
+                                                {
+                                                    <img src="~/Repository/CustomerImagesPlots/@Model.PlotData.Id/@own.Id/1.jpg" id="img1" class="img1" width="200" height="200"><br>
+                                                }
+                                                else if (own.Owner_Img != "1.jpg")
+                                                {
+                                                    <img src="@own.Owner_Img" id="img1" class="img1" width="200" height="200"><br>
+                                                }
+                                                else
+                                                {
+                                                    <img src="/assets/static/images/def-img.png" id="img1" class="img1" width="200" height="200"><br>
+
+                                                }
+                                                <button class="btn btn-success btn_gen___poss" style="margin-top:10px" type="submit" name="" value="1">Save Image</button>
+                                            </div>
+                                            <div class="col-md-3" id="2">
+                                                <input type="hidden" name="imgID" class="img_id" value="2" />
+                                                <input type="hidden" name="Plot_Id" class="Plot_id" value="@Model.PlotData.Id" />
+                                                <input type="hidden" name="OwnerId" class="owner_id" value="@own.Id" />
+                                                <input type="file" id="file2" name="File"><br>
+                                                @if (own.Owner_Img2 == "2.jpg")
+                                                {
+                                                    <img src="~/Repository/CustomerImagesPlots/@Model.PlotData.Id/@own.Id/2.jpg" id="img2" class="img2" width="200" height="200"><br>
+                                                }
+                                                else if (own.Owner_Img2 != null)
+                                                {
+                                                    <img src="@own.Owner_Img2" id="img2" class="img2" width="200" height="200"><br>
+                                                }
+                                                else
+                                                {
+                                                    <img src="/assets/static/images/def-img.png" id="img2" class="img2" width="200" height="200"><br>
+
+                                                }
+                                                <button class="btn btn-success btn_gen___poss" style="margin-top:10px" type="submit" name="" value="2">Save Image</button>
+                                            </div>
+                                            <div class="col-md-3" id="3">
+                                                <input type="hidden" name="imgID" class="img_id" value="3" />
+                                                <input type="hidden" name="Plot_Id" class="Plot_id" value="@Model.PlotData.Id" />
+                                                <input type="hidden" name="OwnerId" class="owner_id" value="@own.Id" />
+                                                <input type="file" id="file3" name="File"><br>
+                                                @if (own.Owner_Img3 == "3.jpg")
+                                                {
+                                                    <img src="~/Repository/CustomerImagesPlots/@Model.PlotData.Id/@own.Id/3.jpg" id="img3" class="img3" width="200" height="200"><br>
+                                                }
+                                                else if (own.Owner_Img3 != null)
+                                                {
+                                                    <img src="@own.Owner_Img3" id="img3" class="img3" width="200" height="200"><br>
+                                                }
+                                                else
+                                                {
+                                                    <img src="/assets/static/images/def-img.png" id="img3" class="img3" width="200" height="200"><br>
+
+                                                }
+                                                <button class="btn btn-success btn_gen___poss" style="margin-top:10px" type="submit" name="" value="3">Save Image</button>
+                                            </div>
+                                            <div class="col-md-3" id="4">
+                                                <input type="hidden" name="imgID" class="img_id" value="4" />
+                                                <input type="hidden" name="Plot_Id" class="Plot_id" value="@Model.PlotData.Id" />
+                                                <input type="hidden" name="OwnerId" class="owner_id" value="@own.Id" />
+                                                <input type="file" id="file4" name="File"><br>
+                                                @if (own.Owner_Img4 == "4.jpg")
+                                                {
+                                                    <img src="~/Repository/CustomerImagesPlots/@Model.PlotData.Id/@own.Id/4.jpg" id="img4" class="img4" width="200" height="200"><br>
+                                                }
+                                                else if (own.Owner_Img4 != null)
+                                                {
+                                                    <img src="@own.Owner_Img4" id="img4" class="img4" width="200" height="200"><br>
+                                                }
+                                                else
+                                                {
+                                                    <img src="/assets/static/images/def-img.png" id="img4" class="img4" width="200" height="200"><br>
+
+                                                }
+                                                <button class="btn btn-success btn_gen___poss" style="margin-top:10px" type="submit" name="" value="4">Save Image</button>
+                                            </div>
+
+
+
+
+                                        </div>
+                                    }
+                                    <div class="form-row">
+                                        <div class="col-md-2">
+                                            <button class="btn btn-primary upd-info" style="margin-top:5px" id="">Update Information</button>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <button class="btn btn-success sav-info" style="margin-top:5px;display:none" id="">Save</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <hr />
+                        //ownercount--;
+                        count++;
+                    }
+                }
+            }
+            <div class="col-md-2" style=" height: 50px; padding-top:15px; color:white; background-color: #5cb85c;"><b>Add Plot Owner</b>
+                 <i class="fa fa-plus pointer add__Owner__from__plts" data-id="@GroupTag" style="float:right; color:greenyellow; margin-left:15px"></i>
+            </div>
+            <br/>
+        </div>
+    </div>
+    @*<div class="form-row">
+        <input type="submit" id="up-trans-btn" data-owncount="@ownercount" class="btn btn-secondary" value="Transfer Plot" />
+    </div>*@
+    <hr />
+    <div class="form-row" id="inst-plan" style="display:none">
+        <div class="form-group col-md-1">
+            <label>Total Price</label>
+            <input class="form-control coma gran-cal" value="" id="plt-price" placeholder="300,000" required>
+            <input type="hidden" id="plt-pric" class="amt" required>
+        </div>
+        <div class="form-group col-md-1">
+            <label>Disc Amount</label>
+            <input class="form-control coma gran-cal" placeholder="300,000">
+            <input type="hidden" id="dis-amt" class="amt">
+        </div>
+        <div class="form-group col-md-2">
+            <label>Grand Total</label>
+            <input class="form-control" id="grnd-total" readonly>
+        </div>
+        <div class="form-group col-md-2">
+            <label>No. of Insts</label>
+            <input type="text" class="form-control" id="ttl-ins">
+        </div>
+        <div class="form-group col-md-1">
+            <label>Advance</label>
+            <input class="form-control coma" placeholder="550,000" required>
+            <input type="hidden" id="adv-amt" class="amt" required>
+        </div>
+        <div class="form-group col-md-2">
+            <label>Date of Registeration</label>
+            <input type="text" class="form-control" placeholder="mm/dd/yyyy" id="reg-date" data-provide="datepicker">
+        </div>
+        <div class="form-group col-md-2">
+            <label>Installment Start Date</label>
+            <input type="text" class="form-control" placeholder="mm/dd/yyyy" id="inst-date" data-provide="datepicker">
+        </div>
+        <div class="form-group col-md-1">
+            <label style="width:100%"></label>
+            <button type="button" class="btn btn-primary" id="gen-ins">Generate</button>
+        </div>
+        <div class="form-group col-md-1">
+            <label style="width:100%"></label>
+            <button type="button" class="btn btn-success" id="sav-ins">Save</button>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="col-md-5">
+            <div class="row">
+                <div class="col-md-2">
+                    <i class="fas fa-angle-double-left pointer" id="shft-inst-pln-l" title="Shift Plan to Previous Month" style="float: Left;"> </i>
+                    <i class="fas fa-angle-double-right pointer" id="shft-inst-pln-r" title="Shift Plan to Next Month" style="float: right;"> </i>
+                </div>
+                <div class="col-md-2">
+                    <i class="fa fa-plus pointer installment-plan-row-add" id="" data-toggle="modal" data-target="#Modal" title="Add Row" style="float: right;color: #3ADBA6"> </i>
+                </div>
+                <div class="col-md-2">
+                    <i class="fas fa-exchange-alt pointer" id="ch-inst-plan" data-toggle="modal" data-target="#Modal" title="Change Installment Plan" style="float: right;"> </i>
+                </div>
+            </div>
+            <table class="table table-striped table-bordered" cellspacing="0" width="100%" style="margin-bottom:0px">
+                <thead class="thead-dark">
+                    <tr>
+                        @*<th><button class="btn btn-primary" id="cr-ins-plan">Update Installment Plan</button></th>*@
+
+                        <th>
+                            @if (Model.PlotData.Status == "Registered")
+                            {
+                                <button class="btn btn-secondary" id="on-btn-man" name="rece-btn-man" data-toggle="modal" data-target="#Modal">Online Receipts</button>
+                            }
+                        </th>
+
+                    </tr>
+                </thead>
+            </table>
+            <div style="min-height:0px; max-height:500px;overflow:auto" class=" ps--active-y">
+
+                <table class="table table-striped table-bordered" id="all-instments" cellspacing="0" width="100%">
+                    <tbody>
+                        @{
+                            int pltinser = 1;
+                            foreach (var item in Model.PlotInstallments)
+                            {
+                                <tr data-toggle="modal" data-target="#Modal" id="@item.Id" class="Ins__rec__upd">
+                                    <td>@pltinser</td>
+                                    <td>@item.Installment_Name</td>
+                                    <td>@string.Format("{0:0,0.##}", item.Amount)</td>
+                                    <td>@string.Format("{0:dd-MMM-yyyy}", item.DueDate)</td>
+                                    @if (User.IsInRole("Delete Plot Installement"))
+                                    {
+                                        <td>
+                                            <i class="fa fa-plus pointer installment-plan-row-add" data-toggle="modal" data-target="#Modal" title="Add an Installment"></i>
+                                            &nbsp;&nbsp;|&nbsp;&nbsp;
+                                            <i class="pointer fa fa-trash installment-plan-row-del" title="Delete Installment" data-ins-id="@item.Id" data-ins-name="@item.Installment_Name"></i>
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td></td>
+                                    }
+                                </tr>
+                                pltinser++;
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="col-md-7">
+            @foreach (var g in Model.PlotReceipts.GroupBy(x => x.Type))
+            {
+                <table class="table table-striped table-bordered" id="rec-amts" cellspacing="0" width="100%" style="margin-bottom:0px">
+                    <thead class="thead-dark">
+                        <tr><th>@g.Key</th></tr>
+                        <tr>
+                            <th>Sr.</th>
+                            <th>Receipt No.</th>
+                            <th>Amount</th>
+                            <th>Date</th>
+                            <th>Type</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{ int srcount = 1;
+                            foreach (var item in g)
+                            {
+                                <tr id="@item.Id">
+                                    <td>@srcount</td>
+                                    <td class="rece-num">@item.ReceiptNo</td>
+                                    <td class="rece-amt">@string.Format("{0:0,0.##}", item.Amount)</td>
+                                    <td>@string.Format("{0:dd-MMM-yyyy}", item.DateTime)</td>
+                                    <td class="rece-type">@item.PaymentType</td>
+                                    <td>
+                                        <ul style="list-style:none;margin-left:0px;">
+                                            <li class="dropdown">
+                                                <a href="" class="dropdown-toggle no-after peers " data-toggle="dropdown">
+                                                    <i class="ti-more-alt  c-grey-900" style="transform:rotate(90deg);"></i>
+                                                </a>
+                                                <ul class="dropdown-menu" style="padding:10px;width:auto !important">
+                                                    <li><a id="@item.Id" class="pointer get-rec-data" data-toggle="modal" data-target="#Modal"><span>Update</span></a></li>
+                                                    <hr />
+                                                    @*<li><a id="" class="del-rec pointer"><span>Delete</span></a></li>*@
+                                                    <hr />
+                                                    <li><a id="" class="rece-refund-pop pointer" data-toggle="modal" data-target="#Modal"><span>Refund</span></a></li>
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                    </td>
+                                    @*<td><i class="ti-close del-rec"></i><i class="ti-pulse ref-amt-plt"></i></td>*@
+                                </tr>
+                                srcount++;
+                            }
+                        }
+                    </tbody>
+                </table>
+            }
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="col-md-8" id="plot-rep">
+        </div>
+        <div class="col-md-4">
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('#plot-rep').load('/Plots/PlotInstallmentsReports/', { Plotid: @Model.PlotData.Id});
+    })
+    $(document).ready(function () {
+        $('.add__Owner__from__plts').unbind().click(function () {
+            debugger
+            let iden = $(this).attr('data-id');
+            let strct = `<div class="row own-row-dat" data-id="${iden}" id = "${iden}">
+                                <div class="col-md-12">
+                                    <div class="form-row">
+                                        <div class="form-group col-md-3">
+                                            <label>Ownership Status</label>
+                                            <select class="form-control Ownership_Status" id="Ownership_Status" name="" readonly>
+                                                <option value="">Select Ownership</option>
+                                                <option value="Owner">Owner</option>
+                                                <option value="Transfered">Transfered</option>
+                                                <option value="Cancelled">Cancelled</option>
+                                                <option value="Pending">Pending</option>
+                                            </select>
+                                        </div>
+<div class="form-group col-md-3">
+    <label>Name</label>
+    <input type="text" class="form-control Name" name="">
+</div>
+<div class="form-group col-md-3">
+    <label>Father's/Husband's Name</label>
+    <input type="text" class="form-control Father_Husband" name="">
+</div>
+<div class="form-group col-md-3">
+    <label>CNIC / NICOP</label>
+    <input type="text" class="form-control CNIC_NICOP" name="" placeholder="12345-1234567-1   or   123456-123456-1">
+</div>
+<div class="form-group col-md-2">
+    <label>Date Of Birth</label>
+    <input type="text" class="form-control Date_Of_Birth" data-provide="datepicker" placeholder="mm/dd/yyyy" name="">
+</div>
+<div class="form-group col-md-6">
+    <label>Postal Address</label>
+    <input type="text" class="form-control Postal_Address" name="" placeholder="1234 Main St">
+</div>
+<div class="form-group col-md-6">
+    <label>Residential Address</label>
+    <input type="text" class="form-control Residential_Address" name="" placeholder="Apartment, Plot, or floor">
+</div>
+<div class="form-group col-md-2">
+    <label>City</label>
+    <input type="text" class="form-control City">
+</div>
+<div class="form-group col-md-3">
+    <label>Occupation</label>
+    <input type="text" class="form-control Occupation" name="">
+</div>
+<div class="form-group col-md-2">
+    <label>Nationality</label>
+    <input type="text" class="form-control Nationality" name="">
+</div>
+<div class="form-group col-md-3">
+    <label>Email</label>
+    <input type="text" class="form-control Email" name="">
+</div>
+                                    </div>
+<div class="form-row">
+    <div class="form-group col-md-3">
+        <label>Phone Office</label>
+        <input type="text" class="form-control Phone_Office" name="">
+    </div>
+    <div class="form-group col-md-3">
+        <label>Residential</label>
+        <input type="text" class="form-control Residential" name="">
+    </div>
+
+    <div class="form-group col-md-3">
+        <label>Mobile 1</label>
+        <input type="text" class="form-control Mobile_1" placeholder="03121234567" name="">
+    </div>
+
+    <div class="form-group col-md-3">
+        <label>Mobile 2</label>
+        <input type="text" class="form-control Mobile_2" pattern="^0\d{10}" placeholder="03121234567" name="">
+    </div>
+    <div class="form-group col-md-3">
+        <label>Date of Ownership</label>
+        <input type="text" class="form-control Ownership_DateTime" data-provide="datepicker"  name="">
+    </div>
+<div class="form-group col-md-6" style="margin:auto;">
+                                            <h6 style="width: auto;float: left;margin: 7px;">Filer</h6>
+                                            <label class="switch"><input type="checkbox" class="IsFiler"><span class="slider round"></span></label>
+                                        </div>
+</div>
+<h6 class="c-grey-900">Nominee</h6>
+<div class="form-row">
+    <div class="form-group col-md-3">
+        <label>Name</label>
+        <input type="text" class="form-control Nominee_Name" name="">
+    </div>
+    <div class="form-group col-md-2">
+        <label>CNIC / NICOP</label>
+        <input type="text" class="form-control Nominee_CNIC_NICOP"  placeholder="12345-1234567-1 or 123456-123456-1" name="">
+    </div>
+    <div class="form-group col-md-2">
+        <label>Relation</label>
+        <input class="form-control Nominee_Relation" name="" placeholder="">
+    </div>
+    <div class="form-group col-md-5">
+        <label>Address</label>
+        <input type="text" class="form-control Nominee_Address" name="" placeholder="1234 Main St">
+    </div>
+</div>
+<div class="form-row">
+    <div class="col-md-3">
+        <img style="margin-top:10px" width="200" height="200" id="own_img" />
+        <input type="button" class="btn btn-primary own-img add-own-img" id="add-own-img1" style="margin-top:10px;display:none" data-toggle="modal" value="Add Image" data-target="#Modal" />
+    </div>
+</div>
+<div class="form-row">
+    <div class="col-md-2">
+        <button class="btn btn-success sav-new-own-info-jkshfd-yuie" style="margin-top:5px;" id="">Add Ownership</button>
+    </div>
+</div>
+                                </div>
+                            </div><br/>`;
+
+            //$('.' + iden).append(strct);
+            $('.Tran-own').append(strct); 
+        });
+    });
+
+
+    $(document).off("click", ".sav-new-own-info-jkshfd-yuie").on("click", ".sav-new-own-info-jkshfd-yuie", function () {
+        debugger
+        var that = $(this);
+        //$(that).prop('disabled', true);
+        var id = $(this).closest(".own-row-dat").attr("id");
+        var prnt = $(this).closest(".own-row-dat");
+        var plotowndata = {
+            Plot_Size: $(prnt).find(".pl-size").val(),
+            Name: $(prnt).find(".Name").val(),
+            Father_Husband: $(prnt).find(".Father_Husband").val(),
+            Postal_Address: $(prnt).find(".Postal_Address").val(),
+            Residential_Address: $(prnt).find(".Residential_Address").val(),
+            Phone_Office: $(prnt).find(".Phone_Office").val(),
+            Residential: $(prnt).find(".Residential").val(),
+            Mobile_1: $(prnt).find(".Mobile_1").val(),
+            Mobile_2: $(prnt).find(".Mobile_2").val(),
+            Email: $(prnt).find(".Email").val(),
+            Occupation: $(prnt).find(".Occupation").val(),
+            Nationality: $(prnt).find(".Nationality").val(),
+            Date_Of_Birth: $(prnt).find(".Date_Of_Birth").val(),
+            CNIC_NICOP: $(prnt).find(".CNIC_NICOP").val(),
+            Ownership_DateTime: $(prnt).find(".Ownership_DateTime").val(),
+            Nominee_Name: $(prnt).find(".Nominee_Name").val(),
+            Nominee_Relation: $(prnt).find(".Nominee_Relation").val(),
+            Nominee_Address: $(prnt).find(".Nominee_Address").val(),
+            Nominee_CNIC_NICOP: $(prnt).find(".Nominee_CNIC_NICOP").val(),
+            DateTime: $(prnt).find(".DateTime").val(),
+            Ownership_Status: $(prnt).find(".Ownership_Status").val(),
+            Plot_Id: $("#plt-id").val(),
+            GroupTag: id,
+            Total_Price: $("#plt-price").val(),
+            City: $(prnt).find(".City").val(),
+            IsFiler: $(prnt).find(".IsFiler").is(':checked'),
+        }
+        if (plotowndata.Name == null || plotowndata.Name.trim() == "") {
+            alert("Please Enter Name");
+            return false;
+        }
+        else if (plotowndata.CNIC_NICOP == null || plotowndata.CNIC_NICOP.trim() == "") {
+            alert("Please CNIC");
+            return false;
+        }
+        else if (plotowndata.Ownership_DateTime == null || plotowndata.Ownership_DateTime.trim() == "") {
+            alert("Ownership Date");
+            return false;
+        }
+        $.ajax({
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            url: '/Plots/AddNewPlotOwner/',
+            data: JSON.stringify(plotowndata),
+            success: function (result) {
+                $(that).hide();
+                alert(result.message);
+                //alert("Data Updated");
+            },
+            error: function (result) {
+                alert(result.message);
+            }
+        });
+    });
+    //
+    $(document).on('click','.installment-plan-row-del',function () {
+        var id = $(this).attr('data-ins-id');
+        var insname = $(this).attr('data-ins-name');
+        if (insname != "Advance") {
+            var reason = prompt("Reason");
+            if (reason != "" && reason != null) {
+                $.ajax({
+                    type: "POST",
+                    url: '/Plots/DeletePlotInstallment/',
+                    data: { insId: id, comment: reason },
+                    success: function (data) {
+                        alert(insname + " deleted successfully.");
+                        window.location.reload();
+                    },
+                    error: function () {
+                        alert("Error Occured");
+                    }
+                });
+            }
+        }
+        else {
+            alert("Advance cannot be deleted.");
+        }
+    });
+
+</script>

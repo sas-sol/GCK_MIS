@@ -1,0 +1,55 @@
+﻿@model MeherEstateDevelopers.Models.NewConnectionCharges
+@if (Model != null)
+{
+    using (Html.BeginForm("PayNewConnectionCharges", "ServiceCharges", FormMethod.Post, new { @id = "pay-con-char", @class = "", role = "form", autocomplete = "off" }))
+    {
+        @Html.AntiForgeryToken()
+        <input type="hidden" value="@Model.PlotData.Id" name="PlotId" />
+        <input type="hidden" id="trans-id" name="TransactionId" value="@ViewBag.TransactionId" />
+        <input type="hidden" value="@Model.Conch.Connection_Name" name="Connection" />
+        <div class="bgc-white p-20 bd">
+            <div class="mT-30">
+                <div class="form-row row">
+                    <div class="col-md-12">
+                        <div class="form-row">
+                            <div class="form-group col-md-1">
+                                <label>Plot No.</label>
+                                <h5 id="plt-no">@Model.PlotData.Plot_No</h5>
+                            </div>
+                            <div class="form-group col-md-1">
+                                <label>Block</label>
+                                <h5 id="plt-blk">@Model.PlotData.Block_Name</h5>
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label>Type</label>
+                                <h5 id="plt-type">@Model.PlotData.Type</h5>
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label>Name</label>
+                                <h5 id="nam">@string.Join(" , ",Model.OwnerData.Select(x=>x.Name))</h5>
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label>Connection Charges</label>
+                                <h5 id="nam">@Model.Conch.Charges</h5>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <button class="btn btn-info" type="submit" id="pay-con-char-btn">Generate Receipt</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <hr />
+
+        </div>
+    }
+}
+else
+{
+    <div class="bgc-white p-20 bd">
+        <h5 class="c-grey-900">No Record Found</h5>
+    </div>
+}
+
+

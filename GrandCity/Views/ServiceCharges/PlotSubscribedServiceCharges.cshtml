@@ -1,0 +1,104 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Sp_Get_PlotServiceChargesTypeList_Result>
+@using (Html.BeginForm("CreateCharges", "ServiceCharges", FormMethod.Post, new { @id = "", @class = "", role = "form" }))
+{
+    @Html.AntiForgeryToken();
+    <div id="ser-ch-list">
+        <table class="table table-striped table-bordered" width="800">
+            <thead>
+                <tr>
+                    <th colspan="2">Develop Status</th>
+                    <th colspan="2" id="dev-stat"></th>
+                </tr>
+                <tr>
+                    <th style="width:50px">Sr.</th>
+                    <th style="width:250px">Service Charges</th>
+                    <th style="width:250px">Rate</th>
+                    <th style="width:250px">Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+
+                    decimal? total = 0;
+                    int sr = 1;
+                    foreach (var item in Model)
+                    {
+                        if (sr == 1)
+                        {
+                            <script>
+                                var text = "@item.Develop_Status";
+                                $("#dev-stat").text(text);
+                            </script>
+                        }
+                        if (item.Develop_Status == "Constructed")
+                        {
+                            <tr>
+                                <td>@sr</td>
+                                <td>@item.Service_Charge_Name</td>
+                                @{
+                                    if (item.Type == "Constant")
+                                    {
+                                        <td> @Convert.ToDecimal(item.Rate).ToString("0.##")</td>
+                                        <td>@Convert.ToDecimal(item.Rate).ToString("0.##")</td>
+                                        total += item.Rate;
+                                    }
+                                    else if (item.Type == "Size")
+                                    {
+                                        <td> @Convert.ToDecimal(item.Rate).ToString("0.##")</td>
+                                        <td>@Convert.ToDecimal(item.Rate).ToString("0.##")</td>
+                                        total += item.Rate;
+                                    }
+
+                                    else
+                                    {
+                                        var res = item.Plot_Size * item.Rate;
+                                        <td>@Convert.ToDecimal(item.Rate).ToString("0.##") x @Convert.ToDecimal(item.Plot_Size).ToString("0.##") Marla</td>
+                                        <td>@Convert.ToDecimal(res).ToString("0.##")</td>
+                                        total += res;
+                                    }
+                                }
+                            </tr>
+                            sr++;
+                        }
+                        else
+                        {
+                            <tr>
+                                <td>@sr</td>
+                                <td>@item.Service_Charge_Name</td>
+                                @{
+                                    if (item.Type == "Constant")
+                                    {
+                                        var newrate = ((item.Rate * 75) / 100);
+                                        <td> @Convert.ToDecimal(item.Rate).ToString("0.##") - 75%</td>
+                                        <td>@Convert.ToDecimal(newrate).ToString("0.##")  </td>
+                                        total = total + newrate;
+                                    }
+                                    else if (item.Type == "Size")
+                                    {
+                                        var newrate = ((item.Rate * 75) / 100);
+                                        <td> @Convert.ToDecimal(item.Rate).ToString("0.##") - 75%</td>
+                                        <td>@Convert.ToDecimal(newrate).ToString("0.##")  </td>
+                                        total = total + newrate;
+                                    }
+                                    else
+                                    {
+                                        var res = item.Plot_Size * item.Rate;
+                                        res = ((res * 75) / 100);
+                                        <td>@Convert.ToDecimal(item.Rate).ToString("0.##") x @Convert.ToDecimal(item.Plot_Size).ToString("0.##") Marla - 75%</td>
+                                        <td>@Convert.ToDecimal(res).ToString("0.##")</td>
+                                        total = total + res;
+                                    }
+                                }
+                            </tr>
+                            sr++;
+                        }
+                    }
+                    <tr>
+                        <td colspan="3" align="right"><b>Grand Total</b></td>
+                        <td>@Convert.ToDecimal(total).ToString("0.##")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}

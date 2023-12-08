@@ -1,0 +1,54 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Vendor>
+
+
+
+@{
+    /**/
+
+    if (!Model.Any())
+    {
+        <div>No Data Available</div>
+    }
+    else
+    {
+        <h4>Vendor Info</h4>
+        <div class="form-row">
+            <div class="form-group col-md-2" style="display: block;">
+                <label>Company</label><br />
+            </div>
+            <div class="form-group col-md-2" style="display: block;">
+                <label>Adress</label><br />
+            </div>
+            <div class="form-group col-md-2" style="display: block;">
+                <label>City</label><br />
+            </div>
+            <div class="form-group col-md-2" style="display: block;">
+                <label>Email</label><br />
+            </div>
+
+        </div>
+        foreach (var item in Model)
+        {
+
+            <div class="form-row  ">
+                <div class="form-group col-md-2" style="display: block;">
+                    <label>@item.Company </label>
+                </div>
+                <div class="form-group col-md-2" style="display: block;">
+                    <label>@item.Address </label>
+                </div>
+                <div class="form-group col-md-2" style="display: block;">
+                    <label>@item.City </label>
+                </div>
+                <div class="form-group col-md-2" style="display: block;">
+                    <label>@item.Email </label>
+                </div>
+
+            </div>
+        }
+        <div style="border:1px solid"></div>
+
+    }
+}
+
+

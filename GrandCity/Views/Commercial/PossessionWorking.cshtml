@@ -1,0 +1,157 @@
+﻿@model Management_Information_System.Models.CommercialPossessionDataModel
+@{
+    if (User.IsInRole("Administrator"))
+    { Layout = "~/Views/Shared/_AdminLayout.cshtml"; }
+    else { Layout = "~/Views/Shared/_StaffLayout.cshtml"; }
+}
+<div class="bgc-white p-20 bd">
+    <h3 style="text-align:center">Possession Request Details</h3>
+    <div class="form-row">
+        <div class="col-md-12">
+            <div class="form-row">
+                <div class="form-group col-md-1">
+                    <label>Shop No.</label>
+                    <h5 id="plt-no">@Model.CommercialDetails.shop_no</h5>
+                    <input type="hidden" class="form-control" id="plt-id" name="Plot_Id" value="@Model.CommercialDetails.Id" readonly>
+                </div>
+                <div class="form-group col-md-1">
+                    <label>Shop Area</label>
+                    <h5 id="plt-size">@Model.CommercialDetails.Area Sqft.</h5>
+                </div>
+                <div class="form-group col-md-1">
+                    <label>Project</label>
+                    <h5 id="plt-size">@Model.CommercialDetails.Project_Name</h5>
+                </div>
+                <div class="form-group col-md-2">
+                    <label>Type</label>
+                    <h5 id="plt-type">@Model.CommercialDetails.Type</h5>
+                </div>
+                <div class="form-group col-md-2">
+                    <label>Dimension</label>
+                    <h5 id="plt-dim">@Model.CommercialDetails.Dimension</h5>
+                </div>
+                @*<div class="form-group col-md-2">
+                    <label>Status</label>
+                    <h5 id="plt-status"> @Model.CommercialDetails.Develop_Status.Replace('_', ' ')</h5>
+                </div>*@
+                <div class="form-group col-md-1">
+                    <label>Floor</label>
+                    <h5 id="plt-road">@Model.CommercialDetails.Floor</h5>
+                </div>
+                <div class="form-group col-md-1">
+                    <label>Area</label>
+                    <h5 id="plt-area">@Convert.ToDecimal(Model.CommercialDetails.Area).ToString("0.##") Sq-Ft</h5>
+                </div>
+                @*<div class="form-group col-md-2">
+                    <label>Location</label>
+                    <h5 id="plt-loc">@Model.CommercialDetails.Plot_Location</h5>
+                </div>*@
+            </div>
+        </div>
+    </div>
+    <hr />
+    <div class="form-row">
+        <div class="form-group col-md-3">
+            <label>Name</label>
+            <input type="text" class="form-control" name="Name" value="@string.Join(" , ",Model.CommercialOwnersDetails.Select(x=>x.Name))" readonly>
+        </div>
+        <div class="form-group col-md-3">
+            <label>Father's/Husband's Name</label>
+            <input type="text" class="form-control" name="Father_Husband" value="@string.Join(" , ",Model.CommercialOwnersDetails.Select(x=>x.Father_Husband))" readonly>
+        </div>
+        <div class="form-group col-md-3">
+            <label>CNIC / NICOP</label>
+            <input type="text" class="form-control" name="CNIC_NICOP" value="@string.Join(" , ",Model.CommercialOwnersDetails.Select(x=>x.CNIC_NICOP))" placeholder="12345-1234567-1   or   123456-123456-1" readonly>
+        </div>
+        <div class="form-group col-md-2">
+            <label>Date Of Birth</label>
+            <input type="text" class="form-control" data-provide="datepicker" value="@string.Join(" , ",Model.CommercialOwnersDetails.Select(x=>x.Date_Of_Birth))" placeholder="mm/dd/yyyy" name="Date_Of_Birth" readonly>
+        </div>
+        <div class="form-group col-md-6">
+            <label>Postal Address</label>
+            <input type="text" class="form-control" name="Postal_Address" value="@string.Join(" , ",Model.CommercialOwnersDetails.Select(x=>x.Postal_Address))" placeholder="1234 Main St" readonly>
+        </div>
+        <div class="form-group col-md-6">
+            <label>Residential Address</label>
+            <input type="text" class="form-control" name="Residential_Address" value="@string.Join(" , ",Model.CommercialOwnersDetails.Select(x=>x.Residential_Address))" placeholder="Apartment, Plot, or floor" readonly>
+        </div>
+        <div class="form-group col-md-2">
+            <label>City</label>
+            <input type="text" class="form-control" value="@string.Join(" , ",Model.CommercialOwnersDetails.Select(x=>x.City))" readonly>
+        </div>
+        <div class="form-group col-md-3">
+            <label>Occupation</label>
+            <input type="text" class="form-control" value="@string.Join(" , ",Model.CommercialOwnersDetails.Select(x=>x.Occupation))" name="Occupation" readonly>
+        </div>
+        <div class="form-group col-md-2">
+            <label>Nationality</label>
+            <input type="text" class="form-control" value="@string.Join(" , ",Model.CommercialOwnersDetails.Select(x=>x.Nationality))" name="Nationality" readonly>
+        </div>
+        <div class="form-group col-md-3">
+            <label>Email</label>
+            <input type="text" class="form-control" value="@string.Join(" , ",Model.CommercialOwnersDetails.Select(x=>x.Email))" name="Email" readonly>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-3">
+            <label>Phone Office</label>
+            <input type="text" class="form-control" value="@string.Join(" , ",Model.CommercialOwnersDetails.Select(x=>x.Phone_Office))" name="Phone_Office" readonly>
+        </div>
+        <div class="form-group col-md-3">
+            <label>Residential</label>
+            <input type="text" class="form-control" value="@string.Join(" , ",Model.CommercialOwnersDetails.Select(x=>x.Residential))" name="Residential" readonly>
+        </div>
+        <div class="form-group col-md-3">
+            <label>Mobile 1</label>
+            <input type="text" class="form-control" value="@string.Join(" , ",Model.CommercialOwnersDetails.Select(x=>x.Mobile_1))" placeholder="03121234567" name="Mobile_1" readonly>
+        </div>
+        <div class="form-group col-md-3">
+            <label>Mobile 2</label>
+            <input type="text" class="form-control" value="@string.Join(" , ",Model.CommercialOwnersDetails.Select(x=>x.Mobile_2))" pattern="^0\d{10}" placeholder="03121234567" name="Mobile_2" readonly>
+        </div>
+    </div>
+    <h5>Nominee</h5>
+    <div class="form-row">
+        <div class="form-group col-md-3">
+            <label>Name</label>
+            <input type="text" class="form-control" value="@string.Join(" , ",Model.CommercialOwnersDetails.Select(x=>x.Nominee_Name))" name="Nominee_Name" readonly>
+        </div>
+        <div class="form-group col-md-2">
+            <label>CNIC / NICOP</label>
+            <input type="text" class="form-control" value="@string.Join(" , ",Model.CommercialOwnersDetails.Select(x=>x.Nominee_CNIC_NICOP))" placeholder="12345-1234567-1 or 123456-123456-1" name="Nominee_CNIC_NICOP" readonly>
+        </div>
+        <div class="form-group col-md-2">
+            <label>Relation</label>
+            <input class="form-control" value="@string.Join(" , ",Model.CommercialOwnersDetails.Select(x=>x.Nominee_Relation))" name="Nominee_Relation" placeholder="" readonly>
+        </div>
+        <div class="form-group col-md-5">
+            <label>Address</label>
+            <input type="text" class="form-control" value="@string.Join(" , ",Model.CommercialOwnersDetails.Select(x=>x.Nominee_Address))" name="Nominee_Address" placeholder="1234 Main St" readonly>
+        </div>
+    </div>
+    <div class="form-row">
+        @foreach (var v in Model.CommercialOwnersDetails)
+        {
+            <div class="col-md-3">
+                <img style="margin-top:10px" src="@v.Owner_Image1" width="200" height="200" id="own_img" />
+                @*<input type="button" class="btn btn-info own-img add-own-img" id="add-own-img1" style="margin-top:10px;display:none" data-toggle="modal" value="Add Image" data-target="#Modal" />*@
+            </div>
+        }
+    </div>
+    <hr />
+    <h5 style="text-align:center">Possession Details</h5>
+    <div id="bound-det-tab">            </div>
+
+    <script>
+        $('.btn_gen__poss').hide();
+    </script>
+</div>
+<style>
+    table tr td {
+        padding: 2px;
+        text-align: center
+    }
+</style>
+<script>
+    $("#bound-det-tab").load('/Commercial/CommercialBounding/', { id: @Model.CommercialDetails.Id });
+</script>

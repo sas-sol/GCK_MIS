@@ -1,0 +1,175 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.PaymentTypes_Report>
+<div id="transfercontainer" style="min-width: 310px; height: 400px; max-width: 600px; margin: 0 auto"></div>
+<input type="hidden" id="t-f-date" value="@ViewBag.From" />
+<input type="hidden" id="t-t-date" value="@ViewBag.To" />
+<script>
+  var colors = Highcharts.getOptions().colors,
+        categories = @Html.Raw(Json.Encode(ViewBag.Categories)),
+        data = @Html.Raw(Json.Encode(Model)),
+        browserData = [],
+        versionsData = [],
+        i,
+        j,
+        dataLen = data.length,
+        drillDataLen,
+        brightness;
+    // Build the data arrays
+    for (i = 0; i < dataLen; i += 1) {
+
+        // add browser data
+        browserData.push({
+            name: categories[i],
+            y: data[i].y,
+            color: data[i].color
+        });
+
+        // add version data
+        drillDataLen = data[i].drilldown.data.length;
+        for (j = 0; j < drillDataLen; j += 1) {
+            brightness = 0.2 - (j / drillDataLen) / 5;
+            versionsData.push({
+                name: data[i].drilldown.categories[j],
+                y: data[i].drilldown.data[j],
+                color: Highcharts.color(data[i].color).brighten(brightness).get()
+            });
+        }
+    }
+    // Create the chart
+    Highcharts.chart('transfercontainer', {
+        chart: {
+            type: 'pie'
+        },
+        title: {
+            text: 'Plot Transfers '
+        },
+        subtitle: {
+            text: ''
+        },
+        plotOptions: {
+            pie: {
+                shadow: false,
+                center: ['50%', '50%']
+            },
+            series: {
+                cursor: 'pointer',
+                point: {
+                    events: {
+                        click: function () {
+                            var f = $("#t-f-date").val();
+                            var t = $("#t-t-date").val();
+                            var block = this.name;
+                            $("#tans-plt-lst").slideDown("slow", function () {
+                                $.post("/Reports/PlotTranferList/", { Block: block, Startdate: f, Enddate: t }, function (data) {
+                                    $("#tans-plt-lst").empty();
+                                    var html = `<table class="table">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Sr.</th>
+                                                            <th>Plot Number</th>
+                                                            <th>-</th>
+                                                            <th>Type</th>
+                                                            <th>Block</th>
+                                                            <th>Plot Size</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    </tbody>
+                                                </table>`;
+                                    $("#tans-plt-lst").append(html);
+                                    $.each(data, function (a) {
+                                        var count = a + 1;
+                                        if (data[a].Sector == null) {
+                                            var html1 = `<tr>
+                                                    <td>${count}</td>
+                                                    <td>${data[a].File_Plot_Number}</td>
+                                                    <td>-</td>
+                                                    <td>${data[a].Plot_Type}</td>
+                                                    <td>${data[a].Block}</td>
+                                                    <td>${data[a].Size}</td>
+                                                </tr>`;
+                                            $("#tans-plt-lst table tbody").append(html1);
+                                        }
+                                        else {
+                                            var html1 = `<tr>
+                                                    <td>${count}</td>
+                                                    <td>${data[a].File_Plot_Number}</td>
+                                                    <td>Sector-${data[a].Sector}</td>
+                                                    <td>${data[a].Plot_Type}</td>
+                                                    <td>${data[a].Block}</td>
+                                                    <td>${data[a].Size}</td>
+                                                </tr>`;
+                                            $("#tans-plt-lst table tbody").append(html1);
+                                        }
+                                 
+                                    });
+                                    var t = $('#tans-plt-lst table').DataTable({
+                                        "columnDefs": [{
+                                            "searchable": false,
+                                            "orderable": false,
+                                            "targets": 0
+                                        }],
+                                        "order": [[1, 'asc']]
+                                    });
+
+                                    t.on('order.dt search.dt', function () {
+                                        t.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
+                                            cell.innerHTML = i + 1;
+                                        });
+                                    }).draw();
+                                });
+                            });
+                            return false;
+                        }
+                    }
+                }
+            }
+        },
+        tooltip: {
+            formatter: function () {
+                return this.key + ': <b>' + this.y + '</b>';
+            },
+            valueSuffix: ''
+        },
+        series: [{
+            name: 'Block',
+            data: browserData,
+            size: '60%',
+            dataLabels: {
+                formatter: function () {
+                    return this.y > 5 ? this.point.name : null;
+                },
+                color: '#ffffff',
+                distance: -30
+            }
+        }, {
+            name: 'Type',
+            data: versionsData,
+            size: '80%',
+            innerSize: '60%',
+            dataLabels: {
+                formatter: function () {
+                    // display only if larger than 1
+                    return this.y > 1 ? '<b>' + this.point.name + ':</b> ' +
+                        this.y + '' : null;
+                }
+            },
+                id: 'Types'
+        }],
+        responsive: {
+            rules: [{
+                condition: {
+                    maxWidth: 400
+                },
+                chartOptions: {
+                    series: [{
+                    }, {
+                        id: 'Types',
+                        dataLabels: {
+                            enabled: false
+                        }
+                    }]
+                }
+            }]
+        }
+    });
+</script>

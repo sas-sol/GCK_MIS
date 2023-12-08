@@ -1,0 +1,34 @@
+﻿@{ if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+}
+
+<div class="col-md-12 p-20 bgc-white">
+    <h5 style="text-align:center;">Plots Module Configuration</h5>
+    <hr />
+
+    <div class="row trans-fee-config-area">
+        @{ Html.RenderAction("TransferFeesConfiguration", "Plots");}
+    </div>
+
+    <div class="row trans-fee-config-area-file">
+        @{ Html.RenderAction("File_TransferFeesConfiguration", "FileSystem");}
+    </div>
+
+    <div class="row trans-fee-config-area-file">
+        @{ Html.RenderAction("CommercialTransferFeeConfiguration", "Commercial");}
+    </div>
+
+    <div class="row tax-config-area mt-md-3">
+        @{ Html.RenderAction("TransferFeeConfig", "Plots");}
+    </div>
+
+    <div class="row tax-config-area mt-md-3">
+        @{ Html.RenderAction("DiscountConfiguration", "Plots");}
+    </div>
+</div>

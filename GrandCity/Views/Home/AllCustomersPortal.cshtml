@@ -1,0 +1,108 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Sp_Get_AllCustomer_Portal_Result>
+
+
+@{
+    if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+}
+<h3>Customers Portal Users</h3>
+<table id="portal" class="table table-striped table-bordered " cellspacing="0" width="100%">
+    <thead class="thead-dark">
+        <tr>
+            <th>Sr.</th>
+            <th>Name</th>
+            <th>Father / Husband </th>
+            <th>Email</th>
+            <th>CNIC</th>
+            <th>Phone</th>
+            <th>OTP</th>
+            <th>Show Password</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            if (!Model.Any())
+            {
+                <tr><td colspan="7" style="text-align:center">No data available</td></tr>
+            }
+            else
+            {
+                int sr = 1;
+                foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@sr</td>
+                        <td>@item.Name</td>
+                        <td>@item.Father_Husband</td>
+                        <td class="email">@item.Email</td>
+                        <td class="cnic">@item.CNIC</td>
+                        <td class="phone">@item.Phone</td>
+                        <td>@item.OTP</td>
+                        <td>
+                            <i class="fas fa-eye dis-pasw" id="@item.Password"></i>
+                            <i class="fas fa-trash dlt-usr " title="Delete Account"></i>
+                        </td>
+                    </tr>
+                    sr++;
+                }
+            }
+        }
+    </tbody>
+</table>
+<script>
+    $(document).ready(function () {
+        $('#portal').DataTable({
+            dom: 'Bfrtip'
+        });
+    });
+
+    // Final Cancelatio of file
+    $(document).on("click", ".dis-pasw", function (e) {
+        e.preventDefault();
+        var pword = $(this).attr('id');
+        var con = confirm("Are you sure you want to Show Password");
+        if (con) {
+            $.ajax({
+                type: "POST",
+                url: '/Home/GetPassword/',
+                data: { Password: pword },
+                success: function (data) {
+                    alert(data);
+                },
+                error: function () {
+                    alert("Error Occured");
+                    $('#gen-rec').attr("disabled", false);
+                }
+            });
+        }
+    });
+
+    $(document).on("click", ".dlt-usr", function (e) {
+        e.preventDefault();
+        var id = $(this).closest('tr').find('.email').text();
+        var email = $(this).closest('tr').find('.email').text();
+        var cnic = $(this).closest('tr').find('.cnic').text();
+        var phone = $(this).closest('tr').find('.phone').text();
+        var con = confirm("Are you sure you want to Delete Record");
+        if (con) {
+            $.ajax({
+                type: "POST",
+                url: '/Home/DeleteUser/',
+                data: { email: email, cnic: cnic, phone: phone },
+                success: function (data) {
+                    window.location.reload();
+                },
+                error: function () {
+                    alert("Error Occured");
+
+                }
+            });
+        }
+    });
+</script>

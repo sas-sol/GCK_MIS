@@ -1,0 +1,36 @@
+﻿
+<style>
+    #loanreason {
+        resize: none;
+    }
+</style>
+
+<link href="~/Content/bootstrap-material-datetimepicker.css" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<script src="~/Scripts/bootstrap-material-datetimepicker.min.js"></script>
+<input type="hidden" id="currmnthsal"  />
+<div class="email-app">
+    <div class="p-20 email-compose" id="loan_table_append">
+        <h4 class="c-grey-900 mB-20">Apply For Loan</h4>
+        <div class="col-md-12">
+            <div class="form-row">
+                <div class="form-group col-md-12">
+                    <label>Employee Name</label>
+                    @Html.DropDownList("Employee", null, "Choose..", new { @class = "form-control emp-det-raw" })
+                </div>
+            </div>
+        </div>
+        <hr />
+        <div class="col-md-12 oth-loan">
+
+        </div>
+    </div>
+
+</div>
+<script>
+    $(document).ready(function () {
+        $('.emp-det-raw').select2({
+            placeholder: 'Select an Employee',
+        });
+    });
+</script>

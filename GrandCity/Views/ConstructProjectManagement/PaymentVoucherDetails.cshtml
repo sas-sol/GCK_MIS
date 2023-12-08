@@ -1,0 +1,87 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Prj_Voucher_Req>
+@{
+    int count = 1;
+    string Status = Model.Select(x => x.Status).FirstOrDefault();
+    DateTime date = DateTime.Now;
+    long Group = Model.Select(x => x.Group_Id).FirstOrDefault();
+}
+@foreach (var g in Model.GroupBy(x => new { x.Milestone, x.Milestone_Id }))
+{
+    <div class="row">
+        <div class="form-row col-md-3">
+            <div class="form-group col-md-11">
+                <h5>@g.Key.Milestone</h5>
+            </div>
+        </div>
+        <div class="col-md-9">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Description</th>
+                        <th>Unit</th>
+                        <th>Qty</th>
+                        <th>Rate</th>
+                        <th>Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in g)
+                    {
+                        <tr>
+                            <td>@item.Description</td>
+                            <td>@item.Unit</td>
+                            <td>@item.Qty</td>
+                            <td>@item.Rate</td>
+                            <td>@item.Amount</td>
+                        </tr>
+                    }
+                    <tr>
+                        <td colspan="4"></td>
+                        <td>@g.Sum(x => x.Amount)</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+}
+    <div class="row">
+            <div class="form-row col-md-3">
+            </div>
+            <div class="col-md-9">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <td style="text-align:right" >@Model.Sum(x => x.Amount)</td>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+    </div>
+@if (Status == "Pending")
+{
+    <script>
+        $(function () {
+            $('.modal-footer').append('<button class="btn btn-primary" data-group="@Group" id="app-prj-pay-vou" type="button">Approved</button>');
+            $(".modal-header").text("Payment Voucher Request");
+        });
+    </script>
+}
+else if (Status == "Approved")
+{
+    <script>
+        $(function () {
+            $('.modal-footer').append('<button class="btn btn-primary" data-group="@Group" id="app-prj-pay-vou" type="button">Generate Voucher</button>');
+            $(".modal-header").text("Payment Voucher Details");
+        });
+    </script>
+}
+else if (Status == "Voucher_Printed")
+{
+<script>
+    $(function () {
+        //$('.modal-footer').append('<button class="btn btn-primary" id="cra-lead" type="button"></button>');
+        $(".modal-header").text("Payment Voucher Details");
+    });
+</script>
+}
+

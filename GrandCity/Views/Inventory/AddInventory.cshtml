@@ -1,0 +1,184 @@
+﻿@model MeherEstateDevelopers.Models.Inv_Dep
+<div class="col-md-12 mt-md-2">
+    <div class="form-row cal">
+        <div class="form-group col-md-2">
+            <label style="width:100%">Category</label>
+            @Html.DropDownList("Category", null, "Select Category", htmlAttributes: new { @class = "form-control" })
+        </div>
+        <div class="form-group col-md-2">
+            <label>Company</label>
+            <input type="text" class="form-control" id="comp" />
+        </div>
+        <div class="form-group col-md-4">
+            <label>Product</label>
+            <input type="text" class="form-control" id="name" />
+        </div>
+        <div class="form-group col-md-1">
+            <label style="width:100%">UOM</label>
+            <select style="padding:5px" class="form-control" id="uom"></select>
+        </div>
+        <div class="form-group col-md-2">
+            <label>Min Qty Level</label>
+            <input type="number" class="form-control" id="min-stk" placeholder="23,   56.65">
+        </div>
+        <div class="form-group col-md-2">
+            <label><span id="u-pk"></span> Packing</label>
+            <input type="number" class="form-control" id="pking" placeholder="">
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-md-2 len-div">
+            <label style="width:100%">Specifications</label>
+            <select style="float:left" class="form-control slwhd">
+                <option>Choose ..</option>
+                <option value="s">Size</option>
+                <option value="l">Length</option>
+                <option value="w">Width</option>
+                <option value="h">Height</option>
+                <option value="d">Diameter</option>
+            </select>
+        </div>
+        <div class="form-group col-md-2 len-div" style="display:none">
+            <label style="width:100%">Length <i class="ti-close" style="float:right;font-size:9px"></i></label>
+            <input type="number" style="float:left" class="form-control col-md-6" id="len">
+            <select style="float:left" class="form-control col-md-6 l-uom"></select>
+        </div>
+        <div class="form-group col-md-2 wid-div" style="display:none">
+            <label style="width:100%">Width<i class="ti-close" style="float:right;font-size:9px"></i></label>
+            <input style="float:left" type="number" class="form-control col-md-6" id="wid">
+            <select style="float:left" class="form-control col-md-6 w-uom"></select>
+        </div>
+        <div class="form-group col-md-2 hei-div" style="display:none">
+            <label style="width:100%">Height<i class="ti-close" style="float:right;font-size:9px"></i></label>
+            <input style="float:left" type="number" class="form-control col-md-6" id="hei">
+            <select style="float:left" class="form-control col-md-6 h-uom"></select>
+        </div>
+        <div class="form-group col-md-2 dia-div" style="display:none">
+            <label style="width:100%">Diameter<i class="ti-close" style="float:right;font-size:9px"></i></label>
+            <input style="float:left" type="number" class="form-control col-md-6 " id="dia">
+            <select style="float:left" class="form-control col-md-6 d-uom"></select>
+        </div>
+        <div class="form-group col-md-2 siz-div" style="display:none">
+            <label style="width:100%">Size<i class="ti-close" style="float:right;font-size:9px"></i></label>
+            <input style="float:left" type="text" class="form-control col-md-6 " id="siz">
+            <select style="float:left" class="form-control col-md-6 s-uom"></select>
+        </div>
+    </div>
+    @*Departments*@
+    <hr />
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label>Departments </label>
+            @Html.DropDownList("Department", null, "Select Department", htmlAttributes: new { @class = "form-control " })
+        </div>
+        <div class="form-group col-md-2">
+            <button class="btn btn-primary tag-inv-dep" style="margin-top:29px">Tag</button>
+        </div>
+        <div class="form-group col-md-4" id="invdep-s">
+            <h5>Departments</h5>
+            <div class="col-md-10 sel-inv-dep">
+            </div>
+        </div>
+        <hr />
+        <div class="form-row col-md-12">
+            <div class="form-group col-md-6">
+                <label>Description</label>
+                <input type="text" class="form-control" id="desc">
+            </div>
+            <div class="form-group col-md-2">
+                <label style="width:100%">Is Perishable</label>
+                <label class="switch"><input type="checkbox" id="is-per"><span class="slider round"></span></label>
+            </div>
+            <div class="form-group col-md-4">
+                <label>Head Code</label>
+                <select class="form-control head"></select>
+            </div>
+        </div>
+        <hr />
+    </div>
+</div>
+<script>
+    $(document).on("change", ".slwhd", function () {
+        var a = $(this).val();
+        switch (a) {
+            case 's':
+                $(".siz-div").show();
+                break;
+            case 'l':
+                $(".len-div").show();
+                break;
+            case 'w':
+                $(".wid-div").show();
+                break;
+            case 'h':
+                $(".hei-div").show();
+                break;
+            case 'd':
+                $(".dia-div").show();
+                break;
+        }
+    });
+    $(document).on("click", ".ti-close", function () {
+        $(this).closest('.col-md-2').hide();
+    });
+    $(document).on("click", ".del-invdep", function () {
+        $(this).closest('.col-md-2').hide();
+    });
+    $('.modal-footer').append('<button type="button" class="btn btn-primary sav-invt">Save</button>');
+    $(document).ready(function () {
+        $("#uom, .l-uom, .w-uom, .h-uom, .d-uom, .s-uom").append(unitlistg)
+    });
+    $(document).on("change", "#uom", function () {
+        var val = $(this).val();
+        $("#u-pk").text(val + "/")
+    });
+
+
+    $(".tag-inv-dep").unbind().click(function () {
+
+        var depId = $('#Department').val();
+        var depNam = $('#Department :selected').text();
+
+
+        var found = false;
+        $(".inv-dep-uytjhg").each(function (i, v) {
+            var id = $(this).attr("id");
+
+            if (depId == id) {
+                found = true;
+            }
+        });
+
+        if (!found && depId != "") {
+            var html = `<label class="inv-dep-uytjhg" id="${depId}" data-deptName="${depNam}">${depNam}&nbsp;<i class="fa fa-trash pointer del-invdep"></i></label>`;
+            $(".sel-inv-dep").append(html);
+        }
+
+
+    });
+
+    $('.head').select2({
+        dropdownParent: $('#Modal'),
+        placeholder: "Search for Head",
+        ajax: {
+            url: '/AccountHeads/GetHead/',
+            dataType: 'json',
+            params: {
+                contentType: 'application/json; charset=utf-8'
+            },
+            quietMillis: 100,
+            data: function (params) {
+                return {
+                    q: params.term// search term
+                };
+            },
+            processResults: function (data) {
+                return {
+                    results: data.items
+                };
+            }
+        }
+    });
+
+</script>

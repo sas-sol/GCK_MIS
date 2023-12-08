@@ -1,0 +1,171 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Sp_Get_All_Employess_Salaries_Result>
+<style>
+    table tr, table td, table th {
+        padding: 2px !important;
+        color: black !important;
+        font-family: Arial, Helvetica, sans-serif;
+    }
+
+    @@media print {
+        table.salary-id tr td, table.print-friendly tr th {
+            page-break-inside: avoid;
+        }
+
+        #sumary {
+            font-size: 13px
+        }
+    }
+</style>
+<div style="width:100%">
+    <img src="~/assets/static/images/meherestate-simple.png" style="float:left;margin: 1%;width: 100px;" />
+    <span style="float:right;width:150px;text-align:center">Powered by<img src="~/assets/static/images/sas.png" style="width:100px;height:60px;margin:0.5%" /></span>
+</div>
+<table class="table table-striped table-bordered" id="sumary">
+    <thead>
+        <tr>
+            @{ 
+                var month = DateTime.Now;
+            }
+            <th colspan="13" style="text-align:center"><font size="5">All Companies Salary Report <br /> @string.Format("{0:MMMM yyyy}", month)</font></th>
+        </tr>
+        <tr>
+            <th>Company Name</th>
+            @*<th>Previous Basic Salary</th>*@
+            @*<th>COLA</th>*@
+            <th>Basic Salary</th>
+            <th>Overtime</th>
+            <th>Allownces/Bonus</th>
+            <th>Gross Salary</th>
+            <th>Tax Deductions</th>
+            <th>Loan</th>
+            <th>Advance</th>
+            <th>Absentee</th>
+            <th>Other Deductions</th>
+            <th>Net Payable</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Where(x => x.Basic_salary > 0).GroupBy(x => new { x.CompanyName, x.CompanyId }).OrderByDescending(y=> y.Sum(x => Math.Round(Convert.ToDecimal( x.Gross_Salary)))))
+        {
+            <tr>
+                <td>@item.Key.CompanyName</td>
+                @*<td align="right">@string.Format("{0:n0}", item.Sum(x => Math.Round(Convert.ToDecimal(x.Previous_Basic_Salary)))) </td>*@
+                @*<td align="right">@string.Format("{0:n0}", item.Sum(x => Math.Round(Convert.ToDecimal(x.COLA_Amount)))) </td>*@
+                <td align="right">@string.Format("{0:n0}", item.Sum(x => Math.Round(Convert.ToDecimal(x.Basic_salary)))) </td>
+                <td align="right">@string.Format("{0:n0}", item.Sum(x => Math.Round(Convert.ToDecimal(x.Overtime)))) </td>
+                <td align="right">@string.Format("{0:n0}", item.Sum(x => Math.Round(Convert.ToDecimal(x.Allownces))) + item.Sum(x => Math.Round(Convert.ToDecimal(x.Bonus)))) </td>
+                <td align="right">@string.Format("{0:n0}", item.Sum(x => Math.Round(Convert.ToDecimal(x.Gross_Salary)))) </td>
+                <td align="right">@string.Format("{0:n0}", item.Sum(x => Math.Round(Convert.ToDecimal(x.Ded_Tax)))) </td>
+                <td align="right">@string.Format("{0:n0}", item.Sum(x => Math.Round(Convert.ToDecimal(x.Ded_Loan)))) </td>
+                <td align="right">@string.Format("{0:n0}", item.Sum(x => Math.Round(Convert.ToDecimal(x.Ded_Advance)))) </td>
+                <td align="right">@string.Format("{0:n0}", item.Sum(x => Math.Round(Convert.ToDecimal((x.Basic_salary / 30 * x.Absentee)@*- (x.Basic_salary / 30 * x.Salary_Leaves)*@)))) </td>
+
+                <td align="right">@string.Format("{0:n0}", item.Sum(x => Math.Round(Convert.ToDecimal(x.Ded_Other)))) </td>
+                <td align="right">@string.Format("{0:n0}", item.Sum(x => Math.Round(Convert.ToDecimal(x.Grand_total)) - Math.Round(Convert.ToDecimal(x.Stipend)))) </td>
+            </tr>
+        }
+        <tr>
+            <th>Grand Total</th>
+            @*<th style="text-align:right">@string.Format("{0:n0}", Model.Sum(x => Math.Round(Convert.ToDecimal(x.Basic_salary)))) </th>*@
+            @*<th style="text-align:right">@string.Format("{0:n0}", Model.Sum(x => Math.Round(Convert.ToDecimal(x.COLA_Amount)))) </th>*@
+            <th style="text-align:right">@string.Format("{0:n0}", Model.Where(x => x.Basic_salary > 0).Sum(x => Math.Round(Convert.ToDecimal(x.Basic_salary)))) </th>
+            <th style="text-align:right">@string.Format("{0:n0}", Model.Where(x => x.Basic_salary > 0).Sum(x => Math.Round(Convert.ToDecimal(x.Overtime)))) </th>
+            <th style="text-align:right">@string.Format("{0:n0}", Model.Where(x => x.Basic_salary > 0).Sum(x => Math.Round(Convert.ToDecimal(x.Allownces))) + Model.Sum(x => Math.Round(Convert.ToDecimal(x.Bonus)))) </th>
+            <th style="text-align:right">@string.Format("{0:n0}", Model.Where(x => x.Basic_salary > 0).Sum(x => Math.Round(Convert.ToDecimal(x.Gross_Salary)))) </th>
+            <th style="text-align:right">@string.Format("{0:n0}", Model.Where(x => x.Basic_salary > 0).Sum(x => Math.Round(Convert.ToDecimal(x.Ded_Tax)))) </th>
+            <th style="text-align:right">@string.Format("{0:n0}", Model.Where(x => x.Basic_salary > 0).Sum(x => Math.Round(Convert.ToDecimal(x.Ded_Loan)))) </th>
+            <th style="text-align:right">@string.Format("{0:n0}", Model.Where(x => x.Basic_salary > 0).Sum(x => Math.Round(Convert.ToDecimal(x.Ded_Advance)))) </th>
+            <th style="text-align:right">@string.Format("{0:n0}", Model.Where(x => x.Basic_salary > 0).Sum(x => Math.Round(Convert.ToDecimal((x.Basic_salary / 30 * x.Absentee)@*- (x.Basic_salary / 30 * x.Salary_Leaves)*@)))) </th>
+
+            <th style="text-align:right">@string.Format("{0:n0}", Model.Where(x => x.Basic_salary > 0).Sum(x => Math.Round(Convert.ToDecimal(x.Ded_Other)))) </th>
+            <th style="text-align:right">@string.Format("{0:n0}", Model.Where(x => x.Basic_salary > 0).Sum(x => Math.Round(Convert.ToDecimal(x.Grand_total)) - Math.Round(Convert.ToDecimal(x.Stipend)))) </th>
+        </tr>
+        @*<tr><td colspan="3">&nbsp;</td><td colspan="3">&nbsp;</td></tr>*@
+        @*<tr><td colspan="3">&nbsp;</td><td colspan="3">&nbsp;</td></tr>*@
+        <tr><td colspan="3">&nbsp;</td><td colspan="3">&nbsp;</td></tr>
+        <tr style="height:60px;vertical-align: bottom;"><td colspan="3" style="vertical-align:bottom;">Prepared By &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;___________________________________</td><td colspan="3" style="vertical-align:bottom;">Accounts &nbsp;&nbsp;&nbsp;_______________________________________</td><td colspan="3" style="vertical-align:bottom;">Director HR ___________________________________</td><td colspan="3" style="vertical-align:bottom;">CEO &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;________________________________________</td></tr>
+        <tr style="height:60px;vertical-align: bottom;"><td colspan="3" style="vertical-align:bottom;">Chairman &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;___________________________________</td></tr>
+       @*<tr><td colspan="3">&nbsp;</td><td colspan="3">&nbsp;</td></tr>
+        <tr><td colspan="3">&nbsp;</td><td colspan="3">&nbsp;</td></tr>
+        <tr style="height:60px;vertical-align: bottom"> </tr>*@
+        @*<tr style="height:60px;vertical-align: bottom"><td colspan="6">CEO &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;___________________________________</td></tr>*@
+    </tbody>
+</table>
+<div style="page-break-after:always"></div>
+<div id="">
+    @foreach (var g in Model.Where(x => x.Basic_salary > 0).GroupBy(x => new { x.CompanyName, x.CompanyId }))
+    {
+
+        string img = g.Key.CompanyName + ".png";
+        <div id="title2">
+            <label class="" style="font-weight:700; float:left;margin-top:1%;font-size:x-large">@g.Key.CompanyName &nbsp;  </label>
+            <label class="" style="font-weight:700; float:right"><img src="~/assets/static/images/@img" style="width:150px;margin:0.5%" /> &nbsp;  </label>
+        </div>
+        <table id="salary-dat" class="table table-striped table-bordered " cellspacing="0" width="100%">
+            <thead class="thead-light">
+                <tr>
+                    <th>Department</th>
+                    @*<th>Previous Basic Salary</th>*@
+                    @*<th>COLA</th>*@
+                    <th>Basic Salary</th>
+                    <th>Overtime</th>
+                    <th>Allownces/Bonus</th>
+                    <th>Gross Salary</th>
+                    <th>Tax Deductions</th>
+                    <th>Loan</th>
+                    <th>Advance</th>
+                    <th>Absentee</th>
+                    <th>Other Deductions</th>
+                    <th>Net Payable</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in g.GroupBy(h => new { h.DepartmentId, h.DepartmentName }).OrderByDescending(y => y.Sum(x => Math.Round(Convert.ToDecimal(x.Gross_Salary)))))
+                {
+                    int sr = 1;
+                    <tr>
+                        @if (string.IsNullOrEmpty(item.Key.DepartmentName) || string.IsNullOrWhiteSpace(item.Key.DepartmentName))
+                        {
+                            <td>Executive</td>
+                        }
+                        else
+                        {
+                            <td>@item.Key.DepartmentName</td>
+                        }
+ @*                       <td align="right">@string.Format("{0:n0}", item.Sum(x => Math.Round(Convert.ToDecimal(x.Previous_Basic_Salary)))) </td>*@
+   @*                     <td align="right">@string.Format("{0:n0}", item.Sum(x => Math.Round(Convert.ToDecimal(x.COLA_Amount)))) </td>*@
+                        <td align="right">@string.Format("{0:n0}", item.Sum(x => Math.Round(Convert.ToDecimal(x.Basic_salary)))) </td>
+                        <td align="right">@string.Format("{0:n0}", item.Sum(x => Math.Round(Convert.ToDecimal(x.Overtime)))) </td>
+                        <td align="right">@string.Format("{0:n0}", item.Sum(x => Math.Round(Convert.ToDecimal(x.Allownces))) + item.Sum(x => Math.Round(Convert.ToDecimal(x.Bonus)))) </td>
+                        <td align="right">@string.Format("{0:n0}", item.Sum(x => Math.Round(Convert.ToDecimal(x.Gross_Salary)))) </td>
+                        <td align="right">@string.Format("{0:n0}", item.Sum(x => Math.Round(Convert.ToDecimal(x.Ded_Tax )))) </td>
+                        <td align="right">@string.Format("{0:n0}", item.Sum(x => Math.Round(Convert.ToDecimal(x.Ded_Loan)))) </td>
+                        <td align="right">@string.Format("{0:n0}", item.Sum(x => Math.Round(Convert.ToDecimal(x.Ded_Advance)))) </td>
+                        <td align="right">@string.Format("{0:n0}", item.Sum(x => Math.Round(Convert.ToDecimal((x.Basic_salary / 30 * x.Absentee) @*- (x.Basic_salary / 30 * x.Salary_Leaves)*@)))) </td>
+                 
+                        <td align="right">@string.Format("{0:n0}", item.Sum(x => Math.Round(Convert.ToDecimal(x.Ded_Other)))) </td>
+                        <td align="right">@string.Format("{0:n0}", item.Sum(x => Math.Round(Convert.ToDecimal(x.Grand_total)) - Math.Round(Convert.ToDecimal(x.Stipend)))) </td>
+                    </tr>
+                }
+                <tr>
+                    <th>Grand Total</th>
+                    @*<th style="text-align:right">@string.Format("{0:n0}", g.Sum(x => Math.Round(Convert.ToDecimal(x.Previous_Basic_Salary))))</th>*@
+                    @*<th style="text-align:right">@string.Format("{0:n0}", g.Sum(x => Math.Round(Convert.ToDecimal(x.COLA_Amount))))</th>*@
+                    <th style="text-align:right">@string.Format("{0:n0}", g.Sum(x => Math.Round(Convert.ToDecimal(x.Basic_salary))))</th>
+                    <th style="text-align:right">@string.Format("{0:n0}", g.Sum(x => Math.Round(Convert.ToDecimal(x.Overtime))))</th>
+                    <th style="text-align:right">@string.Format("{0:n0}", g.Sum(x => Math.Round(Convert.ToDecimal(x.Allownces))) + g.Sum(x => Math.Round(Convert.ToDecimal(x.Bonus)))) </th>
+                    <th style="text-align:right">@string.Format("{0:n0}", g.Sum(x => Math.Round(Convert.ToDecimal(x.Gross_Salary)))) </th>
+                    <th style="text-align:right">@string.Format("{0:n0}", g.Sum(x => Math.Round(Convert.ToDecimal(x.Ded_Tax )))) </th>
+                    <th style="text-align:right">@string.Format("{0:n0}", g.Sum(x => Math.Round(Convert.ToDecimal(x.Ded_Loan)))) </th>
+                    <th style="text-align:right">@string.Format("{0:n0}", g.Sum(x => Math.Round(Convert.ToDecimal(x.Ded_Advance)))) </th>
+                    <th style="text-align:right">@string.Format("{0:n0}", g.Sum(x => Math.Round(Convert.ToDecimal((x.Basic_salary / 30 * x.Absentee) @*- (x.Basic_salary / 30 * x.Salary_Leaves)*@)))) </th>
+                    <th style="text-align:right">@string.Format("{0:n0}", g.Sum(x => Math.Round(Convert.ToDecimal(x.Ded_Other)))) </th>
+                    <th style="text-align:right">@string.Format("{0:n0}", g.Sum(x => Math.Round(Convert.ToDecimal(x.Grand_total)) - Math.Round(Convert.ToDecimal(x.Stipend)))) </th>
+                </tr>
+              
+            </tbody>
+        </table>
+        <div style="page-break-after:always"></div>
+    }
+
+</div>

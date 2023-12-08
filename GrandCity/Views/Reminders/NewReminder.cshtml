@@ -1,0 +1,92 @@
+﻿<script src="~/Scripts/tinymce/tinymce.min.js"></script>
+<link href="~/Content/bootstrap-material-datetimepicker.css" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<script src="~/Scripts/bootstrap-material-datetimepicker.min.js"></script>
+@using (Html.BeginForm("NewReminder", "Reminders", FormMethod.Post, new { @id = "new-reminder-form", @class = "", role = "form", autocomplete = "off" }))
+{
+    @Html.AntiForgeryToken();
+    <input type="hidden" name="ModuleId" value="@ViewBag.modId" />
+    <input type="hidden" name="ModuleType" value="@ViewBag.mode" />
+<div class="col-md-12">
+    <div class="row">
+        <div class="col-md-2">
+            <b>Title : </b>
+        </div>
+
+        <div class="col-md-9">
+            <input type="text" class="form-control remndr-ttl" placeholder="Title Of Reminder" name="Title" value="@ViewBag.ttl" required />
+        </div>
+    </div>
+
+    <div class="row mt-md-2">
+        <div class="col-md-2">
+            <b>Description :</b>
+        </div>
+        <div class="col-md-9">
+            <textarea class="form-control remndr-desc" id="Description" placeholder="Reminder Description" rows="5" name="UnParsedDesc"></textarea>
+        </div>
+    </div>
+
+    <div class="row mt-md-2">
+        <div class="col-md-2">
+            <b>Remind At :</b>
+        </div>
+
+        <div class="col-md-3">
+            <input type="text" class="form-control rmndr-deadln" placeholder="Remind On" name="RemindOn" required />
+        </div>
+    </div>
+
+    <div class="row mt-md-2">
+        <div class="col-md-2">
+            <b>Notify via :</b>
+        </div>
+
+        <div class="col-md-2">
+            @Html.CheckBox("EmailNotify")&nbsp;&nbsp;Email
+            @*<input type="checkbox" class="EmailNotify" id="EmailNotify" name="EmailNotify" value="false" />&nbsp;&nbsp;Email*@
+        </div>
+
+        <div class="col-md-2">
+            @Html.CheckBox("SMSNotify")&nbsp;&nbsp;SMS
+            @*<input type="checkbox" class="SMSNotify" name="SMSNotify" id="SMSNotify" value="false" />&nbsp;&nbsp;SMS*@
+        </div>
+    </div>
+
+    <div class="row mt-md-2" style="justify-content:center;">
+        <div class="col-md-2">
+            <button class="btn btn-success sv-rmndr"><i class="fa fa-save"></i>&nbsp; Save Reminder</button>
+        </div>
+    </div>
+</div>
+}
+
+<script>
+    $(document).ready(function () {
+        tinymce.init({ selector: '#Description', branding: false, statusbar: false });
+        $('#new-reminder-form').submit(function (e) {
+            e.preventDefault();
+            var con = confirm("Are you sure you want to create this reminder?");
+            if (con) {
+                $.ajax({
+                    type: "POST",
+                    url: $("#new-reminder-form").attr('action'),
+                    data: $("#new-reminder-form").serialize(),
+                    success: function (data) {
+                        closeModal();
+                        $('.rems-fld').load('/Reminders/RemindersWidget/');
+                    },
+                    error: function () {
+                        alert("Failed to create this reminder. Please try again.");
+                    }
+                });
+            }
+            else {
+                return false;
+            }
+        });
+
+        $('.rmndr-deadln').bootstrapMaterialDatePicker({ weekStart: 0, time: true, format: 'MM-DD-YYYY HH:mm' }).on('change', function (e, date) {
+        });
+    });
+</script>

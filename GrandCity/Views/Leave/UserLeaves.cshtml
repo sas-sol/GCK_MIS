@@ -1,0 +1,227 @@
+﻿@*@model IEnumerable<MeherEstateDevelopers.Models.LeaveRequisitionModel>*@
+<!--@{
+    if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+}
+
+<style>
+    #link {
+        color: #FF0000;
+    }
+</style>
+<div class="full-container">
+    <div class="email-app">
+        <div class="email-side-nav remain-height ov-h">
+            <div class="h-100 layers">
+                <div class="p-20 bgc-grey-100 layer w-100 text-white">
+                    <a href="javascript:void(0)" onclick="Userpenlaves('/Leave/Create?Id=@ViewBag.EmployeeId')" id="link" class="btn btn-danger btn-block" style="color:white;" >Create Leave</a>
+                </div>
+                <div class="scrollable pos-r bdT layer w-100 fxg-1">
+                    <h6 style="margin-left:15px">My Leaves</h6>
+                    <ul class="p-20 nav flex-column">
+                        <li class="nav-item">
+                            <a href="javascript:void(0)" onclick="Userpenlaves('/Leave/UserLeavesApproved?EmpId=@ViewBag.EmployeeId')" class="nav-link c-grey-800 cH-blue-500 active">
+                                <div class="peers ai-c jc-sb">
+                                    <div class="peer peer-greed">
+                                        <i class="mR-10 ti-email"></i>
+                                        <span>Approved</span>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="javascript:void(0)" onclick="Userpenlaves('/Leave/UserLeavesPending?EmpId=@ViewBag.EmployeeId')" class="nav-link c-grey-800 cH-blue-500">
+                                <div class="peers ai-c jc-sb">
+                                    <div class="peer peer-greed">
+                                        <i class="mR-10 ti-share"></i>
+                                        <span>Pending</span>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="javascript:void(0)" onclick="Userpenlaves('/Leave/UserLeavesRejected?EmpId=@ViewBag.EmployeeId')" class="nav-link c-grey-800 cH-blue-500">
+                                <div class="peers ai-c jc-sb">
+                                    <div class="peer peer-greed">
+                                        <i class="mR-10 ti-trash"></i>
+                                        <span>Rejected</span>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                    </ul>
+                    <hr />
+                    <h6>Manager</h6>
+                    <ul class="p-20 nav flex-column">
+                        <li class="nav-item">
+                            <a href="javascript:void(0)" onclick="Userpenlaves('/Leave/ApprovedLeaves/')" class="nav-link c-grey-800 cH-blue-500 active">
+                                <div class="peers ai-c jc-sb">
+                                    <div class="peer peer-greed">
+                                        <i class="mR-10 ti-email"></i>
+                                        <span>Approved</span>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="javascript:void(0)" onclick=" Userpenlaves('/Leave/AllLeaves/')" class="nav-link c-grey-800 cH-blue-500">
+                                <div class="peers ai-c jc-sb">
+                                    <div class="peer peer-greed">
+                                        <i class="mR-10 ti-share"></i>
+                                        <span>Pending</span>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="javascript:void(0)" onclick="Userpenlaves('/Leave/RejectedLeaves/')" class="nav-link c-grey-800 cH-blue-500">
+                                <div class="peers ai-c jc-sb">
+                                    <div class="peer peer-greed">
+                                        <i class="mR-10 ti-trash"></i>
+                                        <span>Rejected</span>
+                                    </div>
+
+                                </div>
+                            </a>
+                        </li>
+                    </ul>-->
+                    @*<hr />*@
+                    @*@if (User.IsInRole("HR Manager") || User.IsInRole("Administrator"))
+        {
+            <h6>HR Manager</h6>
+            <ul class="p-20 nav flex-column">
+                <li class="nav-item">
+                    <a href="javascript:void(0)" onclick="Userpenlaves('/Leave/HRApprovedLeave/')" class="nav-link c-grey-800 cH-blue-500 active">
+                        <div class="peers ai-c jc-sb">
+                            <div class="peer peer-greed">
+                                <i class="mR-10 ti-email"></i>
+                                <span>Approved</span>
+                            </div>
+                        </div>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="javascript:void(0)" onclick=" Userpenlaves('/Leave/HRShowLeavespendings/')" class="nav-link  c-grey-800 cH-blue-500">
+                        <div class="peers ai-c jc-sb">
+                            <div class="peer peer-greed">
+                                <i class="mR-10 ti-share"></i>
+                                <span>Pending</span>
+                            </div>
+                        </div>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="javascript:void(0)" onclick="Userpenlaves('/Leave/HRrejectedLeave/')" class="nav-link c-grey-800 cH-blue-500">
+                        <div class="peers ai-c jc-sb">
+                            <div class="peer peer-greed">
+                                <i class="mR-10 ti-trash"></i>
+                                <span>Rejected</span>
+                            </div>
+                        </div>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="javascript:void(0)" onclick="Userpenlaves('/Leave/OfficailLeaves/')" class="nav-link c-grey-800 cH-blue-500 active">
+                        <div class="peers ai-c jc-sb">
+                            <div class="peer peer-greed">
+                                <i class="mR-10 ti-email"></i>
+                                <span>Officials leaves</span>
+                            </div>
+                        </div>
+                    </a>
+                </li>
+            </ul>
+        }*@
+
+                    <!--@{
+                        if (User.IsInRole("Leave For Others") || User.IsInRole("Leave For Department") || User.IsInRole("Administrator"))
+                        {
+                            <h6>Leave For Other</h6>
+                            <div class="p-20 bgc-grey-100 layer w-100 text-white">
+                                <a href="javascript:void(0)" onclick="Userpenlaves('/Leave/LeaveForOther/')" id="link" class="btn btn-danger btn-block" style="color:white;">Apply For Others</a>
+                            </div>
+                        }
+                    }
+
+                    @if (User.IsInRole("Leave For Others") || User.IsInRole("Administrator"))
+                    {
+                        <hr />
+                        <ul class="nav flex-column">
+                            <li class="nav-item">
+                                <a href="javascript:void(0)" onclick="Userpenlaves('/Leave/OtherPending/')" class="nav-link c-grey-800 cH-blue-500 active">
+                                    <div class="peers ai-c jc-sb">
+                                        <div class="peer peer-greed">
+                                            <i class="mR-10 ti-email"></i>
+                                            <span>Pending</span>
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a href="javascript:void(0)" onclick="Userpenlaves('/Leave/OtherApproved/')" class="nav-link c-grey-800 cH-blue-500">
+                                    <div class="peers ai-c jc-sb">
+                                        <div class="peer peer-greed">
+                                            <i class="mR-10 ti-share"></i>
+                                            <span>Approved</span>
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="javascript:void(0)" onclick="Userpenlaves('/Leave/OtherRejected/')" class="nav-link c-grey-800 cH-blue-500">
+                                    <div class="peers ai-c jc-sb">
+                                        <div class="peer peer-greed">
+                                            <i class="mR-10 ti-trash"></i>
+                                            <span>Rejected</span>
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="javascript:void(0)" onclick="Userpenlaves('/Leave/OfficailLeaves/')" class="nav-link c-grey-800 cH-blue-500 active">
+                                    <div class="peers ai-c jc-sb">
+                                        <div class="peer peer-greed">
+                                            <i class="mR-10 ti-email"></i>
+                                            <span>Officials leaves</span>
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+                        </ul>
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="email-wrapper row remain-height pos-r scrollable bgc-white">
+            <div class="email-content open no-inbox-view">
+                <h2 style="text-align:center;">Leave Management</h2>
+                <div class="email-compose" >
+                    <div class="bgc-white bd bdrs-3 p-20 mB-20" id="leaves_table_user">
+                  
+                        @{ Html.RenderAction("Create", "Leave", new { Id = ViewBag.EmployeeId });}
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>-->
+
+
+
+
+
+
+
+
+
+
+
+

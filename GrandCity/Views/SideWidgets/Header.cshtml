@@ -1,0 +1,211 @@
+﻿@model MeherEstateDevelopers.Models.Header
+
+<style>
+    #profileImageini {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        background: #FF5733;
+        font-size: 24px;
+        color: #fff;
+        text-align: center;
+        line-height: 30px;
+        margin: 5px -8px 10px -6px;
+    }
+
+    @@media screen and (max-width: 767px) {
+        .header .header-container .nav-left .notifications .dropdown-menu, .header .header-container .nav-right .notifications .dropdown-menu {
+            max-width: 300px;
+            margin: 0px -90px 0px 0px;
+        }
+    }
+</style>
+<script src="~/Scripts/Notification.js"></script>
+<script src="~/Scripts/MIS_Reminders.js"></script>
+@*<script>
+        getnotifications();
+        $(function () {
+            var job = $.connection.notificationHub;
+            job.client.sendNoti = function (data) {
+                Shownotification(data.Message);
+                document.title = "";
+                getnotifications();
+                var creationTime = moment(data.creationTime).fromNow();
+                var html = '<li><a href="' + data.hit + '&noti=' + data.id + '" class="peers fxw-nw td-n p-10 bdB c-grey-800 cH-blue bgcH-grey-100"><div class="peer mR-15"><img class="w-3r bdrs-50p" src="/assets/static/images/def-img.png" alt=""></div>' +
+                    '<div class="peer peer-greed"><span><span class="c-grey-600">' + data.Message + '</span></span><p class="m-0"><small class="fsz-xs">' + creationTime + '</small></p></div></a></li >';
+                NotiAppend(html);
+            }
+            $.connection.hub.start();
+        });
+    </script>*@
+
+@*<script>
+        $(function () {
+            var chat = $.connection.authHub;
+            chat.client.Signout = function () {
+                $('#logoutForm').submit();
+                $.connection.hub.stop();
+            };
+            $.connection.hub.start().done(function () {
+
+
+                chat.server.getConnectedUsers().done(function (users) {
+                    $.each(users, function (i, username) {
+                        $("#usersTable").append("<tr><th scope='row'>" + (i + 1) + "</th><td>" + username + "</td><td><a href='javascript:void(0)' data-user='" + username + "' class='btn btn-primary btn-sm btn-logout'>Logout User</a></td></tr>");
+                    });
+                });
+
+                $('body').on('click', 'a.btn-logout', function () {
+                    var username = $(this).attr('data-user');
+                    chat.server.forceLogOut(username);
+                });
+
+            });
+        });
+
+    </script>*@
+<div class="header navbar no-print">
+    <div class="header-container gradient" style="background-color: #FDDC5C; box-shadow: 5px 5px 10px;">
+        <ul class="nav-left">
+            <li><a id="sidebar-toggle" class="sidebar-toggle" href="javascript:void(0);"><i class="ti-menu"></i></a></li>
+            @*<li style="padding:10px"><span style="font-size: 25px; color:black; font-family: Papyrus;"><b>@ViewBag.Company</b></span> </li>*@
+        </ul>
+        <ul class="nav-right">
+            <li class="notifications dropdown">
+                <a href="" class="dropdown-toggle no-after" data-toggle="dropdown">
+                    <i class="ti-cloud"></i>
+                </a>
+                <ul class="dropdown-menu">
+                    <li class="pX-20 pY-15 bdB"><span class="fsz-sm fw-600 c-grey-900">Company</span></li>
+                    <li style="height:500px;overflow-y:scroll">
+                        <ul class="noti-list ovY-a pos-r scrollable lis-n p-0 m-0 fsz-sm">
+                            @foreach (var item in Model.Companylist)
+                            {
+                                <li>
+                                    <a href="/Account/CompanyRedirect?CompId=@item.Comp_Id" class="peers fxw-nw td-n p-10 bdB c-grey-800 cH-blue bgcH-grey-100">
+                                        <div class="peer mR-15"></div>
+                                        <div class="peer peer-greed">
+                                            <span>
+                                                <span class="c-grey-600">@item.Company_Name</span>
+                                            </span>
+                                        </div>
+                                    </a>
+                                </li>
+                            }
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+
+            @* For Notifications *@
+            <li class="notifications dropdown">
+                @if (Model.Details.Total_Notifications > 0)
+                {
+                    <span class="counter bgc-red">@Model.Details.Total_Notifications</span>
+                }
+
+                <a href="" class="dropdown-toggle no-after" data-toggle="dropdown">
+                    <i class="ti-bell"></i>
+                </a>
+                <ul class="dropdown-menu">
+                    <li class="pX-20 pY-15 bdB"><i class="ti-bell pR-10"></i> <span class="fsz-sm fw-600 c-grey-900">Notifications</span></li>
+                    <li>
+                        <ul class="noti-list ovY-a pos-r scrollable lis-n p-0 m-0 fsz-sm">
+                            @if (Model.Noties.Any())
+                            {
+
+
+                                foreach (var item in Model.Noties)
+                                {
+                                    string color = "";
+                                    if (!item.IsRead)
+                                    {
+                                        color = "bisque";
+                                    }
+                                    <li>
+                                        <a href="@item.Path&noti=@item.Id" style="background-color:@color" class="peers fxw-nw td-n p-10 bdB c-grey-800 cH-blue bgcH-grey-100">
+                                            <div class="peer mR-15"><img class="w-3r bdrs-50p" src="/assets/static/images/def-img.png" alt=""></div>
+                                            <div class="peer peer-greed">
+                                                <span>
+                                                    <span class="c-grey-600">@item.Text</span>
+                                                </span>
+
+                                                <p class="m-0"><small class="fsz-xs" id="t-@item.Id"></small></p>
+                                            </div>
+                                        </a>
+                                    </li>
+                                    @*<script>
+                                        var date = '@item.CreatedAt';
+                                        var t = moment(date).fromNow();
+                                        $("#t-@item.Id").text(t);
+                                    </script>*@
+                                }
+                            }
+                            else
+                            {
+                                <li style="text-align:center"><span class="c-grey-600">No Notifications Yet</span></li>
+                            }
+                        </ul>
+                    </li>
+                    <li class="pX-20 pY-15 ta-c bdT"><span><a href="/Notify/AllNotifications" class="c-grey-600 cH-blue fsz-sm td-n">View All Notifications <i class="ti-angle-right fsz-xs mL-10"></i></a></span></li>
+                </ul>
+            </li>
+
+            <li class="notifications dropdown rems-fld">
+                @{
+                    Html.RenderAction("RemindersWidget", "Reminders");
+                }
+            </li>
+
+            <li class="dropdown">
+                <a href="" class="dropdown-toggle no-after peers fxw-nw ai-c lh-1" data-toggle="dropdown">
+                    <div class="peer mR-10">
+                        @{
+                            if (Model.Details.ProfileImage != null)
+                            {
+                                <img class="w-2r bdrs-50p" src="~/Profile_Imgs/@Model.Details.Id/@Model.Details.ProfileImage" alt="">
+                            }
+                            else
+                            {
+                                <div id="profileImageini"></div>
+                            }
+                        }
+                    </div>
+                    <div class="peer">
+                        <span class="fsz-sm" id="user-name" style="display:none">@Model.Details.Name</span>
+                    </div>
+                </a>
+                <ul class="dropdown-menu fsz-sm" style="width:250px">
+                    <li><a href="javascript:void()" data-toggle="modal" data-target="#Modal" class="gen-tick d-b td-n pY-5 bgcH-grey-100 c-grey-700"><i class="ti-panel mR-10"></i> <span>Report a Problem</span></a></li>
+                    @if (User.IsInRole("Cashier"))
+                    {
+                        <li><a href="/Finance/Receipts/" target="_blank" class="d-b td-n pY-5 bgcH-grey-100 c-grey-700"><i class="ti-user mR-10"></i> <span>Receipts</span></a></li>
+                        <li><a href="/Finance/MarketingReceipts/" target="_blank" class="d-b td-n pY-5 bgcH-grey-100 c-grey-700"><i class="ti-user mR-10"></i> <span>Marketing Receipts</span></a></li>
+                        <li><a href="/Banking/DishonredCheqList/" target="_blank" class="d-b td-n pY-5 bgcH-grey-100 c-grey-700"><i class="ti-user mR-10"></i> <span>Dishoner Cheques List</span></a></li>
+                        <li><a href="/Banking/LeadsDishonoredCheqs/" target="_blank" class="d-b td-n pY-5 bgcH-grey-100 c-grey-700"><i class="ti-user mR-10"></i> <span>Leads Dishoner Cheques List</span></a></li>
+                        <li><a href="/Banking/DailyCashReport/" target="_blank" class="d-b td-n pY-5 bgcH-grey-100 c-grey-700"><i class="ti-user mR-10"></i> <span>Daily Report</span></a></li>
+                        if (User.IsInRole("SAM Cashier"))
+                        {
+                            <li><a href="/Banking/DailySAMCashReport/" target="_blank" class="d-b td-n pY-5 bgcH-grey-100 c-grey-700"><i class="ti-user mR-10"></i> <span>Daily SAM Report</span></a></li>
+                        }
+                    }
+                    <li><a href="/Activity/MyActivity" class="d-b td-n pY-5 bgcH-grey-100 c-grey-700"><i class="ti-user mR-10"></i> <span>My Activity</span></a></li>
+                   @* <li><a href="/HumanResource/Detail/" class="d-b td-n pY-5 bgcH-grey-100 c-grey-700"><i class="ti-user mR-10"></i> <span>Profile</span></a></li>*@
+                    <li role="separator" class="divider"></li>
+                    <li><a href="javascript:document.getElementById('logoutForm').submit()" class="d-b td-n pY-5 bgcH-grey-100 c-grey-700"><i class="ti-power-off mR-10"></i> <span>Logout</span></a></li>
+                    @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm" }))
+                    {
+                        @Html.AntiForgeryToken()
+                    }
+                </ul>
+            </li>
+        </ul>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+
+        var intials = $('#user-name').text().charAt(0);
+        var profileImage = $('#profileImageini').text(intials);
+    });
+</script>

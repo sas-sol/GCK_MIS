@@ -1,0 +1,329 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Inventory_Demand_Req>
+@{
+    if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+}
+
+<script src="~/Scripts/Inv.js"></script>
+<div class="bgc-white p-20 bd">
+    <div style="text-align:center">
+        <h3>Requisitions For Others</h3>
+    </div>
+    @if (Model != null)
+    {
+        <input type="hidden" value="@Model.FirstOrDefault().Group_Id" id="dr" />
+    }
+    <input type="hidden" class="grpId" value="@ViewBag.Group_Id" />
+    <div class="col-md-12 mt-md-3 row">
+        <div class="form-group col-md-6">
+            <label>Project Name</label>
+            @Html.DropDownList("Project", null, "Choose..", new { @class = "form-control Project col-md-8" })
+        </div>
+        <div class="form-group col-md-6">
+            <label>Expected Delivery Date (min 5 days)</label>
+            <input class="form-control col-md-8" data-provide="datepicker" id="del-date" />
+        </div>
+
+        <div class="form-group col-md-6">
+            <label>Department</label>
+            @Html.DropDownList("Department", null, "Select Department", new { @class = "form-control Department col-md-8" })
+        </div>
+    </div>
+    @if (Model != null)
+    {
+        <div class="col-md-12 mt-md-3">
+            <h5 style="text-align:center">Demand Requisition Details</h5>
+            <table class="table table-bordered" width="100%">
+                <thead>
+                    <tr>
+                        <th>Sr.</th>
+                        <th style="text-align:center">Requested Items</th>
+                        <th>Req By</th>
+                        <th>Req Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{ int i = 1;}
+                    @foreach (var g in Model.GroupBy(x => new { x.Group_Id, x.ReqBy_Name, x.ReqBy_Date, x.Type, x.ApprovedBy, x.ApprovedBy_Name }))
+                    {
+                        <tr id="@g.Key.Group_Id">
+                            <td>@i</td>
+                            <td class="tdscrol">
+                                <table class="table" style="margin-bottom:0px; border:none">
+                                    <thead>
+                                        <tr>
+                                            <th>Item Name</th>
+                                            <th>Qty</th>
+                                            <th>Details</th>
+                                        </tr>
+                                    </thead>
+                                    @foreach (var item in g)
+                                    {
+                                        <tr>
+                                            <td>@item.Item_Name</td>
+                                            <td>@string.Format("{0:n0}", item.Qty)</td>
+                                            <td>@item.Details</td>
+                                        </tr>
+                                    }
+                                </table>
+                            </td>
+                            <td>@g.Key.ReqBy_Name</td>
+                            <td>@string.Format("{0:dd-MMM-yyyy}", g.Key.ReqBy_Date)</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    <div class="col-md-12 " id="ad-demand">
+        <div class="cal item-pur-req-row" style="margin-top:5px; box-shadow: rgba(0,0,0,0.8) 0 0 3px;border-radius: 5px;">
+            <div class="form-row col-md-12 dm-stat" style="justify-content:center">
+            </div>
+            <div class="form-row">
+                <div class="sr">1</div>
+                <div class="form-group col-md-2">
+                    <label>Code</label>
+                    <input class="form-control item-code" readonly>
+                </div>
+                <div class="form-group col-md-4">
+                    <label>Item</label>
+                    <select class="form-control product"></select>
+                </div>
+                <div class="form-group col-md-1">
+                    <label>UOM</label>
+                    <input class="form-control item-uom" name="UOM" readonly>
+                </div>
+                <div class="form-group col-md-1">
+                    <label>Available Qty</label>
+                    <input class="form-control av-qty" readonly>
+                </div>
+                <div class="form-group col-md-1">
+                    <label>Req Qty</label>
+                    <input class="form-control coma" placeholder="12,345" required>
+                    <input type="hidden" id="" name="Quantity" class="amt Quantity" required>
+                </div>
+                <div class="col-md-1" style="padding-top:2.5%">
+                    <i class="ti-trash rmv-pur-req-row rmv" style="font-size:20px"></i> | <i class="fa fa-plus-circle toggle_icon" style="font-size:20px"></i>@*&nbsp;&nbsp; | &nbsp;&nbsp;*@
+                </div>
+                <input type="hidden" class="stat" />            
+    <!--<div class="col-md-2">
+                    <input type="hidden" class="atch-id" />
+                    <input type="hidden" class="stat" />-->
+                    @*<form action="/Inventory/UploadRef" method="post" enctype="multipart/form-data">
+                        Refrences:
+                        <input type="hidden" value="@ViewBag.Group_Id" name="Group_ref" />
+                        <input type="file" class=" ref-file" name="file-input" id="file-input">
+                    </form>
+                    <div class="filename-container hide"></div>*@
+                <!--</div>-->
+            </div>
+            <div class="form-row toggle_text" style="display:none">
+                <div class="col-md-1"></div>
+                <div class="form-group row col-md-8">
+                    <label class="col-sm-2 col-form-label">Details</label>
+                    <textarea class="form-control descr col-md-10" rows="1" cols="5" placeholder="Details"></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr />
+    <div class="row">
+        <div class="col-md-2">
+            <button type="button" id="add-new-pr-row" class="btn btn-success">Add Another Product</button>
+        </div>
+        <div class="col-md-2">
+            <button type="submit" id="reg-PurReq-for-other" class="btn btn-primary">Submit</button>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    $(document).ready(function () {
+    var prdctThat = $(".product").first();
+    $(prdctThat).select2({
+        minimumInputLength: 3,
+        dropdownParent: $(prdctThat).parent(),
+        placeholder: "Search for Inventory",
+        ajax: {
+            url: '/Inventory/GetInventoryItem/',
+            dataType: 'json',
+            params: {
+                contentType: 'application/json; charset=utf-8'
+            },
+            quietMillis: 100,
+            data: function (params) {
+                return {
+                    q: params.term// search term
+                };
+            },
+            processResults: function (data) {
+                return {
+                    results: data.items
+                };
+            }
+        }
+    });
+    $(prdctThat).on('select2:select', function (e) {
+        var department = $(".Department option:selected").val();
+        var s = e.params.data;
+        $.ajax({
+            type: "POST",
+            url: '/Inventory/GetInventoryItemById/',
+            data: { Id: s.id, Dep_Id: department },
+            success: function (data) {
+                if (data.InvDeps.length == 0) {
+                    alert("Contact Warehouse for Item Department Tagging");
+                }
+                else {
+                    if (!data.Status) {
+                        var html = `<span class="dem-div">Demand Requisition - <b> ${data.InvDeps[0].Dep_Name} </b></span>`;
+                        $(prdctThat).closest('.item-pur-req-row').find('.dm-stat').html(html);
+                    }
+                }
+
+                $(prdctThat).closest('.item-pur-req-row').find('.Product-id').val(data.Inventory.Id);
+                $(prdctThat).closest('.item-pur-req-row').find('.item-uom').val(data.Inventory.UOM);
+                $(prdctThat).closest('.item-pur-req-row').find('.item-code').val(data.Inventory.SKU);
+                $(prdctThat).closest('.item-pur-req-row').find('.stat').val(data.Status);
+                $(prdctThat).closest('.item-pur-req-row').find('.av-qty').val(Number(data.Inventory.Total_In_Qty - data.Inventory.Total_Out_Qty));
+            }
+            , error: function (xmlhttprequest, textstatus, message) {
+                if (textstatus === "timeout") {
+                    alert("got timeout");
+                } else {
+                    alert(textstatus);
+                }
+            }
+        });
+    });
+
+    });
+
+    $(document).on("change", ".ref-file", function (e) {
+        e.preventDefault();
+        var $this = $(this);
+        var form = $(this).closest('form');
+        var data = new FormData();
+        var files = $(this).get(0).files;
+        if (files.length == 0) {
+            return;
+        }
+        data.append("Files", files[0]);
+        $.each(form.serializeArray(), function (key, input) {
+
+            data.append(input.name, input.value);
+        });
+        $.ajax({
+            type: "POST",
+            processData: false,
+            contentType: false,
+            url: $(form).attr('action'),
+            data: data,
+            success: function (data) {
+                if (data.Status) {
+                    $file = $($this).val();
+                    $file = $file.replace(/.*[\/\\]/, ''); //grab only the file name not the path
+                    //$($this).closest('.item-pur-req-row').find('.filename-container').empty().append($file + '<i class="fa fa-check"></i>').show();
+                    $($this).closest('.item-pur-req-row').find('.filename-container').empty().append('Uploaded <i class="fa fa-check" style="color:green"></i>').show();
+                    $($this).closest('.item-pur-req-row').find('.atch-id').val(data.Id);
+                }
+                else {
+                    alert(data.Msg)
+                }
+            }
+        });
+
+    });
+
+    $(document).on("blur", "#del-date", function () {
+        var date = $(this).val();
+        var date1 = moment();
+        var date2 = moment(date);
+        var diff = date2.diff(date1, 'days');
+        diff++;
+        if (diff < 5) {
+            alert("Minimum 5 days are required for delivery");
+            $(this).val('');
+        }
+    });
+    $(document).on("click", ".toggle_icon", function () {
+        if ($(this).hasClass('fa-plus-circle')) {
+            $(this).removeClass('fa-plus-circle');
+            $(this).addClass('fa-minus-circle');
+            $(this).closest('.cal').find('.toggle_text').slideToggle();
+        }
+        else {
+            $(this).removeClass('fa-minus-circle');
+            $(this).addClass('fa-plus-circle');
+            $(this).closest('.cal').find('.toggle_text').slideToggle();
+        }
+    });
+
+</script>
+<style>
+
+    .rmv-pur-req-row:hover {
+        color: #d0232A;
+        cursor: pointer;
+    }
+
+    .left-mar-temp {
+        margin-left: 6rem !important;
+    }
+
+    .sr {
+        text-align: center;
+        margin: 35px 10px 0 10px;
+    }
+
+    .rounded {
+        height: 30px;
+        border-radius: 4px;
+        padding: 4px;
+    }
+
+    .in1 {
+        width: 120px;
+    }
+
+    .in2 {
+        width: 350px;
+    }
+
+    i {
+        margin: 0 8px;
+    }
+
+
+    .filename {
+        display: inline-block;
+        padding: 0 10px;
+        margin-right: 10px;
+        background-color: #ccc;
+        border: 1px solid black;
+        border-radius: 15px;
+        height: 20px;
+        line-height: 20px;
+        text-align: center;
+        font-weight: 700;
+        font-size: 12px;
+        font-family: 'verdana', sans-serif;
+    }
+
+    /*.hide {
+        display: none;
+    }*/
+    .dem-div {
+        width: auto;
+        margin: 10px 0;
+        padding: 10px;
+        background: lightgoldenrodyellow;
+    }
+</style>

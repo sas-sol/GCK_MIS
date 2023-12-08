@@ -1,0 +1,219 @@
+﻿
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.13.5/xlsx.full.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.13.5/jszip.js"></script>
+<script>
+    var AllData;
+    var dataForUpload = [];
+    var ExcelToJSON = function () {
+        this.parseExcel = function (file) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                var data = e.target.result;
+                var workbook = XLSX.read(data, {
+                    type: 'binary'
+                });
+                workbook.SheetNames.forEach(function (sheetName) {
+                    var XL_row_object = XLSX.utils.sheet_to_row_object_array(workbook.Sheets[sheetName]);
+                    //AllData = JSON.stringify(XL_row_object);
+                    AllData = XL_row_object;
+                })
+            };
+            reader.onerror = function (ex) {
+                console.log(ex);
+            };
+            reader.readAsBinaryString(file);
+        };
+    };
+    function handleFileSelect(evt) {
+        var xl2json = new ExcelToJSON();
+        xl2json.parseExcel(fileUploadlead.files[0]);
+    }
+    function Upload() {
+        //Reference the fileUploadlead element.
+        var fileUploadlead = document.getElementById("fileUploadlead");
+        handleFileSelect(fileUploadlead);
+        //Validate whether File is valid Excel file.
+        var regex = /^([a-zA-Z0-9\s_\\.\-:])+(.xls|.xlsx)$/;
+        if (regex.test(fileUploadlead.value.toLowerCase())) {
+            if (typeof (FileReader) != "undefined") {
+                var reader = new FileReader();
+
+                //For Browsers other than IE.
+                if (reader.readAsBinaryString) {
+                    reader.onload = function (e) {
+                        ProcessExcel(e.target.result);
+                    };
+                    reader.readAsBinaryString(fileUploadlead.files[0]);
+                } else {
+                    //For IE Browser.
+                    reader.onload = function (e) {
+                        var data = "";
+                        var bytes = new Uint8Array(e.target.result);
+                        for (var i = 0; i < bytes.byteLength; i++) {
+                            data += String.fromCharCode(bytes[i]);
+                        }
+                        ProcessExcel(data);
+                    };
+                    reader.readAsArrayBuffer(fileUploadlead.files[0]);
+                }
+            } else {
+                alert("This browser does not support HTML5.");
+            }
+        } else {
+            alert("Please upload a valid Excel file.");
+        }
+    };
+    function ProcessExcel(data) {
+        //Read the Excel File data.
+        var workbook = XLSX.read(data, {
+            type: 'binary'
+        });
+
+        //Fetch the name of First Sheet.
+        var table = document.createElement("table");
+        table.setAttribute('class', 'table');
+        table.setAttribute('class', 'table-bordered');
+        table.setAttribute('style', 'width:100%');
+        table.border = "1";
+
+        //Add the header row.
+        var row = table.insertRow(-1);
+
+        //Add the header cells.
+        var headerCell = document.createElement("th");
+        headerCell.innerHTML = "Name";
+        row.appendChild(headerCell);
+
+        var headerCell = document.createElement("th");
+        headerCell.innerHTML = "Address";
+        row.appendChild(headerCell);
+
+        var headerCell = document.createElement("th");
+        headerCell.innerHTML = "Mobile";
+        row.appendChild(headerCell);
+
+        var headerCell = document.createElement("th");
+        headerCell.innerHTML = "Source";
+        row.appendChild(headerCell);
+        var headerCell = document.createElement("th");
+        headerCell.innerHTML = "Remarks";
+        row.appendChild(headerCell);
+        
+
+        let ind = 0;
+        for (ind = 0; ind < workbook.SheetNames.length; ind++) {
+            var firstSheet = workbook.SheetNames[ind];
+
+            //Read all rows from First Sheet into an JSON array.
+            var excelRows = XLSX.utils.sheet_to_row_object_array(workbook.Sheets[firstSheet]);
+
+            console.log(dataForUpload);
+
+            //saving json for uploading data
+            $.each(excelRows, function (t_index, t_value) {
+                dataForUpload.push(t_value);
+            });
+
+            //if (dataForUpload.length <= 0) {
+            //    dataForUpload = excelRows
+            //}
+            //else {
+            //    dataForUpload.concat(excelRows);
+            //}
+
+            console.log(dataForUpload);
+            //Create a HTML Table element.
+
+            //Add the data rows from Excel file.
+            for (var i = 0; i < excelRows.length; i++) {
+                //Add the data row.
+                var row = table.insertRow(-1);
+
+                //Add the data cells.
+                var cell = row.insertCell(-1);
+                cell.innerHTML = (excelRows[i].Sr == "") ? "-" : excelRows[i].Name;
+
+                cell = row.insertCell(-1);
+                cell.innerHTML = (excelRows[i].Address == undefined) ? "-" : excelRows[i].Address;
+
+                cell = row.insertCell(-1);
+                cell.innerHTML = (excelRows[i].Mobile == undefined) ? "-" : excelRows[i].Mobile;
+
+                cell = row.insertCell(-1);
+                cell.innerHTML = (excelRows[i].Source == undefined) ? "-" : excelRows[i].Source;
+
+                cell = row.insertCell(-1);
+                cell.innerHTML = (excelRows[i].Remarks == undefined) ? "-" : excelRows[i].Remarks;
+                
+
+            }
+        }
+
+        var dvExcel = document.getElementById("dvExcel");
+        dvExcel.innerHTML = "";
+        dvExcel.appendChild(table);
+    };
+    //
+</script>
+<input type="file" id="fileUploadlead" />
+<input type="hidden" id="project" value="@ViewBag.Project"/>
+<input type="hidden" id="status" value="@ViewBag.Status" />
+<input type="button" class="btn btn-info" id="upload" value="Verify lead Data" onclick="Upload()" />
+<input type="button" class="btn btn-success upld-lead-inventroy-btn" value="Upload Leads" />
+<a href="~/assets/static/LeadsSample.xlsx" style=" background-color: #4caf50;border-color: #4caf50; text-decoration-color:white; color: white !important;text-align: center;text-decoration: none;display: inline-block;border-radius: .25rem;display: inline-block;font-weight: 400;text-align: center;white-space: nowrap;border: 1px solid transparent;padding: 6px 12px;padding: .375rem .75rem;font-size: 14px;font-size: .875rem;line-height: 1.5;border-radius: .25rem;" rel="nofollow">Download Sample Excel File Here</a>
+<hr />
+<div id="dvExcel"></div>
+
+<script>
+    $('.upld-lead-inventroy-btn').unbind().click(function () {
+        var prj = $('#project').val();
+        var status = $('#status').val();
+        let conf = confirm('Are you sure you want to upload this Leads Data?');
+        if (!conf) {
+            return;
+        }
+        ShowFullScreenLoader();
+        $('.upld-lead-inventroy-btn').attr('disabled', 'disabled');
+        $.ajax({
+            type: "POST",
+            url: "/Leads/SaveLeadsList/",
+            contentType: "application/json",
+            traditional: true,
+            beforeSend: function () {
+
+            },
+            complete: function () {
+
+            },
+            data: JSON.stringify({ AllLeads: dataForUpload, Project: prj, UnAssigned: status }),
+        }).done(function (data) {
+            HideFullScreenLoader();
+            if (data == true) {
+                alert('Leads has been added.');
+                closeModal();
+                var $this = $('.active'),
+                    targ = $this.attr('href'),
+                    loadurl = $this.attr('data-link');
+                var Lead_User = $('.lead_user').val();
+                var SPE_lead_Status = $("#SAM_Lead_Status option:selected").val();
+                var to = $('#SAM-lead-to').val();
+                var phone = $('#leadphone').val();
+
+                var from = $('#SAM-lead-from').val();
+
+                SASLoad(targ);
+                $(targ).load(loadurl, { From: from, To: to, LeadStatus: SPE_lead_Status, LeadUser: Lead_User, Phone: phone }, function () {
+                    SASUnLoad(targ);
+
+                    $('#myTabs .active').removeClass("active");
+                    $this.addClass("active");
+                });
+            }
+            else {
+                alert('Failed to save Leads.');
+            }
+        });
+
+    });
+</script>

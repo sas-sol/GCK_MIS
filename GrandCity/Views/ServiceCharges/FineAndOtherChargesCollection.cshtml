@@ -1,0 +1,32 @@
+﻿@{
+    if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else if (User.IsInRole("Staff"))
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+}
+<script src="~/Scripts/scanning.js"></script>
+<div class="bgc-white bd bdrs-3 p-20 mB-20">
+    <div class="col-md-12">
+        <ul class="nav nav-tabs" role="tablist" id="myTabs">
+            <li class="nav-item"><a class="nav-link active " role="tab" data-toggle="tab" data-link="/ServiceCharges/FineCollection/" id="foc" href="#foccollection">Plot's Other Recovery</a></li>
+            <li class="nav-item"><a class="nav-link " role="tab" data-toggle="tab" data-link="/Installments/OtherRecovery/" id="foc" href="#foccollection">Miscellaneous Recovery</a></li>
+            <!--<li class="nav-item">-->@*<a class="nav-link " role="tab" data-toggle="tab" data-link="/Installments/SubsidiaryRecovery/" id="foc" href="#foccollection">Subsidiary Recovery</a>*@<!--</li>-->
+        </ul>
+        <div class="tab-content">
+            <div role="tabpanel" id="foccollection" class="tab-pane active p-20 table-responsive">
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(function () {
+        SASLoad($('#foccollection'));
+        $('#foccollection').load('/ServiceCharges/FineCollection/', function () {
+            SASUnLoad($('#foccollection'));
+        });
+    });
+</script>

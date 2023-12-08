@@ -1,0 +1,421 @@
+﻿@{
+    Layout = "~/Views/Shared/_StaffLayout.cshtml";
+}
+<div class="row gap-20 pos-r">
+    <div class="col-md-8">
+        <div class="bgc-white p-20 bd">
+            <h6 class="c-grey-900">Application File Form</h6>
+            <div class="mT-30">
+                <div class="form-row row">
+                    <div class="col-md-9">
+                        <div class="form-row" id="file-trans-alert"></div>
+                        <div class="form-row">
+                            <div class="form-group col-md-2">
+                                <label>File Form No.</label>
+                                <input type="text" class="form-control" id="app-num">
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label>Dealership</label>
+                                <input type="text" class="form-control" id="deal-nam" readonly>
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label>Plot Size</label>
+                                <input type="text" class="form-control" id="pl-size" readonly>
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label>Project</label>
+                                <input type="text" class="form-control" id="prj" readonly>
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label>Phase</label>
+                                <input type="text" class="form-control" id="phs" readonly>
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label>Block</label>
+                                <input type="text" class="form-control" id="blk" readonly>
+                            </div>
+                            <div class="form-group col-md-2">
+                                <button type="button" class="btn btn-primary my-4" id="sea-file-data-trans-test">Search File</button>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="col-md-3">
+                                <h5>File Status : &nbsp;<span id="status">-</span></h5>
+                            </div>
+                            <div class="col-md-5">
+                                <h3 id="dev-char"></h3>
+                            </div>
+                            <div class="col-md-4">
+                                <h5>Balance : &nbsp;<span id="bal-amt">-</span></h5>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <img src="~/assets/static/images/no-img.png" width="200" height="200" id="qr_img" />
+                    </div>
+                </div>
+            </div>
+            <hr />
+            <div class="form-row">
+                <div class="col-md-4">
+                    <h6 class="c-grey-900">Personal Information</h6>
+                </div>
+            </div>
+            <div class="mT-30">
+                <div class="form-row">
+                    <div class="form-group col-md-3">
+                        <label>Name</label>
+                        <input type="text" class="form-control" id="Name" readonly>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label>Father's/Husband's Name</label>
+                        <input type="text" class="form-control" id="Father_Husband" readonly>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label>Postal Address</label>
+                        <input type="text" class="form-control" id="Postal_Address" readonly>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label>Residential Address</label>
+                        <input type="text" class="form-control" id="Residential_Address" readonly>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label>City</label>
+                        <input type="text" class="form-control" id="City" readonly>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label>Date Of Birth</label>
+                        <input type="text" class="form-control" id="Date_Of_Birth" readonly>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label>CNIC / NICOP</label>
+                        <input type="text" class="form-control" id="CNIC_NICOP" readonly>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label>Occupation</label>
+                        <input type="text" class="form-control" id="Occupation" readonly>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label>Nationality</label>
+                        <input type="text" class="form-control" id="Nationality" readonly>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label>Email</label>
+                        <input type="text" class="form-control" id="Email" readonly>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label>Phone Office</label>
+                        <input type="text" class="form-control" id="Phone_Office" readonly>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label>Residential</label>
+                        <input type="text" class="form-control" id="Residential" readonly>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label>Mobile 1</label>
+                        <input type="text" class="form-control" id="Mobile_1" readonly>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label>Mobile 2</label>
+                        <input type="text" class="form-control" id="Mobile_2" readonly>
+                    </div>
+                </div>
+            </div>
+            <hr />
+            <h6 class="c-grey-900">Nominee</h6>
+            <div class="mT-30">
+                <div class="form-row">
+                    <div class="form-group col-md-2">
+                        <label>Name</label>
+                        <input type="text" class="form-control" id="Nominee_Name" readonly>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label>CNIC / NICOP</label>
+                        <input type="text" class="form-control" id="Nominee_CNIC_NICOP" readonly>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label>Relation</label>
+                        <input class="form-control" id="Nominee_Relation" readonly>
+                    </div>
+                    <div class="form-group col-md-5">
+                        <label>Address</label>
+                        <input type="text" class="form-control" id="Nominee_Address" readonly>
+                    </div>
+                </div>
+            </div>
+            <hr />
+            <div class="form-row">
+                <div class="col-md-6">
+                    <h6 class="c-grey-900">Installments </h6>
+                </div>
+                <div class="col-md-6">
+                    <h5> Over Due Amount : <span id="ov-du-amt"></span></h5>
+                </div>
+            </div>
+            <div class="mT-30">
+                <div class="form-row">
+                    <div class="col-md-6">
+                        <table class="table table-striped table-bordered" cellspacing="0" width="100%" style="margin-bottom:0px">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th>Sr.</th>
+                                </tr>
+                            </thead>
+                        </table>
+                        <div style="min-height:0px; max-height:500px;overflow:auto" class=" ps--active-y">
+                            <table class="table table-striped table-bordered" id="all-instments" cellspacing="0" width="100%">
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div style="min-height:0px; max-height:500px;overflow:auto" class=" ps--active-y">
+                            <table class="table table-striped table-bordered" id="oth-inst" cellspacing="0" width="100%">
+                                <thead class="thead-dark">
+                                    <tr>
+                                        <th>Sr.</th>
+                                        <th>Installment Name</th>
+                                        <th>Amount</th>
+                                        <th>Date</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="bgc-white p-20 bd">
+            <div class="form-row">
+                <div class="col-md-4">
+                    <h6 class="c-grey-900">Transfer To</h6>
+                </div>
+            </div>
+            @using (Html.BeginForm("FileTransfer", "FileSystem", FormMethod.Post, new { @id = "transfer-file", @class = "", role = "form", autocomplete = "off" }))
+            {
+                @Html.AntiForgeryToken()
+                <div class="mT-30">
+                    <div class="form-row">
+                        <h5>Transfer Fees: <span id="tras-fee"></span></h5>
+                        <input type="hidden" id="transfer-fees" name="Amount">
+                        <input type="hidden" id="file-id" name="File_Form_Id">
+                        <input type="hidden" id="file-rate" name="Rate">
+                        <input type="hidden" id="ttl-amt" name="Total">
+                        <input type="hidden" id="grd-ttl" name="GrandTotal">
+                        <input type="hidden" id="blk-id" name="Block_Id">
+                        <input type="hidden" id="ph-id" name="Phase_Id">
+                        <input type="hidden" id="plt-size" name="Plot_Size">
+                        <input type="hidden" id="plt-pref" name="Plot_Prefrence">
+                        <input type="hidden" id="qr_Id" name="QR_Code">
+                        <input type="hidden" id="amt-in-words" name="AmountInWords">
+                        <input type="hidden" id="fp-num" name="File_Plot_Number">
+                        <input type="hidden" id="prj-nam" name="Project_Name">
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label>Name</label>
+                            <input type="text" class="form-control" name="Name" required>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label>Father's/Husband's Name</label>
+                            <input type="text" class="form-control" name="Father_Husband" required>
+                        </div>
+                        <div class="form-group col-md-12">
+                            <label>Postal Address</label>
+                            <input type="text" class="form-control" name="Postal_Address" placeholder="1234 Main St" required>
+                        </div>
+                        <div class="form-group col-md-12">
+                            <label>Residential Address</label>
+                            <input type="text" class="form-control" name="Residential_Address" placeholder="Apartment, Plot, or floor" required>
+                        </div>
+                        <div class="form-group col-md-5">
+                            <label>City</label>
+                            @Html.DropDownList("City", null, "Choose..", new { @class = "form-control", required = "" })
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label>Date Of Birth</label>
+                            <input type="text" class="form-control" data-provide="datepicker" name="Date_Of_Birth" required>
+                        </div>
+                        <div class="form-group col-md-5">
+                            <label>CNIC / NICOP</label>
+                            <input type="text" class="form-control" name="CNIC_NICOP" pattern="[0-9+]{5}-[0-9+]{7}-[0-9]{1}|[0-9+]{6}-[0-9+]{6}-[0-9]{1}" placeholder="12345-1234567-1   or   123456-123456-1" required>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label>Occupation</label>
+                            <input type="text" class="form-control" name="Occupation" required>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label>Nationality</label>
+                            <input type="text" class="form-control" name="Nationality" required>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label>Email</label>
+                            <input type="text" class="form-control" name="Email">
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label>Phone Office</label>
+                            <input type="text" class="form-control" name="Phone_Office">
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label>Residential</label>
+                            <input type="text" class="form-control" name="Residential">
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label>Mobile 1</label>
+                            <input type="text" class="form-control" pattern="^0\d{10}" placeholder="03121234567" name="Mobile_1" required>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label>Mobile 2</label>
+                            <input type="text" class="form-control" pattern="^0\d{10}" placeholder="03121234567" name="Mobile_2">
+                        </div>
+                    </div>
+                </div>
+                <hr />
+                <h6 class="c-grey-900">Nominee</h6>
+                <div class="mT-40">
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            <label>Name</label>
+                            <input type="text" class="form-control" name="Nominee_Name" required>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label>CNIC / NICOP</label>
+                            <input type="text" class="form-control" pattern="[0-9+]{5}-[0-9+]{7}-[0-9]{1}|[0-9+]{6}-[0-9+]{6}-[0-9]{1}" placeholder="12345-1234567-1   or   123456-123456-1" name="Nominee_CNIC_NICOP" required>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label>Relation</label>
+                            <input class="form-control" name="Nominee_Relation" placeholder="" required>
+                        </div>
+                        <div class="form-group col-md-7">
+                            <label>Address</label>
+                            <input type="text" class="form-control" name="Nominee_Address" placeholder="1234 Main St" required>
+                        </div>
+                    </div>
+                    <div class="form-row" id="trns-btn">
+
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+<script>
+    $(document).on("click", "#sea-file-data-trans-test", function () {
+    var val = $('#app-num').val();
+    $.ajax({
+        type: "POST",
+        url: '/FileSystem/GetFileDelivery/',
+        data: { Filefromid: val },
+        success: function (data) {
+            if (data == false) {
+                alert("No Result found");
+            }
+            else {
+                $("#file-trans-alert").html("");
+                $("#oth-inst tbody").empty();
+                $("#all-instments tbody").empty();
+                $("#trns-btn").html("");
+                $('#file-id').val(data.File.Id);
+                $('#file-trans-id').val(data.File.File_Transfer_Id);
+                $('#file-rate').val(data.File.Rate)
+                $('#ttl-amt').val(data.File.TotalPlotVal)
+                $('#grd-ttl').val(data.File.GrandTotal)
+                $('#qr_Id').val(data.File.QR_Id)
+                $('#deal-nam').val(data.File.Dealership_Name);
+                $('#pl-size').val(data.File.Plot_Size);
+                $('#plt-size').val(data.File.Plot_Size);
+                $('#plt-pref').val(data.File.Plot_Prefrence);
+                $('#fp-num').val(data.File.File_Form_Number);
+                $('#prj').val(data.File.Project_Name);
+                $('#prj-nam').val(data.File.Project_Name);
+                $('#phs').val(data.File.Phase_Name);
+                $('#ph-id').val(data.File.Phase_Id);
+                $('#blk').val(data.File.Block_Name);
+                $('#blk-id').val(data.File.Block_Id);
+                $('#status').text(data.File.Status);
+                $('#dev-char').text(data.File.Development_Charges);
+                $('#qr_img').attr("src", '/QR Codes/' + data.File.File_Form_Number + '.png');
+                $('#Name').val(data.File.Name);
+                $('#Father_Husband').val(data.File.Father_Husband);
+                $('#Postal_Address').val(data.File.Postal_Address);
+                $('#Residential_Address').val(data.File.Residential_Address);
+                $('#City').val(data.File.City);
+                $('#Date_Of_Birth').val(data.File.Date_Of_Birth);
+                $('#CNIC_NICOP').val(data.File.CNIC_NICOP);
+                $('#Occupation').val(data.File.Occupation);
+                $('#Nationality').val(data.File.Nationality);
+                $('#Email').val(data.File.Email);
+                $('#Phone_Office').val(data.File.Phone_Office);
+                $('#Residential').val(data.File.Residential);
+                $('#Mobile_1').val(data.File.Mobile_1);
+                $('#Mobile_2').val(data.File.Mobile_2);
+                $('#Nominee_Name').val(data.File.Nominee_Name);
+                $('#Nominee_CNIC_NICOP').val(data.File.Nominee_CNIC_NICOP);
+                $('#Nominee_Relation').val(data.File.Nominee_Relation);
+                $('#Nominee_Address').val(data.File.Nominee_Address);
+                $('#bal-amt').text(data.File.Balance_Amount);
+                $("#Plot_Prefrence").val(data.File.Plot_Prefrence);
+                var instserialno = 1, overduetotal = 0;
+
+                var pltsize = data.File.Plot_Size;
+                var pltsize = pltsize.split(" ");
+
+
+                var fees = pltsize[0] * 500;
+                $("#transfer-fees").val(fees);
+                $("#tras-fee").html(fees);
+                $("#amt-in-words").val(InWords(fees));
+                $.each(data.Installments, function (i) {
+                    var statuscolor = "";
+                    if (data.Installments[i].Status == "NotPaid") {
+                        statuscolor = "bgc-red-50";
+                        overduetotal = parseFloat(overduetotal) + parseFloat(data.Installments[i].Amount);
+                    }
+                    else if (data.Installments[i].Status == "Paid") {
+                        statuscolor = "bgc-green-50";
+                    }
+                    var html = '<tr class=' + statuscolor + ' id="' + data.Installments[i].Id + '" ><td scope="row">' + instserialno + '</td>' +
+                        '<td>' + moment(data.Installments[i].Due_Date).format("MMMM YYYY") + '</td>' +
+                        '<td>' + data.Installments[i].Amount + '</td>' +
+                        '<td>' + moment(data.Installments[i].Due_Date).format("dd-MMM-yyyy") + '</td>' +
+                        '<td>' + data.Installments[i].Status + '</td></tr>';
+
+                    $("#all-instments tbody").append(html);
+                    instserialno++;
+                });
+                var otherinstserialno = 1;
+                $.each(data.OtherInstallments, function (i) {
+                    var statuscolor = "";
+                    if (data.OtherInstallments[i].Status == "NotPaid") {
+                        statuscolor = "bgc-red-50";
+                        overduetotal = parseFloat(overduetotal) + parseFloat(data.OtherInstallments[i].Amount);
+                    }
+                    else if (data.OtherInstallments[i].Status == "Paid") {
+                        statuscolor = "bgc-green-50";
+                    }
+                    var html = '<tr class=' + statuscolor + ' id="' + data.OtherInstallments[i].Id + '" ><td scope="row">' + otherinstserialno + '</td>' +
+                        '<td>' + data.OtherInstallments[i].Installment_Name + '</td>' +
+                        '<td>' + data.OtherInstallments[i].Amount + '</td>' +
+                        '<td>' + moment(data.OtherInstallments[i].Due_Date).format("dd-MMM-yyyy") + '</td>' +
+                        '<td>' + data.OtherInstallments[i].Status + '</td></tr>';
+
+                    $("#oth-inst tbody").append(html);
+                    otherinstserialno++;
+                });
+                $("#ov-du-amt").text(overduetotal)
+                var overdue = parseFloat(overduetotal);
+                var btn = '<button class="btn btn-primary" type="submit" id="trans-frm" style="width:100%" >Transfer</button>';
+                $("#trns-btn").html(btn);
+            }
+        },
+        error: function (data) {
+            alert("Error Occured Try Again")
+        }
+    });
+});
+
+</script>

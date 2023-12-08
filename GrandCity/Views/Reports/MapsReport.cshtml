@@ -1,0 +1,77 @@
+﻿<h4>Strategic Customers Areas</h4>
+<div id="map" style="width:100%;height:400px;"></div>
+<div id="messages"></div>
+<!-- Replace the value of the key parameter with your own API key. -->
+<script type="text/javascript" src="https://maps.google.com/maps/api/js?sensor=false&key=AIzaSyApYERmCgpWqWl_uHp9r1I4LENkZEJizto"></script>
+<script>
+    // ====== Create map objects ======
+    var infowindow = new google.maps.InfoWindow();
+    var latlng = new google.maps.LatLng(31.4826352, 74.054197);
+    var mapOptions = {
+        zoom:4.5,
+        center: latlng,
+        mapTypeId: google.maps.MapTypeId.ROADMAP
+    }
+    var geo = new google.maps.Geocoder();
+    var map = new google.maps.Map(document.getElementById("map"), mapOptions);
+    var bounds = new google.maps.LatLngBounds();
+
+    // ====== Geocoding ======
+    function getAddress(search, next) {
+        geo.geocode({ address: search }, function (results, status) {
+            // If that was successful
+            if (status == google.maps.GeocoderStatus.OK) {
+                // Lets assume that the first marker is the one we want
+                var p = results[0].geometry.location;
+                var lat = p.lat();
+                var lng = p.lng();
+                createMarker(search, lat, lng);
+            }
+            // ====== Decode the error status ======
+            else {
+                // === if we were sending the requests to fast, try this one again and increase the delay
+                if (status == google.maps.GeocoderStatus.OVER_QUERY_LIMIT) {
+                    nextAddress--;
+                }
+            }
+            next();
+        }
+        );
+    }
+
+    // ======= Function to create a marker
+    function createMarker(add, lat, lng) {
+        var contentString = add;
+        var marker = new google.maps.Marker({
+            position: new google.maps.LatLng(lat, lng),
+            map: map,
+            zIndex: Math.round(latlng.lat() * -100000) << 5
+        });
+        google.maps.event.addListener(marker, 'click', function () {
+            infowindow.setContent(contentString);
+            infowindow.open(map, marker);
+        });
+        bounds.extend(marker.position);
+    }
+    // ======= An array of locations that we want to Geocode ========
+    var addresses = @Html.Raw(Json.Encode(ViewBag.Res));
+    // ======= Global variable to remind us what to do next
+    var nextAddress = 0;
+
+    function theNext() {
+        if (nextAddress < addresses.length) {
+            setTimeout('getAddress("' + addresses[nextAddress] + '",theNext)', 0.001);
+            nextAddress++;
+        } else {
+            // We're done. Show map bounds
+            map.fitBounds(bounds);
+        }
+    }
+    // ======= Call that function for the first time =======
+    theNext();
+</script>
+<style>
+    #map {
+        height: 100%;
+    }
+</style>

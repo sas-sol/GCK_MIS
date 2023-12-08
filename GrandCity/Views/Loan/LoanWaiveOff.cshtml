@@ -1,0 +1,89 @@
+﻿@model MeherEstateDevelopers.Models.LoanCompleteDetails
+<h5>
+    Employee Details
+</h5>
+<div class="row">
+    <div class="col-md-2">
+        <label>Employee</label>
+        <h6>@Model.LoanData.Employee_Name</h6>
+    </div>
+    <div class="col-md-4">
+        <label>Company</label>
+        <h6>@Model.EmployeeDetails.Select(x => x.CompanyName).FirstOrDefault()</h6>
+    </div>
+    <div class="col-md-4">
+        <label>Department</label>
+        <h6>@Model.EmployeeDetails.Select(x => x.DepName).FirstOrDefault()</h6>
+    </div>
+    <div class="col-md-2">
+        <label>Designation</label>
+        <h6>@Model.EmployeeDetails.Select(x => x.Designation).FirstOrDefault()</h6>
+    </div>
+</div>
+<br />
+<hr />
+<h5>
+    Loan Details
+</h5>
+<div class="row">
+    <div class="col-md-3">
+        <label>Amount</label>
+        <h6>@string.Format("{0:0,0.##}", Model.LoanData.Amount)</h6>
+    </div>
+    <div class="col-md-4">
+        <label>Date</label>
+        <h6>@string.Format("{0:dd-MMM-yyyy}", Model.LoanData.CreatedAt)</h6>
+    </div>
+    <div class="col-md-5">
+        <label>Reason</label>
+        <h6>@Model.LoanData.Reason</h6>
+    </div>
+    <div class="col-md-3">
+        <label>Manager</label>
+        <h6>@Model.LoanData.Manager_Name</h6>
+    </div>
+    <div class="col-md-4">
+        <label>Manager Remarks</label>
+        <h6>@Model.LoanData.ManagerRemarks</h6>
+    </div>
+    <div class="col-md-4">
+        <label>Hr Remarks</label>
+        <h6>@Model.LoanData.HrRemarks</h6>
+    </div>
+</div>
+<hr />
+<h5>
+    Installment Details
+</h5>
+<input type="hidden" value="@Model.InstallmentsInfo.Id" id="instid"/>
+<input type="hidden" value="@String.Format("{0:n0}", ViewBag.LoanAmount)" id="loan-inst-amt"/>
+<input type="hidden" value="@String.Format("{0:MMM, yyyy}", ViewBag.LoanInstDate)" id="loan-inst-date"/>
+<div class="row">
+    <div class="col-md-3">
+        <label>Total Loan Amount</label>
+        <h6>@string.Format("{0:0,0.##}", Model.LoanData.Amount)</h6>
+    </div>
+    <div class="col-md-3">
+        <label>Installment Amount</label>
+        <h6>@string.Format("{0:0,0.##}", Model.InstallmentsInfo.Loan_Amt)</h6>
+    </div>
+    <div class="col-md-3">
+        <label>Installment Status</label>
+        <h6>@Model.InstallmentsInfo.Status</h6>
+    </div>
+    <div class="col-md-3">
+        <label>Installment Date</label>
+        <h6>@string.Format("{0:dd-MMM-yyyy}", Model.InstallmentsInfo.Date)</h6>
+    </div>
+    <div class="col-md-6 disss">
+        <label>Reason</label>
+        <textarea id="reasonwaveoff" class="form-control" rows="4" cols="50" placeholder="Reason For Wave Off" required></textarea>
+    </div>
+</div>
+    <script>
+        $(document).ready(function () {
+            $('.modal-footer').append(`  <button type="submit" class="btn btn-primary" id="Waveinst">
+                Wave Off
+            </button>`);
+        });
+    </script>

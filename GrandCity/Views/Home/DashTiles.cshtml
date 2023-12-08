@@ -1,0 +1,1593 @@
+﻿<style>
+    .info-blocks > li {
+        min-width: 0px !important;
+        margin: 0px !important;
+    }
+    .c:hover {
+        transform: scale(1.1);
+        /*box-shadow: 0px 2px 0px 0px rgba(0,0,0,0.25), 0px 0px 4px 2px rgba(0,0,0,0.22);*/
+    }
+    .c {
+        width: 250px;
+        height: 250px;
+        text-align: center;
+        color: black;
+        font-size: 18px;
+        font-weight:bold;
+        background-color: #B4B4B2;
+        padding-top: 100px;
+        font-family:'Times New Roman', Times, serif;
+        border-radius: 10px;
+        /* background-image: url("../assets/static/images/NewTiles/Test.png");
+        background-repeat: no-repeat;
+        background-size: cover;*/
+    }
+</style>
+<head>
+    <script>
+        var dash_tp = @Html.Raw(Json.Encode(ViewBag.Dash));
+    </script>
+</head>
+<div class="row">
+    <ul class="info-blocks">
+        @{
+            if (ViewBag.Dash == "dealer")
+            {
+                <li>
+                    <a style="color:black !important;" href="/Dealership/AddDealer/">
+                        <div class="c" style="box-shadow: 10px 0px 10px rgba(0, 0, 0, 0.5);">
+                            New Dealership
+                            @*<br/> <img src="../assets/static/images/NewTiles/Test.png" alt="New Dealership" width="50" height="50" />*@
+                        </div>
+
+                        @*New Dealership*@
+                    </a>
+                    <!--<div class="hexagon bg-green card">
+                <div class="text" style="">
+                    <i class="fas fa-address-card fa-3x"></i>
+                    <br />
+                    <a style="color:black !important" href="/Dealership/AddDealer/">
+                    <img src="../assets/static/images/Test.png" width="200" height="200" />-->
+                    @*New Dealership*@
+                    <!--</a>
+                    </div>
+                </div>-->
+                </li>
+                <li>
+                    <a style="color:black !important" href="/Dealership/DealerFormAssociation/">
+                        <div class="c" style="box-shadow: 10px 0px 10px rgba(0, 0, 0, 0.5); margin:10px; ">
+                            Dealer Applicatipn Form
+                            @*<img loading="eager" src="../assets/static/images/NewTiles/Test2.png" alt="Dealer Applicatipn Form" width="250" height="250" />*@
+                        </div>
+                    </a>
+                    @*<div class="hexagon bg-red card">
+                        <div class="text" style="">
+                        <div class="text" style="">
+                            <i class="fas fa-address-card fa-3x"></i>
+                            <br />
+                            <a style="color:black !important" href="/Dealership/DealerFormAssociation/">Generate Dealer<br /> Application Form</a>
+                        </div>
+                    </div>*@
+                </li>
+                <li>
+                    <a style="color:black !important" href="/Dealership/PlotsAssignment/">
+                        @*<a style="color:black !important" href="/Dealership/DealerPlotsAssociation/">*@
+                        <div class="c" style="box-shadow: 10px 0px 10px rgba(0, 0, 0, 0.5); margin:10px; ">
+                            New Deal
+                            @* <img src="../assets/static/images/NewTiles/Test4.png" alt="New Deal" width="250" height="250" />*@
+                        </div>
+                    </a>
+                    @*<div class="hexagon bg-blue card">
+                        <div class="text" style="">
+                            <i class="fas fa-feed fa-3x"></i>
+                            <br />
+                            <a style="color:black !important" href="/Dealership/PlotsAssignment/">New Deals</a>
+                        </div>
+                    </div>*@
+                </li>
+                <li>
+                    <a style="color:black !important" href="/Dealership/DealershipDeals/">
+                        <div class="c" style="box-shadow: 10px 0px 10px rgba(0, 0, 0, 0.5); margin:10px; ">
+                            Dealership Deals
+                            @* <img src="../assets/static/images/NewTiles/Test5.png" alt="Dealership Deals" width="250" height="250" />*@
+                        </div>
+                    </a>
+                    @*<div class="hexagon bg-yellow card">
+                        <div class="text" style="">
+                            <i class="fas fa-shopping-cart fa-3x"></i>
+                            <br />
+                            <a style="color:black !important" href="/Dealership/DealershipDeals/">Dealership Deals</a>
+                        </div>
+                    </div>*@
+                </li>
+                <hr style="margin: 5% 0" />
+                <li>
+                    <a style="color:black !important" href="/Dealership/AllDealerships/">
+                        <div class="c" style="box-shadow: 10px 0px 10px rgba(0, 0, 0, 0.5); margin:10px; ">
+                            All Dealerships
+                            @* <img src="../assets/static/images/NewTiles/Test6.png" alt="All Dealerships" width="250" height="250" />*@
+                        </div>
+                    </a>
+                    @*<div class="hexagon bg-grey">
+                        <div class="text" style="">
+                            <i class="fas fa-address-book fa-3x"></i>
+                            <br />
+                            <a style="color:black !important" href="/Dealership/AllDealerships/">All Dealerships</a>
+                        </div>
+                    </div>*@
+                </li>
+                <li>
+                    <a style="color:black !important" href="/Dealership/CommessionList/">
+                        <div class="c" style="box-shadow: 10px 0px 10px rgba(0, 0, 0, 0.5); margin:10px; ">
+                            Commission Lists
+                            @*<img src="../assets/static/images/NewTiles/Test7.png" alt="Comission Lists" width="250" height="250" />*@
+                        </div>
+                    </a>
+                    @*<div class="hexagon bg-green">
+                        <div class="text" style="">
+                            <i class="fas fa-address-book fa-3x"></i>
+                            <br />
+                            <a style="color:black !important" href="/Dealership/CommessionList/">Commission Lists</a>
+                        </div>
+                    </div>*@
+                </li>
+                <hr style="margin: 5% 0" />
+                <li>
+                    <a style="color:black !important" href="/Installments/CreateInstallmentStructure/">
+                        <div class="c" style="box-shadow: 10px 0px 10px rgba(0, 0, 0, 0.5); margin:10px; ">
+                            Installment Structure
+                            @*<img src="../assets/static/images/NewTiles/Test3.png" alt="Installment Structure" width="250" height="250" />*@
+                        </div>
+                        @*<div class="hexagon bg-blue">
+                            <div class="text" style="">
+                                <i class="fas fa-address-book fa-3x"></i>
+                                <br />
+                                <a style="color:black !important" href="/Installments/CreateInstallmentStructure/">Installment Structure</a>
+                            </div>
+                        </div>*@
+                </li>
+                <li>
+                    <a style="color:black !important" href="/Installments/PlotsAssociation/">
+                        <div class="c" style="box-shadow: 10px 0px 10px rgba(0, 0, 0, 0.5); margin:10px; ">
+                            Plot Installment Association
+                            @*<img src="../assets/static/images/NewTiles/Test8.png" alt="Plot Installment Association" width="250" height="250" />*@
+                        </div>
+                    </a>
+                    @*<div class="hexagon bg-blue">
+                        <div class="text" style="">
+                            <i class="fas fa-address-book fa-3x"></i>
+                            <br />
+                            <a style="color:black !important" href="/Installments/PlotsAssociation/">Plot Installment Association</a>
+                        </div>
+                    </div>*@
+                </li>
+                <div style="margin: 5% 0"> </div>
+            }
+            else if (ViewBag.Dash == "cash counter")
+            {
+                <h4 style="color:black !important;">New Booking</h4>
+
+                <li>
+                    <a href="/FileSystem/RegisterFile">
+                        <div class="c" style="box-shadow: 10px 0px 10px rgba(0, 0, 0, 0.5); margin:10px; ">
+                            File Registration
+                            @*<img src="../assets/static/images/NewTiles/CashCounter/1.png" alt="File Registration" width="250" height="250" />*@
+                        </div>
+                    </a>
+                    @*<div style="width:160px">
+                        <a href="/FileSystem/RegisterFile">
+                            <img src="~/assets/static/images/Tileicons/file-reg.png" style="width:100%" />
+                        </a>
+                    </div>*@
+                </li>
+                <li>
+                    <a href="/Plots/RegisterPlot">
+                        <div class="c" style="box-shadow: 10px 0px 10px rgba(0, 0, 0, 0.5); margin:10px; ">
+                            Plot Registration
+                            @*  <img src="../assets/static/images/NewTiles/CashCounter/7.png" alt="Plot Registration" width="250" height="250" />*@
+                        </div>
+                    </a>
+                    @*<div style="width:160px">
+                        <a href="/Plots/RegisterPlot">
+                            <img src="~/assets/static/images/Tileicons/plt-reg.png" style="width:100%" />
+                        </a>
+                    </div>*@
+                </li>
+                <li>
+                    <!--<a href="/Commercial/CommercialRegisteration/">
+                        <div class="c" style="box-shadow: 10px 0px 10px rgba(0, 0, 0, 0.5); margin:10px; ">
+                            Commercial Registration-->
+                            @* <img src="../assets/static/images/NewTiles/CashCounter/6.png" alt="Commercial Registration" width="250" height="250" />*@
+                        <!--</div>
+                    </a>-->
+                    @*<div style="width:160px">
+                        <a href="/Commercial/CommercialRegisteration/">
+                            <img src="~/assets/static/images/Tileicons/Commercial-Registration.png" style="width:100%" />
+                        </a>
+                    </div>*@
+                </li>
+                <hr>
+                <h4 style="color:black !important;">Installments</h4>
+                <li>
+                    <a href="/Installments/InstallmentPortal">
+                        <div class="c" style="box-shadow: 10px 0px 10px rgba(0, 0, 0, 0.5); margin:10px; ">
+                            Recieve Installments
+                            @* <img src="../assets/static/images/NewTiles/CashCounter/3.png" alt="Receive Installment" width="250" height="250" />*@
+                        </div>
+                    </a>
+                    @*<div style="width:160px">
+                        <a href="/Installments/InstallmentPortal">
+                            <img src="~/assets/static/images/Tileicons/rec-inst.png" style="width:100%" />
+                        </a>
+                    </div>*@
+                </li>
+                <hr>
+
+                <h4 style="color:black !important;">Transfer</h4>
+                <li>
+                    <a href="/FileSystem/FileTransfer">
+                        <div class="c" style="box-shadow: 10px 0px 10px rgba(0, 0, 0, 0.5); margin:10px; ">
+                            File Transfer
+                            @* <img src="../assets/static/images/NewTiles/CashCounter/4.png" alt="File Transfer" width="250" height="250" />*@
+                        </div>
+                    </a>
+                    @*<div style="width:160px">
+                        <a href="/FileSystem/FileTransfer">
+                            <img src="~/assets/static/images/Tileicons/fil-trs.png" style="width:100%" />
+                        </a>
+                    </div>*@
+                </li>
+                <li>
+                    <a href="/Transfer/PlotTransfer">
+                        <div class="c" style="box-shadow: 10px 0px 10px rgba(0, 0, 0, 0.5); margin:10px; ">
+                            Plot Transfer
+                            @* <img src="../assets/static/images/NewTiles/CashCounter/5.png" alt="Plot Transfer" width="250" height="250" />*@
+                        </div>
+                    </a>
+                    @*<div style="width:160px">
+                        <a href="/Transfer/PlotTransfer">
+                            <img src="~/assets/static/images/Tileicons/plt-trs.png" style="width:100%" />
+                        </a>
+                    </div>*@
+                </li>
+                <li>
+                    <a style="color:black !important" href="/Transfer/CommercialTransfer/">
+                        <div class="c" style="box-shadow: 10px 0px 10px rgba(0, 0, 0, 0.5); margin:10px; ">
+                            Commercial Units Transfer
+                            @*<img src="../assets/static/images/NewTiles/CashCounter/2.png" alt="Commercial Unit Transfer" width="250" height="250" />*@
+                        </div>
+                    </a>
+                    @*<div class="hexagon bg-grey" style="padding-top: 10px;">
+                        <div class="text" style="">
+                            <i class="fas fa-hamsa fa-3x"></i>
+                            <br />
+                            <a style="color:black !important" href="/Transfer/CommercialTransfer/">Commercial Units Transfer</a>
+                        </div>
+                    </div>*@
+                </li>
+                <hr>
+            }
+            else if (ViewBag.Dash == "files Plots")
+            {
+                <h4 style="color:black !important;">File Management</h4>
+                <br />
+                <li>
+                    <a href="/FileSystem/FileInformation">
+                        <div class="c" style="box-shadow: 10px 0px 10px rgba(0, 0, 0, 0.5); margin:10px;">
+                            File Infromation
+                            @* <img src="../assets/static/images/NewTiles/FPR/File/1.png" alt="File Information" width="250" height="250" />*@
+                        </div>
+                    </a>
+                    @*<div style="width:160px">
+                        <a href="/FileSystem/FileInformation">
+                            <img src="~/assets/static/images/Tileicons/fil-info.png" style="width:100%" />
+                        </a>
+                    </div>*@
+                </li>
+                <li>
+                    <a href="/FileSystem/UpdateInformation">
+                        <div class="c" style="box-shadow: 10px 0px 10px rgba(0, 0, 0, 0.5); margin:10px; ">
+                            Update File Information
+                            @* <img src="../assets/static/images/NewTiles/FPR/File/2.png" alt="Update File Infromation" width="250" height="250" />*@
+                        </div>
+                    </a>
+                    @*<div style="width:160px">
+                        <a href="/FileSystem/UpdateInformation">
+                            <img src="~/assets/static/images/Tileicons/up-fil-info.png" style="width:100%" />
+                        </a>
+                    </div>*@
+                </li>
+                <li>
+                    <a href="/FileSystem/OverDueFiles">
+                        <div class="c" style="box-shadow: 10px 0px 10px rgba(0, 0, 0, 0.5); margin:10px; ">
+                            Overdue Files
+                            @* <img src="../assets/static/images/NewTiles/FPR/File/4.png" alt="Overdue Files" width="250" height="250" />*@
+                        </div>
+                    </a>
+                    @*<div style="width:160px">
+                        <a href="/FileSystem/OverDueFiles">
+                            <img src="~/assets/static/images/Tileicons/ov-fil.png" style="width:100%" />
+                        </a>
+                    </div>*@
+                </li>
+                <li>
+                    <a href="/FileSystem/CancellationReqs">
+                        <div class="c" style="box-shadow: 10px 0px 10px rgba(0, 0, 0, 0.5); margin:10px; ">
+                            File Cancellation Request
+                            @* <img src="../assets/static/images/NewTiles/FPR/File/5.png" alt="File Cancellation Request" width="250" height="250" />*@
+                        </div>
+                    </a>
+                    @*<div style="width:160px">
+                        <a href="/FileSystem/CancellationReqs">
+                            <img src="~/assets/static/images/Tileicons/fil-can-req.png" style="width:100%" />
+                        </a>
+                    </div>*@
+                </li>
+                <li>
+                    <a href="/FileSystem/ExtraAmountRefundFiles">
+                        <div class="c" style="box-shadow: 10px 0px 10px rgba(0, 0, 0, 0.5); margin:10px; ">
+                            Receipt Refund Request
+                            @*<img src="../assets/static/images/NewTiles/FPR/File/7.png" alt="Receipt Refund Request" width="250" height="250" />*@
+                        </div>
+                    </a>
+                    @*<div style="width:160px">
+                        <a href="/FileSystem/ExtraAmountRefundFiles">
+                            <img src="~/assets/static/images/Tileicons/rec-ref-req.png" style="width:100%" />
+                        </a>
+                    </div>*@
+                </li>
+                <li>
+                    <a href="/FileSystem/FileDelivery">
+                        <div class="c" style="box-shadow: 10px 0px 10px rgba(0, 0, 0, 0.5); margin:10px; ">
+                            File Delivery
+                            @*<img src="../assets/static/images/NewTiles/FPR/File/8.png" alt="File Delivery" width="250" height="250" />*@
+                        </div>
+                    </a>
+                    @*<div style="width:160px">
+                        <a href="/FileSystem/FileDelivery">
+                            <img src="~/assets/static/images/Tileicons/fil-del.png" style="width:100%" />
+                        </a>
+                    </div>*@
+                </li>
+                <li>
+                    <a href="/FileSystem/TransferRequestList">
+                        <div class="c" style="box-shadow: 10px 0px 10px rgba(0, 0, 0, 0.5); margin:10px; ">
+                            File Transfer
+                            @* <img src="../assets/static/images/NewTiles/FPR/File/3.png" alt="File Transfer" width="250" height="250" />*@
+                        </div>
+                    </a>
+                    @*<div style="width:160px">
+                        <a href="/FileSystem/TransferRequestList">
+                            <img src="~/assets/static/images/Tileicons/fil-trs-reqs.png" style="width:100%" />
+                        </a>
+                    </div>*@
+                </li>
+
+                <li>
+                    <a href="/Transfer/FilesTransfersList">
+                        <div class="c" style="box-shadow: 10px 0px 10px rgba(0, 0, 0, 0.5); margin:10px; ">
+                            File Transfer Request
+                            @* <img src="../assets/static/images/NewTiles/FPR/File/6.png" alt="File Transfer Request" width="250" height="250" />*@
+                        </div>
+                    </a>
+                    @*<div style="width:160px">
+                        <a href="/Transfer/FilesTransfersList">
+                            <img src="~/assets/static/images/Tileicons/fil-trs.png" style="width:100%" />
+                        </a>
+                    </div>*@
+                </li>
+
+                <br />
+                <br />
+                <h4 style="color:black !important;">Plot Management</h4>
+                <br />
+                <li>
+                    <a href="/Plots/PlotsInventory">
+                        <div class="c" style="box-shadow: 10px 0px 10px rgba(0, 0, 0, 0.5); margin:10px; ">
+                            Plots Inventory
+                            @* <img src="../assets/static/images/NewTiles/FPR/Plot/plot-info.png" alt="Plot Information" width="250" height="250" />*@
+                        </div>
+                    </a>
+                </li>
+                <li>
+                    <a href="/Plots/PlotInformation">
+                        <div class="c" style="box-shadow: 10px 0px 10px rgba(0, 0, 0, 0.5); margin:10px; ">
+                            Plot Information
+                            @* <img src="../assets/static/images/NewTiles/FPR/Plot/plot-info.png" alt="Plot Information" width="250" height="250" />*@
+                        </div>
+                    </a>
+                    @*<div style="width:160px">
+                        <a href="/Plots/PlotInformation">
+                            <img src="~/assets/static/images/Tileicons/plt-info.png" style="width:100%" />
+                        </a>
+                    </div>*@
+                </li>
+                <li>
+                    <a href="/Plots/UpdatePlotInformation">
+                        <div class="c" style="box-shadow: 10px 0px 10px rgba(0, 0, 0, 0.5); margin:10px; ">
+                            Update Plot Infromation
+                            @*<img src="../assets/static/images/NewTiles/FPR/Plot/update-plot-info.png" alt="Update Plot Information" width="250" height="250" />*@
+                        </div>
+                    </a>
+                    @*<div style="width:160px">
+                        <a href="/Plots/UpdatePlotInformation">
+                            <img src="~/assets/static/images/Tileicons/plt-up-info.png" style="width:100%" />
+                        </a>
+                    </div>*@
+                </li>
+                <li>
+                    <a href="/Plots/AllotmentLettersList">
+                        <div class="c" style="box-shadow: 10px 0px 10px rgba(0, 0, 0, 0.5); margin:10px; ">
+                            Allotment Letter Requests List
+                            @*<img src="../assets/static/images/NewTiles/FPR/Plot/alot-letter-req.png" alt="Allotment Letter Request" width="250" height="250" />*@
+                        </div>
+                    </a>
+                    @*<div style="width:160px">
+                        <a href="/Plots/AllotmentLettersList">
+                            <img src="~/assets/static/images/Tileicons/all-list.png" style="width:100%" />
+                        </a>
+                    </div>*@
+                </li>
+                <li>
+                    <a href="/Transfer/PlotTransferRequest">
+                        <div class="c" style="box-shadow: 10px 0px 10px rgba(0, 0, 0, 0.5); margin:10px; ">
+                            Request Plot Transfer
+                            @*<img src="../assets/static/images/NewTiles/FPR/Plot/Plot-Transfer-Request.png" alt="Request Plot Transfer" width="250" height="250" />*@
+                        </div>
+                    </a>
+                    @*<div style="width:160px">
+                        <a href="/Transfer/PlotTransferRequest">
+                            <img src="~/assets/static/images/Tileicons/plt-trs-reqs.png" style="width:100%" />
+                        </a>
+                    </div>*@
+                </li>
+                <li>
+                    <a href="/Transfer/PlotTransferRequestList">
+                        <div class="c" style="box-shadow: 10px 0px 10px rgba(0, 0, 0, 0.5); margin:10px; ">
+                            Plot Transfer Requests
+                            @* <img src="../assets/static/images/NewTiles/FPR/Plot/8.png" alt="Plot Transfer Requests" width="250" height="250" />*@
+                        </div>
+                    </a>
+                    @*<div style="width:160px">
+                        <a href="/Transfer/PlotTransferRequestList">
+                            <img src="~/assets/static/images/Tileicons/plt-trs-req.png" style="width:100%" />
+                        </a>
+                    </div>*@
+                </li>
+                <li>
+                    <a href="/Transfer/PlotsTransfersList">
+                        <div class="c" style="box-shadow: 10px 0px 10px rgba(0, 0, 0, 0.5); margin:10px; ">
+                            Transferref Plots
+                            @*<img src="../assets/static/images/NewTiles/FPR/Plot/11.png" alt="Transferred Plots" width="250" height="250" />*@
+                        </div>
+                    </a>
+                    @*<div style="width:160px">
+                        <a href="/Transfer/PlotsTransfersList">
+                            <img src="~/assets/static/images/Tileicons/plt-trs.png" style="width:100%" />
+                        </a>
+                    </div>*@
+                </li>
+                <li>
+                    <a href="/Plots/AllotmentTrackingViews">
+                        <div class="c" style="box-shadow: 10px 0px 10px rgba(0, 0, 0, 0.5); margin:10px; ">
+                            Allotment Letter Requests
+                            @*<img src="../assets/static/images/NewTiles/FPR/Plot/alot-letter-req.png" alt="Allotment Letter Request" width="250" height="250" />*@
+                        </div>
+                    </a>
+                    @*<div style="width:160px">
+                        <a href="/Plots/AllotmentTrackingViews">
+                            <img src="~/assets/static/images/Tileicons/all-trac.png" style="width:100%" />
+                        </a>
+                    </div>*@
+                </li>
+                <li>
+                    <a href="/Plots/CancellationReqs">
+                        <div class="c" style="box-shadow: 10px 0px 10px rgba(0, 0, 0, 0.5); margin:10px; ">
+                            Plot Cancellation Request
+                            @*<img src="../assets/static/images/NewTiles/FPR/Plot/plot-can-req.png" alt="Plot Cancellation Request" width="250" height="250" />*@
+                        </div>
+                    </a>
+                    @*<div style="width:160px">
+                        <a href="/Plots/CancellationReqs">
+                            <img src="~/assets/static/images/Tileicons/plt-can-req.png" style="width:100%" />
+                        </a>
+                    </div>*@
+                </li>
+                <li>
+                    <a href="/Plots/ExtraAmountRefund">
+                        <div class="c" style="box-shadow: 10px 0px 10px rgba(0, 0, 0, 0.5); margin:10px; ">
+                            Receipt Refund Request
+                            @* <img src="../assets/static/images/NewTiles/FPR/Plot/9.png" alt="Receipt Refund Request" width="250" height="250" />*@
+                        </div>
+                    </a>
+                    @*<div style="width:160px">
+                        <a href="/Plots/ExtraAmountRefund">
+                            <img src="~/assets/static/images/Tileicons/rec-ref-req.png" style="width:100%" />
+                        </a>
+                    </div>*@
+                </li>
+                <li>
+                    <a href="/Plots/OverDuePlots">
+                        <div class="c" style="box-shadow: 10px 0px 10px rgba(0, 0, 0, 0.5); margin:10px; ">
+                            Overdue Plots
+                            @*<img src="../assets/static/images/NewTiles/FPR/Plot/6.png" alt="Overdue Plots" width="250" height="250" />*@
+                        </div>
+                    </a>
+                    @*<div style="width:160px">
+                        <a href="/Plots/OverDuePlots">
+                            <img src="~/assets/static/images/Tileicons/ov-plt.png" style="width:100%" />
+                        </a>
+                    </div>*@
+                </li>
+                <li>
+                    <a href="/Plots/PossessionRequests">
+                        <div class="c" style="box-shadow: 10px 0px 10px rgba(0, 0, 0, 0.5); margin:10px; ">
+                            Possession Letter Requests
+                            @*<img src="../assets/static/images/NewTiles/FPR/Plot/possession.png" alt="Possession Letter Requests" width="250" height="250" />*@
+                        </div>
+                    </a>
+                    @*<div style="width:160px">
+                        <a href="/Plots/PossessionRequests">
+                            <img src="~/assets/static/images/Tileicons/pos-let-req.png" style="width:100%" />
+                        </a>
+                    </div>*@
+                </li>
+                @*<li>
+                    <div style="width:160px">
+                        <a href="/Rental/Index">
+                            <img src="~/assets/static/images/Tileicons/ren-prop.png" style="width:100%" />
+                        </a>
+                    </div>
+                </li>
+                <li>
+                    <div class="hexagon bg-red">
+                        <div class="text" style="">
+                            <i class="fas fa-inbox fa-3x"></i>
+                            <br />
+                            <a style="color:black !important" href="/Plots/EmployeeFile/">Employee Plots</a>
+                        </div>
+                    </div>
+                </li>*@
+                <br />
+                <br />
+                <h4 style="color:black !important;">Receipts</h4>
+                <br />
+                <br />
+                <br />
+
+                <li>
+                    <a href="/Banking/BankingInstrument">
+                        <div class="c" style="box-shadow: 10px 0px 10px rgba(0, 0, 0, 0.5); margin:10px; ">
+                            Instruments
+                            @*<img src="../assets/static/images/NewTiles/FPR/1.png" alt="Instruments" width="250" height="250" />*@
+                        </div>
+                    </a>
+                    @*<div style="width:160px">
+                        <a href="/Banking/BankingInstrument">
+                            <img src="~/assets/static/images/Tileicons/all-ins.png" style="width:100%" />
+                        </a>
+                    </div>*@
+                </li>
+                <li>
+                    <a href="/Reports/RecoveryReport">
+                        <div class="c" style="box-shadow: 10px 0px 10px rgba(0, 0, 0, 0.5); margin:10px; ">
+                            Recovery Reports
+                            @*<img src="../assets/static/images/NewTiles/FPR/2.png" alt="Recovery Reports" width="250" height="250" />*@
+                        </div>
+                    </a>
+                    @*<div style="width:160px">
+                        <a href="/Reports/RecoveryReport">
+                            <img src="~/assets/static/images/Tileicons/al-rec-rep.png" style="width:100%" />
+                        </a>
+                    </div>*@
+                </li>
+                <li>
+                    <a style="color:black !important" href="/Finance/FinancialAdjustList/">
+                        <div class="c" style="box-shadow: 10px 0px 10px rgba(0, 0, 0, 0.5); margin:10px; ">
+                            Receipt Adjustment Requests
+                            @* <img src="../assets/static/images/NewTiles/FPR/3.png" alt="Receipt Adjustment Requests" width="250" height="250" />*@
+                        </div>
+                    </a>
+                    @*<div class="hexagon bg-green">
+                        <div class="text" style="">
+                            <i class="fas fa-money-bill-wave fa-3x"></i>
+                            <br />
+                            <a style="color:black !important" href="/Finance/FinancialAdjustList/">Receipts Adjustment Requests</a>
+                        </div>
+                    </div>*@
+                </li>
+                <li>
+                    <a href="/Finance/UpdateRequests">
+                        <div class="c" style="box-shadow: 10px 0px 10px rgba(0, 0, 0, 0.5); margin:10px; ">
+                            Update Receipt
+                            @*<img src="../assets/static/images/NewTiles/FPR/4.png" alt="Update Receipt" width="250" height="250" />*@
+                        </div>
+                    </a>
+                    @*<div style="width:160px">
+                        <a href="/Finance/UpdateRequests">
+                            <img src="~/assets/static/images/Tileicons/rece-up.png" style="width:100%" />
+                        </a>
+                    </div>*@
+                </li>
+
+                <li>
+                    <a href="/Finance/AllCancelRequests">
+                        <div class="c" style="box-shadow: 10px 0px 10px rgba(0, 0, 0, 0.5); margin:10px; ">
+                            Receipt Cancellation Requests
+                            @*<img src="../assets/static/images/NewTiles/FPR/5.png" alt="Receipt Cancellation Request" width="250" height="250" />*@
+                        </div>
+                    </a>
+                    @*<div style="width:160px">
+                        <a href="/Finance/AllCancelRequests">
+                            <img src="~/assets/static/images/Tileicons/rec-can-req.png" style="width:100%" />
+                        </a>
+                    </div>*@
+                </li>
+
+            }
+            else if (ViewBag.Dash == "prj management")
+            {
+
+                @*<li>
+                    <div style="width:160px">
+                        <a href="/ConstructProjectManagement/ProjectsList">
+                            <img src="~/assets/static/images/Tileicons/prj.png" style="width:100%" />
+                        </a>
+                    </div>
+                </li>*@
+            }
+            else if (ViewBag.Dash == "tickets")
+            {
+    <li>
+        <a style="color:black !important" href="/Tickets/AllTickets">
+            <div class="c" style="box-shadow: 10px 0px 10px rgba(0, 0, 0, 0.5); margin:10px; ">
+                All Tickets
+            </div>
+        </a>
+        @*<div style="width:160px">
+            <a href="/Tickets/AllTickets">
+                <img src="~/assets/static/images/Tileicons/al-tick.png" style="width:100%" />
+            </a>
+        </div>*@
+    </li>
+    <li>
+        <a style="color:black !important" href="/Tickets/ReceptionTicketing">
+            <div class="c" style="box-shadow: 10px 0px 10px rgba(0, 0, 0, 0.5); margin:10px; ">
+                Reception Tickets
+            </div>
+        </a>
+        @*<div style="width:160px">
+            <a href="/Tickets/ReceptionTicketing">
+                <img src="~/assets/static/images/Tileicons/rec-tick.png" style="width:100%" />
+            </a>
+        </div>*@
+    </li>
+    <li>
+        <a style="color:black !important" href="/Tickets/MyTickets">
+            <div class="c" style="box-shadow: 10px 0px 10px rgba(0, 0, 0, 0.5); margin:10px; ">
+                My Tickets
+            </div>
+        </a>
+        @*<div style="width:160px">
+            <a href="/Tickets/MyTickets">
+                <img src="~/assets/static/images/Tileicons/my-tick.png" style="width:100%" />
+            </a>
+        </div>*@
+    </li>
+
+            }
+            else if (ViewBag.Dash == "transfer requests")
+            {
+                <li>
+                    <div style="width:160px">
+                        <a href="/FileSystem/TransferRequest">
+                            <img src="~/assets/static/images/Tileicons/fil-trs-req.png" style="width:100%" />
+                        </a>
+                    </div>
+                </li>
+                <li>
+                    <div style="width:160px">
+                        <a href="/Transfer/PlotTransferRequest">
+                            <img src="~/assets/static/images/Tileicons/plt-trs-reqs.png" style="width:100%" />
+                        </a>
+                    </div>
+                </li>
+            }
+            else if (ViewBag.Dash == "reports")
+            {
+                <h6 style="margin:50px 0">Plots Management</h6>
+                <li>
+                    <a style="color:black !important" href="/Reports/PlotsOutstanding/">
+                        <div class="c" style="box-shadow: 10px 0px 10px rgba(0, 0, 0, 0.5); margin:10px; ">
+                            Plots Outstanding Report
+                            @*<img src="../assets/static/images/NewTiles/Reports/1.png" alt="Plots Outstanding Report" width="250" height="250" />*@
+                        </div>
+                    </a>
+                    @*<div class="hexagon bg-yellow">
+                        <div class="text" style="">
+                            <i class="fas fa-store-alt fa-3x"></i>
+                            <br />
+                            <a style="color:black !important" href="/Reports/PlotsOutstanding/">Plots Outstanding Report</a>
+                        </div>
+                    </div>*@
+                </li>
+                <li>
+                    <!--<a style="color:black !important" href="/Balloting/BallotingReport/">
+                        <div class="c" style="box-shadow: 10px 0px 10px rgba(0, 0, 0, 0.5); margin:10px; ">
+                            Balloting Report-->
+                            @*<img src="../assets/static/images/NewTiles/Reports/2.png" alt="Balloting Report" width="250" height="250" />*@
+                        <!--</div>
+                    </a>-->
+                    @*<div class="hexagon bg-red">
+                        <div class="text" style="">
+                            <i class="fas fa-store-alt fa-3x"></i>
+                            <br />
+                            <a style="color:black !important" href="/Balloting/BallotingReport/">Balloting Report</a>
+                        </div>
+                    </div>*@
+                </li>
+                <li>
+                    <!--<a style="color:black !important" href="/Plots/SpecialPrefrencesCharges/">
+                        <div class="c" style="box-shadow: 10px 0px 10px rgba(0, 0, 0, 0.5); margin:10px; ">
+                            Special Preferences Report-->
+                            @* <img src="../assets/static/images/NewTiles/Reports/3.png" alt="Special Preferences Report" width="250" height="250" />*@
+                        <!--</div>
+                    </a>-->
+                    @*<div class="hexagon bg-blue">
+                        <div class="text" style="">
+                            <i class="fas fa-store-alt fa-3x"></i>
+                            <br />
+                            <a style="color:black !important" href="/Plots/SpecialPrefrencesCharges/">Special Preferences Report</a>
+                        </div>
+                    </div>*@
+                </li>
+                <li>
+                    <a style="color:black !important" href="/Reports/OverDueFiles/">
+                        <div class="c" style="box-shadow: 10px 0px 10px rgba(0, 0, 0, 0.5); margin:10px; ">
+                            Overdue Files Report
+                            @*<img src="../assets/static/images/NewTiles/Reports/4.png" alt="Overdue Files Report" width="250" height="250" />*@
+                        </div>
+                    </a>
+                    @*<div class="hexagon bg-green">
+                        <div class="text" style="">
+                            <i class="fas fa-file-alt fa-3x"></i>
+                            <br />
+                            <a style="color:black !important" href="/Reports/OverDueFiles/">Overdue Files Report</a>
+                        </div>
+                    </div>*@
+                </li>
+
+                <li>
+                    <a style="color:black !important" href="/Filesystem/FilesPlotsReport/">
+                        <div class="c" style="box-shadow: 10px 0px 10px rgba(0, 0, 0, 0.5); margin:10px; ">
+                            File Summary Report
+                            @*<img src="../assets/static/images/NewTiles/Reports/6.png" alt="File Summary Report" width="250" height="250" />*@
+                        </div>
+                    </a>
+                    @*<div class="hexagon bg-green">
+                        <div class="text" style="">
+                            <i class="fas fa-file-alt fa-3x"></i>
+                            <br />
+                            <a style="color:black !important" href="/Filesystem/FilesPlotsReport/">Files Summary Report</a>
+                        </div>
+                    </div>*@
+                </li>
+
+                <li>
+                    <a style="color:black !important" href="/Reports/SAPlotSalesReport/">
+                        <div class="c" style="box-shadow: 10px 0px 10px rgba(0, 0, 0, 0.5); margin:10px; ">
+                            Plot Sales Report
+                            @* <img src="../assets/static/images/NewTiles/Reports/5.png" alt="Plot Sales Report" width="250" height="250" />*@
+                        </div>
+                    </a>
+                    @*<div class="hexagon bg-grey">
+                        <div class="text" style="">
+                            <i class="fas fa-list fa-3x"></i>
+                            <br />
+                            <a style="color:black !important" href="/Reports/SAPlotSalesReport/">SA Plot Sales Report</a>
+                        </div>
+
+                    </div>*@
+                </li>
+            }
+            else if (ViewBag.Dash == "Admin Facilities")
+            {
+                <li class="bg-success">
+                    <div class="top-info">
+                        <a href="javascript:void(0);" class="get-link text-white" data-link="/AdminFacilities/Project/">Projects</a>
+                    </div>
+                </li>
+                <li class="bg-success">
+                    <div class="top-info">
+                        <a href="javascript:void(0);" class="get-link text-white" data-link="/AdminFacilities/Registration/">Member Registration</a>
+                    </div>
+                </li>
+                <li class="bg-info">
+                    <div class="top-info">
+                        <a href="javascript:void(0);" class="get-link text-white" data-link="/AdminFacilities/Detail/">Fee</a>
+                    </div>
+                </li>
+                <li class="bg-info">
+                    <div class="top-info">
+                        <a href="javascript:void(0);" class="get-link text-white" data-link="/AdminFacilities/MemberListingproject/">All Member</a>
+                    </div>
+                </li>
+
+                <br />
+
+                <li>
+                    <div style="width:160px">
+                        <a href="/Receipts/ArchiCustomers/">
+                            <img src="~/assets/static/images/Tileicons/archi-rec-req.png" style="width:100%" />
+                        </a>
+                    </div>
+                </li>
+
+                <li>
+                    <div style="width:160px">
+                        <a href="/Receipts/ArchitectureFeeRequests">
+                            <img src="~/assets/static/images/Tileicons/archi-rec-req.png" style="width:100%" />
+                        </a>
+                    </div>
+                </li>
+            }
+            else if (ViewBag.Dash == "ballot")
+            {
+                <li>
+                    <a style="color:black !important" href="/Balloting/Ballot">
+                        <div class="c" style="box-shadow: 10px 0px 10px rgba(0, 0, 0, 0.5); margin:10px; ">
+                            Balloting
+                            @*<img src="../assets/static/images/NewTiles/Balloting/1.png" alt="Balloting" width="250" height="250" />*@
+                        </div>
+                    </a>
+
+                    @*<div class="hexagon bg-grey">
+                        <div class="text" style="">
+                            <i class="fas fa-directions fa-3x"></i>
+                            <br />
+                            <a style="color:black !important" href="/Balloting/Ballot">Perform Ballot</a>
+                        </div>
+                    </div>*@
+                </li>
+                <li>
+                    <a style="color:black !important" href="/Balloting/BallotedPlots">
+                        <div class="c" style="box-shadow: 10px 0px 10px rgba(0, 0, 0, 0.5); margin:10px; ">
+                            Intimation Letter
+                            @*<img src="../assets/static/images/NewTiles/Balloting/2.png" alt="Intimation Letter" width="250" height="250" />*@
+                        </div>
+                    </a>
+                    @*<div class="hexagon bg-grey">
+                        <div class="text" style="">
+                            <i class="fas fa-directions fa-3x"></i>
+                            <br />
+                            <a style="color:black !important" href="/Balloting/BallotedPlots">Intimation Letter</a>
+                        </div>
+                    </div>*@
+                </li>
+                <li>
+                    <a style="color:black !important" href="/Balloting/BallotInventory/">
+                        <div class="c" style="box-shadow: 10px 0px 10px rgba(0, 0, 0, 0.5); margin:10px; ">
+                            Ballot Summary
+                            @*<img src="../assets/static/images/NewTiles/Balloting/3.png" alt="Ballot Summary" width="250" height="250" />*@
+                        </div>
+                    </a>
+                    @*<div class="hexagon bg-grey">
+                        <div class="text" style="">
+                            <i class="fas fa-directions fa-3x"></i>
+                            <br />
+                            <a style="color:black !important" href="/Balloting/BallotInventory/">Balloted Summary</a>
+                        </div>
+                    </div>*@
+                </li>
+            }
+            else if (ViewBag.Dash == "inventory")
+            {
+                <li>
+                    <div class="hexagon bg-grey">
+                        <div class="text" style="">
+                            <i class="fas fa-directions fa-3x"></i>
+                            <br />
+                            <a style="color:black !important" href="/ConstructProjectManagement/ProjectInventory/">Department Inventory</a>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="hexagon bg-blue">
+                        <div class="text" style="">
+                            <i class="fas fa-id-card-alt fa-3x"></i>
+                            <br />
+                            <a style="color:black !important" href="/Inventory/DemandOrders/">Demand Orders</a>
+                        </div>
+                    </div>
+                </li>
+
+                <li>
+                    <div class="hexagon bg-yellow">
+                        <div class="text" style="">
+                            <i class="fas fa-directions fa-3x"></i>
+                            <br />
+                            <a style="color:black !important" href="/Inventory/InventoryList/">All Inventory</a>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="hexagon bg-red">
+                        <div class="text" style="">
+                            <i class="fas fa-id-card-alt fa-3x"></i>
+                            <br />
+                            <a style="color:black !important" href="/Inventory/ReceiveItems/">Receive Items</a>
+                        </div>
+                    </div>
+                </li>
+
+                <li>
+                    <div class="hexagon bg-green">
+                        <div class="text" style="">
+                            <i class="fas fa-directions fa-3x"></i>
+                            <br />
+                            <a style="color:black !important" href="/Inventory/InventoryReturn/">Return Items</a>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="hexagon bg-blue">
+                        <div class="text" style="">
+                            <i class="fas fa-id-card-alt fa-3x"></i>
+                            <br />
+                            <a style="color:black !important" href="/Inventory/DemandOrders/">All Demand Orders</a>
+                        </div>
+                    </div>
+                </li>
+
+                <hr style="margin:25px 0" />
+                <li>
+                    <div class="hexagon bg-grey">
+                        <div class="text" style="">
+                            <i class="fas fa-directions fa-3x"></i>
+                            <br />
+                            <a style="color:black !important" href="/Inventory/InventoryReport/">Inventory Report</a>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="hexagon bg-red">
+                        <div class="text" style="">
+                            <i class="fas fa-id-card-alt fa-3x"></i>
+                            <br />
+                            <a style="color:black !important" href="/Inventory/StockTaking/">Stock Taking</a>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="hexagon bg-yellow">
+                        <div class="text" style="">
+                            <i class="fas fa-directions fa-3x"></i>
+                            <br />
+                            <a style="color:black !important" href="/Inventory/DirectItems/">Direct Issuance</a>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="hexagon bg-green">
+                        <div class="text" style="">
+                            <i class="fas fa-truck fa-3x"></i>
+                            <br />
+                            <a style="color:black !important" href="/Inventory/MaterialShifting/">Material Shifting</a>
+                        </div>
+                    </div>
+                </li>
+
+                <li>
+                    <div class="hexagon bg-red">
+                        <div class="text" style="">
+                            <i class="fas fa-surprise fa-3x"></i>
+                            <br />
+                            <a style="color:black !important" href="/Inventory/GRNNeedSupervision/">GRN Supervision</a>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="hexagon bg-blue">
+                        <div class="text" style="">
+                            <i class="fas fa-address-book fa-3x"></i>
+                            <br />
+                            <a style="color:black !important" href="/Inventory/IssuanceNeedSupervision/">Issuance Need Supervision</a>
+                        </div>
+                    </div>
+                </li>
+            }
+            else if (ViewBag.Dash == "proc")
+            {
+                @*<li>
+                    <div class="hexagon bg-red">
+                        <div class="text" style="">
+                            <i class="fas fa-shopping-cart fa-3x"></i>
+                            <br />
+                            <a style="color:black !important" href="/Procurement/User_Purchase_Req/">Purchase Requisitions</a>
+                        </div>
+                    </div>
+                </li>*@
+                @*<li>
+                    <div class="hexagon bg-yellow">
+                        <div class="text" style="">
+                            <i class="far fa-calendar-alt fa-3x"></i>
+                            <br />
+                            <a style="color:black !important" href="/Services/User_Service_Req/">Services Requisitions</a>
+                        </div>
+                    </div>
+                </li>*@
+                <li>
+                    <div class="hexagon bg-green">
+                        <div class="text" style="">
+                            <i class="fas fa-dharmachakra fa-3x"></i>
+                            <br />
+                            <a style="color:black !important" href="/Procurement/Purchases/">Purchase Management</a>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="hexagon bg-grey">
+                        <div class="text" style="">
+                            <i class="fa fa-clock-o fa-3x"></i>
+                            <br />
+                            <a style="color:black !important" href="/Services/Services/">Service Management</a>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="hexagon bg-blue">
+                        <div class="text" style="">
+                            <i class="fas fa-vote-yea fa-3x"></i>
+                            @*<i class="fa fa-clock-o "></i>*@
+                            <br />
+                            <a style="color:black !important" href="/Inventory/DeliveryNoteNeedSupervision/">Delivery Note Supervision</a>
+                        </div>
+                    </div>
+                </li>
+                @*<li>
+                    <div class="hexagon bg-red">
+                        <div class="text" style="">
+                            <i class="fas fa-cash-register fa-3x"></i>
+                            <br />
+                            <a style="color:black !important" href="/Finance/AllPattyCash/">Petty Cash</a>
+                        </div>
+                    </div>
+                </li>*@
+                <li>
+                    <div class="hexagon bg-red">
+                        <div class="text" style="">
+                            <i class="fas fa-user-friends fa-3x"></i>
+                            <br />
+                            <a style="color:black !important" href="/Vendor/VendorList/">Vendors</a>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="hexagon bg-blue">
+                        <div class="text" style="">
+                            <i class="fas fa-vote-yea fa-3x"></i>
+                            <br />
+                            <a style="color:black !important" href="/Services/ServicesContract/">Service Contract</a>
+                        </div>
+                    </div>
+                </li>
+
+            }
+            @*else if (ViewBag.Dash == "accounts")
+            {
+                <li>
+                    <div style="width:160px">
+                        <a href="/Banking/BankingInstrument">
+                            <img src="~/assets/static/images/Tileicons/all-ins.png" style="width:100%" />
+                        </a>
+                    </div>
+                </li>
+                <li>
+                    <div style="width:160px">
+                        <a href="/Reports/RecoveryReport">
+                            <img src="~/assets/static/images/Tileicons/al-rec-rep.png" style="width:100%" />
+                        </a>
+                    </div>
+                </li>
+                <li>
+                    <div class="hexagon bg-green">
+                        <div class="text" style="">
+                            <i class="fas fa-money-bill-wave fa-3x"></i>
+                            <br />
+                            <a style="color:black !important" href="/Finance/FinancialAdjustList/">Receipts Adjustment Requests</a>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div style="width:160px">
+                        <a href="/Finance/UpdateRequests">
+                            <img src="~/assets/static/images/Tileicons/rece-up.png" style="width:100%" />
+                        </a>
+                    </div>
+                </li>
+
+                <li>
+                    <div style="width:160px">
+                        <a href="/Finance/AllCancelRequests">
+                            <img src="~/assets/static/images/Tileicons/rec-can-req.png" style="width:100%" />
+                        </a>
+                    </div>
+                </li>
+            }*@
+            else if (ViewBag.Dash == "audit")
+            {
+                <li>
+                    <a href="/FileSystem/FileVerification">
+                        <div class="c" style="box-shadow: 10px 0px 10px rgba(0, 0, 0, 0.5); margin:10px; ">
+                            File Verification
+                            @*<img src="../assets/static/images/NewTiles/Audit/1.png" alt="File Verification" width="250" height="250" />*@
+                        </div>
+                    </a>
+                    @*<div style="width:160px">
+                        <a href="/FileSystem/FileVerification">
+                            <img src="~/assets/static/images/Tileicons/fil-ver.png" style="width:100%" />
+                        </a>
+                    </div>*@
+                </li>
+                <li>
+                    <a href="/Plots/ReqVerificationList">
+                        <div class="c" style="box-shadow: 10px 0px 10px rgba(0, 0, 0, 0.5); margin:10px; ">
+                            Plot Verification List
+                            @*<img src="../assets/static/images/NewTiles/Audit/2.png" alt="Plot Verification List" width="250" height="250" />*@
+                        </div>
+                    </a>
+                    @*<div style="width:160px">
+                        <a href="/Plots/ReqVerificationList">
+                            <img src="~/assets/static/images/Tileicons/plt-ver-lst.png" style="width:100%" />
+                        </a>
+                    </div>*@
+                </li>
+                <li>
+                    <a href="/Plots/AllotmentRequest">
+                        <div class="c" style="box-shadow: 10px 0px 10px rgba(0, 0, 0, 0.5); margin:10px; ">
+                            Allotment Letter Request
+                            @* <img src="../assets/static/images/NewTiles/Audit/3.png" alt="Allotment Letter Request" width="250" height="250" />*@
+                        </div>
+                    </a>
+                    @*<div style="width:160px">
+                        <a href="/Plots/AllotmentRequest">
+                            <img src="~/assets/static/images/Tileicons/all-reqs.png" style="width:100%" />
+                        </a>
+                    </div>*@
+                </li>
+
+            }
+            if (ViewBag.Dash == "communication")
+            {
+                <li>
+                    <div class="hexagon bg-yellow">
+                        <div class="text" style="">
+                            <i class="fas fa-sms fa-3x"></i>
+                            <br />
+                            <a href="/Sms/Text/">Send SMS</a>
+                        </div>
+                    </div>
+                </li>
+                @*<li>
+                    <div class="hexagon bg-yellow">
+                        <div class="text" style="">
+                            <i class="fas fa-envelope-square fa-3x"></i>
+                            <br />
+                            <a href="/SMS/Email/">Send Email</a>
+                        </div>
+                    </div>
+                </li>*@
+            }
+            if (ViewBag.Dash == "building")
+            {
+                <li>
+                    <div class="hexagon bg-grey">
+                        <div class="text" style="">
+                            <i class="fas fa-dolly-flatbed fa-3x"></i>
+                            <br />
+                            <a style="color:black !important" href="/Commercial/AddShopOrApartment/">Add Inventory</a>
+                        </div>
+                    </div>
+                </li>
+
+                <li>
+                    <div class="hexagon bg-yellow">
+                        <div class="text" style="">
+                            <i class="fas fa-place-of-worship fa-3x"></i>
+                            <br />
+                            <a style="color:black !important" href="/Commercial/CommercialUpdation/">Commercial <br /> Management</a>
+                        </div>
+                    </div>
+                </li>
+
+                <li>
+                    <div class="hexagon bg-blue">
+                        <div class="text" style="">
+                            <i class="fas fa-pallet fa-3x"></i>
+                            <br />
+                            <a style="color:black !important" href="/Installments/CreateCommercialInstallmentStructure/">Installment Structure</a>
+                        </div>
+                    </div>
+                </li>
+
+                <li>
+                    <div class="hexagon bg-red">
+                        <div class="text" style="">
+                            <i class="fas fa-vector-square fa-3x"></i>
+                            <br />
+                            <a style="color:black !important" href="/Commercial/CommercialRegisteration/">Registration</a>
+                        </div>
+                    </div>
+                </li>
+
+                @*<li>
+                    <div class="hexagon yellow">
+                        <div class="text" style="">
+                            <i class="far fa-handshake fa-3x"></i>
+                            <br />
+                            <a href="/Commercial/AllProjects/">All Projects</a>
+                        </div>
+                    </div>
+                </li>*@
+
+                <li>
+                    <div class="hexagon bg-green">
+                        <div class="text" style="">
+                            <i class="fas fa-info-circle fa-3x"></i>
+                            <br />
+                            <a style="color:black !important" href="/Commercial/UpdateCommercialInformation/">Update Information</a>
+                        </div>
+                    </div>
+                </li>
+
+                <li>
+                    <div class="hexagon bg-grey">
+                        <div class="text" style="">
+                            <i class="fas fa-hamsa fa-3x"></i>
+                            <br />
+                            <a style="color:black !important" href="/Commercial/CommercialInfo/">Detail Information</a>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="hexagon bg-grey">
+                        <div class="text" style="">
+                            <i class="fas fa-hamsa fa-3x"></i>
+                            <br />
+                            <a style="color:black !important" href="/Transfer/CommercialTransferRequestList/">Transfer Request</a>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="hexagon bg-grey">
+                        <div class="text" style="">
+                            <i class="fas fa-hamsa fa-3x"></i>
+                            <br />
+                            <a style="color:black !important" href="/Transfer/CommercialTransfersList/">Transfers List</a>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="hexagon bg-yellow">
+                        <div class="text" style="">
+                            <i class="fa fa-check fa-3x"></i>
+                            <br />
+                            <a style="color:black !important" href="/Commercial/VerifcationRequests/">Verification Requests</a>
+                        </div>
+                    </div>
+                </li>
+                <hr style="margin: 50px 0" />
+                <li>
+                    <div class="hexagon bg-yellow">
+                        <div class="text" style="">
+                            <i class="fa fa-check fa-3x"></i>
+                            <br />
+                            <a style="color:black !important" href="/Commercial/CancellationReqs/">Cancellation Requests</a>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="hexagon bg-dark">
+                        <div class="text" style="">
+                            <i class="fa fa-home fa-3x"></i>
+                            <br />
+                            <a style="color:black !important" href="/Commercial/PossessionRequests/">Possession Requests</a>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="hexagon bg-blue">
+                        <div class="text" style="">
+                            <i class="fa fa-clock-o fa-3x"></i>
+                            <br />
+                            <a style="color:black !important" href="/Commercial/OverDueShop/">Overdue Properties</a>
+                        </div>
+                    </div>
+                </li>
+                @*<li>
+                    <div class="hexagon bg-yellow">
+                        <div class="text" style="">
+                            <i class="fas fa-sms fa-3x"></i>
+                            <br />
+                            <a href="/ServiceCharges/GenerateElectricBillCommercial/">Generate Electric Charges Bill</a>
+                        </div>
+                    </div>
+                </li>
+
+                <li>
+                    <div class="hexagon bg-yellow">
+                        <div class="text" style="">
+                            <i class="fas fa-sms fa-3x"></i>
+                            <br />
+                            <a href="/ServiceCharges/MeterReadingCommercial/">Add Meter Readings</a>
+                        </div>
+                    </div>
+                </li>
+
+                <li>
+                    <div class="hexagon bg-yellow">
+                        <div class="text" style="">
+                            <i class="fas fa-sms fa-3x"></i>
+                            <br />
+                            <a href="/ServiceCharges/ElectricityBillCommercial/"> Electricity Charges Details</a>
+                        </div>
+                    </div>
+                </li>
+
+                <li>
+                    <div class="hexagon bg-yellow">
+                        <div class="text" style="">
+                            <i class="fas fa-sms fa-3x"></i>
+                            <br />
+                            <a href="/serviceCharges/ComIdsSC/">Generate Service charges Bills</a>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="hexagon bg-yellow">
+                        <div class="text" style="">
+                            <i class="fas fa-sms fa-3x"></i>
+                            <br />
+                            <a href="/ServiceCharges/CommercialBills/"> Service Charges Details</a>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="hexagon bg-yellow">
+                        <div class="text" style="">
+                            <i class="fas fa-sms fa-3x"></i>
+                            <br />
+                            <a href="/ServiceCharges/CommercialManageServiceCharges/">Commercial Service Charges</a>
+                        </div>
+                    </div>
+                </li>*@
+                @*<li>
+                    <div class="hexagon bg-yellow">
+                        <div class="text" style="">
+                            <i class="fas fa-sms fa-3x"></i>
+                            <br />
+                            <a href="/Commercial/AllotmentInformation/">Request For Allotment Letter</a>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="hexagon bg-yellow">
+                        <div class="text" style="">
+                            <i class="fas fa-sms fa-3x"></i>
+                            <br />
+                            <a href="/Commercial/AllotmentRequest/">Allotment Letter Requests</a>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="hexagon blue">
+                        <div class="text" style="">
+                            <i class="fas fa-sms fa-3x"></i>
+                            <br />
+                            <a href="/Commercial/TranferRequest/">Transfer Request</a>
+                        </div>
+                    </div>
+                </li>
+                *@
+            }
+            if (ViewBag.Dash == "land")
+            {
+                <li>
+                    <div class="hexagon bg-grey">
+                        <div class="text" style="">
+                            <i class="fas fa-map fa-3x"></i>
+                            <br />
+                            <a style="color:black !important" href="/Land/LandRecords/">Land Records</a>
+                        </div>
+                    </div>
+                </li>
+
+                <li>
+                    <div class="hexagon bg-yellow">
+                        <div class="text" style="">
+                            <i class="fas fa-users fa-3x"></i>
+                            <br />
+                            <a style="color:black !important" href="/Land/LandSellers/">Seller Parties</a>
+                        </div>
+                    </div>
+                </li>
+            }
+            else if (ViewBag.Dash == "makepayment")
+            {
+                <li>
+                    <div class="hexagon bg-grey">
+                        <div class="text" style="">
+                            <i class="fas fa-map fa-3x"></i>
+                            <br />
+                            <a style="color:black !important" href="/Procurement/AllBillsVendor/">Bill Payments</a>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="hexagon bg-red">
+                        <div class="text" style="">
+                            <i class="fas fa-users fa-3x"></i>
+                            <br />
+                            <a style="color:black !important" href="/Dealership/DealershipPayment/">Dealer Payable</a>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="hexagon bg-yellow">
+                        <div class="text" style="">
+                            <i class="fas fa-users fa-3x"></i>
+                            <br />
+                            <a style="color:black !important" href="/Finance/PayPattyCash/">Petty Cash Payable</a>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="hexagon bg-green">
+                        <div class="text" style="">
+                            <i class="fas fa-users fa-3x"></i>
+                            <br />
+                            <a style="color:black !important" href="/Finance/TaxPayment/">Tax Payable</a>
+                        </div>
+                    </div>
+                </li>
+            }
+        }
+    </ul>
+</div>
+<script>
+    $('.hexagon').on('click', function () {
+        let _ele = $(this).find('a');
+        if (_ele.length <= 0) {
+            return;
+        }
+
+        $(_ele).get(0).click();
+        //console.log();
+    });
+</script>
+<style>
+    .a {
+        color: #592a88;
+    }
+
+    .hexagon a {
+        font-size: 10px;
+        font-weight: bold;
+    }
+
+    .text {
+        position: absolute;
+        z-index: 1000;
+        width: 100%;
+        text-align: center;
+        font-size: 17px;
+    }
+
+    .hexagon {
+        position: relative;
+        width: 160px;
+        height: 90px;
+        border-left: solid 2px transparent;
+        border-right: solid 2px transparent;
+        cursor: pointer;
+        padding-top: 10px;
+    }
+
+        .hexagon:before,
+        .hexagon:after {
+            content: "";
+            position: absolute;
+            z-index: 1;
+            width: 113px;
+            height: 113px;
+            -webkit-transform: scaleY(0.5774) rotate(-45deg);
+            -ms-transform: scaleY(0.5774) rotate(-45deg);
+            transform: scaleY(0.5774) rotate(-45deg);
+            background-color: inherit;
+            left: 21.5px;
+            transition: .3s ease-out;
+        }
+
+        .hexagon:before {
+            top: -57px;
+            border-top: solid transparent;
+            border-right: solid transparent;
+        }
+
+        .hexagon:after {
+            bottom: -57px;
+            border-bottom: solid transparent;
+            border-left: solid transparent;
+            transition: .1s ease-out;
+        }
+
+    .heavyFont {
+        font-size: 30px;
+    }
+
+
+    .bg-red {
+        background-color: #d0232A;
+        color: white;
+    }
+
+    .bg-grey {
+        background-color: #777777;
+        color: white;
+    }
+
+    .bg-green {
+        background-color: #79c944;
+        color: white;
+    }
+
+    .bg-blue {
+        background-color: #2572ff;
+        color: white;
+    }
+
+    .bg-yellow {
+        background-color: #fb8f02;
+        color: white;
+    }
+
+    .font-white {
+        color: white;
+    }
+</style>
+<script>
+    $(document).ready(function () {
+
+        if (dash_tp == 'service charges') {
+            $.ajax({
+                type: "POST",
+                url: '/ServiceCharges/GetReqsCountForHome/',
+                data: null,
+                success: function (data) {
+                    $('.met-req-count').text(data.met_chg_reqs);
+                    $('.inst-req-count').text(data.inst_reqs);
+                    $('.met-red-count').text(data.met_red_reqs);
+                    $('.bil-req-count').text(data.other_Reqs);
+
+                    if (data.met_chg_reqs == null || data.met_chg_reqs == 0) {
+                        $('.met-req-count').closest('span').hide();
+                    }
+                    if (data.inst_reqs == null || data.inst_reqs == 0) {
+                        $('.inst-req-count').closest('span').hide();
+                    }
+                    if (data.met_red_reqs == null || data.met_red_reqs == 0) {
+                        $('.met-red-count').closest('span').hide();
+                    }
+                    if (data.other_Reqs == null || data.other_Reqs == 0) {
+                        $('.bil-req-count').closest('span').hide();
+                    }
+
+                },
+                error: function () {
+                    $('.my-dot').hide();
+
+                }
+            });
+        }
+    });
+</script>

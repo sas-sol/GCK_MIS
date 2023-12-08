@@ -1,0 +1,199 @@
+﻿@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/sunburst.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+<script src="https://code.highcharts.com/modules/export-data.js"></script>
+<script src="https://code.highcharts.com/modules/accessibility.js"></script>
+
+<link href="~/Content/bootstrap-material-datetimepicker.css" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<script src="~/Scripts/bootstrap-material-datetimepicker.min.js"></script>
+<link rel="stylesheet" href="~/Content/select2.css" />
+<script src="~/Scripts/select2.js"></script>
+<div class="row gap-20 pos-r">
+    <div class="w-100" id="cont">
+        <div class="row gap-20">
+            @{if (User.IsInRole("Admin_Auth"))
+                {
+                    Html.RenderAction("AuditorsHome", "Home");
+                } }
+        </div>
+        <div class="bgc-white bd bdrs-3 p-20 mB-20">
+            @* Booking Report*@
+
+            <div class="col-md-12 scrollable" style="z-index:1;min-height:310px; max-height:310px;overflow-y:scroll;">
+                <div class="row">
+                    <div class="col-md-12">
+                        <ul class="nav nav-tabs" role="tablist" id="myTabs">
+                            @*<li class="nav-item"><a class="nav-link active welc-widg-navs" role="tab" data-toggle="tab" data-link="/Attendance/HomeWidget" id="proj" href="#coahead">My Attendance</a></li>*@
+                            <li class="nav-item"><a class="nav-link welc-widg-navs" role="tab" data-toggle="tab" data-link="/Home/RequestsView/" id="proj" href="#coahead">Requests</a></li>
+                            @*<li class="nav-item"><a class="nav-link emp-navs" role="tab" data-toggle="tab" data-link="/HumanResource/EmployeeFilesAndPlots/" id="proj" href="#coahead">Files &amp; Plots</a></li>*@
+                        </ul>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12" style="margin-top:10px;">
+                        <div id="welc-widget-dets" class="tab-pane">
+                            @{ Html.RenderAction("RequestsView", "Home");}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group col-md-3">
+                    <label>Start Date</label>
+                    <input type="text" class="form-control" data-provide="datepicker" onchange="getbookingdata();" id="startdate" name="startdate" placeholder="mm/dd/yyyy" required>
+                </div>
+                <div class="form-group col-md-3">
+                    <label>End Date</label>
+                    <input type="text" class="form-control" data-provide="datepicker" onchange="getbookingdata();" id="enddate" name="enddate" placeholder="mm/dd/yyyy" required>
+                </div>
+                <div class="form-group col-md-3">
+                    <label>Choose Last Booking Records</label>
+                    <select class="form-control" id="opt" onchange="getoptions();">
+                        <option selected disabled>Choose...</option>
+                        <option value="weekly">Weekly</option>
+                        <option value="monthly">Monthly</option>
+                        <option value="6months">6 Month</option>
+                        <option value="yearly">Yearly</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="col-md-6" id="bookin"></div>
+                <div class="col-md-6" id="bk-det"></div>
+            </div>
+            @* Transfer Report*@
+            <hr />
+            <div class="form-row">
+                <div class="form-group col-md-3">
+                    <label>Start Date</label>
+                    <input type="text" class="form-control" data-provide="datepicker" onchange="gettransferdata();" id="transferstartdate" name="transferstartdate" placeholder="mm/dd/yyyy" required>
+                </div>
+                <div class="form-group col-md-3">
+                    <label>End Date</label>
+                    <input type="text" class="form-control" data-provide="datepicker" onchange="gettransferdata();" id="transferenddate" name="transferenddate" placeholder="mm/dd/yyyy" required>
+                </div>
+                <div class="form-group col-md-3">
+                    <label>Choose Last Transfer Records</label>
+                    <select class="form-control" id="opttransfer" onchange="gettransferoptions();">
+                        <option selected disabled>Choose...</option>
+                        <option value="weekly">Weekly</option>
+                        <option value="monthly">Monthly</option>
+                        <option value="6months">6 Month</option>
+                        <option value="yearly">Yearly</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="col-md-6" id="transferplot"></div>
+                <div class="col-md-6" id="tans-plt-lst"></div>
+            </div>
+            <hr />
+            @*Total Revenue Report*@
+            <div class="form-row">
+                <div class="form-group col-md-3">
+                    <label>Start Date</label>
+                    <input type="text" class="form-control" data-provide="datepicker" onchange="getrevenuedata();" id="revenuestartdate" name="revenuestartdate" placeholder="mm/dd/yyyy" required>
+                </div>
+                <div class="form-group col-md-3">
+                    <label>End Date</label>
+                    <input type="text" class="form-control" data-provide="datepicker" onchange="getrevenuedata();" id="revenueenddate" name="revenueenddate" placeholder="mm/dd/yyyy" required>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="col-md-12" id="revreport"></div>
+            </div>
+            <hr />
+
+            @* All Monthly Installment*@
+            <div class="form-row" id="allmonthinst">            </div>
+            <hr />
+            @* Block Recovery*@
+            <div class="form-row">
+                <div class="form-group col-md-3">
+                    <label>Start Date</label>
+                    <input type="text" class="form-control" onchange="GetBlkRecov()" data-provide="datepicker" id="blk-rec-start" name="revenuestartdate" placeholder="mm/dd/yyyy" required>
+                </div>
+                <div class="form-group col-md-3">
+                    <label>End Date</label>
+                    <input type="text" class="form-control" onchange="GetBlkRecov()" data-provide="datepicker" id="blk-rec-to" name="revenueenddate" placeholder="mm/dd/yyyy" required>
+                </div>
+
+            </div>
+            <div class="form-row">
+                <div class="col-md-12" id="blk-recovery"></div>
+            </div>
+            <hr />
+            <div class="form-row">
+                <div class="col-md-12" id="dail-cash-rep">
+                </div>
+            </div>
+            <hr />
+
+        </div>
+    </div>
+</div>
+<script>
+    $(function () {
+        var curdate = "@DateTime.Now";
+        $("#blk-recovery").load('/Reports/PlotsRecovery/', { From: null, To: null});
+        $("#allmonthinst").load('/Reports/AllMonthlyInstallment/');
+        //$("#ifof-div").load('/Graph/MonthlyInflow_Outflow/', { From: curdate, To: curdate });
+        $("#revreport").load('/Reports/RevenueReport/', { From: curdate, To: curdate });
+        $("#dail-cash-rep").load('/Graph/DailyCollectionSearch/', { From: null, To: null});
+        //$("#paymentreport").load('/Reports/PayableReport/', { From: curdate, To: curdate });
+        $("#transferplot").load('/Reports/PlotTranfer/', { Startdate: curdate, Enddate: curdate });
+        $("#bookin").load('/Reports/PlotBooking/', { Startdate: curdate, Enddate: curdate });
+        //$("#file-year").load('/Reports/FilesYearlyRecovery/');
+    });
+
+    $('.st-dt-khjdf').bootstrapMaterialDatePicker({ weekStart: 0, time: false, format: 'MM-DD-YYYY' }).on('change', function (e, curdate) {
+        $('.en-dt-khjdf').bootstrapMaterialDatePicker('setMinDate', curdate);
+    });
+    $('.en-dt-khjdf').bootstrapMaterialDatePicker({ weekStart: 0, time: false, format: 'MM-DD-YYYY' });
+
+    $('.st-dt-dfhjgs').bootstrapMaterialDatePicker({ weekStart: 0, time: false, format: 'MM-DD-YYYY' }).on('change', function (e, curdate) {
+        $('.en-dt-fkjdghs').bootstrapMaterialDatePicker('setMinDate', curdate);
+    });
+    $('.en-dt-fkjdghs').bootstrapMaterialDatePicker({ weekStart: 0, time: false, format: 'MM-DD-YYYY' });
+
+    $('.dets-att-rep-btn-fkajh').unbind().click(function () {
+        let stDt = $('.st-dt-khjdf').val();
+        let enDt = $('.en-dt-khjdf').val();
+        let dep = $('.dep-att-lst-gskfskj').val();
+        let depNam = $.trim($('.dep-att-lst-gskfskj').text());
+        window.open('/Reports/DetailedAttendanceReport?start=' + stDt + '&end=' + enDt + '&depart=' + dep + '&typ=' + depNam);
+    });
+
+    $('.dets-payrl-rep-btn-fdljk').unbind().click(function () {
+        let stDt = $('.st-dt-khjdf').val();
+        let enDt = $('.en-dt-khjdf').val();
+        let dep = $('.dep-payrl-lst-dsfjk').val();
+        let depNam = $.trim($('.dep-payrl-lst-dsfjk').text());
+        window.open('/Reports/DetailedPayrollReport?start=' + stDt + '&end=' + enDt + '&depart=' + dep + '&typ=' + depNam);
+    });
+
+    //Requests for approval
+    $(document).ready(function () {
+        $('.welc-widg-navs').unbind().click(function () {
+            $('#welc-widget-dets').empty();
+            let lnk = $(this).attr('data-link');
+            SASLoad($('#welc-widget-dets'));
+            $('#welc-widget-dets').load(lnk, function () {
+                SASUnLoad($('#welc-widget-dets'));
+            });
+        });
+
+        $('#welc-widget-dets').empty();
+        SASLoad($('#welc-widget-dets'));
+        $('#welc-widget-dets').load('/Home/RequestsView', function () {
+            SASUnLoad($('#welc-widget-dets'));
+        });
+
+    });
+</script>

@@ -1,0 +1,110 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Sp_Get_All_Employess_Salaries_Result>
+    <style>
+        table tr, table td, table th {
+            padding: 2px !important;
+            color: black !important;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+    @@media print {
+        table.salary-id tr td, table.print-friendly tr th {
+            page-break-inside: avoid;
+        }
+
+        #sumary {
+            font-size: 13px
+        }
+    }
+    </style>
+<div style="width:100%">
+
+    <img src="~/assets/static/images/meherestate-simple.png" style="float:left;margin: 1%;width: 100px;" />
+
+    <span style="float:right;width:150px;text-align:center">Powered by<img src="~/assets/static/images/sas.png" style="width:100px;height:60px;margin:0.5%" /></span>
+</div>
+
+<div style="page-break-after:always"></div>
+<div id="">
+
+    @foreach (var g in Model.Where(x=> x.Basic_salary > 0).GroupBy(x => new { x.DepartmentName, x.CompanyName }))
+    {
+        int sr = 1;
+        <table id="salary-dat" class="table table-striped table-bordered " cellspacing="0" width="100%">
+            <thead class="">
+
+                @if (string.IsNullOrEmpty(g.Key.DepartmentName) || string.IsNullOrWhiteSpace(g.Key.DepartmentName))
+                {
+                    <tr>
+                        <th colspan="16" style="font-size:21px;text-align:center" ><b style="color:black">@g.Key.CompanyName Executive</b> </th>
+                    </tr>
+                }
+                else
+                {
+                    <tr>
+                        <th colspan="16" style="font-size:21px;text-align:center"><b style="color:black">@g.Key.CompanyName- @g.Key.DepartmentName</b> </th>
+                    </tr>
+                }
+                    <tr  >
+                        <th>Sr.</th>
+                        <th>Code</th>
+                        <th>Name</th>
+                        <th>Designation</th>
+                        <th>Joining Date</th>
+                        @*<th>Previous Basic Salary</th>*@
+                        @*<th>COLA</th>*@
+                        <th>Basic Salary</th>
+                        <th>Overtime</th>
+                        <th>Allownces/Bonus</th>
+                        <th>Tax Ded</th>
+                        <th>Loan</th>
+                        <th>Advance</th>
+                        <th>Absentee</th>
+                        @*<th>Extra Fuel Charges</th>*@
+                        <th>Other Ded</th>
+                        <th>Net Payable</th>
+                    </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in g.OrderByDescending(x => x.Grand_total))
+                {
+                <tr class="fin-up-rec" id="@item.Id">
+                    <td>@sr</td>
+                    <td class="col-mod">@item.Employee_code</td>
+                    <td class="col-mod">@item.Employee_Name</td>
+                    <td class="col-mod">@item.Designation_name</td>
+                    <td class="col-mod ">@string.Format("{0: dd-MMM-yyyy }", item.Emp_Date_Of_Joining)</td>
+                    @*<td class="col-mod s-read" align="right">@String.Format("{0:n0}", item.Previous_Basic_Salary)</td>*@
+                    @*<td class="col-mod s-read" align="right">@String.Format("{0:n0}", item.COLA_Amount)</td>*@
+                    <td class="col-mod s-read" align="right">@String.Format("{0:n0}", item.Basic_salary)</td>
+                    <td class="col-mod s-read" align="right">@String.Format("{0:n0}", item.Overtime)</td>
+                    <td class="col-mod t_allownce" align="right"> @String.Format("{0:n0}", item.Allownces + item.Bonus)</td>
+                    <td class="col-mod fin-dedc" align="right">@String.Format("{0:n0}", item.Ded_Tax)</td>
+                    <td class="col-mod fin-dedc" align="right">@String.Format("{0:n0}", item.Ded_Loan)</td>
+                    <td class="col-mod fin-dedc" align="right">@String.Format("{0:n0}", item.Ded_Advance)</td>
+                    <td class="col-mod fin-dedc" align="right">@String.Format("{0:n0}", (item.Ded_Absentee)@*- (item.Basic_salary / 30 * (item.Salary_Leaves))*@)</td>
+                    @*<td class="col-mod fin-dedc" align="right">@String.Format("{0:n0}", item.Extra_Fuel_Charges)</td>*@
+                    <td class="col-mod fin-dedc" align="right">@String.Format("{0:n0}", item.Ded_Other)</td>
+                    <td class="col-mod GrndTot" align="right" style="font:bold"> @String.Format("{0:n0}", item.Grand_total - item.Stipend )</td>
+                </tr>
+                    sr++;
+                }
+                <tr class="" id="@g.Key.DepartmentName">
+                    <td colspan="5" class="col-mod"></td>
+                    @*<td align="right">@String.Format("{0:n0}", g.Select(x => x.Previous_Basic_Salary).Sum())</td>*@
+                    @*<td align="right">@String.Format("{0:n0}", g.Select(x => x.COLA_Amount).Sum())</td>*@
+                    <td align="right">@String.Format("{0:n0}", g.Select(x => x.Basic_salary).Sum())</td>
+                    <td align="right">@String.Format("{0:n0}", g.Select(x => x.Overtime).Sum())</td>
+                    <td id="totl_allownce" align="right">@String.Format("{0:n0}", g.Select(x => x.Allownces).Sum() + g.Select(x => x.Bonus).Sum()) </td>
+                    <td id="deduc_group" align="right">@String.Format("{0:n0}", g.Select(x => x.Ded_Tax).Sum())</td>
+                    <td id="deduc_group" align="right">@String.Format("{0:n0}", g.Select(x => x.Ded_Loan).Sum())</td>
+                    <td id="deduc_group" align="right">@String.Format("{0:n0}", g.Select(x => x.Ded_Advance).Sum())</td>
+                    <td id="deduc_group" align="right">@String.Format("{0:n0}", g.Select(x => x.Ded_Absentee).Sum())</td>
+                    @*<td id="deduc_group" align="right">@String.Format("{0:n0}", g.Select(x => x.Extra_Fuel_Charges).Sum())</td>*@
+                    <td id="deduc_group" align="right">@String.Format("{0:n0}", g.Select(x => x.Ded_Other).Sum())</td>
+                    <td align="right">@String.Format("{0:n0}", g.Select(x => x.Grand_total).Sum() - g.Select(x => x.Stipend).Sum())</td>
+                </tr>
+            </tbody>
+        </table>
+        <div style="page-break-after:always"></div>
+    }
+</div>

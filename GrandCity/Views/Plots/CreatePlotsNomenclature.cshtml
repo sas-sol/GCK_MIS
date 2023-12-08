@@ -1,0 +1,59 @@
+﻿@model MeherEstateDevelopers.Models.Plots_Category
+@{ if (User.IsInRole("Administrator")) { Layout = "~/Views/Shared/_AdminLayout.cshtml"; } else { Layout = "~/Views/Shared/_StaffLayout.cshtml"; } }
+<div class="row gap-20 masonry pos-r">
+    <div class="masonry-sizer col-md-6"></div>
+    <div class="masonry-item col-md-6">
+        <div class="bgc-white p-20 bd">
+            <h6 class="c-grey-900">New Plot Size Defination</h6>
+            <div class="mT-30">
+                @using (Html.BeginForm("CreatePlotsNomenclature", "Plots", FormMethod.Post, new { @id = "pl-cr", @class = "", role = "form" }))
+                {
+                    @Html.AntiForgeryToken()
+                    <div class="form-row">
+                        <div class="form-group col-md-3">
+                            <label>Plot Size</label>
+                            @Html.EditorFor(model => model.Plot_Size, new { htmlAttributes = new { @class = "form-control" } })
+
+                        </div>
+                        <div class="form-group col-md-5">
+                            <label>Unit Of Measurement</label>
+                            <select class="form-control" name="Uom">
+                                <option value="">Select Measurement</option>
+                                <option value="sqft">Sq. Feet</option>
+                                <option value="sqyd">Sq. Yard</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-4">
+
+                            <label>Category</label>
+                            <select class="form-control" name="Category">
+                                <option value="">Select Category</option>
+                                <option value="marla">Marla</option>
+                                <option value="kanal">Kanal</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-3">
+                            <label>Front</label>
+                            @Html.EditorFor(model => model.Front_Side, new { htmlAttributes = new { @class = "form-control" } })
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label>Back</label>
+                            @Html.EditorFor(model => model.Back_Side, new { htmlAttributes = new { @class = "form-control" } })
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label>Left</label>
+                            @Html.EditorFor(model => model.Left_Side, new { htmlAttributes = new { @class = "form-control" } })
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label>Right</label>
+                            @Html.EditorFor(model => model.Right_Side, new { htmlAttributes = new { @class = "form-control" } })
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Create Plot Defination</button>
+                }
+            </div>
+        </div>
+    </div>
+</div>

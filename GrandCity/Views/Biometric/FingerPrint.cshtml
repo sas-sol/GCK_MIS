@@ -1,0 +1,387 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.BiometricOwnerDetails>
+
+<style>
+    .img-full {
+        width: 100%;
+    }
+
+    .pic-div {
+        width: 160px;
+        height: 160px;
+    }
+</style>
+
+<div class="col-md-12 bgc-white">
+    <div class="central-text-align panel-heading">
+        <h5>Owner Finger Print Record</h5>
+    </div>
+    <div class="row mt-md-3">
+        <div class="col-md-2">
+            <label>Select Owner :</label>
+        </div>
+        <div class="col-md-5">
+            <select class="form-control own-id">
+                @foreach (var v in Model)
+                {
+                    <option value="@v.CNIC">@v.Name (@v.CNIC_Uparsed)</option>
+                }
+            </select>
+        </div>
+
+        <div class="col-md-1"></div>
+
+    </div>
+
+    <div class="row mt-md-5">
+        <div class="col-md-2">
+            <label>Select Finger</label>
+        </div>
+
+        <div class="col-md-3">
+            <select class="form-control fngr-slctr-fgk">
+                <optgroup label="Male">
+                    <option value="5" selected>Left Thumb</option>
+                    <option value="4">Left Index Finger</option>
+                    <option value="3">Left Middle Finger</option>
+                    <option value="2">Left Ring Finger</option>
+                    <option value="1">Left Little Finger</option>
+                </optgroup>
+                <optgroup label="Female">
+                    <option value="10">Right Thumb</option>
+                    <option value="9">Right Little Finger</option>
+                    <option value="8">Right Ring Finger</option>
+                    <option value="7">Right Middle Finger</option>
+                    <option value="6">Right Index Finger</option>
+                </optgroup>
+            </select>
+        </div>
+
+        <div class="col-md-1">
+            <button class="btn btn-primary capt-btn-dsfjk">Capture</button>
+        </div>
+    </div>
+
+    <div class="row mt-md-5 rs-div-fsdj" style="display:none;">
+        <div class="col-md-1">
+            Result :
+        </div>
+
+        <div class="col-md-2">
+            <div class="pic-div">
+                <img class="img-full" id="rzlt-img-dkads" src="" />
+            </div>
+        </div>
+
+        <div class="col-md-1">
+            <button class="btn btn-success svbtn-sfhk">Save</button>
+        </div>
+    </div>
+
+    @*<div class="row">
+            <div class="col-md-1">
+                <button class="btn btn-success matcher">Match</button>
+            </div>
+        </div>*@
+
+    <input type="hidden" class="temp-val" />
+    <input type="hidden" class="temp-img" />
+    @*<input type="hidden" class="own-id" value="@Model.Id" />*@
+</div>
+
+
+<script>
+    // nice global area, so that only 1 location, contains this information
+    // var secugen_lic = "hE/78I5oOUJnm5fa5zDDRrEJb5tdqU71AVe+/Jc2RK0=";   // webapi.secugen.com
+    var secugen_lic = "";
+    $(document).ready(function () {
+        //$.ajax({
+        //    type: "GET",
+        //    dataType: "json",
+        //    url: "https://localhost:9999/ASW/initialize",
+        //    async: false,
+        //    headers: {
+        //        'Cache-Control': 'no-cache, no-store, must-revalidate',
+        //        'Pragma': 'no-cache',
+        //        'Expires': '0'
+        //    },
+        //    error: function (jqXHR, textStatus, errorThrown) {
+        //        //alert("secugen wrapper service not running");
+        //        alert("Failed to initialize the finger print scanning device");
+        //        $('.capt-btn-dsfjk').attr('disabled', true);
+        //    },
+        //    success: function (data) {
+        //        if (data.code === '00') {
+        //            //document.getElementById("initResult").innerHTML = '<p style="font-weight:bold" class="text-info">Result: <spand class="text-success" style="font-weight:normal">Device successfully initialized</span></p>';
+        //        } else {
+        //            //document.getElementById("initResult").innerHTML = '<p style="font-weight:bold" class="text-info">Result: <spand class="text-danger" style="font-weight:normal"> ' + data.value + '</span></p>';
+        //            alert('Failed to initialize device properly.');
+        //            $('.capt-btn-dsfjk').attr('disabled', true);
+        //        }
+
+        //    }
+        //});
+    });
+
+    //$('.capt-btn-dsfjk').unbind().click(function () {
+    //    $(".rzlt-img-dkads").attr('src', '');
+    //    $('.temp-val').val('');
+    //    var template_ = 1;
+    //    var finger_ = $('.fngr-slctr-fgk option:selected').val();
+    //    console.log(template_);
+    //    console.log(finger_);
+    //    $.ajax({
+    //        type: "GET",
+    //        dataType: "json",
+    //        url: "https://localhost:9999/ASW/captureFinger",
+    //        async: false,
+    //        headers: {
+    //            'Cache-Control': 'no-cache, no-store, must-revalidate',
+    //            'Pragma': 'no-cache',
+    //            'Expires': '0'
+    //        },
+    //        data: {
+    //            "template": template_,
+    //            "finger": finger_
+    //        },
+    //        error: function (jqXHR, textStatus, errorThrown) {
+    //            //alert("secugen wrapper service not running");
+    //            alert("Failed to communicate with the device. Please try plugging in the device again.");
+    //        },
+    //        success: function (data) {
+    //            console.log(data);
+    //            if (data.code === '00') {
+    //                $("#rzlt-img-dkads").attr('src', "data:image/png;base64," + data.image);
+    //                $('.temp-val').val(data.value);
+    //                $('.temp-img').val("data:image/png;base64," + data.image);
+    //                $('.svbtn-sfhk').show();
+    //                $('.rs-div-fsdj').show();
+    //                //document.getElementById("captureResult").innerHTML = '<p style="font-weight:bold" class="text-info">Template: <pre class="text-success" style="font-weight:normal">' + data.value + '</pre></p>';
+    //            } else {
+    //                //document.getElementById("captureResult").innerHTML = '<p style="font-weight:bold" class="text-info">Result: <spand class="text-danger" style="font-weight:normal">' + data.value + '</span></p>';
+    //                alert('Failed to capture finger print. Please try again.');
+    //            }
+    //        }
+    //    });
+    //});
+
+    $('.capt-btn-dsfjk').unbind().click(function () {
+        $(".rzlt-img-dkads").attr('src', '');
+        $('.temp-val').val('');
+        var template_ = 1;
+        var finger_ = $('.fngr-slctr-fgk option:selected').val();
+        console.log(template_);
+        console.log(finger_);
+        // 8.16.2017 - At this time, only SSL client will be supported.
+        $.ajax({
+            type: "GET",
+            dataType: "json",
+            url: "https://localhost:9999/ASW/captureFinger",
+            async: false,
+            headers: {
+                'Cache-Control': 'no-cache, no-store, must-revalidate',
+                'Pragma': 'no-cache',
+                'Expires': '0'
+            },
+            data: {
+                "template": template_,
+                "finger": finger_
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert("secugen wrapper service not running");
+            },
+            success: function (data) {
+                SuccessFunc(data);
+            }
+        });
+    });
+
+    $('.svbtn-sfhk').unbind().click(function () {
+        var con = confirm("Are You sure you want to save this finger print to this owner?");
+        if (con) {
+            let finger = $('.fngr-slctr-fgk option:selected').val();
+            let imgCode = $('.temp-img').val();
+            let template = $('.temp-val').val();
+            let owner = $('.own-id option:selected').val();
+
+            $.ajax({
+                type: "POST",
+                url: '/Biometric/FingerPrintUpdater/',
+                data: { img: '', patt: template, ftype: finger, ownId: owner },
+                success: function (data) {
+                    if (data.Status == true) {
+                        alert(data.Msg);
+
+                        //if (savedLink != undefined) {
+                        //    $.each(savedLink, function (i, v) {
+                        //        window.open(v.lnk, '_blank');
+                        //    });
+                        //}
+
+                        window.location.reload();
+                    }
+                    else {
+                        alert(data.Msg);
+                    }
+
+
+                },
+                error: function () {
+                    alert("Error Occured. Failed to save this finger print");
+                }
+            });
+
+        }
+    });
+
+    $('.matcher').unbind().click(function () {
+        var con = confirm("Are You sure you want to save this finger print to this owner?");
+        if (con) {
+            let finger = $('.fngr-slctr-fgk option:selected').val();
+            let imgCode = $('.temp-img').val();
+            let template = $('.temp-val').val();
+            let owner = parseInt($('.own-id').val());
+
+            $.ajax({
+                type: "POST",
+                url: '/Plots/MatchFingers/',
+                data: { img: imgCode, ownId: owner, ftype: finger },
+                success: function (data) {
+                    if (data.Status == true) {
+                        alert('Finger print matched successfully.');
+                    }
+                    else {
+                        alert('Failed to verify this finger print. Please try again. Error Code : ' + data.Code);
+                    }
+
+
+                },
+                error: function () {
+                    alert("Error Occured. Failed to save this finger print");
+                }
+            });
+
+        }
+    });
+
+    function SuccessFunc(result) {
+        debugger;
+        if (result.code == "00") {
+            /* 	Display BMP data in image tag
+                BMP data is in base 64 format
+            */
+            //if (result != null && result.BMPBase64.length > 0) {
+            //    document.getElementById("FPImage1").src = "data:image/bmp;base64," + result.BMPBase64;
+            //}
+
+            $("#rzlt-img-dkads").attr('src', "data:image/png;base64," + result.image);
+            $('.temp-val').val(result.value);
+            $('.temp-img').val("data:image/png;base64," + result.image);
+            $('.svbtn-sfhk').show();
+            $('.rs-div-fsdj').show();
+
+            //var tbl = "<table border=1>";
+            //tbl += "<tr>";
+            //tbl += "<td> Serial Number of device </td>";
+            //tbl += "<td> <b>" + result.SerialNumber + "</b> </td>";
+            //tbl += "</tr>";
+            //tbl += "<tr>";
+            //tbl += "<td> Image Height</td>";
+            //tbl += "<td> <b>" + result.ImageHeight + "</b> </td>";
+            //tbl += "</tr>";
+            //tbl += "<tr>";
+            //tbl += "<td> Image Width</td>";
+            //tbl += "<td> <b>" + result.ImageWidth + "</b> </td>";
+            //tbl += "</tr>";
+            //tbl += "<tr>";
+            //tbl += "<td> Image Resolution</td>";
+            //tbl += "<td> <b>" + result.ImageDPI + "</b> </td>";
+            //tbl += "</tr>";
+            //tbl += "<tr>";
+            //tbl += "<td> Image Quality (1-100)</td>";
+            //tbl += "<td> <b>" + result.ImageQuality + "</b> </td>";
+            //tbl += "</tr>";
+            //tbl += "<tr>";
+            //tbl += "<td> NFIQ (1-5)</td>";
+            //tbl += "<td> <b>" + result.NFIQ + "</b> </td>";
+            //tbl += "</tr>";
+            //tbl += "<tr>";
+            //tbl += "<td> Template(base64)</td>";
+            //tbl += "<td> <b> <textarea rows=8 cols=50>" + result.TemplateBase64 + "</textarea></b> </td>";
+            //tbl += "</tr>";
+            //tbl += "<tr>";
+            //tbl += "<td> Image WSQ Size</td>";
+            //tbl += "<td> <b>" + result.WSQImageSize + "</b> </td>";
+            //tbl += "</tr>";
+            //tbl += "<tr>";
+            //tbl += "<td> EncodeWSQ(base64)</td>";
+            //tbl += "<td> <b> <textarea rows=8 cols=50>" + result.WSQImage + "</textarea></b> </td>";
+            //tbl += "</tr>";
+            //tbl += "</table>";
+            //document.getElementById('result').innerHTML = tbl;
+        }
+        else {
+            alert("Fingerprint Capture Error Code:  " + result.ErrorCode + ".\nDescription:  " + ErrorCodeToString(result.ErrorCode) + ".");
+        }
+    }
+
+    function ErrorFunc(status) {
+
+        /*
+            If you reach here, user is probabaly not running the
+            service. Redirect the user to a page where he can download the
+            executable and install it.
+        */
+        alert("Drivers not installed.Please download and install drivers first");
+
+    }
+
+    function ErrorCodeToString(ErrorCode) {
+        var Description;
+        console.log(ErrorCode);
+        switch (ErrorCode) {
+            // 0 - 999 - Comes from SgFplib.h
+            // 1,000 - 9,999 - SGIBioSrv errors 
+            // 10,000 - 99,999 license errors
+            case 51:
+                Description = "System file load failure";
+                break;
+            case 52:
+                Description = "Sensor chip initialization failed";
+                break;
+            case 53:
+                Description = "Device not found";
+                break;
+            case 54:
+                Description = "Fingerprint image capture timeout";
+                break;
+            case 55:
+                Description = "No device available";
+                break;
+            case 56:
+                Description = "Driver load failed";
+                break;
+            case 57:
+                Description = "Wrong Image";
+                break;
+            case 58:
+                Description = "Lack of bandwidth";
+                break;
+            case 59:
+                Description = "Device Busy";
+                break;
+            case 60:
+                Description = "Cannot get serial number of the device";
+                break;
+            case 61:
+                Description = "Unsupported device";
+                break;
+            case 63:
+                Description = "SgiBioSrv didn't start; Try image capture again";
+                break;
+            default:
+                Description = "Unknown error code or Update code to reflect latest result";
+                break;
+        }
+        return Description;
+    }
+</script>

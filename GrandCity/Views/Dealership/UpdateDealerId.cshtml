@@ -1,0 +1,21 @@
+﻿@model MeherEstateDevelopers.Models.Dealer_Commession
+<input type="hidden" name="" id="comm-id" value="@Model.Id" />
+<input type="hidden" name="" id="File_Plot_Id" value="@Model.File_Plot_Id" />
+<input type="hidden" name="" id="Module" value="@Model.Module" />
+<div class="form-row">
+
+    <div class="form-group col-md-4">
+        <label>Delaership.</label>
+        @Html.DropDownList("Dealership", null, "Choose..", new { @class = "form-control dealers-detail" })
+    </div>
+
+</div>
+
+<script>
+
+
+    $(function () {
+        $('.modal-footer').append('<button class="btn btn-primary" id="updtdelrcommesinid" type="button">Update</button>');
+        $(".modal-header").text("Update Request");
+    });
+</script>

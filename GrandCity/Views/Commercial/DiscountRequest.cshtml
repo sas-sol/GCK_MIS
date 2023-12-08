@@ -1,0 +1,108 @@
+﻿@model MeherEstateDevelopers.Models.CommercialLastOwnerDiscount
+
+<div class="col-md-12">
+    <div class="panel-heading">
+        <h5>Plot Details</h5>
+    </div>
+    <table class="table table-borderless">
+        <thead>
+            <tr>
+                <th>Plot</th>
+                <th>Paid</th>
+                <th>Outstanding Balance</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>@Model.Data.ApplicationNo @Model.Data.Floor</td>
+                <td>@string.Format("{0:n0}", Model.Report.Sum(x => x.Credit))</td>
+                <td>@string.Format("{0:n0}", (Model.Report.Sum(x => x.Debit) - Model.Report.Sum(x => x.Credit)))</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<input type="hidden" class="plt-id" value="@Model.Data.Id" />
+<div class="row">
+    <div class="col-md-6">
+        <div class="col-md-12">
+            <label><b>Discount Amount :</b></label>
+        </div>
+        <div class="col-md-12">
+            <input type="number" class="form-control disc-amt-fdshjk" />
+        </div>
+
+        <div class="col-md-12 mt-md-2">
+            <div class="col-md-12">
+                <label><b>Reason For Discount :</b></label>
+            </div>
+            <div class="col-md-12">
+                <textarea class="form-control rzn-disc-fkjdh" rows="7" cols="4"></textarea>
+            </div>
+        </div>
+
+        <div class="col-md-12 mt-md-2">
+            <div class="col-md-12">
+                <label><b>Priority :</b></label>
+            </div>
+            <div class="col-md-12">
+                <select class="form-control req-urg-jskfhd">
+                    <option value="1">Normal</option>
+                    <option value="2">Urgent</option>
+                    <option value="3">Very Urgent</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        @{ Html.RenderAction("CommercialComments", "Messages", new { Plotid = Model.Data.Id });}
+    </div>
+</div>
+<div class="col-md-12 mt-md-5 central-text-align">
+    <button class="btn btn-primary snd-disc-apprvl-btn-fdhjk">Send For Approval</button>
+</div>
+
+
+<script>
+    $('.snd-disc-apprvl-btn-fdhjk').unbind().click(function () {
+        let conf = confirm('Are you sure you want to send this discount application for approval?');
+
+        if (!conf) {
+            return;
+        }
+
+        let plt = $('.plt-id').val();
+        let rzn = $('.rzn-disc-fkjdh').val();
+        let amt = $('.disc-amt-fdshjk').val();
+        let urge = $('.req-urg-jskfhd option:selected').val();
+
+        if (amt == '' || plt == '' || rzn == '') {
+            alert('Please fill all fields before proceeding.');
+            return;
+        }
+        showLoader();
+        //yahan pe ajax maarni hai
+        $.ajax({
+            type: "POST",
+            url: '/Commercial/SaveDiscountRequest/',
+            data: { unitNo: plt, amt: amt, rems: rzn, urgency: urge},
+            success: function (data) {
+                if (data) {
+                    alert("Request has been dispatched successfully.");
+                    closeModal();
+                    hideLoader();
+                }
+                else {
+                    alert("Failed to dispatch the request. Please try again");
+                    hideLoader();
+                }
+            }
+            , error: function (xmlhttprequest, textstatus, message) {
+                if (textstatus === "timeout") {
+                    alert("got timeout");
+                } else {
+                    alert(textstatus);
+                }
+            }
+        });
+    });
+</script>

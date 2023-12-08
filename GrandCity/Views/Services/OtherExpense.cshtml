@@ -1,0 +1,83 @@
+﻿@{ if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+}
+<script src="~/Scripts/Inv.js"></script>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<div class="bgc-white p-20 bd">
+    <div style="text-align:center">
+        <h3>Other Expense Requisition</h3>
+    </div>
+    <input type="hidden" class="grpId" value="@ViewBag.Group_Id" />
+    <div class="col-md-12 mt-md-3">
+        <div class="form-group col-md-4">
+            <label>Project Name</label>
+            <h4>@Model.Name</h4>
+            <input type="hidden" value="@Model.Id" id="Prj_Id" />
+        </div>
+    </div>
+    <div class="col-md-12 " id="ad-demand">
+        <div class="cal item-pur-req-row">
+            <div class="form-row">
+                <div class="col-md-1">
+                    <div class="sr">1</div>
+                </div>
+                <div class="form-group col-md-5">
+                    <label>Name</label>
+                    <input type="text" class="form-control Product" id="Product" required />
+                </div>
+                <div class="form-group col-md-3">
+                    <label>Details</label>
+                    <textarea class="form-control descr" rows="1" cols="5"></textarea>
+                </div>
+                <div class="form-group col-md-2">
+                    <label>Amount <select class="ccy"><option value="Rs">Rs</option><option value="$">$</option><option value="£">£</option></select></label>
+                    <input type="text" class="coma form-control Amount" id="Amount" required />
+                </div>
+                <div class="col-md-1">
+                    <i class="ti-trash rmv-pur-req-row rmv"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr />
+    <div class="row">
+        <div class="col-md-2">
+            <button type="button" class="btn btn-success add-new-oth-exp-row">Add Another Line</button>
+        </div>
+        <div class="col-md-2">
+            <button type="submit" id="reg-othexp" class="btn btn-primary">Submit</button>
+        </div>
+    </div>
+</div>
+
+<style>
+    .rmv-pur-req-row {
+        align-items: center;
+        height: 100%;
+        display: flex;
+        margin: auto;
+        justify-content: center;
+        font-size: 20px;
+    }
+
+        .rmv-pur-req-row:hover {
+            color: #d0232A;
+            cursor: pointer;
+        }
+
+    .left-mar-temp {
+        margin-left: 6rem !important;
+    }
+
+    .sr {
+        text-align: center;
+        margin-top: 35px;
+    }
+</style>

@@ -1,0 +1,102 @@
+﻿@model MeherEstateDevelopers.Models.Overdue_CancelReport_Plots
+<div class="row">
+    <div class="col-md-4" style="border: 1px solid #ccc;">
+        <h5 style="text-align:center">Qualifying Plots</h5>
+        <div class="row">
+            <div class="col-md-2"><h6>Total</h6></div>
+            <div class="col-md-4"><h6>Plot Size</h6></div>
+            <div class="col-md-6"><h6>Overdue Amount</h6></div>
+        </div>
+        @foreach (var item in Model.OverduePlots.Where(x => x.Type == "Qualifying"))
+        {
+            <div class="row">
+                <div class="col-md-2"><label>@item.Total</label></div>
+                <div class="col-md-4"><label>@item.Plot_Size</label></div>
+                <div class="col-md-6"><label><span class="ccy">Rs. </span> @string.Format("{0:n0}", -(item.Balance_Amount))</label></div>
+            </div>
+        }
+        <div class="row" style="border-top:1px solid #ccc">
+            <div class="col-md-2"><h6>@string.Format("{0:n0}", Model.OverduePlots.Where(x => x.Type == "Qualifying").Sum(x => x.Total))</h6></div>
+            <div class="col-md-4"><label></label></div>
+            <div class="col-md-6"><h6><span class="ccy">Rs. </span> @string.Format("{0:n0}", -(Model.OverduePlots.Where(x => x.Type == "Qualifying").Sum(x => x.Balance_Amount)))</h6></div>
+        </div>
+    </div>
+    <div class="col-md-4" style="border: 1px solid #ccc;">
+        <h5 style="text-align:center">1st Warning</h5>
+        <div class="row">
+            <div class="col-md-2"><h6>Total</h6></div>
+            <div class="col-md-4"><h6>Plot Size</h6></div>
+            <div class="col-md-6"><h6>Overdue Amount</h6></div>
+        </div>
+        @foreach (var item in Model.OverduePlots.Where(x => x.Type == "First Notice"))
+        {
+            <div class="row">
+                <div class="col-md-2"><label>@item.Total</label></div>
+                <div class="col-md-4"><label>@item.Plot_Size</label></div>
+                <div class="col-md-6"><label><span class="ccy">Rs. </span>@string.Format("{0:n0}", -(item.Balance_Amount))</label></div>
+            </div>
+        }
+        <div class="row" style="border-top:1px solid #ccc">
+            <div class="col-md-2"><h6>@string.Format("{0:n0}", Model.OverduePlots.Where(x => x.Type == "First Notice").Sum(x => x.Total))</h6></div>
+            <div class="col-md-4"><label></label></div>
+            <div class="col-md-6"><h6><span class="ccy">Rs. </span> @string.Format("{0:n0}", -(Model.OverduePlots.Where(x => x.Type == "First Notice").Sum(x => x.Balance_Amount)))</h6></div>
+        </div>
+    </div>
+    <div class="col-md-4" style="border: 1px solid #ccc;">
+        <h5 style="text-align:center">2nd Warning</h5>
+        <div class="row">
+            <div class="col-md-2"><h6>Total</h6></div>
+            <div class="col-md-4"><h6>Plot Size</h6></div>
+            <div class="col-md-6"><h6>Overdue Amount</h6></div>
+        </div>
+        @foreach (var item in Model.OverduePlots.Where(x => x.Type == "Second Notice"))
+        {
+            <div class="row">
+                <div class="col-md-2"><label>@item.Total</label></div>
+                <div class="col-md-4"><label>@item.Plot_Size</label></div>
+                <div class="col-md-6"><label><span class="ccy">Rs. </span> @string.Format("{0:n0}", -(item.Balance_Amount))</label></div>
+            </div>
+        }
+        <div class="row" style="border-top:1px solid #ccc">
+            <div class="col-md-2"><h6>@string.Format("{0:n0}", Model.OverduePlots.Where(x => x.Type == "Second Notice").Sum(x => x.Total))</h6></div>
+            <div class="col-md-4"><label></label></div>
+            <div class="col-md-6"><h6><span class="ccy">Rs. </span> @string.Format("{0:n0}", -(Model.OverduePlots.Where(x => x.Type == "Second Notice").Sum(x => x.Balance_Amount)))</h6></div>
+        </div>
+    </div>
+    <div class="col-md-1"></div>
+    <div class="col-md-10" style="border: 1px solid #ccc;">
+        <h5 style="text-align:center">Cancelled Notice</h5>
+        <div class="row">
+            <div class="col-md-1"><h6>Total</h6></div>
+            <div class="col-md-2"><h6>Plot Size</h6></div>
+            <div class="col-md-2"><h6>Overdue Amount</h6></div>
+            <div class="col-md-2"><h6>Received Amount</h6></div>
+            <div class="col-md-2"><h6>Deduction</h6></div>
+            <div class="col-md-2"><h6>Payable</h6></div>
+        </div>
+
+
+
+        @foreach (var g in Model.CancelPlots.GroupBy(x => x.Plot_Size))
+        {
+            <div class="row">
+                <div class="col-md-1"><label>@g.Count()</label></div>
+                <div class="col-md-2"><label>@g.Key</label></div>
+                <div class="col-md-2"><label><span class="ccy">Rs. </span> @string.Format("{0:n0}", g.Sum(x => x.Balance_Amount))</label></div>
+                <div class="col-md-2"><label><span class="ccy">Rs. </span> @string.Format("{0:n0}", g.Sum(x => x.Received_Amount))</label></div>
+                <div class="col-md-2"><label><span class="ccy">Rs. </span> @string.Format("{0:n0}", g.Sum(x => x.Deduction))</label></div>
+                <div class="col-md-2"><label><span class="ccy">Rs. </span> @string.Format("{0:n0}", g.Sum(x => x.Payable))</label></div>
+            </div>
+        }
+        <div class="row" style="border-top:1px solid #ccc">
+            <div class="col-md-1"><h6>@string.Format("{0:n0}", Model.CancelPlots.Count())</h6></div>
+            <div class="col-md-2"><label></label></div>
+            <div class="col-md-2"><h6><span class="ccy">Rs. </span> @string.Format("{0:n0}", Model.CancelPlots.Sum(x => x.Balance_Amount))</h6></div>
+            <div class="col-md-2"><h6><span class="ccy">Rs. </span> @string.Format("{0:n0}", Model.CancelPlots.Sum(x => x.Received_Amount))</h6></div>
+            <div class="col-md-2"><h6><span class="ccy">Rs. </span> @string.Format("{0:n0}", Model.CancelPlots.Sum(x => x.Deduction))</h6></div>
+            <div class="col-md-2"><h6><span class="ccy">Rs. </span> @string.Format("{0:n0}", Model.CancelPlots.Sum(x => x.Payable))</h6></div>
+        </div>
+    </div>
+    <div class="col-md-1"></div>
+
+</div>

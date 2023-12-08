@@ -1,0 +1,66 @@
+﻿@model MeherEstateDevelopers.Models.Prj_Milestone_Tasks_SubTasks
+<input type="hidden" id="MTS" value="@Model.Type" />
+<input type="hidden" id="mts_id" value="@Model.Id" />
+<div class="form-row">
+    @if (Model.Type == "Milestone")
+    {
+        <div class="form-group col-md-4">
+            <label>Milestone</label>
+            <input type="text" class="form-control" id="mile-title" value="@Model.Title" />
+        </div>
+    }
+    <div class="form-group col-md-8">
+        <label>Description</label>
+        <textarea class="form-control" id="mile-desc" rows="4">@Model.Description</textarea>
+    </div>
+</div>
+<div class="form-row">
+    <div class="form-group col-md-3">
+        <label>Unit</label>
+        <select class="form-control" id="mile-unit">
+            <option value="Cft">Cft</option>
+            <option value="Rft">Rft</option>
+            <option value="Nos.">Nos.</option>
+            <option value="Each">Each</option>
+            <option value="Kg">Kg</option>
+            <option value="Job">Job</option>
+            <option value="Per/Hour">Per/Hour</option>
+            <option value="Sft">Sft</option>
+            <option value="Unit">Unit</option>
+        </select>
+    </div>
+    <div class="form-group col-md-3">
+        <label>Qty</label>
+        <input type="text" class="form-control mile-rate-cal coma" id="mile-qty" value="@string.Format("{0:n2}", Model.Qty)" placeholder="Qty">
+    </div>
+    <div class="form-group col-md-3">
+        <label>Rate</label>
+        <input type="text" class="coma form-control mile-rate-cal coma" id="mile-rate" value="@string.Format("{0:n2}", Model.Rate)" placeholder="Rate">
+    </div>
+    <div class="form-group col-md-3">
+        <label>Total</label>
+        <input type="text" class="form-control coma" id="mile-total" value="@string.Format("{0:n2}", Model.Amount)">
+    </div>
+</div>
+<div class="form-row">
+    <div class="form-group col-md-3">
+        <label>Start date</label>
+        <input type="text" class="form-control " id="mile-start" value="@string.Format("{0:MM/dd/yyyy}",Model.Start_Date)" data-provide="datepicker" placeholder="Start Date">
+    </div>
+    <div class="form-group col-md-3">
+        <label>Deadline</label>
+        <input type="text" class="form-control " id="mile-dead" value="@string.Format("{0:MM/dd/yyyy}",Model.Deadline)" data-provide="datepicker" placeholder="Deadline">
+    </div>
+    <div class="form-group col-md-3">
+        <label>Department</label>
+        @Html.DropDownList("Department", null, "Department..", new { Name = "Dep_Id", @class = "form-control" })
+    </div>
+</div>
+<script>
+    $(function () {
+        $('.modal-footer').append('<button class="btn btn-primary" id="mts-up-req" type="button">Request</button>');
+        $(".modal-header").text("Update Request");
+        var text = "@Model.Unit";
+        $("#mile-unit").val(text);
+    });
+</script>

@@ -1,0 +1,27 @@
+﻿<div class="row">
+    <div class="col-md-4">
+        <label>Type</label>
+        <select class="form-control inst-type">
+            <option>Select Installment Type</option>
+            <option value="1">Installment</option>
+            <option value="2">Development Charges</option>
+            <option value="3">Advance</option>
+            <option value="0">Other Charges</option>
+            <option value="5">Special Prefrence Charges</option>
+        </select>
+    </div>
+    <div class="col-md-4">
+        <label>Amount</label>
+        <input type="text" class="coma form-control" id="Amount" />
+    </div>
+    <div class="col-md-4">
+        <label>Due Date</label>
+        <input type="date" id="date" class="form-control" />
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('.modal-footer').append('<button class="btn btn-success" id="ints-add" type="submit">Generate Installment</button>');
+    });  
+</script>

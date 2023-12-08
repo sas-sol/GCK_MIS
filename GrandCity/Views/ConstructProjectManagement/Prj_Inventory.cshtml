@@ -1,0 +1,64 @@
+﻿<div class="form-row col-md-12 col-sm-10 mainContent">
+    <div class="form-group col-md-3">
+        <button type="button" class="btn btn-info dem-req" data-toggle="modal" data-target="#Modal"><i class="fas fa-clipboard-list"></i> Demand Requisition</button>
+    </div>
+    <div class=" col-sm-12 pt-4 my-2">
+        <div class="row">
+            <div class="col-md-12">
+
+                <div class="card">
+                    <div class="card-header" id="heading-1">
+                        <h5 class="mb-0">
+                            <a role="button" data-toggle="collapse" href="#collapse-1" aria-expanded="false" aria-controls="collapse-1">
+                                Issued Items
+                            </a>
+                        </h5>
+                    </div>
+                    <div id="collapse-1" class="collapse" data-parent="#1" aria-labelledby="heading-1">
+                        <div class="card-body">
+                            <div class="row">
+                                @{Html.RenderAction("Prj_InventoryStockIn", "ConstructProjectManagement", new { Prj_Id = ViewBag.Prj_Id });}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header" id="heading-2">
+                        <h5 class="mb-0">
+                            <a role="button" data-toggle="collapse" href="#collapse-2" aria-expanded="false" aria-controls="collapse-2">
+                                Demand Orders
+                            </a>
+                        </h5>
+                    </div>
+                    <div id="collapse-2" class="collapse" data-parent="#2" aria-labelledby="heading-2">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-10">
+                                    @{Html.RenderAction("Prj_DemandOrders", "ConstructProjectManagement", new { Prj_Id = ViewBag.Prj_Id });}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header" id="heading-3">
+                        <h5 class="mb-0">
+                            <a role="button" data-toggle="collapse" href="#collapse-3" aria-expanded="false" aria-controls="collapse-3">
+                                Purchase Requisitions
+                            </a>
+                        </h5>
+                    </div>
+                    <div id="collapse-3" class="collapse" data-parent="#3" aria-labelledby="heading-3">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-10">
+                                    @{Html.RenderAction("Prj_PurchaseReq", "ConstructProjectManagement", new { Prj_Id = ViewBag.Prj_Id });}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,301 @@
+﻿@model MeherEstateDevelopers.Models.ArrearsSalariesDetails
+    <html>
+    <head>
+        <style>
+            .watermark {
+                background-image: url('../../images/watermark.jpg');
+                /* Full height */
+                /* Center and scale the image nicely */
+                background-repeat: no-repeat;
+                background-position: center;
+                -moz-filter: blur(5px);
+                -ms-filter: blur(5px);
+                filter: blur(5px);
+                z-index: 1;
+                width: 1200px;
+                height: 800px;
+            }
+        </style>
+        <meta name="viewport" content="width=device-width" />
+        <link href="~/Content/salaryslip/Salry.css" rel="stylesheet" />
+        <link rel="stylesheet" type="text/css" media="print" href="~/Content/salaryslip/Salry.css">
+        <title>SalarySlip</title>
+    </head>
+    <body>
+        @if (Model.salary.Any())
+        {
+            foreach (var item in Model.salary)
+            {
+                <div class=" ">
+                    <div id="payslip" class="">
+                        <div id="title">
+                            Employee Copy
+                            <img src="/assets/static/images/meherestate-simple.png" class="imagesas">
+                        </div>
+                        <label class="month">Salary Month: &nbsp;@string.Format("{0:MMMMMMMMM d, yyyy}", item.Salary_Month) </label>
+                        <div class="content watermark">
+                            <div class="left-panel ">
+                                <div class="details" id="">
+                                    <div class="entry">
+                                        <div class="label">Employee Code</div>
+                                        <div class="value">@item.Employee_code</div>
+                                    </div>
+                                    <div class="entry">
+                                        <div class="label">Employee Name</div>
+                                        <div class="value">@item.Employee_Name</div>
+                                    </div>
+                                    <div class="entry">
+                                        <div class="label">Date Hired</div>
+                                        <div class="value">@string.Format("{0: MM/dd/yyyy}", item.Emp_Date_Of_Joining)</div>
+                                    </div>
+                                    <div class="entry">
+                                        <div class="label">Department & Position</div>
+                                        <div class="value">@item.Employee_Designation</div>
+                                    </div>
+                                    <div class="entry">
+                                        <div class="label">Payroll Cycle</div>
+                                        <div class="value">Monthly</div>
+                                    </div>
+                                    <div class="entry">
+                                        <div class="label">Prepared by</div>
+                                        <div class="value">HR Department</div>
+                                    </div>
+                                    <div class="entry">
+                                        <div class="label">No Of Days</div>
+                                        <div class="value">@item.No_Of_Days</div>
+                                    </div>
+                                    <div class="entry">
+                                        <div class="label">Absentee</div>
+                                        <div class="value">@item.Absentee</div>
+                                    </div>
+                                    <div class="entry">
+                                        <div class="label">Worked Days</div>
+                                        <div class="value">@(item.No_Of_Days - item.Absentee)</div>
+                                    </div>
+                                    <div class="entry">
+                                        <div class="label">Basic Salary</div>
+                                        <div class="value">@String.Format("{0:n0}", item.Basic_salary)</div>
+                                    </div>
+                                </div>
+                                <div class="gross">
+                                    <div class="title">Gross Total</div>
+                                    <div class="entry">
+                                        <div class="label"></div>
+                                        <div class="value">Rs. @String.Format("{0:n0}", item.Grand_total)</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="right-panel">
+                                <div class="details">
+                                    <div class="taxable_allowance">
+                                        <div class="entry">
+                                            <div class="label">Allowance and Bonus</div>
+                                        </div>
+                                        @if (Model.details.Any())
+                                        {
+                                            foreach (var item2 in Model.details.Where(x => x.Type == "AllowncesAndBonus"))
+                                            {
+                                                <div class="entry">
+                                                    <div class="label"></div>
+                                                    <div class="detail">@item2.Description</div>
+                                                    <div class="rate"></div>
+                                                    <div class="amount">@String.Format("{0:n0}", item2.Amount)</div>
+                                                </div>
+                                            }
+                                        }
+                                        <div class="entry">
+                                            <div class="label"></div>
+                                            <div class="detail">Bonus</div>
+                                            <div class="rate"></div>
+                                            <div class="amount">@String.Format("{0:n0}", item.Bonus)</div>
+                                        </div>
+                                        <hr />
+                                        <div class="entry">
+                                            <div class="label">Total</div>
+                                            <div class="rate"></div>
+                                            <div class="amount">@String.Format("{0:n0}", item.Allownces + item.Bonus)</div>
+                                        </div>
+                                    </div>
+                                    <hr />
+                                    <div class="deductions">
+                                        <div class="entry">
+                                            <div class="label">Deductions And Taxes</div>
+                                        </div>
+                                        @if (Model.details.Any())
+                                        {
+                                            foreach (var item3 in Model.details.Where(x => x.Type == "DeductionAndTaxes"))
+                                            {
+                                                <div class="entry">
+                                                    <div class="label"></div>
+                                                    <div class="detail">@item3.Description</div>
+                                                    <div class="rate"></div>
+                                                    <div class="amount">@String.Format("{0:n0}", item3.Amount)</div>
+                                                </div>
+                                            }
+                                        }
+                                        <hr />
+                                        <div class="entry">
+                                            <div class="label">Total</div>
+                                            <div class="rate"></div>
+                                            <div class="amount">@String.Format("{0:n0}", item.Deductions)</div>
+                                        </div>
+                                    </div>
+                                    <div class="net_pay">
+                                        <div class="entry">
+                                            <div class="label">NET PAY</div>
+                                            <div class="detail"></div>
+                                            <div class="rate"></div>
+                                            <div class="amount">@String.Format("{0:n0}", item.Grand_total)</div>
+                                        </div>
+                                    </div>
+                                    <br />
+                                    <br />
+                                </div>
+                            </div>
+                        </div>
+                        <br />
+                        <span>-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------</span>
+                        <div id="title2">
+                            Finance Manager Signature
+                            <lable class="imagesas">Employee Signature</lable>
+                        </div>
+                        <div style="margin-top:7%;">
+                            <div id="payslip">
+                                <div id="title">
+                                    Accounts Copy
+                                    <img src="/assets/static/images/meherestate-simple.png" class="imagesas">
+                                </div>
+                                <label class="month">Salary Month: &nbsp;@string.Format("{0:MMMMMMMMM d, yyyy}", item.Salary_Month) </label>
+                                <div class="content">
+                                    <div class="left-panel">
+                                        <div class="details">
+                                            <div class="entry">
+                                                <div class="label">Employee Code</div>
+                                                <div class="value">@item.Employee_code</div>
+                                            </div>
+                                            <div class="entry">
+                                                <div class="label">Employee Name</div>
+                                                <div class="value">@item.Employee_Name</div>
+                                            </div>
+                                            <div class="entry">
+                                                <div class="label">Date Hired</div>
+                                                <div class="value">@string.Format("{0: MM/dd/yyyy}", item.Emp_Date_Of_Joining)</div>
+                                            </div>
+                                            <div class="entry">
+                                                <div class="label">Department & Position</div>
+                                                <div class="value">@item.Employee_Designation</div>
+                                            </div>
+                                            <div class="entry">
+                                                <div class="label">Payroll Cycle</div>
+                                                <div class="value">Monthly</div>
+                                            </div>
+                                            <div class="entry">
+                                                <div class="label">Prepared by</div>
+                                                <div class="value">HR Department</div>
+                                            </div>
+                                            <div class="entry">
+                                                <div class="label">No Of Days</div>
+                                                <div class="value">@item.No_Of_Days</div>
+                                            </div>
+                                            <div class="entry">
+                                                <div class="label">Absentee</div>
+                                                <div class="value">@item.Absentee</div>
+                                            </div>
+                                            <div class="entry">
+                                                <div class="label">Worked Days</div>
+                                                <div class="value">@(item.No_Of_Days - item.Absentee)</div>
+                                            </div>
+                                            <div class="entry">
+                                                <div class="label">Basic Salary</div>
+                                                <div class="value">@String.Format("{0:n0}", item.Basic_salary)</div>
+                                            </div>
+                                        </div>
+                                        <div class="gross">
+                                            <div class="title">Gross Total</div>
+                                            <div class="entry">
+                                                <div class="label"></div>
+                                                <div class="value">Rs. @String.Format("{0:n0}", item.Grand_total)</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="right-panel">
+                                        <div class="details">
+                                            <div class="taxable_allowance">
+                                                <div class="entry">
+                                                    <div class="label">Allowance and Bonus</div>
+                                                </div>
+                                                @if (Model.details.Any())
+                                                {
+                                                    foreach (var item2 in Model.details.Where(x => x.Type == "AllowncesAndBonus"))
+                                                    {
+                                                        <div class="entry">
+                                                            <div class="label"></div>
+                                                            <div class="detail">@item2.Description</div>
+                                                            <div class="rate"></div>
+                                                            <div class="amount">@String.Format("{0:n0}", item2.Amount)</div>
+                                                        </div>
+                                                    }
+                                                }
+                                                <div class="entry">
+                                                    <div class="label"></div>
+                                                    <div class="detail">Bonus</div>
+                                                    <div class="rate"></div>
+                                                    <div class="amount">@String.Format("{0:n0}", item.Bonus)</div>
+                                                </div>
+                                                <hr />
+                                                <div class="entry">
+                                                    <div class="label">Total</div>
+                                                    <div class="rate"></div>
+                                                    <div class="amount">@String.Format("{0:n0}", item.Allownces + item.Bonus)</div>
+                                                </div>
+                                            </div>
+                                            <div class="deductions">
+                                                <div class="entry">
+                                                    <div class="label">Deductions And Taxes</div>
+                                                </div>
+                                                @if (Model.details.Any())
+                                                {
+                                                    foreach (var item3 in Model.details.Where(x => x.Type == "DeductionAndTaxes"))
+                                                    {
+                                                        <div class="entry">
+                                                            <div class="label"></div>
+                                                            <div class="detail">@item3.Description</div>
+                                                            <div class="rate"></div>
+                                                            <div class="amount">@String.Format("{0:n0}", item3.Amount)</div>
+                                                        </div>
+                                                    }
+                                                }
+                                                <hr />
+                                                <div class="entry">
+                                                    <div class="label">Total</div>
+                                                    <div class="rate"></div>
+                                                    <div class="amount">@String.Format("{0:n0}", item.Deductions)</div>
+                                                </div>
+                                            </div>
+                                            <div class="net_pay">
+                                                <div class="entry">
+                                                    <div class="label">NET PAY</div>
+                                                    <div class="detail"></div>
+                                                    <div class="rate"></div>
+                                                    <div class="amount">@String.Format("{0:n0}", item.Grand_total)</div>
+                                                </div>
+                                            </div>
+                                            <br />
+                                            <br />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <br />
+                        <span>-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------</span>
+                        <div id="title2">
+                            Finance Manager Signature
+                            <lable class="imagesas">Employee Signature</lable>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+    </body>
+</html>

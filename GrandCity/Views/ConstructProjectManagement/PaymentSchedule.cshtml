@@ -1,0 +1,392 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Project_Payment_Schedule>
+    <head>
+        <script>
+            var hasAlreadyRecord = @Html.Raw(Json.Encode(Model.Count()));
+            var milesList = @Html.Raw(Json.Encode(ViewBag.Milestones));
+        </script>
+    </head>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th></th>
+            <th rowspan="2">Sr#</th>
+            <th rowspan="2">Description</th>
+            <th colspan="2">Completion</th>
+            <th colspan="2">Work Done</th>
+            <th colspan="2">Balance</th>
+            <th rowspan="2">Remarks</th>
+        </tr>
+
+        <tr>
+            <th></th>
+            <th>%age</th>
+            <th>Amount</th>
+            <th>%age</th>
+            <th>Amount</th>
+            <th>%age</th>
+            <th>Amount</th>
+        </tr>
+    </thead>
+
+    <tbody class="main-rec">
+        @*yahan pe wo schedule anay hain jo puranay hain*@
+        @if (!Model.Any())
+        {
+            <tr class="pmnt-scd-info-row row-1">
+                <td class="pointer row-del">@*<i class="c-teal-500 ti-close"></i>*@</td>
+                <td>
+                    <input type="text" class="myInpt srno" value="1" readonly />
+                </td>
+                <td>
+                    <select class="myInpt descr"></select>
+                </td>
+                <td>
+                    <input type="number" class="myInpt com-perc" value="0" maxlength="2" />
+                </td>
+                <td>
+                    <input type="number" class="myInpt com-amt" value="0"/>
+                </td>
+                <td>
+                    <input type="number" class="myInpt wd-perc" value="0" maxlength="2" readonly/>
+                </td>
+                <td>
+                    <input type="number" class="myInpt wd-amt" value="0" readonly />
+                </td>
+                <td>
+                    <input type="number" class="myInpt bal-perc" value="0" readonly />
+                </td>
+                <td>
+                    <input type="number" class="myInpt bal-amt" value="0" readonly />
+                </td>
+                <td>
+                    <input type="text" class="myInpt rems" value="" />
+                </td>
+            </tr>
+        }
+        else
+        {
+            foreach (var item in Model)
+            {
+                <tr class="pmnt-scd-info-row row-1">
+                    <td class="pointer row-del">@*<i class="c-teal-500 ti-close"></i>*@</td>
+                    <td>
+                        <input type="text" class="myInpt srno" value="@(item.SID+1)" readonly />
+                    </td>
+                    <td>
+                        <input type="text" class="myInpt descr" value="@item.Description" />
+                    </td>
+                    <td>
+                        <input type="number" class="myInpt com-perc" value="@item.CompletionPercentage" maxlength="2" />
+                    </td>
+                    <td>
+                        <input type="number" class="myInpt com-amt" value="@item.CompletionAmount" />
+                    </td>
+                    <td>
+                        <input type="number" class="myInpt wd-perc" value="@item.WorkDonePercentage" maxlength="2" readonly />
+                    </td>
+                    <td>
+                        <input type="number" class="myInpt wd-amt" value="@item.WorkDoneAmount" readonly />
+                    </td>
+                    <td>
+                        <input type="number" class="myInpt bal-perc" value="@(item.CompletionPercentage-item.WorkDonePercentage)" readonly />
+                    </td>
+                    <td>
+                        <input type="number" class="myInpt bal-amt" value="@(item.CompletionAmount-item.WorkDoneAmount)" readonly />
+                    </td>
+                    <td>
+                        <input type="text" class="myInpt rems" value="" />
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+
+    <tfoot>
+        <tr>
+            <th></th>
+            <th></th>
+            <th>Totals</th>
+            <th id="ttl-comp-perc">0</th>
+            <th id="ttl-comp-amt">0</th>
+            <th id="ttl-work-perc">0</th>
+            <th id="ttl-work-amt">0</th>
+            <th id="ttl-bal-perc">0</th>
+            <th id="ttl-bal-amt">0</th>
+            <th></th>
+        </tr>
+        <tr>
+            <th colspan="10">
+                <button class="btn btn-success new-pay-schd">Insert New Row</button>
+            </th>
+        </tr>
+        <tr>
+            <th colspan="9">
+            </th>
+            <th>
+                <button class="btn btn-primary sav-pay-schd">Update</button>
+            </th>
+        </tr>
+    </tfoot>
+</table>
+
+<style>
+    th {
+        text-align: center;
+        vertical-align: middle !important;
+    }
+
+    td {
+        text-align: center;
+    }
+
+    .myInpt {
+        width: 100%;
+        height: 100%;
+        border: none;
+        text-align: center;
+    }
+</style>
+
+<script>
+    $(document).ready(function () {
+        let status = $('#Prj_Status').val();
+
+        let ele = $('.pmnt-scd-info-row');
+        if (hasAlreadyRecord > 0) {
+            UpdateView(ele.first());
+        }
+        else {
+            InitMileByEle($('.descr').first(), milesList)
+        }
+
+        //Hiding the insert New Row Btn
+        if (status == 'Approved') {
+            $('.new-pay-schd').remove();
+        }
+    });
+    $('.new-pay-schd').on('click', function () {
+        var _ele = $('.main-rec tr:last-child');
+        checkAllFilled(_ele);
+    });
+    function checkAllFilled(ele) {
+        let parentEle = $(ele);
+
+        let desc = $(parentEle).find('.descr').val();
+        let comPerc = $(parentEle).find('.com-perc').val();
+        let comAmt = $(parentEle).find('.com-amt').val();
+        //let wdPerc = $(parentEle).find('.wd-perc').val();
+        //let wdAmt = $(parentEle).find('.wd-amt').val();
+
+        if (comPerc === '0' || comAmt === '0' || desc === '') {
+            alert('Please insert data into the previous row first');
+            return;
+        }
+
+        let _row_no = $('.pmnt-scd-info-row').length;
+        _row_no++;
+        let _newRow = `<tr class="pmnt-scd-info-row row-${_row_no}">
+            <td class="pointer row-del"><i class="c-teal-500 ti-close"></i></td>
+            <td>
+                <input type="text" class="myInpt srno" value="${_row_no}" readonly/>
+            </td>
+            <td>
+                <select class="myInpt descr" value=""></select>
+            </td>
+            <td>
+                <input type="text" class="myInpt com-perc" value="0" maxlength="2"/>
+            </td>
+            <td>
+                <input type="text" class="myInpt com-amt" value="0" />
+            </td>
+            <td>
+                <input type="text" class="myInpt wd-perc" value="0" maxlength="2"/>
+            </td>
+            <td>
+                <input type="text" class="myInpt wd-amt" value="0" readonly/>
+            </td>
+            <td>
+                <input type="text" class="myInpt bal-perc" value="0" readonly/>
+            </td>
+            <td>
+                <input type="text" class="myInpt bal-amt" value="0" readonly/>
+            </td>
+            <td>
+                <input type="text" class="myInpt rems" value="" />
+            </td>
+        </tr>`;
+        let new_row_elem = $('.main-rec').append(_newRow);
+        InitMileByEle($(new_row_elem).find('.descr').last(), milesList);
+
+        $('.row-del').unbind().on('click', function () {
+            let con = confirm("Are you sure you want to remove this row?");
+            if (con) {
+                let _row_ele = $(this).closest('.pmnt-scd-info-row');
+                $(_row_ele).remove();
+                var _last_row = $('.main-rec tr:last-child');
+                UpdateView(_last_row);
+            } else {
+                return;
+            }
+            return;
+        });
+    }
+
+    $(document).on('focusout', '.myInpt', function () {
+        var parentElement = $(this).closest('.pmnt-scd-info-row');
+        
+        UpdateView(parentElement);
+    });
+
+    $(document).on('focusin', '.myInpt', function () {
+        $(this).select();
+    });
+
+    function UpdateView(_parent_ele) {
+
+        //Updating Serial number columns
+        $('.srno').each(function (i, _ele) {
+            $(_ele).val(i + 1)
+        });
+
+        var _balCompPerc = 0;
+        var _balCompAmt = 0;
+        var _balWDPerc = 0;
+        var _balWDAmt = 0;
+
+        
+        _balCompPerc = parseFloat($(_parent_ele).find('.com-perc').val());
+        _balCompAmt = parseFloat($(_parent_ele).find('.com-amt').val());
+        _balWDPerc = parseFloat($(_parent_ele).find('.wd-perc').val());
+        if (_balWDPerc > _balCompPerc) {
+            alert('Work done percentage cannot be greater than completion percentage. Please correct.');
+            parseFloat($(_parent_ele).find('.wd-perc').val(_balCompPerc));
+            return;
+        }
+        if (isNaN(_balCompPerc)) {
+            $(_parent_ele).find('.com-perc').val(0);
+            _balCompPerc = 0;
+        }
+
+        if (isNaN(_balCompAmt)) {
+            $(_parent_ele).find('.com-amt').val(0);
+            _balCompAmt = 0;
+        }
+
+        if (isNaN(_balWDPerc)) {
+            $(_parent_ele).find('.wd-perc').val(0);
+            _balWDPerc = 0;
+        }
+
+        _balWDAmt = (_balWDPerc / (100)) * (_balCompAmt);
+        $(_parent_ele).find('.wd-amt').val(_balWDAmt);
+        $(_parent_ele).find('.bal-perc').val(_balCompPerc - _balWDPerc);
+        $(_parent_ele).find('.bal-amt').val(_balCompAmt - _balWDAmt);
+
+        //---------------------------- Footer Updations ----------------------------
+        //Total Completion Sums
+        var _ttl_comp_perc = 0;
+        $('.com-perc').each(function () {
+            _ttl_comp_perc += parseFloat($(this).val());
+        });
+
+        var _ttl_comp_amt = 0;
+        $('.com-amt').each(function () {
+            _ttl_comp_amt += parseFloat($(this).val());
+        });
+
+        //Total Work Done Sums
+        var _ttl_work_perc = 0;
+        $('.wd-perc').each(function () {
+            _ttl_work_perc += parseFloat($(this).val());
+        });
+
+        var _ttl_work_amt = 0;
+        $('.wd-amt').each(function () {
+            _ttl_work_amt += parseFloat($(this).val());
+        });
+
+        //Total Balance Sums
+        var _ttl_bal_perc = 0;
+        $('.bal-perc').each(function () {
+            _ttl_bal_perc += parseFloat($(this).val());
+        });
+
+        var _ttl_bal_amt = 0;
+        $('.bal-amt').each(function () {
+            _ttl_bal_amt += parseFloat($(this).val());
+        });
+
+        $('#ttl-comp-perc').text(isNaN(_ttl_comp_perc) ? 0 : _ttl_comp_perc);
+        $('#ttl-comp-amt').text(isNaN(_ttl_comp_amt) ? 0 : _ttl_comp_amt);
+        $('#ttl-work-perc').text(isNaN(_ttl_work_perc) ? 0 : _ttl_work_perc);
+        $('#ttl-work-amt').text(isNaN(_ttl_work_amt) ? 0 : _ttl_work_amt);
+        $('#ttl-bal-perc').text(isNaN(_ttl_bal_perc) ? 0 : _ttl_bal_perc);
+        $('#ttl-bal-amt').text(isNaN(_ttl_bal_amt) ? 0 : _ttl_bal_amt);
+
+    }
+
+    $('.sav-pay-schd').unbind().on('click', function () {
+        var pmtsData = [];
+        let prj = $("#Prj_Id").val();
+        $('.pmnt-scd-info-row').each(function () {
+            let description = $(this).find('.descr option:selected').text();
+            let desc_id = $(this).find('.descr option:selected').val();
+            let compPerc = $(this).find('.com-perc').val();
+            let compAmt = $(this).find('.com-amt').val();
+            let wdPerc = $(this).find('.wd-perc').val();
+            let wdAmt = $(this).find('.wd-amt').val();
+            let remarks = $(this).find('.rems').val();
+
+            pmtsData.push({
+                desc: description,
+                descid: desc_id,
+                c_per: compPerc,
+                c_amt: compAmt,
+                w_per: wdPerc,
+                w_amt: wdAmt,
+                rem: remarks
+            });
+        });
+
+        
+        //checks baad main lgane hain
+        let ttlPerc = 0;
+        $.each(pmtsData, function (ind, val) {
+            ttlPerc += parseInt(val.c_per);
+        });
+
+        //checks ended
+        if (ttlPerc < 100 || ttlPerc > 100) {
+            alert('Completion Percentages should sum to a total of 100. Please recheck your entries.');
+            return;
+        }
+
+        //data posting to server
+        $.ajax({
+            type: "POST",
+            url: "/ConstructProjectManagement/SavePaymentSchedule/",
+            contentType: "application/json",
+            traditional: true,
+            beforeSend: function () {
+                
+            },
+            complete: function () {
+                
+            },
+            data: JSON.stringify({ schd: pmtsData, ProjId: prj }),
+        }).done(function (data) {
+            if (data == true) {
+                alert('data has been saved');
+                //
+                //let prj = $("#Prj_Id").val();
+                //$('#prjdetails').load('/ConstructProjectManagement/NewMaterialStatement?proj=' + prj, function () {
+                //    
+                //});
+            }
+            else {
+                alert('unable to save the data');
+            }
+        });
+    });
+</script>

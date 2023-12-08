@@ -1,0 +1,44 @@
+﻿
+
+
+
+<div class="form-row">
+    <div class="col-md-3">
+        <label>Amount</label>
+        <input type="text" class="form-control" value="@String.Format("{0:n}", ViewBag.Amount)" readonly />
+    </div>
+    <div class="col-md-6">
+        <label>------</label>
+        <div class="checkbox checkbox-circle checkbox-info peers ai-c">
+            <input type="checkbox" id="reb-chk" onchange="" value="Adjust_in_adv" required="required" class="peer">
+            <label class="peers peer-greed js-sb ai-c">
+                <span class="peer peer-greed " style="font-weight:bold">Adjust in advance </span>
+            </label>
+        </div>
+    </div>
+</div>
+<hr />
+<div class="row">
+    <div class="col-md-3">
+        <label>Release Amount</label>
+        <input class="form-control coma" placeholder="250,000" required>
+        <input type="hidden" id="Amount" class="amt" required>
+    </div>
+    <div class="col-md-3">
+        <label>Payment Type</label>
+        <select class="form-control" name="payty" id="payty">
+            <option value="">Choose..</option>
+            <option value="Cash">Cash</option>
+            <option value="Bank">Bank</option>
+        </select>
+    </div>
+</div>
+
+
+
+<script>
+    $(function () {
+        $('.modal-footer').append('<button type="submit"  value="@ViewBag.DealId" id="sub-reb" class="btn btn-primary">Release Rebate</button>');
+    });
+</script>
+

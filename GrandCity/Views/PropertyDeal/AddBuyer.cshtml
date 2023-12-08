@@ -1,0 +1,57 @@
+﻿@using (Html.BeginForm("AddBuyer", "PropertyDeal", FormMethod.Post, new { @id = "c-buy", @class = "", role = "form" }))
+{
+    @Html.AntiForgeryToken()
+    <input type="hidden" id="de-deal-id" name="Deal_Id" />
+    <div class="row">
+        <div class="form-group col-md-12">
+            <h5 id="buy-sel">Buyer Information</h5>
+        </div>
+        <div class="form-group col-md-3">
+            <label>Name</label>
+            <input class="form-control text-box single-line" id="Name" name="Name" required="" type="text" value="">
+        </div>
+        <div class="form-group col-md-3">
+            <label>Mobile</label>
+            <input class="form-control text-box single-line" id="Mobile" name="Mobile" placeholder="03211234567" required="" type="text" value="">
+        </div>
+        <div class="form-group col-md-3">
+            <label>Address</label>
+            <input class="form-control text-box single-line" id="Address" name="Address" type="text" value="">
+        </div>
+    </div>
+    <hr />
+    <div class="row">
+        @*<div class="form-group col-md-2">
+            <label>Demand</label>
+            <input class="form-control coma" placeholder="12,345" required>
+            <input type="hidden" id="dem-pric" name="Demand" class="amt" required>
+        </div>*@
+        <div class="form-group col-md-2">
+            <label>Offer Price</label>
+            <input class="form-control coma" id="of-pr" placeholder="12,345" required>
+            <input type="hidden" id="off-pric" name="Offered_Rate" class="amt" required>
+        </div>
+        <div class="form-group col-md-2">
+            <label>Rate/Marla</label>
+            <input class="form-control coma" id="rateper" placeholder="12,345" readonly required>
+            <input type="hidden" id="rate" name="Rate_Per_Marla" class="amt" readonly required>
+        </div>
+        <div class="form-group col-md-2">
+            <label>Source</label>
+            <select class="form-control" name="Source">
+                <option value="Walkin">Walk-in</option>
+                <option value="Social Media">Social Media</option>
+                <option value="UAN">UAN</option>
+                <option value="Reference">Reference</option>
+            </select>
+        </div>
+       
+    </div>
+}
+<script>
+    $(function () {
+        $('.modal-footer').append('<button class="btn btn-primary" id="cra-buy" type="button">Add Buyer</button>');
+        $(".modal-header").text("Add New Buyer");
+        $("#de-deal-id").val($("#deal-id").val());
+    });
+</script>

@@ -1,0 +1,14 @@
+﻿@{ if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+}
+
+
+<div class="col-md-12 bgc-white p-20" style="height:100vh;">
+    @{ Html.RenderAction("FingerPrint", "Biometric", new { Id = ViewBag.modId, module = ViewBag.modTyp, tp = ViewBag.Typ });}
+</div>

@@ -1,0 +1,157 @@
+﻿
+@model IEnumerable<MeherEstateDevelopers.Models.Sp_Get_ReminderComments_Result>
+<div class="peer peer-greed">
+    <div class="layer w-100">
+        <div class="p-20 bgc-white">
+            <h3>Reminder Comments</h3>
+        </div>
+    </div>
+    <div class="layer w-100 bd gapY-15 fxg-1 bgc-grey-200 pos-r">
+        <div class="p-20 layers ai-fe gapY-10 chat-box-height" id="chat-msg">
+            @{
+                if (Model.Any())
+                {
+                    foreach (var item in Model)
+                    {
+                        string color = "";
+                        if (item.Msg_Type == "Allotment_Letter_Delivered")
+                        {
+                            color = "bgc-purple-50";
+                        }
+                        else if (item.Msg_Type == "Signed")
+                        {
+                            color = "bgc-blue-50";
+                        }
+                        else if (item.Msg_Type == "Plot_Verified")
+                        {
+                            color = "bgc-green-50";
+                        }
+                        else if (item.Msg_Type == "Allotment_Letter_Generate")
+                        {
+                            color = "bgc-blue-50";
+                        }
+                        else if (item.Msg_Type == "Allotment_Letter_Requested")
+                        {
+                            color = "bgc-purple-50";
+                        }
+                        else if (item.Msg_Type == "Dimension_Updation")
+                        {
+                            color = "bgc-red-50";
+                        }
+                        else if (item.Msg_Type == "Plan_Updation")
+                        {
+                            color = "bgc-red-50";
+                        }
+                        else if (item.Msg_Type == "Add_Plot_Owner")
+                        {
+                            color = "bgc-blue-50";
+                        }
+                        else if (item.Msg_Type == "Record_Upatation")
+                        {
+                            color = "bgc-red-50";
+                        }
+                        else if (item.Msg_Type == "Customer_File")
+                        {
+                            color = "bgc-blue-50";
+                        }
+                        else if (item.Msg_Type == "Plot_Status_Updation")
+                        {
+                            color = "bgc-red-50";
+                        }
+                        <div class="layer">
+                            <div class="peers fxw-nw ai-c pY-3 pX-10 bgc-white bdrs-2 lh-3/2 @color">
+                                <div class="peer-greed ord-0">
+                                    @if (item.Msg_Type == "file")
+                                    {
+                                        <img src="/RemindersData/@item.Ticket_Id/@item.Comment" width="200" height="200" />
+                                    }
+                                    else
+                                    {
+                                        <span>@item.Comment</span>
+                                    }
+                                </div>
+                            </div>
+                            <div class="peers fxw-nw ai-c pY-3 pX-10 bgc-white @color">
+                                <div class="peer-greed ord-0">
+                                    <span>@item.Name</span>
+                                </div>
+                                <div class="peer mL-10 ord-1">
+                                    <small>@string.Format("{0:d MMM yyy, h:mm tt}", item.CommentDate)</small>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+            }
+        </div>
+    </div>
+    <div class="layer w-100">
+        <!-- Chat Send -->
+        <div class="bdT bgc-white" style="padding-top:2.5%">
+            @using (Html.BeginForm("PostReminderComment", "Reminders", FormMethod.Post, new { @id = "rem-comt", @class = "", role = "form", enctype = "multipart/form-data" }))
+            {
+                <input type="hidden" name="Rem_Id" value="@ViewBag.FileId" />
+                <div class="pos-r">
+                    <textarea type="text" name="Comment" class="chat-comment-box form-control m-0 fl-text" style="width:90%; padding-right:10%" placeholder="Add Comment"></textarea>
+                    <button type="submit" class="btn btn-primary w-2r p-0 h-2r pos-a r-1 t-1" style="margin-top:10px">
+                        <i class="fa fa-paper-plane-o"></i>
+                    </button>
+                    <input type="file" id="files" name="Files" style="margin:10px;" />
+                </div>
+            }
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        ChatBottom();
+
+        $("#rem-comt").unbind().submit(function (e) {
+            e.preventDefault();
+            var msg = $(".fl-text").val();
+            var file = $("#files").get(0).files;
+            if ((msg == null || msg == "") && file.length == 0) {
+                return false;
+            }
+            var date = moment().format('DD MMM, h:mm a');
+            var nam = $("#user-name").text();
+            var form = $("#rem-comt");
+            var data = new FormData();
+            var files = $("#files").get(0).files;
+            data.append("Files", files[0]);
+            $.each(form.serializeArray(), function (key, input) {
+                data.append(input.name, input.value);
+            });
+            $.ajax({
+                type: "POST",
+                processData: false,
+                contentType: false,
+                url: $("#rem-comt").attr('action'),
+                data: data,
+                success: function (data) {
+                    $.each(data, function (i) {
+                        if (data[i].Msg_Type == "Text") {
+                            var html = '<div class="layer"><div class="peers fxw-nw ai-c pY-3 pX-10 bgc-white bdrs-2 lh-3/2"><div class="peer-greed ord-0">' +
+                                '<span>' + msg + '</span>' +
+                                '</div></div><div class="peers fxw-nw ai-c pY-3 pX-10 bgc-white"><div class="peer-greed ord-0"><span>' + nam + '</span>' +
+                                '</div><div class="peer mL-10 ord-1"><small>' + date + '</small></div></div></div>';
+                            $(html).hide().appendTo("#chat-msg").fadeIn(500);
+                            $(".fl-text").val('');
+                            $("#files").val("");
+                        }
+                        else {
+                            var html = '<div class="layer"><div class="peers fxw-nw ai-c pY-3 pX-10 bgc-white bdrs-2 lh-3/2"><div class="peer-greed ord-0">' +
+                                '<img src="/PlotsData/' + data[i].Plot_Id + '/' + data[i].Comment + '" width="200" height="200" />' +
+                                '</div></div><div class="peers fxw-nw ai-c pY-3 pX-10 bgc-white"><div class="peer-greed ord-0"><span>' + nam + '</span>' +
+                                '</div><div class="peer mL-10 ord-1"><small>' + date + '</small></div></div></div>';
+                            $(html).hide().appendTo("#chat-msg").fadeIn(500);
+                            $(".fl-text").val('');
+                            $("#files").val("");
+                        }
+                    });
+                    ChatBottom();
+                }
+            });
+        });
+    });
+</script>

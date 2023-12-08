@@ -1,0 +1,46 @@
+﻿
+@model IEnumerable<MeherEstateDevelopers.Models.BallotResultModel>
+
+
+@if (Model.Count() > 0)
+{
+    foreach (var v in Model.GroupBy(x => x.Preference))
+    {
+        <hr />
+        <div class="col-md-12">
+            <div class="panel-heading central-text-align">
+                <h5>@v.Key</h5>
+            </div>
+
+            <div class="col-md-12">
+                <table class="table table-borderless">
+                    <thead>
+                        <tr class="thead-dark">
+                            <th>Sr#</th>
+                            <th>File No.</th>
+                            <th>Booking Date</th>
+                            <th>Plot Assigned</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach(var item in v)
+                        {
+
+                        }
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th class="thead-dark" colspan="4">Unballoted Plots</th>
+                        </tr>
+                        <tr>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    }
+}

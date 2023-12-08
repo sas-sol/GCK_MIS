@@ -1,0 +1,55 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Voucher>
+
+ 
+<table id="vouchers" class="table table-striped table-bordered " cellspacing="0" width="100%">
+    <thead class="thead-dark">
+        <tr>
+            <th>Sr.</th>
+            <th>Voucher No.</th>
+            <th>Date</th>
+            <th>Name</th>
+            <th>Office Number</th>
+            <th>Address</th>
+            <th>Amount</th>
+            <th>Type</th>
+            
+        </tr>
+    </thead>
+    <tbody>
+        @{
+
+            if (!Model.Any())
+            {
+                <tr><td colspan="10" style="text-align:center">No data available</td></tr>
+            }
+            else
+            {
+                int sr = 1;
+                foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@sr</td>
+                        <td>@item.VoucherNo</td>
+                        <td>@item.DateTime.Value.ToShortDateString()</td>
+                        <td>@item.Name</td>
+                        <td>@item.Contact</td>
+                        <td>@item.Address</td>
+                        <td>@item.Amount</td>
+                        <td>@item.PaymentType</td>
+                        
+                    </tr>
+                    sr++;
+                }
+            }
+        }
+    </tbody>
+</table>
+
+<script>
+    $(document).ready(function () {
+        $('#vouchers').DataTable({
+            dom: 'Bfrtip'
+        });
+    });
+</script>
+

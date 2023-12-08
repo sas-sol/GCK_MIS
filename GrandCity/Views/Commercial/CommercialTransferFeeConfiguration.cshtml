@@ -1,0 +1,120 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.CommercialTransferFeeModel>
+
+<div class="col-md-12">
+    <fieldset class="p-20" style="border:1px solid #ddc">
+        <legend>Commercial Transfer Fee Configuration</legend>
+
+        <div class="col-md-12">
+
+            @foreach (var item in Model.GroupBy(x => new { x.ProjectId, x.ProjectName }))
+            {
+                <div>
+                    <h3>@item.Key.ProjectName</h3>
+                </div>
+
+                <div class="row mb-md-2">
+                    <div class="col-md-3">
+                        <b>Type</b>
+                    </div>
+                    <div class="col-md-3">
+                        <b>Amount Type</b>
+                    </div>
+                    <div class="col-md-3">
+                        <b>Non Dealer</b>
+                    </div>
+
+                    <div class="col-md-3">
+                        <b>Dealer</b>
+                    </div>
+                </div>
+
+                foreach (var v in item)
+                {
+                    <div class="row mb-md-2 trans-com-fee-conf-row">
+                        <div class="col-md-3">
+                            <label class="com-type">@v.ComType</label>
+                            <input type="hidden" value="@v.ProjectId" class="prj_Id" />
+                            <input type="hidden" value="@v.ProjectName" class="prj_Name" />
+                        </div>
+                        <div class="col-md-3">
+                            <input type="hidden" value="@v.TransferAmountType" class="hd-amttype"/>
+                            <select class="form-control amt-type"><option value="">Select Type</option><option value="Fixed">Fixed</option><option value="Percentage">Percentage</option></select>
+                        </div>
+                        <div class="col-md-3">
+                            <input type="text" class="coma form-control non-dealer-amt" value="@string.Format("{0:n0}",v.Non_Dealer)" />
+                        </div>
+
+                        <div class="col-md-3">
+                            <input type="text" class="coma form-control dealer-amt" value="@string.Format("{0:n0}",v.Dealer)" />
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+
+        <div class="col-md-12">
+            <button class="btn btn-success updt-trans-tax-com">Update</button>
+        </div>
+    </fieldset>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('.trans-com-fee-conf-row').each(function () {
+            $(this).find('.amt-type').val($(this).find('.hd-amttype').val());
+        })
+        $('.updt-trans-tax-com').unbind().click(function () {
+            if (!confirm('Are you sure you want to update transfer fee configuration?')) {
+                return;
+            }
+
+            let configValues = [];
+            $('.trans-com-fee-conf-row').each(function () {
+
+
+                let projectId = $(this).find('.prj_Id').val();
+                let projectName = $(this).find('.prj_Name').val();
+                let unittype = $(this).find('.com-type').text();
+                let amountType = $(this).find('.amt-type').val();
+                let nondealerAmnt = RemoveComma($(this).find('.non-dealer-amt').val());
+                let dealerAmnt = RemoveComma($(this).find('.dealer-amt').val());
+
+
+                configValues.push({
+                    ProjectName: projectName,
+                    ProjectId: projectId,
+                    ComType: unittype,
+                    TransferAmountType: amountType,
+                    Non_Dealer: nondealerAmnt,
+                    Dealer: dealerAmnt
+                });
+            });
+
+            ShowFullScreenLoader();
+            $.ajax({
+                type: "POST",
+                url: '/Commercial/SaveCommercialTransferFeeConfig/',
+                data: { config: configValues },
+                success: function (data) {
+                    HideFullScreenLoader();
+                    if (data) {
+                        alert('Transfer fee has been updated successfully.');
+                        window.location.reload();
+                    }
+                    else {
+                        alert('Failed to update configuration. Please try again.');
+                    }
+                }
+                , error: function (xmlhttprequest, textstatus, message) {
+                    HideFullScreenLoader();
+                    if (textstatus === "timeout") {
+                        alert("Network communication error. Please check your network.");
+                    } else {
+                        alert(textstatus);
+                    }
+                }
+            });
+        });
+    });
+    
+</script>

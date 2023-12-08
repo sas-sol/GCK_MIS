@@ -1,0 +1,188 @@
+﻿@model MeherEstateDevelopers.Models.EmployeeProfileLoanView
+<div class="col-md-12 bgc-white">
+    <input type="hidden" value="@Model.Requisitions.Select(x=>x.Emp_Id).FirstOrDefault()" id="EmplyId" />
+    <button class="btn btn-danger oth-fun-pay" data-toggle="modal" data-target="#Modal">Other Funeral Payments</button>
+    <div class="othemppay row"></div>
+    @if (Model != null)
+    {
+        <div class="col-md-12">
+            <h4 class="c-grey-900 mB-20" style="text-align:center"><u>Loan History</u></h4>
+        </div>
+        <div class="loans-disp col-md-12" style="margin:auto;">
+            <table class="table table-borderless">
+                <thead>
+                    <tr class="central-text-align">
+                        <th>Amount</th>
+                        <th>Date</th>
+                        <th>Installments</th>
+                        <th>Reason</th>
+                        <th>Status</th>
+                        <th>Structure</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.Requisitions.Any())
+                    {
+                        foreach (var v in Model.Requisitions)
+                        {
+                            <tr class="central-text-align">
+                                <td>@string.Format("{0:n0}", v.Amount)</td>
+                                <td>@v.CreatedAt.Value.ToLongDateString()</td>
+                                <td>@v.Installments</td>
+                                <td>@v.Reason</td>
+                                @if (v.Paid_Status == true)
+                                {
+                                    <td>Received</td>
+                                }
+                                else
+                                {
+                                    <td>Not Received</td>
+                                }
+                                <td>
+                                    @{ var lst = Model.Installments.Where(x => x.Loan_Id == v.Id).ToList();}
+                                    <table class="table table-bordered">
+                                        <thead>
+                                            <tr class="thead-dark">
+                                                <th colspan="2"> Paid : @string.Format("{0:n0}", lst.Where(x => x.Status == "Paid").Sum(x => x.Loan_Amt)) (@lst.Where(x => x.Status == "Paid").Count() Insts.)</th>
+                                                <th colspan="3"> Remaining : @string.Format("{0:n0}", lst.Where(x => x.Status == "Pending").Sum(x => x.Loan_Amt)) (@lst.Where(x => x.Status == "Pending").Count() Insts.)</th>
+                                            </tr>
+                                            <tr class="thead-dark pointer show-dets-skfjh">
+                                                <th>Sr#</th>
+                                                <th>Date</th>
+                                                <th>Installment</th>
+                                                <th>Status</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+
+                                        <tbody class="hid-bod">
+                                            @{ int count = 1;}
+                                            @foreach (var inst in lst.OrderBy(x => x.Date))
+                                            {
+                                                <tr>
+                                                    <td>@(count++)</td>
+                                                    <td>@inst.Date.Value.ToString("MM/yyyy")</td>
+                                                    <td>@string.Format("{0:n0}", inst.Loan_Amt)</td>
+                                                    <td>@inst.Status</td>
+                                                    @if (inst.Status == "Pending")
+                                                    {
+                                                        if (User.IsInRole("Loan Structure Update") || User.IsInRole("Administrator"))
+                                                        {
+                                                            <td><button class="wv-off-btn btn btn-outline-primary" data-toggle="modal" data-target="#Modal" data-vid="@inst.Id">Waive OFF</button></td>
+                                                        }
+                                                        else
+                                                        {
+                                                            <td>-</td>
+                                                        }
+                                                    }
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </td>
+                                @if (User.IsInRole("Loan Structure Update") || User.IsInRole("Administrator"))
+                                {
+                                    @*if (Model.Installments.Any(x => x.Loan_Id == v.Id && x.Status == "Pending"))
+                                        {
+                                            <td><button class="btn btn-primary loan-strc-updt-btn" data-lnid="@v.Id" data-toggle="modal" data-target="#Modal">Update Structure</button></td>
+                                        }
+                                        else
+                                        {
+                                            <td>-</td>
+                                        }
+                                    *@
+                                    if (v.Paid_Status == null)
+                                    {
+                                        <td><button class="btn btn-danger loan-deletion-btn-shjkdf" data-lnid="@v.Id">Delete Loan</button></td>
+                                    }
+                                    <td><button class="btn btn-primary loan-strc-updt-btn" data-lnid="@v.Id" data-toggle="modal" data-target="#Modal">Update Structure</button></td>
+
+                                }
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr class="bgc-red-50 central-text-align">
+                            <td colspan="6">No Record Found</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <div class="row bgc-red-50">
+            <div class="panel-heading">
+                <h5>No Loan History Found</h5>
+            </div>
+        </div>
+    }
+    <div class="empsalary row"></div>
+    <div class="row emp-arr-dets-dfjshkl"></div>
+</div>
+
+<script>
+
+    $('.hid-bod').slideUp();
+    $('.show-dets-skfjh').unbind().click(function () {
+        $(this).closest('table').find('tbody').slideToggle();
+    });
+    $('.empsalary').load('/Salaries/GetEmployeeSalaries/', { emp: $('.empId').val() })
+    $('.othemppay').load('/HumanResource/OtherEmpPaymentsReqs/', { EmpId: $('.empId').val() })
+    $('.emp-arr-dets-dfjshkl').load('/HumanResource/EmployeeArrearsPartial', { empId: $('.empId').val() });
+
+    $(document).ready(function () {
+        $('.loan-strc-updt-btn').unbind().click(function () {
+            let loanId = parseInt($(this).attr('data-lnid'));
+            EmptyModel();
+            $('#ModalLabel').text("Update Loan Structure");
+            $('#modalbody').load('/Loan/UpdateLoanStructure/', { Id: loanId });
+        });
+
+        $('.wv-off-btn').unbind().click(function () {
+            let instId = $(this).attr('data-vid');
+
+            EmptyModel();
+            $('#ModalLabel').text("Installment Waive Off");
+            $('#modalbody').load('/Loan/LoanWaiveOff/', { instId: instId, display: 1 });
+        });
+
+        $('.loan-deletion-btn-shjkdf').unbind().click(function () {
+            if (!confirm('Are you sure you want to delete this loan?')) {
+                return;
+            }
+
+            let reason = prompt('State your reason for deletion', '');
+
+            if (reason == '' || reason == undefined) {
+                alert('Please enter a valid reason for deletion.');
+                return;
+            }
+            let lnIden = $(this).attr('data-lnid');
+            $.ajax({
+                type: "POST",
+                url: '/HumanResource/DeleteLoan/',
+                data: { loan: lnIden, reason: reason },
+                success: function (data) {
+                    if (data) {
+                        alert("Loan has been deleted successfully");
+                        window.location.reload(true);
+                    }
+                    else {
+                        alert("Failed to delete this loan. Please try again.");
+                    }
+                }
+                , error: function (xmlhttprequest, textstatus, message) {
+                    if (textstatus === "timeout") {
+                        alert("got timeout");
+                    } else {
+                        alert(textstatus);
+                    }
+                }
+            });
+
+        });
+    });
+</script>

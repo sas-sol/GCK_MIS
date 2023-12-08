@@ -1,0 +1,23 @@
+﻿
+    <input type="hidden" name="Id" value="@ViewBag.ComId" id="Comid" />
+    <div class="form-row">
+        <div class="form-group col-md-3">
+            <label>Current  Status</label>
+            @{ string stat = ViewBag.Status.ToString().Replace('_', ' ');}
+            <h5>@stat</h5>
+        </div>
+        <div class="form-group col-md-3">
+            <label>New Status</label>
+            @Html.DropDownList("ComStatus", null, "Choose..", new { @class = "form-control comersta" })
+        </div>
+        <div class="form-group col-md-6">
+            <label>Reason</label>
+            <textarea class="form-control" name="Remarks" id="Remarks" required></textarea>
+        </div>
+    </div>
+
+<script>
+    $(function () {
+        $('.modal-footer').append('<button class="btn btn-primary" id="up-comm-stat" type="button">Update</button>');
+    });
+</script>

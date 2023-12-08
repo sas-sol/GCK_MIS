@@ -1,0 +1,236 @@
+﻿@model Management_Information_System.Models.FileLedger
+@using Management_Information_System.Models;
+
+<style>
+    @@media print {
+        table, tr, td, th {
+            padding: 1px !important;
+        }
+
+        body {
+            margin: 2px;
+            color: black;
+        }
+    }
+</style>
+<table>
+    <tr>
+        <td align="left" style="width:500px"><img style="width:75px;font-size:16px;padding:10px" src="/assets/static/images/logo.png" alt=""> &nbsp;SA Management Information System</td>
+        <td align="right" style="width:500px"><img style="width:120px" src="~/assets/static/images/whitesaprj.png" /></td>
+    </tr>
+</table>
+<h4>Owner Information</h4>
+<table>
+    <tr>
+        <td width="180">Name:</td>
+        <td>@Model.File.Name</td>
+
+        @if (Model.File.AuditVerified == true)
+        {
+            <td width="80"><img width="50" src="~/assets/static/images/verified.png" /></td>
+            <td>Verified</td>
+        }
+    <tr><td>Father / Husband</td><td>@Model.File.Father_Husband</td></tr>
+    <tr><td>Mobile No.</td><td>@Model.File.Mobile_1</td></tr>
+    <tr><td>Address</td><td>@Model.File.Postal_Address</td></tr>
+</table>
+<hr />
+<h4>Plot Details</h4>
+<table>
+    <tr>
+        <td width="120"><b>Project</b></td>
+        <td width="120">@Model.File.Project_Name</td>
+        <td width="130"><b>Plot No.</b></td>
+        <td width="120">@Model.File.File_Form_Number</td>
+        <td width="120"><b>Phase</b></td>
+        <td width="120">@Model.File.Phase_Name</td>
+        <td width="120"><b>Block</b></td>
+        <td width="120">@Model.File.Block_Name</td>
+
+    </tr>
+    @{
+        string dev = "";
+        if (Model.File.Development_Charges == "False")
+        {
+            dev = "Non Development Charges";
+        }
+        else if (Model.File.Development_Charges == "True")
+        {
+            dev = "With Development Charges";
+        }
+        else
+        {
+            dev = "To Be Announce";
+        }
+    }
+    <tr>
+        <td width="120"><b>Plot Size</b></td>
+        <td width="120">@Model.File.Plot_Size</td>
+        <td width="130"><b>Preference</b></td>
+        <td width="120">@Model.File.Plot_Prefrence</td>
+        @*<td width="120" colspan="2"><b>Development Charges</b></td>
+            <td width="120" colspan="2">@dev</td>*@
+    </tr>
+</table>
+<hr />
+<h4>Booking Details</h4>
+<table style="margin-top:5px">
+    <tr>
+        <td width="150"><b>Booking Price</b></td>
+        <td width="150">@string.Format("{0:n0}", Model.TotalAmt)</td>
+        <td width="150"><b>Rate / Marla</b></td>
+        @{
+            int plotsize = Convert.ToInt16(Model.File.Plot_Size.Split(' ')[0]);
+            var rate = Model.TotalAmt / plotsize;
+
+        }
+        <td width="150">@string.Format("{0:n0}", rate)</td>
+
+        <td width="150"><b>Booking Date</b></td>
+        <td width="150" id="booking-date"></td>
+    </tr>
+</table>
+
+<hr />
+<h4>Payment Details</h4>
+<table class="table table-borderless clickable-rows" style="font-size:10px">
+    <thead>
+        <tr>
+            <th width="150">Rect No.</th>
+            <th width="200">Description</th>
+            <th width="150">Date</th>
+            <th width="150">Mode</th>
+            <th width="150">Int. No</th>
+            <th width="150">Bank</th>
+            <th width="150">Recp. Amt</th>
+            <th width="180">Balance</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            decimal? bal = Model.TotalAmt;
+            decimal? holdAmt = 0;
+            decimal? Total_Received_amt = 0;
+            decimal? OutStand_amt = 0;
+
+        }
+        @foreach (var Rece in Model.ReceAmts)
+        {
+            if ((Rece.Status == "Approved" || string.IsNullOrEmpty(Rece.Status) || string.IsNullOrWhiteSpace(Rece.Status)) && (Rece.PaymentType != "Cash" || string.IsNullOrEmpty(Rece.PaymentType) || string.IsNullOrWhiteSpace(Rece.PaymentType)))
+            {
+                Total_Received_amt += Rece.Amount;
+                bal -= Rece.Amount;
+
+            }
+            if (Rece.PaymentType == "Cash")
+            {
+                Total_Received_amt += Rece.Amount;
+                bal -= Rece.Amount;
+            }
+
+            string installments = "";
+
+            decimal Actamt = Convert.ToDecimal(Rece.Amount + holdAmt);
+            decimal TotalInstallmentAmt = 0, AmttoPaid = 0;
+            List<AmountToPaidInfo> latpi = new List<AmountToPaidInfo>();
+            List<AdjInst> insid = new List<AdjInst>();
+
+            foreach (var Installment in Model.Installments.Where(x => x.check == false))
+            {
+                if (Installment.Installment_Name == "Advance")
+                {
+                    <script>
+                    var res = " @string.Format("{0:MMM dd yyyy}", Rece.DateTime)";
+                    $("#booking-date").text(res);
+                    </script>
+                }
+                TotalInstallmentAmt += Installment.Amount;
+                int TtlAmt = (int)TotalInstallmentAmt;
+                if (TtlAmt <= Actamt)
+                {
+                    AmountToPaidInfo atpi = new AmountToPaidInfo();
+
+                    AmttoPaid += Installment.Amount;
+                    atpi.Id = Installment.Id;
+                    atpi.Amount = Installment.Amount;
+                    atpi.Installment_Name = Installment.Installment_Name;
+                    atpi.Months = string.Format("{0:MMM yyyy}", Installment.Due_Date);
+                    latpi.Add(atpi);
+                    Installment.check = true;
+                }
+                else
+                {
+                    holdAmt = Actamt - (TtlAmt - Installment.Amount);
+                    break;
+                }
+            }
+
+            foreach (var a in latpi)
+            {
+                installments += a.Months + " - " + a.Installment_Name + " ,";
+            }
+            <tr>
+                <td>@Rece.ReceiptNo</td>
+                <td>@installments</td>
+                <td>@string.Format("{0:dd/MM/yyyy}", Rece.DateTime)</td>
+                <td>@Rece.PaymentType</td>
+                <td>@Rece.Ch_Pay_Draft_No @string.Format("{0:dd/MM/yyyy}", Rece.Ch_Pay_Draft_Date) <br /> <hr /> @Rece.Status</td>
+                <td>@Rece.Bank</td>
+                <td>@string.Format("{0:n0}", Rece.Amount)</td>
+                <td>@string.Format("{0:n0}", bal)</td>
+            </tr>
+        }
+        @{ OutStand_amt = bal;}
+    </tbody>
+</table>
+<table class="table">
+    <tbody>
+        <tr>
+            @{
+                var overdueamt = Model.Installments.Where(x => x.check == false && x.Due_Date <= DateTime.Now).Sum(x => x.Amount) - holdAmt;
+            };
+            <td><b>Submitted Amount</b></td>
+            <td>@string.Format("{0:n0}", Total_Received_amt)</td>
+            <td><b>Overdue Amount</b></td>
+            <td>@string.Format("{0:n0}", overdueamt)</td>
+            <td><b>Outstanding Amount</b></td>
+            <td>@string.Format("{0:n0}", OutStand_amt)</td>
+            <td colspan="4"></td>
+        </tr>
+
+    </tbody>
+</table>
+@{
+    if (Model.DiscountAmt != null)
+    {
+        <h5> Discount </h5>
+        <table class="table">
+            <tbody>
+                <tr>
+                    <td><b>Total Amount</b></td>
+                    <td>@string.Format("{0:n0}", Model.DiscountAmt.Total_Amount)</td>
+                    <td><b>Discount  @Model.DiscountAmt.Percentage % </b></td>
+                    <td>@string.Format("{0:n0}", Model.DiscountAmt.Discount_Amount)</td>
+                    <td><b>Outstanding Amount</b></td>
+                    @{ OutStand_amt -= Model.DiscountAmt.Discount_Amount; }
+                    <td>@string.Format("{0:n0}", OutStand_amt)</td>
+                </tr>
+                <tr>
+                    <td><b>Remarks</b></td>
+                    <td colspan="4">@Model.DiscountAmt.Remarks</td>
+                </tr>
+            </tbody>
+        </table>
+    }
+}
+<table class="table">
+    <tbody>
+        <tr>
+            <td><b>This is Verified Ledger do not required any signature</b></td>
+        </tr>
+        <tr>
+            <td><b>@string.Format("{0:dd-MMM-yyyy}", DateTime.Now)</b></td>
+        </tr>
+    </tbody>
+</table>
+

@@ -1,0 +1,89 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.ChartParentChildModel>
+
+<div class="form-group col-md-3">
+    <label>Start Date</label>
+    <input type="text" class="form-control" data-provide="datepicker" onchange="getpaydata();" id="p-st-dat" placeholder="mm/dd/yyyy" required>
+</div>
+<div class="form-group col-md-3">
+    <label>End Date</label>
+    <input type="text" class="form-control" data-provide="datepicker" onchange="getpaydata();" id="p-end-dat" placeholder="mm/dd/yyyy" required>
+</div>
+
+<div class="col-md-6"></div>
+
+<div class="col-md-12 mt-md-3">
+    <div  id="paymentcontainer"></div>
+</div>
+@{
+    var res = Model.Where(x => x.id == "0").Select(x => x.value).FirstOrDefault();
+}
+<script>
+    var data =@Html.Raw(Json.Encode(Model));
+
+
+    // Splice in transparent for the center circle
+    //Highcharts.getOptions().colors.splice(0, 0, 'transparent');
+
+
+    Highcharts.chart('paymentcontainer', {
+
+        chart: {
+            height: '100%',
+            backgroundColor: '#212639'
+        },
+
+        title: {
+            text: 'Total Payment'
+        },
+        subtitle: {
+            text: '@string.Format("{0:n0}",res)'
+        },
+        series: [{
+            type: "sunburst",
+            data: data,
+            allowDrillToNode: true,
+            cursor: 'pointer',
+            dataLabels: {
+                format: '{point.name}',
+                filter: {
+                    property: 'innerArcLength',
+                    operator: '>',
+                    value: 16
+                }
+            },
+            levels: [{
+                level: 1,
+                levelIsConstant: false,
+                dataLabels: {
+                    filter: {
+                        property: 'outerArcLength',
+                        operator: '>',
+                        value: 64
+                    }
+                }
+            }, {
+                level: 2,
+                colorByPoint: true
+            },
+            {
+                level: 3,
+                colorVariation: {
+                    key: 'brightness',
+                    to: -0.5
+                }
+            }, {
+                level: 4,
+                colorVariation: {
+                    key: 'brightness',
+                    to: 0.5
+                }
+            }]
+
+        }],
+        tooltip: {
+            headerFormat: "",
+            pointFormat: 'The Payment of <b>{point.name}</b> is <b>{point.value}</b>'
+        }
+    });
+
+</script>

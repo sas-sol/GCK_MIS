@@ -1,0 +1,191 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.COA_Mapper>
+@using MeherEstateDevelopers.Models;
+@{
+    var a = Model.Where(x => x.ModuleType == COA_Mapper_ModuleTypes.Plot_Sales_Commission_Expense.ToString()).FirstOrDefault();
+    var b = Model.Where(x => x.ModuleType == COA_Mapper_ModuleTypes.Fines_And_Penalties.ToString()).FirstOrDefault();
+    var c = Model.Where(x => x.ModuleType == COA_Mapper_ModuleTypes.Reinstate_Charges.ToString()).FirstOrDefault();
+    var d = Model.Where(x => x.ModuleType == COA_Mapper_ModuleTypes.Posession_Charges.ToString()).FirstOrDefault();
+    var e = Model.Where(x => x.ModuleType == COA_Mapper_ModuleTypes.Duplicate_Allotment_Letter.ToString()).FirstOrDefault();
+    var f = Model.Where(x => x.ModuleType == COA_Mapper_ModuleTypes.Registry_Charges.ToString()).FirstOrDefault();
+    var g = Model.Where(x => x.ModuleType == COA_Mapper_ModuleTypes.Power_Of_Attorney.ToString()).FirstOrDefault();
+    var h = Model.Where(x => x.ModuleType == COA_Mapper_ModuleTypes.Out_Station_Charges.ToString()).FirstOrDefault();
+    var i = Model.Where(x => x.ModuleType == COA_Mapper_ModuleTypes.Other_Recovery.ToString()).FirstOrDefault();
+    var j = Model.Where(x => x.ModuleType == COA_Mapper_ModuleTypes.Duplicate_Customer_File.ToString()).FirstOrDefault();
+    var k = Model.Where(x => x.ModuleType == COA_Mapper_ModuleTypes.Other_Transfer_Charges.ToString()).FirstOrDefault();
+    var l = Model.Where(x => x.ModuleType == COA_Mapper_ModuleTypes.Advance_Tax_236_C.ToString()).FirstOrDefault();
+    var m = Model.Where(x => x.ModuleType == COA_Mapper_ModuleTypes.Advance_Tax_236_K.ToString()).FirstOrDefault();
+    var n = Model.Where(x => x.ModuleType == COA_Mapper_ModuleTypes.New_Connection_Charges.ToString()).FirstOrDefault();
+}
+<h4>Income</h4>
+<div class="col-md-12">
+    <div class="form-row row">
+        <div class="col-md-12">
+            <div class="from-row row p-20">
+                <div class="form-group col-md-3">
+                    <h5>Plot_Sales_Commission_Expense</h5>
+                    <select class="form-control sel-plug a">
+                        @if (a != null)
+                        {
+                            <option value="@a.AccountId">@a.AccountCode - @a.Head_Name</option>
+                        }
+                    </select>
+                </div>
+                <div class="form-group col-md-3">
+                    <h5>Fines_And_Penalties</h5>
+                    <select class="form-control sel-plug b">
+                        @if (b != null)
+                        {
+                            <option value="@b.AccountId">@b.AccountCode - @b.Head_Name</option>
+                        }
+                    </select>
+                </div>
+                <div class="form-group col-md-3">
+                    <h5>Reinstate_Charges</h5>
+                    <select class="form-control sel-plug c">
+                        @if (c != null)
+                        {
+                            <option value="@c.AccountId">@c.AccountCode - @c.Head_Name</option>
+                        }
+                    </select>
+                </div>
+                <div class="form-group col-md-3">
+                    <h5>Posession_Charges</h5>
+                    <select class="form-control sel-plug d">
+                        @if (d != null)
+                        {
+                            <option value="@d.AccountId">@d.AccountCode - @d.Head_Name</option>
+                        }
+                    </select>
+                </div>
+                <div class="form-group col-md-3">
+                    <h5>Duplicate_Allotment_Letter</h5>
+                    <select class="form-control sel-plug e">
+                        @if (e != null)
+                        {
+                            <option value="@e.AccountId">@e.AccountCode - @e.Head_Name</option>
+                        }
+                    </select>
+                </div>
+                <div class="form-group col-md-3">
+                    <h5>Registry_Charges</h5>
+                    <select class="form-control sel-plug f">
+                        @if (f != null)
+                        {
+                            <option value="@f.AccountId">@f.AccountCode - @f.Head_Name</option>
+                        }
+                    </select>
+                </div>
+                <div class="form-group col-md-3">
+                    <h5>Power_Of_Attorney</h5>
+                    <select class="form-control sel-plug g">
+                        @if (g != null)
+                        {
+                            <option value="@g.AccountId">@g.AccountCode - @g.Head_Name</option>
+                        }
+                    </select>
+                </div>
+                <div class="form-group col-md-3">
+                    <h5>Out_Station_Charges</h5>
+                    <select class="form-control sel-plug h">
+                        @if (h != null)
+                        {
+                            <option value="@h.AccountId">@h.AccountCode - @h.Head_Name</option>
+                        }
+                    </select>
+                </div>
+                <div class="form-group col-md-3">
+                    <h5>Other_Recovery</h5>
+                    <select class="form-control sel-plug i">
+                        @if (i != null)
+                        {
+                            <option value="@i.AccountId">@i.AccountCode - @i.Head_Name</option>
+                        }
+                    </select>
+                </div>
+                <div class="form-group col-md-3">
+                    <h5>Duplicate_Customer_File</h5>
+                    <select class="form-control sel-plug j">
+                        @if (j != null)
+                        {
+                            <option value="@j.AccountId">@j.AccountCode - @j.Head_Name</option>
+                        }
+                    </select>
+                </div>
+                <div class="form-group col-md-3">
+                    <h5>Other_Transfer_Charges</h5>
+                    <select class="form-control sel-plug k">
+                        @if (k != null)
+                        {
+                            <option value="@k.AccountId">@k.AccountCode - @k.Head_Name</option>
+                        }
+                    </select>
+                </div>
+                <div class="form-group col-md-3">
+                    <h5>Advance_Tax_236_C</h5>
+                    <select class="form-control sel-plug l">
+                        @if (l != null)
+                        {
+                            <option value="@l.AccountId">@l.AccountCode - @l.Head_Name</option>
+                        }
+                    </select>
+                </div>
+                <div class="form-group col-md-3">
+                    <h5>Advance_Tax_236_K</h5>
+                    <select class="form-control sel-plug m">
+                        @if (m != null)
+                        {
+                            <option value="@m.AccountId">@m.AccountCode - @m.Head_Name</option>
+                        }
+                    </select>
+                </div>
+                <div class="form-group col-md-3">
+                    <h5>New Connection Charges</h5>
+                    <select class="form-control sel-plug n">
+                        @if (n != null)
+                        {
+                            <option value="@n.AccountId">@n.AccountCode - @n.Head_Name</option>
+                        }
+                    </select>
+                </div>
+
+                <div class="form-group col-md-12">
+                    <button class="btn btn-primary up-inco">Update</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $('.sel-plug').select2({
+        placeholder: "Search for Account",
+        ajax: {
+            url: '/AccountHeads/GetHead/',
+            dataType: 'json',
+            params: {
+                contentType: 'application/json; charset=utf-8'
+            },
+            data: function (params) {
+                return {
+                    q: params.term// search term
+                };
+            },
+            processResults: function (data) {
+                // Transforms the top-level key of the response object from 'items' to 'results'
+                return {
+                    results: $.map(data.items, function (item) {
+                        return {
+                            text: item.Parent,
+                            children: [{
+                                id: item.id,
+                                text: item.text
+                            }]
+                        }
+                    })
+                };
+            }
+        }
+    });
+
+
+
+</script>

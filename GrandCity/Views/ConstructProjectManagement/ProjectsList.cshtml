@@ -1,0 +1,146 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Project>
+@{
+    if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else if (User.IsInRole("CEO"))
+    {
+        Layout = "~/Views/Shared/_CEOLayout.cshtml";
+    }
+    else if (User.IsInRole("Staff"))
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+}
+<script src="~/Scripts/Prj.js"></script>
+<div class=" mt-2 bgc-white" id="prjpartiallist">
+    <script>
+        var dep = @Html.Raw(Json.Encode(ViewBag.Department));
+    </script>
+    <div class="container-fluid">
+        <div class="col-md-12 ">
+            <h3 style="text-align:center">Project Management</h3>
+        </div>
+    </div>
+    @if (User.IsInRole("Create Project") || User.IsInRole("Administrator"))
+    {
+        <div class="container-fluid">
+            <div class="row">
+                <div class="form-group col-md-12 pointer">
+                    <h6 data-toggle="modal" data-target="#Modal" class="cr-prj"> <i class="fas fa-folder-plus"></i> Initiate a Project</h6>
+                </div>
+            </div>
+        </div>
+    }
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12 bdrs-3 ov-h bd" id="customtable">
+                <div class="container-fluid">
+                    <table class="table table-borderless">
+                        <thead class="thead-new-dark">
+                            <tr>
+                                <th scope="col">Sr.</th>
+                                <th scope="col">Project Name</th>
+                                <th scope="col">Budget</th>
+                                <th scope="col">Status</th>
+                                <th scope="col">Created By</th>
+                                <th scope="col">Date</th>
+                                <td></td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{ int i = 1;}
+
+                            @if (Model.Any())
+                            {
+
+                                foreach (var g in Model.GroupBy(x => x.ProjectType).OrderBy(x => x.Key))
+                                {
+                                    <tr>
+                                        <th colspan="7" style="text-align:center">@((g.Key == null || string.IsNullOrEmpty(g.Key)) ? "Non Recurring" : g.Key)</th>
+                                    </tr>
+                                    foreach (var gg in g.GroupBy(x => x.CreatedBy_Dep))
+                                    {
+                                        <tr>
+                                            <th colspan="7" style="text-align:left">@(gg.Key)</th>
+                                        </tr>
+                                        foreach (var item in gg)
+                                        {
+                                            <tr class="pr" id="@item.Id">
+                                                <td>
+                                                    @i
+                                                </td>
+                                                <td class="pointer prj-det">@item.Name</td>
+                                                <td>@string.Format("{0:n0}", ((item.Budget) == null ? 0 : item.Budget))</td>
+                                                <td>@item.Status.Replace("_", " ")</td>
+                                                <td>@item.CreatedBy_Name</td>
+                                                <td>
+                                                    @string.Format("{0: dd-MMM-yyyy}", item.Datetime)
+                                                </td>
+                                                <td>
+                                                    @if (ViewBag.Userid == item.CreatedBy)
+                                                    {
+                                                        <i class="fas fa-trash del-prj"></i>
+                                                    }
+                                                </td>
+                                            </tr>
+                                            i++;
+                                        }
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td colspan="6" style="text-align:center">No Projects have been initiated yet</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    #prjpartiallist {
+        width: 100%;
+        max-width: 100%;
+        max-height: 100%;
+        height: 100%
+    }
+
+    .navforcolor {
+    }
+    .del-prj {
+        visibility: hidden
+    }
+
+    .pr:hover .del-prj {
+        visibility: visible
+    }
+
+    li.sas {
+        min-height: 60px !important;
+        text-align: center !important;
+    }
+
+        li.sas > a {
+            padding-top: 25px !important;
+            font-weight: bold !important;
+        }
+
+    div.shadowcustom:hover {
+        /*border: 1px solid !important;
+            padding: 10px !important;
+            box-shadow: 5px 10px #888888 !important;*/
+    }
+
+    .dropdown-menu {
+        width: 250px !important;
+        max-height: 500px;
+        overflow-y: scroll;
+    }
+</style>

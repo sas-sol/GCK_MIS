@@ -1,0 +1,248 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Sp_Get_JournalLedger_WO_Balance_Result>
+@{
+    decimal? Cur_bal_n = 0, Avl_bal_n = 0;
+}
+<title>@ViewBag.Code  - @ViewBag.Head</title>
+<div class="form-row">
+    <div class="form-group col-md-2">
+        <label>From</label>
+        <input type="text" id="from" class="form-control" value="@string.Format("{0:MM-dd-yyyy}", ViewBag.From)" data-provide="datepicker" autocomplete="off" />
+    </div>
+    <div class="form-group col-md-2">
+        <label>To</label>
+        <input type="text" id="to" class="form-control" value="@string.Format("{0:MM-dd-yyyy}", ViewBag.To)" data-provide="datepicker" autocomplete="off" />
+    </div>
+    <div class="form-group col-md-2">
+        <button class="btn btn-info sea-ldg" style="margin-top:29px">Search</button>
+    </div>
+    <div class="form-group col-md-6 ">
+        @if (User.IsInRole("Administrator") || User.IsInRole("Edit Chart Of Account"))
+        {
+            <a class="up-add-node btn btn-primary" style="float: right;color: wheat;" data-toggle="modal" data-target="#Modal" data-id="@ViewBag.Id"><i class="fas fa-gear"></i></a>
+        }
+        <a href="#" class="btn btn-primary print-pdf" style="color:white !important; margin-top:29px; float:right">Export PDF</a>
+        <a href="#" class="btn btn-primary fnExcelReportdynamic gledger" data-name="@ViewBag.Head" data-report="gledger" style="margin-top:29px;float:right;color:white !important;" id="test">Excel</a>
+    </div>
+</div>
+<input type="hidden" id="h-code" value="@ViewBag.Code" />
+<input type="hidden" id="h-head" value="@ViewBag.Head" />
+<div class="form-row">
+    <div class="form-group col-md-2">
+        <label> Head: <b>@ViewBag.Head </b> </label>
+    </div>
+    @*<div class="form-group col-md-3">
+            <label> Current Balance: <b><label class="currBal"></label></b> </label>
+        </div>*@
+    <div class="form-group col-md-3">
+        <label> Available Balance: <b><label class="avlBal"></label></b> </label>
+    </div>
+    <div class="form-group col-md-4">
+        <label> Date Range :<b>  @string.Format("{0:dd-MMM-yyyy}", ViewBag.From) - @string.Format("{0:dd-MMM-yyyy}", ViewBag.To) </b></label>
+    </div>
+</div>
+
+<div style="overflow:scroll;height:500px" id="gledger">
+    <table id="led" class="table table-bordered ">
+        <thead>
+            <tr align="center">
+                <th colspan="8">
+                    General Ledger
+                    <br />
+                    @ViewBag.Code  - @ViewBag.Head
+                    <br />
+                    @string.Format("{0:dd-MMM-yyyy}", ViewBag.From) - @string.Format("{0:dd-MMM-yyyy}", ViewBag.To)
+                </th>
+            </tr>
+            <tr>
+                <th width="15%">Date</th>
+                <th>Voucher</th>
+                <th>Inst No</th>
+                <th>Inst Date</th>
+                <th>Description</th>
+                <th width="10%">Debit</th>
+                <th width="10%">Credit</th>
+                <th width="10%">Balance</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @foreach (var item in Model.OrderBy(x => x.Supviseby_Date))
+            {
+                if (ViewBag.LedgerNature == "Assets" || ViewBag.LedgerNature == "Expense" || ViewBag.LedgerNature == "Equity")
+                {
+                    if (item.Balance == "Current")
+                    {
+                        if (item.Voucher_Type == "CPV" || item.Voucher_Type == "CRV")
+                        {
+                            Avl_bal_n += (item.Debit == null) ? 0 : item.Debit;
+                            Avl_bal_n += (item.Credit == null) ? 0 : -(item.Credit);
+                        }
+                        else if ((item.Voucher_Type == "BPV" || item.Voucher_Type == "BRV" || item.Voucher_Type == "JV") && (item.Inst_Status == "Pending" || item.Inst_Status == "Deposited"))
+                        {
+                            Avl_bal_n += (item.Debit == null) ? 0 : item.Debit;
+                            Avl_bal_n += (item.Credit == null) ? 0 : -(item.Credit);
+                        }
+                        else if ((item.Voucher_Type == "BPV" || item.Voucher_Type == "BRV") && (item.Inst_Status == "Approved" || item.Inst_Status == "Dishonored"))
+                        {
+                            Avl_bal_n += (item.Debit == null) ? 0 : item.Debit;
+                            Avl_bal_n += (item.Credit == null) ? 0 : -(item.Credit);
+                        }
+                        else
+                        {
+                            Avl_bal_n += (item.Debit == null) ? 0 : item.Debit;
+                            Avl_bal_n += (item.Credit == null) ? 0 : -(item.Credit);
+                        }
+                    }
+                    else
+                    {
+                        if (item.Voucher_Type == "CPV" || item.Voucher_Type == "CRV")
+                        {
+                            Cur_bal_n += (item.Debit == null) ? 0 : item.Debit;
+                            Cur_bal_n += (item.Credit == null) ? 0 : -(item.Credit);
+
+                            Avl_bal_n += (item.Debit == null) ? 0 : item.Debit;
+                            Avl_bal_n += (item.Credit == null) ? 0 : -(item.Credit);
+                        }
+                        else if ((item.Voucher_Type == "BPV" || item.Voucher_Type == "BRV" || item.Voucher_Type == "JV") && (item.Inst_Status == "Pending" || item.Inst_Status == "Deposited"))
+                        {
+                            Avl_bal_n += (item.Debit == null) ? 0 : item.Debit;
+                            Avl_bal_n += (item.Credit == null) ? 0 : -(item.Credit);
+                        }
+                        else if ((item.Voucher_Type == "BPV" || item.Voucher_Type == "BRV") && (item.Inst_Status == "Approved" || item.Inst_Status == "Dishonored"))
+                        {
+                            Cur_bal_n += (item.Debit == null) ? 0 : item.Debit;
+                            Cur_bal_n += (item.Credit == null) ? 0 : -(item.Credit);
+
+                            Avl_bal_n += (item.Debit == null) ? 0 : item.Debit;
+                            Avl_bal_n += (item.Credit == null) ? 0 : -(item.Credit);
+                        }
+                        else
+                        {
+                            Cur_bal_n += (item.Debit == null) ? 0 : item.Debit;
+                            Cur_bal_n += (item.Credit == null) ? 0 : -(item.Credit);
+
+                            Avl_bal_n += (item.Debit == null) ? 0 : item.Debit;
+                            Avl_bal_n += (item.Credit == null) ? 0 : -(item.Credit);
+                        }
+                    }
+                }
+                else if (ViewBag.LedgerNature == "Liability" || ViewBag.LedgerNature == "Income")
+                {
+                    if (item.Balance == "Current")
+                    {
+                        if (item.Voucher_Type == "CPV" || item.Voucher_Type == "CRV")
+                        {
+                            Avl_bal_n += (item.Debit == null) ? 0 : -(item.Debit);
+                            Avl_bal_n += (item.Credit == null) ? 0 : item.Credit;
+                        }
+                        else if ((item.Voucher_Type == "BPV" || item.Voucher_Type == "BRV" || item.Voucher_Type == "JV") && (item.Inst_Status == "Pending" || item.Inst_Status == "Deposited"))
+                        {
+                            Avl_bal_n += (item.Debit == null) ? 0 : -(item.Debit);
+                            Avl_bal_n += (item.Credit == null) ? 0 : item.Credit;
+                        }
+                        else if ((item.Voucher_Type == "BPV" || item.Voucher_Type == "BRV") && (item.Inst_Status == "Approved" || item.Inst_Status == "Dishonored"))
+                        {
+                            Avl_bal_n += (item.Debit == null) ? 0 : -(item.Debit);
+                            Avl_bal_n += (item.Credit == null) ? 0 : item.Credit;
+                        }
+                        else
+                        {
+                            Avl_bal_n += (item.Debit == null) ? 0 : -(item.Debit);
+                            Avl_bal_n += (item.Credit == null) ? 0 : item.Credit;
+                        }
+                    }
+                    else
+                    {
+                        if (item.Voucher_Type == "CPV" || item.Voucher_Type == "CRV")
+                        {
+                            Cur_bal_n += (item.Debit == null) ? 0 : -(item.Debit);
+                            Cur_bal_n += (item.Credit == null) ? 0 : item.Credit;
+
+                            Avl_bal_n += (item.Debit == null) ? 0 : -(item.Debit);
+                            Avl_bal_n += (item.Credit == null) ? 0 : item.Credit;
+                        }
+                        else if ((item.Voucher_Type == "BPV" || item.Voucher_Type == "BRV" || item.Voucher_Type == "JV") && (item.Inst_Status == "Pending" || item.Inst_Status == "Deposited"))
+                        {
+                            Avl_bal_n += (item.Debit == null) ? 0 : -(item.Debit);
+                            Avl_bal_n += (item.Credit == null) ? 0 : item.Credit;
+                        }
+                        else if ((item.Voucher_Type == "BPV" || item.Voucher_Type == "BRV") && (item.Inst_Status == "Approved" || item.Inst_Status == "Dishonored"))
+                        {
+                            Cur_bal_n += (item.Debit == null) ? 0 : -(item.Debit);
+                            Cur_bal_n += (item.Credit == null) ? 0 : item.Credit;
+
+                            Avl_bal_n += (item.Debit == null) ? 0 : -(item.Debit);
+                            Avl_bal_n += (item.Credit == null) ? 0 : item.Credit;
+                        }
+                        else
+                        {
+                            Cur_bal_n += (item.Debit == null) ? 0 : -(item.Debit);
+                            Cur_bal_n += (item.Credit == null) ? 0 : item.Credit;
+
+                            Avl_bal_n += (item.Debit == null) ? 0 : -(item.Debit);
+                            Avl_bal_n += (item.Credit == null) ? 0 : item.Credit;
+                        }
+                    }
+                }
+                <tr class="op-gen-entr" data-toggle="modal" data-target="#Modal" id="@item.GroupId">
+                    <td>@string.Format("{0:dd-MMM-yyyy}", item.Supviseby_Date)</td>
+                    <td>@item.Voucher_No</td>
+                    <td>@item.Inst_No</td>
+                    @if (item.Inst_Date == null)
+                    {
+                        <td>-</td>
+                    }
+                    else
+                    {
+                        <td>@string.Format("{0:dd-MMM-yyyy}", item.Inst_Date)</td>
+                    }
+                    <td>@item.Naration</td>
+                    @if (item.Debit == 0)
+                    {
+                        <td>-</td>
+                    }
+                    else
+                    {
+                        <td>@string.Format("{0:0,0.##}", item.Debit)</td>
+                    }
+                    @if (item.Credit == 0)
+                    {
+                        <td>-</td>
+                    }
+                    else
+                    {
+                        <td>@string.Format("{0:0,0.##}", item.Credit)</td>
+                    }
+                    @if (Avl_bal_n < 0)
+                    {
+                        <td>(@string.Format("{0:0,0.##}", -(Avl_bal_n)))</td>
+                    }
+                    else
+                    {
+                        <td>@string.Format("{0:0,0.##}", Avl_bal_n)</td>
+                    }
+
+                </tr>
+
+            }
+        </tbody>
+        <tfoot>
+            <tr>
+                <th colspan="5"></th>
+                <th>@string.Format("{0:0,0.##}", Model.Sum(x => x.Debit))</th>
+                <th>@string.Format("{0:0,0.##}", Model.Sum(x => x.Credit))</th>
+                <th>@string.Format("{0:0,0.##}", Avl_bal_n)</th>
+            </tr>
+        </tfoot>
+    </table>
+</div>
+<script>
+    $(document).ready(function () {
+        $('.avlBal').text('@String.Format("{0:0,0.##}", Avl_bal_n)');
+        $('.currBal').text('@String.Format("{0:0,0.}", Cur_bal_n)');
+        $('#led').DataTable({
+            paging: false
+            ,ordering:false
+        });
+    });
+</script>

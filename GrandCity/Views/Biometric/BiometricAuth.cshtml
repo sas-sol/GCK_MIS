@@ -1,0 +1,118 @@
+﻿@{ if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+}
+
+    <div class="col-md-12">
+        <div class="row" style="justify-content:center;align-items:center">
+            <div class="col-sm-4">
+                <div style="padding-top: 30px; padding-bottom: 30px;">
+                    <center><button id="btnCapture" type="button" class="btn btn-outline-primary">Capture Finger</button></center>
+                    </br>
+                    </br>
+                    <div class="form-group">
+                        <label class="mr-sm-2" for="setTemplate">Template:</label>
+                        <select class="form-control mb-2 mr-sm-2" id="setTemplate">
+                            <option value=1>ANSI</option>
+                            <option value=2>ISO</option>
+                        </select>
+                        <label class="mr-sm-2" for="setFinger">Finger:</label>
+                        <select class="form-control mb-2 mr-sm-2" id="setFinger">
+                            <option value=1>Left Index</option>
+                            <option value=2>Left Middle</option>
+                            <option value=3>Left Ring</option>
+                            <option value=4>Left Little</option>
+                            <option value=5>Left Thumb</option>
+                            <option value=6>Right Index</option>
+                            <option value=7>Right Middle</option>
+                            <option value=8>Right Ring</option>
+                            <option value=9>Right Little</option>
+                            <option value=10>Right Thumb</option>
+                        </select>
+                    </div>
+                    <img id="ItemPreview" src="" />
+                    <div id="captureResult">
+                        <p style="font-weight:bold" class="text-info">Template: </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row" style="justify-content:center;align-items:center">
+            <button class="btn btn-success sv-btn" style="display:none;">Save</button>
+        </div>
+    </div>
+
+
+<script type="text/javascript">
+
+
+    //$(document).ready(function () {
+    //    $.ajax({
+    //        type: "GET",
+    //        dataType: "json",
+    //        url: "https://localhost:9999/ASW/initialize",
+    //        async: false,
+    //        headers: {
+    //            'Cache-Control': 'no-cache, no-store, must-revalidate',
+    //            'Pragma': 'no-cache',
+    //            'Expires': '0'
+    //        },
+    //        error: function (jqXHR, textStatus, errorThrown) {
+    //            alert("secugen wrapper service not running");
+    //        },
+    //        success: function (data) {
+    //            if (data.code === '00') {
+
+    //            } else {
+    //                alert('failed to init device.');
+    //            }
+
+    //        }
+    //    });
+    //});
+
+    $('#btnCapture').click(function () {
+        document.getElementById("ItemPreview").src = "";
+        document.getElementById("captureResult").innerHTML = '<p style="font-weight:bold" class="text-info">Template: </p>';
+        var template_ = $('#setTemplate').find(":selected").val();
+        var finger_ = $('#setFinger').find(":selected").val();
+        console.log(template_);
+        console.log(finger_);
+        $.ajax({
+            type: "GET",
+            dataType: "json",
+            url: "https://localhost:9999/ASW/captureFinger",
+            async: false,
+            headers: {
+                'Cache-Control': 'no-cache, no-store, must-revalidate',
+                'Pragma': 'no-cache',
+                'Expires': '0'
+            },
+            data: {
+                "template": template_,
+                "finger": finger_
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert("secugen wrapper service not running");
+            },
+            success: function (data) {
+                if (data.code === '00') {
+                    $('.sv-btn').show();
+                    document.getElementById("ItemPreview").src = "data:image/png;base64," + data.image;
+                    document.getElementById("captureResult").innerHTML = '<p style="font-weight:bold" class="text-info">Template: <pre class="text-success" style="font-weight:normal">' + data.value + '</pre></p>';
+                } else {
+                    document.getElementById("captureResult").innerHTML = '<p style="font-weight:bold" class="text-info">Result: <spand class="text-danger" style="font-weight:normal">' + data.value + '</span></p>';
+                }
+            }
+        });
+    });
+
+
+
+</script>

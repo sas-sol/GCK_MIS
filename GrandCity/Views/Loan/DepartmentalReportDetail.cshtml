@@ -1,0 +1,104 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Sp_Get_DepartmentalLoanReport_Result>
+
+@if (Model != null && Model.Any())
+{
+    <div class="col-md-12">
+        <table class="table table-borderless dept-lns-tbl">
+            <thead>
+                <tr>
+                    <th>Sr.</th>
+                    <th>Employee Name</th>
+                    <th>Employee Code</th>
+                    <th>Department</th>
+                    <th>Status</th>
+                    <th>Type</th>
+                    <th>Amount</th>
+                    <th>Apply Date</th>
+                    <th>Installments</th>
+                    <th>Paid</th>
+                    <th>Pending</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @{ int cnt = 1;}
+                @foreach (var item in Model.GroupBy(x => x.DepId))
+                {
+                    decimal ttlAmnt = 0;
+                    foreach (var v in item)
+                    {
+                        string cls = (v.Total_Pending_Insts == 0) ? "bgc-green-50" : string.Empty;
+                        <tr class="@cls">
+                            <td>@(cnt++)</td>
+                            <td>@v.EmpName</td>
+                            <td>@v.EmpCode</td>
+                            <td>@v.DepName</td>
+                            <td>@v.Emp_Status</td>
+                            @if (v.TypeOfReq.Contains("Loan"))
+                            {
+                                <td>Loan</td>
+                            }
+                            else
+                            {
+                                <td>Advance</td>
+                            }
+                            <td>@string.Format("{0:n0}", v.Amount)</td>
+                            @{ttlAmnt += Convert.ToDecimal(v.Amount);}
+                            <td>@v.CreateDate.Value.ToShortDateString()</td>
+                            <td>@v.Installments</td>
+                            <td>@string.Format("{0:n0}", v.Total_Paid) (@v.Total_Paid_Insts inst. Paid)</td>
+                            <td>@string.Format("{0:n0}", v.Total_Pending) (@v.Total_Pending_Insts inst. Pending)</td>
+                        </tr>
+                    }
+            <tr style="background-color:rgb(182, 255, 0)">
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>Total</td>
+                <td><b>@String.Format("{0:n0}", ttlAmnt)</b></td>
+                <td></td>
+                <td></td>
+                <td>@string.Format("{0:n0}", item.Sum(x => x.Total_Paid))</td>
+                <td>@string.Format("{0:n0}", item.Sum(x => x.Total_Pending))</td>
+            </tr>
+                }
+            </tbody>
+            <tfoot>
+                <tr style="background-color:rgba(250,218,120,.4)">
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>@string.Format("{0:n0}", Model.Sum(x => x.Amount))</td>
+                    <td></td>
+                    <td></td>
+                    <td>@string.Format("{0:n0}", Model.Sum(x => x.Total_Paid))</td>
+                    <td>@string.Format("{0:n0}", Model.Sum(x => x.Total_Pending))</td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+}
+else
+{
+    <div class="col-md-12 bgc-red-50">
+        <h5>No Record Found</h5>
+    </div>
+}
+
+<script>
+    $(document).ready(function () {
+        $('.dept-lns-tbl').DataTable({
+            dom: 'Bfrtip',
+            buttons: [
+                'copy', 'csv', 'excel', 'pdf', 'print'
+            ],
+            "order": [],
+            "paging": false
+        });
+    });
+</script>

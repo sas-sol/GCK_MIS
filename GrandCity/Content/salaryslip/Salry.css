@@ -1,0 +1,178 @@
+﻿
+body {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    /*justify-content: center;*/
+    padding: 0px;
+    height: 10%;
+
+}
+
+/*@import url('https://fonts.googleapis.com/css?family=Roboto:200,300,400,600,700');*/
+
+* {
+    font-family: 'Roboto', sans-serif;
+    font-size: 12px;
+    color: #444;
+}
+
+#payslip {
+    width: calc( 8.5in - 80px );
+    background: #fff;
+    
+}
+
+.imagesa {
+    float: right;
+}
+
+.imagesas {
+    width: 150px;
+
+    float: right;
+}
+#title {
+    margin-bottom: 10px;
+    font-size: 30px;
+    font-weight: 600;
+    float: left;
+    width: 100%;
+}
+#title2 {
+    float: left;
+    width: 100%;
+}
+
+#scope {
+    border-top: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+    padding: 7px 0 4px 0;
+    display: flex;
+    justify-content: space-around;
+}
+
+    #scope > .scope-entry {
+        text-align: center;
+    }
+
+        #scope > .scope-entry > .value {
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+.content {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    margin-top: 5%;
+
+}
+
+
+    .content .left-panel {
+        border-right: 1px solid #ccc;
+        width: 45%;
+        /*padding: 1px 6px 0px 68px;*/
+        padding: 1px 10px 5px 0px;
+        font-weight: 400;
+        height: 64%;
+    }
+
+    .content .right-panel {
+
+        width: 50%;
+        padding: 0px 0px 0px 10px;
+        height: 34%;
+    }
+.month {
+    float: right;
+    font-weight: 700;
+}
+#employee {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+    #employee #name {
+        font-size: 15px;
+        font-weight: 700;
+    }
+
+    #employee #email {
+        font-size: 11px;
+        font-weight: 300;
+    }
+
+.details, .contributions, .ytd, .gross {
+    margin-bottom: 0px;
+}
+
+    .details .entry, .contributions .entry, .ytd .entry {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 3px;
+    }
+
+        .details .entry .value, .contributions .entry .value, .ytd .entry .value {
+            font-weight: 700;
+            max-width: 200px;
+            text-align: right;
+        }
+
+    .gross .entry .value {
+        font-weight: 700;
+        text-align: right;
+        font-size: 16px;
+    }
+
+    .contributions .title, .ytd .title, .gross .title {
+        font-size: 15px;
+        font-weight: 700;
+        border-bottom: 1px solid #ccc;
+        padding-bottom: 4px;
+        margin-bottom: 6px;
+    }
+
+
+
+    .content .right-panel .details .entry {
+        display: flex;
+        /*padding: 0 5px;*/
+        margin: 0px 0;
+    }
+
+.content .right-panel .details .label {
+    font-weight: bold;
+    width: 50%;
+   
+}
+
+.content .right-panel .details .detail {
+    font-weight: bold;
+    width: 100%;
+}
+
+    .content .right-panel .details .rate {
+        font-weight: 400;
+        width: 80px;
+        font-style: italic;
+        letter-spacing: 1px;
+    }
+
+.content .right-panel .details .amount {
+    text-align: right;
+    font-weight: 700;
+    width: 50%;
+}
+
+    .content .right-panel .details .net_pay div, .content .right-panel .details .nti div {
+        font-weight: 600;
+        font-size: 12px;
+    }
+
+    .content .right-panel .details .net_pay, .content .right-panel .details .nti {
+        padding: 3px 0 2px 0;
+        margin-bottom: 10px;
+        background: rgba(0, 0, 0, 0.04);
+    }

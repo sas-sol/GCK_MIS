@@ -1,0 +1,108 @@
+﻿
+@model IEnumerable<MeherEstateDevelopers.Models.Sp_Get_MIS_Requests_Result>
+
+
+@{
+    if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+}
+
+
+<div class="col-md-12">
+    <div class="row bgc-white">
+        <div class="col-md-12">
+            <div class="panel-heading central-text-align">
+                <h5>Printable Loan Vouchers</h5>
+            </div>
+        </div>
+        <br />
+        <div class="col-md-12">
+            <table class="table table-borderless" id="latetable">
+                <thead>
+                    <tr class="central-text-align thead-dark">
+                        <th>Sr#</th>
+                        <th>Employee Name</th>
+                        <th>Employee Code</th>
+
+                        <th>Total Loan</th>
+
+                        <th>Wave Amount</th>
+                        <th></th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @if (Model.Any())
+                    {
+                        var sr = 1;
+                        foreach (var v in Model)
+                        {
+                            <tr class="central-text-align pointer ">
+                                <td>@sr</td>
+                                <td>@v.WaiverDetails.EmployeeName</td>
+                                <td>@v.WaiverDetails.EmployeeCode</td>
+                                <td>@v.WaiverDetails.LoanTotalAmount</td>
+                                <td>@v.WaiverDetails.WaiverAmount</td>
+                                <td><i class="fa fa-print pointer printVoch" id="@v.Id" title="Print" ></i></td>
+
+
+
+
+
+                            </tr>
+                            sr++;
+
+                        }
+                    }
+                    else
+                    {
+                        <tr class="bgc-red-50 central-text-align">
+                            <td colspan="6">No Record Found</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+<script>
+    $(document).ready(function () {
+        $('.printVoch').click(function () {
+            if (confirm("Are you sure want to Generate Voucher")) {
+                $.ajax({
+                    type: "POST",
+                    url: '/Loan/GenerateLoanVoucher/',
+                    data: { reqId: $(this).attr("id") },
+                    success: function (data) {
+                        if (data.Status == true) {
+                            window.open("/Vouchers/SAGVouchers?Id=" + data.VoucherNo + "&Token=" + data.Token, '_blank');
+                            window.location.reload();
+                        }
+                        else {
+                            alert(data.Msg)
+                        }
+                    },
+                    error: function () {
+                        alert("Error Occured");
+                    }
+                });
+            }
+        });
+       
+
+ 
+
+        $('#latetable').DataTable({
+
+        });
+    });
+
+
+</script>

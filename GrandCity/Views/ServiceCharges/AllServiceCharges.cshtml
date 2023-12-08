@@ -1,0 +1,22 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Sp_Get_ServiceChargesTypeList_Result>
+@{
+    if (Model.Any())
+    {
+            <div class="bgc-white p-20 bd">
+                @foreach (var item in Model)
+                {
+                    string type = ( item.Type == "PerMarla") ? "/ Marla" : item.Type;
+                    <h6>@item.Charges_Name : <span style="font-weight:normal">@item.Rate - @type </span></h6>
+                    <hr />
+                }
+            </div>
+
+    }
+    else
+    {
+            <div class="bgc-white p-20 bd">
+                <h6>No Service Charges Added</h6>
+            </div>
+    }
+}
+

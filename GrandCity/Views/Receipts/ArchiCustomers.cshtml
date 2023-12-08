@@ -1,0 +1,70 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Architecture_Customers>
+
+@{ if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+}
+
+
+<div class="col-md-12 bgc-white pt-md-3">
+    <h5 class="central-text-align">Office of Design Customers</h5>
+    <hr />
+    <div class="row mt-md-2 mb-md-2">
+        <div class="col-md-2">
+            <button data-toggle="modal" data-target="#Modal" class="btn btn-primary ad-cust-btn">Add New Customer</button>
+        </div>
+    </div>
+    <table class="table table-borderless arctab">
+        <thead>
+            <tr>
+                <th>Sr.</th>
+                <th>Name</th>
+                <th>Father Name</th>
+                <th>CNIC</th>
+                <th>Mobile</th>
+                <th>Block</th>
+                <th>Plot No</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @{ int c = 1;}
+            @foreach (var v in Model)
+            {
+                <tr class="pointer archi-cust-dets-opener" data-cust="@v.Id">
+                    <td>@(c++)</td>
+                    <td>@v.CustomerName</td>
+                    <td>@v.CustomerFatherName</td>
+                    <td>@v.CustomerCNIC</td>
+                    <td>@v.CustomerContact</td>
+                    <td>@v.Block</td>
+                    <td>@v.PlotNo</td>
+                </tr>
+            }
+</tbody>
+        </table>
+    </div>
+
+<script>
+    $(document).ready(function () {
+        $('.archi-cust-dets-opener').unbind().click(function () {
+            let dataCust = $(this).attr('data-cust');
+            window.open('/Receipts/ArchiCustomer?Id=' + dataCust);
+        });
+
+        $('.ad-cust-btn').unbind().click(function () {
+            EmptyModel();
+            $('#ModalLabel').text("Add New Customer");
+            $('#modalbody').load('/Receipts/AddCustomer/', function () {
+                hideLoader();
+            });
+        });
+        $('.arctab').dataTable();
+
+    });
+</script>

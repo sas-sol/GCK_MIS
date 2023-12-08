@@ -1,0 +1,43 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Sp_Get_EmployeeLoan_Management_Result>
+<div class="bgc-white col-md-12 bd bdrs-3 p-20 mB-20">
+    <h4 class="c-grey-900 mB-20">My Pending Loan</h4>
+    <table class="table table-striped table-bordered" cellspacing="0" width="100%">
+        <thead>
+            <tr>
+                <th>Sr#</th>
+                <th>Created At</th>
+                <th>Reason</th>
+                <th>Manager Approvel</th>
+                <th>HR Approvel</th>
+                <th>Installments</th>
+                <th>Total Amount</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+
+                if (!Model.Any())
+                {
+                    <tr><td colspan="7" style="text-align:center">No data available</td></tr>
+                }
+                else
+                {
+                    var counter = 1;
+                    foreach (var item in Model)
+                    {
+                        <tr class=" " id="@item.Id">
+                            <td>@counter</td>
+                            <td>@string.Format("{0: dd-MMM-yyyy}", item.CreatedAt)</td>
+                            <td>@item.Reason</td>
+                            <td>@item.ManagerApproval</td>
+                            <td>@item.HrApproval</td>
+                            <td>@item.Installments</td>
+                            <td>@String.Format("{0:n0}", item.Amount)</td>
+                        </tr>
+                        counter++;
+                    }
+                }
+            }
+        </tbody>
+    </table>
+</div>

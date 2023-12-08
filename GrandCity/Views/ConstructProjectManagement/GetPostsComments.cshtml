@@ -1,0 +1,40 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Discussion_Post_Comments>
+<div id="addForComments-@ViewBag.Post_Id">
+    @foreach (var item in Model)
+    {
+        <div class="media pb-2">
+            <div class="media-left media-middle">
+                <div>
+                    <img src="~/assets/static/images/def-img.png" class="img-fluid rounded-circle mx-auto d-block" alt="Cinque Terre" style="height: 30px !important; width: 30px !important;">
+                </div>
+                <p class="mb-0">@item.CreateBy_Name</p>
+            </div>
+            <div class="media-body d-flex align-items-center">
+                <p class="pl-4" style="">@item.Comment</p>
+            </div>
+            <p class="timepost text-center">   @string.Format("{0:dd-MMM-yyyy}", item.DateTime) </p> &nbsp;&nbsp;&nbsp;<p class="timepost text-center">
+                <div class="btn-group">
+                    <i class="fas fa-ellipsis-h align-content-end" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></i>
+                    <div class="dropdown-menu">
+                        <a href="#"> <i class="fas fa-edit  col-md-12 py-3">&nbsp;&nbsp;&nbsp;&nbsp;Edit</i></a>
+                        <a href="#"><i class="fas fa-trash-alt col-md-12 py-3">&nbsp;&nbsp;&nbsp;&nbsp;Delete</i></a>
+                        <a href="#"><i class="fas fa-lock col-md-12 py-3">&nbsp;&nbsp;&nbsp;&nbsp;Private</i></a>
+                    </div>
+                </div>
+            </p>
+        </div>
+        @*<div class="row mt-0">
+                <div class="col-md-2 pr-0 mr-0">
+                    <img src="~/assets/static/images/def-img.png" class="rounded-circle " alt="@item.CreateBy_Name" style="height: 30px !important; width: 30px !important;">
+                    <p>@item.CreateBy_Name</p>
+                </div>
+                <div class="col-md-10 pl-0 ml-0">
+                    <div class="jumbotron p-0">
+                        <div class="container pl-0 pr-0 pr-5">
+                            <p>@item.Comment</p>
+                        </div>
+                    </div>
+                </div>
+            </div>*@
+    }
+</div>

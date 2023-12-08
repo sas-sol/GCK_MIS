@@ -1,0 +1,44 @@
+<div>
+    <h3 style="text-align:center">Monthly Consumtion</h3>
+    <div class="row">
+        <div class="col-md-2">
+            <label>From :</label>
+            <input type="text" class="form-control" data-provide="datepicker" id="dateFrom" placeholder="mm/dd/yyyy" autocomplete="off" style="width:auto">
+        </div>
+        <div class="col-md-2">
+            <label>To :</label>
+            <input type="text" class="form-control" data-provide="datepicker" id="dateTo" placeholder="mm/dd/yyyy" autocomplete="off" style="width:auto">
+        </div>
+        <div class="col-md-2" style="margin-top: 2.2%;">
+            <button class="btn btn-primary" id="search_monthly_stockOut">Search</button>
+        </div>
+    </div>
+    <div id="comparison_data" style=""></div>
+    
+</div>
+<script>
+
+    $(document).ready(function () {
+
+        var fromDate = $('#dateFrom').val();
+        var toDate = $('#dateTo').val();
+        var prjId = $('#Prj_Id').val();
+        $('#comparison_data').load("/ConstructProjectManagement/ProjectMonthlyConsumption/", { FromDate: fromDate, ToDate: toDate, PrjId: prjId });
+
+    });
+
+    $(document).on('click', '#search_monthly_stockOut', function () {
+        $('.dtrg-group').each(function () {
+            var myArray = ['bgc-purple-50', 'bgc-blue-50', 'bgc-yellow-50'];
+            var rand = myArray[Math.floor(Math.random() * myArray.length)];
+            $(this).addClass(rand);
+
+        });
+
+        var fromDate = $('#dateFrom').val();
+        var toDate = $('#dateTo').val();
+        var prjId = $('#Prj_Id').val();
+        $('#comparison_data').load("/ConstructProjectManagement/ProjectMonthlyConsumption/", { FromDate: fromDate, ToDate: toDate, PrjId: prjId });
+    });
+</script>
+

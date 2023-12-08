@@ -1,0 +1,129 @@
+﻿@model MeherEstateDevelopers.Models.Electricity_Meter_Reqs
+
+<input type="hidden" class="reqid-iou" value="@Model.Id" />
+<div class="col-md-12">
+    <table class="table table-bordered">
+        <thead>
+            <tr class="central-text-align thead-dark">
+                <th colspan="7">Old Meter Details</th>
+            </tr>
+            <tr class="central-text-align">
+                <th>Plot No.</th>
+                <th>Block</th>
+                <th>Meter No.</th>
+                <th>Current Reading</th>
+                <th>Requested by</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr class="central-text-align">
+                <td>@Model.Plot_No</td>
+                <td>@Model.Block_Name</td>
+                <td>@Model.Old_Meter_No</td>
+                <td>@Model.Old_Mtr_Last_Bld_Rdng</td>
+                <td>@Model.Requested_By_Name</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="row central-text-align mt-md-3">
+        <div class="col-md-2">
+            <label><b>New Meter No.</b></label>
+            <br />
+            <label>@Model.New_Meter_No</label>
+
+        </div>
+
+        <div class="col-md-3">
+            <label><b>New Meter Reading</b></label>
+            <br />
+            <label>@Model.New_Mtr_Curr_Rdng</label>
+        </div>
+
+        <div class="col-md-2">
+            <label><b>Old Meter Reading</b></label>
+            <br />
+            <label>@Model.Old_Mtr_Curr_Rdng</label>
+        </div>
+
+        <div class="col-md-2">
+            <label><b>Old Meter Bill</b></label>
+            <br />
+            <label>@Model.Old_Meter_Amount</label>
+        </div>
+
+        <div class="col-md-3">
+            <label><b>New Meter Charges</b></label>
+            <br />
+            <label>@Model.ReplacementCharges</label>
+        </div>
+    </div>
+
+    <div class="row mt-md-4 central-text-align">
+        <div class="col-md-6">
+            <label><b>Requesting Body Remarks :</b></label>
+            <pre>@Html.Raw(Model.Requested_By_Remarks)</pre>
+        </div>
+        <div class="col-md-6">
+            <label><b>Approving Body Remarks: </b></label>
+            @if (Model.Approval_Status == MeherEstateDevelopers.Models.ServiceChargesInstallmentsStatus.Pending.ToString())
+            {
+                <textarea rows="5" class="form-control met-chg-rems-hjg"></textarea>
+            }
+            else
+            {
+                <pre>@Html.Raw(Model.Approved_By_Remarks)</pre>
+            }
+        </div>
+    </div>
+
+    @if (Model.Approval_Status == MeherEstateDevelopers.Models.ServiceChargesInstallmentsStatus.Pending.ToString())
+    {
+        <div class="col-md-12 mt-md-5 central-text-align">
+            <button class="btn btn-danger met-stat-change-btn-fdjksha" data-tp="0">Reject</button>
+            <button class="btn btn-success met-stat-change-btn-fdjksha" data-tp="1" @*style="float:right;"*@>Approve</button>
+        </div>
+    }
+</div>
+
+<script>
+    //yahan pe accept ya reject ka kaam hona hai
+
+    $('.met-stat-change-btn-fdjksha').unbind().click(function () {
+
+        let conf = confirm('Are you sure you want to change status of this request?');
+
+        if (!conf) {
+            return;
+        }
+
+        showLoader();
+        let mainId = $('.reqid-iou').val();
+        let stat = $(this).attr('data-tp');
+        let remar = $('.met-chg-rems-hjg').val();
+
+        //yahan se ajax request le jao agay.
+        $.ajax({
+            type: "POST",
+            url: "/ServiceCharges/UpdateMeterChangeReqStat/",
+            contentType: "application/json",
+            traditional: true,
+            beforeSend: function () {
+
+            },
+            complete: function () {
+                hideLoader();
+            },
+            data: JSON.stringify({ id: mainId, rems: remar, tp: stat }),
+        }).done(function (data) {
+            if (data == true) {
+                alert('Request has been processed successfully.');
+                closeModal();
+            }
+            else {
+                alert('Failed to process this request at the moment. Please try again later.');
+            }
+        });
+    });
+</script>

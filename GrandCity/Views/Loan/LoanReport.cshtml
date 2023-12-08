@@ -1,0 +1,83 @@
+﻿@model MeherEstateDevelopers.Models.LoanReportView
+
+@{
+    if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+}
+
+<div class="col-md-12 bgc-white pt-md-3">
+    @{ 
+        var currDt = DateTime.Now;
+        int loanSr = 1;
+        }
+    <div class="panel-heading">
+        <h5><b>Total Loan Amount : @Model.LoansData.Sum(x=>x.Amount)</b> &nbsp;&nbsp;&nbsp;&nbsp; <b>Total Received Amount : @Model.InstallmentsData.Where(x=>x.Status == "Paid").Sum(x=>x.Loan_Amt)</b> &nbsp;&nbsp;&nbsp;&nbsp;<b>Total Outstanding Amount: @Model.InstallmentsData.Where(x=>x.Status == "Pending").Sum(x=>x.Loan_Amt)</b> </h5>
+    </div>
+    <table class="table table-bordered">
+        <tbody>
+            @foreach (var v in Model.LoansData.OrderByDescending(x=>x.CreatedAt).GroupBy(x => new { Month = x.CreatedAt.Value.ToString("MMM/yyyy")}).ToList())
+            {
+            <thead class="thead-dark">
+                <tr class="central-text-align">
+                    @{ int mon = v.Select(x => x.CreatedAt.Value.Month).FirstOrDefault();
+                        int yr = v.Select(x => x.CreatedAt.Value.Year).FirstOrDefault();
+                        }
+                    <th colspan="7">Loans Applied In Month : @v.Key.Month &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  <b>Amount(applied this month) : </b>@string.Format("{0:n0}", v.Sum(x => x.Amount))    &nbsp;&nbsp;&nbsp;&nbsp; <b>Paid Amount(paid this month) : </b> @string.Format("{0:n0}", Model.InstallmentsData.Where(x => x.Date.Value.Month == mon && x.Date.Value.Year == yr && x.Status == "Paid").Sum(x => (x.Loan_Amt == 0) ? x.Paid_Amt : x.Loan_Amt)) &nbsp;&nbsp;&nbsp;&nbsp; <b>Not Paid(not paid this month) : </b> @string.Format("{0:n0}", Model.InstallmentsData.Where(x => x.Date.Value.Month == mon &&x.Date.Value.Year == yr && x.Status == "Pending").Sum(x => (x.Loan_Amt == 0) ? x.Paid_Amt : x.Loan_Amt))</th>
+                </tr>
+                <tr>
+                    <th>Sr#</th>
+                    <th>Employee Name</th>
+                    <th>Loan Amount</th>
+                    <th>Paid</th>
+                    <th>Reason</th>
+                    <th>Date</th>
+                    <th></th>
+                </tr>
+            </thead>
+            foreach (var item in v)
+            {
+                <tr>
+                    <td>@(loanSr++)</td>
+                    <td>@item.Employee_Name</td>
+                    <td>@item.Amount</td>
+                    <td>@Model.InstallmentsData.Where(x => x.Loan_Id == item.Id).Count(x => x.Status == "Paid") / @Model.InstallmentsData.Where(x => x.Loan_Id == item.Id).Count()</td>
+                    <td>@item.Reason</td>
+                    <td>@item.CreatedAt.Value.ToShortDateString()</td>
+                    <td>
+                        <table class="table table-borderless">
+                            <thead class="thead-dark">
+                                <tr class="pointer dets-dfslkhj">
+                                    <th colspan="3">Click To Expand Details</th>
+                                </tr>
+                            </thead>
+
+                            <tbody style="display:none;">
+                                @foreach (var inst in Model.InstallmentsData.Where(x => x.Loan_Id == item.Id).ToList())
+                                {
+                                    <tr>
+                                        <td>@inst.Date.Value.ToShortDateString()</td>
+                                        <td>@((inst.Loan_Amt == 0) ?inst.Paid_Amt:inst.Loan_Amt)</td>
+                                        <td>@inst.Status</td>
+                                    </tr>
+                                }
+                            </tbody>
+
+                        </table>
+                    </td>
+                </tr>
+            }
+        }
+        </table>
+</div>
+
+<script>
+    $('.dets-dfslkhj').unbind().click(function () {
+        $(this).closest('table').find('tbody').slideToggle();
+    });
+</script>

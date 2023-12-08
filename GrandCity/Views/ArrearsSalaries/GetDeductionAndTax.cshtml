@@ -1,0 +1,32 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Sp_Get_Salary_Arrears_Details_Result>
+
+
+
+@if (Model.Any())
+{
+    foreach (var item in Model.Where(x => x.Type == "DeductionAndTaxes"))
+    {
+
+
+        <input type="hidden" class="DeductionAndTaxesSalaries" value="@item.Salaries_id" />
+        <div class="from-row row">
+            <div class="form-group col-md-3">
+
+                <label>@item.Description</label>
+
+            </div>
+            <div class="form-group col-md-3">
+
+                <label>@String.Format("{0:n0}", item.Amount)</label>
+            </div>
+            @if (item.Description != "Absentee" && item.Description != "Tax")
+            {
+                <div class="form-group">
+                    <i class="ti-minus ded-taxes-rmv bgc-red-50 pointer" id="@item.Id"></i>
+                </div>
+            }
+        </div>
+
+    }
+
+}

@@ -1,0 +1,58 @@
+﻿@{ if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+}
+<div class="row">
+    <div class="col-md-12">
+        <div class="bdrs-3 ov-h bgc-white p-10 bd">
+            <div class="form-row">
+                <h5>Purchase Requsition Item Wise Report</h5>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-2">
+                    <label style="width:100%"> Item Code</label>
+                    <input type="text" id="ItemCode" class="form-control" />
+                </div>
+                <div class="form-group col-md-2">
+                    <label style="width:100%">From</label>
+                    <input type="text" id="from" data-provide="datepicker" class="form-control" />
+                </div>
+                <div class="form-group col-md-2">
+                    <label style="width:100%">To</label>
+                    <input type="text" id="to" data-provide="datepicker" class="form-control" />
+                </div>
+
+                <div class="form-group col-md-2">
+                    <button class="btn btn-info sea-do-PRitem-rprt" style="margin-top:29px">Search</button>
+                </div>
+            </div>
+            <div id="report">
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        SASLoad($("#report"));
+        $("#report").load("/Reports/PurchaseReqItemReport_Search/", function () {
+            SASUnLoad($("#report"));
+        });
+    });
+
+    $('.sea-do-PR-rprt').click(function () {
+        SASLoad($("#report"));
+        var ItemCode = $("#ItemCode").val();
+        var from = $("#from").val();
+        var to = $("#to").val();
+        $("#report").load("/Reports/PurchaseReqItemReport_Search/", { ItemCode: ItemCode, From: from, To: to }, function () {
+            SASUnLoad($("#report"));
+        });
+    });
+
+</script>

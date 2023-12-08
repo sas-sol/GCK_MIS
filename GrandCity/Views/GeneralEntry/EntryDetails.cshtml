@@ -1,0 +1,157 @@
+﻿@model MeherEstateDevelopers.Models.EntryInvoice
+@{ if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+    var groupid = Model.General_Entries.Select(x => x.GroupId).FirstOrDefault();
+    var rec_name = Model.General_Entries.Select(x => x.Rec_Name).FirstOrDefault();
+    var rec_date = Model.General_Entries.Select(x => x.Date).FirstOrDefault();
+    var Supvise_by = Model.General_Entries.Select(x => x.Supvise_by).FirstOrDefault();
+    var Sup_Name = Model.General_Entries.Select(x => x.Sup_Name).FirstOrDefault();
+    var Sup_Date = Model.General_Entries.Select(x => x.Sup_Date).FirstOrDefault();
+    var Total_Amt = Model.General_Entries.Sum(x => x.Credit);
+}
+<div class=" bgc-white bd bdrs-3 p-20 mB-20 row">
+    <div class="col-md-12">
+        <div class="">
+            <h4 style="width:100%; text-align:center">Journal Entries @*<button class="btn btn-dark ent-rever" style="float:left">Reverse Entry</button>*@</h4>
+            <input type="hidden" value="@groupid" id="g-id" />
+            <input type="hidden" value="@Total_Amt" id="t-amt" />
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel-group" id="accordion">
+                    @foreach (var g in Model.General_Entries.GroupBy(x => x.Line))
+                    {
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <div class="own-det">
+                                    @foreach (var item in g.GroupBy(x => new { x.Naration }))
+                                    {
+                                        <div class="form-row">
+                                            <div class="form-group col-md-2"></div>
+                                            <div class="form-group col-md-6">
+                                                <label>Description</label>
+                                                <input type="text" class="form-control" value="@item.Key.Naration" readonly>
+                                            </div>
+                                            <div class="form-group col-md-2">
+                                                <label>Amount</label>
+                                                <input type="text" class="form-control" value="@string.Format("{0:n0}", item.Sum(x=> x.Credit))" readonly>
+                                            </div>
+                                            <div class="form-group col-md-2">
+                                                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#@g.Key" aria-expanded="true"></a>
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                            <div id="@g.Key" class="panel-collapse collapse in" aria-expanded="true" style="">
+                                <div class="panel-body">
+                                    <div class="form-row">
+                                        <div class="form-group col-md-2"></div>
+                                        <div class="form-group col-md-3"><h6>Head</h6></div>
+                                        <div class="form-group col-md-1"><h6>Qty</h6></div>
+                                        <div class="form-group col-md-1"><h6>UOM</h6></div>
+                                        <div class="form-group col-md-1"><h6>Rate</h6></div>
+                                        <div class="form-group col-md-1"><h6>Debit</h6></div>
+                                        <div class="form-group col-md-1"><h6>Credit</h6></div>
+                                        <div class="form-group col-md-2"></div>
+                                    </div>
+                                    @foreach (var item1 in g.OrderByDescending(x => x.Debit))
+                                    {
+                                        <div class="own-det" id="@item1.Id">
+                                            <div class="form-row">
+                                                <div class="form-group col-md-2"></div>
+                                                <div class="form-group col-md-3 hed-lst">
+                                                    <input type="text" value="@item1.Head" class="form-control hed-lst-in" readonly />
+                                                </div>
+                                                <div class="form-group col-md-1">
+                                                    <input type="text" class="form-control" value="@string.Format("{0:n0}", item1.Qty)" readonly>
+                                                </div>
+                                                <div class="form-group col-md-1">
+                                                    <input type="text" class="form-control" value="@string.Format("{0:n0}", item1.UOM)" readonly>
+                                                </div>
+                                                <div class="form-group col-md-1">
+                                                    <input type="text" class="form-control" value="@string.Format("{0:n0}", item1.Rate)" readonly>
+                                                </div>
+                                                <div class="form-group col-md-1">
+                                                    <input type="text" class="form-control" value="@string.Format("{0:n0}", item1.Debit)" readonly>
+                                                </div>
+                                                <div class="form-group col-md-1">
+                                                    <input type="text" class="form-control" value="@string.Format("{0:n0}", item1.Credit)" readonly>
+                                                </div>
+                                                <div class="form-group col-md-1 hed-nam">
+                                                    @if (item1.Supvise_by is null)
+                                                    {
+                                                        <i class="ti-pencil up-line-head" data-id="@item1.Id"></i>
+                                                        <button class="btn btn-success he-sav-btn" data-id="@item1.Id">Save</button>
+                                                    }
+                                                </div>
+                                                <div class="form-group col-md-1"></div>
+                                            </div>
+                                        </div>
+                                        @*<script>
+                                            $(function () {
+                                                InitHeadsWithVal(@item1.Id, @item1.Head_Id);
+                                            });
+                                        </script>*@
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="demo-gallery col-md-12">
+                <ul id="lightgallery" class="list-unstyled row">
+                    @foreach (var item in Model.Files)
+                    {
+                        <li class="col-xs-6 col-sm-4 col-md-3" data-responsive="Repository/Invoice/@groupid/@item.File_Name 375, Repository/Invoice/@groupid/@item.File_Name 480, Repository/Invoice/@groupid/@item.File_Name 800" data-src="/Repository/Invoice/@groupid/@item.File_Name">
+                            <a href="">
+                                <img class="img-responsive" src="~/Repository/Invoice/@groupid/@item.File_Name">
+                            </a>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-md-9">
+                <h4 style="padding-top:1%;float:right">Total : @string.Format("{0:n0}", Model.General_Entries.Sum(x => x.Credit))</h4>
+            </div>
+        </div>
+        @if (Supvise_by == null)
+        {
+            <div><button class="btn btn-primary sup-vouc">Verified & Supervised</button></div>
+        }
+        else
+        {
+            <h4>Supervised By: @Sup_Name at @string.Format("{0:dd-MMM-yyyy hh:mm tt}", Sup_Date)</h4>
+        }
+
+    </div>
+</div>
+<style>
+    .paymentotherinfo {
+        display: none;
+    }
+
+    .up-line-head, .he-sav-btn {
+        display: none;
+    }
+
+    .hed-nam:hover .up-line-head {
+        display: inline-block;
+    }
+</style>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#lightgallery').lightGallery();
+    });
+</script>

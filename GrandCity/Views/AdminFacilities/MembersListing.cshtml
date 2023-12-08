@@ -1,0 +1,109 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Sp_Get_Member_Parameter_Result>
+<style>
+    table thead tr th, table tbody tr td {
+        font-size: 12px;
+    }
+
+    .scrolling-box {
+        height: 740px;
+        overflow-y: scroll;
+        overflow-x: scroll;
+        width: 100%;
+        position: sticky;
+        top: 0;
+    }
+
+    .tableFixHead {
+        overflow: auto;
+        height: 700px;
+    }
+
+        .tableFixHead .ka th {
+            position: sticky;
+            top: 0;
+        }
+</style>
+
+
+
+<div class="bgc-white bd bdrs-3 p-20 mB-20">
+    <h4 class="c-grey-900 mB-20">Registered Members</h4>
+    <button class="btn btn-success ref-link">Refresh Fees</button>
+    <div class="tableFixHead">
+        <table id="salary-dat" class="table table-striped table-bordered" cellspacing="0" width="100%">
+            <thead class="thead-dark ka">
+                <tr>
+                    <th>Sr#</th>
+                    <th>Name</th>
+                    <th>CNIC</th>
+                    <th>Father Name</th>
+                    <th>Mobile 1</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            @{
+                if (!Model.Any())
+                {
+                    <tr>
+                        <th colspan="6" > No membere register yet</th>
+                    </tr>
+                }
+                else
+                {
+                    foreach (var g in Model.GroupBy(x => new { x.memsubsta }))
+                    {
+                        int sr = 1;
+
+                        <thead class="">
+                            <tr>
+                                <th colspan="6" style="font-size:21px;text-align:center"> @g.Key.memsubsta</th>
+                            </tr>
+                            <tr>
+                                <th>Sr#</th>
+                                <th>Name</th>
+                                <th>CNIC</th>
+                                <th>Father Name</th>
+                                <th>Mobile 1</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in g)
+                            {
+
+                                <tr id="@item.Id">
+                                    <td>@sr</td>
+                                    <td>@item.Name</td>
+                                    <td>@item.CNIC</td>
+                                    <td>@item.Father_Name</td>
+                                    <td>@item.Mobile_1</td>
+                                    <td>@item.memsubsta <span>|</span> <i class="ti-eye Get__mem__info pointer" id="@item.Id" data-toggle="modal" data-target="#Modal"></i></td>
+                                </tr>
+                                sr++;
+                            }
+
+                        </tbody>
+                    }
+                }
+            }
+        </table>
+    </div>
+</div>
+<script>
+    $(".ref-link").click(function () {
+        $.ajax({
+            type: "POST",
+            url: '/AdminFacilities/GenerateFee/',
+            success: function (data) {
+                 alert("Fees refreshed")
+            }
+            , error: function (xmlhttprequest, textstatus, message) {
+                if (textstatus === "timeout") {
+                    alert("got timeout");
+                } else {
+                    alert(textstatus);
+                }
+            }
+        });
+    });
+</script>

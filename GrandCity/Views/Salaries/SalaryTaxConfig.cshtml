@@ -1,0 +1,224 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.SalaryTaxEmployee>
+
+@{ if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+}
+
+<div class="col-md-12 bgc-white p-10">
+    <div class="panel-heading central-text-align mt-md-2">
+        <h5>Salary Tax Configuration</h5>
+    </div>
+
+    <div class="row mt-md-2 mb-md-2">
+        <div class="col-md-2">
+            <button class="btn btn-primary add-slb-fds">Add new Slab</button>
+        </div>
+    </div>
+
+    <div class="tax-slabs-hjd col-md-12">
+       
+        @foreach (var v in Model)
+        {
+        <div class="row slab-row mt-md-3">
+            <input type="hidden" class="empidd" Name="Id" value="@v.EmployeeId" />
+            <div class="col-md-4">
+                <select class="form-control empsearch searchboxx" data-id="1">
+                    <option selected>@v.EmployeeName</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <input type="text" class="form-control  empcode" readonly placeholder="Employee Code" value="@v.EmpCode" />
+            </div>
+            <div class="col-md-2">
+                <input type="text" class="form-control  BasicSalary" readonly Name="Basic_Salary" placeholder="Basic Salary" value="@v.BasicSalary" />
+            </div>
+
+            <div class="col-md-2">
+                <input type="text" disabled class="form-control coma static-tax-amt" placeholder="Static Tax Amount" value="@v.TaxAmount" />
+            </div>
+            <div class="col-md-1">
+                <span><i class="fa fa-trash pointer rmv-row-fsfsdk" title="Remove Slab"></i></span>
+            </div>
+        </div>
+
+          
+        }
+    </div>
+    @{ string show = (Model.Count() > 0) ? string.Empty : "display:none;";}
+    <div class="row mt-md-2 mb-md-2 sv-btn-row" style="@show">
+        <div class="col-md-2">
+            <button class="btn btn-success save-slb-fds"><i class="fa fa-cogs"></i> &nbsp;&nbsp; Save Configuration</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    $('.add-slb-fds').unbind().click(function () {
+        let strc = ` <div class="row slab-row mt-md-3">
+     <input type="hidden" class="empidd" Name="Id" value=""/>
+            <div class="col-md-4">
+               <select class="form-control empsearch searchboxx"   data-id="1"></select>
+            </div>
+            <div class="col-md-2">
+                <input type="text" class="form-control  empcode" readonly  placeholder="Employee Code" />
+            </div>
+            <div class="col-md-2">
+                <input type="text" class="form-control  BasicSalary" readonly Name="Basic_Salary" placeholder="Basic Salary" />
+            </div>
+
+            <div class="col-md-2">
+                <input type="text" class="form-control coma static-tax-amt" placeholder="Static Tax Amount" />
+            </div>
+ 
+
+            <div class="col-md-1">
+                <span><i class="fa fa-trash pointer rmv-row-fsfsdk" title="Remove Slab"></i></span>
+            </div>
+        </div>`;
+
+        $('.tax-slabs-hjd').append(strc);
+
+        $('.searchboxx').last().select2({
+            dropdownParent: $('.slab-row'),
+            placeholder: "Search for Employee",
+            ajax: {
+                url: '/Salaries/GetEmployees_Select/',
+                data: function (params) {
+                    var query = {
+                        s: params.term,
+                        type: 'public'
+                    }
+                    // Query parameters will be ?search=[term]&type=public
+                    return query;
+                },
+                processResults: function (data) {
+                   
+                    return {
+                        results: $.map(data.items, function (item) {
+                           
+                            return {
+                                
+                                children: [{
+                                    id: item.Id,
+                                    text: item.Name + ' (' + item.EmpCode + ')'
+                                }]
+                            }
+                        })
+                    };
+                }
+            }
+        });
+        $('.empsearch').last().change(function () {
+            var that = $(this); 
+                $.ajax({
+                    type: "GET",
+                    url: '/Salaries/GetEmployees_Detail_Byname/',
+                    data: { s: $(this).val() },
+                    contentType: "application/json;charset=utf-8",
+                    dataType: "json",
+                    success: function (result) {
+                        
+
+                        $(that).closest('.slab-row').find('.empidd').val(result.items[0].Id);
+                        $(that).closest('.slab-row').find('.empcode').val(result.items[0].EmpCode);
+                        $(that).closest('.slab-row').find('.BasicSalary').val(result.items[0].Basic_Salary.toLocaleString());
+                      
+
+                    },
+                    error: function (response) {
+                        alert('eror');
+                    }
+                });
+            
+        });
+        
+        $('.sv-btn-row').show();
+
+    });
+
+    $(document).on('click', '.rmv-row-fsfsdk', function () {
+        let confi = confirm('Are you sure you want to remove this slab?');
+        if (!confi) {
+            return;
+        }
+
+        $(this).closest('.slab-row').remove();
+        if ($('.slab-row').length <= 0) {
+            $('.sv-btn-row').hide();
+        }
+    });
+
+    $('.save-slb-fds').unbind().click(function () {
+        let confi = confirm('Are you sure you want to update this configuration?');
+        if (!confi) {
+            return;
+        }
+
+        let dataArr = [];
+        $('.slab-row').each(function () {
+            
+            let empid = $(this).find('.empidd').val();
+            let empnam = $(this).find('.empsearch').text();
+            let empcod = $(this).find('.empcode').val();
+            let empsal = parseInt(RemoveComma($(this).find('.BasicSalary').val()));
+            let tax = parseInt(RemoveComma($(this).find('.static-tax-amt').val()));
+  
+
+
+
+            if (empid > 0) {
+                dataArr.push({
+                    EmployeeName: empnam,
+                    EmployeeId: empid,
+                    BasicSalary: empsal,
+                    EmpCode: empcod,
+                    TaxAmount: tax
+                });
+            }
+            
+        });
+
+        $.ajax({
+            type: "POST",
+            url: "/Salaries/SaveSalaryTaxConfig/",
+            contentType: "application/json",
+            traditional: true,
+            beforeSend: function () {
+
+            },
+            complete: function () {
+
+            },
+            data: JSON.stringify({ stm: dataArr }),
+        }).done(function (data) {
+            if (data == true) {
+                alert('Configuration has been updated sucessfully.');
+
+                window.location.reload();
+            }
+            else {
+                alert('Failed to save configuration. Please try again.');
+            }
+        });
+    });
+   
+</script>
+
+<style>
+    .rmv-row-fsfsdk:hover {
+        color: #d0232a;
+    }
+
+    .slab-row {
+        border-top: 1px solid #ddc;
+        padding: 10px;
+        align-items: center;
+        border-bottom: 1px solid #ddc;
+    }
+</style>

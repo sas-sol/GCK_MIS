@@ -1,0 +1,85 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.LeavesTypes>
+<script src="~/Scripts/Inv.js"></script>
+@{ if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+}
+<div class="bgc-white bd bdrs-3 p-20 mB-20">
+    <div class="row">
+        <div class="col-md-12">
+            <h4 class="c-grey-900 mB-20" style="text-align:center">Inventory Stock Taking</h4>
+        </div>
+    </div>
+    <div class="row">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light navforcolor bgc-white" style="width: 100%;overflow: auto;">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                <div class="navbar-nav nav-fill w-100">
+                    @if (Model.Any())
+                    {
+                        foreach (var item in Model)
+                        {
+                            <a href="#" data-id="@item.Value" style="min-width:10%; margin: 0 1%" class="nav-item nav-link navproject currentclass">@item.Name</a>
+                        }
+                    }
+                    else
+                    {
+                        <h2>No Inventory Exists</h2>
+                    }
+
+                </div>
+            </div>
+        </nav>
+    </div>
+    <div class=" mt-2 bgc-white" id="dep-inv">
+
+    </div>
+</div>
+<style>
+    #inv tr.odd td:first-child,
+    #inv tr.even td:first-child {
+        padding-left: 4em;
+    }
+
+    .dtrg-level-0 {
+        font-size: 20px;
+        text-align: center;
+        font-weight: bold;
+    }
+
+    .dtrg-level-1 {
+        font-size: 16px;
+        text-align: center;
+        font-weight: bold;
+    }
+
+    .dtrg-level-2 {
+        font-size: 14px;
+        font-weight: bold;
+    }
+</style>
+<script>
+    $(".navproject").click(function () {
+        var list = $(".navproject")
+        $(this).css("background-color", "ghostwhite");
+        $(".currentclass").css("background-color", "white");
+        $(".currentclass").removeClass("currentclass");
+        $(this).addClass('currentclass');
+    });
+
+    $(document).on("click", ".navproject", function () {
+        var id = $(this).data('id');
+        $('#dep-inv').load('/Inventory/List/', { Dep: id });
+    });
+
+    $(document).ready(function () {
+        $(".currentclass").css("background-color", "ghostwhite");
+    });
+</script>

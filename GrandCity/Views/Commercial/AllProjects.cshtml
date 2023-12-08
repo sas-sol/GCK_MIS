@@ -1,0 +1,34 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.RealEstate_Projects>
+
+@{
+    if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+}
+
+
+<div class="row">
+    <ul class="info-blocks">
+        @{
+
+            foreach (var item in Model)
+            {
+                var img = item.Project_Name + ".png";
+                <li>
+                    <a href="javascript:void(0);" class="get-link" id="@item.Id" data-link="/Commercial/Building?Id=@item.Id"><img src="~/assets/static/images/@img" /></a>
+                </li>
+            }
+
+        }
+    </ul>
+</div>
+<style>
+    .a {
+        color: #592a88;
+    }
+</style>

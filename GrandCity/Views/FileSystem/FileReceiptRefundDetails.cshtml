@@ -1,0 +1,513 @@
+﻿@model MeherEstateDevelopers.Models.FileRefundDetailData
+<link href="~/Content/albery.css" rel="stylesheet" />
+@{ Layout = "~/Views/Shared/_StaffLayout.cshtml"; }
+@if (Model.FileOwners.Any())
+{
+    <input type="hidden" id="can-req-id" value="@Model.File_Req.Id" />
+    <input type="hidden" id="rece-id" value="@Model.File_Req.Receipt_Id" />
+    <div class="bgc-white p-20 bd row">
+        <div class="col-md-9">
+            <div class="row">
+                @if (User.IsInRole("Finance Manager"))
+                {
+                    if (Model.FileData.Verified == true)
+                    {
+                        <div class="col-md-4">
+                            <div class="alert alert-success" style="text-align:center" role="alert">Verified</div>
+                        </div>
+                        if (Model.File_Req.Finance_Approval != "Approve")
+                        {
+                            <div class="col-md-3">
+                                <button class="btn btn-primary frd-fil-ref-f" data-toggle="modal" data-target="#Modal">Forward for Refund</button>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="col-md-4">
+                                <div class="alert alert-success" style="text-align:center" role="alert">Forwarded for Refund</div>
+                            </div>
+                        }
+
+                    }
+                    else
+                    {
+                        <div class="col-md-4">
+                            <h6 style="width: auto;float: left;margin: 7px;">Request For Verifcation</h6>
+                            @if (Model.FileData.Verification_Req == true)
+                            {
+                                <label class="switch"><input type="checkbox" id="veri-req" checked><span class="slider round"></span></label>
+                            }
+                            else
+                            {
+                                <label class="switch"><input type="checkbox" id="veri-req"><span class="slider round"></span></label>
+                            }
+                        </div>
+                    }
+                }
+                else
+                {
+                    if (Model.FileData.Verified == true)
+                    {
+                        <div class="col-md-4">
+                            <div class="alert alert-success" style="text-align:center" role="alert">Verified</div>
+                        </div>
+                        if (Model.File_Req.Manager_Approval != "Approve")
+                        {
+                            <div class="col-md-3">
+                                <button class="btn btn-primary frd-plt-ref">Forward for Refund</button>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="col-md-4">
+                                <div class="alert alert-success" style="text-align:center" role="alert">Forwarded for Refund</div>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <div class="col-md-4">
+                            <h6 style="width: auto;float: left;margin: 7px;">Request For Verifcation</h6>
+                            @if (Model.FileData.Verification_Req == true)
+                            {
+                                <label class="switch"><input type="checkbox" id="veri-req" checked><span class="slider round"></span></label>
+                            }
+                            else
+                            {
+                                <label class="switch"><input type="checkbox" id="veri-req"><span class="slider round"></span></label>
+                            }
+                        </div>
+                    }
+                }
+
+                @*@if (Model.FileData.Status == "Repurchased")
+                {
+                    <div class="col-md-4"><div class="alert alert-info" style="text-align:center" role="alert">This Plot is Repurchased by Company</div></div>
+                }
+                else if (Model.FileData.Status == "Available_For_Sale")
+                {
+                    <div class="col-md-4"><div class="alert alert-info" style="text-align:center" role="alert">This Plot is Available For Sale</div></div>
+                }
+                else if (Model.FileData.Status == "Disputed")
+                {
+                    <div class="col-md-4"><div class="alert alert-warning" style="text-align:center" role="alert">This Plot is Disputed </div></div>
+                }
+                else if (Model.FileData.Status == "CancelledDueAmount")
+                {
+                    <div class="col-md-4"><div class="alert alert-danger" style="text-align:center" role="alert">This Plot is Cancelled Due to Over Due Amount</div></div>
+                }
+                else if (Model.FileData.Status == "Cancelled")
+                {
+                    <div class="col-md-4"><div class="alert alert-danger" style="text-align:center" role="alert">This Plot is Cancelled By Company</div></div>
+                }
+                else if (Model.FileData.Status == "Temporary_Cancelled")
+                {
+                    <div class="col-md-4"><div class="alert alert-danger" style="text-align:center" role="alert">This Plot is Temporary Cancelled By Company</div></div>
+                }
+                else if (Model.FileData.Status == "Hold")
+                {
+                    <div class="col-md-4"><div class="alert alert-dark" style="text-align:center" role="alert">This Plot is Holded by Company</div></div>
+                }*@
+            </div>
+            <div class="mT-30">
+                <div class="form-row row">
+                    <div class="col-md-12">
+                        <div class="form-row">
+                            <div class="form-group col-md-1">
+                                <label>File No.</label>
+                                <h5 id="plt-no">@Model.FileData.FileFormNumber</h5>
+                                <input type="hidden" class="form-control" id="plt-id" name="Plot_Id" value="@Model.FileData.Id" readonly>
+                            </div>
+                            <div class="form-group col-md-1">
+                                <label>Size</label>
+                                <h5 id="plt-size">@Model.FileData.Plot_Size</h5>
+                            </div>
+                            <div class="form-group col-md-1">
+                                <label>Block</label>
+                                <h5 id="plt-size">@Model.FileData.Block</h5>
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label>Type</label>
+                                <h5 id="plt-type">@Model.FileData.Plot_Type</h5>
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label>Status</label>
+                                @{
+                                    MeherEstateDevelopers.Models.FileStatus filestat = (MeherEstateDevelopers.Models.FileStatus)Model.FileData.Status;
+                                    string status = filestat.ToString();
+                                }
+                                <h5>@status.Replace("_", " ")</h5>
+                            </div>
+                            @{
+                                string dev = "";
+                                if (Model.FileData.Development_Charges == false)
+                                {
+                                    dev = "Non Development Charges";
+                                }
+                                else if (Model.FileData.Development_Charges == true)
+                                {
+                                    dev = "With Development Charges";
+                                }
+                                else
+                                {
+                                    dev = "To Be Announce";
+                                }
+                            }
+                            <div class="form-group col-md-3">
+                                <label>Development Charges</label>
+                                <h5 id="plt-dim">@dev</h5>
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label>Preference</label>
+                                <h5 id="plt-loc">@Model.FileData.Plot_Prefrence</h5>
+                            </div>
+                        </div>
+                        <h6>Booking Details</h6>
+                        <div class="form-row">
+                            <div class="form-group col-md-3">
+                                <label>Plot Price</label>
+                                <h5 id="plt-price"></h5>
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label>Booking Date</label>
+                                <h5 id="booking-date"></h5>
+                            </div>
+                        </div>
+                    </div>
+                    @if (Model.File_Req != null)
+                    {
+                        <div class="col-md-12">
+                            <div class="form-row">
+                                <div class="form-group col-md-2">
+                                    <label>Receipt Amount</label>
+                                    <h5>@string.Format("{0:n0}", Math.Round(Convert.ToDouble(Model.File_Req.Receipt_Amount)))</h5>
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <label>Refund Amount</label>
+                                    <h5>@string.Format("{0:n0}", Math.Round(Convert.ToDouble(Model.File_Req.Amount)))</h5>
+                                </div>
+
+                            </div>
+                        </div>
+                    }
+                    <div class="col-md-4"></div>
+                </div>
+            </div>
+            <div class="mT-30">
+                <div class="panel-group" id="accordion">
+                    @{ int ownercount = 1;
+                        foreach (var item in Model.FileOwners.OrderByDescending(x => x.Id))
+                        {
+                            string show = "";
+                            if (ownercount == 1)
+                            {
+                                <script>
+                            var pltprice = "@string.Format("{0:n0}", item.Rate)";
+                            $("#plt-price").text(pltprice);
+                                </script>
+                                show = "show";
+                            }
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h5 class="panel-title">
+                                        <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#@item.Id" aria-expanded="true">
+                                            @item.Name - @item.Ownership_Status
+                                        </a>
+                                    </h5>
+                                </div>
+                                <div id="@item.Id" class="panel-collapse collapse in @show" aria-expanded="true" style="">
+                                    <div class="panel-body">
+                                        <div class="own-det">
+                                            <div class="form-row">
+                                                <div class="form-group col-md-3">
+                                                    <label>Name</label>
+                                                    <input type="text" class="form-control" name="Name" value="@item.Name" readonly>
+                                                </div>
+                                                <div class="form-group col-md-3">
+                                                    <label>Father's/Husband's Name</label>
+                                                    <input type="text" class="form-control" name="Father_Husband" value="@item.Father_Husband" readonly>
+                                                </div>
+                                                <div class="form-group col-md-3">
+                                                    <label>CNIC / NICOP</label>
+                                                    <input type="text" class="form-control" name="CNIC_NICOP" value="@item.CNIC_NICOP" placeholder="12345-1234567-1   or   123456-123456-1" readonly>
+                                                </div>
+                                                <div class="form-group col-md-2">
+                                                    <label>Date Of Birth</label>
+                                                    <input type="text" class="form-control" data-provide="datepicker" value="@item.Date_Of_Birth" placeholder="mm/dd/yyyy" name="Date_Of_Birth" readonly>
+                                                </div>
+                                                <div class="form-group col-md-6">
+                                                    <label>Postal Address</label>
+                                                    <input type="text" class="form-control" name="Postal_Address" value="@item.Postal_Address" placeholder="1234 Main St" readonly>
+                                                </div>
+                                                <div class="form-group col-md-6">
+                                                    <label>Residential Address</label>
+                                                    <input type="text" class="form-control" name="Residential_Address" value="@item.Residential_Address" placeholder="Apartment, Plot, or floor" readonly>
+                                                </div>
+                                                <div class="form-group col-md-2">
+                                                    <label>City</label>
+                                                    <input type="text" class="form-control" value="@item.City" readonly>
+                                                </div>
+                                                <div class="form-group col-md-3">
+                                                    <label>Occupation</label>
+                                                    <input type="text" class="form-control" value="@item.Occupation" name="Occupation" readonly>
+                                                </div>
+                                                <div class="form-group col-md-2">
+                                                    <label>Nationality</label>
+                                                    <input type="text" class="form-control" value="@item.Nationality" name="Nationality" readonly>
+                                                </div>
+                                                <div class="form-group col-md-3">
+                                                    <label>Email</label>
+                                                    <input type="text" class="form-control" value="@item.Email" name="Email" readonly>
+                                                </div>
+                                            </div>
+                                            <div class="form-row">
+                                                <div class="form-group col-md-3">
+                                                    <label>Phone Office</label>
+                                                    <input type="text" class="form-control" value="@item.Phone_Office" name="Phone_Office" readonly>
+                                                </div>
+                                                <div class="form-group col-md-3">
+                                                    <label>Residential</label>
+                                                    <input type="text" class="form-control" value="@item.Residential" name="Residential" readonly>
+                                                </div>
+                                                <div class="form-group col-md-3">
+                                                    <label>Mobile 1</label>
+                                                    <input type="text" class="form-control" value="@item.Mobile_1" placeholder="03121234567" name="Mobile_1" readonly>
+                                                </div>
+                                                <div class="form-group col-md-3">
+                                                    <label>Mobile 2</label>
+                                                    <input type="text" class="form-control" value="@item.Mobile_1" pattern="^0\d{10}" placeholder="03121234567" name="Mobile_2" readonly>
+                                                </div>
+                                            </div>
+                                            <h6 class="c-grey-900">Nominee</h6>
+                                            <div class="form-row">
+                                                <div class="form-group col-md-3">
+                                                    <label>Name</label>
+                                                    <input type="text" class="form-control" value="@item.Nominee_Name" name="Nominee_Name" readonly>
+                                                </div>
+                                                <div class="form-group col-md-2">
+                                                    <label>CNIC / NICOP</label>
+                                                    <input type="text" class="form-control" value="@item.Nominee_CNIC_NICOP" placeholder="12345-1234567-1 or 123456-123456-1" name="Nominee_CNIC_NICOP" readonly>
+                                                </div>
+                                                <div class="form-group col-md-2">
+                                                    <label>Relation</label>
+                                                    <input class="form-control" value="@item.Nominee_Relation" name="Nominee_Relation" placeholder="" readonly>
+                                                </div>
+                                                <div class="form-group col-md-5">
+                                                    <label>Address</label>
+                                                    <input type="text" class="form-control" value="@item.Nominee_Address" name="Nominee_Address" placeholder="1234 Main St" readonly>
+                                                </div>
+                                            </div>
+                                            <div class="form-row">
+                                                <div class="col-md-3">
+                                                    @if (item.Image1 == null)
+                                                    {
+                                                        <img style="margin-top:10px" src="~/assets/static/images/def-img.png" width="200" height="200" id="own_img" />
+                                                    }
+                                                    else
+                                                    {
+                                                        <img style="margin-top:10px" src="~/Repository/CustomerImages/@item.Id/@item.Image1" width="200" height="200" id="own_img" />
+                                                    }
+                                                </div>
+                                                <div class="col-md-3">
+                                                    @if (item.Image2 == null)
+                                                    {
+                                                        <img style="margin-top:10px" src="~/assets/static/images/def-img.png" width="200" height="200" id="own_img" />
+
+                                                    }
+                                                    else
+                                                    {
+                                                        <img style="margin-top:10px" src="~/Repository/CustomerImages/@item.Id/@item.Image2" width="200" height="200" id="own_img" />
+                                                    }
+                                                </div>
+                                                <div class="col-md-3">
+                                                    @if (item.Image3 == null)
+                                                    {
+                                                        <img style="margin-top:10px" src="~/assets/static/images/def-img.png" width="200" height="200" id="own_img" />
+
+                                                    }
+                                                    else
+                                                    {
+                                                        <img style="margin-top:10px" src="~/Repository/CustomerImages/@item.Id/@item.Image3" width="200" height="200" id="own_img" />
+                                                    }
+                                                </div>
+                                                <div class="col-md-3">
+                                                    @if (item.Image4 == null)
+                                                    {
+                                                        <img style="margin-top:10px" src="~/assets/static/images/def-img.png" width="200" height="200" id="own_img" />
+
+                                                    }
+                                                    else
+                                                    {
+                                                        <img style="margin-top:10px" src="~/Repository/CustomerImages/@item.Id/@item.Image4" width="200" height="200" id="own_img" />
+                                                    }
+                                                </div>
+                                            </div>
+                                            @if (item.Ownership_Status == "Cancelled" || item.Ownership_Status == "Cancelled_Not_Refunded" || item.Ownership_Status == "Refund")
+                                            {
+                                                <a class="btn btn-primary" style="color:white" href="/Reports/FileStatmentCancel?FileNumber=@Model.FileData.FileFormNumber&OwnerId=@item.Id" target="_blank">@item.Name Ledger Report</a>
+                                            }
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            ownercount++;
+                        }
+                    }
+                </div>
+            </div>
+            <div class="form-row ">
+                <div class="albery-container" style="background-color: black;">
+                    <div class="albery-wrapper">
+                        @{
+                            foreach (var item in Model.FileReceipts)
+                            {
+                                string img = item.Id + ".png";
+                                <div class="albery-item">
+                                    <img title="@item.ReceiptNo" src="/PlotReceipts/Plots/@Model.FileData.Id/@img" height="300" alt=""> //Check
+                                </div>
+                            }
+                        }
+                    </div>
+                    <div class="move-right">
+                        <a href="#" id="rightArrow">▶</a>
+                    </div>
+                    <div class="move-left">
+                        <a href="#" id="leftArrow">◀</a>
+                    </div>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="col-md-5">
+                    <table class="table table-striped table-bordered" cellspacing="0" width="100%" style="margin-bottom:0px">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th>Installment</th>
+                                <th>Amount</th>
+                                <th>Due Date</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                decimal overduetotal = 0;
+                                foreach (var item in Model.FileInstallments)
+                                {
+                                    var statuscolor = "";
+                                    if (item.Status == "NotPaid")
+                                    {
+                                        statuscolor = "bgc-red-50";
+                                        overduetotal = overduetotal + item.Amount;
+                                    }
+                                    else if (item.Status == "Paid")
+                                    {
+                                        statuscolor = "bgc-green-50";
+                                    }
+                                    if (item.Installment_Name == "Advance")
+                                    {
+                                        <script>
+                                            var res = "@string.Format("{0:MMM dd yyyy}", item.Due_Date)";
+                                            $("#booking-date").text(res);
+                                        </script>
+                                    }
+                                    <tr class="@statuscolor">
+                                        <td>@item.Installment_Name</td>
+                                        <td>@string.Format("{0:n0}", item.Amount)</td>
+                                        <td>@string.Format("{0:dd-MMM-yyyy}", item.Due_Date)</td>
+                                        <td>@item.Status</td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-md-7">
+                    <table class="table table-striped table-bordered" cellspacing="0" width="100%" style="margin-bottom:0px">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th>Sr.</th>
+                                <th>Receipt No.</th>
+                                <th>Inst No.</th>
+                                <th>Type</th>
+                                <th>Status</th>
+                                <th>Amount</th>
+                                <th>Date</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{ int srcount = 1;
+                                foreach (var item in Model.FileReceipts)
+                                {
+                                    string stat = "";
+                                    if (item.Status == "Pending")
+                                    {
+                                        stat = "bgc-yellow-50";
+                                    }
+                                    else if (item.Status == "Dishonored")
+                                    {
+                                        stat = "bgc-red-50";
+                                    }
+                                    else if (item.Status == "Approved")
+                                    {
+                                        stat = "bgc-green-50";
+                                    }
+                                    else if (item.Status == "Deposited")
+                                    {
+                                        stat = "bgc-orange-50";
+                                    }
+                                    else
+                                    {
+                                        stat = "";
+                                    }
+                                    <tr class="@stat" id="@item.Id">
+                                        <td>@srcount</td>
+                                        <td>@item.ReceiptNo</td>
+                                        <td>@string.Format("{0:n0}", item.Ch_Pay_Draft_No)</td>
+                                        <td>@item.PaymentType</td>
+                                        <td>@item.Status</td>
+                                        <td>@string.Format("{0:n0}", item.Amount)</td>
+                                        <td>@string.Format("{0:dd-MMM-yyyy}", item.DateTime)</td>
+                                        @if (item.Verified == true)
+                                        {
+                                            <td><i class="ti-check" style="color:green"></i></td>
+                                        }
+                                        else
+                                        {
+                                            <td></td>
+                                        }
+                                    </tr>
+                                    srcount++;
+                                }
+                            }
+                            <tr>
+                                <td colspan="6"><a class="btn btn-primary" href="/Plots/PlotDetailReport?Plotid=@Model.FileData.Id" target="_blank">Ledger Report</a></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            @*<div class="form-row">
+                <div id="plot-rep">
+                    @{Html.RenderAction("PlotInstallmentsReports", "Plots", new { Plotid = Model.FileData.Id });}
+                </div>
+            </div>*@
+        </div>
+        <div class="col-md-3">
+            @{ Html.RenderAction("FilesComments", "Messages", new { Fileid = Model.FileData.Id });}
+        </div>
+    </div>
+    <script src="~/Scripts/albery.js"></script>
+    <script>
+        $(".albery-container").albery({
+            speed: 500,
+            imgWidth: 400,
+        });
+    </script>
+}
+else
+{
+    <div class="bgc-white p-20 bd">
+        <h5 class="c-grey-900">No Record Found</h5>
+    </div>
+}

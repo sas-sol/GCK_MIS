@@ -1,0 +1,143 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Sp_Get_PlotData_Result>
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        @@page {
+            margin: 0;
+            size: A4
+        }
+
+        .bg {
+            height: 1555px;
+            width: 1186px;
+            margin-left: 0%;
+            background-image: url(../../assets/static/images/PlotsFile.jpg);
+            background-size: 1186px 1620px;
+            font-family: sans-serif;
+            color: black;
+            background-repeat: no-repeat;
+        }
+        .uperdiv {
+            width: 100%;
+            float: left;
+            margin-top: 21%;
+            display: inline-flex;
+        }
+        .firstdiv{
+            width:80%;
+            font-size:22px
+        }
+        .secdiv{
+            width:20%
+        }
+        label{
+            text-align:center;
+        }
+        .imageqr {
+            width: 220px;
+            height: 228px;
+            float: left;
+        }
+
+        .imageqrs {
+            width: 100%
+        }
+
+        .mar {
+            margin-top: 1%;
+        }
+
+        .pagebreak {
+            page-break-before: always;
+        }
+
+
+/**/
+
+        .bg1 {
+            height: 1555px;
+            width: 1186px;
+            margin-left: 0%;
+            background-image: url(../../assets/static/images/PlotsFilePrem.png);
+            background-size: 1186px 1620px;
+            font-family: sans-serif;
+            color: black;
+            background-repeat: no-repeat;
+        }
+
+
+
+    </style>
+</head>
+<body>
+    @foreach (var item in Model)
+    {
+        if (item.Block_Name == "Premium")
+        {
+            <div class="bg1">
+                <div class="uperdiv">
+                    <div class="firstdiv">
+                        <div style="margin-top:4.5%">
+                            <label style="width:66%">@item.Plot_No</label>
+                            <label style="width:33%">@item.Block_Name</label>
+                        </div>
+                        <div style="font-size:20px">
+                            <label style="width:66%">@item.Plot_Size</label>
+                            <label style="width:33%">@item.Type</label>
+                        </div>
+                        <div style="margin-top:1%;font-size:20px">
+                            <label style="width:66%">@item.Plot_Location</label>
+                            <label style="width:33%">@Convert.ToDecimal(item.Area).ToString("0.##") SqFt</label>
+                        </div>
+                        <div style="margin-top:1.5%;font-size:20px">
+                            <label style="width:76%">@item.Dimension</label>
+                        </div>
+                    </div>
+                    <div class="secdiv">
+                        <div class="imageqr">
+                            @{ var img = item.Type + "_" + item.Block_Name + "_" + item.Plot_No + ".png";}
+                            <img class="imageqrs" src="~/Repository/QR Codes/@img" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pagebreak"></div>
+        }
+        else
+        {
+            <div class="bg">
+                <div class="uperdiv">
+                    <div class="firstdiv">
+                        <div style="margin-top:2.5%">
+                            <label style="width:40%">@item.Plot_No</label>
+                            <label style="width:30%">@item.Block_Name</label>
+                            <label style="width:28%">@item.Plot_Size</label>
+                        </div>
+                        <div style="margin-top:3%;font-size:20px">
+                            <label style="width:15%"></label>
+                            <label style="width:56%">@item.Plot_Location</label>
+                            <label style="width:27%">@item.Type</label>
+                        </div>
+                        <div style="margin-top:3%;font-size:20px">
+                            <label style="width:76%">@item.Dimension</label>
+                            <label style="width:23%">@Convert.ToDecimal(item.Area).ToString("0.##") SqFt</label>
+                        </div>
+                    </div>
+                    <div class="secdiv">
+                        <div class="imageqr">
+                            @{ var img = item.Type + "_" + item.Block_Name + "_" + item.Plot_No + ".png";}
+                            <img class="imageqrs" src="~/Repository/QR Codes/@img" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pagebreak"></div>
+        }
+
+
+    }
+
+</body>
+</html>

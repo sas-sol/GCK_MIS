@@ -1,0 +1,59 @@
+﻿
+
+<div class="form-row">
+    <div class="col-md-12" style="text-align:center">
+        <h4><u>Real Estate Project Configuration</u></h4>
+    </div>
+    <div class="col-md-2">
+        <div class="vertical-menu">
+            <a href="javascript:void(0)" class="active sideLink" data-typ="/RealEstateProjects/ProjectList/">Project List</a>
+            <a href="javascript:void(0)" class="sideLink " data-typ="/RealEstateProjects/Create/">Real Estate Project</a>
+            <a href="javascript:void(0)" class="sideLink" data-typ="/RealEstatePhases/Create/">Phase</a>
+            <a href="javascript:void(0)" class="sideLink" data-typ="/RealEstateBlocks/Create/">Block</a>
+            <a href="javascript:void(0)" class="sideLink" data-typ="/Plots/CreatePlotInventory/">Plots</a>
+        </div>
+    </div>
+    <div class="col-md-10">
+        <div id="prj-conf" class="tab-pane">
+            @{ Html.RenderAction("ProjectList", "RealEstateProjects");}
+        </div>
+    </div>
+</div>
+
+<script>
+    $('.sideLink').unbind().click(function () {
+        if (!$(this).hasClass('active')) {
+            $(this).addClass('active');
+            $(this).prevAll('.sideLink').removeClass('active');
+            $(this).nextAll('.sideLink').removeClass('active');
+            let typeOfLink = $(this).attr('data-typ');
+            SASLoad($('#prj-conf'));
+            $('#prj-conf').load(typeOfLink, function () {
+                SASUnLoad($('#prj-conf'));
+            });
+        }
+    });
+</script>
+
+<style>
+    .vertical-menu {
+        width: 200px;
+    }
+
+        .vertical-menu a {
+            background-color: #eee;
+            color: black;
+            display: block;
+            padding: 12px;
+            text-decoration: none;
+        }
+
+            .vertical-menu a:hover {
+                background-color: #ccc;
+            }
+
+            .vertical-menu a.active {
+                background-color: #D0232A;
+                color: white !important;
+            }
+</style>

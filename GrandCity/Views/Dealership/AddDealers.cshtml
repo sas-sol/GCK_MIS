@@ -1,0 +1,47 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Dealer>
+@using (Html.BeginForm("UpdateDealerInfo", "Dealership", FormMethod.Post, new { @id = "delrs-up-inf", @class = "", role = "form" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label>Dealership Name</label>
+            <input type="text" class="form-control" id="deal-nam">
+        </div>
+        <div class="form-group col-md-6">
+            <label>Registeration Date</label>
+            <input type="text" class="form-control" data-provide="datepicker" id="reg-dat">
+        </div>
+    </div>
+    if (Model.Any())
+    {
+        foreach (var item in Model)
+        {
+            <div class="form-row">
+                <div class="form-group col-md-2">
+                    <label>Name</label>
+                    <input type="text" class="form-control" value="@item.Name">
+                </div>
+                <div class="form-group col-md-2">
+                    <label>Father Name</label>
+                    <input type="text" class="form-control" value="@item.Father_Name">
+                </div>
+                <div class="form-group col-md-2">
+                    <label>CNIC</label>
+                    <input type="text" class="form-control" value="@item.CNIC_NICOP">
+                </div>
+                <div class="form-group col-md-2">
+                    <label>Mobile 1</label>
+                    <input type="text" class="form-control" value="@item.Mobile_1">
+                </div>
+                <div class="form-group col-md-3">
+                    <label>Mobile 2</label>
+                    <input type="text" class="form-control" value="@item.Mobile_2">
+                </div>
+            </div>
+        }
+    }
+    else
+    {
+        <h6>No Dealers Info Added</h6>
+    }
+}

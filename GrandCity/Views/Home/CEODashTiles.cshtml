@@ -1,0 +1,565 @@
+﻿<div class="row">
+    <ul class="info-blocks">
+        @{
+            if (ViewBag.Dash == "dealer")
+            {
+                <li class="bg-danger">
+                    <div class="top-info">
+                        <a href="javascript:void(0);" class="get-link text-white" data-link="/Dealership/DealerFormAssociation/">Generate Files</a>
+                    </div>
+                </li>
+                <li class="bg-danger text-white">
+                    <div class="top-info">
+                        <a href="javascript:void(0);" class="get-link text-white" data-link="/Dealership/AddDealer/">Add Dealerships</a>
+                    </div>
+                </li>
+                <li class="bg-secondary text-white">
+                    <div class="top-info">
+                        <a href="javascript:void(0);" class="get-link text-white" data-link="/Dealership/AllDealerships/">Dealership Details</a>
+                    </div>
+                </li>
+                <hr />
+                <li class="bg-info">
+                    <div class="top-info">
+                        <a href="javascript:void(0);" class="get-link text-white" data-link="/Dealership/Deal/">Add Deal</a>
+                    </div>
+                </li>
+                <li class="bg-info">
+                    <div class="top-info">
+                        <a href="javascript:void(0);" class="get-link text-white" data-link="/Dealership/DealList/">Deals List</a>
+                    </div>
+                </li>
+
+            }
+            else if (ViewBag.Dash == "cash counter")
+            {
+
+                <li class="bg-primary">
+                    <div class="top-info">
+                        <a href="javascript:void(0);" class="get-link text-white" data-link="/Installments/ReceiveInstallments/">Receive Installments</a>
+                    </div>
+                </li>
+                <li class="bg-secondary text-white">
+                    <div class="top-info">
+                        <a href="javascript:void(0);" class="get-link text-white" data-link="/FileSystem/RegisterFile/">New File Registeration</a>
+                    </div>
+                </li>
+                <li class="bg-secondary text-white">
+                    <div class="top-info">
+                        <a href="javascript:void(0);" class="get-link text-white" data-link="/Installments/ReceivePlotInstallments/">Plot Installments</a>
+                    </div>
+                </li>
+                <li class="bg-danger">
+                    <div class="top-info">
+                        <a href="javascript:void(0);" class="get-link text-white" data-link="/FileSystem/FileTransfer/">File Transfer</a>
+                    </div>
+                </li>
+                <li class="bg-primary text-white">
+                    <div class="top-info">
+                        <a href="javascript:void(0);" class="get-link text-white" data-link="/Finance/AllCancelRequests/">Receipt Cancelations Requests</a>
+                    </div>
+                </li>
+                <li class="bg-info text-white">
+                    <div class="top-info">
+                        <a href="javascript:void(0);" class="get-link text-white" data-link="/Plots/PlotOwnership/">Plot Registeration</a>
+                    </div>
+                </li>
+                <li class="bg-danger">
+                    <div class="top-info">
+                        <a href="javascript:void(0);" class="get-link text-white" data-link="/Transfer/PlotTransfer/">Plot Transfer</a>
+                    </div>
+                </li>
+                <li class="bg-danger">
+                    <div class="top-info">
+                        <a href="javascript:void(0);" class="get-link text-white" data-link="/ServiceCharges/ServiceChargesBillPayment/">Service Charges Recovery</a>
+                    </div>
+                </li>
+                <li class="bg-info">
+                    <div class="top-info">
+                        <a href="javascript:void(0);" class="get-link text-white" data-link="/ServiceCharges/NewConnection/">New Connection</a>
+                    </div>
+                </li>
+                <li class="bg-primary">
+                    <div class="top-info">
+                        <a href="javascript:void(0);" class="get-link text-white" data-link="/ServiceCharges/FineCollection/">Fine Collection</a>
+                    </div>
+                </li>
+                <li class="bg-danger">
+                    <div class="top-info">
+                        <a href="javascript:void(0);" class="get-link text-white" data-link="/Leads/LeadsPayments/">Leads Receipts</a>
+                    </div>
+                </li>
+                <li class="bg-danger">
+                    <div class="top-info">
+                        <a href="javascript:void(0);" class="get-link text-white" data-link="/Vouchers/VoucherRequest/">Leads Vouchers</a>
+                    </div>
+                </li>
+                <li class="bg-info">
+                    <div class="top-info">
+                        <a href="javascript:void(0);" class="get-link text-white" data-link="/Dealership/Receipt/">Deal Receipt</a>
+                    </div>
+                </li>
+                <li class="bg-info">
+                    <div class="top-info">
+                        <a href="javascript:void(0);" class="get-link text-white" data-link="/Dealership/DealFiles/">List Deal Files</a>
+                    </div>
+                </li>
+
+            }
+            else if (ViewBag.Dash == "file management")
+            {
+                <li class="bg-info">
+                    <div class="top-info">
+                        <a href="javascript:void(0);" class="get-link text-white" data-link="/FileSystem/FileInformation/">File Information</a>
+                    </div>
+                </li>
+                <li class="bg-primary text-white">
+                    <div class="top-info">
+                        <a href="javascript:void(0);" class="get-link text-white" data-link="/FileSystem/UpdateInformation/">Update Information</a>
+                    </div>
+                </li>
+                <li class="bg-danger">
+                    <div class="top-info">
+                        <a href="javascript:void(0);" class="get-link text-white" data-link="/FileSystem/OverDueFiles/">Overdue Files</a>
+                    </div>
+                </li>
+
+            }
+            else if (ViewBag.Dash == "plot management")
+            {
+                <li class="bg-danger text-white">
+                    <div class="top-info">
+                        <a href="javascript:void(0);" class="get-link text-white" data-link="/Plots/PlotInformation/">Plot Information</a>
+                    </div>
+                </li>
+                <li class="bg-success text-white">
+                    <div class="top-info">
+                        <a href="javascript:void(0);" class="get-link text-white" data-link="/Plots/UpdatePlotInformation/">Update Plots Information</a>
+                    </div>
+                </li>
+                <li class="bg-primary text-white">
+                    <div class="top-info">
+                        <a href="javascript:void(0);" class="get-link text-white" data-link="/Plots/NewAllotmentLetters/">New Allotment Letters</a>
+                    </div>
+                </li>
+                <li class="bg-secondary text-white">
+                    <div class="top-info">
+                        <a href="javascript:void(0);" class="get-link text-white" data-link="/Plots/AllotmentLettersList/">Allotment Letters List</a>
+                    </div>
+                </li>
+                <li class="bg-primary text-white">
+                    <div class="top-info">
+                        <a href="javascript:void(0);" class="get-link text-white" data-link="/Transfer/PlotTransferRequestList/">Plot Transfer Requests</a>
+                    </div>
+                </li>
+                <li class="bg-info">
+                    <div class="top-info">
+                        <a href="javascript:void(0);" class="get-link text-white" data-link="/ServiceCharges/ElectricityBillPayment/">Electricity Charges Recovery</a>
+                    </div>
+                </li>
+                <li class="bg-primary">
+                    <div class="top-info">
+                        <a href="javascript:void(0);" class="get-link text-white" data-link="/Plots/CancellationReqs/">Plot Cancellation Requests</a>
+                    </div>
+                </li>
+                <li class="bg-primary">
+                    <div class="top-info">
+                        <a href="javascript:void(0);" class="get-link text-white" data-link="/Reports/TransferAllotmentLetters/">Transfer Plot Allotment Letters</a>
+                    </div>
+                </li>
+                <li class="bg-info">
+                    <div class="top-info">
+                        <a href="javascript:void(0);" class="get-link text-white" data-link="/Plots/AllotmentTrackingViews/">Allotment Letter Tracking</a>
+                    </div>
+                </li>
+                <li class="bg-primary">
+                    <div class="top-info">
+                        <a href="javascript:void(0);" class="get-link text-white" data-link="/Plots/ExtraAmountRefund/">Receipt Refund Requests</a>
+                    </div>
+                </li>
+                <li class="bg-danger text-white">
+                    <div class="top-info">
+                        <a href="javascript:void(0);" class="get-link text-white" data-link="/Plots/OverDuePlots/">Plot Cancellations</a>
+                    </div>
+                </li>
+            }
+            else if (ViewBag.Dash == "file delivery")
+            {
+                <li class="bg-primary">
+                    <div class="top-info">
+                        <a href="javascript:void(0);" class="get-link text-white" data-link="/FileSystem/FileDelivery/">File Delivery</a>
+                    </div>
+                </li>
+                <li class="bg-primary text-white">
+                    <div class="top-info">
+                        <a href="javascript:void(0);" class="get-link text-white" data-link="/FileSystem/TransferRequestList/">All Transfer Requests</a>
+                    </div>
+                </li>
+            }
+            else if (ViewBag.Dash == "prj management")
+            {
+                <li class="bg-primary">
+                    <div class="top-info">
+                        <a href="javascript:void(0);" class="get-link text-white" data-link="/Projects/AllProjects/">Projects List</a>
+                    </div>
+                </li>
+            }
+            else if (ViewBag.Dash == "tickets")
+            {
+                <li class="bg-primary">
+                    <div class="top-info">
+                        <a href="javascript:void(0);" class="get-link text-white" data-link="/Tickets/AllTickets/">All Tickets</a>
+                    </div>
+                </li>
+                <li class="bg-primary">
+                    <div class="top-info">
+                        <a href="javascript:void(0);" class="get-link text-white" data-link="/Tickets/ReceptionTicketing/">Reception Tickets</a>
+                    </div>
+                </li>
+                <li class="bg-primary">
+                    <div class="top-info">
+                        <a href="javascript:void(0);" class="get-link text-white" data-link="/Tickets/MyTickets/">My Tickets</a>
+                    </div>
+                </li>
+            }
+            else if (ViewBag.Dash == "transfer requests")
+            {
+                <li class="bg-primary text-white">
+                    <div class="top-info">
+                        <a href="javascript:void(0);" class="get-link text-white" data-link="/FileSystem/TransferRequest/">Transfer Request</a>
+                    </div>
+                </li>
+                <li class="bg-primary text-white">
+                    <div class="top-info">
+                        <a href="javascript:void(0);" class="get-link text-white" data-link="/Transfer/PlotTransferRequest/">Plots Transfer Request</a>
+                    </div>
+                </li>
+            }
+            else if (ViewBag.Dash == "accounts")
+            {
+                <li class="bg-success text-white">
+                    <div class="top-info">
+                        <a href="javascript:void(0);" class="get-link text-white" data-link="/Banking/AllBankPayments/">Cheques</a>
+                    </div>
+                </li>
+                <li class="bg-success text-white">
+                    <div class="top-info">
+                        <a href="javascript:void(0);" class="get-link text-white" data-link="/Banking/LeadAllBankPayments/">SAM Cheques</a>
+                    </div>
+                </li>
+                <li class="bg-primary text-white">
+                    <div class="top-info">
+                        <a href="javascript:void(0);" class="get-link text-white" data-link="/Banking/AllBankPayments/">Pay Orders</a>
+                    </div>
+                </li>
+                <li class="bg-info text-white">
+                    <div class="top-info">
+                        <a href="javascript:void(0);" class="get-link text-white" data-link="/Banking/AllBankPayments/">Bank Drafts</a>
+                    </div>
+                </li>
+                <li class="bg-info text-white">
+                    <div class="top-info">
+                        <a href="javascript:void(0);" class="get-link text-white" data-link="/Banking/Cash/">Cash</a>
+                    </div>
+                </li>
+                <li class="bg-info text-white">
+                    <div class="top-info">
+                        <a href="javascript:void(0);" class="get-link text-white" data-link="/Reports/RecoveryReport/">All Recovery Reports</a>
+                    </div>
+                </li>
+                <li class="bg-primary text-white">
+                    <div class="top-info">
+                        <a href="javascript:void(0);" class="get-link text-white" data-link="/Finance/UpdateRequests/">Receipt Updations</a>
+                    </div>
+                </li>
+                <li class="bg-info">
+                    <div class="top-info">
+                        <a href="javascript:void(0);" class="get-link text-white" data-link="/Banking/LeadAllBankPayments?Company=SPE">Property Exchange Instruments</a>
+                    </div>
+                </li>
+                <li class="bg-primary">
+                    <div class="top-info">
+                        <a href="javascript:void(0);" class="get-link text-white" data-link="/Banking/LeadAllBankPayments?Company=SAM">SA Marketing Instruments</a>
+                    </div>
+                </li>
+            }
+            else if (ViewBag.Dash == "audit")
+            {
+                <li class="bg-primary text-white">
+                    <div class="top-info">
+                        <a href="javascript:void(0);" class="get-link text-white" data-link="/FileSystem/FileVerification/">File Verification</a>
+                    </div>
+                </li>
+                <li class="bg-primary text-white">
+                    <div class="top-info">
+                        <a href="javascript:void(0);" class="get-link text-white" data-link="/Plots/AllotmentRequest/">Allotment Letter Request</a>
+                    </div>
+                </li>
+                <li class="bg-secondary text-white">
+                    <div class="top-info">
+                        <a href="javascript:void(0);" class="get-link text-white" data-link="/Plots/PostPlotVerification/">Pre Verification of Plots</a>
+                    </div>
+                </li>
+                <li class="bg-danger">
+                    <div class="top-info">
+                        <a href="javascript:void(0);" class="get-link text-white" data-link="/Plots/ReqVerificationList/">Verification List</a>
+                    </div>
+                </li>
+
+            }
+            else if (ViewBag.Dash == "service charges")
+            {
+                <li class="bg-success">
+                    <div class="top-info">
+                        <a href="javascript:void(0);" class="get-link text-white" data-link="/ServiceCharges/MeterReading/">Add Meter Readings</a>
+                    </div>
+                </li>
+                <li class="bg-danger">
+                    <div class="top-info">
+                        <a href="javascript:void(0);" class="get-link text-white" data-link="/ServiceCharges/Bills/">Service Charges Details</a>
+                    </div>
+                </li>
+                <li class="bg-info">
+                    <div class="top-info">
+                        <a href="javascript:void(0);" class="get-link text-white" data-link="/ServiceCharges/ElectricityBill/">Electricity Charges Details</a>
+                    </div>
+                </li>
+                <li class="bg-info">
+                    <div class="top-info">
+                        <a href="javascript:void(0);" class="get-link text-white" data-link="/ServiceCharges/ManageServiceCharges/">Manage Service Charges</a>
+                    </div>
+                </li>
+            }
+
+            else if (ViewBag.Dash == "hr")
+            {
+                <h4>Company Structure</h4>
+                <li class="bg-info">
+                    <div class="top-info">
+                        <a href="javascript:void(0);" class="get-link text-white" data-link="/Company/AddCompany/">Add Company</a>
+                    </div>
+                </li>
+                <li class="bg-info">
+                    <div class="top-info">
+                        <a href="javascript:void(0);" class="get-link text-white" data-link="/Company/AddDepartments/">Add Department</a>
+                    </div>
+                </li>
+                <li class="bg-info">
+                    <div class="top-info">
+                        <a href="javascript:void(0);" class="get-link text-white" data-link="/Company/AddDesignation/">Add Designation</a>
+                    </div>
+                </li>
+                <li class="bg-info">
+                    <div class="top-info">
+                        <a href="javascript:void(0);" class="get-link text-white" data-link="/Company/UpdateCompanyDepartmentDesignation/">Update</a>
+                    </div>
+                </li>
+                <li class="bg-info">
+                    <div class="top-info">
+                        <a href="javascript:void(0);" class="get-link text-white" data-link="/Company/UpdateParentCompany/">Hierarchy Change</a>
+                    </div>
+                </li>
+                <hr />
+                <h4>Employees</h4>
+                <li class="bg-info">
+                    <div class="top-info">
+                        <a href="javascript:void(0);" class="get-link text-white" data-link="/HumanResource/EmployeeListing/">Employees List</a>
+                    </div>
+                </li>
+                <li class="bg-info">
+                    <div class="top-info">
+                        <a href="javascript:void(0);" class="get-link text-white" data-link="/HumanResource/AddEmployee/">Add New Employee</a>
+                    </div>
+                </li>
+                <li class="bg-info">
+                    <div class="top-info">
+                        <a href="javascript:void(0);" class="get-link text-white" data-link="/HumanResource/Organogram/">Organization Chart</a>
+                    </div>
+                </li>
+                <hr />
+                <h4>Salaries</h4>
+                <li class="bg-info">
+                    <div class="top-info">
+                        <a href="javascript:void(0);" class="get-link text-white" data-link="/Salaries/GenerateiontableSalariesSlip/">Generate This Month Salary</a>
+                    </div>
+                </li>
+                <li class="bg-info">
+                    <div class="top-info">
+                        <a href="javascript:void(0);" class="get-link text-white" data-link="/Salaries/AllSalaries/">Salary List</a>
+                    </div>
+                </li>
+                <li class="bg-info">
+                    <div class="top-info">
+                        <a href="javascript:void(0);" class="get-link text-white" data-link="/Salaries/InProcessSalariesSlip/">Human Resources</a>
+                    </div>
+                </li>
+                <li class="bg-info">
+                    <div class="top-info">
+                        <a href="javascript:void(0);" class="get-link text-white" data-link="/Salaries/FinanceSalariesSlip/">Finance</a>
+                    </div>
+                </li>
+                <li class="bg-info">
+                    <div class="top-info">
+                        <a href="javascript:void(0);" class="get-link text-white" data-link="/Salaries/FinanceFinalSlip/">Final Finance</a>
+                    </div>
+                </li>
+                <li class="bg-info">
+                    <div class="top-info">
+                        <a href="javascript:void(0);" class="get-link text-white" data-link="/Salaries/SalarySearch/">Search By Date Salary</a>
+                    </div>
+                </li>
+                <hr />
+                <h4>Arrears</h4>
+
+
+                <li class="bg-info">
+                    <div class="top-info">
+                        <a href="javascript:void(0);" class="get-link text-white" data-link="/ArrearsSalaries/SalaryIndex/">Select Employee For Arrears</a>
+                    </div>
+                </li>
+                <li class="bg-info">
+                    <div class="top-info">
+                        <a href="javascript:void(0);" class="get-link text-white" data-link="/ArrearsSalaries/AllSalaries/">Arrear Salary List</a>
+                    </div>
+                </li>
+
+
+                <li class="bg-info">
+                    <div class="top-info">
+                        <a href="javascript:void(0);" class="get-link text-white" data-link="/ArrearsSalaries/InProcessSalariesSlip/">Arrear Approval</a>
+                    </div>
+                </li>
+
+                <li class="bg-info">
+                    <div class="top-info">
+                        <a href="javascript:void(0);" class="get-link text-white" data-link="/ArrearsSalaries/FinanceSalariesSlip/">Arrear Finance</a>
+                    </div>
+                </li>
+
+                <hr />
+                <h4>Leaves</h4>
+                <li class="bg-info">
+                    <div class="top-info">
+                        <a href="javascript:void(0);" class="get-link text-white" data-link="/Leave/UserLeaves/">Leaves</a>
+                    </div>
+                </li>
+                <hr />
+                <h4>Loan & Advance Sallary</h4>
+                <li class="bg-info">
+                    <div class="top-info">
+                        <a href="javascript:void(0);" class="get-link text-white" data-link="/Loan/Index/">Application</a>
+                    </div>
+                </li>
+                <li class="bg-primary">
+                    <div class="top-info">
+                        <a href="javascript:void(0);" class="get-link text-white" data-link="/Loan/LoanForOther/">Loan For Others</a>
+                    </div>
+                </li>
+                <li class="bg-info">
+                    <div class="top-info">
+                        <a href="javascript:void(0);" class="get-link text-white" data-link="/Loan/LoanList/">Loans List</a>
+                    </div>
+                </li>
+                <li class="bg-info">
+                    <div class="top-info">
+                        <a href="javascript:void(0);" class="get-link text-white" data-link="/Loan/AdvanceList/">Advance Salary List</a>
+                    </div>
+                </li>
+            }
+            else if (ViewBag.Dash == "call center")
+            {
+                <li class="bg-primary text-white">
+                    <div class="top-info">
+                        <a href="javascript:void(0);" class="get-link text-white" data-link="/CallCenter/OverdueInstallments/">Call Center</a>
+                    </div>
+                </li>
+
+            }
+            else if (ViewBag.Dash == "asset")
+            {
+                <li class="bg-primary text-white">
+                    <div class="top-info">
+                        <a href="javascript:void(0);" class="get-link text-white" data-link="/Company/AddAsset/">Assets Details</a>
+                    </div>
+                </li>
+                <li class="bg-primary text-white">
+                    <div class="top-info">
+                        <a href="javascript:void(0);" class="get-link text-white" data-link="/Company/AssetLogsList/">Assets Log List</a>
+                    </div>
+                </li>
+
+            }
+            else if (ViewBag.Dash == "vehical")
+            {
+                <li class="bg-primary text-white">
+                    <div class="top-info">
+                        <a href="javascript:void(0);" class="get-link text-white" data-link="/Company/AddVehical/">Vehical Details</a>
+                    </div>
+                </li>
+                <li class="bg-primary text-white">
+                    <div class="top-info">
+                        <a href="javascript:void(0);" class="get-link text-white" data-link="/Company/AssetLogsList/">Assets Log List</a>
+                    </div>
+                </li>
+                <li class="bg-primary text-white">
+                    <div class="top-info">
+                        <a href="javascript:void(0);" class="get-link text-white" data-link="/Company/FuelDetails/">Fuel Details</a>
+                    </div>
+                </li>
+
+            }
+            else if (ViewBag.Dash == "sa marketing")
+            {
+                <li class="bg-primary text-white">
+                    <div class="top-info">
+                        <a href="javascript:void(0);" class="get-link text-white" data-link="/Reports/SAMRecoveryReport/">Recovery Reports</a>
+                    </div>
+                </li>
+                <li class="bg-info">
+                    <div class="top-info">
+                        <a href="javascript:void(0);" class="get-link text-white" data-link="/Leads/SAMLead">All Leads</a>
+                    </div>
+                </li>
+
+                <li class="bg-primary">
+                    <div class="top-info">
+                        <a href="javascript:void(0);" class="get-link text-white" data-link="/Reports/LeadsReports/">Leads Reports</a>
+                    </div>
+                </li>
+
+            }
+            else if (ViewBag.Dash == "property exchange")
+            {
+                <li class="bg-primary text-white">
+                    <div class="top-info">
+                        <a href="javascript:void(0);" class="get-link text-white" data-link="/Reports/SAMRecoveryReport/">Recovery Reports</a>
+                    </div>
+                </li>
+                <li class="bg-info">
+                    <div class="top-info">
+                        <a href="javascript:void(0);" class="get-link text-white" data-link="/Leads/SPELead">All Leads</a>
+                    </div>
+                </li>
+                <li class="bg-primary">
+                    <div class="top-info">
+                        <a href="javascript:void(0);" class="get-link text-white" data-link="/Reports/LeadsReports/">Leads Reports</a>
+                    </div>
+                </li>
+
+            }
+            else if (ViewBag.Dash == "reports")
+            {
+                <li class="bg-info">
+                    <div class="top-info">
+                        <a href="javascript:void(0);" class="get-link text-white" data-link="/Reports/Index">All Reports</a>
+                    </div>
+                </li>
+            }
+        }
+    </ul>
+</div>
+<style>
+    .a {
+        color: #592a88;
+    }
+</style>

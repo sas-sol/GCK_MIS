@@ -1,0 +1,144 @@
+﻿@{
+    if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+
+}
+<script src="~/Scripts/scanning.js"></script>
+<div class="row gap-20 pos-r">
+    <div class="col-md-12">
+        <div class="bgc-white p-20 bd">
+            <h6 class="c-grey-900">Dealer Registeration Fees</h6>
+            <div class="mT-30">
+                <div class="form-row">
+                    <div class="form-group  col-md-3">
+                        <label>Dealership</label>
+                        @Html.DropDownList("Dealership", null, "Select Dealership", htmlAttributes: new { @class = "form-control" })
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label>Description</label>
+                        <textarea id="desc" class="form-control"></textarea>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <input type="hidden" id="trans-id" name="TransactionId" value="@ViewBag.TransactionId" />
+                    <div class="form-row">
+                        <div class="form-group col-md-2">
+                            <label>Amount</label>
+                            <input class="form-control coma" placeholder="12,345" required>
+                            <input type="hidden" id="amt" name="Amount" class="amt" required>
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label>Cash / Bank</label>
+                            <select class="form-control paytypesel-test" id="cah-chq-bak" name="PaymentType">
+                                <option value="Cash">Cash</option>
+                                <option value="BankDraft">Bank Draft</option>
+                                <option value="Cheque">Cheque</option>
+                                <option value="PayOrder">Pay Order</option>
+                                <option value="Online_Cash">Online - Cash</option>
+                                <option value="Online_Cheque">Online - Cheque</option>
+                                <option value="Online_Payorder">Online - PayOrder</option>
+                                <option value="Online_Bankdraft">Online - BankDraft</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-3 paymentotherinfo">
+                            <label id="paytypelabel"></label>
+                            <input type="text" class="form-control" id="inst-no" name="PayChqNo" placeholder="" disabled>
+                        </div>
+                        <div class="form-group col-md-3 paymentotherinfo">
+                            <label>Bank</label>
+                            @Html.DropDownList("Bank", null, "Choose..", new { @class = "form-control", disabled = "" })
+                        </div>
+                        <div class="form-group col-md-2 paymentotherinfo">
+                            <label>Branch </label>
+                            <input type="text" class="form-control" id="Branch" name="Branch" placeholder="Mall Rd" disabled>
+                        </div>
+                        <div class="form-group col-md-2 paymentotherinfo">
+                            <label>Date</label>
+                            <input type="text" class="form-control" id="inst-date" data-provide="datepicker" name="Ch_bk_Pay_Date" placeholder="mm/dd/yyyy" disabled required>
+                        </div>
+                        <div class="form-group col-md-2 paymentotherinfo">
+                            <label>Upload a Attachment</label>
+                            <input type="file" id="quote-file" />
+                        </div>
+                        <div class="form-group col-md-2 paymentotherinfo">
+                            <label>Scan File </label>
+                            <button class=" btn btn-primary" data-v="1" type="button" id="scanbtn">Scan</button>
+                        </div>
+                        <div id="images-1" class="col-md-10"></div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-3">
+                            <button class="btn btn-primary del-sec-fee">Generate Receipt</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(function () {
+        $('#Dealership').select2();
+    });
+    //
+    $(document).on("click", ".del-sec-fee", function () {
+        
+        var dat = new FormData();
+        var files = $('#quote-file').get(0).files;
+        var paytype = $("#cah-chq-bak").val();
+        if (files.length == 0) {
+            var img = $("#scanned").attr('src');
+            if (paytype != "Cash" && (img == null || img == '')) {
+                alert('Attachment is not available please Scan Image first');
+                return false;
+            }
+            else {
+                dat.append("Img", img);
+            }
+        }
+
+        dat.append("Files", files[0]);
+        dat.append("Id", $("#Dealership").val());
+        dat.append("Amount", $("#amt").val());
+        dat.append("TransactionId", $("#trans-id").val());
+        dat.append("PaymentType", $("#cah-chq-bak").val());
+        dat.append("Inst_No", $("#inst-no").val());
+        dat.append("Bank", $("#Bank").val());
+        dat.append("Inst_Date", $("#inst-date").val());
+        dat.append("Branch", $("#Branch").val());
+        dat.append("Description", $("#desc").val());
+
+        if (confirm("Are you sure want to Generate Receipt")) {
+            $.ajax({
+                type: "POST",
+                processData: false,
+                contentType: false,
+                url: '/Dealership/DealerSecurity/',
+                data: dat,
+                success: function (data) {
+                    if (data.Status == true) {
+                        window.open("/Receipts/DealerAdvance?Id=" + data.Receiptid + "&Token=" + data.Token, '_blank');
+                        window.location.reload();
+                    }
+                    else {
+                        alert(data.Msg)
+                    }
+                },
+                error: function () {
+                    alert("Error Occured");
+                }
+            });
+        }
+    });
+</script>
+<style>
+    .paymentotherinfo {
+        display: none
+    }
+</style>

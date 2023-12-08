@@ -1,0 +1,61 @@
+﻿
+@model IEnumerable<MeherEstateDevelopers.Models.Electricity_Meter_Reqs>
+
+@if (Model.Any())
+{
+    <table class="table reqs-tbl">
+        <thead>
+            <tr class="central-text-align">
+                <th scope="col">Sr.</th>
+                <th scope="col">Plot No</th>
+                <th scope="col">Block</th>
+                <th scope="col">Requested By</th>
+                <th scope="col">Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{ int i = 1;}
+            @foreach (var item in Model)
+            {
+                <tr data-toggle="modal" data-target="#Modal" class="pointer gh-ty-fg central-text-align" data-trid="@item.Id">
+                    <td>@i</td>
+                    <td>@item.Plot_No</td>
+                    <td>@item.Block_Name</td>
+                    <td>@item.Requested_By_Name</td>
+                    <td>@item.Request_Date.Value.ToShortDateString()</td>
+                </tr>
+                i++;
+            }
+        </tbody>
+    </table>
+}
+
+else
+{
+    <table class="table table-bordered">
+        <thead>
+            <tr class="bgc-red-50">
+                <th colspan="6" class="central-text-align">
+                    No Record Found
+                </th>
+            </tr>
+        </thead>
+    </table>
+}
+
+<script>
+    $(document).on('click', '.gh-ty-fg', function () {
+
+        let a = parseInt($(this).attr('data-trid'));
+        EmptyModel();
+        $('#ModalLabel').text("Details");
+        $('#modalbody').load('/ServiceCharges/MetChgReqDets/', { id: a });
+    });
+    $(document).ready(function () {
+        $('.reqs-tbl').DataTable({
+            dom: 'Bfrtip',
+            buttons: [
+            ]
+        });
+    });
+</script>

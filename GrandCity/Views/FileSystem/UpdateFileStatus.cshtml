@@ -1,0 +1,31 @@
+﻿@using (Html.BeginForm("FileStatusUpdate", "FileSystem", FormMethod.Post, new { @id = "up-f-stat", @class = "", role = "form", autocomplete = "off" }))
+{
+    @Html.AntiForgeryToken()
+    <input type="hidden" name="FileId" value="@ViewBag.FileId" id="FileId" />
+    <div class="form-row">
+        <div class="form-group col-md-3">
+            <label>Current Plot Status</label>
+            @{ string stat = ViewBag.C_Status.ToString().Replace('_', ' ');}
+            <h5>@stat</h5>
+        </div>
+        <div class="form-group col-md-3">
+            <label>New Status</label>
+            <select class="form-control" name="Status">
+                <option>Choose ..</option>
+                <option value="Temporary_Cancelled">Temporary Cancelled</option>
+                <option value="Cancelled">Cancelled</option>
+                <option value="Repurchased">Repurchased</option>
+            </select>
+        </div>
+        <div class="form-group col-md-6">
+            <label>Reason</label>
+            <textarea class="form-control" name="Remarks" required></textarea>
+        </div>
+    </div>
+}
+<script>
+    $(function () {
+        $("#ModalLabel").text("Update File Status");
+        $('.modal-footer').append('<button class="btn btn-primary" id="up-f-stat-btn" type="button">Update Status</button>');
+    });
+</script>

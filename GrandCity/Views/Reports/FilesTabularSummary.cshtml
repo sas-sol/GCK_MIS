@@ -1,0 +1,44 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Files_ABS_Summary>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th colspan="2"></th>
+            <th colspan="2">Residential</th>
+            <th colspan="2">Commercial</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        <tr>
+            <td colspan="2">Total</td>
+            <td colspan="2">@Model.Where(x => x.TypeName == "Residential").Count()</td>
+            <td colspan="2">@Model.Where(x => x.TypeName == "Commercial").Count()</td>
+        </tr>
+        <tr>
+            <td colspan="2">Ballotted</td>
+            <td colspan="2">@Model.Where(x => x.BallotPlotId != null && x.TypeName == "Residential").Count()</td>
+            <td colspan="2">@Model.Where(x => x.BallotPlotId != null && x.TypeName == "Commercial").Count()</td>
+        </tr>
+        <tr>
+            <td colspan="2">No Yet Ballotted</td>
+            <td colspan="2">@(Model.Where(x => x.BallotPlotId == null && x.TypeName == "Residential").Count() - Model.Where(x => x.BallotPlotId != null && x.TypeName == "Residential").Count())</td>
+            <td colspan="2">@(Model.Where(x => x.BallotPlotId == null && x.TypeName == "Commercial").Count() - Model.Where(x => x.BallotPlotId != null && x.TypeName == "Commercial").Count())</td>
+        </tr>
+
+        @{var remFiles = Model.Where(x => x.BallotPlotId == null).GroupBy(x => x.StatusVal); }
+
+        <tr>
+            <td colspan="6" style="text-align:center">Files Not Ballotted Details</td>
+        </tr>
+
+        @foreach (var item in remFiles)
+        {
+            <tr>
+                <td colspan="2">@item.Select(x => x.Status).FirstOrDefault()</td>
+                <td colspan="2">@item.Where(x => x.TypeName == "Residential").Count()</td>
+                <td colspan="2">@item.Where(x => x.TypeName == "Commercial").Count()</td>
+            </tr>
+
+        }
+    </tbody>
+</table>

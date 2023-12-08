@@ -1,0 +1,211 @@
+﻿@model MeherEstateDevelopers.Models.HOH_Shops
+@{ if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+}
+<style>
+    .info-blocks > li {
+        min-width: 0px !important;
+        margin: 0px !important;
+    }
+</style>
+<div class="row">
+    <div class="col-md-12">
+        <h3>@Model.ShopName</h3>
+        <h6>@Model.Description</h6>
+    </div>
+</div>
+<div class="row">
+    <ul class="info-blocks">
+
+        @*<div class="row">
+            <div class="col-md-3">
+                @{ Html.RenderAction("LateCommersWidget", "Attendance");}
+            </div>
+            <div class="col-md-6">
+                @{ Html.RenderAction("ProbationEndEmployeesWidget", "HumanResource");}
+            </div>
+            <div class="col-md-12">
+                @{ Html.RenderAction("HiringFiringGraph", "HumanResource");}
+            </div>
+        </div>*@
+        <li>
+            <div class="hexagon bg-grey">
+                <div class="text" style="">
+                    <i class="fas fa-dolly-flatbed fa-3x"></i>
+                    <br />
+                    <a style="color:white !important" href="/HOH/CreatePurchase?ShopId=@Model.Id">Purchases</a>
+                </div>
+            </div>
+        </li>
+        <li>
+            <div class="hexagon bg-red">
+                <div class="text" style="">
+                    <i class="fas fa-shopping-bag fa-3x"></i>
+                    <br />
+                    <a style="color:white !important" href="/HOH/CreateSales?ShopId=@Model.Id">Sales</a>
+                </div>
+            </div>
+        </li>
+        <li>
+            <div class="hexagon bg-yellow">
+                <div class="text" style="">
+                    <i class="fas fa-shopping-bag fa-3x"></i>
+                    <br />
+                    <a style="color:white !important" href="/HOH/CreateSalesFood?ShopId=@Model.Id">Food - Sales</a>
+                </div>
+            </div>
+        </li>
+        <li>
+            <div class="hexagon bg-blue">
+                <div class="text" style="">
+                    <i class="fas fa-expand fa-3x"></i>
+                    <br />
+                    <a style="color:white !important" href="/HOH/CreateOtherExpense?ShopId=@Model.Id">Other Expense</a>
+                </div>
+            </div>
+        </li>
+        <li>
+            <div class="hexagon bg-green">
+                <div class="text" style="">
+                    <i class="fas fa-caret-left fa-3x"></i>
+                    <br />
+                    <a style="color:white !important" href="/HOH/InventoryList?ShopID=@Model.Id">Inventory</a>
+                </div>
+            </div>
+        </li>
+        <li>
+            <div class="hexagon bg-red">
+                <div class="text" style="">
+                    <i class="fas fa-save fa-3x"></i>
+                    <br />
+                    <a style="color:white !important" href="/HOH/SetSaleRate?ShopID=@Model.Id">Rates</a>
+                </div>
+            </div>
+        </li>
+        <hr />
+        <h4>Reports</h4>
+        <li>
+            <div class="hexagon bg-yellow" style="margin-top:25%">
+                <div class="text">
+                    <i class="fas fa-gavel fa-3x"></i>
+                    <br />
+                    <a style="color:white !important" href="/HOH/HohPurchase?ShopId=@Model.Id">Purchases Report</a>
+                </div>
+            </div>
+        </li>
+        <li>
+            <div class="hexagon bg-green">
+                <div class="text" style="">
+                    <i class="fas fa-calendar fa-3x"></i>
+                    <br />
+                    <a style="color:white !important" href="/HOH/HohSales?ShopId=@Model.Id">Sales  Report</a>
+                </div>
+            </div>
+        </li>
+        <li>
+            <div class="hexagon bg-red">
+                <div class="text" style="">
+                    <i class="fas fa-exclamation fa-3x"></i>
+                    <br />
+                    <a style="color:white !important" href="/HOH/HohOtherExpense?ShopId=@Model.Id">Other Expense  Report</a>
+                </div>
+            </div>
+        </li>
+    </ul>
+</div>
+<style>
+    .a {
+        color: #592a88;
+    }
+
+    .hexagon a {
+        font-size: 10px;
+        font-weight: bold;
+    }
+
+    .text {
+        position: absolute;
+        z-index: 1000;
+        width: 100%;
+        text-align: center;
+        font-size: 17px;
+    }
+
+    .hexagon {
+        position: relative;
+        width: 160px;
+        height: 90px;
+        border-left: solid 2px transparent;
+        border-right: solid 2px transparent;
+        cursor: pointer;
+        padding-top: 10px;
+    }
+
+        .hexagon:before,
+        .hexagon:after {
+            content: "";
+            position: absolute;
+            z-index: 1;
+            width: 113px;
+            height: 113px;
+            -webkit-transform: scaleY(0.5774) rotate(-45deg);
+            -ms-transform: scaleY(0.5774) rotate(-45deg);
+            transform: scaleY(0.5774) rotate(-45deg);
+            background-color: inherit;
+            left: 21.5px;
+            transition: .3s ease-out;
+        }
+
+        .hexagon:before {
+            top: -57px;
+            border-top: solid transparent;
+            border-right: solid transparent;
+        }
+
+        .hexagon:after {
+            bottom: -57px;
+            border-bottom: solid transparent;
+            border-left: solid transparent;
+            transition: .1s ease-out;
+        }
+
+    .heavyFont {
+        font-size: 30px;
+    }
+
+
+    .bg-red {
+        background-color: #d0232A;
+        color: white;
+    }
+
+    .bg-grey {
+        background-color: #777777;
+        color: white;
+    }
+
+    .bg-green {
+        background-color: #79c944;
+        color: white;
+    }
+
+    .bg-blue {
+        background-color: #2572ff;
+        color: white;
+    }
+
+    .bg-yellow {
+        background-color: #fb8f02;
+        color: white;
+    }
+
+    .font-white {
+        color: white;
+    }
+</style>

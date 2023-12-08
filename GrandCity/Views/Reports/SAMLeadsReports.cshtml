@@ -1,0 +1,70 @@
+﻿<div class="col-md-12 bgc-white p-20 bd">
+    <input type="hidden" id="comp" value="SAM" />
+    <div class="form-row">
+        <div class="form-group col-md-2">
+            <label>Sales Person</label>
+            @Html.DropDownList("LeadsUser", null, "Choose..", new { @class = "form-control lead_user", multiple="" })
+        </div>
+        <div class="form-group col-md-2">
+            <label>Lead Status</label>
+            <select class="form-control" name="SAM_Lead_Status" id="SAM_Lead_Status" value="">
+                <option value="">Choose..</option>
+                <option value="Mature">Initial Discussion</option>
+                <option value="Mature">Mature</option>
+                <option value="Close">Close</option>
+                <option value="Loose">Loose</option>
+            </select>
+        </div>
+        <div class="form-group col-md-1">
+            <label>Start Date</label>
+            <input type="text" class="form-control" data-provide="datepicker"  id="startdate" name="startdate" placeholder="mm/dd/yyyy" required>
+        </div>
+        <div class="form-group col-md-1">
+            <label>End Date</label>
+            <input type="text" class="form-control" data-provide="datepicker"  id="enddate" name="enddate" placeholder="mm/dd/yyyy" required>
+        </div>
+        <div class="form-group col-md-2">
+            <label>Choose Last Record</label>
+            <select class="form-control" id="opt" onchange="getleadsoptions();">
+                <option selected disabled>Choose...</option>
+                <option value="weekly">Weekly</option>
+                <option value="monthly">Monthly</option>
+                <option value="6months">6 Month</option>
+                <option value="yearly">Yearly</option>
+            </select>
+        </div>
+        <div class="form-group col-md-2">
+            <button class="btn btn-info ser-rep" style="margin-top:29px" onclick="getleadsdata()">Search</button>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="col-md-12" id="lst-deal">
+            @{Html.RenderAction("DealsListReport", "Reports", new { Startdate = DateTime.Now, Enddate = DateTime.Now, Comp = "SAM" });}
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="col-md-6" id="us-lds">
+            @{Html.RenderAction("LeadsStatusReport", "Reports", new { Startdate = DateTime.Now, Enddate = DateTime.Now, Comp = "SAM" });}
+        </div>
+        <div class="col-md-6" id="ld-stat">
+            @{Html.RenderAction("LeadsRecovery", "Reports", new { Startdate = DateTime.Now, Enddate = DateTime.Now, Comp = "SAM" });}
+        </div>
+        <div class="col-md-6" id="ld-plt-stat">
+            @{Html.RenderAction("LeadsPlotSizeReports", "Reports", new { Startdate = DateTime.Now, Enddate = DateTime.Now, Comp = "SAM" });}
+        </div>
+        <div class="col-md-6" id="pd-n-plt-stat">
+            @{Html.RenderAction("PropertyDealsPlotSizeReports", "Reports", new { Startdate = DateTime.Now, Enddate = DateTime.Now, Comp = "SAM", Type = "New_Lead" });}
+        </div>
+        <div class="col-md-6" id="pd-r-plt-stat">
+            @{Html.RenderAction("PropertyDealsPlotSizeReports", "Reports", new { Startdate = DateTime.Now, Enddate = DateTime.Now, Comp = "SAM", Type = "Resale" });}
+        </div>
+        <div class="col-md-6" id="pd-i-plt-stat">
+            @{Html.RenderAction("PropertyDealsPlotSizeReports", "Reports", new { Startdate = DateTime.Now, Enddate = DateTime.Now, Comp = "SAM", Type = "Investment" });}
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $('.lead_user').select2();
+    });
+</script>

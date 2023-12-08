@@ -1,0 +1,99 @@
+﻿@model MeherEstateDevelopers.Models.RegisterMember
+<h4 class="c-grey-900 mB-20">Basic Information</h4>
+<div class="row">
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label>Name</label>
+            <input type="text" class="form-control Name" name="Name" value="@Model.Name" readonly>
+        </div>
+        <div class="form-group col-md-6">
+            <label>Father's/Husband's Name</label>
+            <input type="text" class="form-control Father_Name" name="Father_Name" value="@Model.Father_Name" readonly>
+        </div>
+        <div class="form-group col-md-6">
+            <label>CNIC / NICOP</label>
+            <input type="text" class="form-control CNIC" name="CNIC" placeholder="12345-1234567-1  or  123456-123456-1" value="@Model.CNIC" readonly>
+        </div>
+        <div class="form-group col-md-6">
+            <label>Date Of Birth</label>
+            <input type="text" class="form-control Date_Of_Birth" data-provide="datepicker" placeholder="mm/dd/yyyy" name="" value="@string.Format("{0:MM/dd/yyyy}", Model.Date_Of_Birth)" readonly>
+        </div>
+        <div class="form-group col-md-6">
+            <label>Email</label>
+            <input type="text" class="form-control Email" name="Email" value="@Model.Email" placeholder="abc.com" readonly>
+        </div>
+        <div class="form-group col-md-6">
+            <label>Address</label>
+            <input type="text" class="form-control Address" name="Address" placeholder="1234 Main St" value="@Model.Address" readonly>
+        </div>
+        <div class="form-group col-md-6">
+            <label>City</label>
+            <input type="text" class="form-control Address" name="Address" placeholder="1234 Main St" value="@Model.City" readonly>
+        </div>
+        <div class="form-group col-md-6">
+            <label>Mobile 1</label>
+            <input type="text" class="form-control Mobile_1" placeholder="03121234567" name="Mobile_1" value="@Model.Mobile_1" readonly>
+        </div>
+        <div class="form-group col-md-6">
+            <label>Mobile 2</label>
+            <input type="text" class="form-control Mobile_2" pattern="^0\d{10}" placeholder="03121234567" name="Mobile_2" value="@Model.Mobile_2" readonly>
+        </div>
+        <div class="form-group col-md-6">
+            <label>Company Email</label>
+            <input type="text" class="form-control Company_Email" name="Company_Email" value="@Model.Company_Email" readonly>
+        </div>
+
+        <div class="form-group col-md-6">
+            <label>Marital Status</label>
+            <select class="form-control" name="Marital_Status" id="mari-stat" value="@Model.Marital_Status" readonly>
+                <option value="">Select Blood Group</option>
+                <option value="Single">Single</option>
+                <option value="Married">Married</option>
+                <option value="Separated">Separated</option>
+                <option value="Divorced">Divorced</option>
+                <option value="Widowed">Widowed</option>
+            </select>
+        </div>
+        <div class="form-group col-md-6">
+            <label>Blood Group</label>
+            <script>
+                            $(document).ready(function () {
+                                var bg = "@Model.Blood_Group";
+                                var marti = "@Model.Marital_Status";
+                                var religion= "@Model.Religion"
+                                $("#blod-grp").val(bg);
+                                $("#mari-stat").val(marti);
+                                $("#relign").val(religion);
+                            });
+            </script>
+            <select class="form-control " name="Blood_Group" id="blod-grp" value="@Model.Blood_Group" readonly>
+                <option value="">Select Blood Group</option>
+                <option value="A+">A+</option>
+                <option value="A-">A-</option>
+                <option value="B+">B+</option>
+                <option value="B-">B-</option>
+                <option value="AB+">AB+</option>
+                <option value="AB-">AB-</option>
+                <option value="O+">O+</option>
+                <option value="O-">O-</option>
+            </select>
+        </div>
+        <div class="form-group col-md-6">
+            <label>Religion</label>
+            <select class="form-control" name="Religion" id="relign" value="@Model.Religion" readonly>
+                <option value="">Select Religion</option>
+                <option value="Muslim">Muslim</option>
+                <option value="christian">Christian</option>
+            </select>
+        </div>
+
+        <div class="form-group col-md-6">
+            <label>Emergency Contact</label>
+            <input type="text" class="form-control Emergency_Contact" name="Emergency_Contact" value="@Model.Emergency_Contact" readonly>
+        </div>
+        <div class="form-group col-md-6">
+            <label>Relation with Person</label>
+            <input type="text" class="form-control Relationship" name="Relationship" value="@Model.Relationship" readonly>
+        </div>
+    </div>
+</div>

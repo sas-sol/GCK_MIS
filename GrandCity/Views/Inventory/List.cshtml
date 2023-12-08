@@ -1,0 +1,76 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.InventoryTemplate>
+<div class="bgc-white bd bdrs-3 p-20 mB-20">
+    <table id="inv" class="table table-striped table-bordered " cellspacing="0" width="100%" style="margin-left:0%">
+        <thead class="thead-dark">
+            <tr>
+                <th width="5%">Sr.</th>
+                <th>Department</th>
+                <th>Warehouse</th>
+                <th width="10%">Item Code</th>
+                <th style="width:65%">Item Name   (Length - Width - Height - Diameter - Size )</th>
+                @*<th width="15%">Warehouse</th>*@
+                <th width="10%">Qty</th>
+                <th>Quantity</th>
+                <th width="10%"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                if (Model.Any())
+                {
+                    int i = 1;
+                    foreach (var item in Model.GroupBy(x => new { x.Id, x.Dep_Id, x.Dep, x.Item_Code,x.Item_Name, x.Ware_Id, x.Warehouse_Name }).OrderBy(x=> x.Key.Dep).ThenBy(x=> x.Key.Warehouse_Name))
+                    {
+                        <tr id="@item.Key.Id">
+                            <td>@i</td>
+                            <th>@item.Key.Dep</th>
+                            <th>@item.Key.Warehouse_Name</th>
+                            <th>@item.Key.Item_Code</th>
+                            <th>@item.Key.Item_Name</th>
+                            @*<td>
+                                <select class="form-control w-h">
+                                    <option value="1">Warehouse 1</option>
+                                    <option value="2">Warehouse 2</option>
+                                    <option value="3">Warehouse 3</option>
+                                </select>
+                            </td>
+                            <script>
+                                $("#@item.Key.Id .w-h").val(@item.Key.Ware_Id);
+                            </script>*@
+                            <td>
+                                <input type="hidden" value="@item.Key.Ware_Id" class="w-h-id" />
+                                <input type="hidden" value="@item.Key.Warehouse_Name" class="w-h-nam" />
+                                <input type="hidden" value="@item.Key.Dep_Id" class="d-id" />
+                                <input type="hidden" value="@item.Key.Dep" class="d-nam" />
+                                <input type="hidden" value="@string.Format("{0:n0}",item.Sum(x=> x.Qty))" class="pqty" />
+                                <input type="text" class="qty" value="@string.Format("{0:n0}",item.Sum(x=> x.Qty))" />
+                            </td>
+                            <td>
+                                @string.Format("{0:n0}", item.Sum(x => x.Qty))
+                            </td>
+                            <td>
+                                <button class="btn btn-info in-qty">Save</button>
+                            </td>
+                        </tr>
+                        i++;
+                    }
+                }
+            }
+        </tbody>
+    </table>
+</div>
+<script>
+    $(document).ready(function () {
+        $('#inv').DataTable({
+            dom: 'Bfrtip',
+            order: [[1, 'asc']],
+            rowGroup: {
+                dataSrc: [1, 2]
+            },
+            columnDefs: [{
+                targets: [1, 2, 6],
+                visible: false
+            }]
+        });
+    });
+</script>

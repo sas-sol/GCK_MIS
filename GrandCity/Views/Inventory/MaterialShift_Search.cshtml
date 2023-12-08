@@ -1,0 +1,48 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Sp_Get_MaterialShift_List_Result>
+<table id="inv" class="table table-striped table-bordered " cellspacing="0" width="100%" style="margin-left:0%">
+    <thead class="thead-dark">
+        <tr>
+            <th>Sr</th>
+            <th>Code</th>
+            <th>Item Name</th>
+            <th>From Project</th>
+            <th>To Project</th>
+            <th>Qty</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            if (Model.Any())
+            {
+                int sr = 1;
+                // int flag = 0;
+                foreach (var gp in Model.GroupBy(x => x.Group_Id))
+                {
+                    var item2 = gp.OrderBy(x => x.Item_Id).ToList();
+                    <tr>
+                        <td>@sr</td>
+                        <td>MSN NO<b> @item2[0].IssueNote_No</b></td>
+                        <td>Issued By<b> @item2[0].IssueTo_Name</b> </td>
+                        <td>Received By<b> @item2[0].Received_By</b> </td>
+                        <td colspan="2">Date<b>  @string.Format("{0:dd-MMM-yyyy}", item2[0].IssuedTo_Date)</b> </td>
+                    </tr>
+                    <tr>
+                        <td hidden> @sr </td>
+                        <td> </td>
+                        <td> @item2[0].SKU</td>
+                        <td> @item2[0].Complete_Name</td>
+                        <td> @item2[1].Prj_Name</td>
+                        <td> @item2[0].Prj_Name</td>
+                        <td> @string.Format("{0:0,0.##}", item2[0].Qty) / @item2[0].UOM</td>
+                    </tr>
+                    sr++;
+                }
+            }
+        }
+    </tbody>
+</table>
+
+<script>
+    $('#inv').DataTable();
+</script>
+

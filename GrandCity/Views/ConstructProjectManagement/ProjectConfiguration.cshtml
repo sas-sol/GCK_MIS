@@ -1,0 +1,214 @@
+﻿@model MeherEstateDevelopers.Models.Project
+@{
+    if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else if (User.IsInRole("Staff"))
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+}
+<script src="~/Scripts/Prj.js"></script>
+<script src="~/Scripts/inv.js"></script>
+<script src="https://code.highcharts.com/gantt/highcharts-gantt.js"></script>
+<script src="https://code.highcharts.com/gantt/modules/draggable-points.js"></script>
+<link href="~/node_modules/blueimp-gallery/css/blueimp-gallery.css" rel="stylesheet" type="text/css" />
+<link href="~/node_modules/blueimp-file-upload/css/jquery.fileupload.css" rel="stylesheet" type="text/css" />
+<link href="~/node_modules/blueimp-file-upload/css/jquery.fileupload-ui.css" rel="stylesheet" type="text/css" />
+<noscript>
+    <link href="~/node_modules/blueimp-file-upload/css/jquery.fileupload-noscript.css" rel="stylesheet" type="text/css" />
+    <link href="~/node_modules/blueimp-file-upload/css/jquery.fileupload-ui-noscript.css" rel="stylesheet" type="text/css" />
+</noscript>
+<script src="~/node_modules/blueimp-file-upload/js/vendor/jquery.ui.widget.js"></script>
+<script src="~/node_modules/blueimp-tmpl/js/tmpl.js"></script>
+<script src="~/node_modules/blueimp-load-image/js/load-image.all.min.js"></script>
+<script src="~/node_modules/blueimp-canvas-to-blob/js/canvas-to-blob.js"></script>
+<script src="~/node_modules/blueimp-gallery/js/blueimp-gallery.js"></script>
+<script src="~/node_modules/blueimp-gallery/js/jquery.blueimp-gallery.js"></script>
+<script src="~/node_modules/blueimp-file-upload/js/jquery.iframe-transport.js"></script>
+<script src="~/node_modules/blueimp-file-upload/js/jquery.fileupload.js"></script>
+<script src="~/node_modules/blueimp-file-upload/js/jquery.fileupload-process.js"></script>
+<script src="~/node_modules/blueimp-file-upload/js/jquery.fileupload-image.js"></script>
+<script src="~/node_modules/blueimp-file-upload/js/jquery.fileupload-audio.js"></script>
+<script src="~/node_modules/blueimp-file-upload/js/jquery.fileupload-video.js"></script>
+<script src="~/node_modules/blueimp-file-upload/js/jquery.fileupload-validate.js"></script>
+<script src="~/node_modules/blueimp-file-upload/js/jquery.fileupload-ui.js"></script>
+<script src="~/Scripts/jqupload.main.js"></script>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<style>
+    .prj-nam {
+        font-size: 2em;
+        width: 50%;
+    }
+</style>
+@if (Model == null)
+{
+    <h1>No Details Found</h1>
+}
+else
+{
+    <div class="form-row">
+        <div class="col-md-8 pt-0">
+            <div class="bdrs-3 ov-h bgc-white p-10 bd">
+                <div class="row">
+                    <div id="carouselExampleIndicators" class="carousel slide col-md-12" data-ride="carousel">
+                        <div class="carousel-inner">
+                            <input type="hidden" id="Prj_Id" value="@Model.Id" />
+                            <input type="hidden" id="Prj_Status" value="@Model.Status" />
+                            <div class="carousel-item active col-md-12">
+                                <div class="d-block w-100 pb-0" style="background: transparent !important">
+                                    <div class="form-row">
+                                        <div class="form-group col-md-9">
+                                            @if (User.IsInRole("Administrator") || User.IsInRole("Update Project Name"))
+                                            {
+                                                <h1 class="display-4 editable-prj-nam" data-prjatt="prj-nam" id="Prj_Name">@Model.Name</h1>
+                                            }
+                                            else
+                                            {
+                                                <h1 class="display-4" data-prjatt="prj-nam" id="Prj_Name">@Model.Name</h1>
+                                            }
+                                        </div>
+                                        <div class="form-group col-md-3">
+                                            @*<button class="btn btn-primary prj-app" data-stat="Pending_Approval"> Send For Approval </button>*@
+                                        </div>
+                                        <div class="form-group col-md-12">
+                                            <label>Project Id</label>
+                                            <h3 class="prj-id">@Model.Project_Id</h3>
+                                        </div>
+                                        @if (Model.ProjectType != MeherEstateDevelopers.Models.ProjectType.Recurring.ToString())
+                                        {
+                                        <div class="form-group col-md-4">
+                                            <label>Budget</label>
+                                            @if (Model.Budget == null || Model.Budget == 0)
+                                            {
+                                                <input type="text" class="form-control coma savablebudget" data-prjatt="prj-bud" />
+                                            }
+                                            else
+                                            {
+                                                if (User.IsInRole("Administrator") || User.IsInRole("Revise Budget"))
+                                                {
+                                                    <h3 class="editablebudget" data-prjatt="prj-bud">@string.Format("{0:n0}", Model.Budget)</h3>
+                                                }
+                                                else
+                                                {
+                                                    <h3 class="" data-prjatt="prj-bud">@string.Format("{0:n0}", Model.Budget)</h3>
+                                                }
+                                            }
+                                        </div>
+                                            <div class="form-group col-md-4">
+                                                <label>Start Date</label>
+                                                @if (Model.StartDate == null)
+                                                {
+                                                    <input type="text" class="form-control savablestart" data-provide="datepicker" data-prjatt="prj-start" />
+                                                }
+                                                else
+                                                {
+                                                    <h3 class="editablestart" data-prjatt="prj-start">@string.Format("{0:dd-MMM-yyyy}", Model.StartDate)</h3>
+                                                }
+                                            </div>
+                                            <div class="form-group col-md-4">
+                                                <label>Deadline</label>
+                                                @if (Model.Deadline == null)
+                                                {
+                                                    <input type="text" class="form-control savabledead" data-provide="datepicker" data-prjatt="prj-dead" />
+                                                }
+                                                else
+                                                {
+                                                    <h3 class="editabledead" data-prjatt="prj-dead">@string.Format("{0:dd-MMM-yyyy}", Model.Deadline)</h3>
+                                                }
+                                            </div>
+                                        }
+                                    </div>
+                                    <hr />
+                                    <h1 class="display-7">Scope</h1>
+                                    @if (string.IsNullOrWhiteSpace(Model.Scope))
+                                    {
+                                        <input type="text" class="form-control savableParagraph" data-prjatt="prj-scop" />
+                                    }
+                                    else
+                                    {
+                                        <p id="edit" class="editableParagraph" data-prjatt="prj-scop">@Model.Scope</p>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-row bdrs-3 ov-h bgc-white p-10 bd prj-attt">
+                @{ Html.RenderAction("PrjDepartments", "ConstructProjectManagement", new { Prj_Id = Model.Id });}
+            </div>
+        </div>
+    </div>
+    <div class="container pb-0">
+        <div class="row mt-5">
+            <nav class="navbar navbar-expand-lg navbar-light bg-light" style="width:100%">
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                    <div class="navbar-nav nav-fill w-100">
+                        @if (Model.ProjectType != MeherEstateDevelopers.Models.ProjectType.Recurring.ToString())
+                        {
+                            if (User.IsInRole("Work Break Down") || User.IsInRole("Administrator"))
+                            {
+                            <a href="Javascript:void(0)" class="nav-item nav-link prjlink" data-link="/ConstructProjectManagement/Create_WorkBreakDown/">Baseline Schedule </a>
+                            <a href="Javascript:void(0)" class="nav-item nav-link prjlink" data-link="/ConstructProjectManagement/WbdResources?proj=@Model.Id">Resources</a>
+                            <a href="Javascript:void(0)" class="nav-item nav-link prjlink" data-link="/ConstructProjectManagement/WBDBilling?proj=@Model.Id">Billing</a>
+
+			    }
+
+                            <a href="Javascript:void(0)" class="nav-item nav-link prjlink" data-link="/ConstructProjectManagement/Create_Milestones/">Milestones</a>
+                            <a href="Javascript:void(0)" class="nav-item nav-link prjlink" data-link="/ConstructProjectManagement/GanttChart/">Gantt Chart</a>
+                            <a href="Javascript:void(0)" class="nav-item nav-link prjlink" data-link="/ConstructProjectManagement/ProjectFiles/">Project Files</a>
+                            <a href="Javascript:void(0)" class="nav-item nav-link prjlink" data-link="/ConstructProjectManagement/NewMaterialStatement?proj=@Model.Id">Material Statement</a>
+                            <a href="Javascript:void(0)" class="nav-item nav-link prjlink" data-link="/ConstructProjectManagement/PaymentSchedule?proj=@Model.Id">Payment Schedule</a>
+                            <a href="Javascript:void(0)" class="nav-item nav-link prjlink" data-link="/ConstructProjectManagement/DiscussionIndex/">Disscussion Thread</a>
+                        }
+                        <a href="Javascript:void(0)" class="nav-item nav-link prjlink" data-link="/ConstructProjectManagement/Prj_InventoryStockIn?Prj_Id=@Model.Id">Issued Items</a>
+                        <a href="Javascript:void(0)" class="nav-item nav-link prjlink" data-link="/ConstructProjectManagement/Prj_DemandOrders?Prj_Id=@Model.Id">Demand</a>
+                        <a href="Javascript:void(0)" class="nav-item nav-link prjlink" data-link="/ConstructProjectManagement/Prj_PurchaseReq?Prj_Id=@Model.Id">Purchases</a>
+                        <a href="Javascript:void(0)" class="nav-item nav-link prjlink" data-link="/ConstructProjectManagement/Prj_Services?Prj_Id=@Model.Id&Prj_Type=@Model.ProjectType">Services</a>
+                        @*<a href="#" class="nav-item nav-link prjlink" data-link="/ConstructProjectManagement/Prj_Demand?Prj_Id=@Model.Id">Demand Requisitions</a>*@
+                        <a href="Javascript:void(0)" class="nav-item nav-link prjlink" data-link="/ConstructProjectManagement/Prj_OtherExp?Prj_Id=@Model.Id">Miscellaneous Expense</a>
+                        <a href="Javascript:void(0)" class="nav-item nav-link prjlink" data-link="/ConstructProjectManagement/prj_MaterialComparrison?Prj_Id=@Model.Id">Material Comparison</a>
+                        <a href="Javascript:void(0)" class="nav-item nav-link prjlink" data-link="/ConstructProjectManagement/prj_Monthly_Consumption?Prj_Id=@Model.Id">Monthly Consumption</a>
+
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </div>
+    <div class="row mt-2 bgc-white" id="prjdetails">
+    </div>
+    if (Model.ProjectType != MeherEstateDevelopers.Models.ProjectType.Recurring.ToString())
+    {
+        <script>
+                  $(function () {
+            $('#prjdetails').load("/ConstructProjectManagement/Create_Milestones/", { Prj_Id: @Model.Id});
+         });
+        </script>
+    }
+    else
+    {
+        <script>
+                 $(function () {
+                     $('#prjdetails').load("/ConstructProjectManagement/Prj_InventoryStockIn/", { Prj_Id: @Model.Id});
+         });
+        </script>
+    }
+
+    <style>
+        #container {
+            max-width: 800px;
+            margin: 1em auto;
+        }
+
+        .active {
+        }
+    </style>
+}

@@ -1,0 +1,149 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Sp_Get_PlotLastOwner_Result>
+
+
+@{ int counter = 1;}
+@foreach (var v in Model)
+{
+    <div class="panel panel-default own-inf-kjhsdf">
+        <div class="panel-heading">
+            <div class="panel-heading">
+                <h5 class="panel-title">
+                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#@string.Concat("own",counter.ToString())" aria-expanded="true"></a>
+                    Owner <span class="own-count-info">1</span>
+                </h5>
+            </div>
+        </div>
+
+        <div class="panel-collapse collapse in show" id="@string.Concat("own",counter.ToString())">
+            <div class="mT-30">
+                <div class="form-row">
+                    <input type="hidden" value="@((DateTime.Now-v.Ownership_DateTime.Value).TotalDays)" class="ttl-yrs-own" />
+                    <div class="form-group col-md-3">
+                        <label>Name</label>
+                        <input type="text" class="form-control" value="@v.Name" id="Name" readonly>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label>Father's/Husband's Name</label>
+                        <input type="text" class="form-control" id="Father_Husband" value="@v.Father_Husband" readonly>
+                    </div>
+                    <div class="form-group col-md-5">
+                        <label>Postal Address</label>
+                        <input type="text" class="form-control" id="Postal_Address" value="@v.Postal_Address" readonly>
+                    </div>
+                    <div class="form-group col-md-5">
+                        <label>Residential Address</label>
+                        <input type="text" class="form-control" id="Residential_Address" value="@v.Residential_Address" readonly>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label>City</label>
+                        <input type="text" class="form-control" id="City" value="@v.City" readonly>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label>Date Of Birth</label>
+                        <input type="text" class="form-control" id="Date_Of_Birth" value="@v.Date_Of_Birth" readonly>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label>CNIC / NICOP</label>
+                        <input type="text" class="form-control" id="CNIC_NICOP" value="@v.CNIC_NICOP" readonly>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label>Occupation</label>
+                        <input type="text" class="form-control" id="Occupation" value="@v.Occupation" readonly>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label>Nationality</label>
+                        <input type="text" class="form-control" id="Nationality" value="@v.Nationality" readonly>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label>Email</label>
+                        <input type="text" class="form-control" id="Email" value="@v.Email" readonly>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label>Phone Office</label>
+                        <input type="text" class="form-control" id="Phone_Office" value="@v.Phone_Office" readonly>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label>Residential</label>
+                        <input type="text" class="form-control" id="Residential" value="@v.Residential" readonly>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label>Mobile 1</label>
+                        <input type="text" class="form-control" id="Mobile_1" value="@v.Mobile_1" readonly>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label>Mobile 2</label>
+                        <input type="text" class="form-control" id="Mobile_2" value="@v.Mobile_2" readonly>
+                    </div>
+
+                    <div class="form-group col-md-6" style="margin:auto;">
+                        <h6 style="width: auto;float: left;margin: 7px;">Filer</h6>
+                        @if (v.IsFiler == true)
+                        {
+                            <label class="switch"><input type="checkbox" class="filerCheck filer-khjsdf" data-own="@v.Id" checked><span class="slider round"></span></label>
+                        }
+                        else
+                        {
+                            <label class="switch"><input type="checkbox" class="filerCheck filer-khjsdf" data-own="@v.Id"><span class="slider round"></span></label>
+                        }
+                    </div>
+                </div>
+            </div>
+            <hr />
+            <h6 class="c-grey-900">Nominee</h6>
+            <div class="mT-30">
+                <div class="form-row">
+                    <div class="form-group col-md-2">
+                        <label>Name</label>
+                        <input type="text" class="form-control" id="Nominee_Name" value="@v.Nominee_Name" readonly>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label>CNIC / NICOP</label>
+                        <input type="text" class="form-control" id="Nominee_CNIC_NICOP" value="@v.Nominee_CNIC_NICOP" readonly>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label>Relation</label>
+                        <input class="form-control" id="Nominee_Relation" value="@v.Nominee_Relation" readonly>
+                    </div>
+                    <div class="form-group col-md-5">
+                        <label>Address</label>
+                        <input type="text" class="form-control" id="Nominee_Address" value="@v.Nominee_Address" readonly>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    counter++;
+}
+<hr />
+
+
+<script>
+    $(document).ready(function () {
+        updateTaxDetails();
+
+        $('.filer-khjsdf').unbind().change(function () {
+            let confr = confirm('Are you sure you want to change Filer/Non Filer status of this owner?');
+
+            if (!confr) {
+                return;
+            }
+
+            let own = $(this).attr('data-own');
+            let chc = $(this).is(':checked');
+            let that = $(this);
+            $.ajax({
+                type: "POST",
+                url: '/Plots/UpdateFilerStatus/',
+                data: { owner: own, filer: chc },
+                success: function (data) {
+                    alert("Status changed successfully");
+                },
+                error: function () {
+                    alert("Failed to change status. Please try again");
+                    $(that).prop('checked', !chc);
+                }
+            });
+
+        });
+    });
+</script>

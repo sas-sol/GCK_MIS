@@ -1,0 +1,21 @@
+﻿@model IEnumerable<Management_Information_System.Models.Connection_Charges>
+@{
+    if (Model.Any())
+    {
+        <div class="default-div-bg p-20 bd">
+            @foreach (var item in Model)
+            {
+                <h6>@item.Connection_Name : <span style="font-weight:normal">@item.Charges - @item.Plot_Type </span></h6>
+                <hr />
+            }
+        </div>
+
+    }
+    else
+    {
+        <div class="default-div-bg p-20 bd">
+            <h6>No Connection Charges Added</h6>
+        </div>
+    }
+}
+

@@ -1,0 +1,81 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Sp_Get_Inventory_Details_Result>
+<div>
+    <input type="hidden" class="OprojId" value="@Model.Select(x => x.Prj_Id).FirstOrDefault()" />
+    <input type="hidden" class="prjName" value="@Model.Select(x => x.Prj_Name).FirstOrDefault()" />
+    <input type="hidden" class="issueToId" value="@Model.Select(x => x.Issue_To).FirstOrDefault()" />
+    <input type="hidden" class="issueToName" value="@Model.Select(x => x.IssueTo_Name).FirstOrDefault()" />
+    <input type="hidden" class="requestedById" value="@Model.Select(x => x.Requested_By).FirstOrDefault()" />
+    <input type="hidden" class="requestedByName" value="@Model.Select(x => x.RequestedBy_Name).FirstOrDefault()" />
+    <input type="hidden" class="issueById" value="@Model.Select(x => x.Issue_By).FirstOrDefault()" />
+    <input type="hidden" class="issueByName" value="@Model.Select(x => x.IssueBy_Name).FirstOrDefault()" />
+    <input type="hidden" class="demandOrderId" value="@Model.Select(x => x.DemandOrder_Id).FirstOrDefault()" />
+    <input type="hidden" class="issueNoteNo" value="@Model.Select(x => x.IssueNote_No).FirstOrDefault()" />
+    <input type="hidden" class="depId" value="@Model.Select(x => x.Dep_Id).FirstOrDefault()" />
+    <input type="hidden" class="depName" value="@Model.Select(x => x.Dep_Name).FirstOrDefault()" />
+    <input type="hidden" class="wId" value="@Model.Select(x => x.Warehouse_Id).FirstOrDefault()" />
+    <input type="hidden" class="wName" value="@Model.Select(x => x.Warehouse_Name).FirstOrDefault()" />
+    <input type="hidden" class="poId" value="@Model.Select(x => x.PO_Id).FirstOrDefault()" />
+    <input type="hidden" class="poNum" value="@Model.Select(x => x.PO_Number).FirstOrDefault()" />
+    <input type="hidden" class="reqDate" value="@Model.Select(x => x.Requested_Date).FirstOrDefault()" />
+
+    <div class="row">
+        <div class="col-md-4">
+            <input type="hidden" class="depid" value="@Model.Select(x => x.Dep_Id).FirstOrDefault()" />
+            <label>Issue Note No. <h5>@Model.Select(x => x.IssueNote_No).FirstOrDefault()</h5></label>
+        </div>
+        <div class="col-md-4"></div>
+        <div class="col-md-4">
+            <label>Project Name: <h5><input type="hidden" value="@Model.Select(x => x.Prj_Id).FirstOrDefault()" />@Model.Select(x => x.Prj_Name).FirstOrDefault()</h5></label>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <label>Issued To: <h5>@Model.Select(x => x.IssueTo_Name).FirstOrDefault()</h5></label>
+        </div>
+        <div class="col-md-4"></div>
+        <div class="col-md-4">
+            @{
+                var issueddate = Model.Select(x => x.IssuedBy_Date).FirstOrDefault();
+            }
+            <label>Issued Date: <h5>@String.Format("{0:MMM dd yyyy}", issueddate)</h5></label>
+        </div>
+    </div>
+</div>
+<div>
+    <div class="row">
+        <div class="col-md-12">
+            <table class="table">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>SKU</th>
+                        <th>Item Name</th>
+                        <th>UOM</th>
+                        <th>Qty</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var a in Model)
+                    {
+                        if (a.Qty >= 0)
+                        {
+                            <tr class="item">
+                                <td class="skup">@a.SKU</td>
+                                <td><input type="hidden" class="itemId" value="@a.Item_Id" />@a.Complete_Name</td>
+
+                                @if (a.UOM == null)
+                                {
+                                    <td>-</td>
+                                }
+                                else
+                                {
+                                    <td>@a.UOM</td>
+                                }
+                                <td class="qty">@a.Qty</td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

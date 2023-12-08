@@ -1,0 +1,289 @@
+﻿@model MeherEstateDevelopers.Models.Cancellation_Receipts
+@{
+    Layout = null;
+}
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title></title>
+    <style type="text/css" media="all">
+
+        body, div, table, thead, tbody, tfoot, tr, th, td, p {
+            font-family: "Calibri";
+            font-size: 19px;
+        }
+
+            table td {
+                height: 28px;
+            }
+
+        body {
+            -webkit-print-color-adjust: exact;
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    <table cellspacing="0" border="0" style="width:1000px">
+        <tr>
+            <td align="center" valign="middle"></td>
+        </tr>
+    </table>
+
+    <table bgcolor="white" cellspacing="0" border="0" style="width:1000px">
+        <tr>
+            <td width="800px" align="right" valign=bottom style="padding-right: 95px;">
+                <img src="~/assets/static/images/refund/customer.png" width=450 height=125>
+            </td>
+            <td width="200px" align="right" valign=bottom>
+                <img src="~/assets/static/images/customer-copy.png" width=125 height=125>
+            </td>
+        </tr>
+    </table>
+    <table bgcolor="white" cellspacing="0" border="0" style="width:1000px">
+        <tr>
+            <td width="250px"></td>
+            <td width="90px" valign=bottom style="font-weight:bold">Description</td>
+            <td width="125px" align="center" valign=bottom style="border-bottom:1px solid">@Model.ReceiptNo</td>
+            <td width="246x" valign=bottom></td>
+        </tr>
+    </table>
+    <table bgcolor="white" cellspacing="0" border="0" style="width:1000px">
+        <tr>
+            <td width="50px" align="left" valign=bottom style="font-weight:bold">Name</td>
+            <td width="300px" align="center" valign=bottom style="border-bottom:1px solid">@Model.Name</td>
+            <td width="105px" align="left" valign=bottom style="font-weight:bold">S/O,D/O,W/O</td>
+            <td width="300px" align="center" valign=bottom style="border-bottom:1px solid">@Model.Father_Name</td>
+            <td width="95px" align="left" valign=bottom style="font-weight:bold">Contact No.</td>
+            <td width="120px" align="center" valign=bottom style="border-bottom:1px solid">@Model.Contact</td>
+        </tr>
+    </table>
+    <table bgcolor="white" cellspacing="0" border="0" style="width:1000px">
+        <tr>
+            <td width="70px" align="left" valign=bottom style="font-weight:bold">Plot No </td>
+            <td width="330px" align="center" valign=bottom style="border-bottom:1px solid">@Model.File_Plot_Number</td>
+            <td width="45px" align="left" valign=bottom style="font-weight:bold">Block </td>
+            <td width="150px" align="center" valign=bottom style="border-bottom:1px solid">@Model.Block</td>
+            <td width="35px" align="left" valign=bottom style="font-weight:bold">Size </td>
+            <td width="100px" align="center" valign=bottom style="border-bottom:1px solid">@Model.Size</td>
+            <td width="50px" align="left" valign=bottom style="font-weight:bold">Date</td>
+            <td width="250px" align="center" valign=bottom style="border-bottom:1px solid">@string.Format("{0: MMM dd, yyyy}", DateTime.Now)</td>
+        </tr>
+    </table>
+    @*<table bgcolor="white" cellspacing="0" border="0" style="width:1000px">
+        <tr>
+            <td width="150px" align="left" valign=bottom style="font-weight:bold">Receipt Amount</td>
+            <td width="325px" align="center" valign=bottom style="border-bottom:1px solid">@string.Format("{0:n0}", Math.Round(Convert.ToDouble(Model.Amount)))</td>
+            <td width="130px" align="left" valign=bottom style="font-weight:bold">Refund Amount</td>
+            <td width="325px" align="center" valign=bottom style="border-bottom:1px solid"><b style="color:red">@string.Format("{0:n0}", Math.Round(Convert.ToDouble(Model.Amount)))</b></td>
+        </tr>
+    </table>*@
+
+
+    <table bgcolor="white" cellspacing="0" border="0" style="width:1000px">
+        <tr>
+            <td width="200px" align="left" valign=bottom style="font-weight:bold">Refund Amount</td>
+            <td width="800px" align="center" valign=bottom style="border-bottom:1px solid"><b style="color:red">@string.Format("{0:n0}", Math.Round(Convert.ToDouble(Model.Amount)))</b></td>
+        </tr>
+    </table>
+    <table bgcolor="white" cellspacing="0" border="0" style="width:1000px">
+        <tr><td align="center"><font size="6"><b>Declaration</b></font> </tr>
+        <tr>
+            <td align="center" valign=bottom>I Hereby declare that I want to refund my Extra Amount, I have returened the receipts to Society for the refund purpose and from now onward I have no claim over this Amount</td>
+        </tr>
+    </table>
+    <table bgcolor="white" cellspacing="0" border="0" style="width:1000px">
+        <tr>
+            <td align="right" valign=bottom><font size="4">A Project of</font></td>
+        </tr>
+    </table>
+
+
+
+    <table bgcolor="white" cellspacing="0" border="0" style="width:1000px">
+        <tr>
+            <td width="75px" align="left" valign=bottom style="font-weight:bold"><font size="4">Customer</font></td>
+            <td width="150px" align="center" valign=bottom style="border-bottom:1px solid"><font size="6"></font></td>
+            <td width="160px" align="left" valign=bottom style="font-weight:bold"><font size="4">Senior Manager</font></td>
+            <td width="150px" align="center" valign=bottom style="border-bottom:1px solid"><font size="6"></font></td>
+            <td width="120px" align="left" valign=bottom style="font-weight:bold"><font size="4">Plots Manager</font></td>
+            <td width="150px" align="center" valign=bottom style="border-bottom:1px solid"><font size="6"></font></td>
+            <td width="180px" align="left" valign=bottom><font size="4"></font></td>
+            <td width="130px" align="left" style="vertical-align:top"><img src="~/assets/static/images/meherestate-simple.png" width=130 height=29></td>
+        </tr>
+    </table>
+    <!------------------------------------------------------------------------------------------------------------------------>
+    <table cellspacing="0" border="0" style="width:1000px">
+        <tr>
+            <td align="center" valign="middle">-----------------------------------------------------------------------------------------------------------------------------------------------------------------------</td>
+        </tr>
+    </table>
+
+    <table bgcolor="#F7DCF7" cellspacing="0" border="0" style="width:1000px">
+        <tr>
+            <td width="800px" align="right" valign=bottom style="padding-right: 95px;">
+                <img src="~/assets/static/images/refund/accounts.png" width=450 height=125>
+            </td>
+            <td width="200px" align="right" valign=bottom>
+                <img src="~/assets/static/images/accounts-copy.png" width=125 height=125>
+            </td>
+        </tr>
+    </table>
+    <table bgcolor="#F7DCF7" cellspacing="0" border="0" style="width:1000px">
+        <tr>
+            <td width="250px"></td>
+            <td width="90px" valign=bottom style="font-weight:bold">Description</td>
+            <td width="125px" align="center" valign=bottom style="border-bottom:1px solid">@Model.ReceiptNo</td>
+            <td width="246x" valign=bottom></td>
+        </tr>
+    </table>
+    <table bgcolor="#F7DCF7" cellspacing="0" border="0" style="width:1000px">
+        <tr>
+            <td width="50px" align="left" valign=bottom style="font-weight:bold">Name</td>
+            <td width="300px" align="center" valign=bottom style="border-bottom:1px solid">@Model.Name</td>
+            <td width="105px" align="left" valign=bottom style="font-weight:bold">S/O,D/O,W/O</td>
+            <td width="300px" align="center" valign=bottom style="border-bottom:1px solid">@Model.Father_Name</td>
+            <td width="95px" align="left" valign=bottom style="font-weight:bold">Contact No.</td>
+            <td width="120px" align="center" valign=bottom style="border-bottom:1px solid">@Model.Contact</td>
+        </tr>
+    </table>
+    <table bgcolor="#F7DCF7" cellspacing="0" border="0" style="width:1000px">
+        <tr>
+            <td width="70px" align="left" valign=bottom style="font-weight:bold">Plot No </td>
+            <td width="330px" align="center" valign=bottom style="border-bottom:1px solid">@Model.File_Plot_Number</td>
+            <td width="45px" align="left" valign=bottom style="font-weight:bold">Block </td>
+            <td width="150px" align="center" valign=bottom style="border-bottom:1px solid">@Model.Block</td>
+            <td width="35px" align="left" valign=bottom style="font-weight:bold">Size </td>
+            <td width="100px" align="center" valign=bottom style="border-bottom:1px solid">@Model.Size</td>
+            <td width="50px" align="left" valign=bottom style="font-weight:bold">Date</td>
+            <td width="250px" align="center" valign=bottom style="border-bottom:1px solid">@string.Format("{0: MMM dd, yyyy}", DateTime.Now)</td>
+        </tr>
+    </table>
+    @*<table bgcolor="#F7DCF7" cellspacing="0" border="0" style="width:1000px">
+        <tr>
+            <td width="150px" align="left" valign=bottom style="font-weight:bold">Receipt Amount</td>
+            <td width="325px" align="center" valign=bottom style="border-bottom:1px solid">@string.Format("{0:n0}", Math.Round(Convert.ToDouble(Model.Amount)))</td>
+            <td width="130px" align="left" valign=bottom style="font-weight:bold">Refund Amount</td>
+            <td width="325px" align="center" valign=bottom style="border-bottom:1px solid"><b style="color:red">@string.Format("{0:n0}", Math.Round(Convert.ToDouble(Model.Amount)))</b></td>
+        </tr>
+    </table>*@
+
+    <table bgcolor="#F7DCF7" cellspacing="0" border="0" style="width:1000px">
+        <tr>
+            <td width="200px" align="left" valign=bottom style="font-weight:bold">Refund Amount</td>
+            <td width="800px" align="center" valign=bottom style="border-bottom:1px solid"><b style="color:red">@string.Format("{0:n0}", Math.Round(Convert.ToDouble(Model.Amount)))</b></td>
+        </tr>
+    </table>
+    <table bgcolor="#F7DCF7" cellspacing="0" border="0" style="width:1000px">
+        <tr><td align="center"><font size="6"><b>Declaration</b></font> </tr>
+        <tr>
+            <td align="center" valign=bottom>I Hereby declare that I want to refund my Extra Amount, I have returened the receipts to Society for the refund purpose and from now onward I have no claim over this Amount</td>
+        </tr>
+    </table>
+    <table bgcolor="#F7DCF7" cellspacing="0" border="0" style="width:1000px">
+        <tr>
+            <td align="right" valign=bottom><font size="4">A Project of</font></td>
+        </tr>
+    </table>
+
+    <table bgcolor="#F7DCF7" cellspacing="0" border="0" style="width:1000px">
+        <tr>
+            <td width="75px" align="left" valign=bottom style="font-weight:bold"><font size="4">Customer</font></td>
+            <td width="150px" align="center" valign=bottom style="border-bottom:1px solid"><font size="6"></font></td>
+            <td width="160px" align="left" valign=bottom style="font-weight:bold"><font size="4">Senior Manager</font></td>
+            <td width="150px" align="center" valign=bottom style="border-bottom:1px solid"><font size="6"></font></td>
+            <td width="120px" align="left" valign=bottom style="font-weight:bold"><font size="4">Plots Manager</font></td>
+            <td width="150px" align="center" valign=bottom style="border-bottom:1px solid"><font size="6"></font></td>
+            <td width="180px" align="left" valign=bottom><font size="4"></font></td>
+            <td width="130px" align="left" style="vertical-align:top"><img src="~/assets/static/images/meherestate-simple.png" width=130 height=29></td>
+        </tr>
+    </table>
+    <!-- ************************************************************************** -->
+    <table cellspacing="0" border="0" style="width:1000px">
+        <tr>
+            <td align="center" valign="middle">-----------------------------------------------------------------------------------------------------------------------------------------------------------------------</td>
+        </tr>
+    </table>
+
+
+    <table bgcolor="#FAFAC6" cellspacing="0" border="0" style="width:1000px">
+        <tr>
+            <td width="800px" align="right" valign=bottom style="padding-right: 95px;">
+                <img src="~/assets/static/images/refund/file.png" width=450 height=125>
+            </td>
+            <td width="200px" align="right" valign=bottom>
+                <img src="~/assets/static/images/files-copy.png" width=125 height=125>
+            </td>
+        </tr>
+    </table>
+    <table bgcolor="#FAFAC6" cellspacing="0" border="0" style="width:1000px">
+        <tr>
+            <td width="250px"></td>
+            <td width="90px" valign=bottom style="font-weight:bold">Description</td>
+            <td width="125px" align="center" valign=bottom style="border-bottom:1px solid">@Model.ReceiptNo</td>
+            <td width="246x" valign=bottom></td>
+        </tr>
+    </table>
+    <table bgcolor="#FAFAC6" cellspacing="0" border="0" style="width:1000px">
+        <tr>
+            <td width="50px" align="left" valign=bottom style="font-weight:bold">Name</td>
+            <td width="300px" align="center" valign=bottom style="border-bottom:1px solid">@Model.Name</td>
+            <td width="105px" align="left" valign=bottom style="font-weight:bold">S/O,D/O,W/O</td>
+            <td width="300px" align="center" valign=bottom style="border-bottom:1px solid">@Model.Father_Name</td>
+            <td width="95px" align="left" valign=bottom style="font-weight:bold">Contact No.</td>
+            <td width="120px" align="center" valign=bottom style="border-bottom:1px solid">@Model.Contact</td>
+        </tr>
+    </table>
+    <table bgcolor="#FAFAC6" cellspacing="0" border="0" style="width:1000px">
+        <tr>
+            <td width="70px" align="left" valign=bottom style="font-weight:bold">Plot No </td>
+            <td width="330px" align="center" valign=bottom style="border-bottom:1px solid">@Model.File_Plot_Number</td>
+            <td width="45px" align="left" valign=bottom style="font-weight:bold">Block </td>
+            <td width="150px" align="center" valign=bottom style="border-bottom:1px solid">@Model.Block</td>
+            <td width="35px" align="left" valign=bottom style="font-weight:bold">Size </td>
+            <td width="100px" align="center" valign=bottom style="border-bottom:1px solid">@Model.Size</td>
+            <td width="50px" align="left" valign=bottom style="font-weight:bold">Date</td>
+            <td width="250px" align="center" valign=bottom style="border-bottom:1px solid">@string.Format("{0: MMM dd, yyyy}", DateTime.Now)</td>
+        </tr>
+    </table>
+    @*<table bgcolor="#FAFAC6" cellspacing="0" border="0" style="width:1000px">
+        <tr>
+            <td width="150px" align="left" valign=bottom style="font-weight:bold">Receipt Amount</td>
+            <td width="325px" align="center" valign=bottom style="border-bottom:1px solid">@string.Format("{0:n0}", Math.Round(Convert.ToDouble(Model.Amount)))</td>
+            <td width="130px" align="left" valign=bottom style="font-weight:bold">Refund Amount</td>
+            <td width="325px" align="center" valign=bottom style="border-bottom:1px solid"><b style="color:red">@string.Format("{0:n0}", Math.Round(Convert.ToDouble(Model.Amount)))</b></td>
+        </tr>
+    </table>*@
+    <table bgcolor="#FAFAC6" cellspacing="0" border="0" style="width:1000px">
+        <tr>
+            <td width="200px" align="left" valign=bottom style="font-weight:bold">Refund Amount</td>
+            <td width="800px" align="center" valign=bottom style="border-bottom:1px solid"><b style="color:red">@string.Format("{0:n0}", Math.Round(Convert.ToDouble(Model.Amount)))</b></td>
+        </tr>
+    </table>
+    <table bgcolor="#FAFAC6" cellspacing="0" border="0" style="width:1000px">
+        <tr><td align="center"><font size="6"><b>Declaration</b></font> </tr>
+        <tr>
+            <td align="center" valign=bottom>I Hereby declare that I want to refund my Extra Amount, I have returened the receipts to Society for the refund purpose and from now onward I have no claim over this Amount</td>
+        </tr>
+    </table>
+    <table bgcolor="#FAFAC6" cellspacing="0" border="0" style="width:1000px">
+        <tr>
+            <td align="right" valign=bottom><font size="4">A Project of</font></td>
+        </tr>
+    </table>
+
+    <table bgcolor="#FAFAC6" cellspacing="0" border="0" style="width:1000px">
+        <tr>
+            <td width="75px" align="left" valign=bottom style="font-weight:bold"><font size="4">Customer</font></td>
+            <td width="150px" align="center" valign=bottom style="border-bottom:1px solid"><font size="6"></font></td>
+            <td width="160px" align="left" valign=bottom style="font-weight:bold"><font size="4">Senior Manager</font></td>
+            <td width="150px" align="center" valign=bottom style="border-bottom:1px solid"><font size="6"></font></td>
+            <td width="120px" align="left" valign=bottom style="font-weight:bold"><font size="4">Plots Manager</font></td>
+            <td width="150px" align="center" valign=bottom style="border-bottom:1px solid"><font size="6"></font></td>
+            <td width="180px" align="left" valign=bottom><font size="4"></font></td>
+            <td width="130px" align="left" style="vertical-align:top"><img src="~/assets/static/images/meherestate-simple.png" width=130 height=29></td>
+        </tr>
+    </table>
+</body>
+</html>

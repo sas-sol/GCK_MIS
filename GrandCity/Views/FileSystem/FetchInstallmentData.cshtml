@@ -1,0 +1,371 @@
+﻿@model MeherEstateDevelopers.Models.FileDetailsModel
+
+<script>
+    var data = @Html.Raw(Json.Encode(Model));
+</script>
+
+<div class="row gap-20 pos-r">
+    <div class="col-md-12">
+        <div class="bgc-white p-20 bd">
+            <h6 class="">Application File Form</h6>
+            <div class="mT-30">
+                <div class="form-row row">
+                    <div class="col-md-9">
+                        <div class="form-row">
+                            <div class="form-group col-md-2">
+                                <label>File Form No.</label>
+                                <input type="text" class="form-control" value="@Model.File.Select(x=>x.File_Form_Number).FirstOrDefault()" readonly>
+                                <input type="hidden" id="file-id">
+                                <input type="hidden" id="ttl-amt">
+                                <input type="hidden" id="file-rate">
+                                <input type="hidden" id="app-num" value="@Model.File.Select(x=>x.File_Form_Number).FirstOrDefault()">
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label>Dealership</label>
+                                <input type="text" class="form-control" id="deal-nam" readonly>
+                            </div>
+                            <div class="form-group col-md-1">
+                                <label>Plot Size</label>
+                                <input type="text" class="form-control" id="pl-size" readonly>
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label>Project</label>
+                                <input type="text" class="form-control" id="prj" readonly>
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label>Phase</label>
+                                <input type="text" class="form-control" id="phs" readonly>
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label>Block</label>
+                                <input type="text" class="form-control" id="blk" readonly>
+                            </div>
+                            @*<div class="form-group col-md-6">
+                            <button type="button" class="btn btn-primary my-4" id="sea-file-data">Search File</button>
+                        </div>*@
+                        </div>
+                        <div class="form-row">
+                            <div class="col-md-3">
+                                <h5>File Status : &nbsp;<span id="status">-</span></h5>
+                            </div>
+                            <div class="col-md-5">
+                                <h3 id="dev-char"></h3>
+                            </div>
+                            <div class="col-md-4">
+                                <h5>Balance : &nbsp;<span id="bal-amt">-</span></h5>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <img src="~/assets/static/images/no-img.png" width="200" height="200" id="qr_img" />
+                    </div>
+                </div>
+            </div>
+            <hr />
+            <h6 class="">Personal Information</h6>
+            @{ int cnt = 1;}
+            @foreach (var v in Model.File)
+            {
+                <h4>Owner # @(cnt++)</h4>
+                <div class="mT-30">
+                    <div class="form-row">
+                        <div class="form-group col-md-2">
+                            <label>Name</label>
+                            <input type="text" class="form-control" id="Name" value="@v.Name" readonly>
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label>Father's/Husband's Name</label>
+                            <input type="text" class="form-control" id="Father_Husband" value="@v.Father_Husband" readonly>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label>Postal Address</label>
+                            <input type="text" class="form-control" id="Postal_Address" value="@v.Postal_Address" readonly>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label>Residential Address</label>
+                            <input type="text" class="form-control" id="Residential_Address" value="@v.Residential_Address" readonly>
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label>City</label>
+                            <input type="text" class="form-control" id="City" value="@v.City" readonly>
+                        </div>
+                        <div class="form-group col-md-1">
+                            <label>Date Of Birth</label>
+                            <input type="text" class="form-control" id="Date_Of_Birth" value="@v.Date_Of_Birth" readonly>
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label>CNIC / NICOP</label>
+                            <input type="text" class="form-control" id="CNIC_NICOP" value="@v.CNIC_NICOP" readonly>
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label>Occupation</label>
+                            <input type="text" class="form-control" id="Occupation" value="@v.Occupation" readonly>
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label>Nationality</label>
+                            <input type="text" class="form-control" id="Nationality" value="@v.Nationality" readonly>
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label>Email</label>
+                            <input type="text" class="form-control" id="Email" value="@v.Email" readonly>
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label>Phone Office</label>
+                            <input type="text" class="form-control" id="Phone_Office" value="@v.Phone_Office" readonly>
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label>Residential</label>
+                            <input type="text" class="form-control" id="Residential" value="@v.Residential" readonly>
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label>Mobile 1</label>
+                            <input type="text" class="form-control" id="Mobile_1" value="@v.Mobile_1" readonly>
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label>Mobile 2</label>
+                            <input type="text" class="form-control" id="Mobile_2" value="@v.Mobile_2" readonly>
+                        </div>
+                    </div>
+                </div>
+                <hr />
+                <h6 class="">Nominee</h6>
+                <div class="mT-30">
+                    <div class="form-row">
+                        <div class="form-group col-md-2">
+                            <label>Name</label>
+                            <input type="text" class="form-control" id="Nominee_Name" value="@v.Nominee_Name" readonly>
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label>CNIC / NICOP</label>
+                            <input type="text" class="form-control" id="Nominee_CNIC_NICOP" value="@v.Nominee_CNIC_NICOP" readonly>
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label>Relation</label>
+                            <input class="form-control" id="Nominee_Relation" value="@v.Nominee_Relation" readonly>
+                        </div>
+                        <div class="form-group col-md-5">
+                            <label>Address</label>
+                            <input type="text" class="form-control" id="Nominee_Address" value="@v.Nominee_Address" readonly>
+                        </div>
+                    </div>
+                </div>
+            }
+            <hr />
+            <h6 class="">Installments</h6>
+            <div class="mT-30">
+                <div class="form-row">
+                    <div class="col-md-7">
+                        <table class="table table-borderless clickable-rows" cellspacing="0" width="100%" style="margin-bottom:0px">
+                            <thead class="thead-new-dark">
+                                <tr>
+                                    <th>Sr.</th>
+                                    @if (!User.IsInRole("ReadOnly"))
+                                    {
+                                        <th><button class="btn btn-info" id="rece-btn" name="rece-btn" data-toggle="modal" data-target="#Modal">Receive Installment</button></th>
+                                    }
+                                </tr>
+                            </thead>
+                        </table>
+                        <div style="min-height:0px; max-height:500px;overflow:auto" class=" ps--active-y">
+                            <table class="table table-borderless clickable-rows" id="all-instments" cellspacing="0" width="100%">
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-md-5">
+                        <div style="min-height:0px; max-height:500px;overflow:auto" class=" ps--active-y">
+                            <table class="table table-borderless clickable-rows" id="oth-inst" cellspacing="0" width="100%">
+                                <thead class="thead-new-dark">
+                                    <tr>
+                                        <th>Sr.</th>
+                                        <th>Installment Name</th>
+                                        <th>Amount</th>
+                                        <th>Date</th>
+                                        <th>Status</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+
+                        </div>
+                        <div style="min-height:0px; max-height:500px;overflow:auto" class=" ps--active-y">
+                            <table class="table table-borderless clickable-rows" id="rec-amts" cellspacing="0" width="100%">
+                                <thead class="thead-new-dark">
+                                    <tr>
+                                        <th>Receipt No.</th>
+                                        <th>Amount</th>
+                                        <th>Date</th>
+                                        <th>Type</th>
+                                        <th>Inst No.</th>
+                                        <th>Status</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                        <div style="min-height:0px; max-height:500px;overflow:auto;display:none" class="dis ps--active-y">
+                            <h5>Discounts</h5>
+                            <table class="table table-borderless clickable-rows" id="dis-amts" cellspacing="0" width="100%">
+                                <thead class="thead-new-dark">
+                                    <tr>
+                                        <th>Total Amount</th>
+                                        <th>Discount</th>
+                                        <th>Percentage</th>
+                                        <th>Remarks</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+
+        if (data == false) {
+            alert("No Result found");
+        }
+        else {
+            $("#rece-btn").attr("Disabled", false);
+            var dev = "";
+            if (data.File[0] != undefined && data.File[0].Development_Charges_Val != undefined) {
+                if (data.File[0].Development_Charges_Val == true) { dev = "With Development Charges"; } else if (data.File[0].Development_Charges_Val == false) { dev = "Non Development Charges"; }
+            }
+
+
+            if (data.File[0].Status != "Registered") {
+                alert("File is " + data.File[0].Status);
+                $("#rece-btn").attr("Disabled", true);
+            }
+            $("#oth-inst tbody").empty();
+            $("#all-instments tbody").empty();
+            $("#rec-amts tbody").empty();
+            $('#file-id').val(data.File[0].Id);
+            $('#file-rate').val(data.File[0].Rate)
+            $('#ttl-amt').val(data.File[0].TotalPlotVal)
+            $('#qr_Id').val(data.QR_Code_Id)
+            $('#deal-nam').val(data.File[0].Dealership_Name);
+            $('#pl-size').val(data.File[0].Plot_Size);
+            $('#prj').val(data.File[0].Project_Name);
+            $('#phs').val(data.File[0].Phase_Name);
+            $('#blk').val(data.File[0].Block_Name);
+            $('#status').text(data.File[0].Status);
+            $('#dev-char').text(dev);
+            $('#qr_img').attr("src", '/QR Codes/' + data.File[0].File_Form_Number + '.png');
+            //$('#Name').val(data.File.Name);
+            //$('#Father_Husband').val(data.File.Father_Husband);
+            //$('#Postal_Address').val(data.File.Postal_Address);
+            //$('#Residential_Address').val(data.File.Residential_Address);
+            //$('#City').val(data.File.City);
+            //$('#Date_Of_Birth').val(data.File.Date_Of_Birth);
+            //$('#CNIC_NICOP').val(data.File.CNIC_NICOP);
+            //$('#Occupation').val(data.File.Occupation);
+            //$('#Nationality').val(data.File.Nationality);
+            //$('#Email').val(data.File.Email);
+            //$('#Phone_Office').val(data.File.Phone_Office);
+            //$('#Residential').val(data.File.Residential);
+            //$('#Mobile_1').val(data.File.Mobile_1);
+            //$('#Mobile_2').val(data.File.Mobile_2);
+            //$('#Nominee_Name').val(data.File.Nominee_Name);
+            //$('#Nominee_CNIC_NICOP').val(data.File.Nominee_CNIC_NICOP);
+            //$('#Nominee_Relation').val(data.File.Nominee_Relation);
+            //$('#Nominee_Address').val(data.File.Nominee_Address);
+            $('#bal-amt').text(Number(data.File[0].Balance_Amount).toLocaleString());
+            var instserialno = 1;
+            $.each(data.Installments, function (i) {
+                var statuscolor = "";
+                if (data.Installments[i].Status == "NotPaid") {
+                    statuscolor = "bgc-red-50";
+                }
+                else if (data.Installments[i].Status == "Paid") {
+                    statuscolor = "bgc-green-50";
+                }
+                var html = '<tr class=' + statuscolor + ' id="' + data.Installments[i].Id + '" ><td scope="row">' + instserialno + '</td>' +
+                    '<td>' + data.Installments[i].Installment_Name + '</td>' +
+                    '<td>' + Number(data.Installments[i].Amount).toLocaleString() + '</td>' +
+                    '<td>' + moment(data.Installments[i].Due_Date).format("DD-MMM-YYYY") + '</td>' +
+                    '<td>' + data.Installments[i].Status + '</td></tr>';
+                $("#all-instments tbody").append(html);
+                instserialno++;
+            });
+            var otherinstserialno = 1;
+            $.each(data.OtherInstallments, function (i) {
+                var statuscolor = "", btn = '<button data-toggle="modal" data-target="#Modal" class="btn btn-info otherins">Receive</button></td>';
+                if (data.OtherInstallments[i].Status == "NotPaid") {
+                    statuscolor = "bgc-red-50";
+                }
+                else if (data.OtherInstallments[i].Status == "Paid") {
+                    statuscolor = "bgc-green-50";
+                    btn = "";
+                }
+                var html = '<tr id="' + data.OtherInstallments[i].Id + '"  class=' + statuscolor + ' ><td scope="row">' + otherinstserialno + '</td>' +
+                    '<td class="nam">' + data.OtherInstallments[i].Installment_Name + '</td>' +
+                    '<td class="amt">' + Number(data.OtherInstallments[i].Amount).toLocaleString() + '</td>' +
+                    '<td>' + moment(data.OtherInstallments[i].Due_Date).format("DD-MMM-YYYY") + '</td>' +
+                    '<td>' + data.OtherInstallments[i].Status + '</td>' +
+                    '<td>' + btn + '</tr>';
+                $("#oth-inst tbody").append(html);
+                otherinstserialno++;
+            });
+            var totalamt = 0;
+            $.each(data.ReceivedAmounts, function (i) {
+                var stat = "";
+                if (data.ReceivedAmounts[i].Type == "Booking" || data.ReceivedAmounts[i].Type == "Installment") {
+
+                totalamt = totalamt + parseFloat(data.ReceivedAmounts[i].Amount);
+                if (data.ReceivedAmounts[i].Status == null) {
+                    data.ReceivedAmounts[i].Status = "-";
+                }
+                if (data.ReceivedAmounts[i].Ch_Pay_Draft_No == null) {
+                    data.ReceivedAmounts[i].Ch_Pay_Draft_No = "-";
+                }
+                if (data.ReceivedAmounts[i].Status == "Pending") {
+                    stat = "bgc-yellow-50";
+                }
+                else if (data.ReceivedAmounts[i].Status == "Dishonored") {
+                    stat = "bgc-red-50";
+                    totalamt = totalamt - parseFloat(data.ReceivedAmounts[i].Amount);
+                }
+                else if (data.ReceivedAmounts[i].Status == "Approved") {
+                    stat = "bgc-green-50";
+                }
+                else if (data.ReceivedAmounts[i].Status == "Deposited") {
+                    stat = "bgc-orange-50";
+                }
+                else {
+                    stat = "";
+                }
+                var html = '<tr class="' + stat + '" id="' + data.ReceivedAmounts[i].Id + '" data-token="' + data.ReceivedAmounts[i].TokenParameter + '" >' +
+                    '<td scope="row">' + data.ReceivedAmounts[i].ReceiptNo + '</td>' +
+                    '<td>' + Number(data.ReceivedAmounts[i].Amount).toLocaleString() + '</td>' +
+                    '<td>' + moment(data.ReceivedAmounts[i].DateTime).format("DD-MMM-YYYY") + '</td>' +
+                    '<td>' + data.ReceivedAmounts[i].PaymentType + '</td>' +
+                    '<td>' + data.ReceivedAmounts[i].Ch_Pay_Draft_No + '</td>' +
+                    '<td>' + data.ReceivedAmounts[i].Status + '</td></tr>';
+                $("#rec-amts tbody").append(html);
+                }
+                });
+
+            var html1 = '<tr><td>Total</td><td colspan="4">' + Number(totalamt).toLocaleString() + '</td></tr>';
+            $("#rec-amts tbody").append(html1);
+            $.each(data.Discounts, function (i) {
+                $(".dis").show();
+                var html = `<tr id="${data.Discounts[i].Id}" ><td> ${Number(data.Discounts[i].Total_Amount).toLocaleString()} </td>
+                                <td> ${Number(data.Discounts[i].Discount_Amount).toLocaleString()} </td>
+                                <td> ${data.Discounts[i].Percentage}% </td>
+                                <td> ${data.Discounts[i].Remarks} </td>
+                                <td><i class="fa fa-trash rem-dis"></i></td>
+                                </tr>`;
+                $("#dis-amts tbody").append(html);
+            });
+        }
+        
+    });
+</script>

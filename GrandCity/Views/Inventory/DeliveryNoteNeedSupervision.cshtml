@@ -1,0 +1,85 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Stock_In_Details>
+<script src="~/Scripts/Inv.js"></script>
+@{ if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+}
+<div class="bgc-white bd bdrs-3 p-20 mB-20">
+    <div class="row">
+        <div class="col-md-12">
+            <h4 style="text-align:center">Delivery Note Supervision</h4>
+        </div>
+    </div>
+    <div class=" mt-2 bgc-white" id="dep-inv">
+        <table class="table table-bordered potbl">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Month</th>
+                    <th>Department</th>
+                    <th width="10%">Project</th>
+                    <th width="10%">GRN</th>
+                    <th width="10%">Date</th>
+                    <th width="15%">Vendor</th>
+                    <th width="50%">Items</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Any())
+                {
+                    foreach (var g in Model.GroupBy(x => new { x.Inv.Dep_Name, x.Inv.Prj_Name, x.Inv.Group_Id, x.Inv.GRN, x.Inv.DateTime, x.Inv.Vendor_Name }).OrderByDescending(x => x.Key.DateTime.Value.Year).ThenByDescending(x => x.Key.DateTime.Value.Month).ThenBy(x => x.Key.Dep_Name).ThenByDescending(x => x.Key.DateTime).ToList())
+                    {
+                        <tr id="@g.Key.GRN" class=" pointer sup-dn">
+                            <td>@string.Format("{0:MMMM - yyyy}", g.Key.DateTime)</td>
+                            <td>@g.Key.Dep_Name</td>
+                            <td>@g.Key.Prj_Name</td>
+                            <td>@g.Key.GRN</td>
+                            <td>@string.Format("{0:dd-MMM-yyyy}", g.Key.DateTime)</td>
+                            <td>@g.Key.Vendor_Name</td>
+                            <td class="tdscrol">
+                                <table class="table" style="margin-bottom:0px; border:none">
+                                    <thead>
+                                        <tr>
+                                            <th width="10%">Sr</th>
+                                            <th width="50%">Item</th>
+                                            <th width="20%">Qty</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @{ int ii = 1;}
+                                        @foreach (var item in g)
+                                        {
+                                            <tr>
+                                                <td>@ii</td>
+                                                <td>@item.Item_Name</td>
+                                                <td>@string.Format("{0:0,0.##}", item.Inv.Qty) / @item.Inv.UOM</td>
+                                            </tr>
+                                            ii++;
+                                        }
+                                    </tbody>
+                                </table>
+                            </td>
+
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="5">No Record Exists</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+<script>
+    $(document).on('click', '.sup-dn', function () {
+        let grn = $(this).closest('tr').attr('id');
+        window.open("/Inventory/DNDetails?DN=" + grn);
+    });
+</script>

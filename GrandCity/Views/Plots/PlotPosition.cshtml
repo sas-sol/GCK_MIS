@@ -1,0 +1,152 @@
+﻿@model MeherEstateDevelopers.Models.LatestPlotDetailData
+
+
+
+<div class="form-row">
+    @{
+        <script>
+                    $(document).ready(function () {
+                                  var f = "@Model.PlotsData.Front";
+                        $("#frn__slctn").val(f);
+                            });
+        </script>
+        <input type="hidden" id="@Model.PlotsData.Id" class="pltid" />
+        if (Model.PlotsData.North != null)
+        {
+            <div class="col-md-1 w-100">
+                <lable>North</lable>
+                <input type="text" class="form-control key__pos__plt North" value="@Model.PlotsData.North" />
+            </div>
+        }
+
+        if (Model.PlotsData.East != null)
+        {
+            <div class="col-md-1 w-100">
+                <lable>East</lable>
+                <input type="text" class="form-control key__pos__plt East" value="@Model.PlotsData.East" />
+            </div>
+        }
+
+
+        if (Model.PlotsData.West != null)
+        {
+            <div class="col-md-1 w-100">
+                <lable>West</lable>
+                <input type="text" value="@Model.PlotsData.West" class="form-control key__pos__plt West" />
+            </div>
+        }
+
+
+        if (Model.PlotsData.South != null)
+        {
+            <div class="col-md-1 w-100">
+                <lable>South</lable>
+                <input type="text" class="form-control key__pos__plt South" value="@Model.PlotsData.South" />
+            </div>
+        }
+
+        if (Model.PlotsData.North_East != null)
+        {
+            <div class="col-md-1 w-100">
+                <lable>N-East</lable>
+                <input type="text" class="form-control key__pos__plt North_East" value="@Model.PlotsData.North_East" />
+            </div>
+        }
+        if (Model.PlotsData.North_West != null)
+        {<div class="col-md-1 w-100">
+                <lable>N-West</lable>
+                <input type="text" class="form-control key__pos__plt North_West" value="@Model.PlotsData.North_West" />
+            </div>
+        }
+
+        if (Model.PlotsData.South_East != null)
+        {
+            <div class="col-md-1 ">
+                <lable>S-East</lable>
+                <input type="text" class="form-control key__pos__plt Souh_East " value="@Model.PlotsData.South_East" />
+            </div>
+        }
+
+        if (Model.PlotsData.South_West != null)
+        {
+            <div class="col-md-1 w-100">
+                <lable>S-West</lable>
+                <input type="text" class="form-control key__pos__plt South_West" value="@Model.PlotsData.South_West" />
+            </div>
+        }
+
+    }
+    <div class="col-md-2">
+        <lable>Select Front</lable>
+        <select id="frn__slctn" class="form-control ">
+            <option value="North">North</option>
+            <option value="South">South</option>
+            <option value="East">East</option>
+            <option value="West">West</option>
+            <option value="North_East">North_East</option>
+            <option value="North_West">North_West</option>
+            <option value="South_East">South_East</option>
+            <option value="South_West">South_West</option>
+        </select>
+    </div>
+</div>
+<hr />
+<h6 class="c-grey-900">Plot Bounded By.</h6>
+<div class="col-md-12">
+    <div id="" class="form-row">
+        <div class="form-group col-md-2">
+            <lable>Bonded to</lable>
+            <select id="bnded_po__sel" class="form-control " style="margin-top:6%">
+                <option value="">Select Option</option>
+                <option value="North">North</option>
+                <option value="South">South</option>
+                <option value="East">East</option>
+                <option value="West">West</option>
+                <option value="North_East">North_East</option>
+                <option value="North_West">North_West</option>
+                <option value="South_East">South_East</option>
+                <option value="South_West">South_West</option>
+            </select>
+        </div>
+        <div class="form-group col-md-2">
+            <label>Block</label>
+            @Html.DropDownList("Block", null, "Choose..", new { @class = "form-control blk-plts", required = "" })
+        </div>
+        <div class="form-group col-md-2">
+            <label>Type</label>
+            <select class="form-control blk-plots" id="plot-type">
+                <option value="Residential">Residential</option>
+                <option value="Commercial">Commercial</option>
+            </select>
+
+            <select class="form-control road_slctn" style="display:none">
+                <option value="0">Select Road</option>
+                <option value="20">Road 20'</option>
+                <option value="25">Road 25'</option>
+                <option value="30">Road 30'</option>
+                <option value="40">Road 40'</option>
+                <option value="50">Road 50'</option>
+                <option value="60">Road 60'</option>
+                <option value="72">Road 72'</option>
+                <option value="80">Road 80'</option>
+                <option value="90">Road 90'</option>
+                <option value="100">Road 100'</option>
+                <option value="150">Road 150'</option>
+
+            </select>
+        </div>
+        <div class="form-group col-md-2">
+            <label>Plot No</label>
+            <select class="form-control plt__bndng" id="plot-details">
+                <option>Select Block</option>
+            </select>
+        </div>
+    </div>
+</div>
+<h4 class="c-grey-900 mB-20">Bounded Plots List</h4>
+<div class="col-md-12" id="bound-det">
+
+</div>
+<script>
+    $("#bound-det").load('/Plots/PlotBounded/', { Plot_Id: @Model.PlotsData.Id });
+</script>

@@ -1,0 +1,280 @@
+﻿@model MeherEstateDevelopers.Models.Sp_Get_Employee_Parameter_Result
+<link href="~/Content/bootstrap-material-datetimepicker.css" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<script src="~/Scripts/bootstrap-material-datetimepicker.min.js"></script>
+<input type="hidden"  id="currmnthsal" value="@ViewBag.salary"/>
+<div class="p-20 email-compose" id="">
+    <h4 class="c-grey-900 mB-20">Apply For Loan</h4>
+    @if (Model != null)
+    {
+        <input type="hidden" class="basic_sal" value="@Model.Basic_Salary" />
+        <input type="hidden" class="maxloan" value="@ViewBag.MaxLoanApply" />
+        <input type="hidden" id="emp_loan_id" value="@Model.Id" />
+        <h5>You can apply for loan upto @String.Format("{0:n0}", ViewBag.MaxLoanApply)</h5>
+        <div class="col-md-12">
+            <div class="form-row">
+                <div class="form-group col-md-3">
+                    <label>Name</label>
+                    <input type="text" class="form-control" name="" value="@Model.Name" readonly>
+                </div>
+                <div class="form-group col-md-3">
+                    <label>Employee Code</label>
+                    <input type="text" class="form-control" name="" value="@Model.Employee_Code" readonly>
+                </div>
+                <div class="form-group col-md-3">
+                    <label>Reporting Person</label>
+                    <input type="text" class="form-control" name="" value="@Model.Reporting_Person" readonly>
+                </div>
+                <div class="form-group col-md-3">
+                    <label>Date Of joning</label>
+                    <input type="text" class="form-control" name="" value="@string.Format("{0: dd-MM-yyyy}", Model.Date_Of_Joining)" readonly>
+                </div>
+                <div class="form-group col-md-3">
+                    <label>Basic Salary</label>
+                    <input class="form-control " value="@String.Format("{0:n0}", Model.Basic_Salary)" readonly>
+                </div>
+                <div class="form-group col-md-3">
+                    <label>Tax</label>
+                    <input class="form-control baictax " value="@String.Format("{0:n0}", ViewBag.Tax)" readonly>
+                </div> 
+                <div class="form-group col-md-3">
+                    <label>Max Advance</label>
+                    <input class="form-control maxamtttt " value="@String.Format("{0:n0}",(Model.Basic_Salary -  ViewBag.Tax - ViewBag.loan) )" readonly>
+                </div>
+                <div class="form-group col-md-2">
+                    <label>Select</label>
+                    <select class="form-control" name="loan-advance-app" id="loan-advance-app">
+                        <option value="Advance_Salary">Advance</option>
+                        <option value="Loan">Loan</option>
+                    </select>
+                </div>
+                <div class="form-group col-md-2">
+                    <label>Amount</label>
+                    <input class="form-control coma inst-amt-fasdkjl" placeholder="12,345" required>
+                    <input type="hidden" id="Loan_Installment" name="Amount" class="amt" required>
+                </div>
+                <div class="form-group col-md-5">
+                    <label>Reason</label>
+                    <textarea class="form-control" rows="1" id="loanreason" cols="1" required></textarea>
+                </div>
+                    <div class="form-group col-md-2 hidden-mem">
+                        <label>Installments</label>
+                        <select class="form-control inst-opt-fhjlkads">
+                            @for (int i = 1; i <= Convert.ToInt32(ViewBag.max_inst_count); i++)
+                            {
+                                <option value="@i">@i Months </option>
+                            }
+                            <option value="-1">Custom</option>
+                            <option value="-2">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-2 hidden-othr">
+                        <label>Months</label>
+                        <input type="number" class="form-control othr-mnths" placeholder="Months" />
+                    </div>
+                    <div class="form-group col-md-1">
+                        <label>-------</label>
+                        <button class="btn btn-primary loan-generation-hjkfsda">Apply</button>
+                    </div>
+            </div>
+            <div id="loan-inst"></div>
+        </div>
+    }
+</div>
+<script>
+    $('.hidden-mem').hide();
+    $('.hidden-othr').hide();
+    $('#loan-advance-app').change(function () {
+        var chn = $('#loan-advance-app option:selected').val();
+        if (chn == "Loan") {
+            $('.hidden-mem').show();
+        }
+        else if (chn == "Advance") {
+            $('.hidden-mem').hide();
+        }
+        else {
+            $('.hidden-mem').hide();
+        }
+    });
+    $('.inst-opt-fhjlkads').change(function () {
+        var chn = $('.inst-opt-fhjlkads option:selected').val();
+        if (chn == -2) {
+            $('.hidden-othr').show();
+        }
+        else {
+            $('.hidden-othr').hide();
+        }
+    });
+    $('.loan-generation-hjkfsda').unbind().click(function () {
+        const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
+            "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+        ];
+        let rows_strcts = ``;
+        let instNo = parseInt($('.inst-opt-fhjlkads option:selected').val());
+        if (instNo == -2) {
+            instNo = $('.othr-mnths').val();
+        }
+        let i = 0;
+        let amt = parseInt(RemoveComma($('.inst-amt-fasdkjl').val()));
+        if (amt > ( parseInt(RemoveComma($('.maxamtttt').val())) ) && $('#loan-advance-app option:selected').val() == "Advance_Salary") {
+            alert("Can't Apply Advance more than " + (parseInt(RemoveComma($('.maxamtttt').val())) )  ) ;
+            return false;
+        }
+        if (isNaN(amt)) {
+            alert('Enter amount before generating installments plan.');
+            return;
+        }
+        let instAmt = Math.ceil(amt / instNo);
+        let diff = ((instAmt * instNo) > amt) ? ((instAmt * instNo) - amt) : 0;
+        if (instNo > 0 ) {
+            let dt = new Date();
+
+            if ($('#currmnthsal').val() == 1)
+                dt.setMonth(dt.getMonth() + 1);
+            else
+                dt.setMonth(dt.getMonth() + 0);
+
+
+            for (i = 1; i <= instNo; i++) {
+                if (i == instNo) {
+                    instAmt -= diff;
+                }
+                rows_strcts += `<tr class="central-text-align inst-pl-row-hjkl">
+                                    <td>${i}</td>
+                                    <td class='inst-dt'>${monthNames[dt.getMonth()]}/${dt.getFullYear()}</td>
+                                    <td class='inst-amt'>${instAmt.toLocaleString()}</td>
+                                </tr>`
+                dt.setMonth(dt.getMonth() + 1);
+            }
+            let _strctr = `<table class="table table-borderless">
+                            <thead>
+                                <tr class="thead-dark">
+                                    <th colspan="3" class = "central-text-align">Installments Plan For ${instNo} Months</th>
+                                </tr>
+                                <tr>
+                                    <td>Installment</td>
+                                    <td>Installment Date</td>
+                                    <td>Amount</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${rows_strcts}
+                            </tbody>
+                        </table>
+                        <div class="col-md-12 central-text-align">
+                            <button class="btn btn-primary appl-inst-btn-ashdfjk">Apply</button>
+                        </div>`;
+            $('#loan-inst').empty().append(_strctr);
+        }
+        else if (instNo == -1) {
+            let _cust_strct = `<table class="table table-bordered">
+                        <thead>
+                            <tr class="thead-dark central-text-align">
+                                <td colspan="4">Installments Schedule</td>
+                            </tr>
+                            <tr class="central-text-align">
+                                <td></td>
+                                <td>Installment</td>
+                                <td>Date</td>
+                                <td>Amount</td>
+                            </tr>
+                        </thead>
+                        <tbody class="inst-strctr-rec-tyhj">
+                            <tr class="inst-pl-row-hjkl central-text-align">
+                                <td><i class="ti-trash pointer inst-row-rmv-hkj"></i></td>
+                                <td class="sr">1</td>
+                                <td><input type="text" class="form-control pmt-dt myInpt" data-provide="datepicker" /></td>
+                                <td><input type="number" class="form-control pmt-amt myInpt" /></td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr class="central-text-align">
+                                <td colspan="4">
+                                    <button class="btn btn-success add-new-row-hfg">Insert New Row</button>
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                    <div class="col-md-12 central-text-align">
+                            <button class="btn btn-primary appl-inst-btn-ashdfjk">Apply</button>
+                        </div>`;
+            $('#loan-inst').empty().append(_cust_strct);
+        }
+    });
+    $(document).ready(function () {
+        let currDt = new Date();
+        currDt.setMonth(currDt.getMonth() + 1);
+        currDt.setDate(1);
+        $('.inst-strt-kjhsdvf').bootstrapMaterialDatePicker({ weekStart: 0, time: false, format: 'MM-YYYY' });
+        $('.inst-strt-kjhsdvf').bootstrapMaterialDatePicker('setMinDate', currDt);
+    });
+    $(document).on('focusout', '.pmt-dt', function () {
+        if ($(this).val() == '') {
+            return;
+        }
+        let dt = $(this).val().split('/');
+        if (dt.length < 2) {
+            alert('Invalid Date Selected');
+            $(this).val(null);
+            return;
+        }
+        let selDt = new Date(dt[2], dt[0]);
+        let currDtr = new Date();
+        if (selDt < currDtr) {
+            alert('Invalid date. Cannot select past dates');
+            return;
+        }
+        $(this).val(dt[0] + '/' + dt[2]);
+        checkCustomInstallmentValid(false);
+    });
+    function checkCustomInstallmentValid(isSubmission) {
+        return;
+        //checking Dates and Amount validity
+        let ttlPmt = 0;
+        $('.inst-pl-row-hjkl').each(function () {
+            let that = this;
+            ttlPmt += parseFloat($('.pmt-amt').val());
+            let a = $(that).find('.pmt-dt').val().split('/')[0];
+            $('.inst-pl-row-hjkl').each(function () {
+                if (that != this) {
+                    let b = $(this).find('.pmt-dt').val().split('/')[0];
+                    if (a == b) {
+                        if (!isSubmission) {
+                            alert('Two entries with same month found. Month is ' + b + '. Removing both entries');
+                            $(this).remove();
+                        }
+                        return false;
+                    }
+                }
+            });
+        });
+        let instAmt = Math.ceil(parseFloat(currMonBillDets.Total_Amount + currMonBillDets.Arrears));
+        if (((instAmt - ttlPmt) < (-10)) || ((instAmt - ttlPmt) > (10))) {
+            if (!isSubmission) {
+                alert('Installment amounts mismatch with the bill amount.');
+            }
+            return false;
+        }
+        return true;
+    }
+    $(document).on('click', '.inst-row-rmv-hkj', function () {
+        let conf = confirm('Are you sure you want to remove this row?');
+        if (conf) {
+            $(this).closest('.inst-pl-row-hjkl').remove();
+            let a = 1;
+            $('.inst-pl-row-hjkl').each(function () {
+                $(this).find('.sr').val(a++);
+            });
+        }
+    });
+    $(document).on('click', '.add-new-row-hfg', function () {
+        let rows = $('.inst-pl-row-hjkl').length;
+        let row_strct = `<tr class="inst-pl-row-hjkl central-text-align">
+                                <td><i class="ti-trash pointer inst-row-rmv-hkj"></i></td>
+                                <td class="sr">${rows + 1}</td>
+                                <td class='inst-dt'><input type="text" class="form-control pmt-dt myInpt" data-provide="datepicker" /></td>
+                                <td class='inst-amt'><input type="number" class="form-control pmt-amt myInpt" value="0" /></td>
+                            </tr>`;
+        $('.inst-strctr-rec-tyhj').append(row_strct);
+    });
+</script>

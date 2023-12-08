@@ -1,0 +1,27 @@
+﻿@model MeherEstateDevelopers.Models.NewConnectionCharges
+
+<input type="hidden" id="plot_id" value="@Model.PlotData.Id" />
+<div class="row">
+    <div class="col-md-4">
+        <label>Plot No.</label>
+        <h6>@Model.PlotData.Block_Name  - @Model.PlotData.Type - @Model.PlotData.Plot_No </h6>
+    </div>
+    <div class="col-md-3">
+        <label>Name</label>
+        <h6>@Model.OwnerData.Name</h6>
+    </div>
+    <div class="col-md-2">
+        <label>Amount</label>
+        <input type="text" id="amt" class="form-control coma" />
+    </div>
+    <div class="col-md-4">
+        <label>Reason</label>
+        <textarea id="reason" class="form-control" rows="2"></textarea>
+    </div>
+</div>
+<script>
+    $(function () {
+        $(".modal-header").text("Payment Voucher Request");
+        $('.modal-footer').append('<button class="btn btn-primary" id="req-pay" type="button">Request</button>');
+    });
+</script>

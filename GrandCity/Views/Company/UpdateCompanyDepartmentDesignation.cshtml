@@ -1,0 +1,170 @@
+﻿
+@model MeherEstateDevelopers.Models.Comp_Dep_Desig
+
+@{ if (User.IsInRole("Administrator")) { Layout = "~/Views/Shared/_AdminLayout.cshtml"; } else { Layout = "~/Views/Shared/_StaffLayout.cshtml"; } }
+<div class="gap-20 pos-r">
+    <div class="col-md-12">
+        <div class="bgc-white p-20 bd">
+            <h5>Update Hierarchy</h5>
+            <hr />
+            <h6 class="c-grey-900">Update</h6>
+            <div class="form-row mT-30">
+                <div class="form-group col-md-3">
+                    <select class="form-control Updation_Comp_Dept_Design">
+                        <option value="Please_select">Please select...</option>
+                        <option value="Company">Company</option>
+                        <option value="Department">Department</option>
+                        <option value="Designation">Designation</option>
+                    </select>
+                </div>
+                
+            </div>
+
+            <div class="form-row mt-md-5">
+                <div class="form-group col-md-3 hide_and_show_Company">
+                    <label class="hide_and_show_Company">Company</label>
+                    @Html.DropDownList("Parent_Company", null, "Choose..", new { @class = "form-control comp_drop_list_change_company" })
+                </div>
+                <div class="form-group col-md-3 hide_and_show_Department">
+                    <label class="hide_and_show_Department">Department</label>
+                    @Html.DropDownList("Department", null, "Choose..", new { @class = "form-control comp_drop_list_change_department" })
+                </div>
+                <div class="form-group col-md-3 hide_and_show_Designation">
+                    <label class="hide_and_show_Designation">Designation</label>
+                    @Html.DropDownList("Designation", null, "Choose..", new { @class = "form-control comp_drop_list_change_designation" })
+                </div>
+                <div class="form-group col-md-3">
+                    <label class="hide_and_show_textshow_textbox">Please update name</label>
+                    <input type="text" class="form-control textdisplay hide_and_show_textshow_textbox" />
+                </div>
+                <div class="">
+                    <input type="hidden" class="idsstoring form-control hide_and_show_storingids" />
+                </div>
+                <div class="form-group col-md-1 hide_and_show_update_button">
+                    <label class="">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                    <button type="button" id="" class="btn btn-primary submissionn">Update</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    @*<div class="col-md-12">
+        @{ Html.RenderAction("CompanyHierarchy", "Company");}
+    </div>*@
+</div>
+
+
+<script>
+
+    var comp_id_store = '';
+    var textshow = '';
+    var ids = '';
+    var valueofupdation = '';
+    var selectedupdationotion = '';
+    // hide company department and designation
+    $('.hide_and_show_Company').hide();
+    $('.hide_and_show_Department').hide();
+    $('.hide_and_show_Designation').hide();
+    $('.hide_and_show_textshow_textbox').hide();
+    $('.hide_and_show_update_button').hide();
+
+    // dropdown changes of selection
+    $(".Updation_Comp_Dept_Design").change(function () {
+        valueofupdation = $(".Updation_Comp_Dept_Design option:selected").val();
+        if (valueofupdation == 'Company') {
+            $(".textdisplay").val('');
+            $('.idsstoring').val('');
+            $('.hide_and_show_Company').show();
+            $('.hide_and_show_textshow_textbox').show();
+            $('.hide_and_show_update_button').show();
+            //hidden members
+            $('.hide_and_show_Department').hide();
+            $('.hide_and_show_Designation').hide();
+        }
+
+        else if (valueofupdation == 'Department') {
+            $(".textdisplay").val('');
+            $('.idsstoring').val('');
+            $('.hide_and_show_Department').show();
+            $('.hide_and_show_textshow_textbox').show();
+            $('.hide_and_show_update_button').show();
+            //hidden members
+            $('.hide_and_show_Company').hide();
+            $('.hide_and_show_Designation').hide();
+        }
+        else if (valueofupdation == 'Designation') {
+            $(".textdisplay").val('');
+            $('.idsstoring').val('');
+            $('.hide_and_show_Designation').show();
+            $('.hide_and_show_textshow_textbox').show();
+            $('.hide_and_show_update_button').show();
+            //hidden members
+            $('.hide_and_show_Department').hide();
+            $('.hide_and_show_Department').hide();
+
+        }
+        else {
+            //clear values
+            $(".textdisplay").val('');
+            $('.idsstoring').val('');
+            //hidden members
+            $('.hide_and_show_Company').hide();
+            $('.hide_and_show_Department').hide();
+            $('.hide_and_show_Designation').hide();
+            $('.hide_and_show_textshow_textbox').hide();
+            $('.hide_and_show_update_button').hide();
+
+        }
+    });
+    // dropdown change funtion of company
+    $(".comp_drop_list_change_company").change(function () {
+        comp_id_store = $(".comp_drop_list_change_company").val();
+        textshow = $(".comp_drop_list_change_company option:selected").text();
+        $(".textdisplay").val(textshow);
+        ids = $(".idsstoring").val(comp_id_store);
+    });
+    // dropdown change funtion of Department
+    $(".comp_drop_list_change_department").change(function () {
+        comp_id_store = $(".comp_drop_list_change_department").val();
+        textshow = $(".comp_drop_list_change_department option:selected").text();
+        $(".textdisplay").val(textshow);
+        ids = $(".idsstoring").val(comp_id_store);
+    });
+    // dropdown change funtion of Designation
+    $(".comp_drop_list_change_designation").change(function () {
+        comp_id_store = $(".comp_drop_list_change_designation").val();
+        textshow = $(".comp_drop_list_change_designation option:selected").text();
+        $(".textdisplay").val(textshow);
+        ids = $(".idsstoring").val(comp_id_store);
+    });
+
+    // dropdown event of submission
+    $(document).on("click", ".submissionn", function () {
+        selectedupdationotion = $(".textdisplay").val();
+
+        $.ajax({
+            type: "POST",
+            url: '/Company/UpdateCompanyDepartmentDesignation/',
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify({
+                selectedids: comp_id_store,
+                company_name: selectedupdationotion,
+                selectedoption: valueofupdation
+            }),
+            success: function (data) {
+                if (!data) {
+                    alert("The department already exists or fields are empty");
+                }
+                else {
+                    alert("Successfully updated")
+                    window.location.reload(true);
+
+                }
+
+            },
+            error: function () {
+                alert("error")
+            }
+        });
+    });
+
+</script>

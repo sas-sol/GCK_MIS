@@ -1,0 +1,55 @@
+﻿
+<input type="hidden" value="@ViewBag.Transaction_Id" id="tran-id" />
+<div class="row">
+    <div class="col-md-10">
+        <h5 class="c-grey-900 mB-20" style="text-align:center;">Petty Cash Settlements</h5>
+    </div>
+    <div class="col-md-2">
+        <button class="btn btn-primary c-ptc">
+            Create New Settlement
+        </button>
+    </div>
+</div>
+<div class="bgc-white bd bdrs-3 p-20 mB-20">
+    <div class="col-md-12">
+        <div class="form-row">
+            <nav class="navbar navbar-expand-lg navbar-light bg-light navforcolor bgc-white" style="width: 100%;overflow: auto;">
+                <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                    <div class="navbar-nav nav-fill w-100">
+                        <a href="#" class="nav-item nav-link navproject active currentclass pt-c">Created</a>
+                        <a href="#" class="nav-item nav-link navproject pt-a">Approved</a>
+                        @*<a href="#" class="nav-item nav-link navproject pt-s">Supervision</a>*@
+                        @*<a href="#" class="nav-item nav-link navproject pt-p">Paid</a>*@
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </div>
+    <div class=" mt-2 bgc-white" id="prjpartiallist"></div>
+</div>
+<script>
+    $(".navproject").click(function () {
+        var list = $(".navproject")
+        $(this).css("background-color", "ghostwhite");
+        $(".currentclass").css("background-color", "white");
+        $(".currentclass").removeClass("currentclass");
+        $(this).addClass('currentclass');
+    });
+    $(document).ready(function () {
+        $(".currentclass").css("background-color", "ghostwhite");
+        $("#prjpartiallist").load("/Finance/PattyCashStatus/", { Status: 'Pending' });
+    });
+    $(document).on("click", ".pt-c", function () {
+        $("#prjpartiallist").load("/Finance/PattyCashStatus/", { Status: 'Pending' });
+    });
+    $(document).on("click", ".pt-a", function () {
+        $("#prjpartiallist").load("/Finance/PattyCashStatus/", { Status: 'Approved' });
+    });
+    //$(document).on("click", ".pt-s", function () {
+    //    $("#prjpartiallist").load("/Finance/PattyCashStatus/", { Status: 'Approved' });
+    //});
+    $(document).on("click", ".pt-p", function () {
+        $("#prjpartiallist").load("/Finance/PattyCashStatus/", { Status: 'Paid' });
+    });
+
+</script>

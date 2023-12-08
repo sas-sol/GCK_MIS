@@ -1,0 +1,44 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Sp_Get_BallotEventFiles_ForEntry_Result>
+
+<div class="row">
+    <div class="col-md-6">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Sr.</th>
+                    <th>File #</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @{ int c = 1;}
+                @if (Model != null)
+                {
+                    foreach (var v in Model)
+                    {
+                        <tr>
+                            <td>@(c++)</td>
+                            <td>@v.FileFormNumber</td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr class="central-text-align">
+                        <td colspan="2"> Queue Waiting !! </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <div class="col-md-6">
+        <div class="panel-heading central-text-align">
+            <h5>Currently Serving</h5>
+        </div>
+
+        <div class="col-md-12 central-text-align">
+            <h5>4900000</h5>
+        </div>
+    </div>
+</div>

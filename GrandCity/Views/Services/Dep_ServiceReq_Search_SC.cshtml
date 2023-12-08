@@ -1,0 +1,58 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Sp_Get_Service_Req_List_Result>
+<table class="table table-bordered" id="inv" width="100%">
+    <thead>
+        <tr>
+            <th width="10%">Sr.</th>
+            <th width="10%">Date</th>
+            <th width="10%">Status</th>
+            <th width="15%">Requested By</th>
+            <th width="55%">Services</th>
+            <th width="10%"></th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.Any())
+        {
+            int sr = 1;
+            foreach (var v in Model.GroupBy(x => new { x.Group_Id, x.DateTime, x.RequestedBy_Name, x.Status }))
+            {
+                <tr class="pointer exp-dfkhjsa">
+                    <td>@(sr++)</td>
+                    <td>@string.Format("{0:dd-MMM-yyyy}", v.Key.DateTime)</td>
+                    <td>@v.Key.Status</td>
+                    <td>@v.Key.RequestedBy_Name</td>
+                    <td class="tdscrol">
+                        <table class="table table-bordered" style="margin-bottom:0px; border:none">
+                            <thead>
+                                <tr>
+                                    <th width="5%">Sr.</th>
+                                    <th width="85%">Service Name</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{int count = 1;}
+                                @foreach (var item in v)
+                                {
+                                    <tr>
+                                        <td>@(count++)</td>
+                                        <td>@item.Item_Name</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </td>
+                    <td>
+                        <i class="ti-panel"></i>&nbsp;&nbsp;<a href="/Services/BidsListing_SC?Group=@v.Key.Group_Id" target="_blank">Requisition Details</a>
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="5"> No requisitions created yet</td>
+            </tr>
+        }
+    </tbody>
+</table>
+

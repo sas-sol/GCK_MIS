@@ -1,0 +1,63 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Sp_Get_LoanManagement_Other_Result>
+
+<div class="bgc-white bd col-md-12 bdrs-3 p-20 mB-20">
+    <h4 class="c-grey-900 mB-20">HR Pending Loans</h4>
+    <table class="table table-striped table-bordered" cellspacing="0" width="100%">
+        <thead>
+            <tr>
+
+                <th>Sr#</th>
+                <th>Created At</th>
+                <th>Name</th>
+                <th>Reason</th>
+                <th>Manager Approvel</th>
+                <th>HR Approvel</th>
+                <th>Installments</th>
+                <th>Type</th>
+                <th>Amount</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+
+                if (!Model.Any())
+                {
+                    <tr><td colspan="9" style="text-align:center">No data available</td></tr>
+                }
+                else
+                {
+                    var counter = 1;
+                    foreach (var item in Model.OrderByDescending(x => x.CreatedAt))
+                    {
+                        <tr class="pointer" id="@item.Id">
+                            <td>@counter</td>
+                            <td>@string.Format("{0:dd-MMM-yyyy}", item.CreatedAt)</td>
+                            <td>@item.Employee_Name</td>
+                            <td>@item.Reason</td>
+                            <td>@item.ManagerApproval</td>
+                            <td>@item.HrApproval</td>
+                            <td>@item.Installments</td>
+                            <td>  @item.Type.Replace('_',' ')</td>
+                            <td>
+                                @String.Format("{0:0,0.##}", item.Amount)
+                            </td>
+                            <td>
+                                @if (item.ManagerApproval == "Approved" && item.HrApproval == "Approved")
+                                {
+                                    <i data-toggle="modal" data-target="#Modal" id="@item.Id" class="l-a-det ti-eye"></i>
+                                }
+                                @if (item.ManagerApproval == "Approved" && item.HrApproval == "Pending")
+                                {
+                                    <i data-toggle="modal" data-target="#Modal" id="@item.Id" class="pop_show_pending_loan_hr ti-pencil"></i>
+
+                                }
+                            </td>
+
+                        </tr>
+                        counter++;
+                    }
+                }
+            }
+        </tbody>
+    </table>
+</div>

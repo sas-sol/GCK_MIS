@@ -1,0 +1,132 @@
+﻿@model MeherEstateDevelopers.Models.EmployeeProfileLoanView
+
+    <div class="col-md-12">
+        @{ int cnt = 1;}
+        @foreach (var v in Model.Requisitions.OrderBy(x => x.CreatedAt))
+        {
+            if (Model.Installments.Where(x => x.Loan_Id == v.Id).Any(x => x.Status == "Pending"))
+            {
+                <table class="table table-borderless mt-md-3">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th colspan="2">Loan/Advance # @(cnt++)</th>
+                            <th>Amount : @string.Format("{0:n0}", v.Amount)</th>
+                            <th>Installments : @v.Installments</th>
+                        </tr>
+                        <tr>
+                            <th colspan="2">Loan Request Date : @v.CreatedAt.Value.ToShortDateString()</th>
+                            <th colspan="2">Reason : @v.Reason</th>
+                        </tr>
+                        <tr>
+                            <th>Sr.</th>
+                            <th>Installment Amount</th>
+                            <th>Due Month</th>
+                            <th><input type="checkbox" class="slct-all" /> Action</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @{ int sr = 1;}
+                        @foreach (var item in Model.Installments.Where(x => x.Loan_Id == v.Id && x.IsWaivedOff == null).OrderByDescending(x=>x.Date).ToList())
+                        {
+                            <tr>
+                                <td>@(sr++)</td>
+                                <td>@string.Format("{0:n0}", item.Loan_Amt)</td>
+                                <td>@item.Date.Value.ToString("MM/yyyy")</td>
+                                @if (item.Status == "Pending")
+                                {
+                                    <td><input type="checkbox" class="settle-ln" data-instId="@item.Id" data-amt="@item.Loan_Amt" /> Settle</td>
+                                }
+                                else
+                                {
+                                    <td>-</td>
+                                }
+                            </tr>
+                        }
+                    </tbody>
+
+                    <tfoot style="background-color:rgba(250,218,120,0.4)">
+                        <tr>
+                            <th colspan="2">Settle Installments : <span class="settle-ttl-insts">0</span></th>
+                            <th colspan="2">Settle Amount <span class="settle-ttl">0</span> &nbsp;&nbsp;<button style="float:right;display:none;" class="btn btn-outline-success settle-fnl-btn">Settle</button></th>
+                        </tr>
+                    </tfoot>
+                </table>
+            }
+        }
+    </div>
+
+<script>
+    $(document).ready(function () {
+        $('.settle-ln').unbind().change(function () {
+            updateSettleTotals($(this).closest('tbody'));
+        });
+
+        $('.settle-fnl-btn').unbind().click(function () {
+            if (!confirm('Are you sure you want to finalize this settlement?')) {
+                return;
+            }
+            submitFinalization($(this).closest('table').find('tbody'));
+        });
+
+        $('.slct-all').unbind().change(function () {
+            $(this).closest('table').find('.settle-ln').prop('checked', true).trigger('change');
+        });
+
+    });
+
+    function updateSettleTotals(ele) {
+        var totalAmt = 0;
+        var ttlSettles = 0;
+        $(ele).find('.settle-ln').each(function () {
+            if ($(this).is(':checked')) {
+                ttlSettles++;
+                totalAmt += parseFloat($(this).attr('data-amt'));
+            }
+        });
+
+        $(ele).closest('table').find('.settle-ttl-insts').text(ttlSettles);
+        $(ele).closest('table').find('.settle-ttl').text(totalAmt.toLocaleString());
+        if (ttlSettles > 0) {
+            $(ele).closest('table').find('.settle-fnl-btn').show();
+        }
+        else {
+            $(ele).closest('table').find('.settle-fnl-btn').hide();
+        }
+    }
+
+    function submitFinalization(ele) {
+        var loanIds = [];
+        $(ele).find('.settle-ln').each(function () {
+            if ($(this).is(':checked')) {
+                loanIds.push($(this).attr('data-instId'));
+            }
+        });
+
+        ShowFullScreenLoader();
+        $.ajax({
+            type: "POST",
+            url: '/Loan/SaveLoanSettlment/',
+            data: { installments: loanIds },
+            success: function (data) {
+                HideFullScreenLoader();
+                if (data.Status) {
+                    alert("Loan settled successfully.");
+                    window.open('/Receipts/LoanSettlementReceipt?Id=' + data.ReceiptData.Receipt_Id, true);
+                    window.location.reload(true);
+                }
+                else {
+                    alert("Failed to settle this loan.");
+                }
+            }
+            , error: function (xmlhttprequest, textstatus, message) {
+                HideFullScreenLoader();
+                if (textstatus === "timeout") {
+                    alert("got timeout");
+                } else {
+                    alert(textstatus);
+                }
+            }
+        });
+    }
+</script>

@@ -1,0 +1,93 @@
+﻿@model MeherEstateDevelopers.Models.Lead
+@using (Html.BeginForm("CreateLeads", "Leads", FormMethod.Post, new { @id = "c-led", @class = "", role = "form" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="row">
+        <div class="form-group col-md-3">
+            <label>Name</label>
+            @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control", required = "" } })
+        </div>
+        <div class="form-group col-md-3">
+            <label>Father/Husband Name</label>
+            @Html.EditorFor(model => model.Father_Husband, new { htmlAttributes = new { @class = "form-control", required = "" } })
+        </div>
+        <div class="form-group col-md-3">
+            <label>Mobile</label>
+            @Html.EditorFor(model => model.Mobile_1, new { htmlAttributes = new { @class = "form-control", required = "" } })
+        </div>
+        <div class="form-group col-md-5">
+            <label>Address</label>
+            @Html.EditorFor(model => model.Address, new { htmlAttributes = new { @class = "form-control" } })
+        </div>
+    </div>
+    <hr />
+    <div class="row">
+        
+    </div>
+    <div class="row">
+        <div class="form-group col-md-2">
+            <label>Projects</label>
+            @Html.DropDownList("Project", null, "Choose..", new { @class = "form-control", required = "" })
+        </div>
+        <div class="form-group col-md-2 Block fil">
+            <label>Block</label>
+            @Html.DropDownList("Block", null, "Choose..", new { @class = "form-control" })
+        </div>
+        <div class="form-group col-md-2 Offer_Price fil">
+            <label>Offer Price</label>
+            <input class="form-control coma" id="off-pric" name="Offered_Price" placeholder="12,345" required>
+        </div>
+        <div class="form-group col-md-2 Source fil">
+            <label>Source</label>
+            <select class="form-control" name="Source">
+                <option value="Walkin">Walk-in</option>
+                <option value="Social Media">Social Media</option>
+                <option value="UAN">UAN</option>
+                <option value="Reference">Reference</option>
+                <option value="Zameen Leads">Zameen Leads</option>
+            </select>
+        </div>
+        <div class="form-group col-md-2 Plot_size fil">
+            <label>Plot Size</label>
+            <select class="form-control" id="plt-siz" name="Plot_Size">
+                <option value="2 Marla">2 Marla</option>
+                <option value="3 Marla">3 Marla</option>
+                <option value="4 Marla">4 Marla</option>
+                <option value="5 Marla">5 Marla</option>
+                <option value="6 Marla">6 Marla</option>
+                <option value="8 Marla">8 Marla</option>
+                <option value="10 Marla">10 Marla</option>
+                <option value="11 Marla">11 Marla</option>
+                <option value="12 Marla">12 Marla</option>
+                <option value="1 Kanal">1 Kanal</option>
+            </select>
+        </div>
+        <div class="form-group col-md-2 status fil">
+            <label>Status</label>
+            <select class="form-control" name="LeadStatus" id="LeadStatus" value="">
+                <option value="">Choose..</option>
+                <option value="Initial_Discussion">Initial Discussion</option>
+                <option value="Token">Token</option>
+                <option value="Mature">Mature</option>
+                <option value="Loose">Loose</option>
+            </select>
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group col-md-5">
+            <label>Remarks</label>
+            <textarea class="form-control" name="Description" rows="3" required></textarea>
+        </div>
+    </div>
+}
+<script>
+    $(function () {
+        $('.modal-footer').append('<button class="btn btn-primary" id="cra-lead" type="button">Create Lead</button>');
+        $(".modal-header").text("Create Lead");
+    });
+</script>
+<style>
+    .fil, .r-plt {
+        display: none;
+    }
+</style>

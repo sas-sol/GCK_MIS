@@ -1,0 +1,31 @@
+﻿@{
+    if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+}
+<div class="row gap-20 pos-r">
+    <div class="col-md-12">
+        <div class="bgc-white p-20 bd">
+            <div class="form-row">
+                <div class="col-md-4">            </div>
+                <div class="col-md-4">
+                    <h6 class="c-grey-900">File Number</h6>
+                    <input type="text" id="req-file-no" class="form-control" />
+                </div>
+                <div class="col-md-4">
+                    <input type="button" style="margin-top:29px" id="file-tran-req-det" value="Search" class="btn btn-info" />
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+<div id="tran-data">
+
+</div>

@@ -1,0 +1,110 @@
+﻿@model MeherEstateDevelopers.Models.POStatuses
+<table class="table table-bordered potbl">
+    <thead class="thead-dark">
+        <tr>
+            <th>Month</th>
+            <th>Department</th>
+            <th width="10%">Project</th>
+            <th width="10%">Po#</th>
+            <th width="10%">Date</th>
+            <th width="10%">Pending Days</th>
+            <th width="15%">Vendor</th>
+            <th width="10%">Total PO Value</th>
+            <th width="10%">Complete PO Value</th>
+            <th width="45%">Items</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.PO.Any())
+        {
+            foreach (var po in Model.PO.GroupBy(x => new { x.Dep_Name, x.Prj_Name, x.Group_Id, x.PO_Number, x.DateTime, x.Vendor_Name }).OrderByDescending(x => x.Key.DateTime.Value.Year).ThenByDescending(x => x.Key.DateTime.Value.Month).ThenBy(x => x.Key.Dep_Name).ThenByDescending(x => x.Key.DateTime).ToList())
+            {
+                decimal? Receivedval = 0;
+                foreach (var a in po)
+                {
+                    var it = Model.GRN.Where(x => x.Item_Id == a.Item_Id && x.PO_Number == po.Key.PO_Number).FirstOrDefault();
+                    if (it != null)
+                    {
+                        Receivedval += it.R_Qty * a.Purchase_Rate;
+                    }
+                }
+                if (Receivedval == 0)
+                {
+                    continue;
+                }
+                var remdays = (DateTime.Now.Date - po.Key.DateTime.Value.Date).TotalDays;
+        <tr id="@po.Key.PO_Number" class=" pointer ser-po">
+            <td>@string.Format("{0:MMMM - yyyy}", po.Key.DateTime)</td>
+            <td>@po.Key.Dep_Name</td>
+            <td>@po.Key.Prj_Name</td>
+            <td class="pointer">@po.Key.PO_Number</td>
+            <td>@string.Format("{0:dd-MMM-yyyy}", po.Key.DateTime)</td>
+            <td>@remdays Days</td>
+            <td>@po.Key.Vendor_Name</td>
+            <td>@string.Format("{0:n0}", po.Sum(x => x.TotalVal))</td>
+            <td>@string.Format("{0:n0}", Receivedval)</td>
+            <td class="tdscrol">
+                <table class="table" style="margin-bottom:0px; border:none">
+                    <thead>
+                        <tr>
+                            <th width="25%">GRN</th>
+                            <th width="25%">Date</th>
+                            <th width="50%"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var v in Model.GRN.Where(x => x.PO_Number == po.Key.PO_Number).GroupBy(x => new { x.GRN, x.St_Date }))
+                        {
+                            int ii = 1;
+                            <tr class="">
+                                <td>@v.Key.GRN</td>
+                                <td>@string.Format("{0:dd-MMM-yyyy}", v.Key.St_Date)</td>
+                                <td class="tdscrol">
+                                    <table class="table" style="margin-bottom:0px; border:none">
+                                        <thead>
+                                            <tr>
+                                                <th width="10%">Sr</th>
+                                                <th width="50%">Item</th>
+                                                <th width="20%">Qty</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var item in v)
+                                            {
+                                                <tr>
+                                                    <td>@ii</td>
+                                                    <td>@item.Complete_Name</td>
+                                                    <td>@string.Format("{0:0,0.##}", item.R_Qty)</td>
+                                                </tr>
+                                                ii++;
+                                            }
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="9">No Record Exists</td>
+            </tr>
+        }
+    </tbody>
+</table>
+<script>
+    $(function () {
+        $(".potbl").DataTable({
+            //rowGroup: { dataSrc: [0, 1] },
+            //columnDefs: [{ targets: 5, type: "date-eu" }],
+            //columnDefs: [{ targets: [1, 0], visible: false }],
+            ordering: false,
+            dom: 'Bfrtip'
+        });
+    });
+</script>

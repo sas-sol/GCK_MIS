@@ -1,0 +1,69 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Sp_Get_SalaryComparativeReport_Result>
+<div id="comp-sal-rep" style="margin: 0 auto;min-width: 310px; height: 600px;"></div>
+<script>
+    $(document).ready(function () {
+        let salModelData = @Html.Raw(Json.Encode(Model));
+        let xVals = [];
+        let yVals = [];
+
+        let idents = salModelData.reduce((r, a) => {
+            r[a.Name] = [...r[a.Name] || [], a];
+            return r;
+        }, {});
+
+        let xIdents = salModelData.reduce((r, a) => {
+            r[a.SalaryMonth] = [...r[a.SalaryMonth] || [], a];
+            return r;
+        }, {});
+
+        $.each(xIdents, function (ind, val) {
+            let monthName = val[0].SalaryMonth;
+            xVals.push(monthName);
+        });
+
+        $.each(idents, function (ind, val) {
+            let name = '';
+            let data = [];
+            $.each(val, function (i, v) {
+                name = v.Name;
+                data.push(v.GrandTotal);
+            });
+            yVals.push({
+                name: name,
+                data: data
+            });
+        });
+
+        Highcharts.chart('comp-sal-rep', {
+
+        chart: {
+            type: 'line'
+        },
+
+        title: {
+            text: 'Salaries Report'
+        },
+        subtitle: {
+            text: 'Salaries Comparative Report'
+        },
+            xAxis: {
+                categories: xVals,
+        },
+        yAxis: {
+            title: {
+                text: 'Comparative Salary Report'
+            }
+        },
+        plotOptions: {
+            line: {
+                dataLabels: {
+                    enabled: true
+                },
+                enableMouseTracking: false
+            }
+            },
+            series: yVals
+    });
+    });
+
+</script>

@@ -1,0 +1,146 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Service_PurchaseOrder>
+@{
+    var group = Model.Select(x => x.Group_Id).FirstOrDefault();
+    var vendor = Model.Select(x => x.Vendor_Id).FirstOrDefault();
+    var vendor_Name = Model.Select(x => x.Vendor_Name).FirstOrDefault();
+    var bid_id = Model.Select(x => x.Bid_Id).FirstOrDefault();
+    var PO_num = Model.Select(x => x.PO_Number).FirstOrDefault();
+    var PO_date = Model.Select(x => x.DateTime).FirstOrDefault();
+    var Dep_Id = Model.Select(x => x.Dep_Id).FirstOrDefault();
+    var Dep_Name = Model.Select(x => x.Dep_Name).FirstOrDefault();
+}
+<hr />
+<div class="col-md-12">
+    <div class="col-md-10">
+        <input type="hidden" value="@group" class="grpId" />
+        <input type="hidden" class="form-control Bid_Number" name="Bid_Number" placeholder="Bid Number" readonly value="@bid_id">
+        <div class="form-row">
+            <div class="form-group col-md-3">
+                <label>Vendor</label>
+                <h5>@vendor_Name</h5>
+                <input type="hidden" id="vendors" value="@vendor_Name" />
+                <input type="hidden" id="vendId" value="@vendor" />
+            </div>
+            <div class="form-group col-md-2">
+                <label>PO Number</label>
+                <h5>@PO_num</h5>
+                <input type="hidden" class="PO_Number" name="PO_Number" value="@PO_num">
+            </div>
+            <div class="form-group col-md-2">
+                <label>PO Date</label>
+                <h5>@string.Format("{0:dd-MMM-yyyy}", PO_date)</h5>
+                <input type="hidden" class="PO_Date" placeholder="mm/dd/yyyy" name="PO_Date" value="@Model.Select(x=>x.DateTime).FirstOrDefault().Value.ToShortDateString()">
+            </div>
+            <div class="form-group col-md-2">
+                <label>Department</label>
+                <h5>@Dep_Name</h5>
+                <input type="hidden" id="dep-name" value="@Dep_Name">
+                <input type="hidden" id="dep-id" value="@Dep_Id">
+            </div>
+        </div>
+    </div>
+</div>
+<hr />
+@if (Model.Any())
+{
+    int sr = 1;
+    decimal? g_total = 0;
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th width="10px">Sr.</th>
+                <th>Item</th>
+                <th width="150px">Qty</th>
+                <th width="150px">UOM</th>
+                <th width="150px">Rate</th>
+                <th width="120px">Total</th>
+                <th width="160px">Remarks</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var v in Model)
+            {
+                g_total += (v.Qty * v.Purchase_Rate);
+                <tr class="main-inv-rec cal" id="@v.Id">
+                    <td>@(sr++)</td>
+                    <td class="invs" data-slval='@v.Id'>@v.Item_Name</td>
+                    <td><input type="text" class="form-control rev-ser-qty" data-type="Qty" value="@v.Qty" /></td>
+                    <td>@v.UOM</td>
+                    <td class="inv-rate"><input type="text" class="form-control rev-ser-qty pur-rate" data-type="Rate" value="@v.Purchase_Rate" /></td>
+                    <td class="lin-total">@string.Format("{0:n2}",  v.Purchase_Rate)</td>
+                    <td>
+                        <input type="text" class="form-control remarks">
+                    </td>
+                </tr>
+            }
+            <tr>
+                <td colspan="5">Grand Total</td>
+                <td>@string.Format("{0:n2}", g_total)</td>
+                <td></td>
+            </tr>
+        </tbody>
+    </table>
+}
+
+<script>
+    $(function () {
+        $('.modal-close-btn').remove();
+        $('.modal-footer').append('<button class="btn btn-success cl-pur" type="button">Close</button>');
+    })
+    $(document).on("click", ".cl-pur", function () {
+        window.location.reload();
+    });
+
+
+    $(document).on('keyup', '.ttl-prc', function () {
+        $(this).closest('.cal').find('.inv-qty').val('');
+        calinvamt();
+    });
+    function calinvamt() {
+        var ttlamt = 0;
+        $('.ttl-prc').each(function () {
+            var amt = $(this).val();
+            ttlamt += amt;
+        });
+        $('#tt-invc-amt').text(Number(ttlamt).toLocaleString());
+    }
+
+</script>
+
+<style>
+    .centralText {
+        text-align: center;
+    }
+
+    .warningText {
+        position: absolute;
+        left: 50%;
+        right: 50%;
+        /*font-size: 20px;*/
+        animation-name: warning;
+        animation-duration: .6s;
+        animation-iteration-count: infinite;
+    }
+
+    @@keyframes warning {
+        0% {
+            font-size: 15px;
+        }
+
+        25% {
+            font-size: 20px;
+        }
+
+        50% {
+            font-size: 25px;
+        }
+
+        70% {
+            font-size: 20px;
+        }
+
+        100% {
+            font-size: 15px;
+        }
+    }
+</style>

@@ -1,0 +1,22 @@
+﻿
+@using (Html.BeginForm("RecordAdvance", "Procurement", FormMethod.Post, new { @id = "rec-advance", @class = "", role = "form", autocomplete = "off" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="col-md-12">
+        <div class="form-row">
+            <div class="form-group col-md-9">
+                <label>Descriptions</label>
+                <input type="text" class="form-control" id="nar" required>
+            </div>
+            <div class="form-group col-md-3">
+                <label>Amount</label>
+                <input type="text" class="form-control coma" id="adv-amt" required />
+            </div>
+        </div>
+    </div>
+}
+<script>
+    $(function () {
+        $('.modal-footer').append(' <button type="button" class="btn btn-primary rec-advance-btn">Request Advance</button>');
+    });
+</script>

@@ -1,0 +1,79 @@
+﻿@model IEnumerable<Management_Information_System.Models.Sp_Get_CommercialPossessionsList_Result>
+
+<table id="dataTable" class="table table-borderless clickable-rows" cellspacing="0" width="100%">
+    <thead>
+        <tr>
+            <th>Sr.</th>
+            <td>Shop No</td>
+            <td>Floor</td>
+            <td>Project</td>
+            <td>Size</td>
+            <td>Name</td>
+            <td>Father Name</td>
+            <td>CNIC</td>
+            <td>Type</td>
+            <td>Status</td>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            if (Model.Any())
+            {
+                int srcounter = 1;
+                foreach (var item in Model)
+                {
+                    <tr class="pointer comm_room__get__det__poss" id="@item.Id" data-tp="@item.Possession_Letter">
+                        <td>@srcounter</td>
+                        <td>@item.shop_no</td>
+                        <td>@item.Floor</td>
+                        <td>@item.Project_Name</td>
+                        <td>@item.Area SqFt.</td>
+                        <td>@item.OwnerName</td>
+                        <td>@item.FatherName</td>
+                        <td>@item.CNIC</td>
+                        <td>@item.Type</td>
+                        <td>
+                            @if (item.Possession_Letter == 1)
+                            {
+                                <span>Requested</span>
+                            }
+                            else if (item.Possession_Letter == 2)
+                            {
+                                <span>In Process</span>
+
+                            }
+                            else if (item.Possession_Letter == 3)
+                            {
+                                <span>Possession Letter Printed</span>
+                            }
+                        </td>
+                    </tr>
+                    srcounter++;
+                }
+            }
+        }
+    </tbody>
+</table>
+
+@if (User.IsInRole("ReadOnly"))
+{
+    <script>
+        $('.comm_room__get__det__poss').removeClass('comm_room__get__det__poss');
+    </script>
+}
+
+<script>
+    $(document).ready(function () {
+        $(".comm_room__get__det__poss").click(function () {
+            var id = $(this).attr("id");
+            var tp = $(this).attr('data-tp');
+
+            if (tp == 3) {
+                window.location = "/Commercial/PossessionPrint?PlotId=" + id;
+            }
+            else {
+                window.location = "/Commercial/PossessionWorking?id=" + id;
+            }
+        });
+    });
+</script>

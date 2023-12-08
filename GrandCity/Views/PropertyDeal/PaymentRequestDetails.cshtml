@@ -1,0 +1,110 @@
+﻿@model MeherEstateDevelopers.Models.Sp_Get_PropertyDeal_Request_Id_Result
+
+@using (Html.BeginForm("PaymentGenerate", "PropertyDeal", FormMethod.Post, new { @id = "prop-del-req", @class = "", role = "form" }))
+{
+    @Html.AntiForgeryToken()
+    <input type="hidden" name="Id" value="@Model.Id" />
+    <input type="hidden" name="TransactionId" value="@ViewBag.TransactionId"/>
+    if (Model.Company == "SAM")
+    {
+        <input type="hidden" name="Type" value="SAM Voucher" />
+
+    }
+    else if (Model.Company == "SPE")
+    {
+        <input type="hidden" name="Type" value="SPE Voucher" />
+    }
+    else
+    {
+        <input type="hidden" name="Type" value="SAM Voucher" />
+    }
+    <div class="form-row">
+        <div class="form-group col-md-2">
+            <label>Name</label>
+            <h6> @Model.Name</h6>
+        </div>
+        <div class="form-group col-md-4">
+            <label>File / Plot No.</label>
+            <h6> @Model.File_Plot_Number - @Model.Plot_Type - @Model.Block</h6>
+        </div>
+        <div class="form-group col-md-2">
+            <label>Size</label>
+            <h6> @Model.Size</h6>
+        </div>
+        <div class="form-group col-md-2">
+            <label>Amount</label>
+            <h6>@string.Format("{0:n0}", Model.Amount)</h6>
+        </div>
+        <div class="form-group col-md-3">
+            <label>Requested By</label>
+            <h6>@Model.RequestedBy</h6>
+        </div>
+        <div class="form-group col-md-3">
+            <label>Request Type</label>
+            <h6>@Model.Type</h6>
+        </div>
+    </div>
+    <input type="hidden" id="type-id" value="@Model.Type" />
+    <hr />
+    <div class="form-row" id="pay-1">
+        <div class="form-group col-md-2">
+            <label>Cash / Bank</label>
+            <select class="form-control paytypesel" name="PaymentType" id="cah-chq-bak" required>
+                <option value="Cash">Cash</option>
+                <option value="BankDraft">Bank Draft</option>
+                <option value="Cheque">Cheque</option>
+                <option value="PayOrder">Pay Order</option>
+                <option value="Online_Cash">Online - Cash</option>
+                <option value="Online_Cheque">Online - Cheque</option>
+                <option value="Online_Payorder">Online - PayOrder</option>
+                <option value="Online_Bankdraft">Online - BankDraft</option>
+            </select>
+        </div>
+        <div class="form-group col-md-2">
+            <label>Amount</label>
+            <input class="form-control coma" placeholder="250,000" value="@string.Format("{0:n0}", Model.Amount)" readonly required>
+            <input type="hidden" id="Amount" name="Amount" class="amt" value="@Model.Amount" required>
+        </div>
+        <div class="form-group col-md-2 paymentotherinfo">
+            <label id="paytypelabel">-</label>
+            <input type="text" class="form-control" id="paymenttype" name="PayChqNo" placeholder="" disabled required>
+        </div>
+        <div class="form-group col-md-2 paymentotherinfo">
+            <label>To</label>
+            <select class="form-control" id="paymenttype" name="ch_Pay_Draft_To" disabled>
+                <option value="Meher Estate Developers Pvt Ltd">Meher Estate Developers Pvt Ltd</option>
+                <option value="SA Marketing">SA Marketing</option>
+                <option value="SAG Property Exchange">SAG Property Exchange</option>
+            </select>
+        </div>
+        <div class="form-group col-md-2 paymentotherinfo">
+            <label>Date</label>
+            <input type="text" class="form-control" id="cbp-date" name="Ch_bk_Pay_Date" data-provide="datepicker" placeholder="mm/dd/yyyy" disabled required>
+        </div>
+        <div class="form-group col-md-2 paymentotherinfo">
+            <label>Bank</label>
+            @Html.DropDownList("Bank", null, "Choose..", new { id = "bank", @class = "form-control", disabled = "" })
+        </div>
+        <div class="form-group col-md-2 paymentotherinfo">
+            <label>Branch </label>
+            <input type="text" class="form-control" id="Branch" name="Branch" placeholder="Mall Rd" disabled required>
+        </div>
+        <div class="form-group col-md-1 paymentotherinfo">
+            <label>Scan File </label>
+            <button class=" btn btn-primary" data-v="1" type="button" id="scanbtn">Scan</button>
+        </div>
+        <div id="images-1" class="col-md-10"></div>
+
+    </div>
+}
+<script>
+    $(function () {
+        $('.modal-footer').append('<button class="btn btn-primary" id="gen-del-req" type="button">Generate</button>');
+        $(".modal-header").text("Payment Request");
+    });
+</script>
+<style>
+    .paymentotherinfo {
+        display: none;
+    }
+</style>

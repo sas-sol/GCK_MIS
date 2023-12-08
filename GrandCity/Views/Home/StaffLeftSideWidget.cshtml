@@ -1,0 +1,512 @@
+﻿@model IEnumerable<string>
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/sunburst.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/modules/export-data.js"></script>
+    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+
+    <script>
+        $(function () {
+            $("#mainContent").load("/Home/StaffDashTiles/", { Type: "home" });
+        });
+    </script>
+    <div class="sidebar">
+        <div class="sidebar-inner">
+            <div class="sidebar-logo">
+                <div class="peers ai-c fxw-nw">
+                    <div class="peer peer-greed">
+                        <a class="sidebar-link td-n" href="/Home/Index">
+                            <div class="peers ai-c fxw-nw">
+                                <div class="peer">
+                                    <div class="logo" style="padding:20px 10px 10px 10px">
+                                        <img style="width:100%" src="~/assets/static/images/logo.png" alt="">
+                                    </div>
+                                </div>
+                                <div class="peer peer-greed">
+                                    <h5 class="lh-1 mB-0 logo-text">SA Gardens</h5>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="peer">
+                        <div class="mobile-toggle sidebar-toggle">
+                            <a href="javascript:void(0);" class="td-n"><i class="ti-arrow-circle-left"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <ul class="sidebar-menu scrollable pos-r">
+
+                <li class="nav-item mT-30 active">
+                    <a class="dropdown-toggle staff-dash-tile" href="javascript:void(0);" data-dash="home">
+                        <span class="icon-holder"><i class="c-blue-500 ti-home"></i> </span><span class="title">Dashboard</span>
+                    </a>
+                </li>
+
+                @* Roles & Responsibilities *@
+                @if (Model.Contains("Roles And Responsibilities"))
+                {
+                <li class="nav-item dropdown">
+                    <a class="dropdown-toggle staff-dash-tile" href="javascript:void(0);">
+                        <span class="icon-holder">
+                            <i class="c-red-500 ti-agenda"></i>
+                        </span>
+                        <span class="title">Roles & Responsibilities</span>
+                        <span class="arrow">
+                            <i class="ti-angle-right"></i>
+                        </span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a class='sidebar-link get-link' data-link="/RolesAndResponsibilities/CreateRoles/" href="javascript:void(0);">Roles</a>
+                        </li>
+                        <li>
+                            <a class='sidebar-link get-link' data-link="/RolesAndResponsibilities/AssignRoles/" href="javascript:void(0);">Responsibilities</a>
+                        </li>
+                        <li>
+                            <a class='sidebar-link get-link' data-link="/RolesAndResponsibilities/RolesResponsibilitiesCreation/" href="javascript:void(0);">Roles Assignment</a>
+                        </li>
+                    </ul>
+                </li>
+                }
+
+                @* Real Estate Configuration *@
+                @if (Model.Contains("Real Estate Configuration"))
+                {
+                <li class="nav-item dropdown">
+                    <a class="dropdown-toggle staff-dash-tile" href="javascript:void(0);">
+                        <span class="icon-holder">
+                            <i class="c-red-500 ti-home"></i>
+                        </span>
+                        <span class="title">Real Estate Configuration</span>
+                        <span class="arrow">
+                            <i class="ti-angle-right"></i>
+                        </span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        @if (User.IsInRole("Real Estate Project"))
+                        {
+                        <li>
+                            <a class='sidebar-link get-link' data-link="/RealestateProjects/Create/" href="javascript:void(0);">Projects</a>
+                        </li>
+                        }
+                        @if (User.IsInRole("Real Estate Phase"))
+                        {
+                        <li>
+                            <a class='sidebar-link get-link' data-link="/RealestatePhases/Create/" href="javascript:void(0);">Phase</a>
+                        </li>
+                        }
+                        @if (User.IsInRole("Real Estate Block"))
+                        {
+                        <li>
+                            <a class='sidebar-link get-link' data-link="/RealEstateBlocks/Create/" href="javascript:void(0);">Block</a>
+                        </li>
+                        }
+                        @if (User.IsInRole("Transfer"))
+                        {
+                        <li>
+                            <a class='sidebar-link get-link' data-link="/Plots/TransferFeeConfig/" href="javascript:void(0);">Transfer</a>
+                        </li>
+                        }
+                    </ul>
+                </li>
+                }
+                @* Dealership *@
+                @if (Model.Contains("Dealership") || Model.Contains("Cash Counter"))
+                {
+                <li class="nav-item dropdown dash-tile" data-dash="dealer">
+                    <a class="dropdown-toggle " href="javascript:void(0);">
+                        <span class="icon-holder">
+                            <i class="c-red-500 ti-id-badge"></i>
+                        </span>
+                        <span class="title">Dealership Management</span>
+                        <span class="arrow">
+                            <i class="ti-angle-right"></i>
+                        </span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a class='sidebar-link get-link' data-link="/Dealership/DealershipRegisteration/" href="javascript:void(0);">Registeration</a>
+                        </li>
+                        <li>
+                            <a class='sidebar-link get-link' data-link="/Dealership/DealershipSecurity/" href="javascript:void(0);">Advance Collection</a>
+                        </li>
+                        <li>
+                            <a class='sidebar-link get-link' data-link="/Dealership/DealershipPayment/" href="javascript:void(0);">Payments</a>
+                        </li>
+                    </ul>
+                </li>
+                }
+                @* Cash Counter *@
+                @if (Model.Contains("Cash Counter"))
+                {
+                <li class="nav-item dropdown">
+                    <a class="dropdown-toggle staff-dash-tile" href="javascript:void(0);" data-dash="cash counter">
+                        <span class="icon-holder">
+                            <i class="c-blue-500 ti-user"></i>
+                        </span>
+                        <span class="title">Cash Counter</span>
+                    </a>
+                </li>
+                }
+                @* Files & Plots *@
+                @if (Model.Contains("Files Plots"))
+                {
+                <li class="nav-item dropdown">
+                    <a class="dropdown-toggle staff-dash-tile" href="javascript:void(0);" data-dash="Files Plots">
+                        <span class="icon-holder">
+                            <i class="c-blue-500 ti-file"></i>
+                        </span>
+                        <span class="title">Files & Plots</span>
+                    </a>
+                </li>
+                }
+
+                @if (Model.Contains("Building Management"))
+                {
+                <li class="nav-item dropdown">
+                    <a class="dropdown-toggle staff-dash-tile" href="javascript:void(0);" data-dash="building">
+                        <span class="icon-holder">
+                            <i class="c-blue-500 ti-layout-menu-v"></i>
+                        </span>
+                        <span class="title">Building Management</span>
+                    </a>
+                </li>
+                }
+                @* Accounts *@
+                @if (Model.Contains("Accounts"))
+                {
+                <li class="nav-item dropdown">
+                    <a class="dropdown-toggle staff-dash-tile" href="javascript:void(0);" data-dash="accounts">
+                        <span class="icon-holder">
+                            <i class="c-teal-500 ti-view-list-alt"></i>
+                        </span>
+                        <span class="title">Accounts</span>
+                        <span class="arrow">
+                            <i class="ti-angle-right"></i>
+                        </span>
+                    </a>
+                    <ul class="dropdown-menu">
+
+                        @if (User.IsInRole("Chart of Accounts"))
+                        {
+                        <li class="nav-item dropdown">
+                            <a href="/AccountHeads/AccountHeadList">
+                                <span>Chart of Accounts</span>
+                            </a>
+                        </li>
+                        }
+                        @if (User.IsInRole("Vouchers Reports"))
+                        {
+                        <li class="nav-item dropdown">
+                            <a href="javascript:void(0);">
+                                <span>Vouchers Reports</span>
+                                <span class="arrow">
+                                    <i class="ti-angle-right"></i>
+                                </span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a href="/JournalEntry/VouchersReports?r=CRV">Cash Receipt Vouchers</a>
+                                </li>
+                                <li>
+                                    <a href="/JournalEntry/VouchersReports?r=BRV">Bank Receipt Vouchers</a>
+                                </li>
+                                <li>
+                                    <a href="/JournalEntry/VouchersReports?r=CPV">Cash Payment Vouchers</a>
+                                </li>
+                                <li>
+                                    <a href="/JournalEntry/VouchersReports?r=BPV">Bank Payment Vouchers</a>
+                                </li>
+                                <li>
+                                    <a href="/JournalEntry/VouchersReports?r=JV">Journal Vouchers</a>
+                                </li>
+                            </ul>
+                        </li>
+                        }
+                        @if (User.IsInRole("General Entry") || User.IsInRole("Supervision of General Entry"))
+                        {
+                        <li class="nav-item dropdown">
+                            <a href="javascript:void(0);">
+                                <span>Journal Entry</span>
+                                <span class="arrow">
+                                    <i class="ti-angle-right"></i>
+                                </span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                @if (User.IsInRole("General Entry"))
+                                {
+                                <li>
+                                    <a href="/GeneralEntry/RecordedEntries">My Journal Entry</a>
+                                </li>
+
+                                <li>
+                                    <a href="/GeneralEntry/GeneralEntry">New Journal Entry</a>
+                                </li>
+                                }
+                                @if (User.IsInRole("Supervision of General Entry"))
+                                {
+                                <li>
+                                    <a href="/GeneralEntry/PendingEntries">Pending Journal Entry</a>
+                                </li>
+                                }
+
+                            </ul>
+                        </li>
+                        }
+
+                        @if (User.IsInRole("Payable Voucher"))
+                        {
+                        <li class="nav-item dropdown">
+                            <a href="/GeneralEntry/PayableVouchers">
+                                <span>Payable Vouchers</span>
+                            </a>
+                        </li>
+                        }
+
+
+                        @if (User.IsInRole("Daily Cash Recovery") || User.IsInRole("Daily Bank Recovery"))
+                        {
+                        <li class="nav-item dropdown">
+                            <a href="javascript:void(0);">
+                                <span>Daily Recovery</span>
+                                <span class="arrow">
+                                    <i class="ti-angle-right"></i>
+                                </span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                @if (User.IsInRole("Daily Cash Recovery"))
+                                {
+                                <li>
+                                    <a href="/GeneralEntry/CashBook">Daily Cash Recovery</a>
+                                </li>
+                                }
+                                @if (User.IsInRole("Daily Bank Recovery"))
+                                {
+                                <li>
+                                    <a href="/GeneralEntry/BankBook">Daily Bank Recovery</a>
+                                </li>
+                                }
+                            </ul>
+                        </li>
+                        }
+
+                        @if (User.IsInRole("Cash Book"))
+                        {
+                        <li class="nav-item dropdown">
+                            <a href="/JournalEntry/CashBook">
+                                <span>Cash Book</span>
+                            </a>
+                        </li>
+                        }
+                        @if (User.IsInRole("Bank Book"))
+                        {
+                        <li class="nav-item dropdown">
+                            <a href="/JournalEntry/BankBook">
+                                <span>Bank Book</span>
+                            </a>
+                        </li>
+                        }
+                        @if (User.IsInRole("Trail Balance"))
+                        {
+                        <li class="nav-item dropdown">
+                            <a href="/AccountHeads/TrailBalance">
+                                <span>Trial Balance</span>
+                            </a>
+                        </li>
+                        }
+                        @if (User.IsInRole("Payable Voucher"))
+                        {
+                        <li class="nav-item dropdown">
+                            <a href="/AccountHeads/COA_Mapper">
+                                <span>COA Mapper</span>
+                            </a>
+                        </li>
+                        }
+                    </ul>
+                </li>
+                }
+                @* Audit *@
+                @if (Model.Contains("Audit"))
+                {
+                <li class="nav-item dropdown">
+                    <a class="dropdown-toggle staff-dash-tile" href="javascript:void(0);" data-dash="audit">
+                        <span class="icon-holder">
+                            <i class="c-pink-500 ti-user"></i>
+                        </span>
+                        <span class="title">Audit</span>
+                    </a>
+                </li>
+                }
+
+
+                @* Project Management *@
+                @if (Model.Contains("Project Management"))
+                {
+                <li class="nav-item dropdown">
+                    <a class="dropdown-toggle staff-dash-tile" href="javascript:void(0);" data-dash="prj management">
+                        <span class="icon-holder">
+                            <i class="c-orange-500 ti-write"></i>
+                        </span>
+                        <span class="title">Project Management</span>
+                    </a>
+                </li>
+
+                }
+
+                @* Inventory Management *@
+                @if (Model.Contains("Inventory"))
+                {
+                <li class="nav-item dropdown">
+                    <a class="dropdown-toggle staff-dash-tile" href="javascript:void(0);" data-dash="Inventory">
+                        <span class="icon-holder">
+                            <i class="c-green-500 ti-stack-overflow"></i>
+                        </span>
+                        <span class="title">Inventory Management</span>
+                    </a>
+                </li>
+                }
+
+
+                @* Procurement Management *@
+                @if (Model.Contains("Procurement"))
+                {
+                <li class="nav-item dropdown">
+                    <a class="dropdown-toggle staff-dash-tile" href="javascript:void(0);" data-dash="Procurement">
+                        <span class="icon-holder">
+                            <i class="c-pink-500 ti-shopping-cart-full"></i>
+                        </span>
+                        <span class="title">Procurement Management</span>
+                    </a>
+                </li>
+                }
+
+
+                @* Assets Management *@
+                @if (Model.Contains("Assets Management"))
+                {
+                <li class="nav-item dropdown">
+                    <a class="dropdown-toggle staff-dash-tile" href="javascript:void(0);" data-dash="asset">
+                        <span class="icon-holder">
+                            <i class="c-pink-500 ti-user"></i>
+                        </span>
+                        <span class="title">Assets Management</span>
+                    </a>
+                </li>
+                }
+
+
+                @* Vehical Management *@
+                @if (Model.Contains("Vehical Management"))
+                {
+                <li class="nav-item dropdown">
+                    <a class="dropdown-toggle staff-dash-tile" href="javascript:void(0);" data-dash="vehical">
+                        <span class="icon-holder">
+                            <i class="c-pink-500 ti-user"></i>
+                        </span>
+                        <span class="title">Vehical Management</span>
+                    </a>
+                </li>
+                }
+
+
+                @* Human Resource *@
+                @if (Model.Contains("Human Resource"))
+                {
+                <li class="nav-item dropdown">
+                    <a class="dropdown-toggle staff-dash-tile" href="javascript:void(0);" data-dash="hr">
+                        <span class="icon-holder">
+                            <i class="c-pink-500 ti-user"></i>
+                        </span>
+                        <span class="title">Human Resource</span>
+                    </a>
+                </li>
+                }
+
+
+                @*Call Center*@
+                @if (Model.Contains("Call Center"))
+                {
+                <li class="nav-item dropdown">
+                    <a class="dropdown-toggle staff-dash-tile" href="javascript:void(0);" data-dash="call center">
+                        <span class="icon-holder">
+                            <i class="c-pink-500 ti-headphone-alt"></i>
+                        </span>
+                        <span class="title">Call Center</span>
+                    </a>
+                </li>
+                }
+
+
+                @*Tickets*@
+                @if (Model.Contains("Tickets"))
+                {
+                <li class="nav-item dropdown">
+                    <a class="dropdown-toggle staff-dash-tile" href="javascript:void(0);" data-dash="tickets">
+                        <span class="icon-holder">
+                            <i class="c-pink-500 ti-ticket"></i>
+                        </span>
+                        <span class="title">Tickets</span>
+                    </a>
+                </li>
+                }
+
+
+                @*Marketing*@
+                @if (Model.Contains("Marketing"))
+                {
+                <li class="nav-item dropdown">
+                    <a class="dropdown-toggle staff-dash-tile" href="javascript:void(0);" data-dash="sa marketing">
+                        <span class="icon-holder">
+                            <i class="c-pink-500 ti-user"></i>
+                        </span>
+                        <span class="title">SA Marketing</span>
+                    </a>
+                </li>
+                }
+
+
+                @*Reports*@
+                @if (Model.Contains("Reports"))
+                {
+                <li class="nav-item dropdown">
+                    <a class="dropdown-toggle staff-dash-tile" href="javascript:void(0);" data-dash="reports">
+                        <span class="icon-holder">
+                            <i class="c-blue-500 ti-user"></i>
+                        </span>
+                        <span class="title">Reports</span>
+                    </a>
+                </li>
+                }
+
+
+                @* Service Charges *@
+                @if (Model.Contains("Service Charges"))
+                {
+                <li class="nav-item dropdown">
+                    <a class="dropdown-toggle staff-dash-tile" href="javascript:void(0);" data-dash="service charges">
+                        <span class="icon-holder">
+                            <i class="c-orange-500 ti-server"></i>
+                        </span>
+                        <span class="title">Service Charges</span>
+                    </a>
+                </li>
+                }
+
+
+                @*Sports & Recreational*@
+                @if (Model.Contains("Administration"))
+                {
+                <li class="nav-item dropdown">
+                    <a class="dropdown-toggle staff-dash-tile" href="javascript:void(0);" data-dash="Admin Facilities">
+                        <span class="icon-holder">
+                            <i class="c-orange-500 ti-server"></i>
+                        </span>
+                        <span class="title">Admin Facilities</span>
+                    </a>
+                </li>
+
+                }
+            </ul>
+        </div>
+    </div>

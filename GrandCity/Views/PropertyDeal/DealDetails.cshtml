@@ -1,0 +1,334 @@
+﻿@model MeherEstateDevelopers.Models.DealModel
+@{ if (User.IsInRole("Administrator")) { Layout = "~/Views/Shared/_AdminLayout.cshtml"; } else { Layout = "~/Views/Shared/_StaffLayout.cshtml"; }
+    string[] types = { "Commession", "Cancellation" };
+    var dire = Model.Receipts.Where(x => x.Type == "Direct Payment" && x.Cancel is null).ToList();
+    decimal sellamt = 0;
+    var receiedAmt = Model.Receipts.Where(x => (x.Status == "Approved" || x.Status == null) && x.Cancel is null && !types.Contains(x.Type)).Sum(x => x.Amount);
+    var pay = Model.Voucher.Where(x => x.Cancel is null && !types.Contains(x.Type)).Sum(x => x.Amount);
+}
+<div class="bgc-white p-20 bd form-row">
+    <div class="col-md-10">
+        <div class="form-row">
+            <input type="hidden" value="@Model.Deal.Id" id="deal-id" />
+            <div class="form-group col-md-2">
+                <label>Plot No</label>
+                <h6>@Model.Deal.File_Plot_Number</h6>
+            </div>
+            <div class="form-group col-md-2">
+                <label>Type</label>
+                <h6>@Model.Deal.Plot_Type</h6>
+            </div>
+            <div class="form-group col-md-2">
+                <label>Block</label>
+                <h6>@Model.Deal.Block</h6>
+            </div>
+            <div class="form-group col-md-2">
+                <label>Size</label>
+                <h6 id="plt-size">@Model.Deal.Size</h6>
+            </div>
+            <div class="form-group col-md-2">
+                <label>Deal Type</label>
+                <h6 id="de-typ">@Model.Deal.Type</h6>
+            </div>
+            <div class="form-group col-md-2">
+                <label>Created By</label>
+                <h6>@ViewBag.Name</h6>
+            </div>
+            <div class="form-group col-md-2">
+                <label>Date Created</label>
+                <h6>@string.Format("{0:dd-MMM-yyyy}", Model.Deal.Datetime)</h6>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-2" style="border-left:1px solid #ccc">
+        <h5>Status: @Model.Deal.Status.Replace("_", " ")</h5>
+        <hr />
+        @if (Model.Deal.Status == MeherEstateDevelopers.Models.LeadsStatus.Close.ToString())
+        {
+            var prf = receiedAmt - pay;
+            <label>Profit : <b>@string.Format("{0:n0}", prf) </b></label>
+            <label>Commission : <b>@string.Format("{0:n0}", Model.Receipts.Where(x => x.Type == "Commession").Sum(x => x.Amount))</b></label>
+            <hr />
+            <label>Total : <b>@string.Format("{0:n0}", Model.Receipts.Where(x => x.Type == "Commession").Sum(x => x.Amount) + prf)</b></label>
+        }
+    </div>
+    <hr />
+    <div class="form-row">
+        <div class="col-md-9">
+            <div class="form-row">
+                <div class="col-md-12 col-xl-12">
+                    <div class="row">
+                        <div class="form-group col-md-2">
+                            <h5>Seller</h5>
+                        </div>
+                        <div class="form-group col-md-2">
+                            <button class="btn btn-info dr-pay" data-toggle="modal" data-target="#Modal">Direct Payments</button>
+                        </div>
+                    </div>
+                    <table class="table table-striped table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Mobile</th>
+                                <th>Address</th>
+                                <th>Demand</th>
+                                <th>Offered Rate</th>
+                                <th>Rate / Marla</th>
+                                <th>Commission</th>
+                                <th></th>
+                                <th>Commission Approval</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model.Parties.Any(x => x.Type == "Seller"))
+                            {
+                                string statuscolor = "";
+                                foreach (var item in Model.Parties.Where(x => x.Type == "Seller"))
+                                {
+                                    sellamt = Convert.ToDecimal(item.Offered_Rate);
+                                    if (item.Userid == ViewBag.UserId || User.IsInRole("Commission Approval") || User.IsInRole("Administrator"))
+                                    {
+                                        if (item.Status == MeherEstateDevelopers.Models.LeadsStatus.Mature.ToString() || item.Status == MeherEstateDevelopers.Models.LeadsStatus.Close.ToString()) { statuscolor = "bgc-green-50"; }
+                                        else if (item.Status == MeherEstateDevelopers.Models.LeadsStatus.Loose.ToString()) { statuscolor = "bgc-red-50"; }
+                                        <tr id="@item.Id" class="@statuscolor">
+                                            <td>@item.Name</td>
+                                            <td>@item.Mobile</td>
+                                            <td>@item.Address</td>
+                                            <td>@string.Format("{0:n0}", item.Demand)</td>
+                                            <td>@string.Format("{0:n0}", item.Offered_Rate)</td>
+                                            <td>@string.Format("{0:n0}", item.Rate_Per_Marla)</td>
+                                            <td>@string.Format("{0:n0}", item.Commession) </td>
+                                            <td><i class="ti-pencil up-par-info" data-toggle="modal" data-target="#Modal"></i></td>
+                                            @if (User.IsInRole("Commission Approval") || User.IsInRole("Administrator"))
+                                            {
+                                                if (item.Com_Approve == "Pending")
+                                                {
+                                                    <td><button class="btn btn-info com-appr">Approve</button></td>
+                                                }
+                                            }
+                                        </tr>
+                                    }
+                                    else
+                                    {
+                                        <tr id="@item.Id" class="@statuscolor">
+                                            <td>*******</td>
+                                            <td>*******</td>
+                                            <td>*******</td>
+                                            <td>@string.Format("{0:n0}", item.Demand)</td>
+                                            <td>*******</td>
+                                            <td>*******</td>
+                                            <td>*******</td>
+                                        </tr>
+                                    }
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-md-12 col-xl-12">
+                    <div class="row">
+                        <div class="form-group col-md-2">
+                            <h5>Buyers</h5>
+                        </div>
+                        <div class="form-group col-md-2">
+                            <button type="button" class="btn btn-primary ad-de-buy" data-toggle="modal" data-target="#Modal">Add Buyer</button>
+                        </div>
+                    </div>
+                    <table class="table table-striped table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Mobile</th>
+                                <th>Address</th>
+                                <th>Offered Rate</th>
+                                <th>Rate / Marla</th>
+                                <th>Commission</th>
+                                <th>Created By</th>
+                                <th>Date</th>
+                                <th></th>
+                                <th>Commission Approval</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model.Parties.Any(x => x.Type == "Buyer"))
+                            {
+                                string statuscolor = "";
+                                foreach (var item in Model.Parties.Where(x => x.Type == "Buyer"))
+                                {
+                                    sellamt = Convert.ToDecimal(item.Offered_Rate);
+                                    if (item.Userid == ViewBag.UserId || User.IsInRole("Commission Approval") || User.IsInRole("Administrator"))
+                                    {
+                                        if (item.Status == MeherEstateDevelopers.Models.LeadsStatus.Mature.ToString() || item.Status == MeherEstateDevelopers.Models.LeadsStatus.Close.ToString()) { statuscolor = "bgc-green-50"; }
+                                        else if (item.Status == MeherEstateDevelopers.Models.LeadsStatus.Loose.ToString()) { statuscolor = "bgc-red-50"; }
+                                        <tr id="@item.Id" class="@statuscolor">
+                                            <td>@item.Name</td>
+                                            <td>@item.Mobile</td>
+                                            <td>@item.Address</td>
+                                            <td>@string.Format("{0:n0}", item.Offered_Rate)</td>
+                                            <td>@string.Format("{0:n0}", item.Rate_Per_Marla)</td>
+                                            <td>@string.Format("{0:n0}", item.Commession)</td>
+                                            <td>@item.Created_By</td>
+                                            <td>@string.Format("{0:dd-MMM-yyyy}", item.Datetime)</td>
+                                            <td><i class="ti-pencil up-par-info" data-toggle="modal" data-target="#Modal"></i></td>
+                                            @if (User.IsInRole("Commission Approval") || User.IsInRole("Administrator"))
+                                            {
+                                                if (item.Com_Approve == "Pending")
+                                                {
+                                                    <td><button class="btn btn-info com-appr">Approve</button></td>
+                                                }
+                                            }
+                                        </tr>
+                                    }
+                                    else
+                                    {
+                                        if (item.Status == MeherEstateDevelopers.Models.LeadsStatus.Mature.ToString() || item.Status == MeherEstateDevelopers.Models.LeadsStatus.Close.ToString()) { statuscolor = "bgc-green-50"; }
+                                        else if (item.Status == MeherEstateDevelopers.Models.LeadsStatus.Loose.ToString()) { statuscolor = "bgc-red-50"; }
+                                        <tr class="@statuscolor">
+                                            <td>*******</td>
+                                            <td>*******</td>
+                                            <td>*******</td>
+                                            <td>@string.Format("{0:n0}", item.Offered_Rate)</td>
+                                            <td>*******</td>
+                                            <td>*******</td>
+                                            <td>@item.Created_By</td>
+                                            <td>@string.Format("{0:dd-MMM-yyyy}", item.Datetime)</td>
+                                            <td></td>
+                                        </tr>
+                                    }
+                                }
+                            }
+                        </tbody>
+                    </table>
+                    <div class="row">
+                        @{
+                            var rem = sellamt - Model.Voucher.Where(x => x.Cancel is null).Sum(x => x.Amount);
+                        }
+                        <input type="hidden" id="pay-amt" value="@pay" />
+                        <input type="hidden" id="rec-amt" value="@rem" />
+                        <input type="hidden" id="reciv-amt" value="@receiedAmt" />
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <input type="hidden" value="@sellamt" id="del-ttlamt" />
+                    <h5>Payment Amount: @string.Format("{0:n0}", Model.Voucher.Sum(x => x.Amount))</h5>
+                </div>
+                <div class="col-md-6">
+                    <h5>Received Amount: @string.Format("{0:n0}", receiedAmt)</h5>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            @{ Html.RenderAction("DealComments", "Messages", new { DealId = Model.Deal.Id });}
+        </div>
+    </div>
+    @if (Model.Ledger.Any())
+    {
+        int sr = 1;
+        decimal? bal = 0;
+        <hr />
+        <div class="col-md-12">
+            <h5>Ledger</h5>
+            <table class="table table-striped table-bordered">
+                <thead>
+                    <tr>
+                        <th>Sr.</th>
+                        <th>Name</th>
+                        <th>Type</th>
+                        <th>Date</th>
+                        <th>No.</th>
+                        <th>Amount</th>
+                        <th>Balance</th>
+                    </tr>
+                </thead>
+                @foreach (var item in Model.Ledger.OrderBy(x => x.Date))
+                {
+                    bal += (((item.Status == "Dishonored" || item.Status == "Pending" || item.Status == "Deposited") && item.PaymentType != "Cash") ) ? 0 : item.Amount;
+                    string col = "";
+                    if (item.Type == "Commession")
+                    {
+                        col = "bgc-blue-50";
+                    }
+
+                    if (item.Status == "Dishonored")
+                    {
+                        col = "bgc-red-50";
+                    }
+                    else if (item.Status == "Approved")
+                    {
+                        col = "bgc-green-50";
+                    }
+                    if (item.Status == "Pending" || item.Status == "Deposited")
+                    {
+                        col = "bgc-yellow-50";
+                    }
+
+                    <tr class="@col">
+                        <td>@sr</td>
+                        <td>@item.Name</td>
+                        <td>
+                            @item.Receipt
+                            @if (item.Status == "Dishonored")
+                            {
+                                <hr /> @item.Status 
+                            }
+                        </td>
+                        <td>@string.Format("{0:dd-MM-yyyy}", item.Date)</td>
+                        <td>@item.ReceiptNo</td>
+                        <td>@string.Format("{0:n0}", item.Amount)</td>
+                        <td>@string.Format("{0:n0}", bal)</td>
+                    </tr>
+                    sr++;
+                }
+            </table>
+        </div>
+    }
+    @if (dire.Any())
+    {
+        int sr = 1;
+        <hr />
+        <div class="col-md-12">
+            <h5>Direct Payments</h5>
+
+            <table class="table table-striped table-bordered">
+                <thead>
+                    <tr>
+                        <th>Sr.</th>
+                        <th>Buyer</th>
+                        <th>Seller</th>
+                        <th>Amount</th>
+                        <th>Payment Type</th>
+                        <th>Bank</th>
+                        <th>To</th>
+                        <th>Instrument No</th>
+                    </tr>
+                </thead>
+                @foreach (var item in dire)
+                {
+                    string statuscolor = "";
+                    if (item.Cancel == true)
+                    {
+                        statuscolor = "bgc-red-50";
+                    }
+                    <tr id="@item.Id" class="@statuscolor">
+                        <td>@sr</td>
+                        <td>@item.Name</td>
+                        <td>@item.Size</td> @*Seller Name *@
+                        <td class="deal-amt">@string.Format("{0:n0}", item.Amount)</td>
+                        <td class="pay-type">@item.PaymentType</td>
+                        <td>@item.Bank</td>
+                        <td>@item.Ch_Pay_Draft_To</td>
+                        <td>@item.Ch_Pay_Draft_No</td>
+                        <td><i class="ti-pencil up-dire-rec" data-toggle="modal" data-target="#Modal"></i></td>
+                    </tr>
+                    sr++;
+                }
+            </table>
+        </div>
+    }
+</div>
+<style>
+    tr td, tr th {
+        padding: 2px;
+        font-size: 12px;
+    }
+</style>

@@ -1,0 +1,22 @@
+﻿@{ if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+}
+<script src="~/Scripts/Inv.js"></script>
+
+<div class="col-md-12">
+    <h5 class="center">Inventory Tagging</h5>
+
+    <hr />
+    <div class="table_fulltagger">
+        @{ Html.RenderAction("FullTagger", "Inventory");}
+    </div>
+</div>
+
+<script>
+</script>

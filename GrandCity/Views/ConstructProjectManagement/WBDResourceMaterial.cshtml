@@ -1,0 +1,319 @@
+﻿@{
+    Layout = null;
+
+}
+<div class="container-fluid">
+    <h4 class="c-grey-900 mT-10 mB-30">Work Break Down Resource</h4>
+    <ul class="nav nav-tabs" id="myTabs">
+
+        @{ string activeclass = "";}
+        <li>
+            <a href="Javascript:void(0)" class=" nav-link @activeclass WbdRsrc" data-link="/ConstructProjectManagement/WbdResourcesMaterial?proj=@ViewBag.Proj_Id">Material</a>
+        </li>
+        @{ activeclass = ""; }
+        <li>
+            <a href="Javascript:void(0)" class="nav-link WbdRsrc" data-link="/ConstructProjectManagement/WbdResourcesLabour?proj=@ViewBag.Proj_Id">Labour</a>
+        </li>
+        @{ activeclass = ""; }
+        <li>
+            <a href="Javascript:void(0)" class="nav-link  WbdRsrc" data-link="/ConstructProjectManagement/WbdResourcesEquipment?proj=@ViewBag.Proj_Id">Equipment</a>
+        </li>
+    </ul>
+    <!-- Tab panes -->
+    <div class="tab-content">
+        <div id="Wbddetails" class="tab-pane active">
+            @{Html.RenderAction("WbdResourcesMaterial", "ConstructProjectManagement");}
+        </div>
+    </div>
+</div>
+<div class="container-fluid pl-0 ml-0 pr-0 mr-0">
+    <h4 class="text-center">WBD Resource Material </h4>
+    <div class="form-group col-md-3">
+        @Html.DropDownList("ResourceActivity", null, "Select Activity ", new { Name = "Id", @class = "form-control", required = "" })
+    </div>
+</div>
+<div class="container-fluid ml-0 pr-0 mr-0 main-ms wbd-res in-active main-rec-do">
+    <div class="form-row inv-assign-row">
+        <div class="form-group col-md-3">
+            <label>Type</label>
+            <select class="form-control  select2" name="Type" id="Type" required>
+                <option>Select One</option>
+                <option value="Material" id="Material">Material</option>
+                <option value="Labour">Labour</option>
+                <option value="Equipment">Equipment</option>
+            </select>
+        </div>
+        <!--<div class="form-group col-md-3" id="Inventory" style="display:none">
+    <label>Inventory</label>
+    @Html.DropDownList("wbdresInventory", null, "Select Item ", new { Name = "Id", @class = "form-control", required = "" })-->
+        @*<input type="text" class="form-control mile-item" id="wbdresInventory" required />*@
+        <!--</div>-->
+        <div class="form-group col-md-2" style="display: none;">
+            <label>SKU</label>
+            <input type="text" class="form-control sku" readonly />
+        </div>
+        <div class="form-group col-md-3" id="Inventory" style="display:none">
+            <label>Item</label>
+            <select class="form-control item-name" id="wbdresInventory"></select>
+        </div>
+        <div class="form-group col-md-2" id="uom" style="display:none">
+            <label>UOM</label>
+            <input type="text" class="form-control item-uom" id="wbd-res-uom" required placeholder="Enter Quantity" readonly />
+        </div>
+
+
+        <div class="form-group col-md-1">
+            <label>Quantity</label>
+            <input type="number" class="form-control wbd-res-rate" id="wbd-res-qty" placeholder="Quantity" autocomplete="off">
+        </div>
+        <div class="form-group col-md-1">
+            <label>Rate</label>
+            <input type="number" class="form-control wbd-res-rate" id="wbd-res-rate" placeholder="Rate" autocomplete="off">
+        </div>
+        <div class="form-group col-md-1">
+            <label>Amount</label>
+            <input type="number" class="form-control " id="wbd-res-Amnt" placeholder="Amount" readonly autocomplete="off">
+        </div>
+        @*<div class="form-group col-md-1" id="mi" style="display:none">
+            <label>Mationary Item</label>
+            <input type="text" class="form-control" id="wbd-res-mi" autocomplete="off">
+        </div>
+        <div class="form-group col-md-1" id="phpd" style="display:none">
+            <label>Per Hour/Per Day</label>
+            <input type="text" class="form-control " id="wbd-res-phpd" autocomplete="off">
+        </div>*@
+        <div class="form-group col-md-3" id="phpd" style="display:none">
+            <label>UOM</label>
+            <select class="form-control  select2" name="wbd-res-phpd" id="wbd-res-phpd" required>
+                <option >Select One</option>
+                <option value="PerHour" id="Material">Per Hour</option>
+                <option value="PerDay">Per Day</option>
+            </select>
+        </div>
+        <div class="form-group col-md-3" id="mi" style="display:none">
+            <label>Mationary Item</label>
+            <div class="form-group">
+                @Html.DropDownList("wbdresAssets", null, "Select Item ", new { Name = "Id", @class = "form-control", required = "" })
+            </div>
+        </div>
+        <input type="number" class="" hidden id="Prj_Id" value="ViewBag.Proj_Id">
+
+        <div class="form-group col-md-12 justify-content-end d-flex px-0 mt-2">
+            <button class="btn btn-primary col-md-2 cr-WBD-rsrc-btn">Save</button>
+        </div>
+    </div>
+</div>
+<script>
+
+    $('#Type').on('change', function () {
+        if ($(this).find(":selected").val() === 'Material') {
+            debugger
+            $('#uom').css("display", "block");
+            $('#Inventory').css("display", "block");
+            $('#phpd').css("display", "none");
+            $('#mi').css("display", "none");
+        }
+    });
+    $('#Type').on('change', function () {
+        if ($(this).find(":selected").val() === 'Labour') {
+            debugger
+            $('#Inventory').css("display", "none");
+            $('#uom').css("display", "none");
+            $('#phpd').css("display", "block");
+            $('#mi').css("display", "none");
+        }
+    });
+    $('#Type').on('change', function () {
+        if ($(this).find(":selected").val() === 'Equipment') {
+            debugger
+            $('#Inventory').css("display", "none");
+            $('#uom').css("display", "none");
+            $('#phpd').css("display", "block");
+            $('#mi').css("display", "block");
+        }
+    });
+
+
+    $(document).ready(function () {
+
+
+        $('#ResourceActivity').on('change', function () {
+            var selectedCountry = $(this).children("option:selected").val();
+            console.log(selectedCountry);
+            debugger
+            if ((selectedCountry != undefined) && (selectedCountry != '')) {
+                if ($('.main-ms').css('display') == 'none') {
+                    $('.main-ms').slideToggle(300);
+                }
+            }
+            else {
+                console.log('hello');
+                $('.main-ms').slideToggle(300);
+            }
+        });
+    });
+
+
+</script>
+<style>
+    .invisi {
+        visibility: hidden;
+    }
+
+    .in-active {
+        display: none;
+    }
+
+    textarea {
+        resize: none;
+    }
+
+    .msi-row {
+        border-bottom: .1em solid #dddcdc;
+        margin-top: 10px;
+    }
+
+    .mile-name-mat {
+        font-size: 30px;
+        text-align: center;
+        vertical-align: middle !important;
+    }
+
+    .other {
+        margin-top: 0px !important;
+    }
+</style>
+
+<script>
+        var selectedInven = [];
+        var emps = @Html.Raw(Json.Encode(ViewBag.Employees));
+</script>
+
+<script>
+
+    $(function () {
+      
+        var prdctThat = $('.item-name');
+        $(prdctThat).select2({
+            minimumInputLength: 3,
+            dropdownParent: $(prdctThat).parent(),
+            placeholder: "Search for Inventory",
+            ajax: {
+                url: '/Inventory/SearchInventory/',
+                dataType: 'json',
+                params: {
+                    contentType: 'application/json; charset=utf-8'
+                },
+                quietMillis: 100,
+                data: function (params) {
+                    return {
+                        d: params.term// search term
+                    };
+                },
+                processResults: function (data) {
+                    return {
+                        results: data.items
+                    };
+                }
+            }
+        });
+        $(prdctThat).on('select2:select', function (e) {
+            var s = e.params.data;
+            $.ajax({
+                type: "POST",
+                url: '/Inventory/GetInventoryItemById/',
+                data: { Id: s.id },
+                success: function (data) {
+                    $(prdctThat).closest('.inv-assign-row').find('.item-uom').val('');         
+                    $(prdctThat).closest('.inv-assign-row').find('.item-uom').val(data.Inventory.UOM);
+                    $(prdctThat).closest('.inv-assign-row').find('.sku').val(data.Inventory.SKU);
+                    $(prdctThat).closest('.inv-assign-row').find('.ttl-qty').val(parseFloat(data.Inventory.Total_In_Qty) - parseFloat(data.Inventory.Total_Out_Qty));
+                }
+                , error: function (xmlhttprequest, textstatus, message) {
+                    if (textstatus === "timeout") {
+                        alert("got timeout");
+                    } else {
+                        alert(textstatus);
+                    }
+                }
+            });
+        });
+
+
+
+    });
+
+    $('.add-do-item').click(function () {
+        let _strctr = `<div class="col-md-12 inv-assign-row"></div>`;
+        var newRec = $('.main-rec-do').append(_strctr);
+        InitEmps($(newRec).find('.emp').last());
+        var prdctThat = $(newRec).find('.item-name').last();
+        $(prdctThat).select2({
+            dropdownParent: $(prdctThat).parent(),
+            minimumInputLength: 3,
+            placeholder: "Search for Inventory",
+            ajax: {
+                url: '/Inventory/SearchInventory/',
+                dataType: 'json',
+                params: {
+                    contentType: 'application/json; charset=utf-8'
+                },
+                quietMillis: 100,
+                data: function (params) {
+                    return {
+                        d: params.term// search term
+                    };
+                },
+                processResults: function (data) {
+                    return {
+                        results: data.items
+                    };
+                }
+            }
+        });
+
+
+        $(prdctThat).on('select2:select', function (e) {
+            var s = e.params.data;
+
+            debugger
+            $.ajax({
+                type: "POST",
+                url: '/Inventory/GetInventoryItemById/',
+                data: { Id: s.id },
+                success: function (data) {
+                    $(prdctThat).closest('.inv-assign-row').find('.item-uom').val('');
+                    $(prdctThat).closest('.inv-assign-row').find('.item-uom').val(data.Inventory.UOM);
+                    $(prdctThat).closest('.inv-assign-row').find('.sku').val(data.Inventory.SKU);
+                    $(prdctThat).closest('.inv-assign-row').find('.ttl-qty').val(parseFloat(data.Inventory.Total_In_Qty) - parseFloat(data.Inventory.Total_Out_Qty));
+                }
+                , error: function (xmlhttprequest, textstatus, message) {
+                    if (textstatus === "timeout") {
+                        alert("got timeout");
+                    } else {
+                        alert(textstatus);
+                    }
+                }
+            });
+        });
+    });
+
+    function InitEmps(_ele) {
+        $(_ele).append('<option> Select Employee </option>');
+
+        debugger
+        var $prevGroup, prevGroupName;
+        $.each(emps, function () {
+            var group = (this.Group == null) ? ' ' : this.Group.Name;
+            if (prevGroupName !== group) {
+                $prevGroup = $('<optgroup />').prop('label', group).appendTo(_ele);
+            }
+            $("<option />").val(this.Value).text(this.Text).appendTo($prevGroup);
+            prevGroupName = group;
+        });
+
+    }
+    //$(window).scroll(function () {
+    //    $(".select2-container.select2-dropdown-open").not($(this)).select2('positionDropdown');
+    //});
+</script>

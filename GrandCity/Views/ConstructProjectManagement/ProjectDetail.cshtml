@@ -1,0 +1,142 @@
+﻿@model MeherEstateDevelopers.Models.Project
+@{ Layout = "~/Views/Shared/_AdminLayout.cshtml"; }
+<script src="https://code.highcharts.com/gantt/highcharts-gantt.js"></script>
+<script src="https://code.highcharts.com/gantt/modules/draggable-points.js"></script>
+<script src="~/Scripts/Prj.js"></script>
+<link href="~/node_modules/blueimp-gallery/css/blueimp-gallery.css" rel="stylesheet" type="text/css" />
+<link href="~/node_modules/blueimp-file-upload/css/jquery.fileupload.css" rel="stylesheet" type="text/css" />
+<link href="~/node_modules/blueimp-file-upload/css/jquery.fileupload-ui.css" rel="stylesheet" type="text/css" />
+<noscript>
+    <link href="~/node_modules/blueimp-file-upload/css/jquery.fileupload-noscript.css" rel="stylesheet" type="text/css" />
+    <link href="~/node_modules/blueimp-file-upload/css/jquery.fileupload-ui-noscript.css" rel="stylesheet" type="text/css" />
+</noscript>
+<script src="~/node_modules/blueimp-file-upload/js/vendor/jquery.ui.widget.js"></script>
+<script src="~/node_modules/blueimp-tmpl/js/tmpl.js"></script>
+<script src="~/node_modules/blueimp-load-image/js/load-image.all.min.js"></script>
+<script src="~/node_modules/blueimp-canvas-to-blob/js/canvas-to-blob.js"></script>
+<script src="~/node_modules/blueimp-gallery/js/blueimp-gallery.js"></script>
+<script src="~/node_modules/blueimp-gallery/js/jquery.blueimp-gallery.js"></script>
+<script src="~/node_modules/blueimp-file-upload/js/jquery.iframe-transport.js"></script>
+<script src="~/node_modules/blueimp-file-upload/js/jquery.fileupload.js"></script>
+<script src="~/node_modules/blueimp-file-upload/js/jquery.fileupload-process.js"></script>
+<script src="~/node_modules/blueimp-file-upload/js/jquery.fileupload-image.js"></script>
+<script src="~/node_modules/blueimp-file-upload/js/jquery.fileupload-audio.js"></script>
+<script src="~/node_modules/blueimp-file-upload/js/jquery.fileupload-video.js"></script>
+<script src="~/node_modules/blueimp-file-upload/js/jquery.fileupload-validate.js"></script>
+<script src="~/node_modules/blueimp-file-upload/js/jquery.fileupload-ui.js"></script>
+<script src="~/Scripts/jqupload.main.js"></script>
+<style>
+    .prj-nam {
+        font-size: 2em;
+        width: 50%;
+    }
+</style>
+@if (Model == null)
+{
+    <h1>No Details Found</h1>
+}
+else
+{
+    <div class="row">
+        <div class="col-md-8 pt-0">
+            <div class="bdrs-3 ov-h bgc-white p-10 bd">
+                <div class="row pb-0 pt-0">
+                    <div id="carouselExampleIndicators" class="carousel slide col-md-12 pb-0 pt-0" data-ride="carousel">
+                        <div class="carousel-inner pb-0 pt-0">
+                            <input type="hidden" id="Prj_Id" value="@Model.Id" />
+                            <div class="carousel-item active col-md-12">
+                                <div class="d-block w-100 pb-0" style="background: transparent !important">
+                                    <div class="form-row">
+                                        <div class="form-group col-md-12">
+                                            <h1 class="display-4" id="Prj_Name">@Model.Name</h1>
+                                        </div>
+                                        <div class="form-group col-md-12">
+                                            <label>Project Id</label>
+                                            <h3>@Model.Project_Id</h3>
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label>Budget</label>
+                                            <h3>@string.Format("{0:n0}", Model.Budget)</h3>
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label>Start Date</label>
+                                            <h3>@string.Format("{0:dd-MMM-yyyy}", Model.StartDate)</h3>
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label>Deadline</label>
+                                            <h3>@string.Format("{0:dd-MMM-yyyy}", Model.Deadline)</h3>
+                                        </div>
+                                    </div>
+                                    <hr />
+                                    <h1 class="display-7">Scope</h1>
+                                    <p>@Model.Scope</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-row bdrs-3 ov-h bgc-white p-10 bd">
+                @{ Html.RenderAction("PrjDepartments", "ConstructProjectManagement", new { Prj_Id = Model.Id });}
+            </div>
+        </div>
+    </div>
+    <div class="container pb-0">
+        <div class="row">
+            <nav class="navbar navbar-expand-lg navbar-light bg-light" style=" width: 100%;overflow: auto;">
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                    @{
+                        bool isRecurring = false;
+                        if (!(Model.ProjectType is null) && Model.ProjectType == MeherEstateDevelopers.Models.ProjectType.Recurring.ToString())
+                        {
+                            isRecurring = true;
+                        }
+                    }
+                    <div class="navbar-nav nav-fill w-100">
+                        @if (!isRecurring)
+                        {
+                            <a href="#" class="nav-item nav-link active prjlink" data-link="/ConstructProjectManagement/ProjectOverview/">Overview</a>
+                            <a href="#" class="nav-item nav-link prjlink" data-link="/ConstructProjectManagement/Prj_MTS/">Milestones</a>
+                        }
+                        <a href="#" class="nav-item nav-link prjlink" data-link="/ConstructProjectManagement/DiscussionIndex/">Disscussion Thread</a>
+                        <a href="#" class="nav-item nav-link prjlink" data-link="/ConstructProjectManagement/Costing/">Costing</a>
+                        <a href="#" class="nav-item nav-link prjlink" data-link="/ConstructProjectManagement/Finances/">Finances</a>
+                        @if (!isRecurring)
+                        {
+                            <a href="#" class="nav-item nav-link prjlink" data-link="/ConstructProjectManagement/ProjectFiles/">Project Files</a>
+                            <a href="#" class="nav-item nav-link prjlink" data-link="/ConstructProjectManagement/NewMaterialStatement?proj=@Model.Id">Material Statement</a>
+                        }
+                        <a href="#" class="nav-item nav-link prjlink" data-link="/ConstructProjectManagement/Prj_Inventory?Prj_Id=@Model.Id">Inventory</a>
+                        <a href="#" class="nav-item nav-link prjlink" data-link="/ConstructProjectManagement/NewMaterialStatement?proj=@Model.Id">Material Statement</a>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </div>
+    <div class="row mt-2 bgc-white" id="prjdetails">
+        @{Html.RenderAction("ProjectOverview", "ConstructProjectManagement", new { Prj_Id = Model.Id });}
+    </div>
+    <style>
+        /*.navbar {
+            width: 100%;
+            overflow: auto;
+        }
+
+            .navbar a:hover {
+                border: #555555
+            }*/
+
+        #container {
+            max-width: 800px;
+            margin: 1em auto;
+        }
+
+        .active {
+        }
+    </style>
+}

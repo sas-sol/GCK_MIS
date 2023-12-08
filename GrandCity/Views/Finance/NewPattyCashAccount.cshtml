@@ -1,0 +1,90 @@
+﻿<div class="row">
+    <div class="col-md-12">
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label>Employee</label>
+                <select class="form-control emp-selc-list" style="height:57px;line-height:3">
+                    <option>Search Employee</option>
+                </select>
+            </div>
+            <div class="form-group col-md-3">
+                <label>Cash Limit</label>
+                <input type="text" class="form-control coma" id="cash_limit" placeholder="Cash Limit">
+            </div>
+            <div class="form-group col-md-3">
+                <label>Item Limit</label>
+                <input type="text" class="form-control coma" id="item_limit" placeholder="Item Value Limit">
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $('.emp-selc-list').select2({
+            dropdownParent: $('#Modal'),
+            ajax: {
+                url: '/Finance/EmployeeSearch/',
+                data: function (params) {
+                    var query = {
+                        s: params.term,
+                        type: 'public'
+                    }
+                    // Query parameters will be ?search=[term]&type=public
+                    return query;
+                },
+                processResults: function (data) {
+                    console.log(data);
+                    // Transforms the top-level key of the response object from 'items' to 'results'
+                    return {
+                        results: data
+                    };
+                }
+            }
+        });
+    });
+    $('#gen-pet-acc').click(function () {
+        var person = $('.emp-selc-list option:selected').val();
+        if (person == "" || person == null) {
+            alert("Please select employee Name");
+            return false;
+        }
+        var personName = $('.emp-selc-list option:selected').text();
+        var cashlimit = RemoveComma($('#cash_limit').val());
+        if (cashlimit == 0 || cashlimit == "" || cashlimit == null) {
+            alert("Please Enter Cash Limit");
+            return false;
+        }
+        var itemLimit = RemoveComma($('#item_limit').val());
+        if (itemLimit == 0 || itemLimit == "" || itemLimit == null) {
+            alert("Please Enter Item Cash Limit");
+            return false;
+        }
+
+        if (confirm("Are you sure you want to Enter Patty Cash Account?")) {
+            $.ajax({
+                type: "POST",
+                url: '/Finance/AddNewPattyCashAccount',
+                data: { empName: personName, empId: person, cashLimit: cashlimit, itemLimit: itemLimit},
+                success: function (data) {
+                    if (data.Status) {
+                        alert(data.Msg);
+                        window.location.reload();
+                    }
+                    else {
+                        alert(data.Msg);
+                    }
+                    //window.location.reload();
+                }
+                , error: function (xmlhttprequest, textstatus, message) {
+                    if (textstatus === "timeout") {
+                        alert("got timeout");
+                    } else {
+                        alert(textstatus);
+                    }
+                }
+            });
+        }
+
+
+    });
+</script>

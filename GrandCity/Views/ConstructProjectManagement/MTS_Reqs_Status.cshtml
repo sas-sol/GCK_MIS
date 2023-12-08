@@ -1,0 +1,140 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.MTS_MTSV>
+<div class="container-fluid pl-2 pr-2 row">
+    <div class="col-md-12">
+        @{ int srcounter = 1;}
+        @foreach (var item in Model)
+        {
+            <div id="@item.Id" class="pl-0 pr-0 m-0">
+                <div class="card">
+                    <div class="card-header" id="heading-@item.Id">
+                        <h5 class="mb-0">
+                            <a role="button" data-toggle="collapse" href="#collapse-pop-@item.Id" aria-expanded="false" aria-controls="collapse-pop-@item.Id">
+                                @srcounter - @item.Title
+                            </a>
+                        </h5>
+                    </div>
+                    <div id="collapse-pop-@item.Id" class="collapse" data-parent="#@item.Id" aria-labelledby="heading-@item.Id">
+                        <div class="card-body">
+                            <div class="row">
+                                @if (item.Description == item.Description_R)
+                                {
+                                    <div class="col-md-12">
+                                        <p class="lead">@item.Description</p>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="col-md-6">
+                                        <p class="lead"><s>@item.Description</s></p>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <p class="lead">@item.Description_R</p>
+                                    </div>
+                                }
+
+
+                                <div class="col-md-2">
+                                    <div class="card m-0 p-0" style="border: white !important">
+                                        <h5 class="card-header">Qty</h5>
+                                        <div class="card-body">
+                                            @if (item.Qty != item.Qty_R)
+                                            {
+                                                <p class="card-text"><s>@string.Format("{0:n2}", item.Qty)</s></p>
+                                                <p class="card-text">@string.Format("{0:n2}", item.Qty_R)</p>
+                                            }
+                                            else
+                                            {
+                                                <p class="card-text">@string.Format("{0:n2}", item.Qty)</p>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="card m-0 p-0" style="border: white !important">
+                                        <h5 class="card-header">Rate</h5>
+                                        <div class="card-body">
+                                            @if (item.Rate != item.Rate_R)
+                                            {
+                                                <p class="card-text"><s>@string.Format("{0:n2}", item.Rate)</s></p>
+                                                <p class="card-text">@string.Format("{0:n2}", item.Rate_R)</p>
+                                            }
+                                            else
+                                            {
+                                                <p class="card-text">@string.Format("{0:n2}", item.Rate)</p>
+
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="card m-0 p-0" style="border: white !important">
+                                        <h5 class="card-header">Total</h5>
+                                        <div class="card-body">
+                                            @if (item.Amount != item.Amount_R)
+                                            {
+                                                <p class="card-text"><s> @string.Format("{0:n2}", item.Amount)</s></p>
+                                                <p class="card-text">@string.Format("{0:n2}", item.Amount_R)</p>
+                                            }
+                                            else
+                                            {
+                                                <p class="card-text">@string.Format("{0:n2}", item.Amount)</p>
+
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="card m-0 p-0" style="border: white !important">
+                                        <h5 class="card-header">Start Date</h5>
+                                        <div class="card-body">
+                                            @if (item.Start_Date != item.Start_Date_R)
+                                            {
+                                                <p class="card-text"><s>@string.Format("{0:n2}", item.Start_Date)</s></p>
+                                                <p class="card-text">@string.Format("{0:n2}", item.Start_Date_R)</p>
+                                            }
+                                            else
+                                            {
+                                                <p class="card-text">@string.Format("{0: dd-MMM-yyyy}", item.Start_Date)</p>
+
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="card m-0 p-0" style="border: white !important">
+                                        <h5 class="card-header">End Date</h5>
+                                        <div class="card-body">
+                                            @if (item.Deadline != item.Deadline_R)
+                                            {
+                                                <p class="card-text"><s>@string.Format("{0: dd-MMM-yyyy}", item.Deadline)</s></p>
+                                                <p class="card-text">@string.Format("{0:dd-MMM-yyyy}", item.Deadline_R)</p>
+                                            }
+                                            else
+                                            {
+                                                <p class="card-text">@string.Format("{0: dd-MMM-yyyy}", item.Deadline)</p>
+
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            @if (item.Current_Status == "Pending")
+                            {
+                            <div class="row" style="display:flex;justify-content:center">
+                                    <select data-reqid="@item.Id" class="col-md-3 form-control up-req-stat">
+                                        <option value="Pending">Pending</option>
+                                        <option value="Approved">Approved</option>
+                                        <option value="Rejected">Reject</option>
+                                    </select>
+                            </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+<script>
+    $(".modal-header").text("Request History");
+</script>

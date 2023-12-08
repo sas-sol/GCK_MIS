@@ -1,0 +1,148 @@
+﻿@model MeherEstateDevelopers.Models.FileBalanceLedger
+<style>
+    @@media print {
+        table, tr, td, th {
+            padding: 1px !important;
+        }
+
+        body {
+            margin: 2px;
+            color: black;
+        }
+    }
+</style>
+<table>
+    <tr>
+        <td align="left" style="width:500px"><img style="width:75px;font-size:16px;padding:10px" src="/assets/static/images/logo2.png" alt=""> &nbsp;SA Management Information System</td>
+        <td align="right" style="width:500px"><img style="width:120px" src="~/assets/static/images/whitesaprj.png" /></td>
+    </tr>
+</table>
+<h4>Owner Information</h4>
+<table>
+    <tr><td width="180">Name:</td><td>@Model.File.Name</td></tr>
+    <tr><td>Father / Husband</td><td>@Model.File.Father_Husband</td></tr>
+    <tr><td>Mobile No.</td><td>@Model.File.Mobile_1</td></tr>
+    <tr><td>Address</td><td>@Model.File.Postal_Address</td></tr>
+</table>
+<hr />
+<h4>File Details</h4>
+<table>
+    <tr>
+        <td width="120"><b>Project</b></td>
+        <td width="120">@Model.File.Project_Name</td>
+        <td width="130"><b>File No.</b></td>
+        <td width="120">@Model.File.File_Form_Number</td>
+        <td width="120"><b>Phase</b></td>
+        <td width="120">@Model.File.Phase_Name</td>
+        <td width="120"><b>Block</b></td>
+        <td width="120">@Model.File.Block_Name</td>
+
+    </tr>
+    <tr>
+        <td width="120"><b>Plot Size</b></td>
+        <td width="120">@Model.File.Plot_Size</td>
+        <td width="130"><b>Prefrence</b></td>
+        <td width="120">@Model.File.Plot_Prefrence</td>
+        <td width="120" colspan="2"><b>Development Charges</b></td>
+        <td width="120" colspan="2">@Model.File.Development_Charges</td>
+    </tr>
+
+</table>
+<hr />
+<h4>Booking Details</h4>
+<table style="margin-top:5px">
+    <tr>
+        <td width="150"><b>Booking Price</b></td>
+        <td width="150">@string.Format("{0:n0}", Model.TotalAmt)</td>
+        <td width="150"><b>Rate / Marla</b></td>
+        @{
+            int plotsize = Convert.ToInt16(Model.File.Plot_Size.Split(' ')[0]);
+            var rate = Model.TotalAmt / plotsize;
+
+        }
+        <td width="150">@string.Format("{0:n0}", rate)</td>
+
+        <td width="150"><b>Booking Date</b></td>
+        <td width="150" id="booking-date"></td>
+    </tr>
+</table>
+
+<hr />
+<h4>Payment Details</h4>
+<table class="table table-striped table-bordered" style="font-size:10px">
+    <thead>
+        <tr>
+            <th width="150">Inst</th>
+            <th width="150">Due Date</th>
+            <th width="150">Amt</th>
+            <th width="150">Rect</th>
+            <th width="150">Recp. Amt</th>
+            <th width="150">Mode</th>
+            <th width="150">Chq</th>
+            <th width="150">Bank</th>
+            <th width="150">Date</th>
+            <th width="180">OverDue Amt</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            decimal? bal = 0;
+            decimal? Total_Amt = 0;
+            decimal? Rec_amt = 0;
+            decimal? OutStand_amt = 0;
+            decimal? Per = 0;
+
+        }
+        @foreach (var item in Model.Report)
+        {
+            Total_Amt += (item.Amount == null) ? 0 : item.Amount;
+            Rec_amt += (item.Recp_Amount == null) ? 0 : item.Recp_Amount;
+            bal += (item.Amount == null) ? 0 : -(item.Amount);
+            bal += (item.Recp_Amount == null) ? 0 : item.Recp_Amount;
+
+            if (item.Installments == "Advance")
+            {
+                <script>
+                    var res = " @string.Format("{0:MMM dd yyyy}", item.Due_Date)";
+                    $("#booking-date").text(res);
+                </script>
+            }
+            <tr>
+                <td>@item.Installments</td>
+                <td>@string.Format("{0:dd/MM/yyyy}", item.Due_Date)</td>
+                <td>@string.Format("{0:n0}", item.Amount)</td>
+                <td>@item.Receipt</td>
+                <td>@string.Format("{0:n0}", item.Recp_Amount)</td>
+                <td>@item.Mode</td>
+                <td>@item.Chq_No</td>
+                <td>@item.Bank</td>
+                <td>@string.Format("{0:dd/MM/yyyy}", item.Recp_Date)</td>
+                @{ string amt = "";
+                    if (bal < 0)
+                    {
+                        amt = "-(" + string.Format("{0:n0}", -(bal)) + ")";
+                    }
+                    else
+                    {
+                        amt = string.Format("{0:n0}", bal);
+                    }
+                }
+                <td>@amt</td>
+            </tr>
+        }
+        @{ OutStand_amt = Total_Amt - Rec_amt;}
+    </tbody>
+</table>
+<table class="table">
+    <tbody>
+        <tr>
+            <td><b>Total Amount</b></td>
+            <td>@string.Format("{0:n0}", Total_Amt)</td>
+            <td><b>Received Amount</b></td>
+            <td>@string.Format("{0:n0}", Rec_amt)</td>
+            <td><b>Outstanding Amount</b></td>
+            <td>@string.Format("{0:n0}", OutStand_amt)</td>
+            <td colspan="4"></td>
+        </tr>
+    </tbody>
+</table>

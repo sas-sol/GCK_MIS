@@ -1,0 +1,139 @@
+﻿@{ if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+}
+<script src="~/Scripts/Inv.js"></script>
+
+
+<div class="row bgc-white bd bdrs-3 p-20 mB-20">
+    <div class="col-md-12">
+        <ul class="nav nav-tabs" role="tablist" id="myTabs">
+            @if (User.IsInRole("Add Patty Cash Account") || User.IsInRole("Administrator"))
+            {
+                <li class="nav-item"><a class="nav-link asset-link" role="tab" data-toggle="tab" data-link="/Finance/PettyCashAccount/" id="pen-ap" href="#coahead">Patty Cash Accounts</a></li>
+            }
+            @*@if (User.IsInRole("Release Patty Cash") || User.IsInRole("Administrator"))
+            {
+                <li class="nav-item"><a class="nav-link asset-link" role="tab" data-toggle="tab" data-link="/Finance/PayPattyCash/" id="pen-pay" href="#coahead">Release Patty Cash</a></li>
+            }*@
+            @if (User.IsInRole("Petty Cash") || User.IsInRole("Administrator"))
+            {
+                <li class="nav-item"><a class="nav-link asset-link" role="tab" data-toggle="tab" data-link="/Finance/PattyCashSettlements/" id="pen" href="#coahead">Settlements</a></li>
+            }
+            @if (User.IsInRole("Supervise Patty Cash") || User.IsInRole("Administrator"))
+            {
+                <li class="nav-item"><a class="nav-link asset-link" role="tab" data-toggle="tab" data-link="/Finance/PattyCashSupervisionList" id="po" href="#coahead">Supervision</a></li>
+            }
+
+
+        </ul>
+        <div class="tab-content">
+            <div role="tabpanel" id="coahead" class="tab-pane active p-20 table-responsive"></div>
+        </div>
+    </div>
+</div>
+@{
+    if (User.IsInRole("Add Patty Cash Account") || User.IsInRole("Administrator"))
+    {
+        <script>
+            $(function () {
+                SASLoad($('#coahead'));
+                $('#coahead').load('/Finance/PettyCashAccount/', function () {
+                    $("#pen-ap").addClass('active');
+                    SASUnLoad($('#coahead'));
+                });
+            });
+        </script>
+    }
+    else if (User.IsInRole("Release Patty Cash") || User.IsInRole("Administrator"))
+    {
+        <script>
+            $(function () {
+                SASLoad($('#coahead'));
+                $('#coahead').load('/Finance/PayPattyCash/', function () {
+                    $("#pen-pay").addClass('active');
+                    SASUnLoad($('#coahead'));
+                });
+            });
+        </script>
+
+    }
+    else if (User.IsInRole("Petty Cash") || User.IsInRole("Administrator"))
+    {
+        <script>
+            $(function () {
+                SASLoad($('#coahead'));
+                $('#coahead').load('/Finance/PattyCashSettlements/', function () {
+                    $("#pen").addClass('active');
+                    SASUnLoad($('#coahead'));
+                });
+            });
+        </script>
+
+    }
+    else if (User.IsInRole("Supervise Patty Cash") || User.IsInRole("Administrator"))
+    {
+        <script>
+            $(function () {
+                SASLoad($('#coahead'));
+                $('#coahead').load('/Finance/PattyCashSupervisionList/', function () {
+                    $("#po").addClass('active');
+                    SASUnLoad($('#coahead'));
+                });
+            });
+        </script>
+
+    }
+}
+
+
+
+<script>
+    $(document).ready(function () {
+        //SASLoad($('#coahead'));
+        //$('#coahead').load('/Finance/PettyCashAccount/', function () {
+        //    SASUnLoad($('#coahead'));
+        //});
+        //$("#pen-ap").addClass('active');
+    });
+    $(document).on("Click", ".asset-link", function () {
+        var address = $(this).attr('data-link');
+        var id = $(this).attr('id');
+        SASLoad($('#coahead'));
+        $('#coahead').load(address, function () {
+            SASUnLoad($('#coahead'));
+        });
+        $("#" + id).addClass('active');
+    });
+</script>
+
+
+
+
+
+
+
+
+<style>
+    .DemadnOrder tr.odd td:first-child,
+    .DemadnOrder tr.even td:first-child {
+        padding-left: 4em;
+    }
+
+    .dtrg-level-0 {
+        font-size: 20px;
+        text-align: center;
+        font-weight: bold;
+    }
+
+    .dtrg-level-1 {
+        font-size: 16px;
+        text-align: left;
+        font-weight: bold;
+    }
+</style>

@@ -1,0 +1,77 @@
+﻿@model MeherEstateDevelopers.Models.Land_Seller_Party
+
+@{
+    if (Model == null)
+    {
+        <div class="bgc-red-50">No Data Available</div>
+    }
+
+    else
+    {
+        <input type="hidden" value="@Model.Id" id="Id"/>
+        <div>
+            <div class="row">
+                <div class="col-md-4">
+                    <label>Seller Name:</label>
+                    <input type="text" id="seller-name" placeholder="Seller Name" value="@Model.Name"/>
+                </div>
+
+                <div class="col-md-4">
+                    <label>CNIC :</label>
+                    <input type="number" id="id-card-no" placeholder="CNIC" style="margin-left:11%" value="@Model.CNIC"/>
+                </div>
+            </div>
+
+            <div class="row"style="margin-top:2%;">
+                @*<div class="col-md-4">
+                    <label>Party No :</label>
+                    <input type="hidden" id="party-no" placeholder="Party No" style="margin-left:6%" value="@Model.Party_No"/>
+                </div>*@
+                <div class="col-md-4">
+                    <label>Mobile No :</label>
+                    <input type="number" id="mobile-no" placeholder="Mobile No" value="@Model.Mobile_No" style="margin-left: 1%;"/>
+                </div>
+
+            </div>
+
+        </div>
+    }
+}
+<script>
+    $('.modal-footer').append('<button class="btn btn-primary update-sel-det" style="float:right;">Update</button>');
+
+    $(".update-sel-det").unbind().click(function () {
+        
+        var sellerId = $('#Id').val();
+        var Seller_Name = $("#seller-name").val();
+        var Mobile_No = $("#mobile-no").val();
+        var CNIC = $("#id-card-no").val();
+
+            if (confirm("Are you sure you want to update this Seller Detail?")) {
+                $.ajax({
+                    type: "POST",
+                    url: '/Land/UpdateSeller/',
+                    data: {
+                        Id: sellerId, SellerName: Seller_Name, MobileNo: Mobile_No, CNIC: CNIC
+                    },
+                    success: function (data) {
+                        if (data.Status == true) {
+                            alert("Seller Data Successfully Update");
+                            window.location.reload();
+                        }
+                        else {
+                            alert(data.Msg);
+                        }
+                    }
+                    , error: function (xmlhttprequest, textstatus, message) {
+                        if (textstatus === "timeout") {
+                            alert("got timeout");
+                        } else {
+                            alert(textstatus);
+                        }
+                    }
+                });
+            }
+        
+    });
+</script>

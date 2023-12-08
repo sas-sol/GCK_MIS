@@ -1,0 +1,102 @@
+﻿@model IEnumerable<Management_Information_System.Models.Sp_Get_PlotsElectricCharges_NewMeterReadinds_Type_Parameter_Result>
+
+<div class="col-md-12 default-div-bg bd bdrs-3 p-20 mB-20">
+    <h4 class="heading-lgt-onDark mB-20">@ViewBag.Type</h4>
+    <table id="" class="table table-borderless clickable-rows rea-dat" cellspacing="0" width="100%">
+        <thead class="thead-new-dark">
+            <tr>
+                <th width="" class="col-name">Block Name</th>
+                <th width="" align="center" class="col-date">Plot No</th>
+                <th width="" class="col-name">Name</th>
+                <th width="" class="col-rece">Meter No</th>
+                <th width="" class="col-rece">Previous Reading</th>
+                <th width="" class="col-rece">Current Reading</th>
+                <th width="" class="col-rece">Units</th>
+                <th width="" class="col-rece">Amount</th>
+                <th width="" class="col-rece">Arrears</th>
+                <th width="" class="col-rece">Grand Total</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                /**/
+
+
+                foreach (var item in Model)
+                {
+                    <tr class="pointer" data-id="@item.Plot_Id" id="@item.Id">
+                        <td class="col-type">@item.Block_Name<button class="btn btn-info blk-elc-bills" id="@item.Block_Id">Download Bills</button></td>
+                        <td align="center" class="col-mod">@item.Plot_No</td>
+                        <td class="col-type">@item.Name</td>
+                        <td class="pre-read">@item.Meter_No</td>
+                        <td class="pre-read">@item.Previous_Reading</td>
+                        <td class="pre-read">@item.Current_Reading</td>
+                        <td class="pre-read">@item.Units</td>
+                        <td class="pre-read">@String.Format("{0:n0}", item.Total_Amount) </td>
+                        <td class="pre-read">@String.Format("{0:#,##0.##}", item.Arrears)</td>
+                        <td class="pre-read">@String.Format("{0:#,##0.##}", item.Grand_Total)</td>
+
+                        <td>
+                            <i class="ti-eye vie-elec-bill" id="@item.Id" data-id="@item.Plot_Id"></i>
+                            @if (User.IsInRole("Update Electric Bill"))
+                            {
+                                <i class="ti-pencil plt-bl-det" data-toggle="modal" data-target="#Modal" id="@item.Id" data-id="@item.Plot_Id"></i>
+                                <i class="fas fa-info-circle  bill__pre__his" data-toggle="modal" data-target="#Modal" id="@item.Id" data-id="@item.Plot_Id"></i>
+                            }
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
+<script>
+    $(document).ready(function () {
+        var groupColumn = 0;
+        var table = $('.rea-dat').DataTable({
+            dom: 'Bfrtip',
+            "order": [[groupColumn, 'asc']],
+            "displayLength": 25,
+            "drawCallback": function (settings) {
+                var api = this.api();
+                var rows = api.rows({ page: 'current' }).nodes();
+                var last = null;
+
+                api.column(groupColumn, { page: 'current' }).data().each(function (group, i) {
+                    if (last !== group) {
+                        $(rows).eq(i).before(
+                            '<tr class="group"><td colspan="9">' + group + '</td></tr>'
+                        );
+
+                        last = group;
+                    }
+                });
+            },
+            "columnDefs": [
+                { "targets": groupColumn, "visible": false, },
+
+            ]
+        });
+        // Order by the grouping
+        $('#example tbody').on('click', 'tr.group', function () {
+            var currentOrder = table.order()[0];
+            if (currentOrder[0] === groupColumn && currentOrder[1] === 'asc') {
+                table.order([groupColumn, 'desc']).draw();
+            }
+            else {
+                table.order([groupColumn, 'asc']).draw();
+            }
+        });
+    });
+</script>
+<style>
+    tr.group,
+    tr.group:hover {
+        background-color: #ddd !important;
+    }
+</style>
+
+
+
+

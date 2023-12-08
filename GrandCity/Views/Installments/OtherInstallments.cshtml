@@ -1,0 +1,85 @@
+﻿@using (Html.BeginForm("PayInstallment", "Installments", FormMethod.Post, new { @id = "re-oth-ins", @class = "", role = "form" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="form-row">
+        <div class="form-group col-md-12">
+            <h4>
+                Receipt Type: <span style="font-weight:300">@ViewBag.Name </span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                Amount: <span style="font-weight:300">@string.Format("{0:n0}", ViewBag.Amount)</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                Balance : <span id="bal" style="font-weight:300"></span>
+            </h4>
+            <input type="hidden" id="act-amt" value="@ViewBag.Amount" />
+            <input type="hidden" id="bal-val" name="Balance" />
+            <input type="hidden" value="@ViewBag.TransactionId" id="trans-id" name="TransactionId" />
+            <input type="hidden" id="amt-file-id" name="Filefromid" />
+            <input type="hidden" id="amt-file-no" name="FilePlotNumber" />
+            <input type="hidden" id="amt-in-wrds" name="AmountInWords" />
+            <input type="hidden" id="mbl" name="Mobile_1" />
+            <input type="hidden" id="fth-husbad" name="Father_Husband" />
+            <input type="hidden" id="name" name="Name" />
+            <input type="hidden" id="total-amt" name="TotalAmount" />
+            <input type="hidden" id="prj-name" name="Project_Name" />
+            <input type="hidden" id="rate" name="Rate" />
+            <input type="hidden" id="plt-size" name="Plot_Size" />
+            <input type="hidden" Name="Ids[]" value="@ViewBag.Id" />
+            <input type="hidden" id="paymentfor" name="Paymentfor" value="@ViewBag.Name" />
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-2">
+            <label>Amount</label>
+            <input type="text" class="form-control" id="amt" name="Amount">
+        </div>
+        <div class="form-group col-md-2">
+            <label>Cash / Bank</label>
+            <select class="form-control paytypesel-test" id="cah-chq-bak" name="PaymentType">
+                <option value="Cash">Cash</option>
+                <option value="BankDraft">Bank Draft</option>
+                <option value="Cheque">Cheque</option>
+                <option value="PayOrder">Pay Order</option>
+            </select>
+        </div>
+        <div class="form-group col-md-3 paymentotherinfo">
+            <label id="paytypelabel"></label>
+            <input type="text" class="form-control" id="paymenttype" name="PayChqNo" placeholder="" disabled>
+        </div>
+        <div class="form-group col-md-3 paymentotherinfo">
+            <label>Bank</label>
+            @Html.DropDownList("Bank", null, "Choose..", new { @class = "form-control", disabled = "" })
+        </div>
+        <div class="form-group col-md-2 paymentotherinfo">
+            <label>Branch </label>
+            <input type="text" class="form-control" id="Branch" name="Branch" placeholder="Mall Rd" disabled>
+        </div>
+        <div class="form-group col-md-2 paymentotherinfo">
+            <label>Date</label>
+            <input type="text" class="form-control" data-provide="datepicker" name="Ch_bk_Pay_Date" placeholder="mm/dd/yyyy" disabled required>
+        </div>
+    </div>
+}
+<script>
+    $(function () {
+        $('.modal-footer').append('<button class="btn btn-success" id="gen-oth-rec" type="submit">Generate Receipt</button>');
+        $("#bal").html($("#bal-amt").text());
+        $("#bal-val").val($("#bal-amt").text());
+        $("#amt-file-id").val($("#file-id").val());
+        $("#amt-file-no").val($("#app-num").val());
+        $("#mbl").val($("#Mobile_1").val());
+        $("#fth-husbad").val($("#Father_Husband").val());
+        $("#name").val($("#Name").val());
+        $("#total-amt").val($("#ttl-amt").val());//
+        $("#prj-name").val($("#prj").val());
+        $("#rate").val($("#file-rate").val());//
+        $("#plt-size").val($("#pl-size").val());
+    });
+</script>
+<style>
+    .paymentotherinfo {
+        display: none;
+    }
+
+    #inst-stat {
+        height: 1245px;
+        overflow-y: scroll;
+    }
+</style>

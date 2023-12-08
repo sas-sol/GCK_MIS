@@ -1,0 +1,103 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Sp_Get_Report_Balloting_Est_Result>
+@{
+    if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+}
+<div class="row">
+    <div class="col-md-12">
+        <div class="bgc-white bd bdrs-3 p-20 mB-20">
+            <h4 class="c-grey-900 mB-20" style="text-align:center">Balloting</h4>
+            <table class="table table-bordered">
+                <thead class="thead-dark">
+                    <tr>
+                        <th colspan="2"></th>
+                        <th colspan="2" style="text-align:center">Maturity</th>
+                        <th colspan="3" style="text-align:center">Developement Charges</th>
+                        <th colspan="5" style="text-align:center">Only Registerd</th>
+                    </tr>
+                    <tr>
+                        <th colspan="7"></th>
+                        <th></th>
+                        <th colspan="2">Not Matured</th>
+                        <th colspan="2">Matured</th>
+                    </tr>
+                    <tr>
+                        <th>Type</th>
+                        <th>No. Of Plots</th>
+                        <th>Registered</th>
+                        <th>Cancelled</th>
+                        <th>NDC</th>
+                        <th>WDC</th>
+                        <th>TBA</th>
+                        <th>Total Marlas</th>
+                        <th>Total</th>
+                        <th>Amount</th>
+                        <th>Total</th>
+                        <th>Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var g in Model.GroupBy(x => x.Date))
+                    {
+                        int i = 1;
+                        decimal? Ttlnum = 0;
+                        foreach (var gg in g.GroupBy(x => x.Plot_Size))
+                        {
+                            string col = "";
+                            if (i == 1)
+                            {
+                                col = "Border-top:2px solid #ccc";
+                            }
+                            decimal? num = Convert.ToDecimal(gg.Key.Split(' ')[0]);
+                            var tnum = num * gg.Where(x => x.File_Status == 1).Sum(x => x.Total_Plots);
+                            Ttlnum += tnum;
+                            <tr style="@col">
+                                @if (i == 1)
+                                {
+                                    <th rowspan="@g.GroupBy(x=> x.Plot_Size).Count()" style="text-align:center;vertical-align:middle">@string.Format("{0:MMM - yyyy}", g.Key)</th>
+                                }
+                                <td>@gg.Key</td>
+                                <td>@gg.Where(x=> x.File_Status == 1).Sum(x => x.Total_Plots)</td>
+                                <td>@gg.Where(x=> x.File_Status == 6).Sum(x => x.Total_Plots)</td>
+                                <td>@gg.Where(x=> x.Development_Charges == false && x.File_Status == 1).Sum(x => x.Total_Plots)</td>
+                                <td>@gg.Where(x=> x.Development_Charges == true && x.File_Status == 1).Sum(x => x.Total_Plots)</td>
+                                <td>@gg.Where(x=> x.Development_Charges == null && x.File_Status == 1).Sum(x => x.Total_Plots)</td>
+                                <td>@string.Format("{0:n0}", tnum)</td>
+                                <td>@gg.Where(x => x.STATUS == "Paid" && x.File_Status == 1).Sum(x => x.Total_Plots)</td>
+                                <td>Rs. @string.Format("{0:n0}", gg.Where(x =>  x.STATUS == "Paid" && x.File_Status == 1).Sum(x => x.Amount)) </td>
+                                <td>@gg.Where(x => (x.STATUS == "NotPaid" || x.STATUS == "Pending") && x.File_Status == 1).Sum(x => x.Total_Plots)</td>
+                                <td>Rs. @string.Format("{0:n0}", gg.Where(x => (x.STATUS == "NotPaid" || x.STATUS == "Pending") && x.File_Status == 1).Sum(x => x.Amount)) </td>
+                            </tr>
+                            i++;
+                        }
+                            <tr>
+                                <th colspan="2" style="text-align:right">Total : @g.Sum(x => x.Total_Plots) Plots </th>
+                                <th>@g.Where(x => x.File_Status == 1).Sum(x => x.Total_Plots) Plots</th>
+                                <th>@g.Where(x => x.File_Status == 6).Sum(x => x.Total_Plots) Plots</th>
+                                <th>@g.Where(x => x.Development_Charges == false && x.File_Status == 1).Sum(x => x.Total_Plots) Plots</th>
+                                <th>@g.Where(x => x.Development_Charges == true && x.File_Status == 1).Sum(x => x.Total_Plots) Plots</th>
+                                <th>@g.Where(x => x.Development_Charges == null && x.File_Status == 1).Sum(x => x.Total_Plots) Plots</th>
+
+                                <th>@string.Format("{0:n0}", Ttlnum) Marlas</th>
+                                <th>@g.Where(x => x.STATUS == "Paid" && x.File_Status == 1).Sum(x => x.Total_Plots)</th>
+                                <th>Rs. @string.Format("{0:n0}", g.Where(x => x.STATUS == "Paid" && x.File_Status == 1).Sum(x => x.Amount)) </th>
+                                <th>@g.Where(x => (x.STATUS == "NotPaid" || x.STATUS == "Pending") && x.File_Status == 1).Sum(x => x.Total_Plots)</th>
+                                <th>Rs. @string.Format("{0:n0}", g.Where(x => (x.STATUS == "NotPaid" || x.STATUS == "Pending") && x.File_Status == 1).Sum(x => x.Amount)) </th>
+                            </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<style>
+    table tr th, table tr td {
+        font-size: 13px;
+    }
+</style>

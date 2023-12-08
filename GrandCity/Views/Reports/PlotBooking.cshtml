@@ -1,0 +1,189 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.PaymentTypes_Report>
+
+<div id="container" style="min-width: 310px; height: 400px; max-width: 600px; margin: 0 auto"></div>
+<input type="hidden" id="f-date" value="@ViewBag.From" />
+<input type="hidden" id="t-date" value="@ViewBag.To" />
+
+<script>
+    var colors = Highcharts.getOptions().colors,
+        categories = @Html.Raw(Json.Encode(ViewBag.Categories)),
+        data = @Html.Raw(Json.Encode(Model)),
+        browserData = [],
+        versionsData = [],
+        i,
+        j,
+        dataLen = data.length,
+        drillDataLen,
+        brightness;
+
+
+    // Build the data arrays
+    for (i = 0; i < dataLen; i += 1) {
+
+        // add browser data
+        browserData.push({
+            name: categories[i],
+            y: data[i].y,
+            color: data[i].color
+        });
+
+        // add version data
+        drillDataLen = data[i].drilldown.data.length;
+        for (j = 0; j < drillDataLen; j += 1) {
+            brightness = 0.2 - (j / drillDataLen) / 5;
+            versionsData.push({
+                name: data[i].drilldown.categories[j],
+                y: data[i].drilldown.data[j],
+                color: Highcharts.color(data[i].color).brighten(brightness).get()
+            });
+        }
+    }
+
+    // Create the chart
+    Highcharts.chart('container', {
+        chart: {
+            type: 'pie'
+        },
+        title: {
+            text: 'Plot Booking ' 
+        },
+        subtitle: {
+            text: ''
+        },
+        plotOptions: {
+            pie: {
+                shadow: false,
+                center: ['50%', '50%']
+            },
+            series: {
+                cursor: 'pointer',
+                point: {
+                    events: {
+                        click: function () {
+                            var f = $("#f-date").val();
+                            var t = $("#t-date").val();
+                            var block = this.name;
+                            $("#bk-det").slideDown("slow", function () {
+                                $.post("/Reports/PlotBookingList/", { Block: block, From: f, To: t }, function (data) {
+                                    $("#bk-det").empty();
+                                    var html = `<table class="table">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Sr.</th>
+                                                            <th>Plot Number</th>
+                                                            <th>-</th>
+                                                            <th>Type</th>
+                                                            <th>Block</th>
+                                                            <th>Plot Size</th>
+                                                            <th>Date</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    </tbody>
+                                                </table>`;
+                                    $("#bk-det").append(html);
+                                    $.each(data, function (a) {
+                                        if (data[a].Sector == null) {
+                                            var count = a + 1;
+                                            var html1 = `<tr>
+                                                    <td>${count}</td>
+                                                    <td>${data[a].Plot_No}</td>
+                                                    <td>-</td>
+                                                    <td>${data[a].Type}</td>
+                                                    <td>${data[a].Block}</td>
+                                                    <td>${data[a].Size}</td>
+                                                    <td>${moment(data[a].Owner_DateTime).format('DD-MM-YYYY')}</td>
+                                                </tr>`;
+                                            $("#bk-det table tbody").append(html1);
+                                        }
+                                        else {
+                                            var count = a + 1;
+                                            var html1 = `<tr>
+                                                    <td>${count}</td>
+                                                    <td>${data[a].Plot_No}</td>
+                                                    <td>Sector-${data[a].Sector}</td>
+                                                    <td>${data[a].Type}</td>
+                                                    <td>${data[a].Block}</td>
+                                                    <td>${data[a].Size}</td>
+                                                    <td>${moment(data[a].Owner_DateTime).format('DD-MM-YYYY')}</td>
+                                                </tr>`;
+                                            $("#bk-det table tbody").append(html1);
+                                        }
+                                        
+                                    });
+                                    var t = $('#bk-det table').DataTable({
+                                        "columnDefs": [{
+                                            "searchable": false,
+                                            "orderable": false,
+                                            "targets": 0
+                                        }],
+                                        "order": [[1, 'asc']]
+                                    });
+
+                                    t.on('order.dt search.dt', function () {
+                                        t.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
+                                            cell.innerHTML = i + 1;
+                                        });
+                                    }).draw();
+                                });
+                            });
+                            return false;
+                        }
+                    }
+                }
+            }
+        },
+        tooltip: {
+            formatter: function () {
+                return this.key + ': <b>' + this.y + '</b>';
+            },
+            valueSuffix: ''
+        },
+        series: [{
+            name: 'Block',
+            data: browserData,
+            size: '60%',
+            dataLabels: {
+                formatter: function () {
+                    return  this.point.name ;
+                },
+                color: '#ffffff',
+                distance: -30
+            }
+        }, {
+            name: 'Plot Type',
+            data: versionsData,
+            size: '80%',
+            innerSize: '60%',
+            dataLabels: {
+                formatter: function () {
+                    return  this.key + ';  ' + this.y ;
+                }
+            },
+                id: 'Types'
+        }],
+        responsive: {
+            rules: [{
+                condition: {
+                    maxWidth: 400
+                },
+                chartOptions: {
+                    series: [{
+                    }, {
+                        id: 'Types',
+                        dataLabels: {
+                            enabled: false
+                        }
+                    }]
+                }
+            }]
+        }
+    });
+
+</script>
+<style>
+    #bk-det table tr th, #bk-det table tr td {
+        padding: 2px;
+        font-size: 12px;
+    }
+</style>

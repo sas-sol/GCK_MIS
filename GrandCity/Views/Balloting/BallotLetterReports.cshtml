@@ -1,0 +1,70 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.BallotPlot>
+
+@{ if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+}
+
+<div class="row col-md-12 p-20">
+    <h4 class="col-md-12" style="text-align:center">Counter Report</h4>
+    <div class="col-md-3 mt-md-3"></div>
+    <div class="col-md-6 mt-md-3">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th colspan="3" style="text-align:center">Counter Summary</th>
+                </tr>
+                <tr>
+                    <th>Operator</th>
+                    <th>Total Printed Letters</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var v in Model.Where(x => x.LetterA_IssuedBy_Id != null).GroupBy(x => x.LetterA_IssuedBy_Id))
+                {
+                    <tr>
+                        <td>@v.Select(x => x.LetterA_IssuedBy_Name).FirstOrDefault()</td>
+                        <td>@v.Count()</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="col-md-3 mt-md-3"></div>
+    @foreach (var item in Model.Where(x => x.LetterA_IssuedBy_Id != null).GroupBy(x => new { x.LetterA_IssuedBy_Id, x.LetterA_IssuedBy_Name }))
+    {
+        <table class="table table-bordered fhjksdga">
+            <thead>
+                <tr class="thead-dark">
+                    <th colspan="7"> @item.Key.LetterA_IssuedBy_Name Served Total : @item.Count()</th>
+                </tr>
+                <tr class="thead-dark">
+                    <th>Sr#</th>
+                    <th>File#</th>
+                    <th>Plot</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @{int scount = 1;}
+                @foreach (var v in item)
+                {
+                    <tr>
+                        <td>@(scount++)</td>
+                        <td>@v.BallotFile</td>
+                        <td>@v.PlotNo @v.Sector</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>
+
+<script>
+    $('.fhjksdga').DataTable();
+</script>

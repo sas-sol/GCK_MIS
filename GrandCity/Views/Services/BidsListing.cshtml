@@ -1,0 +1,230 @@
+﻿@model  MeherEstateDevelopers.Models.QuotationServicesViewModel
+@{
+    if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else if (User.IsInRole("CEO"))
+    {
+        Layout = "~/Views/Shared/_CEOLayout.cshtml";
+    }
+    else if (User.IsInRole("Staff"))
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+    var status = Model.AppliedBids.Any(x => x.PR_Status == MeherEstateDevelopers.Models.PurchaseRequisitionStatus.Purchase_Order_Generated.ToString() || x.PR_Status == MeherEstateDevelopers.Models.PurchaseRequisitionStatus.Purchase_Order_NotPrinted.ToString());
+    var printstatus = Model.AppliedBids.Any(x => x.PR_Status == MeherEstateDevelopers.Models.PurchaseRequisitionStatus.Purchase_Order_NotPrinted.ToString());
+    var reqno = Model.PurchaseRequistionDetails.Select(x => x.Requisition_No).FirstOrDefault();
+    var Dep_Name = Model.PurchaseRequistionDetails.Select(x => x.Dep_Name).FirstOrDefault();
+    var Date = Model.PurchaseRequistionDetails.Select(x => x.DateTime).FirstOrDefault();
+    var prj = Model.PurchaseRequistionDetails.Select(x => x.Prj_Name).FirstOrDefault();
+}
+<script src="~/Scripts/Inv.js"></script>
+<input type="hidden" value="@Model.PurchaseRequistionDetails.FirstOrDefault().Group_Id" id="Group_Id" />
+<div class="bgc-white bd bdrs-3 p-20 mB-20">
+    @if (Model.PurchaseRequistionDetails.Any())
+    {
+        <div class="row">
+            <div class="col-md-3">
+                <label>Department</label>
+                <h4>@Dep_Name</h4>
+            </div>
+            <div class="col-md-3">
+                <label>Project</label>
+                <h4>@prj</h4>
+            </div>
+            <div class="col-md-3">
+                <label>Requisition No</label>
+                <h4>@reqno</h4>
+            </div>
+            <div class="col-md-3">
+                <label>Date</label>
+                <h4>@String.Format("{0:dd-MMM-yyyy}", Date)</h4>
+            </div>
+        </div>
+        if (!status)
+        {
+            <button class="btn btn-primary temp-reg-ven" data-toggle="modal" data-target="#Modal">Add New Vendor</button>
+        }
+        int sr = 1;
+        foreach (var v in Model.PurchaseRequistionDetails)
+        {
+
+            string dims = string.Empty;
+            if (!(v.Length is null))
+            {
+                dims += " /Length - " + v.Length + v.Len_UOM;
+            }
+            if (!(v.Width is null))
+            {
+                dims += " /Width - " + v.Width + v.Wid_UOM;
+            }
+            if (!(v.Heigth is null))
+            {
+                dims += " /Height - " + v.Heigth + v.Hei_UOM;
+            }
+            if (!(v.Breadth is null))
+            {
+                dims += " /Breadth - " + v.Breadth + v.B_UOM;
+            }
+            <div class="row it" style="border:1px solid #ccc" id="@v.Id">
+                <div class="col-md-1 p-20 pr">
+                    <h6>@sr</h6>
+                    <br />
+                    <i class="fas fa-trash del-item" data-mod="Services"></i>
+                </div>
+                <div class="col-md-3 p-20">
+                    <h6>@v.Item_Name @((dims is "") ? "" : ("( " + dims + " )"))</h6>
+                    @if (v.Description != null || !string.IsNullOrEmpty(v.Description))
+                    {
+                        <h6>@v.Description</h6>
+                    }
+                </div>
+                <div class="col-md-8">
+                    <table class="table-bordered table">
+                        <thead>
+                            <tr>
+                                @if (!status)
+                                {
+                                    <div style="float:right" class="new-bid-serv" id="@v.Id-new-quo" data-itemid="@v.Id" data-toggle="modal" data-target="#Modal"><i class="fa fa-plus-circle"></i>Add new quote</div>
+                                }
+                            </tr>
+                            <tr class="thTextHeading">
+                                <th width="50px">Sr.</th>
+                                <th width="550px">Vendor</th>
+                                <th width="100px">Est Completion</th>
+                                <th width="100px">Amount</th>
+                                <th width="100px">Gst</th>
+                                <th width="100px">Total</th>
+                                <th width="25px"></th>
+                            </tr>
+                        </thead>
+                        <tbody class="quotes-rec" data-itemid="@v.Id" data-itemInvId="@v.Id" data-itemttl="@v.Item_Name">
+                            @if (Model.AppliedBids.Any())
+                            {
+                                int i = 1;
+                                foreach (var item in Model.AppliedBids.Where(x => x.Bid_PurReqId == v.Id))
+                                {
+                                    string col = "";
+                                    if (item.Bid_Finalized == true)
+                                    {
+                                        col = "bgc-green-50";
+                                    }
+                                    <tr class="exst-item-bid-info @col" data-bidIden="@item.Bid_Id" data-isfnl="@item.Bid_Finalized.ToString()">
+                                        <td class="">
+                                            @i
+                                            @if (item.Bid_Finalized == true)
+                                            {
+                                                <i class="ti-check" style="color:green"></i>
+                                            }
+                                            <div class="s-quote-det"><i class="fa fa-plus-circle"></i></div>
+                                        </td>
+                                        <td class="">@item.Bid_Vendor_Name</td>
+                                        <td class="">@item.BidQty / @item.Bid_UOM</td>
+                                        <td class="">@string.Format("{0:0,0.##}", item.Bid_Pur_Rate)</td>
+                                        <td class="">@string.Format("{0:0,0.##}", item.Tax)</td>
+                                        <td class=""><span class="ccy">@item.Currency</span> @string.Format("{0:0,0.##}", item.Bid_Pur_Rate + item.Tax)</td>
+                                        <td class="">
+                                            @if (!status)
+                                            {
+                                                <ul style="list-style:none;margin-left:0px;">
+                                                    <li class="dropdown">
+                                                        <a href="" class="dropdown-toggle no-after peers" data-toggle="dropdown">
+                                                            <i class="ti-more-alt  c-grey-900" style="transform:rotate(90deg);"></i>
+                                                        </a>
+                                                        <ul class="dropdown-menu" style="padding:10px;width:auto !important">
+                                                            <li class="up-quot" data-toggle="modal" data-target="#Modal" data-bidIden="@item.Bid_Id"><i class="ti-pencil"></i>&nbsp;&nbsp;Update</li>
+
+                                                            <li class="ser-bid-row-rmvr" data-bidIden="@item.Bid_Id"><i class="ti-trash"></i>&nbsp;&nbsp;Delete</li>
+                                                        </ul>
+                                                    </li>
+                                                </ul>
+                                            }
+                                        </td>
+                                    </tr>
+                                    if (!string.IsNullOrEmpty(item.Bid_Desc) && !string.IsNullOrWhiteSpace(item.Bid_Desc))
+                                    {
+                                        <tr>
+                                            <td colspan="6"><b>Remarks: </b> @item.Bid_Desc</td>
+                                        </tr>
+                                    }
+                                    <tr style="display:none" class="quot-deta-@item.Bid_Id">
+                                        <td colspan="3" class="term"></td>
+                                        <td colspan="3" class="quo"></td>
+                                    </tr>
+                                    i++;
+                                }
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td colspan="8">No Quotations are Added yet</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            sr++;
+        }
+
+        <div class="col-md-12" style="text-align:right">
+            @{
+                if (Model.AppliedBids.Any())
+                {
+                    List<bool> Stat = new List<bool>();
+                    foreach (var item in Model.PurchaseRequistionDetails.GroupBy(x => new { x.Id }))
+                    {
+                        Stat.Add(Model.AppliedBids.Any(x => x.Bid_PurReqId == item.Key.Id));
+                    }
+                    if (Stat.All(x => x == true))
+                    {
+                        if (Model.AppliedBids.Any(x => x.Bid_Finalized == true) && printstatus)
+                        {
+                            <button type="button" class="btn btn-primary gen-po">Print Purchase Orders</button>
+                        }
+                        else if (Model.AppliedBids.Any(x => x.Bid_Finalized == true && x.PO_Generated == true) && !printstatus)
+                        {
+                            <h5>Purchase Order Generated</h5>
+                        }
+                        else
+                        {
+                            if (!Model.AppliedBids.Any(x => x.PR_Status == MeherEstateDevelopers.Models.PurchaseRequisitionStatus.Quotation_Approval.ToString()))
+                            {
+                                <button type="button" class="btn btn-info quo-app-ser">Send for Quotation Approval</button>
+                            }
+                            else
+                            {
+                                <h5>Sent for Approval</h5>
+                            }
+                        }
+                    }
+                }
+            }
+        </div>
+    }
+    else
+    {
+        <div class="col-md-12">
+            <h5>It appears to have occurred some sort of error. Please try again or contact SA Systems Team.</h5>
+        </div>
+    }
+</div>
+<style>
+    tr th {
+        font-size: 13px;
+        padding: 5px !important;
+    }
+
+    .thTextHeading {
+        color: #FFF;
+        background-color: #212529;
+    }
+    .del-item {
+        visibility: hidden
+    }
+
+    .pr:hover .del-item {
+        visibility: visible
+    }
+</style>

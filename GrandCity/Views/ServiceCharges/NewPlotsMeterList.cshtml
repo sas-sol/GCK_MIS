@@ -1,0 +1,112 @@
+﻿@model MeherEstateDevelopers.Models.MeterReadingViewDetails
+
+<style>
+    table tr td {
+        padding: 5px !important;
+    }
+
+    .testbg {
+        border: 3px solid red;
+    }
+</style>
+<div class="form-row">
+    <div class="col-md-6">
+        <table id="" class="table table-striped table-bordered result__com__res" cellspacing="0" width="100%">
+            <thead>
+                <tr class="thead-dark central-text-align">
+                    <th colspan="5">Residential Meter Readings</th>
+                </tr>
+                <tr>
+                    <th width="80" align="center" class="col-date">Plot No</th>
+                    <th width="100" class="col-name">Meter No</th>
+                    <th width="120" class="col-rece">Prev Reading</th>
+                    <th width="120" class="col-file">Cur Reading</th>
+                    <th width="100" class="col-file">Units</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    //bool? isAllowed = Model.ManualPermissionGranted;
+                    bool? isAllowed = true;
+                    foreach (var item in Model.MeterReadings.Where(x => x.Type == "Residential").OrderBy(x=> Convert.ToInt32( x.PlotNo)))
+                    {
+                        var units = item.Current_Reading - item.Previous_Reading;
+                        <tr class="meter__read__table__check_res central-text-align" id="@item.Id">
+                            <td align="center" class="col-mod">@item.Plot_No</td>
+                            <td class="col-type">@item.Meter_No</td>
+                            <td class="pre-read" id="@item.Previous_Reading">@item.Previous_Reading</td>
+                            <td class="col-deal">
+                                @if (isAllowed == true)
+                                {
+                                    <input type="text" value="@item.Current_Reading" class="read__cur__readings borderless-Input" />
+                                }
+                                else
+                                {
+                                    <input type="text" value="@item.Current_Reading" class="read__cur__readings borderless-Input" readonly />
+                                }
+                            </td>
+                            <td class="uni-cons" id="@units">@units </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="col-md-6">        
+        <table id="" class="table table-striped table-bordered result__com__res" cellspacing="0" width="100%">
+            <thead>
+                <tr class="thead-dark central-text-align">
+                    <th colspan="5">Commercial Meter Readings</th>
+                </tr>
+                <tr>
+                    <th width="80" align="center" class="col-date">Plot No</th>
+                    <th width="100" class="col-name">Meter No</th>
+                    <th width="120" class="col-rece">Prev Reading</th>
+                    <th width="120" class="col-file">Cur Reading</th>
+                    <th width="100" class="col-file">Units</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    foreach (var item in Model.MeterReadings.Where(x => x.Type == "Commercial").OrderBy(x => Convert.ToInt32(x.PlotNo)))
+                    {
+                                    var units = item.Current_Reading - item.Previous_Reading;
+                        <tr class="meter__read__table__check_com central-text-align" id="@item.Id">
+                            <td align="center" class="col-mod">@item.Plot_No</td>
+                            <td class="col-type">@item.Meter_No</td>
+                            <td class="pre-read" id="@item.Previous_Reading">@item.Previous_Reading</td>
+                            <td class="col-deal">
+                                @if (isAllowed == true)
+                            {
+                                    <input value="@item.Current_Reading" type="text" class="read__cur__readings borderless-Input" />
+                                }
+                                else
+                                {
+                                    <input value="@item.Current_Reading" type="text" class="read__cur__readings borderless-Input" readonly />
+                                }
+                            </td>
+                            <td class="uni-cons" id="@units">@units</td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+    <button class="btn btn-primary" id="Fin__meter__readings" value="@ViewBag.BlockId">Finalize Units</button>
+    @if (isAllowed == false)
+    {
+        <button class="btn btn-primary man-entr ml-md-3" data-toggle="modal" data-target="#Modal" data-blk="@ViewBag.BlockId">Manual Entry Request</button>
+    }
+</div>
+
+<script>
+    $('.man-entr').click(function () {
+        
+        let blk = $('#PlotMeters option:selected').text();
+        let blkId = $(this).attr('data-blk');
+        EmptyModel();
+        $('#ModalLabel').text("Request For Manual Meter Reading");
+        $('#modalbody').load('/ServiceCharges/ManualMeterReadingRequestForBlock/', { block: blk, blockId: blkId });
+        $('.modal-footer').append('<button class="btn btn-success dfg-yu">Request</button>');
+    });
+</script>

@@ -1,0 +1,53 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Sp_Get_PlotsTransferList_Result>
+@{
+    if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+}
+<div class="form-row">
+    <div class="col-md-12 bgc-white bd bdrs-3 p-20 mB-20">
+        <h4 class="c-grey-900 mB-20">Plots Transfer List</h4>
+        <table id="dataTable" class="table table-striped table-bordered" cellspacing="0" width="100%">
+            <thead>
+                <tr>
+                    <th>Sr.</th>
+                    <td>Plot No</td>
+                    <td>Plot Size</td>
+                    <td>Name</td>
+                    <td>Father Name</td>
+                    <td>Transfer Date</td>
+                    <td></td>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    if (Model.Any())
+                    {
+                        int srcounter = 1;
+                        foreach (var item in Model)
+                        {
+                            <tr class="pointer" id="@item.Id">
+                                <td>@srcounter</td>
+                                <td>@item.Plot_No</td>
+                                <td>@item.Plot_Size</td>
+                                <td>@item.Name</td>
+                                <td>@item.Father_Husband</td>
+                                <td>@string.Format("{0:dd-MMM-yyyy}", item.Ownership_DateTime)</td>
+                                @if (item.Transfer_Slip == false)
+                                {
+                                    <td><button class="btn btn-primary p-tran-paper" id="@item.Owner_Id">Generate Transfer Paper</button></td>
+                                }
+                            </tr>
+                            srcounter++;
+                        }
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

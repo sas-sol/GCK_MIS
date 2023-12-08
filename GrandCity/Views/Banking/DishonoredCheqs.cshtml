@@ -1,0 +1,77 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Sp_Get_DishonredCheques_Result>
+@{ if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+}
+<div class="row">
+    <div class="col-md-12">
+        <div class="bdrs-3 ov-h bgc-white p-10 bd">
+            <div class="form-row">
+                <h5>Dishonored Cheques List</h5>
+            </div>
+            <div class="form-row">
+                <div class="table-responsive" id="report">
+                    <table class="table table-striped table-bordered" cellspacing="0" width="100%">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th>Name</th>
+                                <th>Father Name</th>
+                                <th>Contact</th>
+                                <th>Cheque No.</th>
+                                <th>Date</th>
+                                <th>Bank</th>
+                                <th>Amount</th>
+                                <th>File/Plot No -  Module - Type</th>
+                                <th>Dishonored Reason</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                if (Model.Any())
+                                {
+                                    foreach (var g in Model.OrderByDescending(x=> x.Cheque_DemandDraft_PayOrder_Date).GroupBy(x => new { x.Cheque_BankDraft_Payorder_Number, x.Bank, x.Cheque_DemandDraft_PayOrder_Date, x.Status, x.Name, x.Father_Name, x.Contact }))
+                                    {
+                                        <tr class="pointer">
+                                            <td>@g.Key.Name</td>
+                                            <td>@g.Key.Father_Name</td>
+                                            <td>@g.Key.Contact</td>
+                                            <td>@g.Key.Cheque_BankDraft_Payorder_Number</td>
+                                            <td>@string.Format("{0:D}", g.Key.Cheque_DemandDraft_PayOrder_Date)</td>
+                                            <td>@g.Key.Bank</td>
+                                            <td>@string.Format("{0:n0}", g.Sum(x => x.Amount))</td>
+                                            <td>
+                                                @foreach (var item in g)
+                                                {
+                                                    var data = item.File_No + " - " + item.Module + " - " + item.Type;
+                                                    <span>@data</span><br />
+                                                }
+                                            </td>
+                                            <td>
+                                                @foreach (var item in g)
+                                                {
+                                                    <span>@item.Dishonored_Reason</span><br />
+                                                }
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td colspan="10">No Record Found</td>
+                                    </tr>
+                                }
+                            }
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,48 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.DealerFileForm>
+<div class="row">
+    <div class="col-md-12">
+        <div class="bgc-white bd bdrs-3 p-20 mB-20" style="height:500px;overflow-y:scroll">
+            <table id="dataTable" class="table table-striped table-bordered" cellspacing="0" width="100%">
+                <thead>
+                    <tr>
+                        <th>Sr.</th>
+                        <th>Plot Size</th>
+                        <th>File Code</th>
+                        <th>Dealership</th>
+                        <th>Development Charges</th>
+                        <th>Security</th>
+                        <th>Security Amount</th>
+                        <th>Sector</th>
+                        <th>Phase</th>
+                        <th>Block</th>
+                        <th>QR Image</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        int counter = 1;
+
+                        foreach (var item in Model)
+                        {
+                            string filname = item.FileCode + ".png";
+                            <tr>
+                                <td>@counter</td>
+                                <td>@item.Plot_Size</td>
+                                <td>@item.FileCode</td>
+                                <td>@item.Dealership_Name</td>
+                                <td>@item.Dev_Charges_Text</td>
+                                <td>@item.Sec_NoSec_Name</td>
+                                <td>@item.Security</td>
+                                <td>@item.Sector</td>
+                                <td>@item.Phase_Name</td>
+                                <td>@item.Block_Name</td>
+                                <td><img width="100" height="100" src="~/QR Codes/@filname" /></td>
+                            </tr>
+                            counter++;
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

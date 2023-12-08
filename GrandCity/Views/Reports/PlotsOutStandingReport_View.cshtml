@@ -1,0 +1,67 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Sp_Get_Reports_PlotOutstandingByBlock_Result>
+@{
+    var Total = Model.Sum(x => x.total);
+    var Received = Model.Sum(x => x.Received);
+    var Discount = Model.Sum(x => x.Discount);
+    var Remain = Model.Where(x => x.Remaining > 0).Sum(x => x.Remaining);
+    var access = Model.Where(x => x.Remaining < 0).Sum(x => x.Remaining);
+}
+@{
+    if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else if (User.IsInRole("CEO"))
+    {
+        Layout = "~/Views/Shared/_CEOLayout.cshtml";
+    }
+    else if (User.IsInRole("Staff"))
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+}
+<div class="form-row">
+    <div class="col-md-6" id="tab-data">
+        <table class="table table-striped table-bordered rpttable">
+            <thead class="thead-dark">
+                <tr>
+                    <th width="80px">Plot No</th>
+                    <th width="100px">Type</th>
+                    <th width="100px">Status</th>
+                    <th width="150px">Total Amount</th>
+                    <th width="150px">Received</th>
+                    <th width="150px">Discount</th>
+                    <th width="150px">Remaining</th>
+            </thead>
+            <tbody style="max-height: 300px !important;">
+                @foreach (var item in Model)
+                {
+                    <tr class="pointer plt-details" data-id=" @item.Id">
+                        <td width="80px">@item.Plot_No  </td>
+                        <td width="80px">@item.Type  </td>
+                        <td width="80px">@item.Status  </td>
+                        <td width="150px">@string.Format("{0:n0}", item.total)</td>
+                        <td width="150px">@string.Format("{0:n0}", item.Received)</td>
+                        <td width="150px">@string.Format("{0:n0}", item.Discount)</td>
+                        <td width="150px">@string.Format("{0:n0}", item.Remaining)</td>
+                    </tr>
+                }
+            </tbody>
+            <tfoot></tfoot>
+        </table>
+
+    </div>
+    <div class="col-md-" id="rpt-data">
+        <h5>Total Amount: @string.Format("{0:n0}", Total)    </h5>
+        <h5>Received Amount: @string.Format("{0:n0}", Received)   </h5>
+        <h5>Discounted Amount: @string.Format("{0:n0}", Discount)   </h5>
+        <h5>Excess Amount: @string.Format("{0:n0}", access)   </h5>
+        <h5>Remaining Amount: @string.Format("{0:n0}", Remain)   </h5>
+    </div>
+    <div class="col-md-12" id="plot-det"></div>
+</div>
+<script>
+    $(function () {
+        $('.rpttable').DataTable();
+    });
+</script>

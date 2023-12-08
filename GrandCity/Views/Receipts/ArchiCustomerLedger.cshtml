@@ -1,0 +1,39 @@
+﻿@model MeherEstateDevelopers.Models.ArchiCustomerLedgerModel
+
+
+<div class="col-md-12">
+    <table class="table table-borderless">
+        <thead>
+            <tr>
+                <th>Sr.</th>
+                <th>Date</th>
+                <th>Debit</th>
+                <th>Credit</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @{ 
+                int cnt = 1;
+            }
+            @foreach(var v in Model.LedgerDetails.OrderBy(x=>x.ActionDate))
+            {
+                <tr>
+                    <td>@(cnt++)</td>
+                    <td>@v.ActionDate.ToShortDateString()</td>
+                    <td>@((v.Debit == 0) ? "-":string.Format("{0:n0}",v.Debit))</td>
+                    <td>@((v.Credit == 0)? "-":string.Format("{0:n0}",v.Credit))</td>
+                </tr>
+            }
+        </tbody>
+
+        <tfoot>
+            <tr>
+                <td></td>
+                <td></td>
+                <td>@string.Format("{0:n0}",Model.LedgerDetails.Sum(x=>x.Debit))</td>
+                <td>@string.Format("{0:n0}",Model.LedgerDetails.Sum(x=>x.Credit))</td>
+            </tr>
+        </tfoot>
+    </table>
+</div>

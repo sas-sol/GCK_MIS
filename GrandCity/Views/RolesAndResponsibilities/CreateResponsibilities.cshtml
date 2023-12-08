@@ -1,0 +1,39 @@
+﻿@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<div class="row gap-20  pos-r">
+    <div class="col-md-8">
+        <div class="bgc-white p-20 bd">
+            <h6 class="c-grey-900">Add Responsibility</h6>
+            <div class="mT-30">
+                @using (Html.BeginForm("CreateResponsibilities", "RolesAndResponsibilities", FormMethod.Post, new { @id = "res-c", @class = "", role = "form", autocomplete="off" }))
+                {
+                    @Html.AntiForgeryToken()
+                    <div class="form-row">
+                        <div class="form-group col-md-5">
+                            <label for="inputCity">Name</label>
+                            <input type="text" class="form-control" name="Responsibility_Name" id="" required>
+                        </div>
+                        <div class="form-group col-md-7">
+                            <label for="inputState">Details</label>
+                            <input type="text" class="form-control" name="Details" id="" required>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Create</button>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="col-md-8">
+        <div class="bgc-white p-20 bd">
+            <h6 class="c-grey-900">Responsibilities</h6>
+            <div class="mT-30" id="res-lst">
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $("#res-lst").load("/RolesAndResponsibilities/AllResponsibilities/");
+    });
+</script>

@@ -1,0 +1,58 @@
+﻿@model MeherEstateDevelopers.Models.Subscribed_Charges
+
+<input type="hidden" id="Com_id" value="@ViewBag.ComId" />
+@foreach (var item in Model.SCComList)
+{
+    <div class="form-group">
+        <div class="checkbox checkbox-circle checkbox-info peers ai-c">
+            @{
+                if (Model.Com_SCList.Any(x => x.Service_Charges == item.Id))
+                {
+                    <input type="checkbox" value="@item.Id" data-scnam="@item.Charges_Name" class="peer ser-char-subunsb_com" checked>
+                }
+                else
+                {
+                    <input type="checkbox" value="@item.Id"  data-scnam="@item.Charges_Name" class="peer ser-char-subunsb_com">
+                }
+            }
+            <label class="peers peer-greed js-sb ai-c">
+                @if (item.Type == "Size")
+                {
+                    <span class="peer peer-greed ser-ch-nam" style="font-weight:bold"> @item.Charges_Name  - @item.Plot_Size </span>
+                }
+                else
+                {
+                    <span class="peer peer-greed ser-ch-nam" style="font-weight:bold"> @item.Charges_Name   </span>
+
+                }
+            </label>
+        </div>
+    </div>
+}
+<hr />
+<div class="row">
+    <div class="col-md-3">
+        <h6> Electricity Meters</h6>
+    </div>
+    <div class="col-md-3">
+        <button class="btn btn-info add-elc-met-Com" id="@ViewBag.Type">Add New Meter</button>
+    </div>
+</div>
+<div class="" id="addmetcom"></div>
+@foreach (var item in Model.Plot_Meters)
+{
+    <div class="form-row" id="m-@item.Id">
+        <div class="form-group col-md-3">
+            <label>Meter No :</label>
+            <input class="form-control" readonly value="@item.Meter_No" />
+        </div>
+        <div class="form-group col-md-3">
+            <i class="ti-minus rm-elec-met" id="@item.Id"></i>
+        </div>
+    </div>
+}
+<script>
+    $(function () {
+        $(".modal-header").text("Subscribed Service Charges");
+    });
+</script>

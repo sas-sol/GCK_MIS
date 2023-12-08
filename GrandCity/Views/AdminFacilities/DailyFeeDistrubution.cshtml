@@ -1,0 +1,43 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Sp_Get_MembersFee_Delivery_Result>
+<div class="bgc-white bd bdrs-3 p-10 mB-20">
+    @if (Model.Any())
+    {
+        foreach (var g in Model.OrderBy(x => x.ReceivedDateDispersal).GroupBy(x => x.ReceivedDateDispersal))
+        {
+            <h5>@string.Format("{0: dd-MMM}", g.Key)</h5>
+            <div style="display:flex">
+                @foreach (var gg in g.GroupBy(x => x.DeliveredBy))
+                {
+                    int sr = 1;
+                    <table class="table table-bordered" style="width:30%;margin-right:10px">
+                        <tr><th colspan="5">@gg.Key</th></tr>
+                        <tr>
+                            <th></th>
+                            <th>Name</th>
+                            <th>Member Type</th>
+                            <th>Project Name</th>
+                            <th>Fee</th>
+                        </tr>
+                        @foreach (var item in gg)
+                        {
+                        <tr>
+                            <td>@sr</td>
+                            <td>@item.Mem_Name</td>
+                            <td>@item.Mem_Type</td>
+                            <td>@item.Project_Name</td>
+                            <td>@string.Format("{0:n0}", Math.Round(Convert.ToDouble(item.FeeAmount))) </td>
+                        </tr>
+                            sr++;
+                        }
+                        <tr><th></th><th></th><th></th><th></th><th>@string.Format("{0:n0}", Math.Round(Convert.ToDouble(gg.Sum(x => x.FeeAmount))))</th></tr>
+                    </table>
+                }
+            </div>
+            <hr />
+        }
+    }
+    else
+    {
+        <h6>No Record Found</h6>
+    }
+</div>
