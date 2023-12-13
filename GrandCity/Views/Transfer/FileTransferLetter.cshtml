@@ -2,7 +2,124 @@
 @{
     Layout = null;
 }
+
 <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Membership Transfer Letter</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            padding: 20px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+        }
+
+        .right-section {
+            text-align: right;
+            margin-top: 1%;
+        }
+
+        .left-section {
+            margin-top: 5%;
+        }
+
+        h2, h3 {
+            margin-bottom: 50px;
+        }
+
+        p {
+            margin-bottom: 10px;
+        }
+
+        footer {
+            text-align: center;
+            position: fixed;
+            bottom: 70px;
+            width: 100%;
+            padding-top: 10px;
+        }
+
+        .signature-line-r {
+            border-top: 2px solid #000;
+            margin-top: 7%;
+            margin-left: 50%; /* Right margin for the signature line */
+            width: 70%; /* Match the width of the company details */
+        }
+
+        .signature-line-l {
+            border-top: 2px solid #000;
+            margin-top: 7%;
+            /*margin-left: 5%;*/ /* Right margin for the signature line */
+            width: 70%; /* Match the width of the company details */
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="left-section">
+            <p>@Model.Transfer_From</p>
+            <p>@Model.T_Address</p>
+            <p>@Model.T_City</p>
+
+        </div>
+        <div class="right-section">
+            <p><b>@DateTime.Now.ToString("MMM/yyyy")</b></p>
+            @*<p>App #.</p>
+                <p>Reg #. TLP1-0481</p>*@
+            <p><b>Plot/Block:</b> @Model.Plot_No, @Model.Block</p>
+            <p><b>Size</b> @Model.Size</p>
+            <p><b>Phase:</b>@Model.Phase</p>
+        </div>
+    </header>
+
+    <div>
+        <div style="text-align: center;">
+            <h3 style="margin-top: 50px !important;"><b>Subject: <u>Membership Transfer Letter (Plot/House/Shop/Plaza)</u></b></h3>
+        </div>
+        <h4>Dear Member,</h4>
+        <p style="margin-left:7%;">Grand City Management is pleased to inform you that your application for the above-mentioned plot has been accepted, and the plot has been transferred in the name of:</p>
+        <p><b>@Model.Name</b></p>
+        <p>with all rights, deposits, and liabilities as per Grand City's existing Rules and Regulations and those which may be enforced in the future by the Grand City or any authority competent to do so.</p>
+        <div style="text-align: center;">
+            <p>Assuring you the best services and co-operation</p>
+        </div>
+        <p style="margin-left:80%; margin-top: 3%;">Regards!</p>
+
+    </div>
+    <div style="display:flex; justify-content: space-between;">
+        <div class="signature-line-l">
+            <div class="signature-line"></div>
+            <p>GM Membership/GM Transfer</p>
+        </div>
+        <div class="signature-line-r">
+            <div class="signature-line"></div>
+            <p>Project Director</p>
+        </div>
+    </div>
+    <div style="text-align: left; margin-top:2%; margin-bottom:4%;">
+        <p><b>C.C TLP-0481</b></p>
+        <p>@Model.Name</p>
+        <p>@Model.Address</p>
+        <p>@Model.City</p>
+    </div>
+    <div>
+        <p style="white-space: pre;"><b>C.C         Accounts Department</b></p>
+        <p style="white-space: pre;">               <b>Building Control / Design Department</b></p>
+        <p style="white-space: pre;">               <b>(For Information)</b></p>
+
+    </div>
+</body>
+</html>
+<!--<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <style>
@@ -59,9 +176,9 @@
                 <td align="left" valign=bottom style="line-height: 44px;">
                     <p>
                         <b>Transferor Name:</b>&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@Model.Transfer_From&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u>&nbsp;
-                        <b>CNIC </b>&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@Model.T_CNIC&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u>&nbsp;
-                        @*<b>Mobile No</b>&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@Model.T_Mobile1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u>&nbsp;*@
-                    </p>
+                        <b>CNIC </b>&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@Model.T_CNIC&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u>&nbsp;-->
+@*<b>Mobile No</b>&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@Model.T_Mobile1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u>&nbsp;*@
+<!--</p>
                 </td>
             </tr>
         </table>+
@@ -232,4 +349,4 @@
         </table>
     </div>
 </body>
-</html>
+</html>-->

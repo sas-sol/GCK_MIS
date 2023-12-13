@@ -1211,7 +1211,7 @@ namespace MeherEstateDevelopers.Controllers
             db.Sp_Update_CurrentOwner(Plotid);
             var res1 = db.Sp_Get_PlotData(Plotid).SingleOrDefault();
             var res2 = db.Sp_Get_PlotOwnerList(Plotid).ToList();
-            ViewBag.CNo = db.Plot_Ownership.Where(x => x.Plot_Id == Plotid).FirstOrDefault().Currency_Note_No;
+            ViewBag.CNo = db.Plot_Ownership.Where(x => x.Plot_Id == Plotid).FirstOrDefault()?.Currency_Note_No ?? "Non Registered";
             var res3 = db.Sp_Get_PlotInstallments(Plotid).ToList();
             var res4 = db.Sp_Get_ReceivedAmounts(Plotid, Modules.PlotManagement.ToString()).ToList();
             var discount = db.Discounts.Where(x => x.Module_Id == Plotid && x.Module == Modules.PlotManagement.ToString() && x.Plot_Is_Cancelled == null).ToList();
