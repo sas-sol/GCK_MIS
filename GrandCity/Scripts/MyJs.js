@@ -1218,7 +1218,11 @@ $(document).on("submit", "#cr-com-inst-str", function (e) {
     e.preventDefault();
     var floor = $('#floor').val();
     if (floor == null || floor == "") {
-        alert("Select Project Floor");
+        //alert("Select Project Floor");
+        Swal.fire({
+            icon: 'info',
+            text: 'Choose the floor for the project'
+        });
     }
     var inststrdata = [];
     for (var i = 1; i <= instcoutstrc; i++) {
@@ -1239,21 +1243,43 @@ $(document).on("submit", "#cr-com-inst-str", function (e) {
         data: JSON.stringify(finaldata),
         success: function (data) {
             if (data) {
-                alert("Commercial Installment Structure Added");
-                window.location.reload();
+                //alert("Commercial Installment Structure Added");
+                Swal.fire({
+                    icon: 'success',
+                    text: 'Commercial installment structure successfully added'
+                }).then(() => {
+                    window.location.reload();
+                });
+                
             }
             else {
-                alert("Installment Structure of this Floor is already Present");
+                //alert("Installment Structure of this Floor is already Present");
+                Swal.fire({
+                    icon: 'info',
+                    text: 'The installment structure for this floor already exists'
+                })
             }
         },
         error: function () {
-            alert("Error Occured Try Again")
+            //alert("Error Occured Try Again")
+            Swal.fire({
+                icon: 'error',
+                text: 'Something went wrong'
+                })
         }
         , error: function (xmlhttprequest, textstatus, message) {
             if (textstatus === "timeout") {
-                alert("got timeout");
+                //alert("got timeout");
+                Swal.fire({
+                    icon: 'error',
+                    text: 'Request timed out'
+                });
             } else {
-                alert(textstatus);
+                //alert(textstatus);
+                Swal.fire({
+                    icon: 'error',
+                    text: 'Something went wrong'
+                });
             }
         }
     });
@@ -1475,7 +1501,11 @@ $(document).on("click", "#sea-file", function () {
         data: { Filefromid: val },
         success: function (data) {
             if (data == false) {
-                alert("No Result found");
+                //alert("No Result found");
+                Swal.fire({
+                    icon: 'info',
+                    text: "No Result Found."
+                });
             }
             else {
                 var dev = "";
@@ -1505,12 +1535,21 @@ $(document).on("click", "#sea-file", function () {
                 if (data.Status == "Already Received") {
                     $("#reg-file").hide();
                     $("#status").css("color", "green");
-                    alert("This File is Already Registered");
+                    //alert("This File is Already Registered");
+                    Swal.fire({
+                        icon: 'info',
+                        text: "This File is Already Registered."
+                    });
                 }
                 else if (data.Status == "Registered") {
                     $("#reg-file").hide();
                     $("#status").css("color", "green");
-                    alert("This File is Already Registered");
+                    //alert("This File is Already Registered");
+                    Swal.fire({
+                        icon: 'info',
+                        //title: 'Success!',
+                        text: "This File is Already Registered"
+                    });
                 }
                 else if (data.Status == "Pending") {
                     $("#reg-file").show();
@@ -1519,7 +1558,11 @@ $(document).on("click", "#sea-file", function () {
                 else {
                     $("#reg-file").hide();
                     $("#status").css("color", "Red");
-                    alert("This File is Canceled");
+                    //alert("This File is Canceled");
+                    Swal.fire({
+                        icon: 'info',
+                        text: "This File is Cancelled."
+                    });
                 }
             }
         }
@@ -1527,7 +1570,11 @@ $(document).on("click", "#sea-file", function () {
             if (textstatus === "timeout") {
                 alert("got timeout");
             } else {
-                alert(textstatus);
+                //alert(textstatus);
+                Swal.fire({
+                    icon: 'info',
+                    text: textstatus
+                });
             }
         }
     });
@@ -1792,26 +1839,47 @@ $(document).on("click", ".ad-fil-dis", function (e) {
     var rem = $("#remrk").val();
     var id = $("#file-id").val()
     var disDate = $('#dis-date').val();
-    var con = confirm("Are you sure you want to add Discount");
-    if (con) {
-        $.ajax({
-            type: "POST",
-            url: '/FileSystem/FileDiscount/',
-            data: { TotalAmt: ttl, DiscountAmt: dis, Remarks: rem, Id: id, DiscountDate: disDate },
-            success: function (data) {
-                alert("Discount Added")
-            },
-            error: function (xmlhttprequest, textstatus, message) {
-                if (textstatus === "timeout") {
-                    $('#gen-rec').attr("disabled", false);
-                    alert("got timeout");
-                } else {
-                    $('#gen-rec').attr("disabled", false);
-                    alert(textstatus);
+    //var con = confirm("Are you sure you want to add Discount");
+    //if (con) {
+    Swal.fire({
+        text: 'Are you sure you want to add the Discount?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                type: "POST",
+                url: '/FileSystem/FileDiscount/',
+                data: { TotalAmt: ttl, DiscountAmt: dis, Remarks: rem, Id: id, DiscountDate: disDate },
+                success: function (data) {
+                    //alert("Discount Added")
+                    Swal.fire({
+                        icon: 'success',
+                        text: 'Discount added successfully'
+                    });
+                },
+                error: function (xmlhttprequest, textstatus, message) {
+                    if (textstatus === "timeout") {
+                        $('#gen-rec').attr("disabled", false);
+                        //alert("got timeout");
+                        Swal.fire({
+                            icon: 'error',
+                            text: 'Request timed out'
+                        });
+                    } else {
+                        $('#gen-rec').attr("disabled", false);
+                        //alert(textstatus);
+                        Swal.fire({
+                            icon: 'error',
+                            text: 'Something went wrong'
+                        });
+                    }
                 }
-            }
-        });
-    }
+            });
+        }
+    });
 });
 // Get all File Details
 $(document).on("click", "#sea-file-data", function () {
@@ -2282,7 +2350,11 @@ $(document).on("click", "#sea-file-data-deliv", function () {
         data: { Filefromid: val },
         success: function (data) {
             if (data == false) {
-                alert("No Result found");
+                //alert("No Result found");
+                Swal.fire({
+                    icon: 'info',
+                    text: 'No record found'
+                });
             }
             else {
                 var dev = "";
@@ -2373,7 +2445,11 @@ $(document).on("click", "#sea-file-data-deliv", function () {
             }
         },
         error: function (data) {
-            alert("Error Occured Try Again")
+            //alert("Error Occured Try Again")
+            Swal.fire({
+                icon: 'error',
+                text: 'Something went wrong'
+            });
         }
     });
 });
@@ -2429,25 +2505,47 @@ $(document).on("click", "#sav-info", function () {
 $(document).on("click", "#fil-del", function () {
     var overdueamt = parseFloat($("#ov-du-amt").text());
     if (overdueamt > singleinst) {
-        alert("Clear the Over Due Amount First");
+        //alert("Clear the Over Due Amount First");
+        Swal.fire({
+            icon: 'info',
+            text: 'File with overdue amount cannot be marked as Delivered'
+        })
         return false;
     }
     var id = $(this).data('grptag')
-    var act = confirm("Are you Sure you want Deliver this File")
-    if (act == true) {
-        $.ajax({
-            type: "POST",
-            url: '/FileSystem/DeliverFile/',
-            data: { Id: id },
-            success: function (data) {
-                alert("File Delivered Sucessfully");
-                var html = '<button id="fil-del" style="width:100%" class="btn btn-success"><i class="ti-check"></i>&nbsp;&nbsp;File Deliverd</button>';
-                $('#file-del').html(html);
-            },
-            error: function (data) {
-            }
-        });
-    }
+    //var act = confirm("Are you Sure you want Deliver this File")
+    //if (act == true) {
+    Swal.fire({
+        text: 'Are you sure you want to mark this file as delivered?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                type: "POST",
+                url: '/FileSystem/DeliverFile/',
+                data: { Id: id },
+                success: function (data) {
+                    //alert("File Delivered Sucessfully");
+                    Swal.fire({
+                        icon: 'success',
+                        text: 'File marked as delivered successfully'
+                    }).then(() => {
+                        var html = '<button id="fil-del" style="width:100%" class="btn btn-success"><i class="ti-check"></i>&nbsp;&nbsp;File Deliverd</button>';
+                        $('#file-del').html(html);
+                    })
+                },
+                error: function (data) {
+                    Swal.fire({
+                        icon: 'error',
+                        text: 'Something went wrong'
+                    });
+                }
+            });
+        }
+    });
 });
 // search file for Transfer
 $(document).on("click", "#sea-file-data-trans", function () {
@@ -2678,42 +2776,75 @@ function InitBanks(i) {
 }
 // add a payment
 $(document).on("click", "#add-pay-typ", function () {
-    paycont++;
-    var html = '<div class="form-row pay-num" id="pay-' + paycont + '"><div class="form-group col-md-2"><label>Cash / Bank</label><select class="form-control paytypesel" id="cah-chq-bak" required>' +
-        '<option value="Cash">Cash</option><option value="BankDraft">Bank Draft</option><option value="Cheque">Cheque</option><option value="PayOrder">Pay Order</option>' +
-        '<option value="Online_Cash">Online - Cash</option><option value="Online_Cheque">Online - Cheque</option><option value="Online_Payorder">Online - PayOrder</option><option value="Online_Bankdraft">Online - BankDraft</option>' +
-        '</select></div><div class="form-group col-md-1"><label>Amount</label><input class="form-control coma" placeholder="250,000" required><input type="hidden" id="Amount" class="amt" required>' +
-        '</div><div class="form-group col-md-2 paymentotherinfo"><label id="paytypelabel">-</label><input type="text" class="form-control" id="paymenttype" placeholder="" disabled required>' +
-        '</div><div class="form-group col-md-1 paymentotherinfo"><label>Date</label><input type="text" class="form-control" id="cbp-date" data-provide="datepicker" placeholder="mm/dd/yyyy" disabled required>' +
-        '</div><div class="form-group col-md-2 paymentotherinfo"><label>Bank</label><select class="form-control" id="bank" disabled><option>Choose..</option></select></div>' +
-        '<div class="form-group col-md-1 paymentotherinfo"><label>Branch </label><input type="text" class="form-control" id="Branch" placeholder="Mall Rd" disabled required></div>' +
-        '<div class="form-group col-md-1 paymentotherinfo"><label>Scan File</label><button class=" btn btn-block" data-v=' + paycont + ' type="button" id="scanbtn">Scan</button></div>' +
-        '<div id="images-' + paycont + '" class="col-md-1 images"></div>' +
-        '<div class="form-group col-md-1"><i class="pointer ti-close rm-pa-type"></i></div></div>';
-    $('#pay-list').append(html);
-    InitBanks(paycont);
+    Swal.fire({
+        //title: 'Are you sure you want to Add New Owner?',
+        text: 'Are you sure you want to Add another Payment?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            paycont++;
+            var html = '<div class="form-row pay-num" id="pay-' + paycont + '"><div class="form-group col-md-2"><label>Cash / Bank</label><select class="form-control paytypesel" id="cah-chq-bak" required>' +
+                '<option value="Cash">Cash</option><option value="BankDraft">Bank Draft</option><option value="Cheque">Cheque</option><option value="PayOrder">Pay Order</option>' +
+                '<option value="Online_Cash">Online - Cash</option><option value="Online_Cheque">Online - Cheque</option><option value="Online_Payorder">Online - PayOrder</option><option value="Online_Bankdraft">Online - BankDraft</option>' +
+                '</select></div><div class="form-group col-md-1"><label>Amount</label><input class="form-control coma" placeholder="250,000" required><input type="hidden" id="Amount" class="amt" required>' +
+                '</div><div class="form-group col-md-2 paymentotherinfo"><label id="paytypelabel">-</label><input type="text" class="form-control" id="paymenttype" placeholder="" disabled required>' +
+                '</div><div class="form-group col-md-1 paymentotherinfo"><label>Date</label><input type="text" class="form-control" id="cbp-date" data-provide="datepicker" placeholder="mm/dd/yyyy" disabled required>' +
+                '</div><div class="form-group col-md-2 paymentotherinfo"><label>Bank</label><select class="form-control" id="bank" disabled><option>Choose..</option></select></div>' +
+                '<div class="form-group col-md-1 paymentotherinfo"><label>Branch </label><input type="text" class="form-control" id="Branch" placeholder="Mall Rd" disabled required></div>' +
+                '<div class="form-group col-md-1 paymentotherinfo"><label>Scan File</label><button class=" btn btn-block" data-v=' + paycont + ' type="button" id="scanbtn">Scan</button></div>' +
+                '<div id="images-' + paycont + '" class="col-md-1 images"></div>' +
+                '<div class="form-group col-md-1"><i class="pointer ti-close rm-pa-type"></i></div></div>';
+            $('#pay-list').append(html);
+            InitBanks(paycont);
+        }
+    });
 });
 // add a payment
 $(document).on("click", ".add-pay-typ", function () {
-    paycont++;
-    var html = '<div class="form-row pay-num" id="pay-' + paycont + '"><div class="form-group col-md-2"><label>Cash / Bank</label><select class="form-control paytypesel" id="cah-chq-bak" required>' +
-        '<option value="Cash">Cash</option><option value="BankDraft">Bank Draft</option><option value="Cheque">Cheque</option><option value="PayOrder">Pay Order</option>' +
-        '<option value="Online_Cash">Online - Cash</option><option value="Online_Cheque">Online - Cheque</option><option value="Online_Payorder">Online - PayOrder</option><option value="Online_Bankdraft">Online - BankDraft</option>' +
-        '</select></div><div class="form-group col-md-2"><label>Amount</label><input class="form-control coma" placeholder="250,000" required><input type="hidden" id="Amount" class="amt" required>' +
-        '</div><div class="form-group col-md-2 paymentotherinfo"><label id="paytypelabel">-</label><input type="text" class="form-control" id="paymenttype" placeholder="" disabled required>' +
-        '</div><div class="form-group col-md-2 paymentotherinfo"><label>Date</label><input type="text" class="form-control" id="cbp-date" data-provide="datepicker" placeholder="mm/dd/yyyy" disabled required>' +
-        '</div><div class="form-group col-md-2 paymentotherinfo"><label>Bank</label><select class="form-control" id="bank" disabled><option>Choose..</option></select></div>' +
-        '<div class="form-group col-md-1 paymentotherinfo"><label>Branch </label><input type="text" class="form-control" id="Branch" placeholder="Mall Rd" disabled required></div><div class="form-group col-md-1"><i class="pointer ti-close rm-pa-type"></i></div></div>';
-    $("#pay-list").append(html);
-    InitBanks(paycont);
+    Swal.fire({
+        //title: 'Are you sure you want to Add New Owner?',
+        text: 'Are you sure you want to Add another Payment?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            paycont++;
+            var html = '<div class="form-row pay-num" id="pay-' + paycont + '"><div class="form-group col-md-2"><label>Cash / Bank</label><select class="form-control paytypesel" id="cah-chq-bak" required>' +
+                '<option value="Cash">Cash</option><option value="BankDraft">Bank Draft</option><option value="Cheque">Cheque</option><option value="PayOrder">Pay Order</option>' +
+                '<option value="Online_Cash">Online - Cash</option><option value="Online_Cheque">Online - Cheque</option><option value="Online_Payorder">Online - PayOrder</option><option value="Online_Bankdraft">Online - BankDraft</option>' +
+                '</select></div><div class="form-group col-md-2"><label>Amount</label><input class="form-control coma" placeholder="250,000" required><input type="hidden" id="Amount" class="amt" required>' +
+                '</div><div class="form-group col-md-2 paymentotherinfo"><label id="paytypelabel">-</label><input type="text" class="form-control" id="paymenttype" placeholder="" disabled required>' +
+                '</div><div class="form-group col-md-2 paymentotherinfo"><label>Date</label><input type="text" class="form-control" id="cbp-date" data-provide="datepicker" placeholder="mm/dd/yyyy" disabled required>' +
+                '</div><div class="form-group col-md-2 paymentotherinfo"><label>Bank</label><select class="form-control" id="bank" disabled><option>Choose..</option></select></div>' +
+                '<div class="form-group col-md-1 paymentotherinfo"><label>Branch </label><input type="text" class="form-control" id="Branch" placeholder="Mall Rd" disabled required></div><div class="form-group col-md-1"><i class="pointer ti-close rm-pa-type"></i></div></div>';
+            $("#pay-list").append(html);
+            InitBanks(paycont);
+        }
+    });
 });
 // remove a payment type
 $(document).on("click", ".rm-pa-type", function () {
-    $(this).parent().parent().remove();
-    paycont = 1;
-    $(".pay-num").each(function () {
-        paycont++;
-        $(this).prop('id', 'pay-' + paycont);
+    Swal.fire({
+        //title: 'Are you sure you want to Discard this Payment?',
+        text: 'Are you sure you want to Discard this Payment?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $(this).parent().parent().remove();
+            paycont = 1;
+            $(".pay-num").each(function () {
+                paycont++;
+                $(this).prop('id', 'pay-' + paycont);
+            });
+        }
     });
 });
 // Get Details of Generated Group Files
@@ -3079,20 +3210,42 @@ $(document).on("click", "#add-on-amt", function (e) {
     e.preventDefault();
     $('#add-on-amt').attr("disabled", true);
     $("#amt-in-wrds").val(InWords($("#amt").val()));
-    $.ajax({
-        type: "POST",
-        url: $("#onli-amt").attr('action'),
-        data: $("#onli-amt").serialize(),
-        success: function (data) {
-            if (data.Status) {
-                alert("receipt no is " + data.ReceiptNo);
-            }
-            else {
-                alert(data.Msg);
-            }
-        },
-        error: function () {
-            alert("Error Occured");
+    Swal.fire({
+        text: 'Are you sure you want to add online receipt?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                type: "POST",
+                url: $("#onli-amt").attr('action'),
+                data: $("#onli-amt").serialize(),
+                success: function (data) {
+                    if (data.Status) {
+                        Swal.fire({
+                            icon: 'sucess',
+                            text: 'Updated successfully, receipt number is ' + data.ReceiptNo
+                        })
+                        //alert("receipt no is " + data.ReceiptNo);
+                    }
+                    else {
+                        //alert(data.Msg);
+                        Swal.fire({
+                            icon: 'info',
+                            text: data.Msg
+                        });
+                    }
+                },
+                error: function () {
+                    //alert("Error Occured");
+                    Swal.fire({
+                        icon: 'error',
+                        text: 'Something went wrong'
+                    });
+                }
+            });
         }
     });
 });
@@ -3258,7 +3411,11 @@ $(document).on("click", ".get-f-res", function () {
             $("#all-instments tbody").empty();
             $("#dis-amts tbody").empty();
             if (data == false) {
-                alert("No Result found");
+                //alert("No Result found");
+                Swal.fire({
+                    icon: 'error',
+                    text: 'No record found'
+                });
             }
             else {
                 var dev = "";
@@ -3431,7 +3588,11 @@ $(document).on("click", ".get-f-res", function () {
             }
         },
         error: function (data) {
-            alert("Error Occured Try Again")
+            //alert("Error Occured Try Again")
+            Swal.fire({
+                icon: 'error',
+                text: 'Something went wrong'
+            });
         }
     });
 });
@@ -3651,50 +3812,93 @@ $(document).on("click", "#adjust-rec-fin", function () {
 $(document).on("click", "#up-rece-btn", function () {
     var amt = Number($("input[name=Amount]").val());
     if (amt <= 0 || amt == null) {
-        alert("Amount Cannot be empty or zero");
+        //alert("Amount Cannot be empty or zero");
+        Swal.fire({
+            icon: 'info',
+            text: 'Enter a valid amount to proceed'
+        });
         return false;
     }
-    if (confirm("Are you sure you want to update")) {
-        $.ajax({
-            type: "POST",
-            url: $("#up-rece").attr('action'),
-            data: $("#up-rece").serialize(),
-            success: function (data) {
-                if (data.Status) {
-                    alert(data.Msg);
+    //if (confirm("Are you sure you want to update")) {
+    Swal.fire({
+        text: 'Are you sure you want to update the receipt?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                type: "POST",
+                url: $("#up-rece").attr('action'),
+                data: $("#up-rece").serialize(),
+                success: function (data) {
+                    if (data.Status) {
+                        Swal.fire({
+                            icon: 'success',
+                            text: data.Msg
+                        });
+                        //alert(data.Msg);
+                    }
+                    else {
+                        Swal.fire({
+                            icon: 'info',
+                            text: data.Msg
+                        });
+                        //alert(data.Msg);
+                    }
+                },
+                error: function () {
+                    //alert("Error");
+                    Swal.fire({
+                        icon: 'error',
+                        text: 'Something went wrong'
+                    });
                 }
-                else {
-                    alert(data.Msg);
-                }
-            },
-            error: function () {
-                alert("Error");
-            }
-        });
-    }
+            });
+        }
+    });
 });
 //
 //
 $(document).on("click", ".del__rece__btn", function () {
     var R_Id = $(this).attr("id");
-    var ch = confirm('Are you sure you want to delete this receipt');
-    if (ch) {
-        $.ajax({
-            type: "POST",
-            url: '/Banking/ReceiptDelete/',
-            data: { ReceiptId: R_Id },
-            success: function (data) {
-                if (data == true) {
-                    alert("Successfully Deleted");
-                } else {
-                    alert("Already deleted");
+    //var ch = confirm('Are you sure you want to delete this receipt');
+    //if (ch) {
+    Swal.fire({
+        text: 'Are you sure you want to delete the receipt?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                type: "POST",
+                url: '/Banking/ReceiptDelete/',
+                data: { ReceiptId: R_Id },
+                success: function (data) {
+                    if (data == true) {
+                        //alert("Successfully Deleted");
+                        Swal.fire({
+                            icon: 'success',
+                            text: 'Receipt deleted successfully'
+                        });
+                    } else {
+                        //alert("Already deleted");
+
+                    }
+                },
+                error: function () {
+                    //alert("Error");
+                    Swal.fire({
+                        icon: 'error',
+                        text: 'Something went wrong'
+                    });
                 }
-            },
-            error: function () {
-                alert("Error");
-            }
-        });
-    }
+            });
+        }
+    });
 });
 //
 //
@@ -3817,8 +4021,22 @@ $(document).on("change", "#del-stat", function () {
 $(document).on("change", "#Plot_Prefrence", function () {
     var id = $(".file-trans-id").val();
     var plotpref = $(this).val();
-    $.post("/FileSystem/UpdatePlotPref/", { Id: id, Pref: plotpref }, function () {
-        alert("Updated")
+    Swal.fire({
+        text: 'Are you sure you want to update the plot preference?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.post("/FileSystem/UpdatePlotPref/", { Id: id, Pref: plotpref }, function () {
+                //alert("Updated")
+                Swal.fire({
+                    icon: 'success',
+                    text: 'Plot preference updated successfully'
+                });
+            });
+        }
     });
 });
 // Register  a file
@@ -5260,13 +5478,27 @@ $(document).on("click", "#sea-plot-data-trans-req", function () {
 $(document).on("click", ".De__Owner__from__plts", function () {
     var Ownerid = $(this).attr("data-id");
     var plotid = $("#plt-id").val();
-    var ch = confirm("Are you sure you want to delete this owner");
-    if (ch) {
-        $.post('/Plots/DeleteOwner/', { OwnerId: Ownerid, Plotid: plotid }, function (data) {
-            alert('Owner deleted successfully');
-            window.location.reload();
-        });
-    }
+    //var ch = confirm("Are you sure you want to delete this owner");
+    //if (ch) {
+    Swal.fire({
+        text: 'Are you sure you want to delete the owner?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.post('/Plots/DeleteOwner/', { OwnerId: Ownerid, Plotid: plotid }, function (data) {
+                //alert('Owner deleted successfully');
+                Swal.fire({
+                    icon: 'success',
+                    text: 'Owner deleted successfully'
+                }).then(() => {
+                    window.location.reload();
+                })
+            });
+        }
+    });
 });
 //Generate File Request 
 $(document).on("submit", "#trans-file-req", function (e) {
@@ -5325,16 +5557,34 @@ $(document).on("click", ".send-bk-req", function (e) {
 //Generate plot Request 
 $(document).on("click", ".f-tran-paper", function (e) {
     var id = $(this).attr("id");
-    if (confirm("Are you sure you want to Generate Letter")) {
-        window.open("/Transfer/FileTransferLetter?Id=" + id, '_blank');
-    }
+    //if (confirm("Are you sure you want to Generate Letter")) {
+    Swal.fire({
+        text: 'Are you sure you want to generate the transfer paper?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            window.open("/Transfer/FileTransferLetter?Id=" + id, '_blank');
+        }
+    });
 });
 //Generate plot Request 
 $(document).on("click", ".p-tran-paper", function (e) {
     var id = $(this).attr("id");
-    if (confirm("Are you sure you want to Generate Letter")) {
-        window.open("/Transfer/PlotsTransferLetter?Id=" + id, '_blank');
-    }
+    //if (confirm("Are you sure you want to Generate Letter")) {
+    Swal.fire({
+        text: 'Are you sure you want to generate the transfer paper?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            window.open("/Transfer/PlotsTransferLetter?Id=" + id, '_blank');
+        }
+    });
 });
 // List of all Track list
 $(document).on("click", ".trans-det", function () {
@@ -5430,15 +5680,32 @@ $(document).on("click", "#transf-veri", function () {
     var othtranval = $("#oth-Trans-val").val();
     var rate = $("#amt").val();
     var remarks = $("#remarks").val();
-    if (confirm("Are you sure you want to approve the Transfer Request")) {
-        $.post('/FileSystem/OkForTransfer/', { Reqid: tranreqid, Blood_rel: blod_rel, Wave_off: wave, OtherTransferCharges: othtranval, Rate: rate, Remarks: remarks }, function (data) {
-            if (data == true) {
-                alert("Ready for Transfer");
-            }
-        }).fail(function () {
-            alert("System Not Responding");
-        });
-    }
+    //if (confirm("Are you sure you want to approve the Transfer Request")) {
+    Swal.fire({
+        text: 'Are you sure you want to approve the transfer request?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No'
+    }).then((result) => {
+        if (!result.isConfirmed) {
+            $.post('/FileSystem/OkForTransfer/', { Reqid: tranreqid, Blood_rel: blod_rel, Wave_off: wave, OtherTransferCharges: othtranval, Rate: rate, Remarks: remarks }, function (data) {
+                if (data == true) {
+                    //alert("Ready for Transfer");
+                    Swal.fire({
+                        icon: 'success',
+                        text: 'Transfer request processed successfully'
+                    });
+                }
+            }).fail(function () {
+                //alert("System Not Responding");
+                Swal.fire({
+                    icon: 'error',
+                    text: 'Something went wrong'
+                });
+            });
+        }
+    });
 });
 // 
 $(document).on("click", "#plt-transf-veri", function () {
@@ -5462,14 +5729,30 @@ $(document).on("click", "#plt-transf-veri", function () {
 //
 $(document).on("click", "#file-tran-req-det", function () {
     var fileno = $("#req-file-no").val();
-    $("#tran-data").empty();
-    $("#tran-data").load("/FileSystem/FileTransferRequestData/", { Id: fileno });
+    if (fileno) {
+        $("#tran-data").empty();
+        $("#tran-data").load("/FileSystem/FileTransferRequestData/", { Id: fileno });
+    }
+    else {
+        Swal.fire({
+            icon: 'info',
+            text: 'Enter file number to proceed'
+        });
+    }
 });
 //
 $(document).on("click", "#plt-tran-req-det", function () {
     var id = $("#plot-details").val();
-    $("#tran-data").empty();
-    $("#tran-data").load("/Transfer/PlotTransferData/", { Id: id });
+    if (id) {
+        $("#tran-data").empty();
+        $("#tran-data").load("/Transfer/PlotTransferData/", { Id: id });
+    }
+    else {
+        Swal.fire({
+            icon: 'info',
+            text: 'Select plot to proceed'
+        });
+    }
 });
 //...................Get Project Types/ Floor
 $(document).on("change", ".proj-types", function () {
@@ -5665,7 +5948,11 @@ $(document).on("click", "#gen-ins", function () {
     var total_price = RemoveComma($("#plt-pric").val());
     if (total_price == "" || total_price == null) {
         $("#plt-pric").focus();
-        alert("Enter Total Price");
+        //alert("Enter Total Price");
+        Swal.fire({
+            icon: 'info',
+            text: 'Enter total price to proceed'
+        });
         return false;
     }
     var dis_pric = RemoveComma($("#dis-amt").val());
@@ -5675,19 +5962,31 @@ $(document).on("click", "#gen-ins", function () {
     var inst = $("#ttl-ins").val();
     if (inst == "" || inst == null) {
         $("#ttl-ins").focus();
-        alert("Enter Number of Installments");
+        //alert("Enter Number of Installments");
+        Swal.fire({
+            icon: 'info',
+            text: 'Enter number of installments to proceed'
+        });
         return false;
     }
     var adva = RemoveComma($("#adv-amt").val());
     if (adva == "" || adva == null) {
         $("#adv-amt").focus();
-        alert("Enter Advance Amounts");
+        //alert("Enter Advance Amounts");
+        Swal.fire({
+            icon: 'info',
+            text: 'Enter advance amount to proceed'
+        });
         return false;
     }
     var regdate = $("#reg-date").val();
     if (regdate == "" || regdate == null) {
         $("#reg-date").focus();
-        alert("Enter Registeration Date");
+        //alert("Enter Registeration Date");
+        Swal.fire({
+            icon: 'info',
+            text: 'Enter registration date to proceed'
+        });
         return false;
     }
     var instdate = $("#inst-date").val();
@@ -6065,27 +6364,54 @@ $(document).on("click", "#re-up-oth-plt-own", function (e) {
         City: $("#" + id + " #City").val(),
     }
     if (plotowndata.Name == null || plotowndata.Name.trim() == "") {
+        Swal.fire({
+            icon: 'info',
+            text: 'Enter name to proceed'
+        });
         return false;
     }
     else if (plotowndata.CNIC_NICOP == null || plotowndata.CNIC_NICOP.trim() == "") {
+        Swal.fire({
+            icon: 'info',
+            text: 'Enter CNIC to proceed'
+        });
         return false;
     }
     //else if (plotowndata.Date_Of_Birth == null || plotowndata.Date_Of_Birth.trim() == "") {
     //    return false;
     //}
     else if (plotowndata.Ownership_DateTime == null || plotowndata.Ownership_DateTime.trim() == "") {
+        Swal.fire({
+            icon: 'info',
+            text: 'Select ownership date to proceed'
+        });
         return false;
     }
     var data = { PO: plotowndata };
-    $.ajax({
-        type: "POST",
-        contentType: "application/json; charset=utf-8",
-        url: '/Plots/PlotTransferData/',
-        data: JSON.stringify(data),
-        success: function (data) {
-            alert("Plot Transfered")
-            $(".Tran-own").load('/Plots/PlotsOwnersListUpadate/', { Id: plotid }, function () {
-                $("#up-trans-btn").show();
+    Swal.fire({
+        text: 'Are you sure you want to transfer the plot to this owner?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                url: '/Plots/PlotTransferData/',
+                data: JSON.stringify(data),
+                success: function (data) {
+                    //alert("Plot Transfered")
+                    Swal.fire({
+                        icon: 'success',
+                        text: 'Plot transfered succesfully'
+                    }).then(() => {
+                        $(".Tran-own").load('/Plots/PlotsOwnersListUpadate/', { Id: plotid }, function () {
+                            $("#up-trans-btn").show();
+                        });
+                    })
+                }
             });
         }
     });
@@ -6093,7 +6419,11 @@ $(document).on("click", "#re-up-oth-plt-own", function (e) {
 //...... Commercial Transfer Data
 $(document).on("click", "#re-up-oth-com-own", function (e) {
     if (plotowncount < 2) {
-        alert('Please Add form of multiple owners');
+        //alert('Please Add form of multiple owners');
+        Swal.fire({
+            icon: 'info',
+            text: 'Kindly add a form for multiple owners'
+        });
         return false;
     }
     var id = $(this).closest(".own-det").attr("id")
@@ -6163,17 +6493,38 @@ $(document).on("click", "#re-up-oth-com-own", function (e) {
         Owner_Image4: Owner_Image4,
     }
     var data = { comdata: regfiledata };
-    $.ajax({
-        type: "POST",
-        contentType: "application/json; charset=utf-8",
-        url: '/Commercial/CommercialTransferData/',
-        data: JSON.stringify(data),
-        success: function (data) {
-            alert("Successfully Transfered")
-            window.location.reload();
-            //$(".Tran-own").load('/Plots/PlotsOwnersListUpadate/', { Id: plotid }, function () {
-            //    $("#up-trans-btn").show();
-            //});
+    Swal.fire({
+        text: 'Are you sure you want to add another owner?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                url: '/Commercial/CommercialTransferData/',
+                data: JSON.stringify(data),
+                success: function (data) {
+                    //alert("Successfully Transfered")
+                    Swal.fire({
+                        icon: 'success',
+                        text: 'Transfer owner added successfully'
+                    }).then(() => {
+                        window.location.reload();
+                    })
+                    //$(".Tran-own").load('/Plots/PlotsOwnersListUpadate/', { Id: plotid }, function () {
+                    //    $("#up-trans-btn").show();
+                    //});
+                },
+                error: function () {
+                    Swal.fire({
+                        icon: 'error',
+                        text: 'Something went wrong'
+                    })
+                }
+            });
         }
     });
 });
@@ -6191,44 +6542,70 @@ $(document).on("click", "#sav-com-rece", function (e) {
     $.each(form.serializeArray(), function (key, input) {
         data.append(input.name, input.value);
     });
-    $.ajax({
-        type: "POST",
-        processData: false,
-        contentType: false,
-        url: $("#pay-com-ins").attr('action'),
-        data: data,
-        success: function (data) {
-            if (data.ReturnVal == 0) {
-                alert("Reciept Already Exists")
-            }
-            else {
-                $("#rec-amts tbody").empty();
-                alert("Installment Added");
-                var total = 0;
-                $.each(data.ReceAmt, function (i) {
-                    var a = i + 1;
-                    total = total + data.ReceAmt[i].Amount;
-                    var html = '<tr id="' + data.ReceAmt[i].Id + '" data-token="' + data.ReceAmt[i].TokenParameter + '" >' +
-                        '<td scope="row">' + a + '</td>' +
-                        '<td scope="row">' + data.ReceAmt[i].ReceiptNo + '</td>' +
-                        '<td>' + data.ReceAmt[i].Amount + '</td>' +
-                        '<td>' + moment(data.ReceAmt[i].DateTime).format("DD-MMM-YYYY") + '</td>' +
-                        '<td>' + data.ReceAmt[i].PaymentType + '</td><td><i class="ti-close del-rec"></i></td></tr>';
-                    $("#rec-amts tbody").append(html);
-                });
-                var html1 = '<tr><td>Total</td><td colspan="5">' + total + '</td></tr>'
-                $("#rec-amts tbody").append(html1);
-                var id = $("#shp-id").val();
-                //  $("#plot-rep").load("/Plots/PlotInstallmentsReports/", { Plotid: id }, function () { });
-            }
-        },
-        error: function (xmlhttprequest, textstatus, message) {
-            $('#gen-rec').attr("disabled", false);
-            if (textstatus === "timeout") {
-                alert("got timeout");
-            } else {
-                alert(textstatus);
-            }
+    Swal.fire({
+        text: 'Are you sure you want to add manual installment?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                type: "POST",
+                processData: false,
+                contentType: false,
+                url: $("#pay-com-ins").attr('action'),
+                data: data,
+                success: function (data) {
+                    if (data.ReturnVal == 0) {
+                        //alert("Reciept Already Exists")
+                        Swal.fire({
+                            icon: 'info',
+                            text: 'The receipt already exists'
+                        });
+                    }
+                    else {
+                        $("#rec-amts tbody").empty();
+                        //alert("Installment Added");
+                        Swal.fire({
+                            icon: 'success',
+                            text: 'Installment successfully added'
+                        });
+                        var total = 0;
+                        $.each(data.ReceAmt, function (i) {
+                            var a = i + 1;
+                            total = total + data.ReceAmt[i].Amount;
+                            var html = '<tr id="' + data.ReceAmt[i].Id + '" data-token="' + data.ReceAmt[i].TokenParameter + '" >' +
+                                '<td scope="row">' + a + '</td>' +
+                                '<td scope="row">' + data.ReceAmt[i].ReceiptNo + '</td>' +
+                                '<td>' + data.ReceAmt[i].Amount + '</td>' +
+                                '<td>' + moment(data.ReceAmt[i].DateTime).format("DD-MMM-YYYY") + '</td>' +
+                                '<td>' + data.ReceAmt[i].PaymentType + '</td><td><i class="ti-close del-rec"></i></td></tr>';
+                            $("#rec-amts tbody").append(html);
+                        });
+                        var html1 = '<tr><td>Total</td><td colspan="5">' + total + '</td></tr>'
+                        $("#rec-amts tbody").append(html1);
+                        var id = $("#shp-id").val();
+                        //  $("#plot-rep").load("/Plots/PlotInstallmentsReports/", { Plotid: id }, function () { });
+                    }
+                },
+                error: function (xmlhttprequest, textstatus, message) {
+                    $('#gen-rec').attr("disabled", false);
+                    if (textstatus === "timeout") {
+                        //alert("got timeout");
+                        Swal.fire({
+                            icon: 'error',
+                            text: 'Request timed out'
+                        });
+                    } else {
+                        //alert(textstatus);
+                        Swal.fire({
+                            icon: 'error',
+                            text: 'Something went wrong'
+                        });
+                    }
+                }
+            });
         }
     });
 });
@@ -6247,45 +6624,72 @@ $(document).on("click", "#sav-plt-rece", function (e) {
     $.each(form.serializeArray(), function (key, input) {
         data.append(input.name, input.value);
     });
-    $.ajax({
-        type: "POST",
-        processData: false,
-        contentType: false,
-        url: $("#pay-plot-ins").attr('action'),
-        data: data,
-        success: function (data) {
-            if (data.ReturnVal == 0) {
-                alert("Reciept Already Exists")
-            }
-            else {
-                $("#rec-amts tbody").empty();
-                alert("Installment Added");
-                var total = 0;
-                $.each(data.ReceAmt, function (i) {
-                    var a = i + 1;
-                    total = total + data.ReceAmt[i].Amount;
-                    var html = '<tr id="' + data.ReceAmt[i].Id + '" data-token="' + data.ReceAmt[i].TokenParameter + '" >' +
-                        '<td scope="row">' + a + '</td>' +
-                        '<td scope="row">' + data.ReceAmt[i].ReceiptNo + '</td>' +
-                        '<td>' + data.ReceAmt[i].Amount + '</td>' +
-                        '<td>' + moment(data.ReceAmt[i].DateTime).format("DD-MMM-YYYY") + '</td>' +
-                        '<td>' + data.ReceAmt[i].PaymentType + '</td><td><i class="ti-close del-rec"></i></td></tr>';
-                    $("#rec-amts tbody").append(html);
-                });
-                var html1 = '<tr><td>Total</td><td colspan="5">' + total + '</td></tr>'
-                $("#rec-amts tbody").append(html1);
-                var id = $("#plt-id").val();
-                $("#plot-rep").load("/Plots/PlotInstallmentsReports/", { Plotid: id }, function () { });
-            }
-        },
-        error: function (xmlhttprequest, textstatus, message) {
-            $('#gen-rec').attr("disabled", false);
-            $('#sav-plt-rece').attr("disabled", false);
-            if (textstatus === "timeout") {
-                alert("got timeout");
-            } else {
-                alert(textstatus);
-            }
+    Swal.fire({
+        text: 'Are you sure you want to generate the Receipt?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                type: "POST",
+                processData: false,
+                contentType: false,
+                url: $("#pay-plot-ins").attr('action'),
+                data: data,
+                success: function (data) {
+                    if (data.ReturnVal == 0) {
+                        //alert("Reciept Already Exists")
+                        Swal.fire({
+                            icon: 'info',
+                            text: 'The receipt already exists'
+                        });
+                    }
+                    else {
+                        $("#rec-amts tbody").empty();
+                        //alert("Installment Added");
+                        Swal.fire({
+                            icon: 'success',
+                            text: 'Receipt generated successfully'
+                        }).then(() => {
+                            var total = 0;
+                            $.each(data.ReceAmt, function (i) {
+                                var a = i + 1;
+                                total = total + data.ReceAmt[i].Amount;
+                                var html = '<tr id="' + data.ReceAmt[i].Id + '" data-token="' + data.ReceAmt[i].TokenParameter + '" >' +
+                                    '<td scope="row">' + a + '</td>' +
+                                    '<td scope="row">' + data.ReceAmt[i].ReceiptNo + '</td>' +
+                                    '<td>' + data.ReceAmt[i].Amount + '</td>' +
+                                    '<td>' + moment(data.ReceAmt[i].DateTime).format("DD-MMM-YYYY") + '</td>' +
+                                    '<td>' + data.ReceAmt[i].PaymentType + '</td><td><i class="ti-close del-rec"></i></td></tr>';
+                                $("#rec-amts tbody").append(html);
+                            });
+                            var html1 = '<tr><td>Total</td><td colspan="5">' + total + '</td></tr>'
+                            $("#rec-amts tbody").append(html1);
+                            var id = $("#plt-id").val();
+                            $("#plot-rep").load("/Plots/PlotInstallmentsReports/", { Plotid: id }, function () { });
+                        })
+                    }
+                },
+                error: function (xmlhttprequest, textstatus, message) {
+                    $('#gen-rec').attr("disabled", false);
+                    $('#sav-plt-rece').attr("disabled", false);
+                    if (textstatus === "timeout") {
+                        //alert("got timeout");
+                        Swal.fire({
+                            icon: 'error',
+                            text: 'Request timed out'
+                        });
+                    } else {
+                        //alert(textstatus);
+                        Swal.fire({
+                            icon: 'error',
+                            text: 'Something went wrong'
+                        });
+                    }
+                }
+            });
         }
     });
 });
@@ -6545,7 +6949,11 @@ $(document).on("change", ".plt__bndng", function () {
     var Position = $('#bnded_po__sel option:selected').val();
     var type = $("#plot-type option:selected").val();
     if (Position == "" || Position == null) {
-        alert('Plese Select Postion');
+        //alert('Plese Select Postion');
+        Swal.fire({
+            icon: 'info',
+            text: 'Select a position to proceed'
+        });
         return false;
     }
     var dataset =
@@ -6557,14 +6965,32 @@ $(document).on("change", ".plt__bndng", function () {
         Block_Name: Block_name,
         Plot_Type: type,
     };
-    $.post('/Plots/PlotBounding/', { B: dataset, isRoad: false }, function (data) {
-        if (data.Status) {
-            $("#bound-det-tab").load('/Plots/PlotBoundTabular/', { Plot_Id: Pltbndedid });
-            $("#bound-det").load('/Plots/PlotBounded/', { Plot_Id: Pltbndedid });
-            alert(data.Msg);
-        }
-        else {
-            alert(data.Msg);
+    Swal.fire({
+        text: 'Are you sure you want to bound this plot?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.post('/Plots/PlotBounding/', { B: dataset, isRoad: false }, function (data) {
+                if (data.Status) {
+                    $("#bound-det-tab").load('/Plots/PlotBoundTabular/', { Plot_Id: Pltbndedid });
+                    $("#bound-det").load('/Plots/PlotBounded/', { Plot_Id: Pltbndedid });
+                    //alert(data.Msg);
+                    Swal.fire({
+                        icon: 'success',
+                        text: data.Msg
+                    });
+                }
+                else {
+                    //alert(data.Msg);
+                    Swal.fire({
+                        icon: 'info',
+                        text: data.Msg
+                    });
+                }
+            });
         }
     });
 });
@@ -6603,14 +7029,29 @@ $(document).on("change", ".road_slctn", function () {
 $(document).on("click", ".del__bounding", function () {
     var Pltbndedid = $(this).attr("data-id");
     var id = $("#plt-id").val();
-    var ch = confirm('Are you sure you want to delete');
-    if (ch) {
-        $.post('/Plots/DeleteBounding/', { Id: Pltbndedid }, function (data) {
-            alert('Successfully Deleted');
-            $("#bound-det-tab").load('/Plots/PlotBoundTabular/', { Plot_Id: id });
-            $("#bound-det").load('/Plots/PlotBounded/', { Plot_Id: id });
-        });
-    }
+    //var ch = confirm('Are you sure you want to delete');
+    //if (ch) {
+    Swal.fire({
+        text: 'Are you sure you want to delete the bounded plot?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.post('/Plots/DeleteBounding/', { Id: Pltbndedid }, function (data) {
+                //alert('Successfully Deleted');
+                Swal.fire({
+                    icon: 'success',
+                    text: 'Bounded plot deleted successfully'
+                }).then(() => {
+                    $("#bound-det-tab").load('/Plots/PlotBoundTabular/', { Plot_Id: id });
+                    $("#bound-det").load('/Plots/PlotBounded/', { Plot_Id: id });
+                })
+
+            });
+        }
+    });
 });
 function readURLs(input) {
     if (input.files && input.files[0]) {
@@ -6630,7 +7071,11 @@ $(document).on("submit", "#plt-imge", function (e) {
     e.preventDefault();
     var file = $("#files").get(0).files;
     if (file.length == 0) {
-        alert("Error Occured Or Image not uploaded");
+        //alert("Error Occured Or Image not uploaded");
+        Swal.fire({
+            icon: 'info',
+            text: 'Image is not uploaded'
+        });
         return false;
     }
     var form = $("#plt-imge");
@@ -6642,29 +7087,47 @@ $(document).on("submit", "#plt-imge", function (e) {
     $.each(form.serializeArray(), function (key, input) {
         data.append(input.name, input.value);
     });
-    var ch = confirm('Are you sure you want to proceed');
-    if (ch) {
-        $.ajax({
-            type: "POST",
-            processData: false,
-            contentType: false,
-            url: $("#plt-imge").attr('action'),
-            data: data,
-            success: function (data) {
-                if (data == true) {
-                    alert('Request is now InProcess');
-                    window.location.reload();
+    //var ch = confirm('Are you sure you want to proceed');
+    //if (ch) {
+    Swal.fire({
+        text: 'Are you sure you want to proceed?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                type: "POST",
+                processData: false,
+                contentType: false,
+                url: $("#plt-imge").attr('action'),
+                data: data,
+                success: function (data) {
+                    if (data == true) {
+                        //alert('Request is now InProcess');
+                        Swal.fire({
+                            icon: 'success',
+                            text: 'Request is in process'
+                        }).then(() => {
+                            window.location.reload();
+                        })
+                    }
+                    else {
+                        window.open("/Plots/PossessionPrint?PlotId=" + data, '_blank');
+                        window.location.reload();
+                    }
                 }
-                else {
-                    window.open("/Plots/PossessionPrint?PlotId=" + data, '_blank');
-                    window.location.reload();
+                ,
+                error: function () {
+                    Swal.fire({
+                        icon: 'error',
+                        text: 'Something went wrong'
+                    });
                 }
-            }
-            ,
-            error: function () {
-            }
-        });
-    }
+            });
+        }
+    });
 });
 //
 $(document).on("click", "#gen-allot-let-s", function () {
@@ -6697,21 +7160,40 @@ $(document).on("click", "#gen-allot-let", function () {
     var wit2 = $("#wit-2").val();
     var head = $("#head-nam option:selected").text();
     var des = $("#head-nam").val();
-    $.ajax({
-        type: "POST",
-        url: '/Plots/PlotAllotmentLetter/',
-        data: { Id: id, Witness1: wit1, Witness2: wit2, Name: head, Designation: des },
-        success: function (data) {
-            if (data.Status) {
-                alert("Allotment Letter Generated");
-                $("#gen-allot-let").prop("disabled", true);
-                $("#ver-allotment-let").prop("disabled", true);
-                window.open("/Plots/AllotmentLetter?Id=" + data.Id, '_blank');
-            }
-            else {
-                alert(data.Msg);
-                return false;
-            }
+    Swal.fire({
+        text: 'Are you sure you want to regenerate allotment letter?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                type: "POST",
+                url: '/Plots/PlotAllotmentLetter/',
+                data: { Id: id, Witness1: wit1, Witness2: wit2, Name: head, Designation: des },
+                success: function (data) {
+                    if (data.Status) {
+                        //alert("Allotment Letter Generated");
+                        Swal.fire({
+                            icon: 'success',
+                            text: 'Allotment letter generated successfully'
+                        }).then(() => {
+                            $("#gen-allot-let").prop("disabled", true);
+                            $("#ver-allotment-let").prop("disabled", true);
+                            window.open("/Plots/AllotmentLetter?Id=" + data.Id, '_blank');
+                        })
+                    }
+                    else {
+                        //alert(data.Msg);
+                        Swal.fire({
+                            icon: 'error',
+                            text: 'Something went wrong'
+                        });
+                        return false;
+                    }
+                }
+            });
         }
     });
 });
@@ -6719,28 +7201,43 @@ $(document).on("click", "#gen-allot-let", function () {
 $(document).on("click", ".del-rec", function () {
     var id = $(this).closest('tr').attr("id");
     var pltid = $("#plt-id").val();
-    var inp = confirm("Are you sure you want to Delete this Receipt");
-    if (inp == true) {
-        $.post("/Installments/DeleteReceipt/", { Id: id, Plotid: pltid }, function (data) {
-            $("#rec-amts tbody").empty();
-            alert("Receipt Removed");
-            var total = 0;
-            $.each(data, function (i) {
-                var a = i + 1;
-                total = total + data[i].Amount;
-                var html = '<tr id="' + data[i].Id + '" data-token="' + data[i].TokenParameter + '" >' +
-                    '<td scope="row">' + a + '</td>' +
-                    '<td scope="row">' + data[i].ReceiptNo + '</td>' +
-                    '<td>' + data[i].Amount + '</td>' +
-                    '<td>' + moment(data[i].DateTime).format("DD-MMM-YYYY") + '</td>' +
-                    '<td>' + data[i].PaymentType + '</td><td><i class="ti-close del-rec"></i></td></tr>';
-                $("#rec-amts tbody").append(html);
+    //var inp = confirm("Are you sure you want to Delete this Receipt");
+    //if (inp == true) {
+    Swal.fire({
+        text: 'Are you sure you want to delete the receipt?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.post("/Installments/DeleteReceipt/", { Id: id, Plotid: pltid }, function (data) {
+                $("#rec-amts tbody").empty();
+                //alert("Receipt Removed");
+                Swal.fire({
+                    icon: 'success',
+                    text: 'Receipt deleted successfully'
+                }).then(() => {
+                    var total = 0;
+                    $.each(data, function (i) {
+                        var a = i + 1;
+                        total = total + data[i].Amount;
+                        var html = '<tr id="' + data[i].Id + '" data-token="' + data[i].TokenParameter + '" >' +
+                            '<td scope="row">' + a + '</td>' +
+                            '<td scope="row">' + data[i].ReceiptNo + '</td>' +
+                            '<td>' + data[i].Amount + '</td>' +
+                            '<td>' + moment(data[i].DateTime).format("DD-MMM-YYYY") + '</td>' +
+                            '<td>' + data[i].PaymentType + '</td><td><i class="ti-close del-rec"></i></td></tr>';
+                        $("#rec-amts tbody").append(html);
+                    });
+                    var html1 = '<tr><td>Total</td><td colspan="5">' + total + '</td></tr>'
+                    $("#rec-amts tbody").append(html1);
+                    $("#plot-rep").load("/Plots/PlotInstallmentsReports/", { Plotid: pltid }, function () { });
+                })
+                
             });
-            var html1 = '<tr><td>Total</td><td colspan="5">' + total + '</td></tr>'
-            $("#rec-amts tbody").append(html1);
-            $("#plot-rep").load("/Plots/PlotInstallmentsReports/", { Plotid: pltid }, function () { });
-        });
-    }
+        }
+    });
 });
 //
 $(document).on("click", ".del-rec-com", function () {
@@ -6786,32 +7283,50 @@ $(document).on("change", ".plt-rent", function () {
 //
 $(document).on("submit", "#rentalData", function (e) {
     e.preventDefault();
-    var con = confirm("Are you sure you want to save this form?");
-    if (con) {
-        //var form = $("#rentalData");
-        //var cdata = new FormData();
-        //var files = $("#renteePic").get(0).files;
-        //if (files.length > 0) {
-        //    cdata.append("Files", files[0]);
-        //}
-        //$.each(form.serializeArray(), function (key, input) {
-        //    cdata.append(input.name, input.value);
-        //});
-        $.ajax({
-            type: "POST",
-            url: $("#rentalData").attr('action'),
-            data: $("#rentalData").serialize(),
-            success: function (data) {
-                if (data != null) {
-                    window.location.reload();
-                    window.open("/Rental/RentalInfo?Id=" + data, '_blank');
+    //var con = confirm("Are you sure you want to save the form for rental property?");
+    //if (con) {
+    Swal.fire({
+        text: 'Are you sure you want to save the form for rental property?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            //var form = $("#rentalData");
+            //var cdata = new FormData();
+            //var files = $("#renteePic").get(0).files;
+            //if (files.length > 0) {
+            //    cdata.append("Files", files[0]);
+            //}
+            //$.each(form.serializeArray(), function (key, input) {
+            //    cdata.append(input.name, input.value);
+            //});
+            $.ajax({
+                type: "POST",
+                url: $("#rentalData").attr('action'),
+                data: $("#rentalData").serialize(),
+                success: function (data) {
+                    if (data != null) {
+                        Swal.fire({
+                            icon: 'success',
+                            text: 'Form saved successfully'
+                        }).then(() => {
+                            window.location.reload();
+                            window.open("/Rental/RentalInfo?Id=" + data, '_blank');
+                        })
+                    }
+                },
+                error: function () {
+                    //alert("Error Occured");
+                    Swal.fire({
+                        icon: 'error',
+                        text: 'Something went wrong'
+                    });
                 }
-            },
-            error: function () {
-                alert("Error Occured");
-            }
-        });
-    }
+            });
+        }
+    });
 });
 $(document).on("submit", "#rentalDataupdate", function (e) {
     e.preventDefault();
@@ -6880,11 +7395,23 @@ $(document).on("click", "#addplot", function () {
 });
 //......
 $(document).on("click", ".upd-info", function () {
-    var id = $(this).closest(".own-det").attr("id");
-    $("#" + id + " :input").prop("readonly", false);
-    $(this).hide();
-    $("#" + id + " .sav-info").show();
-    $("#" + id + " .own-img").show();
+    debugger
+    Swal.fire({
+        text: 'Are you sure you want to update the owners information?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            var id = $(this).closest(".own-det").attr("id");
+            $("#" + id + " :input").prop("readonly", false);
+            $(this).hide();
+            $("#" + id + " .sav-info").show();
+            $("#" + id + " .own-img").show();
+        }
+
+    });
 });
 //.....update commercial..
 $(document).on("click", ".com-upd-info", function () {
@@ -6932,30 +7459,60 @@ $(document).on("click", ".sav-info", function () {
         IsFiler: $(that).closest(".own-det").find('.IsFiler').is(':checked'),
     }
     if (plotowndata.Name == null || plotowndata.Name.trim() == "") {
-        alert("Please Enter Name");
+        //alert("Please Enter Name");
+        Swal.fire({
+            icon: 'info',
+            text: 'Enter name to proceed'
+        });
         return false;
     }
     else if (plotowndata.CNIC_NICOP == null || plotowndata.CNIC_NICOP.trim() == "") {
-        alert("Please CNIC");
+        //alert("Please CNIC");
+        Swal.fire({
+            icon: 'info',
+            text: 'Enter CNIC to proceed'
+        });
         return false;
     }
     else if (plotowndata.Ownership_DateTime == null || plotowndata.Ownership_DateTime.trim() == "") {
-        alert("Ownership Date");
+        //alert("Ownership Date");
+        Swal.fire({
+            icon: 'info',
+            text: 'Select ownership date to proceed'
+        });
         return false;
     }
-    $.ajax({
-        type: "POST",
-        contentType: "application/json; charset=utf-8",
-        url: '/Plots/UpdateOwnerResult/',
-        data: JSON.stringify(plotowndata),
-        success: function (data) {
-            $("#" + id + " .upd-info").show();
-            $("#" + id + " .sav-info").hide();
-            $("#" + id + " .own-img").hide();
-            $("#" + id + " :input").prop("readonly", true);
-            alert("Owner Information Updated.");
-        },
-        error: function (data) {
+    Swal.fire({
+        text: 'Are you sure you want to save updated owner information?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                url: '/Plots/UpdateOwnerResult/',
+                data: JSON.stringify(plotowndata),
+                success: function (data) {
+                    $("#" + id + " .upd-info").show();
+                    $("#" + id + " .sav-info").hide();
+                    $("#" + id + " .own-img").hide();
+                    $("#" + id + " :input").prop("readonly", true);
+                    //alert("Data Updated");
+                    Swal.fire({
+                        icon: 'success',
+                        text: "Owner's information updated successfully"
+                    });
+                },
+                error: function (data) {
+                    Swal.fire({
+                        icon: 'error',
+                        text: 'Something went wrong'
+                    });
+                }
+            });
         }
     });
 });
@@ -7100,20 +7657,35 @@ $(document).on("click", "#sav-ins", function () {
     var plt_price = $("#plt-pric").val();
     var disc = $("#dis-amt").val();
     var data = { PI: plotinstdata, Plotid: plotid, Plot_Price: plt_price, Discount: disc };
-    var conf = confirm("Are You Want to Plot Installments");
-    if (conf) {
-        $.ajax({
-            type: "POST",
-            contentType: "application/json; charset=utf-8",
-            url: '/Installments/UpdatePlotInstallments/',
-            data: JSON.stringify(data),
-            success: function (data) {
-                alert("Installments Updated")
-                $("#inst-plan").hide();
-                $("#plot-rep").load("/Plots/PlotInstallmentsReports/", { Plotid: plotid }, function () { });
-            }
-        });
-    }
+    //var conf = confirm("Are You Want to Plot Installments");
+    //if (conf) {
+    Swal.fire({
+        text: 'Are you sure you want to add to the installments?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                url: '/Installments/UpdatePlotInstallments/',
+                data: JSON.stringify(data),
+                success: function (data) {
+                    //alert("Installments Updated")
+                    Swal.fire({
+                        icon: 'success',
+                        text: 'Installment added successfully'
+                    }).then(() => {
+                        $("#inst-plan").hide();
+                        $("#plot-rep").load("/Plots/PlotInstallmentsReports/", { Plotid: plotid }, function () { });
+                    })
+                   
+                }
+            });
+        }
+    });
 });
 //...... Commercial Installments Update
 $(document).on("click", ".ch-bk-pay", function () {
@@ -7140,20 +7712,39 @@ $(document).on("click", "#sav-com-ins", function () {
     var shp_price = $("#plt-pric").val();
     var disc = $("#dis-amt").val();
     var data = { comIns: plotinstdata, shopid: shpid, shop_Price: shp_price, Discount: disc };
-    var conf = confirm("Are You Want to Plot Installments");
-    if (conf) {
-        $.ajax({
-            type: "POST",
-            contentType: "application/json; charset=utf-8",
-            url: '/Commercial/UpdateCommercialInstallments/',
-            data: JSON.stringify(data),
-            success: function (data) {
-                alert("Installments Updated")
-                $("#inst-plan").hide();
-                // $("#plot-rep").load("/Plots/PlotInstallmentsReports/", { Plotid: plotid }, function () { });
-            }
-        });
-    }
+    //var conf = confirm("Are You Want to Plot Installments");
+    //if (conf) {
+    Swal.fire({
+        text: 'Are you sure you want to add to the installments?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                url: '/Commercial/UpdateCommercialInstallments/',
+                data: JSON.stringify(data),
+                success: function (data) {
+                    //alert("Installments Updated")
+                    Swal.fire({
+                        icon: 'success',
+                        text: 'Installment added successfully'
+                        })
+                    $("#inst-plan").hide();
+                    // $("#plot-rep").load("/Plots/PlotInstallmentsReports/", { Plotid: plotid }, function () { });
+                },
+                error: function () {
+                    Swal.fire({
+                        icon: 'error',
+                        text: 'Something went wrong'
+                        })
+                }
+            });
+        }
+    });
 });
 //
 $(document).on("click", ".plt-stat", function () {
@@ -7167,8 +7758,22 @@ $(document).on("click", ".plt-stat", function () {
 $(document).on("click", ".regis-plt", function () {
     var chkstat = $(this).is(":checked");
     var id = $(this).val();
-    $.post('/Plots/UpdatePlotRegistryStatus/', { Id: id, Status: chkstat }, function (data) {
-        alert("Plot Registry Updated");
+    Swal.fire({
+        text: 'Are you sure you want to registry the plot?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.post('/Plots/UpdatePlotRegistryStatus/', { Id: id, Status: chkstat }, function (data) {
+                //alert("Plot Registry Updated");
+                Swal.fire({
+                    icon: 'success',
+                    text: 'Plot registry updated successfully'
+                    })
+            });
+        }
     });
 });
 //
@@ -7259,30 +7864,55 @@ $(document).on("click", "#gen-plot-rec", function (e) {
     var img = $("#scanned").attr('src');
     $("#scanimage").val(img);
     if ($("#amt").val() <= 0) {
+        Swal.fire({
+            icon: 'info',
+            text: 'Enter a valid amount to proceed'
+        });
         return false;
     }
-    var con = confirm("Are you sure you want to Generate Receipt");
-    if (con) {
-        $('#gen-plot-rec').attr("disabled", true);
-        $.ajax({
-            type: "POST",
-            url: $("#re-plot-ins").attr('action'),
-            data: $("#re-plot-ins").serialize(),
-            success: function (data) {
-                if (data.Status == false) {
-                    alert(data.Msg);
+    //var con = confirm("Are you sure you want to Generate Receipt");
+    //if (con) {
+    Swal.fire({
+        text: 'Are you sure you want to generate the Receipt?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $('#gen-plot-rec').attr("disabled", true);
+            $.ajax({
+                type: "POST",
+                url: $("#re-plot-ins").attr('action'),
+                data: $("#re-plot-ins").serialize(),
+                success: function (data) {
+                    if (data.Status == false) {
+                        //alert(data.Msg);
+                        Swal.fire({
+                            icon: 'error',
+                            text: data.Msg
+                        });
+                    }
+                    else if (data.Status == true) {
+                        //alert(data.Msg);
+                        Swal.fire({
+                            icon: 'success',
+                            text: data.Msg
+                        });
+                        window.open("/Banking/PlotReceipt?Id=" + data.Receiptid + "&Token=" + data.Token, '_blank');
+                    }
+                },
+                error: function () {
+                    //alert("Error Occured");
+                    Swal.fire({
+                        icon: 'error',
+                        text: "Something went wrong"
+                    });
+                    $('#gen-plot-rec').attr("disabled", false);
                 }
-                else if (data.Status == true) {
-                    alert("Receipt Generated!");
-                    window.open("/Banking/PlotReceipt?Id=" + data.Receiptid + "&Token=" + data.Token, '_blank');
-                }
-            },
-            error: function () {
-                alert("Error Occured");
-                $('#gen-plot-rec').attr("disabled", false);
-            }
-        });
-    }
+            });
+        }
+    });
 });
 //
 $(document).on("click", "#gen-com-rec", function (e) {
@@ -7293,28 +7923,50 @@ $(document).on("click", "#gen-com-rec", function (e) {
     if ($("#amt").val() <= 0) {
         return false;
     }
-    var con = confirm("Are you sure you want to Generate Receipt");
-    if (con) {
-        $('#gen-plot-rec').attr("disabled", true);
-        $.ajax({
-            type: "POST",
-            url: $("#re-com-ins").attr('action'),
-            data: $("#re-com-ins").serialize(),
-            success: function (data) {
-                if (data.Status == false) {
-                    alert(data.Msg);
+    //var con = confirm("Are you sure you want to Generate Receipt");
+    //if (con) {
+    Swal.fire({
+        text: 'Are you sure you want to generate the Receipt?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $('#gen-plot-rec').attr("disabled", true);
+            $.ajax({
+                type: "POST",
+                url: $("#re-com-ins").attr('action'),
+                data: $("#re-com-ins").serialize(),
+                success: function (data) {
+                    if (data.Status == false) {
+                        //alert(data.Msg);
+                        Swal.fire({
+                            icon: 'error',
+                            text: data.Msg
+                        });
+                    }
+                    else if (data.Status == true) {
+                        //alert(data.Msg);
+                        Swal.fire({
+                            icon: 'success',
+                            text: data.Msg
+                        }).then(() => {
+                            window.open("/Receipts/CommercialReceipt?Id=" + data.Receiptid + "&Token=" + data.Token, '_blank');
+                        })
+                    }
+                },
+                error: function () {
+                    //alert("Error Occured");
+                    Swal.fire({
+                        icon: 'error',
+                        text: 'Something went wrong'
+                    });
+                    $('#gen-plot-rec').attr("disabled", false);
                 }
-                else if (data.Status == true) {
-                    alert(data.Msg);
-                    window.open("/Receipts/CommercialReceipt?Id=" + data.Receiptid + "&Token=" + data.Token, '_blank');
-                }
-            },
-            error: function () {
-                alert("Error Occured");
-                $('#gen-plot-rec').attr("disabled", false);
-            }
-        });
-    }
+            });
+        }
+    });
 });
 //
 $(document).on("click", ".ref-del-rec", function (e) {
@@ -7716,19 +8368,41 @@ $(document).on("click", ".up-dim-c", function () {
 //
 $(document).on("click", "#up-plt-dim", function (e) {
     e.preventDefault();
-    $.ajax({
-        type: "POST",
-        url: $("#up-plot-dime").attr('action'),
-        data: $("#up-plot-dime").serialize(),
-        success: function (data) {
-            alert("Plot Category Added!");
-        }
-        , error: function (xmlhttprequest, textstatus, message) {
-            if (textstatus === "timeout") {
-                alert("got timeout");
-            } else {
-                alert(textstatus);
-            }
+    Swal.fire({
+        text: 'Are you sure you want to update the plot Dimensions?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                type: "POST",
+                url: $("#up-plot-dime").attr('action'),
+                data: $("#up-plot-dime").serialize(),
+                success: function (data) {
+                    //alert("Updated");
+                    Swal.fire({
+                        icon: 'success',
+                        text: 'Dimensions updated successfully'
+                    });
+                }
+                , error: function (xmlhttprequest, textstatus, message) {
+                    if (textstatus === "timeout") {
+                        //alert("got timeout");
+                        Swal.fire({
+                            icon: 'error',
+                            text: 'Request timed out'
+                        });
+                    } else {
+                        //alert(textstatus);
+                        Swal.fire({
+                            icon: 'error',
+                            text: 'Something went wrong'
+                        });
+                    }
+                }
+            });
         }
     });
 });
@@ -8098,7 +8772,11 @@ $(document).on("change", "#Poss__req__plots", function () {
     var id = $("#plt-id").val();
     if (this.checked) {
         $.post('/Plots/PossessionLetterStatus/', { Id: id, Status: 1 }, function () {
-            alert("Requested")
+            //alert("Requested")
+            Swal.fire({
+                icon: 'success',
+                text: 'Requested for verification successfully'
+                })
         });
     } else {
         $.post('/Plots/PossessionLetterStatus/', { Id: id, Status: 0 }, function () {
@@ -8174,19 +8852,38 @@ $(document).on("click", "#up-del-all", function () {
     $.each(form.serializeArray(), function (key, input) {
         data.append(input.name, input.value);
     });
-    $.ajax({
-        type: "POST",
-        processData: false,
-        contentType: false,
-        url: '/Plots/UpdateDeliveryofAllotment/',
-        data: data,
-        success: function (data) {
-            alert("Delivered Successfull");
-            $("#" + id).remove();
-            closeModal();
-        },
-        error: function () {
-            alert("Error Occured");
+    Swal.fire({
+        text: 'Are you sure you want to mark allotment letter Delivered?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                type: "POST",
+                processData: false,
+                contentType: false,
+                url: '/Plots/UpdateDeliveryofAllotment/',
+                data: data,
+                success: function (data) {
+                    //alert("Delivered Successfull");
+                    Swal.fire({
+                        icon: 'success',
+                        text: 'Marked as delivered successfully'
+                    }).then(() => {
+                        $("#" + id).remove();
+                        closeModal();
+                    })
+                },
+                error: function () {
+                    //alert("Error Occured");
+                    Swal.fire({
+                        icon: 'error',
+                        text: 'Something went wrong'
+                    });
+                }
+            });
         }
     });
 });
@@ -8200,17 +8897,35 @@ $(document).on("click", "#up-del-all-pre", function () {
     $.each(form.serializeArray(), function (key, input) {
         data.append(input.name, input.value);
     });
-    $.ajax({
-        type: "POST",
-        processData: false,
-        contentType: false,
-        url: '/Plots/UpdateDeliveryofAllotmentPrevious/',
-        data: data,
-        success: function (data) {
-            alert("Delivered Successfull");
-        },
-        error: function () {
-            alert("Error Occured");
+    Swal.fire({
+        text: 'Are you sure you want to deliver allotment letter?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                type: "POST",
+                processData: false,
+                contentType: false,
+                url: '/Plots/UpdateDeliveryofAllotmentPrevious/',
+                data: data,
+                success: function (data) {
+                    //alert("Delivered Successfull");
+                    Swal.fire({
+                        icon: 'success',
+                        text: 'Allotmwnt letter delivered successfully'
+                    });
+                },
+                error: function () {
+                    //alert("Error Occured");
+                    Swal.fire({
+                        icon: 'error',
+                        text: 'Something went wrong'
+                    });
+                }
+            });
         }
     });
 });
@@ -8222,10 +8937,18 @@ $(document).on("click", "#veri-req", function () {
         url: '/Plots/VerifyReq/',
         data: { Id: id },
         success: function (data) {
-            alert("Request Successfull");
+            //alert("Request Successfull");
+            Swal.fire({
+                icon: 'success',
+                text: 'Requested for verification successfully'
+            });
         },
         error: function () {
-            alert("Error Occured");
+            //alert("Error Occured");
+            Swal.fire({
+                icon: 'error',
+                text: 'Something went wrong'
+            });
         }
     });
 });
@@ -8252,10 +8975,18 @@ $(document).on("click", "#veri-req-f", function () {
         url: '/FileSystem/VerifyReq/',
         data: { Id: id },
         success: function (data) {
-            alert("Request Successfull");
+            //alert("Request Successfull");
+            Swal.fire({
+                icon: 'success',
+                text: 'Requested for verification successfully'
+            })
         },
         error: function () {
-            alert("Error Occured");
+            //alert("Error Occured");
+            Swal.fire({
+                icon: 'error',
+                text: 'Something went wrong'
+            });
         }
     });
 });
@@ -8279,227 +9010,392 @@ $(document).on("click", ".fir-war-f", function () {
     var id = $(this).data("id");
     var ownid = $(this).data("ownid");
     var num = $(this).data("num");
-    var con = confirm("Are you sure you want to Generate First Warning Letter");
-    if (con) {
-        $.ajax({
-            type: "POST",
-            url: '/FileSystem/WarningIssues/',
-            data: { Id: id, OwnerId: ownid, Type: "First" },
-            success: function (data) {
-                if (data) {
-                    window.open("/FileSystem/FirstWarningLetter?Id=" + id, '_blank');
-                    window.open("/Reports/FileStatmentAcc?Token=" + num, '_blank');
+    //var con = confirm("Are you sure you want to Generate First Warning Letter");
+    //if (con) {
+    Swal.fire({
+        text: 'Are you sure you want to generate the first warning letter?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                type: "POST",
+                url: '/FileSystem/WarningIssues/',
+                data: { Id: id, OwnerId: ownid, Type: "First" },
+                success: function (data) {
+                    if (data) {
+                        Swal.fire({
+                            icon: 'success',
+                            text: 'First warning letter generated successfully'
+                        }).then(() => {
+                            window.open("/FileSystem/FirstWarningLetter?Id=" + id, '_blank');
+                        })
+                        //window.open("/Reports/FileStatmentAcc?Token=" + num, '_blank');
+                    }
+                },
+                error: function () {
+                    //alert("Error Occured");
+                    Swal.fire({
+                        icon: 'error',
+                        text: 'Something went wrong'
+                    });
                 }
-                else {
-                    alert("Installments Settled")
-                }
-            },
-            error: function () {
-                alert("Error Occured");
-            }
-        });
-    }
+            });
+        }
+    });
 });
 // First warning to File owner
 $(document).on("click", ".fir-war-p", function () {
     var id = $(this).data("id");
     var ownid = $(this).data("ownid");
-    var con = confirm("Are you sure you want to Generate First Warning Letter");
-    if (con) {
-        $.ajax({
-            type: "POST",
-            url: '/Plots/WarningIssues/',
-            data: { Id: id, OwnerId: ownid, Type: "First" },
-            success: function (data) {
-                window.open("/Plots/FirstWarningLetter?Id=" + id, '_blank');
-                window.open("/Plots/PlotStatment?Plotid=" + id, '_blank');
-            },
-            error: function () {
-                alert("Error Occured");
-            }
-        });
-    }
+    //var con = confirm("Are you sure you want to Generate First Warning Letter");
+    //if (con) {
+    Swal.fire({
+        text: 'Are you sure you want to generate the first warning letter?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                type: "POST",
+                url: '/Plots/WarningIssues/',
+                data: { Id: id, OwnerId: ownid, Type: "First" },
+                success: function (data) {
+                    window.open("/Plots/FirstWarningLetter?Id=" + id, '_blank');
+                    window.open("/Plots/PlotStatment?Plotid=" + id, '_blank');
+                },
+                error: function () {
+                    //alert("Error Occured");
+                    Swal.fire({
+                        icon: 'error',
+                        text: 'Something went wrong'
+                    });
+                }
+            });
+        }
+    });
 });
 // Second warning to File owner
 $(document).on("click", ".sec-war-p", function () {
     var id = $(this).data("id");
     var ownid = $(this).data("ownid");
-    var con = confirm("Are you sure you want to Generate Second Warning Letter");
-    if (con) {
-        alert("Please wait, Letter will be generated shortly!");
-        $.ajax({
-            type: "POST",
-            url: '/Plots/WarningIssues/',
-            data: { Id: id, OwnerId: ownid, Type: "Second" },
-            success: function (data) {
-                window.open("/Plots/SecondWarningLetter?Id=" + id, '_blank');
-                window.open("/Plots/PlotStatment?Plotid=" + id, '_blank');
-            },
-            error: function () {
-                alert("Error Occured");
-            }
-        });
-    }
+    //var con = confirm("Are you sure you want to Generate Second Warning Letter");
+    //if (con) {
+    Swal.fire({
+        text: 'Are you sure you want to generate the second warning letter?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                type: "POST",
+                url: '/Plots/WarningIssues/',
+                data: { Id: id, OwnerId: ownid, Type: "Second" },
+                success: function (data) {
+                    window.open("/Plots/SecondWarningLetter?Id=" + id, '_blank');
+                    window.open("/Plots/PlotStatment?Plotid=" + id, '_blank');
+                },
+                error: function () {
+                    //alert("Error Occured");
+                    Swal.fire({
+                        icon: 'error',
+                        text: 'Something went wrong'
+                    });
+                }
+            });
+        }
+    });
 });
 // Cancellation to File owner
 $(document).on("click", ".can-let-p", function () {
     var id = $(this).data("id");
     var ownid = $(this).data("ownid");
-    var con = confirm("Are you sure you want to Generate Cancellation Letter");
-    if (con) {
-        $.ajax({
-            type: "POST",
-            url: '/Plots/WarningIssues/',
-            data: { Id: id, OwnerId: ownid, Type: "Last" },
-            success: function (data) {
-                window.open("/Plots/CancellationLetter?Id=" + id, '_blank');
-                window.open("/Plots/PlotStatment?Plotid=" + id, '_blank');
-            },
-            error: function () {
-                alert("Error Occured");
-            }
-        });
-    }
+    //var con = confirm("Are you sure you want to Generate Cancellation Letter");
+    //if (con) {
+    Swal.fire({
+        text: 'Are you sure you want to generate the cancellation letter?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                type: "POST",
+                url: '/Plots/WarningIssues/',
+                data: { Id: id, OwnerId: ownid, Type: "Last" },
+                success: function (data) {
+                    window.open("/Plots/CancellationLetter?Id=" + id, '_blank');
+                    //window.open("/Plots/PlotStatment?Plotid=" + id, '_blank');
+                },
+                error: function () {
+                    //alert("Error Occured");
+                    Swal.fire({
+                        icon: 'error',
+                        text: 'Something went wrong'
+                    });
+                }
+            });
+        }
+    });
 });
 // Second warning to File owner
 $(document).on("click", ".sec-war-f", function () {
     var id = $(this).data("id");
     var ownid = $(this).data("ownid");
     var num = $(this).data("num");
-    var con = confirm("Are you sure you want to Generate Second Warning Letter");
-    if (con) {
-        $.ajax({
-            type: "POST",
-            url: '/FileSystem/WarningIssues/',
-            data: { Id: id, OwnerId: ownid, Type: "Second" },
-            success: function (data) {
-                if (data) {
-                    window.open("/FileSystem/SecondWarningLetter?Id=" + id, '_blank');
-                    window.open("/Reports/FileStatmentAcc?Token=" + num, '_blank');
+    //var con = confirm("Are you sure you want to Generate Second Warning Letter");
+    //if (con) {
+    Swal.fire({
+        text: 'Are you sure you want to generate the second warning letter?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                type: "POST",
+                url: '/FileSystem/WarningIssues/',
+                data: { Id: id, OwnerId: ownid, Type: "Second" },
+                success: function (data) {
+                    if (data) {
+                        Swal.fire({
+                            icon: 'success',
+                            text: 'Second warning letter generated successfully'
+                        }).then(() => {
+                            window.open("/FileSystem/SecondWarningLetter?Id=" + id, '_blank');
+                        })
+                        /*     window.open("/Reports/FileStatmentAcc?Token=" + num, '_blank');*/
+                    }
+                    //else {
+                    //    alert("Installments are Settled")
+                    //}
+                },
+                error: function () {
+                    //alert("Error Occured");
+                    Swal.fire({
+                        icon: 'error',
+                        text: 'Something went wrong'
+                    });
                 }
-                else {
-                    alert("Installments are Settled")
-                }
-            },
-            error: function () {
-                alert("Error Occured");
-            }
-        });
-    }
+            });
+        }
+    });
 });
 // Cancellation to File owner
 $(document).on("click", ".can-let-f", function () {
     var id = $(this).data("id");
     var ownid = $(this).data("ownid");
     var num = $(this).data("num");
-    var con = confirm("Are you sure you want to Generate Cancellation Letter");
-    if (con) {
-        $.ajax({
-            type: "POST",
-            url: '/FileSystem/WarningIssues/',
-            data: { Id: id, OwnerId: ownid, Type: "Last" },
-            success: function (data) {
-                if (data) {
-                    window.open("/FileSystem/CancellationLetter?Id=" + id, '_blank');
-                    window.open("/Reports/FileStatmentAcc?Token=" + num, '_blank');
+    //var con = confirm("Are you sure you want to Generate Cancellation Letter");
+    //if (con) {
+    Swal.fire({
+        text: 'Are you sure you want to generate the cancellation letter?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                type: "POST",
+                url: '/FileSystem/WarningIssues/',
+                data: { Id: id, OwnerId: ownid, Type: "Last" },
+                success: function (data) {
+                    if (data) {
+                        Swal.fire({
+                            icon: 'success',
+                            text: 'Cancellation letter generated successfully'
+                        }).then(() => {
+                            window.open("/FileSystem/CancellationLetter?Id=" + id, '_blank');
+                        })
+                        //window.open("/Reports/FileStatmentAcc?Token=" + num, '_blank');
+                    }
+                    //else {
+                    //    alert("Installments are Settled")
+                    //}
+                },
+                error: function () {
+                    //alert("Error Occured");
+                    Swal.fire({
+                        icon: 'error',
+                        text: 'Something went wrong'
+                    });
                 }
-                else {
-                    alert("Installments are Settled")
-                }
-            },
-            error: function () {
-                alert("Error Occured");
-            }
-        });
-    }
+            });
+        }
+    });
 });
 //
 // First warning to File owner
 $(document).on("click", ".fir-war-com", function () {
     var id = $(this).data("id");
     var ownid = $(this).data("ownid");
-    var con = confirm("Are you sure you want to Generate First Warning Letter");
-    if (con) {
-        $.ajax({
-            type: "POST",
-            url: '/Commercial/WarningIssues/',
-            data: { Id: id, OwnerId: ownid, Type: "First" },
-            success: function (data) {
-                window.open("/Commercial/FirstWarningLetter?Id=" + id, '_blank');
-                window.open("/Commercial/LedgerdetailReport?Commercial_Id=" + id, '_blank');
-
-            },
-            error: function () {
-                alert("Error Occured");
-            }
-        });
-    }
+    //var con = confirm("Are you sure you want to Generate First Warning Letter");
+    //if (con) {
+    Swal.fire({
+        text: 'Are you sure you want to generate the first warning letter?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                type: "POST",
+                url: '/Commercial/WarningIssues/',
+                data: { Id: id, OwnerId: ownid, Type: "First" },
+                success: function (data) {
+                    Swal.fire({
+                        icon: 'success',
+                        text: 'First warning letter generated'
+                    }).then(() => {
+                        window.open("/Commercial/FirstWarningLetter?Id=" + id, '_blank');
+                        window.open("/Commercial/LedgerdetailReport?Commercial_Id=" + id, '_blank');
+                    })
+                    
+                },
+                error: function () {
+                    //alert("Error Occured");
+                    Swal.fire({
+                        icon: 'error',
+                        text: 'Something went wrong'
+                    });
+                }
+            });
+        }
+    });
 });
 // Second warning to File owner
 $(document).on("click", ".sec-war-com", function () {
     var id = $(this).data("id");
     var ownid = $(this).data("ownid");
-    var con = confirm("Are you sure you want to Generate Second Warning Letter");
-    if (con) {
-        $.ajax({
-            type: "POST",
-            url: '/Commercial/WarningIssues/',
-            data: { Id: id, OwnerId: ownid, Type: "Second" },
-            success: function (data) {
-                window.open("/Commercial/SecondWarningLetter?Id=" + id, '_blank');
-                window.open("/Commercial/LedgerdetailReport?Commercial_Id=" + id, '_blank');
-            },
-            error: function () {
-                alert("Error Occured");
-            }
-        });
-    }
+    //var con = confirm("Are you sure you want to Generate Second Warning Letter");
+    //if (con) {
+    Swal.fire({
+        text: 'Are you sure you want to generate the second warning letter?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                type: "POST",
+                url: '/Commercial/WarningIssues/',
+                data: { Id: id, OwnerId: ownid, Type: "Second" },
+                success: function (data) {
+                    Swal.fire({
+                        icon: 'success',
+                        text: 'Second warning letter generated'
+                    }).then(() => {
+                        window.open("/Commercial/SecondWarningLetter?Id=" + id, '_blank');
+                        window.open("/Commercial/LedgerdetailReport?Commercial_Id=" + id, '_blank');
+                    })
+                },
+                error: function () {
+                    //alert("Error Occured");
+                    Swal.fire({
+                        icon: 'error',
+                        text: 'Something went wrong'
+                    });
+                }
+            });
+        }
+    });
 });
 // Cancellation to File owner
 $(document).on("click", ".can-let-com", function () {
     var id = $(this).data("id");
     var ownid = $(this).data("ownid");
-    var con = confirm("Are you sure you want to Generate Cancellation Letter");
-    if (con) {
-        $.ajax({
-            type: "POST",
-            url: '/Commercial/WarningIssues/',
-            data: { Id: id, OwnerId: ownid, Type: "Last" },
-            success: function (data) {
-                window.open("/Commercial/CancellationLetter?Id=" + id, '_blank');
-                window.open("/Commercial/LedgerdetailReport?Commercial_Id=" + id, '_blank');
-            },
-            error: function () {
-                alert("Error Occured");
-            }
-        });
-    }
+    //var con = confirm("Are you sure you want to Generate Cancellation Letter");
+    //if (con) {
+    Swal.fire({
+        text: 'Are you sure you want to generate the cancellation letter?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                type: "POST",
+                url: '/Commercial/WarningIssues/',
+                data: { Id: id, OwnerId: ownid, Type: "Last" },
+                success: function (data) {
+                    Swal.fire({
+                        icon: 'success',
+                        text: 'Cancellation letter generated'
+                    }).then(() => {
+                        window.open("/Commercial/CancellationLetter?Id=" + id, '_blank');
+                        //window.open("/Commercial/LedgerdetailReport?Commercial_Id=" + id, '_blank');
+                    });
+                },
+                error: function () {
+                    //alert("Error Occured");
+                    Swal.fire({
+                        icon: 'error',
+                        text: 'Something went wrong'
+                    });
+                }
+            });
+        }
+    });
 });
 
 // Cancellation to File owner
 $(document).on("click", ".can-let-com-con", function () {
     var id = $(this).data("id");
     var ownid = $(this).data("ownid");
-    var con = confirm("Are you sure you want to Generate Cancellation Letter");
-    if (con) {
-        $.ajax({
-            type: "POST",
-            url: '/Commercial/WarningIssues/',
-            data: { Id: id, OwnerId: ownid, Type: "ConfirmLast" },
-            success: function (data) {
-                if (data) {
-                    window.open("/Commercial/CancellationLetterConfirm?Id=" + id, '_blank');
-                    window.open("/Commercial/LedgerdetailReport?Commercial_Id=" + id, '_blank');
+    //var con = confirm("Are you sure you want to Generate Cancellation Letter");
+    //if (con) {
+    Swal.fire({
+        text: 'Are you sure you want to generate the first cancellation letter?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                type: "POST",
+                url: '/Commercial/WarningIssues/',
+                data: { Id: id, OwnerId: ownid, Type: "ConfirmLast" },
+                success: function (data) {
+                    if (data) {
+                        Swal.fire({
+                            icon: 'success',
+                            text: 'Cancellation letter generated'
+                        }).then(() => {
+                            window.open("/Commercial/CancellationLetterConfirm?Id=" + id, '_blank');
+                        })
+                        //window.open("/Commercial/LedgerdetailReport?Commercial_Id=" + id, '_blank');
+                    }
+                    else {
+                        //alert("Adjusted")
+                        Swal.fire({
+                            icon: 'info',
+                            text: 'Adjusted'
+                        })
+                    }
+                },
+                error: function () {
+                    //alert("Error Occured");
+                    Swal.fire({
+                        icon: 'error',
+                        text: 'Something went wrong'
+                    });
                 }
-                else {
-                    alert("Adjusted")
-                }
-            },
-            error: function () {
-                alert("Error Occured");
-            }
-        });
-    }
+            });
+        }
+    });
 });
 //
 // First warning to File owner
@@ -8622,41 +9518,74 @@ $(document).on("click", ".Generate_Cust_dealer_noc", function () {
     var DealerType = $('#DealerType').val();
     var Dealer_Id = $('#Dealership').val();
     if (NocType == 'Select NOC') {
-        alert("Select NOC Type");
+        //alert("Select NOC Type");
+        Swal.fire({
+            icon: 'info',
+            text: 'Select NOC type to proceed'
+        });
         return false;
     }
 
     if (NocType == "Customer") {
         if (CustomeType == 'Select Purpose' || CustomeType == '') {
-            alert("Select NOC Purpose");
+            //alert("Select NOC Purpose");
+            Swal.fire({
+                icon: 'info',
+                text: 'Select the purpose of NOC to proceed'
+            });
             return false;
         }
 
-        if (confirm("Are you sure you want to generate NOC of This Plot")) {
-            window.open("/Plots/PlotNOC?Id=" + Plot_Id + "&CustomeType=" + CustomeType, '_blank');
-            closeModal();
-        }
+        //if (confirm("Are you sure you want to generate NOC of This Plot")) {
+        Swal.fire({
+            text: 'Are you sure you want to generate NOC for this plot?',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Yes',
+            cancelButtonText: 'No'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire({
+                    icon: 'success',
+                    text: 'NOC generated successfully'
+                }).then(() => {
+                    window.open("/Plots/PlotNOC?Id=" + Plot_Id + "&CustomeType=" + CustomeType, '_blank');
+
+                    closeModal();
+                })
+            }
+        });
     }
     else if (NocType == "Dealers") {
         if (DealerType == 'Select Purpose' || DealerType == '') {
-            alert("Select NOC Purpose");
+            //alert("Select NOC Purpose");
+            Swal.fire({
+                icon: 'info',
+                text: 'Select the purpose of NOC to proceed'
+            });
             return false;
         }
         if (Dealer_Id == null || Dealer_Id == '') {
-            alert("Select Dealership");
+            //alert("Select Dealership");
+            Swal.fire({
+                icon: 'info',
+                text: 'Select the dealership to proceed'
+            });
             return false;
         }
-        if (confirm("Are you sure you want to generate NOC of This Plot")) {
-            window.open("/Plots/DealerNOC?Id=" + Plot_Id + "&DealerType=" + DealerType + "&Dealer_Id=" + Dealer_Id, '_blank');
-            closeModal();
-        }
-    }
-});
-//
-$(document).on("click", ".com-noc", function () {
-    var id = $('#shp-id').val();
-    if (confirm("Are you sure you want to generate NOC of This Shop")) {
-        window.open("/Commercial/CommercialNOC?Commercial_Id=" + id, '_blank');
+        //if (confirm("Are you sure you want to generate NOC of This Plot")) {
+        Swal.fire({
+            text: 'Are you sure you want to generate NOC for this plot?',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Yes',
+            cancelButtonText: 'No'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.open("/Plots/DealerNOC?Id=" + Plot_Id + "&DealerType=" + DealerType + "&Dealer_Id=" + Dealer_Id, '_blank');
+                closeModal();
+            }
+        });
     }
 });
 //
@@ -8935,10 +9864,22 @@ $(document).on("change", "#ch-stat", function () {
 $(document).on("click", ".allo-sign", function () {
     var id = $(this).closest('tr').attr("id");
     var plotid = $(this).closest('tr').data("id");
-    var a = confirm("Are you sure you want to mark the Allotment Letter sign");
-    if (a) {
+    //var a = confirm("Are you sure you want to mark the Allotment Letter sign");
+    //if (a) {
+    Swal.fire({
+        text: 'Are you sure you want to mark the allotment letter as signed?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No'
+    }).then((result) => {
+        if (result.isConfirmed) {
         $.post("/Plots/SignAllotmentLetter/", { Id: id, PlotId: plotid }, function () {
-            alert("Signed");
+            //alert("Signed");
+            Swal.fire({
+                icon: 'success',
+                text: 'Allotment letter signed successfully'
+            });
             $("#" + id).remove();
         });
     }
@@ -8947,13 +9888,27 @@ $(document).on("click", ".allo-sign", function () {
 $(document).on("click", ".allo-unsign", function () {
     var id = $(this).closest('tr').attr("id");
     var plotid = $(this).closest('tr').data("id");
-    var a = confirm("Are you sure you want to mark the Allotment Letter Un singed");
-    if (a) {
-        $.post("/Plots/UnsingedAllotmentLetter/", { Id: id, PlotId: plotid }, function () {
-            alert("Un Signed Successfully");
-            $("#" + id).remove();
-        });
-    }
+    //var a = confirm("Are you sure you want to mark the Allotment Letter Un singed");
+    //if (a) {
+    Swal.fire({
+        text: 'Are you sure you want to mark the Allotment Letter as unsigned?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.post("/Plots/UnsingedAllotmentLetter/", { Id: id, PlotId: plotid }, function () {
+                //alert("Un Signed Successfully");
+                Swal.fire({
+                    icon: 'success',
+                    text: 'Marked as unsigned successfully'
+                }).then(() => {
+                    $("#" + id).remove();
+                })
+            });
+        }
+    });
 });
 //
 $(document).on("click", ".all-let-ref", function () {
@@ -8978,22 +9933,43 @@ $(document).on("click", ".all-let-ref-update", function () {
     var W1 = $('#W1__al').val();
     var W2 = $('#W2__al').val();
     if (W1 == null || W1 == "") {
-        alert('Please Enter name of witness 1');
+        //alert('Please Enter name of witness 1');
+        Swal.fire({
+            icon: 'info',
+            text: 'Enter the name of the first witness to proceed'
+        });
         return false;
     }
     if (W2 == null || W2 == "") {
-        alert('Please Enter name of witness 2');
+        //alert('Please Enter name of witness 2');
+        Swal.fire({
+            icon: 'info',
+            text: 'Enter the name of the second witness to proceed'
+        });
         return false;
     }
     //var id = $(this).closest('tr').attr("id");
     //var plotid = $(this).closest('tr').data("id");
-    var a = confirm("Are you sure you want to update the Allotment Letter Information");
-    if (a) {
-        $.post("/Plots/UpdateAllotmentLetterInfo/", { Id: id, PlotId: plotid, Witness1: W1, Witness2: W2 }, function () {
-            alert("Updated");
-            closeModal();
-        });
-    }
+    //var a = confirm("Are you sure you want to update the Allotment Letter Information");
+    //if (a) {
+    Swal.fire({
+        text: 'Are you sure you want to update the information in the Allotment Letter?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.post("/Plots/UpdateAllotmentLetterInfo/", { Id: id, PlotId: plotid, Witness1: W1, Witness2: W2 }, function () {
+                //alert("Updated");
+                Swal.fire({
+                    icon: 'success',
+                    text: 'Information updated successfully'
+                });
+                closeModal();
+            });
+        }
+    });
 });
 //
 $(document).on("click", "#src-srch-bill", function () {
@@ -9005,8 +9981,31 @@ $(document).on("click", "#src-srch-bill", function () {
 $(document).on("click", "#src-elec-bill", function () {
     //var id = $("#plot-details").val();
     var metno = $("#met-no").val();
-    $("#plt-serv-data").empty();
-    $("#plt-serv-data").load("/ServiceCharges/ElectricityBillDetails/", { MeterNo: metno });
+    if (metno) {
+        $("#plt-serv-data").empty();
+        $("#plt-serv-data").load("/ServiceCharges/ElectricityBillDetails/", { MeterNo: metno });
+    }
+    else {
+        Swal.fire({
+            icon: 'info',
+            text: 'Enter Bill number to proceed'
+        });
+    }
+});
+////
+$(document).on("click", "#Com-src-elec-bill", function () {
+    //var id = $("#plot-details").val();
+    var metno = $("#met-no").val();
+    if (metno) {
+        $("#plt-serv-data").empty();
+        $("#plt-serv-data").load("/ServiceCharges/ComElectricityBillDetails/", { MeterNo: metno });
+    }
+    else{
+        Swal.fire({
+            icon: 'info',
+            text: 'Enter bill number to proceed'
+        });
+    }
 });
 //
 $(document).on("click", "#rec-serv", function () {
@@ -9030,7 +10029,11 @@ $(document).on("click", "#gen-serv-ch-rec", function (e) {
     var alpha = parseInt(payable);
     var beta = parseInt(bamount);
     if (alpha == "" || alpha == null) {
-        alert("Please Enter Amount");
+        //alert("Please Enter Amount");
+        Swal.fire({
+            icon: 'info',
+            text: 'Please Enter a valid amount'
+        });
         return false;
     }
     //if (alpha < beta) {
@@ -9038,63 +10041,126 @@ $(document).on("click", "#gen-serv-ch-rec", function (e) {
     //    return false;
     //}
     e.preventDefault();
-    var con = confirm("Are you sure you want to Generate Receipt");
-    if (con) {
-        $('#gen-serv-ch-rec').attr("disabled", true);
-        $.ajax({
-            type: "POST",
-            url: $("#pay-ser-ch").attr('action'),
-            data: $("#pay-ser-ch").serialize(),
-            success: function (data) {
-                window.open("/Receipts/ServiceChargesReceipt?Id=" + data.Receiptid + "&Token=" + data.Token, '_blank');
-            },
-            error: function () {
-                alert("Error Occured");
-                $('#gen-plot-rec').attr("disabled", false);
-            }
-        });
-    }
+    //var con = confirm("Are you sure you want to Generate Receipt");
+    //if (con) {
+    Swal.fire({
+        text: 'Are you sure you want to generate the Receipt?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $('#gen-serv-ch-rec').attr("disabled", true);
+            $.ajax({
+                type: "POST",
+                url: $("#pay-ser-ch").attr('action'),
+                data: $("#pay-ser-ch").serialize(),
+                success: function (data) {
+                    Swal.fire({
+                        icon: 'success',
+                        text: 'Receipt generated successfully'
+                    }).then(() => {
+                        window.open("/Receipts/ServiceChargesReceipt?Id=" + data.Receiptid + "&Token=" + data.Token, '_blank');
+                    })
+                },
+                error: function () {
+                    //alert("Error Occured");
+                    Swal.fire({
+                        icon: 'error',
+                        text: 'Something went wrong'
+                    });
+                    $('#gen-plot-rec').attr("disabled", false);
+                }
+            });
+        }
+    });
 });
 //
 $(document).on("submit", "#pay-con-char", function (e) {
     e.preventDefault();
     $('#pay-con-char-btn').attr("disabled", true);
-    var con = confirm("Are you sure you want to Generate Receipt");
-    if (con) {
-        $.ajax({
-            type: "POST",
-            url: $("#pay-con-char").attr('action'),
-            data: $("#pay-con-char").serialize(),
-            success: function (data) {
-                window.open("/Receipts/NewConnctionCharges?Id=" + data.Receiptid + "&Token=" + data.Token, '_blank');
-            },
-            error: function () {
-                alert("Error Occured");
-                $('#gen-plot-rec').attr("disabled", false);
-            }
-        });
-    }
+    //var con = confirm("Are you sure you want to Generate Receipt");
+    //if (con) {
+    Swal.fire({
+        text: 'Are you sure you want to generate the Receipt?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                type: "POST",
+                url: $("#pay-con-char").attr('action'),
+                data: $("#pay-con-char").serialize(),
+                success: function (data) {
+                    Swal.fire({
+                        icon: 'success',
+                        text: 'Receipt generated successfully'
+                    }).then(() => {
+                        window.open("/Receipts/NewConnctionCharges?Id=" + data.Receiptid + "&Token=" + data.Token, '_blank');
+                    })
+                },
+                error: function () {
+                    //alert("Error Occured");
+                    Swal.fire({
+                        icon: 'error',
+                        text: 'Something went wrong'
+                    });
+                    $('#gen-plot-rec').attr("disabled", false);
+                }
+            });
+        }
+    });
 });
 //
 $(document).on("submit", "#pay-fin-char", function (e) {
     e.preventDefault();
     $('#pay-fin-char-btn').attr("disabled", true);
-    var con = confirm("Are you sure you want to Generate Receipt");
-    if (con) {
-        $.ajax({
-            type: "POST",
-            url: $("#pay-fin-char").attr('action'),
-            data: $("#pay-fin-char").serialize(),
-            success: function (data) {
-                window.open("/Receipts/FineCharges?Id=" + data.Receiptid + "&Token=" + data.Token, '_blank');
-                window.location.reload();
-            },
-            error: function () {
-                alert("Error Occured");
-                $('#gen-plot-rec').attr("disabled", false);
-            }
-        });
-    }
+    //var con = confirm("Are you sure you want to Generate Receipt");
+    //if (con) {
+    Swal.fire({
+        text: 'Are you sure you want to generate the Receipt?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                type: "POST",
+                url: $("#pay-fin-char").attr('action'),
+                data: $("#pay-fin-char").serialize(),
+                success: function (data) {
+                    if (!data) {
+                        //alert("Error Occured");
+                        Swal.fire({
+                            icon: 'error',
+                            text: 'Something went wrong'
+                        });
+                    }
+                    else {
+                        Swal.fire({
+                            icon: 'success',
+                            text: 'Receipt generated successfully'
+                        }).then(() => {
+                            window.open("/Receipts/FineCharges?Id=" + data.Receiptid + "&Token=" + data.Token, '_blank');
+                            window.location.reload();
+                        });   
+                    }
+                },
+                error: function () {
+                    //alert("Error Occured");
+                    Swal.fire({
+                        icon: 'error',
+                        text: 'Something went wrong'
+                    });
+                    $('#gen-plot-rec').attr("disabled", false);
+                }
+            });
+        }
+    });
 });
 //
 $(document).on("click", "#gen-elec-ch-rec", function (e) {
@@ -9112,23 +10178,95 @@ $(document).on("click", "#gen-elec-ch-rec", function (e) {
     //     return false;
     // }
     // e.preventDefault();
-    var con = confirm("Are you sure you want to Generate Receipt");
-    if (con) {
-        $('#gen-elec-ch-rec').attr("disabled", true);
-        $.ajax({
-            type: "POST",
-            url: $("#pay-elec-bill").attr('action'),
-            data: $("#pay-elec-bill").serialize(),
-            success: function (data) {
-                window.open("/Receipts/ElectricChargesReceipt?Id=" + data.Receiptid + "&Token=" + data.Token, '_blank');
-                window.location.reload();
-            },
-            error: function () {
-                alert("Error Occured");
-                $('#gen-plot-rec').attr("disabled", false);
-            }
-        });
-    }
+    //var con = confirm("Are you sure you want to Generate Receipt");
+    //if (con) {
+    Swal.fire({
+        text: 'Are you sure you want to generate the Receipt?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $('#gen-elec-ch-rec').attr("disabled", true);
+            $.ajax({
+                type: "POST",
+                url: $("#pay-elec-bill").attr('action'),
+                data: $("#pay-elec-bill").serialize(),
+                success: function (data) {
+                    Swal.fire({
+                        icon: 'success',
+                        text: 'Receipt generated successfully'
+                    }).then(() => {
+                        window.open("/Receipts/ElectricChargesReceipt?Id=" + data.Receiptid + "&Token=" + data.Token, '_blank');
+                        window.location.reload();
+                    })
+                    
+                },
+                error: function () {
+                    //alert("Error Occured");
+                    Swal.fire({
+                        icon: 'error',
+                        text: 'Something went wrong'
+                    });
+                    $('#gen-plot-rec').attr("disabled", false);
+                }
+            });
+        }
+    });
+});
+////
+$(document).on("click", "#gen-com-elec-ch-rec", function (e) {
+    var payable = RemoveComma($(".p__am").attr("id"));
+    // var bamount = RemoveComma($("#paying__amt").val());
+    //var alpha=  parseInt(payable);
+    // var beta= parseInt(bamount);
+    // if (beta == "" || beta == null)
+    // {
+    //     alert("Please enter amount");
+    //     return false;
+    // }
+    // if (beta < alpha) {
+    //     alert("Amount should be equal or greater then payable");
+    //     return false;
+    // }
+    // e.preventDefault();
+    //var con = confirm("Are you sure you want to Generate Receipt");
+    //if (con) {
+    Swal.fire({
+        text: 'Are you sure you want to generate the Receipt?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $('#gen-elec-ch-rec').attr("disabled", true);
+            $.ajax({
+                type: "POST",
+                url: $("#pay-com-elec-bill").attr('action'),
+                data: $("#pay-com-elec-bill").serialize(),
+                success: function (data) {
+                    Swal.fire({
+                        icon: 'success',
+                        text: 'Receipt generated successfully'
+                    }).then(() => {
+                        window.open("/Receipts/ElectricChargesReceipt?Id=" + data.Receiptid + "&Token=" + data.Token, '_blank');
+                        window.location.reload();
+                    })
+                    
+                },
+                error: function () {
+                    //alert("Error Occured");
+                    Swal.fire({
+                        icon: 'error',
+                        text: 'Something went wrong'
+                    });
+                    $('#gen-plot-rec').attr("disabled", false);
+                }
+            });
+        }
+    });
 });
 //
 $(document).on("click", "#plot_reinstate", function () {
@@ -9862,61 +11000,182 @@ $(document).on("click", "#ref-amt-plt", function () {
     //    alert("Refund Amount should be less than or Equal to Receipt Amount")
     //    return false;
     //}
-    var inp = confirm("Are you sure you want to Refund this Receipt");
-    if (inp == true) {
-        $.post("/Installments/RefundAmountPlot/", { Id: id, Amount: refamt }, function (data) {
-            if (data.Status) {
-                if (mod == "PlotManagement") {
-                    window.open("/Receipts/RefundReceipt?Id=" + data.ReceiptId + "&Token=" + data.Token, '_blank');
+    //var inp = confirm("Are you sure you want to Refund this Receipt");
+    //if (inp == true) {
+    Swal.fire({
+        text: 'Are you sure you want to refund the receipt?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.post("/Installments/RefundAmountPlot/", { Id: id, Amount: refamt }, function (data) {
+                if (data.Status) {
+                    Swal.fire({
+                        icon: 'success',
+                        text: 'Receipt refund successful'
+                    }).then(() => {
+                        if (mod == "PlotManagement") {
+                            window.open("/Receipts/RefundReceipt?Id=" + data.ReceiptId + "&Token=" + data.Token, '_blank');
+                        }
+                        else if (mod == "CommercialManagement") {
+                            window.open("/Receipts/RefundReceipt?Id=" + data.ReceiptId + "&Token=" + data.Token, '_blank');
+                        }
+                    })
+                    
                 }
-                else if (mod == "Building") {
-                    window.open("/Receipts/RefundReceipt?Id=" + data.ReceiptId + "&Token=" + data.Token, '_blank');
+                else {
+                    //alert(data.Msg);
+                    Swal.fire({
+                        icon: 'error',
+                        text: 'Something went wrong'
+                    });
                 }
-            }
-            else {
-                alert(data.Msg);
-            }
-        });
+            });
+        }
+    });
+});
+//
+//
+$(document).on("click", "#extra-ref-amt-plt", function () {
+    var pltid = 0;
+    var id = $('#receipt-id').val();
+    var refamt = $('.ref-amt').val();
+    if (refamt <= 0 || refamt == '' || refamt == null) {
+        $('.coma').focus();
+        return false;
     }
+    var mod = $('#module').val();
+    if (mod == "PlotManagement") {
+        pltid = $("#plt-id").val();
+    }
+    else if (mod == "CommercialManagement") {
+        pltid = $("#shp-id").val();
+    }
+    var receamt = RemoveComma($('#rec-amt').text());
+    //if (receamt < refamt) {
+    //    alert("Refund Amount should be less than or Equal to Receipt Amount")
+    //    return false;
+    //}
+    //var inp = confirm("Are you sure you want to Refund this Receipt");
+    //if (inp == true) {
+    Swal.fire({
+        text: 'Are you sure you want to refund the receipt?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.post("/Installments/ExtraRefundAmountPlot/", { Id: id, Amount: refamt }, function (data) {
+                debugger
+                if (data.Status) {
+                    Swal.fire({
+                        icon: 'success',
+                        text: 'Receipt refund successful'
+                    }).then(() => {
+                        if (mod == "PlotManagement") {
+                            window.open("/Receipts/RefundReceipt?Id=" + data.ReceiptId + "&Token=" + data.Token, '_blank');
+                        }
+                        else if (mod == "CommercialManagement") {
+                            window.open("/Receipts/RefundReceipt?Id=" + data.ReceiptId + "&Token=" + data.Token, '_blank');
+                        }
+                    })
+                }
+                else {
+                    //alert(data.Msg);
+                    Swal.fire({
+                        icon: 'error',
+                        text: 'Something went wrong'
+                    });
+                }
+            });
+        }
+    });
 });
 //
 $(document).on("click", "#up-plt-stat", function (e) {
     e.preventDefault();
-    $.ajax({
-        type: "POST",
-        url: $('#up-plot-stat').attr("action"),
-        data: $('#up-plot-stat').serialize(),
-        success: function (data) {
-            if (data.Status) {
-                alert(data.Msg);
-            }
-            else {
-                alert(data.Msg);
-            }
-        },
-        error: function (data) {
+    Swal.fire({
+        text: 'Are you sure you want to update plot status?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                type: "POST",
+                url: $('#up-plot-stat').attr("action"),
+                data: $('#up-plot-stat').serialize(),
+                success: function (data) {
+                    if (data.Status) {
+                        //alert(data.Msg);
+                        Swal.fire({
+                            icon: 'success',
+                            text: data.Msg
+                        });
+                    }
+                    else {
+                        //alert(data.Msg);
+                        Swal.fire({
+                            icon: 'info',
+                            text: data.Msg
+                        });
+                    }
+                },
+                error: function (data) {
+                    Swal.fire({
+                        icon: 'error',
+                        text: 'Something went wrong'
+                    });
+                }
+            });
         }
     });
 });
 //
 $(document).on("click", "#up-com-stat", function (e) {
     e.preventDefault();
-    $.ajax({
-        type: "POST",
-        url: $('#up-com-sta').attr("action"),
-        data: $('#up-com-sta').serialize(),
-        success: function (data) {
-            if (data.Status === "Requested") {
-                alert("Cancelation Requested");
-            }
-            if (data.Status === "Repurchased") {
-                alert("Repurchased and Cancelation Requested");
-            }
-            else {
-                alert("Updated")
-            }
-        },
-        error: function (data) {
+    Swal.fire({
+        text: 'Are you sure you want to update the status?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                type: "POST",
+                url: $('#up-com-sta').attr("action"),
+                data: $('#up-com-sta').serialize(),
+                success: function (data) {
+                    if (data.Status === "Requested") {
+                        //alert("Cancelation Requested");
+                        Swal.fire({
+                            icon: 'info',
+                            text: 'Status update is already requested'
+                            })
+                    }
+                    if (data.Status === "Repurchased") {
+                        //alert("Repurchased and Cancelation Requested");
+                        Swal.fire({
+                            icon: 'info',
+                            text: 'Repurchased with a request for cancellation'
+                            })
+                    }
+                    else {
+                        //alert("Updated")
+                        Swal.fire({
+                            icon: 'success',
+                            text: 'Status updated successfully'
+                            })
+                    }
+                },
+                error: function (data) {
+                }
+            });
         }
     });
 });
@@ -9947,19 +11206,37 @@ $(document).on("click", ".file-can-det", function () {
 //
 $(document).on("click", ".frd-plt-ref", function () {
     var id = $("#can-req-id").val();
-    if (confirm("Are you sure you want to Approve the refund")) {
-        $.ajax({
-            type: "POST",
-            url: "/Plots/ApproveRefund/",
-            data: { Id: id },
-            success: function (data) {
-                alert("Updated and Requested to Finance");
-                window.location.reload();
-            },
-            error: function (data) {
-            }
-        });
-    }
+    //if (confirm("Are you sure you want to Approve the refund")) {
+    Swal.fire({
+        text: 'Are you sure you want to proceed with the receipt refund request?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                type: "POST",
+                url: "/Plots/ApproveRefund/",
+                data: { Id: id },
+                success: function (data) {
+                    //alert("Updated and Requested to Finance");
+                    Swal.fire({
+                        icon: 'success',
+                        text: 'Receipt refund request updated and forwarded to the finance department for processing'
+                    }).then(() => {
+                        window.location.reload();
+                    });
+                },
+                error: function (data) {
+                    Swal.fire({
+                        icon: 'error',
+                        text: 'Something went wrong'
+                    });
+                }
+            });
+        }
+    });
 });
 
 //
@@ -10082,20 +11359,38 @@ $(document).on("click", "#can-file", function () {
         $("#stat").focus();
         return false;
     }
-    if (confirm("Are you sure you want to Process")) {
-        $.ajax({
-            type: "POST",
-            url: "/FileSystem/UpdateCancelStat/",
-            data: { Id: id, FileId: pltid, FileNumber: filnum, Remarks: remark, Status: stat, Deduction: per, Repurchase: repur },
-            success: function (data) {
-                alert("Updated and Requested to Finance")
-                window.open("/Receipts/Cancellation_Receipts?Id=" + data.ReceiptId + "&Token=" + data.Token, '_blank');
-                window.location.reload();
-            },
-            error: function (data) {
-            }
-        });
-    }
+    //if (confirm("Are you sure you want to Process")) {
+    Swal.fire({
+        text: 'Are you sure you want to process this file for cancellation?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                type: "POST",
+                url: "/FileSystem/UpdateCancelStat/",
+                data: { Id: id, FileId: pltid, FileNumber: filnum, Remarks: remark, Status: stat, Deduction: per, Repurchase: repur },
+                success: function (data) {
+                    //alert("Updated and Requested to Finance")
+                    Swal.fire({
+                        icon: 'success',
+                        text: 'Cancellation request updated and forwarded to the finance department for processing'
+                    }).then(() => {
+                        window.open("/Receipts/Cancellation_Receipts?Id=" + data.ReceiptId + "&Token=" + data.Token, '_blank');
+                        window.location.reload();
+                    });
+                },
+                error: function (data) {
+                    Swal.fire({
+                        icon: 'error',
+                        text: 'Something went wrong'
+                    });
+                }
+            });
+        }
+    });
 });
 //
 $(document).on("click", "#can-plt", function () {
@@ -10115,9 +11410,14 @@ $(document).on("click", "#can-plt", function () {
             url: "/Plots/UpdateCancelStat/",
             data: { Id: id, PlotId: pltid, Remarks: remark, Status: stat, Deduction: per, Repurchase: repur },
             success: function (data) {
-                alert("Updated and Requested to Finance")
-                window.open("/Receipts/Cancellation_Receipts?Id=" + data.ReceiptId + "&Token=" + data.Token, '_blank');
-                //window.open("/Transfer/RepurchaseTransfer?Id=" + pltid, '_blank');
+                //alert("Updated and Requested to Finance")
+                Swal.fire({
+                    icon: 'success',
+                    text: 'Cancellation request updated and forwarded to the finance department for processing'
+                }).then(() => {
+                    window.open("/Receipts/Cancellation_Receipts?Id=" + data.ReceiptId + "&Token=" + data.Token, '_blank');
+                    //window.open("/Transfer/RepurchaseTransfer?Id=" + pltid, '_blank');
+                });
             },
             error: function (data) {
             }
@@ -10136,20 +11436,38 @@ $(document).on("click", "#can-com", function () {
         $("#stat").focus();
         return false;
     }
-    if (confirm("Are you sure you want to cancel this Commercial")) {
-        $.ajax({
-            type: "POST",
-            url: "/Commercial/UpdateCancelStat/",
-            data: { Id: id, ComId: comid, Remarks: remark, Status: stat, Deduction: per, Repurchase: repur },
-            success: function (data) {
-                alert("Updated and Requested to Finance")
-                window.open("/Receipts/Cancellation_Receipts_Commercial?Id=" + data.ReceiptId + "&Token=" + data.Token, '_blank');
-                //window.open("/Transfer/RepurchaseTransfer?Id=" + pltid, '_blank');
-            },
-            error: function (data) {
-            }
-        });
-    }
+    //if (confirm("Are you sure you want to cancel this Commercial")) {
+    Swal.fire({
+        text: 'Are you sure you want to cancel this commercial unit?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                type: "POST",
+                url: "/Commercial/UpdateCancelStat/",
+                data: { Id: id, ComId: comid, Remarks: remark, Status: stat, Deduction: per, Repurchase: repur },
+                success: function (data) {
+                    //alert("Updated and Requested to Finance")
+                    Swal.fire({
+                        icon: 'success',
+                        text: 'Cancellation request updated and forwarded to the finance department for processing'
+                    }).then(() => {
+                        window.open("/Receipts/Cancellation_Receipts_Commercial?Id=" + data.ReceiptId + "&Token=" + data.Token, '_blank');
+                    })
+                    //window.open("/Transfer/RepurchaseTransfer?Id=" + pltid, '_blank');
+                },
+                error: function (data) {
+                    Swal.fire({
+                        icon: 'error',
+                        text: 'Something went wrong'
+                    });
+                }
+            });
+        }
+    });
 });
 // View for finance Plot Cancelation
 $(document).on("click", ".show-plt-can-f", function () {
@@ -10168,7 +11486,7 @@ $(document).on("click", ".show-com-can-f", function () {
     var pltid = $("#plt-id").attr("id");
     $('#ModalLabel').text("Cancel Property");
     $('#modalbody').load('/Commercial/ComCancelation/');
-    $('.modal-footer').append('<button class="btn btn-success" id="can-com-f" type="button">Cancel Plot</button>');
+    $('.modal-footer').append('<button class="btn btn-success" id="can-com-f" type="button">Cancel Unit</button>');
 });
 // View For Finance File Cancelation
 $(document).on("click", ".show-file-can-f", function () {
@@ -10253,28 +11571,50 @@ $(document).on("click", "#can-plt-f", function (e) {
     $("#amt-in-wrds").val(InWords($("#amt").val()));
     var im = $("#scanned").attr('src');
     $("#imge").val(im);
-    var con = confirm("Are you sure you want to Cancell this Plot");
-    if (con) {
-        $.ajax({
-            type: "POST",
-            url: $("#plt-fin-can").attr('action'),
-            data: $("#plt-fin-can").serialize(),
-            success: function (data) {
-                if (data.Status) {
-                    alert(data.Msg);
-                    window.open("/Vouchers/Voucher?GroupId=" + data.Token, '_blank');
+    //var con = confirm("Are you sure you want to Cancell this Plot");
+    //if (con) {
+    Swal.fire({
+        text: 'Are you sure you want to cancel this plot?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                type: "POST",
+                url: $("#plt-fin-can").attr('action'),
+                data: $("#plt-fin-can").serialize(),
+                success: function (data) {
+                    if (data.Status) {
+                        //alert(data.Msg);
+                        Swal.fire({
+                            icon: 'success',
+                            text: data.Msg
+                        }).then(() => {
+                            window.open("/Vouchers/Voucher?GroupId=" + data.Token, '_blank');
+                        })
+                    }
+                    else {
+                        //alert(data.Msg);
+                        Swal.fire({
+                            icon: 'error',
+                            text: data.Msg
+                        });
+                        $('#can-plt-f').removeAttr("disabled");
+                    }
+                },
+                error: function () {
+                    //alert("Error Occured");
+                    Swal.fire({
+                        icon: 'error',
+                        text: 'Something went wrong'
+                    });
+                    $('#gen-rec').attr("disabled", false);
                 }
-                else {
-                    alert(data.Msg);
-                    $('#can-plt-f').removeAttr("disabled");
-                }
-            },
-            error: function () {
-                alert("Error Occured");
-                $('#gen-rec').attr("disabled", false);
-            }
-        });
-    }
+            });
+        }
+    });
 });
 // final Cancelation of Plot
 $(document).on("click", "#can-com-f", function (e) {
@@ -10283,26 +11623,43 @@ $(document).on("click", "#can-com-f", function (e) {
     $("#amt-in-wrds").val(InWords($("#amt").val()));
     var im = $("#scanned").attr('src');
     $("#imge").val(im);
-    var con = confirm("Are you sure you want to Cancell this Property");
-    if (con) {
-        $.ajax({
-            type: "POST",
-            url: $("#com-fin-can").attr('action'),
-            data: $("#com-fin-can").serialize(),
-            success: function (data) {
-                if (data.Status == true) {
-                    window.open("/Vouchers/SAGVouchers?Id=" + data.VoucherId + "&Token=" + data.Token, '_blank');
+    //var con = confirm("Are you sure you want to Cancell this Property");
+    //if (con) {
+    Swal.fire({
+        text: 'Are you sure you want to cancel this Property?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                type: "POST",
+                url: $("#com-fin-can").attr('action'),
+                data: $("#com-fin-can").serialize(),
+                success: function (data) {
+                    if (data.Status == true) {
+                        window.open("/Vouchers/SAGVouchers?Id=" + data.VoucherId + "&Token=" + data.Token, '_blank');
+                    }
+                    else {
+                        //alert(data.Msg)
+                        Swal.fire({
+                            icon: 'error',
+                            text: 'Something went wrong'
+                        });
+                    }
+                },
+                error: function () {
+                    //alert("Error Occured");
+                    Swal.fire({
+                        icon: 'error',
+                        text: 'Something went wrong'
+                    });
+                    $('#gen-rec').attr("disabled", false);
                 }
-                else {
-                    alert(data.Msg)
-                }
-            },
-            error: function () {
-                alert("Error Occured");
-                $('#gen-rec').attr("disabled", false);
-            }
-        });
-    }
+            });
+        }
+    });
 });
 //
 $(document).on("click", ".rels-pay", function (e) {
@@ -10330,8 +11687,16 @@ $(document).on("click", "#ref-plot-f-btn", function (e) {
     $("#amt-in-wrds").val(InWords($("#amt").val()));
     var im = $("#scanned").attr('src');
     $("#imge").val(im);
-    var con = confirm("Are you sure you want to Refund this Amount");
-    if (con) {
+    //var con = confirm("Are you sure you want to Refund this Amount");
+    //if (con) {
+    Swal.fire({
+        text: 'Are you sure you want to refund the amount?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No'
+    }).then((result) => {
+        if (result.isConfirmed) {
         $.ajax({
             type: "POST",
             url: $("#plt-fin-ref").attr('action'),
@@ -10340,7 +11705,11 @@ $(document).on("click", "#ref-plot-f-btn", function (e) {
                 window.open("/Vouchers/Voucher?GroupId=" + data.Token, '_blank');
             },
             error: function () {
-                alert("Error Occured");
+                //alert("Error Occured");
+                Swal.fire({
+                    icon: 'error',
+                    text: 'Something went wrong'
+                });
                 $('#gen-rec').attr("disabled", false);
             }
         });
@@ -10675,39 +12044,69 @@ $(document).on("click", ".gen-pr-req", function () {
 // 
 $(document).on("click", "#gen-dire-pay", function (e) {
     e.preventDefault();
-    var remamt = $("#rec-amt").val();
-    var amt = $("#Amount").val();
-    var dealamt = $("#del-ttlamt").val();
-    var receiv_amt = $("#Total_Amt").val();
+    var remamt = Number($("#rec-amt").val());
+    var amt = Number($("#Amount").val());
+    var dealamt = Number($("#del-ttlamt").val());
+    var receiv_amt = Number($("#Total_Amt").val());
     if (dealamt < amt) {
-        alert("You Cant Generate Direct payment More than Deal Amount");
+        //alert("You Cant Generate Direct payment More than Deal Amount");
+        Swal.fire({
+            icon: 'info',
+            text: 'A direct payment exceeding the deal amount cannot be generated'
+        });
         return false;
     }
     else {
         if (amt > remamt) {
-            alert("You Cant Generate Direct payment More than Remaining Amount");
+            //alert("You Cant Generate Direct payment More than Remaining Amount");
+            Swal.fire({
+                icon: 'info',
+                text: 'A direct payment exceeding the remaining amount cannot be generated'
+            });
             return false;
         }
     }
-    var con = confirm("Are you sure you want to Genreate");
-    if (con) {
-        $.ajax({
-            type: "POST",
-            url: $("#prop-del-di-req").attr("action"),
-            data: $("#prop-del-di-req").serialize(),
-            success: function (data) {
-                alert("Direct Payment has done")
-                window.location.reload();
-            }
-            , error: function (xmlhttprequest, textstatus, message) {
-                if (textstatus === "timeout") {
-                    alert("got timeout");
-                } else {
-                    alert(textstatus);
+    //var con = confirm("Are you sure you want to Genreate");
+    //if (con) {
+    Swal.fire({
+        text: 'Are you sure you want to generate the direct payment?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                type: "POST",
+                url: $("#prop-del-di-req").attr("action"),
+                data: $("#prop-del-di-req").serialize(),
+                success: function (data) {
+                    //alert("Direct Payment has done")
+                    Swal.fire({
+                        icon: 'success',
+                        text: 'Direct payment generated successfully'
+                    }).then(() => {
+                        window.location.reload();
+                    })
                 }
-            }
-        });
-    }
+                , error: function (xmlhttprequest, textstatus, message) {
+                    if (textstatus === "timeout") {
+                        //alert("got timeout");
+                        Swal.fire({
+                            icon: 'error',
+                            text: 'Request timed out'
+                        });
+                    } else {
+                        //alert(textstatus);
+                        Swal.fire({
+                            icon: 'error',
+                            text: 'Something went wrong'
+                        });
+                    }
+                }
+            });
+        }
+    });
 });
 // Register 
 $(document).on("click", ".ad-oth-char-btn", function (e) {
@@ -10735,38 +12134,64 @@ $(document).on("click", ".ad-oth-char-btn", function (e) {
 $(document).on("click", "#gen-del-req", function (e) {
     e.preventDefault();
     $(this).attr("disabled", true);
-    var con = confirm("Are you sure you want to Genreate");
-    if (con) {
-        $.ajax({
-            type: "POST",
-            url: $("#prop-del-req").attr("action"),
-            data: $("#prop-del-req").serialize(),
-            success: function (data) {
-                if (data.Status) {
-                    if (data.Type == 'Voucher') {
-                        window.open("/Vouchers/PropertyDeal_Voucher?Id=" + data.VoucherId + "&Token=" + data.Token, '_blank');
+    //var con = confirm("Are you sure you want to Genreate");
+    //if (con) {
+    Swal.fire({
+        text: 'Are you sure you want to generate the Receipt/Voucher?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                type: "POST",
+                url: $("#prop-del-req").attr("action"),
+                data: $("#prop-del-req").serialize(),
+                success: function (data) {
+                    if (data.Status) {
+                        Swal.fire({
+                            icon: 'success',
+                            text: data.Type + ' generated successfully'
+                        }).then(() => {
+                            if (data.Type == 'Voucher') {
+                                window.open("/Vouchers/PropertyDeal_Voucher?Id=" + data.VoucherId + "&Token=" + data.Token, '_blank');
+                            }
+                            else {
+                                window.open("/Receipts/PropertyDeal_Receipts?Id=" + data.ReceiptId + "&Token=" + data.Token, '_blank');
+                            }
+                            window.location.reload();
+                        })
                     }
                     else {
-                        window.open("/Receipts/PropertyDeal_Receipts?Id=" + data.ReceiptId + "&Token=" + data.Token, '_blank');
+                        //alert("Error");
+                        Swal.fire({
+                            icon: 'error',
+                            text: 'Something went wrong'
+                        });
+                        $('#gen-del-req').attr("disabled", false);
                     }
-                    window.location.reload();
                 }
-                else {
-                    alert("Error");
-                    $('#gen-del-req').attr("disabled", false);
+                , error: function (xmlhttprequest, textstatus, message) {
+                    if (textstatus === "timeout") {
+                        //alert("got timeout");
+                        Swal.fire({
+                            icon: 'error',
+                            text: 'Request timed out'
+                        });
+                        $('#gen-del-req').attr("disabled", false);
+                    } else {
+                        //alert(textstatus);
+                        Swal.fire({
+                            icon: 'error',
+                            text: 'Something went wrong'
+                        });
+                        $('#gen-del-req').attr("disabled", false);
+                    }
                 }
-            }
-            , error: function (xmlhttprequest, textstatus, message) {
-                if (textstatus === "timeout") {
-                    alert("got timeout");
-                    $('#gen-del-req').attr("disabled", false);
-                } else {
-                    alert(textstatus);
-                    $('#gen-del-req').attr("disabled", false);
-                }
-            }
-        });
-    }
+            });
+        }
+    });
 });
 //
 $(document).on("click", ".prop-pay-vou-req", function () {
@@ -10838,40 +12263,73 @@ $(document).on("click", "#v-r-c-btn", function (e) {
         if (type == "Voucher") {
             if (amount <= Rece_amt) {
                 if (amount > remain) {
-                    alert("You Cant Request Voucher More than received Amount");
+                    //alert("You Cant Request Voucher More than received Amount");
+                    Swal.fire({
+                        icon: 'info',
+                        text: 'Voucher of amount more than received amount cannot be requested'
+                    });
                     return false;
                 }
             }
             else {
-                alert("You Cant Request Voucher More than received Amount");
+                //alert("You Cant Request Voucher More than received Amount");
+                Swal.fire({
+                    icon: 'info',
+                    text: 'Voucher of amount more than received amount cannot be requested'
+                });
                 return false;
             }
         }
         else if (type == "Receipt") {
             var rem = offeramt - Rece_amt;
             if (amount > rem) {
-                alert("You Cant Request Receipt More than Deal Amount");
+                //alert("You Cant Request Receipt More than Deal Amount");
+                Swal.fire({
+                    icon: 'info',
+                    text: 'Receipt of amount more than deal amount cannot be requested'
+                });
                 return false;
             }
         }
     }
-    if (confirm("Are you sure you want to request " + type)) {
-        $.ajax({
-            type: "POST",
-            url: '/PropertyDeal/PaymentRequest/',
-            data: { Type: type, Amount: amount, Description: desc, Deal_Id: del_id, Party_Id: part_id },
-            success: function (data) {
-                if (data.Status) {
-                    alert(data.Msg)
+    //if (confirm("Are you sure you want to request " + type)) {
+    Swal.fire({
+        text: 'Are you sure you want to request ' + type +' ?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                type: "POST",
+                url: '/PropertyDeal/PaymentRequest/',
+                data: { Type: type, Amount: amount, Description: desc, Deal_Id: del_id, Party_Id: part_id },
+                success: function (data) {
+                    if (data.Status) {
+                        //alert(data.Msg)
+                        Swal.fire({
+                            icon: 'success',
+                            text: data.Msg
+                        });
+                    }
+                    else {
+                        //alert("Deal is Closed you can not request a " + type + " Now")
+                        Swal.fire({
+                            icon: 'error',
+                            text: 'Deal is closed, ' + type + ' cannot be requested'
+                        });
+                    }
+                },
+                error: function (data) {
+                    Swal.fire({
+                        icon: 'error',
+                        text: 'Something went wrong'
+                    });
                 }
-                else {
-                    alert("Deal is Closed you can not request a " + type + " Now")
-                }
-            },
-            error: function (data) {
-            }
-        });
-    }
+            });
+        }
+    });
 });
 //
 $(document).on("click", "#lead-from-to", function () {
@@ -10906,7 +12364,7 @@ $(document).on("click", "#ser-my-lead", function () {
     $("#SAMLeads").load('/Leads/MyLeadSearch/', { From: from, To: to, LeadStatus: SPE_lead_Status, LeadUser: Lead_User, Phone: phone });
 });
 $('.all-leads-up-btn').unbind().click(function () {
-    var pr = "Meher Estate Developers";
+    var pr = "Grand City";
     EmptyModel();
     $('#ModalLabel').text("Upload Leads");
     $('#modalbody').load('/Leads/UploadLeads', { Project: pr, status: "Assigned" });
@@ -11075,19 +12533,37 @@ $(document).on("click", ".rem-req", function (e) {
 $(document).on("click", ".com-appr", function (e) {
     e.preventDefault();
     var id = $(this).closest('tr').attr("id");
-    if (confirm("Are you sure you want to Approve this Commission request")) {
-        $.ajax({
-            type: "POST",
-            url: '/PropertyDeal/UpdateApproval/',
-            data: { Id: id },
-            success: function (data) {
-                alert("Approved")
-                window.location.reload();
-            },
-            error: function (data) {
-            }
-        });
-    }
+    //if (confirm("Are you sure you want to Approve this Commission request")) {
+    Swal.fire({
+        text: 'Are you sure you want to approve this commission request?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                type: "POST",
+                url: '/PropertyDeal/UpdateApproval/',
+                data: { Id: id },
+                success: function (data) {
+                    //alert("Approved")
+                    Swal.fire({
+                        icon: 'success',
+                        text: 'Request approved successfully'
+                    }).then(() => {
+                        window.location.reload();
+                    })
+                },
+                error: function (data) {
+                    Swal.fire({
+                        icon: 'error',
+                        text: 'Something went wrong'
+                    });
+                }
+            });
+        }
+    });
 });
 $(document).on("click", "#cra-lead", function (e) {
     e.preventDefault();
@@ -11100,56 +12576,108 @@ $(document).on("click", "#cra-lead", function (e) {
     var pric = RemoveComma($("#off-pric").val());
     var stat = $('#LeadStatus option:selected').val();
     if (name == "" || name == null) {
-        alert("Please Enter Name")
+        //alert("Please Enter Name")
+        Swal.fire({
+            icon: 'info',
+            text: 'Enter name to proceed'
+        });
         return false;
     }
     else if (f_name == "" || f_name == null) {
-        alert("Please Father Name")
+        //alert("Please Father Name")
+        Swal.fire({
+            icon: 'info',
+            text: 'Enter father name to proceed'
+        });
         return false;
     }
     else if (mob == "" || mob == null) {
-        alert("Please Mobile Number")
+        //alert("Please Mobile Number")
+        Swal.fire({
+            icon: 'info',
+            text: 'Enter mobile number to proceed'
+        });
         return false;
     }
     else if (prj == "" || prj == null) {
-        alert("Please Select Project");
+        //alert("Please Select Project");
+        Swal.fire({
+            icon: 'info',
+            text: 'Select a project to proceed'
+        });
         return false;
     }
     else if (pric == "" || pric == null || pric == 0) {
-        alert("Please Enter Offered Price")
+        //alert("Please Enter Offered Price")
+        Swal.fire({
+            icon: 'info',
+            text: 'Enter a valid offered price to proceed'
+        });
         return false;
     }
     else if (stat == "" || stat == null) {
-        alert("Please Select Lead Status");
+        //alert("Please Select Lead Status");
+        Swal.fire({
+            icon: 'info',
+            text: 'Select lead status to proceed'
+        });
         return false;
     }
     $("#off-pric").val(RemoveComma($("#off-pric").val()));
-    if (confirm("Are you sure you want to create Lead")) {
-        $.ajax({
-            type: "POST",
-            url: $('#c-led').attr("action"),
-            data: $('#c-led').serialize(),
-            success: function (data) {
-                closeModal();
-                var $this = $('.active'),
-                    targ = $this.attr('href'),
-                    loadurl = $this.attr('data-link');
-                var Lead_User = $('.lead_user').val();
-                var SPE_lead_Status = $("#SAM_Lead_Status option:selected").val();
-                var to = $('#SAM-lead-to').val();
-                var phone = $('#leadphone').val();
-                var from = $('#SAM-lead-from').val();
-                SASLoad(targ);
-                $(targ).load(loadurl, { From: from, To: to, LeadStatus: SPE_lead_Status, LeadUser: Lead_User, Phone: phone }, function () {
-                    SASUnLoad(targ);
-                    $('#myTabs .active').removeClass("active");
-                    $this.addClass("active");
-                });
-            },
-            error: function (data) {
-            }
-        });
-    }
+    //if (confirm("Are you sure you want to create Lead")) {
+    Swal.fire({
+        text: 'Are you sure you want to create the lead?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                type: "POST",
+                url: $('#c-led').attr("action"),
+                data: $('#c-led').serialize(),
+                success: function (data) {
+                    if (data.Status) {
+                        //alert(data.Msg);
+                        Swal.fire({
+                            icon: 'success',
+                            text: data.Msg
+                        }).then(() => {
+                            closeModal();
+                            var $this = $('.active'),
+                                targ = $this.attr('href'),
+                                loadurl = $this.attr('data-link');
+                            var Lead_User = $('.lead_user').val();
+                            var SPE_lead_Status = $("#SAM_Lead_Status option:selected").val();
+                            var to = $('#SAM-lead-to').val();
+                            var phone = $('#leadphone').val();
+                            var from = $('#SAM-lead-from').val();
+                            SASLoad(targ);
+                            $(targ).load(loadurl, { From: from, To: to, LeadStatus: SPE_lead_Status, LeadUser: Lead_User, Phone: phone }, function () {
+                                SASUnLoad(targ);
+                                $('#myTabs .active').removeClass("active");
+                                $this.addClass("active");
+                            });
+                        })
+                        
+                    } else {
+                        //alert(data.Msg);
+                        Swal.fire({
+                            icon: 'error',
+                            text: 'Something went wrong'
+                        });
+                    }
+                },
+                error: function (data) {
+                    Swal.fire({
+                        icon: 'error',
+                        text: 'Something went wrong'
+                    });
+                }
+            });
+        }
+    });
 });
 //
 $(document).on("click", "#cra-un-lead", function (e) {
@@ -11205,20 +12733,43 @@ $(document).on("click", "#cra-un-lead", function (e) {
 //
 $(document).on("click", "#up-inf-par", function (e) {
     e.preventDefault();
-    $.ajax({
-        type: "POST",
-        url: $('#up-info-part').attr("action"),
-        data: $('#up-info-part').serialize(),
-        success: function (data) {
-            if (data.Status) {
-                alert(data.Msg);
-                window.location.reload();
-            }
-            else {
-                alert(data.Msg);
-            }
-        },
-        error: function (data) {
+    Swal.fire({
+        text: 'Are you sure you want to update the information?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                type: "POST",
+                url: $('#up-info-part').attr("action"),
+                data: $('#up-info-part').serialize(),
+                success: function (data) {
+                    if (data.Status) {
+                        //alert(data.Msg);
+                        Swal.fire({
+                            icon: 'success',
+                            text: data.Msg
+                        }).then(() => {
+                            window.location.reload();
+                        });
+                    }
+                    else {
+                        //alert(data.Msg);
+                        Swal.fire({
+                            icon: 'info',
+                            text: data.Msg
+                        });
+                    }
+                },
+                error: function (data) {
+                    Swal.fire({
+                        icon: 'error',
+                        text: 'Something went wrong'
+                    });
+                }
+            });
         }
     });
 });
@@ -11229,7 +12780,11 @@ $(document).on("click", "#cra-buy", function (e) {
     var val = $("#Mobile").val();
     var res = email.test(val)
     if (!res) {
-        alert('Please Enter Proper Mobile Number');
+        //alert('Please Enter Proper Mobile Number');
+        Swal.fire({
+            icon: 'info',
+            text: 'Enter a valid mobile number to proceed'
+        });
         return false;
     }
     $.ajax({
@@ -11237,9 +12792,18 @@ $(document).on("click", "#cra-buy", function (e) {
         url: $('#c-buy').attr("action"),
         data: $('#c-buy').serialize(),
         success: function (data) {
-            window.location.reload();
+            Swal.fire({
+                icon: 'success',
+                text: 'Buyer added successfully'
+            }).then(() => {
+                window.location.reload();
+            })
         },
         error: function (data) {
+            Swal.fire({
+                icon: 'error',
+                text: 'Something went wrong'
+            });
         }
     });
 });
@@ -11250,27 +12814,53 @@ $(document).on("click", "#cra-Deal", function (e) {
     var val = $("#Mobile").val();
     var res = email.test(val)
     if (!res) {
-        alert('Please Enter Proper Mobile Number');
+        //alert('Please Enter Proper Mobile Number');
+        Swal.fire({
+            icon: 'info',
+            text: 'Enter a valid mobile number to proceed'
+        });
         return false;
     }
-    if (confirm("Are you sure you want to Create Deal")) {
-        $.ajax({
-            type: "POST",
-            url: $('#c-deal').attr("action"),
-            data: $('#c-deal').serialize(),
-            success: function (data) {
-                if (data) {
-                    alert("Deal Created");
-                    window.location.reload();
+    Swal.fire({
+        text: 'Are you sure you want to create the deal?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            //if (confirm("Are you sure you want to Create Deal")) {
+            $.ajax({
+                type: "POST",
+                url: $('#c-deal').attr("action"),
+                data: $('#c-deal').serialize(),
+                success: function (data) {
+                    if (data) {
+                        //alert("Deal Created");
+                        Swal.fire({
+                            icon: 'success',
+                            text: 'Deal created successfully'
+                        }).then(() => {
+                            window.location.reload();
+                        })
+                    }
+                    else {
+                        //alert("Previous Deal is still not Closed")
+                        Swal.fire({
+                            icon: 'info',
+                            text: 'The previous deal has not yet been closed'
+                        });
+                    }
+                },
+                error: function (data) {
+                    Swal.fire({
+                        icon: 'error',
+                        text: 'Something went wrong'
+                    });
                 }
-                else {
-                    alert("Previous Deal is still not Closed")
-                }
-            },
-            error: function (data) {
-            }
-        });
-    }
+            });
+        }
+    });
 });
 //
 $(document).on("click", "#cra-l-Deal", function (e) {
@@ -11279,7 +12869,11 @@ $(document).on("click", "#cra-l-Deal", function (e) {
     var val = $("#Mobile").val();
     var res = email.test(val)
     if (!res) {
-        alert('Please Enter Proper Mobile Number');
+        //alert('Please Enter Proper Mobile Number');
+        Swal.fire({
+            icon: 'info',
+            text: 'Enter a valid mobile number to proceed'
+        });
         return false;
     }
     var demand = $("#dem-pric").val();
@@ -11291,21 +12885,33 @@ $(document).on("click", "#cra-l-Deal", function (e) {
         if (filplt == "Plot") {
             var newleadplt = $("#NewLeadPlots").val();
             if (newleadplt == "" || newleadplt == null) {
-                alert("Please Select Plot");
+                //alert("Please Select Plot");
+                Swal.fire({
+                    icon: 'info',
+                    text: 'Select a plot to proceed'
+                });
                 return false;
             }
         }
         else if (filplt == "File") {
             var filenum = $("input[name=File_Plot_Number]").val();
             if (filenum == "" || filenum == null) {
-                alert("File Number Cannot be empty")
+                //alert("File Number Cannot be empty")
+                Swal.fire({
+                    icon: 'info',
+                    text: 'Enter a file number to proceed'
+                });
                 return false;
             }
         }
         else if (filplt == "Apartment") {
             var appNum = $('.leadUnits').val();
             if (appNum == "" || appNum == null) {
-                alert("Unit No. Cannot be Empty");
+                //alert("Unit No. Cannot be Empty");
+                Swal.fire({
+                    icon: 'info',
+                    text: 'Enter unit number to proceed'
+                });
                 return false;
             }
         }
@@ -11315,55 +12921,101 @@ $(document).on("click", "#cra-l-Deal", function (e) {
         if (filplt == "Plot") {
             var newleadplt = $("#plot-details").val();
             if (newleadplt == "" || newleadplt == null) {
-                alert("Please Select Plot");
+                //alert("Please Select Plot");
+                Swal.fire({
+                    icon: 'info',
+                    text: 'Select a plot to proceed'
+                });
                 return false;
             }
         }
         else if (filplt == "File") {
             var filenum = $("input[name=File_Plot_Number]").val();
             if (filenum == "" || filenum == null) {
-                alert("File Number Cannot be empty")
+                //alert("File Number Cannot be empty")
+                Swal.fire({
+                    icon: 'info',
+                    text: 'Enter a file number to proceed'
+                });
                 return false;
             }
         }
         else if (filplt == "Apartment") {
             var appNum = $('.leadUnits').val();
             if (appNum == "" || appNum == null) {
-                alert("Unit No. Cannot be Empty");
+                //alert("Unit No. Cannot be Empty");
+                Swal.fire({
+                    icon: 'info',
+                    text: 'Enter unit number to proceed'
+                });
                 return false;
             }
         }
         if (demand == null || demand <= 0) {
-            alert("Demand Cannot be Zero or Empty");
+            //alert("Demand Cannot be Zero or Empty");
+            Swal.fire({
+                icon: 'info',
+                text: 'Enter a valid demand amount'
+            });
             return false;
         }
     }
     if (offeredprice == null || offeredprice <= 0) {
-        alert("Offered Price Cannot be Zero or Empty");
+        //alert("Offered Price Cannot be Zero or Empty");
+        Swal.fire({
+            icon: 'info',
+            text: 'Enter a valid offered amount'
+        });
         return false;
     }
     if (ratepermarla == null || ratepermarla <= 0) {
-        alert("Rate Per Marla Cannot be Zero or Empty");
+        //alert("Rate Per Marla Cannot be Zero or Empty");
+        Swal.fire({
+            icon: 'info',
+            text: 'Enter a valid rate per Marla'
+        });
         return false;
     }
-    if (confirm("Are you sure you want to Create Deal")) {
-        $.ajax({
-            type: "POST",
-            url: $('#c-l-deal').attr("action"),
-            data: $('#c-l-deal').serialize(),
-            success: function (data) {
-                if (data) {
-                    alert("Deal Created");
-                    window.location.reload();
+    //if (confirm("Are you sure you want to Create Deal")) {
+    Swal.fire({
+        text: 'Are you sure you want to convert the lead to deal?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                type: "POST",
+                url: $('#c-l-deal').attr("action"),
+                data: $('#c-l-deal').serialize(),
+                success: function (data) {
+                    if (data) {
+                        //alert("Deal Created");
+                        Swal.fire({
+                            icon: 'success',
+                            text: 'Deal created successfully'
+                        }).then(() => {
+                            window.location.reload();
+                        })
+                    }
+                    else {
+                        //alert("Previous Deal is still not Closed")
+                        Swal.fire({
+                            icon: 'info',
+                            text: 'The previous deal has not yet been finalized'
+                        });
+                    }
+                },
+                error: function (data) {
+                    Swal.fire({
+                        icon: 'error',
+                        text: 'Something went wrong'
+                    });
                 }
-                else {
-                    alert("Previous Deal is still not Closed")
-                }
-            },
-            error: function (data) {
-            }
-        });
-    }
+            });
+        }
+    });
 });
 // List of all Plots Transfer list
 $(document).on("click", ".Plt-Lead-dets", function () {
@@ -11479,18 +13131,38 @@ $(document).on("submit", "#up-lead", function (e) {
         }
     }
     $('#ld-up-stat').attr("disabled", true);
-    $.ajax({
-        type: "POST",
-        url: $("#up-lead").attr('action'),
-        data: $("#up-lead").serialize(),
-        success: function (data) {
-            alert("Updated");
-            window.location.reload();
-        },
-        error: function () {
-            alert("Error Occured");
-            $('#ld-up-stat').attr("disabled", false);
-            $('#gen-plot-rec').attr("disabled", false);
+    Swal.fire({
+        text: 'Are you sure you want to update the lead?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                type: "POST",
+                url: $("#up-lead").attr('action'),
+                data: $("#up-lead").serialize(),
+                success: function (data) {
+                    //alert("Updated");
+                    Swal.fire({
+                        icon: 'success',
+                        text: 'Lead updated successfully'
+                    }).then(() => {
+                        window.location.reload();
+                    })
+                },
+                error: function () {
+                    //alert("Error Occured");
+                    Swal.fire({
+                        icon: 'error',
+                        text: 'Something went wrong'
+                    }).then(() => {
+                        $('#ld-up-stat').attr("disabled", false);
+                        $('#gen-plot-rec').attr("disabled", false);
+                    })
+                }
+            });
         }
     });
 });
@@ -11631,22 +13303,44 @@ $(document).on("click", ".up-f-stat", function () {
 //
 $(document).on("click", "#up-f-stat-btn", function (e) {
     e.preventDefault();
-    $.ajax({
-        type: "POST",
-        url: $('#up-f-stat').attr("action"),
-        data: $('#up-f-stat').serialize(),
-        success: function (data) {
-            if (data.Status === "Requested") {
-                alert("Cancelation Requested");
-            }
-            if (data.Status === "Repurchased") {
-                alert("Repurchased and Cancelation Requested");
-            }
-            else {
-                window.location.reload();
-            }
-        },
-        error: function (data) {
+    Swal.fire({
+        text: 'Are you sure you want to update file status?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                type: "POST",
+                url: $('#up-f-stat').attr("action"),
+                data: $('#up-f-stat').serialize(),
+                success: function (data) {
+                    if (data.Status === "Requested") {
+                        //alert("Cancelation Requested");
+                        Swal.fire({
+                            icon: 'success',
+                            text: 'File cancellation requested successfully'
+                        });
+                    }
+                    if (data.Status === "Repurchased") {
+                        //alert("Repurchased and Cancelation Requested");
+                        Swal.fire({
+                            icon: 'success',
+                            text: 'File repurchase and cancellation requested successfully'
+                        });
+                    }
+                    else {
+                        window.location.reload();
+                    }
+                },
+                error: function (data) {
+                    Swal.fire({
+                        icon: 'error',
+                        text: 'Something went wrong'
+                    });
+                }
+            });
         }
     });
 });
@@ -11728,19 +13422,31 @@ $(document).on("click", ".del-sec-fee-ret", function () {
         taxamount = 0;
     }
     if (taxamount > 0 && taxName == "") {
-        alert("Please Select Tax Account");
+        //alert("Please Select Tax Account");
+        Swal.fire({
+            icon: 'info',
+            text: 'Select Tax account to proceed'
+        });
         return false;
     }
 
     if ((Number(amt) + Number(taxamount)) <= Number($('#ttlamt').val())) {
-        if (confirm("Are you sure want to Generate Voucher")) {
-            $.ajax({
-                type: "POST",
-                url: '/Dealership/DealerPayment/',
-                data: { Id: id, Amount: amt, TransactionId: trans, PaymentType: paytype, Bank: bank, Inst_No: instno, Inst_Date: instdate, Branch: bran, Description: desc, Img: img, TaxAmount: taxamount, TaxAccount: tax_id, Led_Nat: lednat },
-                success: function (data) {
-                    if (data.Status == true) {
-                        window.open("/Vouchers/Voucher?GroupId=" + data.Token, '_blank');
+        //if (confirm("Are you sure want to Generate Voucher")) {
+        Swal.fire({
+            text: 'Are you sure want to generate the Voucher?',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Yes',
+            cancelButtonText: 'No'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    type: "POST",
+                    url: '/Dealership/DealerPayment/',
+                    data: { Id: id, Amount: amt, TransactionId: trans, PaymentType: paytype, Bank: bank, Inst_No: instno, Inst_Date: instdate, Branch: bran, Description: desc, Img: img, TaxAmount: taxamount, TaxAccount: tax_id, Led_Nat: lednat },
+                    success: function (data) {
+                        if (data.Status == true) {
+                            window.open("/Vouchers/Voucher?GroupId=" + data.Token, '_blank');
 
                         window.location.reload();
                     }
@@ -11755,7 +13461,11 @@ $(document).on("click", ".del-sec-fee-ret", function () {
         }
     }
     else {
-        alert("Invalid Amount");
+        //alert("Invalid Amount");
+        Swal.fire({
+            icon: 'info',
+            text: 'Enter a valid amount to proceed'
+        });
     }
 });
 // create a Company
@@ -11856,34 +13566,64 @@ $(document).on("click", "#gen-sam-rec", function (e) {
         TransactionId: $("#trans-id").val(),
     };
     if (recedata.Amount <= 0 || recedata.Amount == "") {
-        alert("Amount Cannot be Zero or Empty");
+        //alert("Amount Cannot be Zero or Empty");
+        Swal.fire({
+            icon: 'info',
+            text: 'Enter valid amount to proceed'
+        });
         return false;
     }
-    var con = confirm("Are you sure you want to Generate Receipt");
-    if (con) {
-        $.ajax({
-            type: "POST",
-            url: '/Installments/PayLeadPaymentWithReceipt/',
-            contentType: "application/json; charset=utf-8",
-            data: JSON.stringify(alldata),
-            success: function (data) {
-                if (data.Status == true) {
-                    window.open("/Receipts/SAM_Receipts?Id=" + data.Receiptid + "&Token=" + data.Token, '_blank');
-                    window.location.reload();
+    //var con = confirm("Are you sure you want to Generate Receipt");
+    //if (con) {
+    Swal.fire({
+        text: 'Are you sure you want to generate the Receipt?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                type: "POST",
+                url: '/Installments/PayLeadPaymentWithReceipt/',
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify(alldata),
+                success: function (data) {
+                    if (data.Status == true) {
+                        Swal.fire({
+                            icon: 'success',
+                            text: 'Receipt generated successfully'
+                        }).then(() => {
+                            window.open("/Receipts/SAM_Receipts?Id=" + data.Receiptid + "&Token=" + data.Token, '_blank');
+                            window.location.reload();
+                        })  
+                    }
+                    else {
+                        //alert("You cannot receive more than offered Amount");
+                        Swal.fire({
+                            icon: 'info',
+                            text: 'You cannot receive an amount greater than the offered amount'
+                        });
+                    }
                 }
-                else {
-                    alert("You cannot receive more than offered Amount");
+                , error: function (xmlhttprequest, textstatus, message) {
+                    if (textstatus === "timeout") {
+                        //alert("got timeout");
+                        Swal.fire({
+                            icon: 'error',
+                            text: 'Request timed out'
+                        });
+                    } else {
+                        //alert(textstatus);
+                        Swal.fire({
+                            icon: 'error',
+                            text: 'Something went wrong'
+                        });
+                    }
                 }
-            }
-            , error: function (xmlhttprequest, textstatus, message) {
-                if (textstatus === "timeout") {
-                    alert("got timeout");
-                } else {
-                    alert(textstatus);
-                }
-            }
-        });
-    }
+            });
+        }
+    });
 });
 //
 $(document).on("click", ".up-dire-rec", function () {
@@ -11944,7 +13684,7 @@ $(document).on("click", "#gen-sam-rec-man", function (e) {
     recedata.Project_Name = $("#prj").val();
     recedata.Branch = $("#Branch").val();
     recedata.Ch_bk_Pay_Date = $("#cbp-date").val();
-    recedata.Project_Name = "Meher Estate Developers";
+    recedata.Project_Name = "Grand City";
     recedata.ReceiptNo = $("#rece-no").val();
     recedata.Date = $("#rece-date").val();
     $("#reg-file").prop("disabled", true);
@@ -12030,48 +13770,91 @@ $(document).on("change", ".developstat", function (e) {
     e.preventDefault();
     var id = $("#plt-id").val();
     var val = $(this).val();
-    var con = confirm("Are you sure you want to Update");
-    if (con) {
-        $.ajax({
-            type: "POST",
-            url: '/Plots/UpdateConstructionStatus/',
-            data: { Id: id, DevelopStatus: val },
-            success: function (data) {
-                alert("Requested")
-            }
-            , error: function (xmlhttprequest, textstatus, message) {
-                if (textstatus === "timeout") {
-                    alert("got timeout");
-                } else {
-                    alert(textstatus);
+    //var con = confirm("Are you sure you want to Update");
+    //if (con) {
+    Swal.fire({
+        text: 'Are you sure you want to update development status of the plot?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                type: "POST",
+                url: '/Plots/UpdateConstructionStatus/',
+                data: { Id: id, DevelopStatus: val },
+                success: function (data) {
+                    //alert("Requested")
+                    Swal.fire({
+                        icon: 'success',
+                        text: 'Development status update requested successfully'
+                    });
                 }
-            }
-        });
-    }
+                , error: function (xmlhttprequest, textstatus, message) {
+                    if (textstatus === "timeout") {
+                        //alert("got timeout");
+                        Swal.fire({
+                            icon: 'error',
+                            text: 'Request timed out'
+                        });
+                    } else {
+                        //alert(textstatus);
+                        Swal.fire({
+                            icon: 'error',
+                            text: 'Something went wrong'
+                        });
+                    }
+                }
+            });
+        }
+    });
 });
 
 // Register  a file
 $(document).on("click", "#up-vou-app-btn", function (e) {
     e.preventDefault();
-    var con = confirm("Are you sure you want to Confirm the Voucher");
-    if (con) {
-        $.ajax({
-            type: "POST",
-            url: $("#up-vou-app").attr("action"),
-            data: $("#up-vou-app").serialize(),
-            success: function (data) {
-                window.open("/Vouchers/SAM_Voucher?Id=" + data.VoucherId + "&Token=" + data.Token, '_blank');
-                window.location.reload();
-            }
-            , error: function (xmlhttprequest, textstatus, message) {
-                if (textstatus === "timeout") {
-                    alert("got timeout");
-                } else {
-                    alert(textstatus);
+    //var con = confirm("Are you sure you want to Confirm the Voucher");
+    //if (con) {
+    Swal.fire({
+        text: 'Are you sure you want to generate the Voucher?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                type: "POST",
+                url: $("#up-vou-app").attr("action"),
+                data: $("#up-vou-app").serialize(),
+                success: function (data) {
+                    Swal.fire({
+                        icon: 'success',
+                        text: 'Voucher generated successfully'
+                    }).then(() => {
+                        window.open("/Vouchers/SAM_Voucher?Id=" + data.VoucherId + "&Token=" + data.Token, '_blank');
+                        window.location.reload();
+                    })   
                 }
-            }
-        });
-    }
+                , error: function (xmlhttprequest, textstatus, message) {
+                    if (textstatus === "timeout") {
+                        //alert("got timeout");
+                        Swal.fire({
+                            icon: 'error',
+                            text: 'Request timed out'
+                        });
+                    } else {
+                        //alert(textstatus);
+                        Swal.fire({
+                            icon: 'error',
+                            text: 'Something went wrong'
+                        });
+                    }
+                }
+            });
+        }
+    });
 });
 // show and hide tab of add employee
 $(document).on("click", "#move3rdstep", function () {
@@ -18481,7 +20264,7 @@ $(document).on("click", "#prn-mem-rec", function () {
     recedata.project_name = $("#prj").val();
     recedata.branch = $("#branch").val();
     recedata.ch_bk_pay_date = $("#cbp-date").val();
-    recedata.project_name = "Meher Estate Developers";
+    recedata.project_name = "Grand City";
     if (recedata.bank == null || recedata.bank == "") {
         if (recedata.amount == null || recedata.amount == "") {
             alert("amount cannot be empty");
@@ -18608,7 +20391,11 @@ $(document).on("submit", "#file-imge", function (e) {
     e.preventDefault();
     var id = $(this).closest('.wrap-sfk').find('.file-trans-id').val();
     if (id == null || id == "") {
-        alert('Please Enter File Number');
+        //alert('Please Enter File Number');
+        Swal.fire({
+            icon: 'info',
+            text: 'Enter file number to proceed'
+        });
         return false;
     }
     //var idim = $(this).val();
@@ -18684,24 +20471,41 @@ $(document).on("submit", "#file-imge", function (e) {
     $.each(form.serializeArray(), function (key, input) {
         data.append(input.name, input.value);
     });
-    var ch = confirm('Are you sure you want to proceed');
-    if (ch) {
-        $.ajax({
-            type: "POST",
-            processData: false,
-            contentType: false,
-            url: $("#file-imge").attr('action'),
-            data: data,
-            success: function (data) {
-                if (data == true) {
-                    $(this).closest("div").find(".btn_gen__poss").hide();
-                    alert('Successfully Saved');
+    //var ch = confirm('Are you sure you want to proceed');
+    //if (ch) {
+    Swal.fire({
+        text: 'Are you sure you want to save the owner image?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                type: "POST",
+                processData: false,
+                contentType: false,
+                url: $("#file-imge").attr('action'),
+                data: data,
+                success: function (data) {
+                    if (data == true) {
+                        $(this).closest("div").find(".btn_gen__poss").hide();
+                        //alert('Successfully Saved');
+                        Swal.fire({
+                            icon: 'success',
+                            text: 'Owner image saved successfully'
+                        });
+                    }
+                },
+                error: function () {
+                    Swal.fire({
+                        icon: 'error',
+                        text: 'Something went wrong'
+                    });
                 }
-            },
-            error: function () {
-            }
-        });
-    }
+            });
+        }
+    });
 });
 $(document).on("submit", "#plt-up-imge", function (e) {
     e.preventDefault();
@@ -18723,6 +20527,10 @@ $(document).on("submit", "#plt-up-imge", function (e) {
                     files = $(this).find("#file4").get(0).files;
                     imageid = 4;
                     if (files.length == 0) {
+                        Swal.fire({
+                            icon: 'info',
+                            text: 'Choose a file to save'
+                            })
                         return false;
                     }
                 }
@@ -18756,24 +20564,41 @@ $(document).on("submit", "#plt-up-imge", function (e) {
     $.each(form.serializeArray(), function (key, input) {
         data.append(input.name, input.value);
     });
-    var ch = confirm('Are you sure you want to proceed to save image');
-    if (ch) {
-        $.ajax({
-            type: "POST",
-            processData: false,
-            contentType: false,
-            url: $("#plt-up-imge").attr('action'),
-            data: data,
-            success: function (data) {
-                if (data == true) {
-                    $(this).closest("div").find(".btn_gen___poss").hide();
-                    alert('Successfully Saved');
+    //var ch = confirm('Are you sure you want to proceed to save image');
+    //if (ch) {
+    Swal.fire({
+        text: "Are you sure you want to save the owner's image?",
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                type: "POST",
+                processData: false,
+                contentType: false,
+                url: $("#plt-up-imge").attr('action'),
+                data: data,
+                success: function (data) {
+                    if (data == true) {
+                        $(this).closest("div").find(".btn_gen___poss").hide();
+                        //alert('Successfully Saved');
+                        Swal.fire({
+                            icon: 'success',
+                            text: "Owner's image saved successfully"
+                        });
+                    }
+                },
+                error: function () {
+                    Swal.fire({
+                        icon: 'error',
+                        text: 'Something went wrong'
+                    });
                 }
-            },
-            error: function () {
-            }
-        });
-    }
+            });
+        }
+    });
 });
 //
 $(document).on("click", ".gen__cus__file", function () {
@@ -18852,11 +20677,19 @@ $(document).on("click", ".reg__shp__Floo", function (e) {
     var f = $('.prj-phase option:selected').val();
     var flag = true;
     if (p == "" || p == null) {
-        alert('Please Select Project');
+        //alert('Please Select Project');
+        Swal.fire({
+            icon: 'info',
+            text: 'Please select a project'
+        });
         return false;
     }
     if (f == "" || f == null) {
-        alert('Please Select Floor');
+        //alert('Please Select Floor');
+        Swal.fire({
+            icon: 'info',
+            text: 'Please select a floor'
+        });
         return false;
     }
     var LeV = [];
@@ -18868,27 +20701,47 @@ $(document).on("click", ".reg__shp__Floo", function (e) {
         LevlData.Floor_Id = f;
         LevlData.Type = $("#shp-" + i + " .Type option:selected").val();
         if (LevlData.Type == 0 || LevlData.Type == "") {
-            alert('Please Enter Advance in row ' + i);
+            //alert('Please Enter Advance in row ' + i);
+            Swal.fire({
+                icon: 'info',
+                text: 'Please Enter Advance for row ' + i
+            });
             flag = false;
         }
         LevlData.Com_App_Shop_Number = $("#shp-" + i + " .Name").val();
         if (LevlData.Com_App_Shop_Number == 0 || LevlData.Com_App_Shop_Number == "") {
-            alert('Please Enter Shop Name in row ' + i);
+            //alert('Please Enter Shop Name in row ' + i);
+            Swal.fire({
+                icon: 'info',
+                text: 'Please Enter unit name for row ' + i
+            });
             flag = false;
         }
         LevlData.Area = $("#shp-" + i + " .Area").val();
         if (LevlData.Area == 0 || LevlData.Area == "") {
-            alert('Please Enter Total Area in row ' + i);
+            //alert('Please Enter Total Area in row ' + i);
+            Swal.fire({
+                icon: 'info',
+                text: 'Please Enter total area for row ' + i
+            });
             flag = false;
         }
         LevlData.Location = $("#shp-" + i + " .loc").val();
         if (LevlData.Location == 0 || LevlData.Location == "") {
-            alert('Please Enter Location in row ' + i);
+            //alert('Please Enter Location in row ' + i);
+            Swal.fire({
+                icon: 'info',
+                text: 'Please Enter location for row ' + i
+            });
             flag = false;
         }
         LevlData.rate_sq_ft = $("#shp-" + i + " .r__Sq__Ft").val() || 0;
         if (LevlData.rate_sq_ft == 0 || LevlData.rate_sq_ft == "") {
-            alert('Please Enter Rate/Sq Ft in row ' + i);
+            //alert('Please Enter Rate/Sq Ft in row ' + i);
+            Swal.fire({
+                icon: 'info',
+                text: 'Please Enter rate/sqft for row ' + i
+            });
             flag = false;
         }
         LevlData.ExtraAmount = $("#shp-" + i + " #Amount").val() || 0;
@@ -18902,20 +20755,37 @@ $(document).on("click", ".reg__shp__Floo", function (e) {
             data: { cr: LeV },
             success: function (data) {
                 if (data == true) {
-                    alert('Successfully Registerd');
-                    window.location.reload();
+                    //alert('Successfully Registerd');
+                    Swal.fire({
+                        icon: 'success',
+                        text: 'Unit(s) registered successfully'
+                    }).then(() => {
+                        window.location.reload();
+                    })
                 }
                 else {
                     $.each(data, function (i, item) {
-                        alert(data[i] + ' Already Exists');
+                        //alert(data[i] + ' Already Exists');
+                        Swal.fire({
+                            icon: 'info',
+                            text: data[i] + ' Already Exists'
+                        });
                     });
                 }
             },
             error: function (xmlhttprequest, textstatus, message) {
                 if (textstatus === "timeout") {
-                    alert("got timeout");
+                    //alert("got timeout");
+                    Swal.fire({
+                        icon: 'error',
+                        text: 'Request timed out'
+                    });
                 } else {
-                    alert(textstatus);
+                    //alert(textstatus);
+                    Swal.fire({
+                        icon: 'error',
+                        text: 'Something went wrong'
+                    });
                 }
             }
         });
@@ -18923,49 +20793,69 @@ $(document).on("click", ".reg__shp__Floo", function (e) {
 });
 // building management mapping
 $(document).on("click", ".ad__shp", function () {
-    paycont++;
-    var html = '<div class="form-row cal add-s-id" id="shp-' + paycont + '" ><h6 class="lh-1 mB-0 pln-counter">' + paycont + '.</h6>' +
-        ' <div class="form-group col-md-2">' +
-        '<select class="form-control Type" id="type" data-id="' + paycont + '">' +
-        '<option value="Shop">Shop</option>' +
-        '<option value="Apartment">Apartment</option>' +
-        ' <option value="Office">Office</option>' +
-        ' </select>' +
-        ' </div>' +
-        '<div class="form-group col-md-2">' +
-        '<input type="text" id="" name="" class="form-control Name" data-id="' + paycont + '">' +
-        '</div>' +
-        '<div class="form-group col-md-1">' +
-        '<input type="text" id="" name="" class="form-control Area" data-id="' + paycont + '">' +
-        '</div>' +
-        '<div class="form-group col-md-2">' +
-        '<input type="text" id="" name="" class="form-control loc" data-id="' + paycont + '">' +
-        '</div>' +
-        '<div class="form-group col-md-2">' +
-        '<input type="text" id="" name="" class="form-control r__Sq__Ft" data-id="' + paycont + '">' +
-        '</div>' +
-        '<div class="form-group col-md-2">' +
-        '<input class="form-control coma" placeholder="250,000" required data-id="' + paycont + '">' +
-        '<input type="hidden" id="Amount" class="amt" required>' +
-        //'<input type="text" id="" name="" class="form-control Ex__Amt" data-id="' + paycont + '">' +
-        '</div>' +
-        '<i class="ti-minus rm_s_row pointer" style="margin-left:3%" ></i></div>';
-    $('#ad-shp').append(html);
+    Swal.fire({
+        text: 'Do you want to add another Unit?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            paycont++;
+            var html = '<div class="form-row cal add-s-id" id="shp-' + paycont + '" ><h6 class="lh-1 mB-0 pln-counter">' + paycont + '.</h6>' +
+                ' <div class="form-group col-md-2">' +
+                '<select class="form-control Type" id="type" data-id="' + paycont + '">' +
+                '<option value="Shop">Shop</option>' +
+                '<option value="Apartment">Apartment</option>' +
+                ' <option value="Office">Office</option>' +
+                ' </select>' +
+                ' </div>' +
+                '<div class="form-group col-md-2">' +
+                '<input type="text" id="" name="" class="form-control Name" data-id="' + paycont + '">' +
+                '</div>' +
+                '<div class="form-group col-md-1">' +
+                '<input type="text" id="" name="" class="form-control Area" data-id="' + paycont + '">' +
+                '</div>' +
+                '<div class="form-group col-md-2">' +
+                '<input type="text" id="" name="" class="form-control loc" data-id="' + paycont + '">' +
+                '</div>' +
+                '<div class="form-group col-md-2">' +
+                '<input type="text" id="" name="" class="form-control r__Sq__Ft" data-id="' + paycont + '">' +
+                '</div>' +
+                '<div class="form-group col-md-2">' +
+                '<input class="form-control coma" placeholder="250,000" required data-id="' + paycont + '">' +
+                '<input type="hidden" id="Amount" class="amt" required>' +
+                //'<input type="text" id="" name="" class="form-control Ex__Amt" data-id="' + paycont + '">' +
+                '</div>' +
+                '<i class="ti-minus rm_s_row pointer" style="margin-left:3%" ></i></div>';
+            $('#ad-shp').append(html);
+        }
+    });
 });
 ////
 $(document).on("click", ".rm_s_row", function () {
-    $(this).parent().remove();
-    paycont = 1;
-    $('.pln-counter').each(function () {
-        $(this).text(paycont + '.');
-        paycont++;
+    Swal.fire({
+        text: 'Are you sure you want to discrad the Unit?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $(this).parent().remove();
+            paycont = 1;
+            $('.pln-counter').each(function () {
+                $(this).text(paycont + '.');
+                paycont++;
+            });
+            paycont = 1;
+            $('.add-s-id').each(function () {
+                paycont++;
+                $(this).attr('id', 'shp-' + paycont);
+            });
+        }
     });
-    paycont = 1;
-    $('.add-s-id').each(function () {
-        paycont++;
-        $(this).attr('id', 'shp-' + paycont);
-    });
-})
+});
 //// Commercial List
 $(document).on("click", ".com-lst__upda", function () {
     var id = $(this).attr("id");
@@ -18978,12 +20868,31 @@ $(document).on("click", ".upda__comm", function () {
 //
 $(document).on("click", ".del__comm", function () {
     var id = $(this).attr('id');
-    $.post('/Commercial/CommercialManagementDelete/', { Id: id }, function (data) {
-        if (data == false) {
-            alert("Error Occured");
-        }
-        else {
-            $('#sp__comm tbody tr#' + id + '').remove();
+    Swal.fire({
+        text: 'Are you sure you want to delete the commercial unit?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.post('/Commercial/CommercialManagementDelete/', { Id: id }, function (data) {
+                if (data == false) {
+                    //alert("Error Occured");
+                    Swal.fire({
+                        icon: 'error',
+                        text: 'Something went wrong'
+                    })
+                }
+                else {
+                    Swal.fire({
+                        icon: 'success',
+                        text: 'Commercial unit deleted successfully'
+                    }).then(() => {
+                        $('#sp__comm tbody tr#' + id + '').remove();
+                    })
+                }
+            });
         }
     });
 });
@@ -19193,7 +21102,12 @@ $(document).on("click", "#sea-com-file", function () {
         data: { ProjectId: proj, FormId: app },
         success: function (data) {
             if (data == false) {
-                alert("No Result Found");
+                //alert("No Result Found");
+                Swal.fire({
+                    icon: 'error',
+                    //title: 'Error!',
+                    text: "No Record Found"
+                });
                 return false;
             }
             if (data.length <= 0) {
@@ -19221,9 +21135,19 @@ $(document).on("click", "#sea-com-file", function () {
         },
         error: function (xmlhttprequest, textstatus, message) {
             if (textstatus === "timeout") {
-                alert("got timeout");
+                //alert("got timeout");
+                Swal.fire({
+                    icon: 'error',
+                    //title: 'Error!',
+                    text: "Request timed out"
+                });
             } else {
-                alert(textstatus);
+                //alert(textstatus);
+                Swal.fire({
+                    icon: 'error',
+                    //title: 'Error!',
+                    text: 'Something went wrong'
+                });
             }
         }
     });
@@ -19233,7 +21157,12 @@ $(document).on("click", "#sea-com-file", function () {
         data: { ProjName: projName, Unit: unit },
         success: function (data) {
             if (data == false) {
-                alert("No Result Found");
+                //alert("No Result Found");
+                Swal.fire({
+                    icon: 'error',
+                    //title: 'Error!',
+                    text: "No Record Found"
+                });
                 return false;
             }
             $('#receipt-data').parent().show();
@@ -19257,9 +21186,19 @@ $(document).on("click", "#sea-com-file", function () {
         },
         error: function (xmlhttprequest, textstatus, message) {
             if (textstatus === "timeout") {
-                alert("got timeout");
+                //alert("got timeout");
+                Swal.fire({
+                    icon: 'error',
+                    //title: 'Error!',
+                    text: "Request timed out"
+                });
             } else {
-                alert(textstatus);
+                //alert(textstatus);
+                Swal.fire({
+                    icon: 'error',
+                    //title: 'Error!',
+                    text: 'Something went wrong'
+                });
             }
         }
     });
@@ -19269,7 +21208,11 @@ $(document).on("change", "#Comm__Allotment__Letter", function () {
     var id = $("#plt-id").val();
     if (this.checked) {
         $.post('/Commercial/AllotmentLetterStatus/', { Id: id, Status: 1 }, function () {
-            alert("Requested")
+            //alert("Requested")
+            Swal.fire({
+                icon: 'success',
+                text: 'Requested for verification successfully'
+                })
         });
     } else {
         $.post('/Commercial/AllotmentLetterStatus/', { Id: id, Status: 0 }, function () {
@@ -19278,105 +21221,120 @@ $(document).on("change", "#Comm__Allotment__Letter", function () {
 });
 //
 $(document).on("click", ".fi-reg-ath", function () {
-    plotowncount++;
-    if (plotowncount <= 6) {
-        var html2 =
-            ' <hr /><div class="add-reg-id" id="add-reg-' + plotowncount + '" >' +
-            '<i class="ti-trash rm-reg-fl   pointer" style="float:right;"></i>' +
-            '<div class="form-row">' +
-            //'<div class="form-row col-md-12">' +
-            //'<div class="form-group  own-det" style="margin-left:85%"  id="' + plotowncount + '">' +
-            //'<img style="margin-top:0px" src="/assets/static/images/no-img.png" width="200" height="180" data-id="' + plotowncount + '" id="own_img" name="Owner_Image1" />' +
-            //'<input type="hidden"  data-id="' + plotowncount + '" id="image" name="Image" required />' +
-            //'<input type="button" class="btn btn-info own-img add-own-img" id="add-own-img1" style="margin-top:10px;" data-id="' + plotowncount + '" data-toggle="modal" value="Upload Image" data-target="#Modal" />' +
-            //'</div>' +
-            //'</div>' +
-            '<h6 class=" mB-0 add-reg-counter">' + plotowncount + '.</h6>' +
-            '<div class="form-group col-md-3">' +
-            '<label>Name</label>' +
-            '<input type="text" class="form-control Name" id="Name" required data-id="' + plotowncount + '">' +
-            '</div>' +
-            '<div class="form-group col-md-3">' +
-            '<label>Fathers/Husbands Name</label>' +
-            '<input type="text" class="form-control Father_Husband" id="Father_Husband" required data-id="' + plotowncount + '">' +
-            '</div>' +
-            '<div class="form-group col-md-3">' +
-            '<label>CNIC / NICOP</label>' +
-            '<input type="text" class="form-control" id="CNIC_NICOP" pattern="[0-9+]{5}-[0-9+]{7}-[0-9]{1}|[0-9+]{6}-[0-9+]{6}-[0-9]{1}" placeholder="12345-1234567-1   or   123456-123456-1" required data-id="' + plotowncount + '">' +
-            '</div>' +
-            '<div class="form-group col-md-2">' +
-            '<label>Date Of Birth</label>' +
-            '<input type="text" class="form-control" id="Date_Of_Birth" data-provide="datepicker" required data-id="' + plotowncount + '">' +
-            '</div>' +
-            '<div class="form-group col-md-6">' +
-            '<label>Postal Address</label>' +
-            '<input type="text" class="form-control" id="Postal_Address" placeholder="1234 Main St" required data-id="' + plotowncount + '">' +
-            '</div>' +
-            '<div class="form-group col-md-6">' +
-            '<label>Residential Address</label>' +
-            '<input type="text" class="form-control Residential_Address" id="Residential_Address" placeholder="Apartment, Plot, or floor" required data-id="' + plotowncount + '">' +
-            '</div>' +
-            '<div class="form-group col-md-2">' +
-            '<label>Select City</label>' +
-            '<select class="form-control city" data-id="' + plotowncount + '"></select>' +
-            '</div>' +
-            '<div class="form-group col-md-3">' +
-            '<label>Occupation</label>' +
-            '<input type="text" class="form-control" id="Occupation" name="" required data-id="' + plotowncount + '">' +
-            '</div>' +
-            '<div class="form-group col-md-2">' +
-            '<label>Nationality</label>' +
-            '<input type="text" class="form-control" id="Nationality" name="" required data-id="' + plotowncount + '">' +
-            '</div>' +
-            '<div class="form-group col-md-2">' +
-            '<label>Email</label>' +
-            '<input type="text" class="form-control" id="Email" name="" data-id="' + plotowncount + '">' +
-            '</div>' +
-            '<div class="form-group col-md-3">' +
-            '<label>Phone Office</label>' +
-            '<input type="text" class="form-control" id="Phone_Office" name="" data-id="' + plotowncount + '">' +
-            '</div>' +
-            '<div class="form-group col-md-3">' +
-            '<label>Residential</label>' +
-            '<input type="text" class="form-control" id="Residential" name="" data-id="' + plotowncount + '">' +
-            '</div>' +
-            '<div class="form-group col-md-3">' +
-            '<label>Mobile 1</label>' +
-            '<input type="text" class="form-control" id="Mobile_1"  placeholder="03121234567"  data-id="' + plotowncount + '">' +
-            '</div>' +
-            '<div class="form-group col-md-3">' +
-            '<label>Mobile 2</label>' +
-            '<input type="text" class="form-control" id="Mobile_2"  placeholder="03121234567" name="" data-id="' + plotowncount + '">' +
-            '</div>' +
-            '</div>' +
-            '<h6 class="c-grey-900">Nominee</h6>' +
-            '<div class="">' +
-            '<div class="form-row">' +
-            '<div class="form-group col-md-3">' +
-            '<label>Name</label>' +
-            '<input type="text" class="form-control" id="Nominee_Name" required data-id="' + plotowncount + '">' +
-            '</div>' +
-            '<div class="form-group col-md-2">' +
-            '<label>CNIC / NICOP</label>' +
-            '<input type="text" class="form-control" pattern="[0-9+]{5}-[0-9+]{7}-[0-9]{1}|[0-9+]{6}-[0-9+]{6}-[0-9]{1}" placeholder="12345-1234567-1 or 123456-123456-1" id="Nominee_CNIC_NICOP" required data-id="' + plotowncount + '">' +
-            '</div>' +
-            '<div class="form-group col-md-2">' +
-            '<label>Relation</label>' +
-            '<input class="form-control" id="Nominee_Relation" placeholder="" required data-id="' + plotowncount + '">' +
-            '</div>' +
-            '<div class="form-group col-md-5">' +
-            '<label>Address</label>' +
-            '<input type="text" class="form-control" id="Nominee_Address" placeholder="1234 Main St" required data-id="' + plotowncount + '">' +
-            '</div>' +
-            '</div>' +
-            '</div>' +
-            '</div>';
-        $('#ad-reg-form').append(html2);
-        Initcity(plotowncount);
-    }
-    else {
-        alert('You cannot enter more then 6 owners');
-    }
+    Swal.fire({
+        //title: 'Are you sure you want to Add New Owner?',
+        text: 'Are you sure you want to add transfer owner for this property?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            plotowncount++;
+            if (plotowncount <= 6) {
+                var html2 =
+                    ' <hr /><div class="add-reg-id" id="add-reg-' + plotowncount + '" >' +
+                    '<i class="ti-trash rm-reg-fl   pointer" style="float:right;"></i>' +
+                    '<div class="form-row">' +
+                    //'<div class="form-row col-md-12">' +
+                    //'<div class="form-group  own-det" style="margin-left:85%"  id="' + plotowncount + '">' +
+                    //'<img style="margin-top:0px" src="/assets/static/images/no-img.png" width="200" height="180" data-id="' + plotowncount + '" id="own_img" name="Owner_Image1" />' +
+                    //'<input type="hidden"  data-id="' + plotowncount + '" id="image" name="Image" required />' +
+                    //'<input type="button" class="btn btn-info own-img add-own-img" id="add-own-img1" style="margin-top:10px;" data-id="' + plotowncount + '" data-toggle="modal" value="Upload Image" data-target="#Modal" />' +
+                    //'</div>' +
+                    //'</div>' +
+                    '<h6 class=" mB-0 add-reg-counter">' + plotowncount + '.</h6>' +
+                    '<div class="form-group col-md-3">' +
+                    '<label>Name</label>' +
+                    '<input type="text" class="form-control Name" id="Name" required data-id="' + plotowncount + '">' +
+                    '</div>' +
+                    '<div class="form-group col-md-3">' +
+                    '<label>Fathers/Husbands Name</label>' +
+                    '<input type="text" class="form-control Father_Husband" id="Father_Husband" required data-id="' + plotowncount + '">' +
+                    '</div>' +
+                    '<div class="form-group col-md-3">' +
+                    '<label>CNIC / NICOP</label>' +
+                    '<input type="text" class="form-control" id="CNIC_NICOP" pattern="[0-9+]{5}-[0-9+]{7}-[0-9]{1}|[0-9+]{6}-[0-9+]{6}-[0-9]{1}" placeholder="12345-1234567-1   or   123456-123456-1" required data-id="' + plotowncount + '">' +
+                    '</div>' +
+                    '<div class="form-group col-md-2">' +
+                    '<label>Date Of Birth</label>' +
+                    '<input type="text" class="form-control" id="Date_Of_Birth" data-provide="datepicker" required data-id="' + plotowncount + '">' +
+                    '</div>' +
+                    '<div class="form-group col-md-6">' +
+                    '<label>Postal Address</label>' +
+                    '<input type="text" class="form-control" id="Postal_Address" placeholder="1234 Main St" required data-id="' + plotowncount + '">' +
+                    '</div>' +
+                    '<div class="form-group col-md-6">' +
+                    '<label>Residential Address</label>' +
+                    '<input type="text" class="form-control Residential_Address" id="Residential_Address" placeholder="Apartment, Plot, or floor" required data-id="' + plotowncount + '">' +
+                    '</div>' +
+                    '<div class="form-group col-md-2">' +
+                    '<label>Select City</label>' +
+                    '<select class="form-control city" data-id="' + plotowncount + '"></select>' +
+                    '</div>' +
+                    '<div class="form-group col-md-3">' +
+                    '<label>Occupation</label>' +
+                    '<input type="text" class="form-control" id="Occupation" name="" required data-id="' + plotowncount + '">' +
+                    '</div>' +
+                    '<div class="form-group col-md-2">' +
+                    '<label>Nationality</label>' +
+                    '<input type="text" class="form-control" id="Nationality" name="" required data-id="' + plotowncount + '">' +
+                    '</div>' +
+                    '<div class="form-group col-md-2">' +
+                    '<label>Email</label>' +
+                    '<input type="text" class="form-control" id="Email" name="" data-id="' + plotowncount + '">' +
+                    '</div>' +
+                    '<div class="form-group col-md-3">' +
+                    '<label>Phone Office</label>' +
+                    '<input type="text" class="form-control" id="Phone_Office" name="" data-id="' + plotowncount + '">' +
+                    '</div>' +
+                    '<div class="form-group col-md-3">' +
+                    '<label>Residential</label>' +
+                    '<input type="text" class="form-control" id="Residential" name="" data-id="' + plotowncount + '">' +
+                    '</div>' +
+                    '<div class="form-group col-md-3">' +
+                    '<label>Mobile 1</label>' +
+                    '<input type="text" class="form-control" id="Mobile_1"  placeholder="03121234567"  data-id="' + plotowncount + '">' +
+                    '</div>' +
+                    '<div class="form-group col-md-3">' +
+                    '<label>Mobile 2</label>' +
+                    '<input type="text" class="form-control" id="Mobile_2"  placeholder="03121234567" name="" data-id="' + plotowncount + '">' +
+                    '</div>' +
+                    '</div>' +
+                    '<h6 class="c-grey-900">Nominee</h6>' +
+                    '<div class="">' +
+                    '<div class="form-row">' +
+                    '<div class="form-group col-md-3">' +
+                    '<label>Name</label>' +
+                    '<input type="text" class="form-control" id="Nominee_Name" required data-id="' + plotowncount + '">' +
+                    '</div>' +
+                    '<div class="form-group col-md-2">' +
+                    '<label>CNIC / NICOP</label>' +
+                    '<input type="text" class="form-control" pattern="[0-9+]{5}-[0-9+]{7}-[0-9]{1}|[0-9+]{6}-[0-9+]{6}-[0-9]{1}" placeholder="12345-1234567-1 or 123456-123456-1" id="Nominee_CNIC_NICOP" required data-id="' + plotowncount + '">' +
+                    '</div>' +
+                    '<div class="form-group col-md-2">' +
+                    '<label>Relation</label>' +
+                    '<input class="form-control" id="Nominee_Relation" placeholder="" required data-id="' + plotowncount + '">' +
+                    '</div>' +
+                    '<div class="form-group col-md-5">' +
+                    '<label>Address</label>' +
+                    '<input type="text" class="form-control" id="Nominee_Address" placeholder="1234 Main St" required data-id="' + plotowncount + '">' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>';
+                $('#ad-reg-form').append(html2);
+                Initcity(plotowncount);
+            }
+            else {
+                //alert('You cannot enter more then 6 owners');
+                Swal.fire({
+                    icon: 'info',
+                    text: 'More than 6 owners are not can not be addedd'
+                });
+            }
+        }
+    });
 });
 //
 $(document).on("submit", "#re-com", function (e) {
@@ -19396,7 +21354,11 @@ $(document).on("submit", "#re-com", function (e) {
     var fileno = $("#app-num").val();
     var Disamt = $("#dis__amt").val();
     if (Disamt > 100) {
-        alert('Discount Amount Should be less then 100 %')
+        //alert('Discount Amount Should be less then 100 %')
+        Swal.fire({
+            icon: 'info',
+            text: 'The discount amount should be less than 100%'
+            })
         return false;
     }
     var img = $("#own_img").attr('src');
@@ -19497,45 +21459,81 @@ $(document).on("submit", "#re-com", function (e) {
     var con = confirm("Are you sure you want to Generate Receipt");
     var ch = $("#full__pay__Commer").is(":checked");
     if (ch == true) {
-        var con1 = confirm('Installment Plan will not apply because you checked Full payment');
+        //var con1 = confirm('Installment Plan will not apply because you checked Full payment');
+         var con1 = Swal.fire({
+         icon: 'info',
+         text: 'The installment plan will not be applied as you have selected full payment'
+     });
     }
     else {
         con1 = true;
     }
     if (con1) {
-        if (con) {
-            $.ajax({
-                type: "POST",
-                url: $(this).attr("action"),
-                contentType: "application/json; charset=utf-8",
-                data: JSON.stringify(alldata),
-                success: function (data) {
-                    if (data == false) {
-                        alert('Error Occured Or Installment Plan is invalid');
+        //var con = confirm("Are you sure you want to Generate Receipt");
+        //if (con) {
+        Swal.fire({
+            text: 'Are you sure you want to generate the Receipt?',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Yes',
+            cancelButtonText: 'No'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    type: "POST",
+                    url: $(this).attr("action"),
+                    contentType: "application/json; charset=utf-8",
+                    data: JSON.stringify(alldata),
+                    success: function (data) {
+                        if (data == false) {
+                            //alert('Error Occured Or Installment Plan is invalid');
+                            Swal.fire({
+                                icon: 'error',
+                                text: 'Something went wrong'
+                            });
+                        }
+                        else if (data.Status == "1") {
+                            //alert("Successfully Registerd");
+                            Swal.fire({
+                                icon: 'success',
+                                text: 'Unit successfully registered'
+                            }).then(() => {
+                                $(data.Receiptid).each(function (i) {
+                                    window.open("/Receipts/CommercialReceipt?Id=" + data.Receiptid[i] + "&Token=" + data.Token, '_blank');
+                                });
+                                //window.open("/Receipts/CommercialReceipt?Id=" + data.Receiptid + "&Token=" + data.Token, '_blank');
+                                window.location.reload();
+                            });
+                        }
+                        else if (data.Status == "2") {
+                            //alert("Wait Until You Payment is Clear from Bank");
+                            Swal.fire({
+                                icon: 'info',
+                                text: 'Kindly wait until your payment has been successfully processed by the bank'
+                            }).then(() => {
+                                window.open("/Receipts/CommercialReceipt?Id=" + data.Receiptid + "&Token=" + data.Token, '_blank');
+                                window.location.reload();
+                            });
+                        }
                     }
-                    else if (data.Status == "1") {
-                        alert("Successfully Registerd");
-                        $(data.Receiptid).each(function (i) {
-                            window.open("/Receipts/CommercialReceipt?Id=" + data.Receiptid[i] + "&Token=" + data.Token, '_blank');
-                        });
-                        //window.open("/Receipts/CommercialReceipt?Id=" + data.Receiptid + "&Token=" + data.Token, '_blank');
-                        window.location.reload();
+                    , error: function (xmlhttprequest, textstatus, message) {
+                        if (textstatus === "timeout") {
+                            //alert("got timeout");
+                            Swal.fire({
+                                icon: 'error',
+                                text: 'Request timed out'
+                            });
+                        } else {
+                            //alert(textstatus);
+                            Swal.fire({
+                                icon: 'error',
+                                text: 'Something went wrong'
+                            });
+                        }
                     }
-                    else if (data.Status == "2") {
-                        alert("Wait Until You Payment is Clear from Bank");
-                        window.open("/Receipts/CommercialReceipt?Id=" + data.Receiptid + "&Token=" + data.Token, '_blank');
-                        window.location.reload();
-                    }
-                }
-                , error: function (xmlhttprequest, textstatus, message) {
-                    if (textstatus === "timeout") {
-                        alert("got timeout");
-                    } else {
-                        alert(textstatus);
-                    }
-                }
-            });
-        }
+                });
+            }
+        });
     }
 });
 //
@@ -20048,62 +22046,112 @@ $(document).on('click', '#shft-inst-pln-r', function () {
     var filenum = $('#plt-no').text();
     var id = $("#plt-id").val();
     var mod = $("#module").val();
-    if (confirm("Are you sure you want to Shift installments to next Month ")) {
-        $.ajax({
-            type: "POST",
-            url: '/Installments/ShiftRightInstallments/',
-            data: { Id: id, Module: mod },
-            success: function (data) {
-                if (data) {
-                    alert("Updated");
-                    //$('.file-pymt-detls').load('/FileSystem/FilePymntDetail/', { FileId: filenum }, function () {
-                    //    SASUnLoad($('.file-pymt-detls'));
-                    //});
+    //if (confirm("Are you sure you want to Shift installments to next Month ")) {
+    Swal.fire({
+        text: 'Are you sure you want to shift installments to the next month?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                type: "POST",
+                url: '/Installments/ShiftRightInstallments/',
+                data: { Id: id, Module: mod },
+                success: function (data) {
+                    if (data) {
+                        //alert("Updated");
+                        Swal.fire({
+                            icon: 'success',
+                            text: 'Installments shifted to the next month successfully'
+                        });
+                        //$('.file-pymt-detls').load('/FileSystem/FilePymntDetail/', { FileId: filenum }, function () {
+                        //    SASUnLoad($('.file-pymt-detls'));
+                        //});
+                    }
+                    else {
+                        //alert("error");
+                        Swal.fire({
+                            icon: 'error',
+                            text: 'Something went wrong'
+                        });
+                    }
                 }
-                else {
-                    alert("error");
+                , error: function (xmlhttprequest, textstatus, message) {
+                    if (textstatus === "timeout") {
+                        //alert("got timeout");
+                        Swal.fire({
+                            icon: 'error',
+                            text: 'Request timed out'
+                        });
+                    } else {
+                        //alert(textstatus);
+                        Swal.fire({
+                            icon: 'error',
+                            text: 'Something went wrong'
+                        });
+                    }
                 }
-            }
-            , error: function (xmlhttprequest, textstatus, message) {
-                if (textstatus === "timeout") {
-                    alert("got timeout");
-                } else {
-                    alert(textstatus);
-                }
-            }
-        });
-    }
+            });
+        }
+    });
 });
 //
 $(document).on('click', '#shft-inst-pln-l', function () {
     var filenum = $('#plt-no').text();
     var id = $("#plt-id").val();
     var mod = $("#module").val();
-    if (confirm("Are you sure you want to Shift installments to Previous Month ")) {
-        $.ajax({
-            type: "POST",
-            url: '/Installments/ShiftLeftInstallments/',
-            data: { Id: id, Module: mod },
-            success: function (data) {
-                if (data) {
-                    alert("Updated");
-                    //$('.file-pymt-detls').load('/FileSystem/FilePymntDetail/', { FileId: filenum }, function () {
-                    //    SASUnLoad($('.file-pymt-detls'));
-                    //});
+    //if (confirm("Are you sure you want to Shift installments to Previous Month ")) {
+    Swal.fire({
+        text: 'Are you sure you want to shift installments to the previous month?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                type: "POST",
+                url: '/Installments/ShiftLeftInstallments/',
+                data: { Id: id, Module: mod },
+                success: function (data) {
+                    if (data) {
+                        //alert("Updated");
+                        Swal.fire({
+                            icon: 'success',
+                            text: 'Installments shifted to the previous month successfully'
+                        });
+                        //$('.file-pymt-detls').load('/FileSystem/FilePymntDetail/', { FileId: filenum }, function () {
+                        //    SASUnLoad($('.file-pymt-detls'));
+                        //});
+                    }
+                    else {
+                        //alert("error");
+                        Swal.fire({
+                            icon: 'error',
+                            text: 'Something went wrong'
+                        });
+                    }
                 }
-                else {
-                    alert("error");
+                , error: function (xmlhttprequest, textstatus, message) {
+                    if (textstatus === "timeout") {
+                        //alert("got timeout");
+                        Swal.fire({
+                            icon: 'error',
+                            text: 'Request timed out'
+                        });
+                    } else {
+                        //alert(textstatus);
+                        Swal.fire({
+                            icon: 'error',
+                            text: 'Something went wrong'
+                        });
+                    }
                 }
-            }
-            , error: function (xmlhttprequest, textstatus, message) {
-                if (textstatus === "timeout") {
-                    alert("got timeout");
-                } else {
-                    alert(textstatus);
-                }
-            }
-        });
-    }
+            });
+        }
+    });
 });
 //
 $(document).on("submit", "#gen-subs-recovery", function (e) {
@@ -20149,25 +22197,46 @@ $(document).on("click", "#assi-new-lead", function () {
         leadsCounter = leadsCounter + Number($(this).find('.userleadcount').val())
     });
     if (leadsCounter > leadCountTotal) {
-        alert("Cannot Assign more than uploaded leads");
+        //alert("Cannot Assign more than uploaded leads");
+        Swal.fire({
+            icon: 'info',
+            text: 'Cannot assign more than available leads'
+        });
         return false;
     }
-    var con = confirm("Are you sure you want to Assign Leads");
-    if (con) {
-        $.ajax({
-            type: 'POST',
-            url: '/PropertyDeal/AssignLeadsToSales/',
-            dataType: "json",
-            data: { SalesLeads: salesLeads },
-            success: function (data) {
-                alert('Leads Successfully Assigned');
-                window.location.reload();
-            },
-            error: function () {
-                alert('Error Occured');
-            }
-        });
-    }
+    //var con = confirm("Are you sure you want to Assign Leads");
+    //if (con) {
+    Swal.fire({
+        text: 'Are you sure you want to assign leads?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                type: 'POST',
+                url: '/PropertyDeal/AssignLeadsToSales/',
+                dataType: "json",
+                data: { SalesLeads: salesLeads },
+                success: function (data) {
+                    //alert('Leads Successfully Assigned');
+                    Swal.fire({
+                        icon: 'success',
+                        text: 'Leads assigned successfully'
+                    });
+                    window.location.reload();
+                },
+                error: function () {
+                    //alert('Error Occured');
+                    Swal.fire({
+                        icon: 'error',
+                        text: 'Something went wrong'
+                    });
+                }
+            });
+        }
+    });
 });
 $(document).on("click", ".req-token", function () {
     var id = $("#l-id").val();
@@ -20262,24 +22331,46 @@ $(document).on("click", "#gen-prem-rec", function (e) {
         data: { Id: id, PaymentType: paytype, InstNo: instNo, InstDate: instDate, Bank: bank, Branch: branch, TransactionId: trans },
         success: function (data) {
             if (data == false) {
-                alert('Error Occured');
+                //alert('Error Occured');
+                Swal.fire({
+                    icon: 'error',
+                    text: 'Something went wrong'
+                });
             }
             else if (data.Status == "1") {
-                alert("Successfully Registerd");
-                window.open("/Receipts/CommercialReceipt?Id=" + data.Receiptid + "&Token=" + data.Token, '_blank');
-                window.location.reload();
+                //alert("Successfully Registerd");
+                Swal.fire({
+                    icon: 'success',
+                    text: 'Successfully registered'
+                }).the(() => {
+                    window.open("/Receipts/CommercialReceipt?Id=" + data.Receiptid + "&Token=" + data.Token, '_blank');
+                    window.location.reload();
+                })
             }
             else if (data.Status == "2") {
-                alert("Wait Until You Payment is Clear from Bank");
-                window.open("/Receipts/CommercialReceipt?Id=" + data.Receiptid + "&Token=" + data.Token, '_blank');
-                window.location.reload();
+                //alert("Wait Until You Payment is Clear from Bank");
+                Swal.fire({
+                    icon: 'info',
+                    text: 'Kindly await confirmation of your payment clearance from the bank'
+                }).then(() => {
+                    window.open("/Receipts/CommercialReceipt?Id=" + data.Receiptid + "&Token=" + data.Token, '_blank');
+                    window.location.reload();
+                })
             }
         }
         , error: function (xmlhttprequest, textstatus, message) {
             if (textstatus === "timeout") {
-                alert("got timeout");
+                //alert("got timeout");
+                Swal.fire({
+                    icon: 'error',
+                    text: 'Request timed out'
+                });
             } else {
-                alert(textstatus);
+                //alert(textstatus);
+                Swal.fire({
+                    icon: 'error',
+                    text: 'Something went wrong'
+                });
             }
         }
     });
@@ -20373,7 +22464,7 @@ $(document).on("change", ".flr_com_str", function () {
 });
 $(document).on("change", "#Project", function () {
     var prj = $("#Project option:selected").text();
-    if (prj == "Meher Estate Developers") {
+    if (prj == "Grand City") {
         $('.Block').show();
         $('.Offer_Price').show();
         $('.Source').show();
@@ -20450,21 +22541,38 @@ $(document).on('click', "#ints-add", function (e) {
     var mod = $("#module").val();
     var type = $(".inst-type option:selected").val();
     var nam = $(".inst-type option:selected").text();
-    var con = confirm("Are you sure you want to Add Installment Row");
-    if (con) {
-        $.ajax({
-            type: "POST",
-            url: "/Installments/AddInstallmentPlann",
-            data: { Amount: amt, Date: datee, Type: type, id: $("#plt-id").val(), Name: nam, Module: mod },
-            success: function (data) {
-                alert("added");
-                window.location.reload(true);
-            },
-            error: function () {
-                alert("Error Occured");
-            }
-        });
-    }
+    //var con = confirm("Are you sure you want to Add Installment Row");
+    //if (con) {
+    Swal.fire({
+        text: 'Are you sure you want to add the installment?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                type: "POST",
+                url: "/Installments/AddInstallmentPlann",
+                data: { Amount: amt, Date: datee, Type: type, id: $("#plt-id").val(), Name: nam, Module: mod },
+                success: function (data) {
+                    //alert("added");
+                    Swal.fire({
+                        icon: 'success',
+                        text: 'Installment added successfully'
+                    });
+                    window.location.reload(true);
+                },
+                error: function () {
+                    //alert("Error Occured");
+                    Swal.fire({
+                        icon: 'error',
+                        text: 'Something went wrong'
+                    });
+                }
+            });
+        }
+    });
 });
 //
 $(document).on('click', '.installment-plan-row-add', function () {
@@ -20514,31 +22622,56 @@ $(document).on("click", ".add_disc_comm", function (e) {
     var rem = $("#remrk").val();
     var id = $(this).data("unit");
     var disDate = $('#dis-date').val();
-    var con = confirm("Are you sure you want to add Discount");
-    if (con) {
-        $.ajax({
-            type: "POST",
-            url: '/Commercial/CommercialUnitDiscount/',
-            data: { TotalAmt: ttl, DiscountAmt: dis, Remarks: rem, Id: id, DiscountDate: disDate },
-            success: function (data) {
-                if (data) {
-                    alert("Discount Added");
+    //var con = confirm("Are you sure you want to add Discount");
+    //if (con) {
+    Swal.fire({
+        text: 'Are you sure you want to add discount?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                type: "POST",
+                url: '/Commercial/CommercialUnitDiscount/',
+                data: { TotalAmt: ttl, DiscountAmt: dis, Remarks: rem, Id: id, DiscountDate: disDate },
+                success: function (data) {
+                    if (data) {
+                        //alert("Discount Added");
+                        Swal.fire({
+                            icon: 'success',
+                            text: 'Discount added successfully'
+                        })
+                    }
+                    else {
+                        //alert("Error. Try Again Later");
+                        Swal.fire({
+                            icon: 'error',
+                            text: 'Something went wrong'
+                        });
+                    }
+                },
+                error: function (xmlhttprequest, textstatus, message) {
+                    if (textstatus === "timeout") {
+                        $('#gen-rec').attr("disabled", false);
+                        //alert("got timeout");
+                        Swal.fire({
+                            icon: 'error',
+                            text: 'Request timed out'
+                        });
+                    } else {
+                        $('#gen-rec').attr("disabled", false);
+                        //alert(textstatus);
+                        Swal.fire({
+                            icon: 'error',
+                            text: 'Something went wrong'
+                        });
+                    }
                 }
-                else {
-                    alert("Error. Try Again Later");
-                }
-            },
-            error: function (xmlhttprequest, textstatus, message) {
-                if (textstatus === "timeout") {
-                    $('#gen-rec').attr("disabled", false);
-                    alert("got timeout");
-                } else {
-                    $('#gen-rec').attr("disabled", false);
-                    alert(textstatus);
-                }
-            }
-        });
-    }
+            });
+        }
+    });
 });
 $(document).on("click", "#ser-arr-date", function () {
     var month = $(".sel-date").val();
@@ -20553,55 +22686,90 @@ $(document).on('click', '#ch-inst-plan', function () {
 });
 $(document).on("click", "#up-inst-plan", function () {
     if (!$("input[type='radio'].intst-id").is(':checked')) {
-        alert("Please Select a Plan");
+        //alert("Please Select a Plan");
+        Swal.fire({
+            icon: 'info',
+            text: 'Select a plan to proceed'
+        });
         return false;
     }
     var id = $("input[type='radio'].intst-id:checked").val();
     var plt_id = $("#plt-id").val();
     var mod = $("#module").val();
-    if (confirm("Are you sure you want to update the Installment Plan")) {
-        $.ajax({
-            type: "POST",
-            url: '/Installments/UpdateInstallmentPlan/',
-            data: { Id: id, File_Id: plt_id, Module: mod },
-            success: function (data) {
-                if (data.Status) {
-                    window.location.reload();
+    //if (confirm("Are you sure you want to update the Installment Plan")) {
+    Swal.fire({
+        text: 'Are you sure you want to update the installment plan?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                type: "POST",
+                url: '/Installments/UpdateInstallmentPlan/',
+                data: { Id: id, File_Id: plt_id, Module: mod },
+                success: function (data) {
+                    if (data.Status) {
+                        Swal.fire({
+                            icon: 'success',
+                            text: 'Installment plan updated successfully'
+                        }).then(() => {
+                            window.location.reload();
+                        })
+                    }
+                    else {
+                        window.location.reload();
+                    }
+                },
+                error: function () {
+                    //alert("Error Occured");
+                    Swal.fire({
+                        icon: 'error',
+                        text: 'Something went wrong'
+                    });
+                    $('#gen-rec').attr("disabled", false);
                 }
-                else {
-                    window.location.reload();
-                }
-            },
-            error: function () {
-                alert("Error Occured");
-                $('#gen-rec').attr("disabled", false);
-            }
-        });
-    }
+            });
+        }
+    });
 });
 $(document).on('click', '#com-file-del', function () {
     var ownId = $('#OwnId').val();
     var comid = $('#shp-id').val();
-    var con = confirm("Are you sure you want to Mark this File Delivered?");
-    if (con) {
-        $.ajax({
-            type: "POST",
-            url: "/Commercial/MarkCommercialFileDelivered/",
-            data: { OwnerId: ownId },
-            success: function (data) {
-                if (data == true) {
-                    $("#com-det").load("/Commercial/CommercialInformationSearch/", { Commercial_Id: comid }, function () {
-                        $('html, body').animate({
-                            scrollTop: $("#com-det").offset().top
-                        }, 1000);
+    //var con = confirm("Are you sure you want to Mark this File Delivered?");
+    //if (con) {
+    Swal.fire({
+        text: 'Are you sure you want to confirm the delivered status for this file?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                type: "POST",
+                url: "/Commercial/MarkCommercialFileDelivered/",
+                data: { OwnerId: ownId, Commercial_Id: comid },
+                success: function (data) {
+                    if (data == true) {
+                        $("#com-det").load("/Commercial/CommercialInformationSearch/", { Commercial_Id: comid }, function () {
+                            $('html, body').animate({
+                                scrollTop: $("#com-det").offset().top
+                            }, 1000);
+                        });
+                    }
+                },
+                error: function () {
+                    //alert("Error Occured");
+                    Swal.fire({
+                        icon: 'error',
+                        text: 'Something went wrong'
                     });
                 }
-            },
-            error: function () {
-                alert("Error Occured");
-            }
-        });
-    }
+            });
+        }
+    });
 });
 $(document).on("click", ".mat-rec-rep", function () {
     var from = $("#from").val();
@@ -20610,15 +22778,33 @@ $(document).on("click", ".mat-rec-rep", function () {
 });
 $(document).on("click", ".p-tran-lett", function (e) {
     var id = $(this).data("ownid");
-    if (confirm("Are you sure you want to Generate Letter")) {
-        window.open("/Transfer/PlotsTransferLetter?Id=" + id, '_blank');
-    }
+    //if (confirm("Are you sure you want to Generate Letter")) {
+    Swal.fire({
+        text: 'Are you sure you want to generate transfer letter?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            window.open("/Transfer/PlotsTransferLetter?Id=" + id, '_blank');
+        }
+    });
 });
 $(document).on("click", ".c-tran-lett", function (e) {
     var id = $(this).data("ownid");
-    if (confirm("Are you sure you want to Generate Letter")) {
-        window.open("/Transfer/CommercialTransferLetter?Id=" + id, '_blank');
-    }
+    //if (confirm("Are you sure you want to Generate Letter")) {
+    Swal.fire({
+        text: 'Are you sure you want to generate the transfer Letter?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            window.open("/Transfer/CommercialTransferLetter?Id=" + id, '_blank');
+        }
+    });
 });
 $(document).on('click', '.rmv-emp-bank-account', function () {
     var EmpId = $(this).data('empid');
@@ -21356,8 +23542,16 @@ $(document).on("click", "#com-transf-veri", function () {
 //
 $(document).on("click", ".com-tran-req-det", function () {
     var id = $("#shp-lst").val();
-    $("#shop-det").empty();
-    $("#shop-det").load("/Transfer/CommercialTransferData/", { Id: id });
+    if (id) {
+        $("#shop-det").empty();
+        $("#shop-det").load("/Transfer/CommercialTransferData/", { Id: id });
+    }
+    else {
+        Swal.fire({
+            icon: 'info',
+            text: 'Select commercial unit to proceed'
+        });
+    }
 });
 //
 //
@@ -21453,7 +23647,17 @@ $(document).on('click', '.up_inst_btn_plot', function () {
 //
 //
 $(document).on('click', '.btnRemove', function () {
-    $(this).closest('.arrElements').remove();
+    Swal.fire({
+        text: 'Are you sure you want to discard the row?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $(this).closest('.arrElements').remove();
+        }
+    });
 });
 $(document).on("change", ".amunt", function () {
     var total = 0;
@@ -22497,8 +24701,22 @@ function DailyAttearlyStrtExcelReport(filename) {
 $(document).on("click", ".Mortgaged-plt", function () {
     var chkstat = $(this).is(":checked");
     var id = $(this).val();
-    $.post('/Plots/UpdatePlotMortgagedStatus/', { Id: id, Status: chkstat }, function (data) {
-        alert("Plot Mortgaged Status Updated");
+    Swal.fire({
+        text: 'Are you sure you want to mark plot as mortgaged?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.post('/Plots/UpdatePlotMortgagedStatus/', { Id: id, Status: chkstat, dataStatus: dataStatus }, function (data) {
+                //alert("Plot Mortgaged Status Updated");
+                Swal.fire({
+                    icon: 'success',
+                    text: 'Plot marked as mortgaged successfully'
+                })
+            });
+        }
     });
 });
 //

@@ -1,4 +1,8 @@
-﻿@using (Html.BeginForm("FileStatusUpdate", "FileSystem", FormMethod.Post, new { @id = "up-f-stat", @class = "", role = "form", autocomplete = "off" }))
+﻿<!-- SweetAlert2 CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+<!-- SweetAlert2 JS -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+@using (Html.BeginForm("FileStatusUpdate", "FileSystem", FormMethod.Post, new { @id = "up-f-stat", @class = "", role = "form", autocomplete = "off" }))
 {
     @Html.AntiForgeryToken()
     <input type="hidden" name="FileId" value="@ViewBag.FileId" id="FileId" />

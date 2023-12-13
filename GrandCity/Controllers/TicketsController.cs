@@ -10,7 +10,7 @@ using MeherEstateDevelopers.Filters;
 using MeherEstateDevelopers.Models;
 using MeherEstateDevelopers;
 
-namespace Management_Information_System.Controllers
+namespace MeherEstateDevelopers.Controllers
 {
     [Authorize]
     [LogAction]

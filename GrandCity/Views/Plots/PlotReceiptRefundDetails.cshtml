@@ -1,4 +1,8 @@
 ﻿@model MeherEstateDevelopers.Models.PlotRefundDetailData
+<!-- SweetAlert2 CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+<!-- SweetAlert2 JS -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <link href="~/Content/albery.css" rel="stylesheet" />
 @{ Layout = "~/Views/Shared/_StaffLayout.cshtml"; }
 @if (Model.PlotOwners.Any())
@@ -24,7 +28,7 @@
                         else
                         {
                             <div class="col-md-4">
-                                <div class="alert alert-success" style="text-align:center" role="alert">Forward for Refund</div>
+                                <div class="alert alert-success" style="text-align:center" role="alert">Forwarded for Refund</div>
                             </div>
                         }
 
