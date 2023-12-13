@@ -59,21 +59,36 @@
             alert('Select type');
             return false;
         }
-        var con = confirm("Are you sure you want to Move this Letter");
-        if (con) {
-            $.ajax({
-                type: "POST",
-                url: '/FileSystem/WarningIssuesFileMove/',
-                data: { Id: id, OwnerId: ownid, Type: type },
-                success: function (data) {
-                    $('#over').load('/FileSystem/QualifyingFiles/');
-                    return false;
-                },
-                error: function () {
-                    alert("Error Occured");
-                }
-            });
-        }
+        //var con = confirm("Are you sure you want to Move this Letter");
+        //if (con) {
+        Swal.fire({
+            text: 'Are you sure you want to transition this letter to another status?',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Yes',
+            cancelButtonText: 'No'
+        }).then((result) => {
+            if (result.isConfirmed) {
+
+                $.ajax({
+                    type: "POST",
+                    url: '/FileSystem/WarningIssuesFileMove/',
+                    data: { Id: id, OwnerId: ownid, Type: type },
+                    success: function (data) {
+                        $('#over').load('/FileSystem/QualifyingFiles/');
+                        return false;
+                    },
+                    error: function () {
+                        //alert("Error Occured");
+                        Swal.fire({
+                            icon: 'error',
+                            text: 'Something went wrong'
+                        });
+
+                    }
+                });
+            }
+        });
     });
 
 
@@ -89,21 +104,36 @@
             alert('Select type');
             return false;
         }
-        var con = confirm("Are you sure you want to Move this Letter");
-        if (con) {
-            $.ajax({
-                type: "POST",
-                url: '/FileSystem/WarningIssuesFileMove/',
-                data: { Id: id, OwnerId: ownid, Type: type },
-                success: function (data) {
-                    $('#over').load('/FileSystem/FirstWarning/');
-                    return false;
-                },
-                error: function () {
-                    alert("Error Occured");
-                }
-            });
-        }
+        //var con = confirm("Are you sure you want to Move this Letter");
+        //if (con) {
+        Swal.fire({
+            text: 'Are you sure you want to transition this letter to another status?',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Yes',
+            cancelButtonText: 'No'
+        }).then((result) => {
+            if (result.isConfirmed) {
+
+                $.ajax({
+                    type: "POST",
+                    url: '/FileSystem/WarningIssuesFileMove/',
+                    data: { Id: id, OwnerId: ownid, Type: type },
+                    success: function (data) {
+                        $('#over').load('/FileSystem/FirstWarning/');
+                        return false;
+                    },
+                    error: function () {
+                        //alert("Error Occured");
+                        Swal.fire({
+                            icon: 'error',
+                            text: 'Something went wrong'
+                        });
+
+                    }
+                });
+            }
+        });
     });
 
 
@@ -118,21 +148,36 @@
             alert('Select type');
             return false;
         }
-        var con = confirm("Are you sure you want to Move this Letter");
-        if (con) {
-            $.ajax({
-                type: "POST",
-                url: '/FileSystem/WarningIssuesFileMove/',
-                data: { Id: id, OwnerId: ownid, Type: type },
-                success: function (data) {
-                    $('#over').load('/FileSystem/SecWarning/');
-                    return false;
-                },
-                error: function () {
-                    alert("Error Occured");
-                }
-            });
-        }
+        //var con = confirm("Are you sure you want to Move this Letter");
+        //if (con) {
+        Swal.fire({
+            text: 'Are you sure you want to transition this letter to another status?',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Yes',
+            cancelButtonText: 'No'
+        }).then((result) => {
+            if (result.isConfirmed) {
+
+                $.ajax({
+                    type: "POST",
+                    url: '/FileSystem/WarningIssuesFileMove/',
+                    data: { Id: id, OwnerId: ownid, Type: type },
+                    success: function (data) {
+                        $('#over').load('/FileSystem/SecWarning/');
+                        return false;
+                    },
+                    error: function () {
+                        //alert("Error Occured");
+                        Swal.fire({
+                            icon: 'error',
+                            text: 'Something went wrong'
+                        });
+
+                    }
+                });
+            }
+        });
     });
 
 
@@ -145,21 +190,36 @@
             alert('Select type');
             return false;
         }
-        var con = confirm("Are you sure you want to Move this Letter");
-        if (con) {
-            $.ajax({
-                type: "POST",
-                url: '/FileSystem/WarningIssuesFileMove/',
-                data: { Id: id, OwnerId: ownid, Type: type },
-                success: function (data) {
-                    $('#over').load('/FileSystem/CancelledFiles/');
-                    return false;
-                },
-                error: function () {
-                    alert("Error Occured");
-                }
-            });
-        }
+        //var con = confirm("Are you sure you want to Move this Letter");
+        //if (con) {
+        Swal.fire({
+            text: 'Are you sure you want to transition this letter to another status?',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Yes',
+            cancelButtonText: 'No'
+        }).then((result) => {
+            if (result.isConfirmed) {
+
+                $.ajax({
+                    type: "POST",
+                    url: '/FileSystem/WarningIssuesFileMove/',
+                    data: { Id: id, OwnerId: ownid, Type: type },
+                    success: function (data) {
+                        $('#over').load('/FileSystem/CancelledFiles/');
+                        return false;
+                    },
+                    error: function () {
+                        //alert("Error Occured");
+                        Swal.fire({
+                            icon: 'error',
+                            text: 'Something went wrong'
+                        });
+
+                    }
+                });
+            }
+        });
     });
 
 </script>

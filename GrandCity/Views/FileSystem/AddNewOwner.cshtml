@@ -1,4 +1,7 @@
-﻿
+﻿<!-- SweetAlert2 CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+<!-- SweetAlert2 JS -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <input type="hidden" value="@ViewBag.filid" id="fileID" />
 <input type="hidden" value="@ViewBag.grp" id="group" />
 <div class="row">
@@ -174,22 +177,39 @@
             , FileId: flId
             , Group_Tag: grp
         };
-        $.ajax({
-            type: "POST",
-            contentType: "application/json; charset=utf-8",
-            url: '/FileSystem/AddOwnergrp/',
-            data: JSON.stringify(od),
-            success: function (data) {
-                alert("Owner information Added");
-                SASLoad($('.file-owners-detls'));
-                $('.file-owners-detls').load('/FileSystem/FileOwnerDetail/', { FileId: $("#fileID").val() }, function () {
-                    SASUnLoad($('.file-owners-detls'));
+        Swal.fire({
+            text: 'Are you sure you want to this file owner?',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Yes',
+            cancelButtonText: 'No'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    type: "POST",
+                    contentType: "application/json; charset=utf-8",
+                    url: '/FileSystem/AddOwnergrp/',
+                    data: JSON.stringify(od),
+                    success: function (data) {
+                        //alert("Owner information Added");
+                        Swal.fire({
+                            icon: 'success',
+                            text: 'File owner added successfully'
+                        }).then(() => {
+                            SASLoad($('.file-owners-detls'));
+                            $('.file-owners-detls').load('/FileSystem/FileOwnerDetail/', { FileId: $("#fileID").val() }, function () {
+                                SASUnLoad($('.file-owners-detls'));
+                            });
+                        })
+                    },
+                    error: function (data) {
+                        //alert('Failed to Add owner\'s information. Please try again.');
+                        Swal.fire({
+                            icon: 'error',
+                            text: 'Something went wrong'
+                        });
+                    }
                 });
-
-            },
-            error: function (data) {
-                alert('Failed to Add owner\'s information. Please try again.');
-
             }
         });
     });

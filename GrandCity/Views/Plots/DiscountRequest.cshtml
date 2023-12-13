@@ -1,5 +1,8 @@
 ﻿@model MeherEstateDevelopers.Models.PlotLastOwnerLedger
-
+<!-- SweetAlert2 CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+<!-- SweetAlert2 JS -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <div class="col-md-12">
     <div class="panel-heading">
         <h5>Plot Details</h5>
@@ -64,45 +67,77 @@
 
 <script>
     $('.snd-disc-apprvl-btn-fdhjk').unbind().click(function () {
-        let conf = confirm('Are you sure you want to send this discount application for approval?');
+        debugger
+        //let conf = confirm('Are you sure you want to send this discount application for approval?');
 
-        if (!conf) {
-            return;
-        }
-
-        let plt = $('.plt-id').val();
-        let rzn = $('.rzn-disc-fkjdh').val();
-        let amt = $('.disc-amt-fdshjk').val();
-        let urge = $('.req-urg-jskfhd option:selected').val();
-
-        if (amt == '' || plt == '' || rzn == '') {
-            alert('Please fill all fields before proceeding.');
-            return;
-        }
-        showLoader();
-        //yahan pe ajax maarni hai
-        $.ajax({
-
-            type: "POST",
-            url: '/Plots/SaveDiscountRequest/',
-            data: { plot: plt, amt: amt, rems: rzn, urgency: urge},
-            success: function (data) {
-                if (data) {
-                    alert("Request has been dispatched successfully.");
-                    closeModal();
-                    hideLoader();
-                }
-                else {
-                    alert("Failed to dispatch the request. Please try again");
-                    hideLoader();
-                }
+        //if (!conf) {
+        //    return;
+        //}
+        Swal.fire({
+            text: 'Are you sure you want to submit this discount application for approval?',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Yes',
+            cancelButtonText: 'No'
+        }).then((result) => {
+            if (!result.isConfirmed) {
+                return;
             }
-            , error: function (xmlhttprequest, textstatus, message) {
-                if (textstatus === "timeout") {
-                    alert("got timeout");
-                } else {
-                    alert(textstatus);
+            else {
+                let plt = $('.plt-id').val();
+                let rzn = $('.rzn-disc-fkjdh').val();
+                let amt = $('.disc-amt-fdshjk').val();
+                let urge = $('.req-urg-jskfhd option:selected').val();
+
+                if (amt == '' || plt == '' || rzn == '') {
+                    //alert('Please fill all fields before proceeding.');
+                    Swal.fire({
+                        icon: 'info',
+                        text: 'Populate all input fields to proceed'
+                    });
+                    return;
                 }
+                showLoader();
+                $.ajax({
+
+                    type: "POST",
+                    url: '/Plots/SaveDiscountRequest/',
+                    data: { plot: plt, amt: amt, rems: rzn, urgency: urge },
+                    success: function (data) {
+                        if (data) {
+                            //alert("Request has been dispatched successfully.");
+                            Swal.fire({
+                                icon: 'success',
+                                text: 'The request has been sent successfully'
+                            });
+                            closeModal();
+                            hideLoader();
+                        }
+                        else {
+                            //alert("Failed to dispatch the request. Please try again");
+                            Swal.fire({
+                                icon: 'error',
+                                text: 'Something went wrong'
+                            });
+                            hideLoader();
+                        }
+                    }
+                    , error: function (xmlhttprequest, textstatus, message) {
+                        if (textstatus === "timeout") {
+                            //alert("got timeout");
+                            Swal.fire({
+                                icon: 'error',
+                                text: 'Request timed out'
+                            });
+                        } else {
+                            //alert(textstatus);
+                            Swal.fire({
+                                icon: 'error',
+                                text: 'Something went wrong'
+                            });
+                        }
+                    }
+                });
             }
         });
     });

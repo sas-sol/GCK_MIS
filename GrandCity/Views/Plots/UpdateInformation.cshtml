@@ -1,7 +1,9 @@
 ﻿@model MeherEstateDevelopers.Models.PlotDetailData
-@{
-    var CNo = ViewBag.currencyNo;
-}
+<!-- SweetAlert2 CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+<!-- SweetAlert2 JS -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <div class="bgc-white p-20 bd">
     <div class="form-row row">
         <div class="col-md-12">
@@ -555,9 +557,17 @@
     })
     $(document).ready(function () {
         $('.add__Owner__from__plts').unbind().click(function () {
-            debugger
-            let iden = $(this).attr('data-id');
-            let strct = `<div class="row own-row-dat" data-id="${iden}" id = "${iden}">
+            Swal.fire({
+                //title: 'Are you sure you want to Add New Owner?',
+                text: 'Are you sure you want to Add another Owner?',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'Yes',
+                cancelButtonText: 'No'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    let iden = $(this).attr('data-id');
+                    let strct = `<div class="row own-row-dat" data-id="${iden}" id = "${iden}">
                                 <div class="col-md-12">
                                     <div class="form-row">
                                         <div class="form-group col-md-3">
@@ -672,8 +682,9 @@
                                 </div>
                             </div><br/>`;
 
-            //$('.' + iden).append(strct);
-            $('.Tran-own').append(strct); 
+                    $('.' + iden).append(strct);
+                }
+            });
         });
     });
 

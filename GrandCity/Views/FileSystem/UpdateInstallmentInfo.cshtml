@@ -1,9 +1,12 @@
 ﻿@model IEnumerable<MeherEstateDevelopers.Models.File_Installments>
-
-    <div class="row">
-        <div class="col-md-10">
-            <div class="installmentStructure" style="overflow-y:scroll; overflow-x:hidden; height:400px;">
-                <input type="hidden" id="com_id" name="comId" value="@ViewBag.id" />
+<!-- SweetAlert2 CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+<!-- SweetAlert2 JS -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<div class="row">
+    <div class="col-md-10">
+        <div class="installmentStructure" style="overflow-y:scroll; overflow-x:hidden; height:400px;">
+            <input type="hidden" id="com_id" name="comId" value="@ViewBag.id" />
 
                 @foreach (var r in Model.Where(x => x.File_Id == ViewBag.id))
                 {
@@ -102,26 +105,40 @@
             });
 
         });
-        debugger
-        var con = confirm("Are You sure you want to Update the Installments");
-        if (con) {
-            $.ajax({
-                type: "POST",
-                url: '/FileSystem/UpdateInstallmentInfoFile/',
-                dataType: "json",
-                data: { id: id, installmentData: arr},
-                success: function (data) {
-                    debugger
-
-                    alert('Successfully done');
-                    window.location.reload();
-                    //window.open("/Salaries/DepartmentReport/");
-                },
-                error: function () {
-                    alert("Error Occured");
-                }
-            });
-        }
+        //var con = confirm("Are You sure you want to Update the Installments");
+        //if (con) {
+        Swal.fire({
+            text: 'Are you sure you want to update the installments?',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Yes',
+            cancelButtonText: 'No'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    type: "POST",
+                    url: '/FileSystem/UpdateInstallmentInfoFile/',
+                    dataType: "json",
+                    data: { id: id, installmentData: arr },
+                    success: function (data) {
+                        //alert('Successfully done');
+                        Swal.fire({
+                            icon: 'success',
+                            text: 'Installments updated successfully'
+                        });
+                        window.location.reload();
+                        //window.open("/Salaries/DepartmentReport/");
+                    },
+                    error: function () {
+                        //alert("Error Occured");
+                        Swal.fire({
+                            icon: 'error',
+                            text: 'Something went wrong'
+                        });
+                    }
+                });
+            }
+        });
     });
     </script>
 

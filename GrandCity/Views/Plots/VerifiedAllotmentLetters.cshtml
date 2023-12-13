@@ -1,4 +1,8 @@
 ﻿@model IEnumerable<MeherEstateDevelopers.Models.Sp_Get_AllotmentLetters_Result>
+<!-- SweetAlert2 CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+<!-- SweetAlert2 JS -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <style>
     table tbody tr td {
         padding: 5px !important;
@@ -89,34 +93,64 @@
 <script>
     $(document).ready(function () {
         $('.undlvr-altmnt-ltr').unbind().click(function () {
-            if (!confirm('Are you sure you want to un deliver this allotment letter?')) {
-                return;
-            }
+            //if (!confirm('Are you sure you want to un deliver this allotment letter?')) {
+            //    return;
+            //}
 
-            var rzn = prompt("Reason For Marking Undelivered", "");
-            var tid = $(this).attr('data-tag');
-            ShowFullScreenLoader();
-            $.ajax({
-                type: "POST",
-                url: '/Plots/MarkAllotmentLtrUnDelivered/',
-                data: { id: tid, reason: rzn },
-                success: function (data) {
-                    HideFullScreenLoader();
-                    if (data) {
-                        alert("Allotment letter has been marked as undelivered.");
-                        window.location.reload(true);
-                    }
-                    else {
-                        alert("Failed to mark allotment letter as undelivered.");
-                    }
+            Swal.fire({
+                text: 'Are you sure you want to mark this allotment letter as undelivered?',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'Yes',
+                cancelButtonText: 'No'
+            }).then((result) => {
+                if (!result.isConfirmed) {
+                    return;
                 }
-                , error: function (xmlhttprequest, textstatus, message) {
-                    HideFullScreenLoader();
-                    if (textstatus === "timeout") {
-                        alert("got timeout");
-                    } else {
-                        alert(textstatus);
-                    }
+                else {
+                    var rzn = prompt("Reason For Marking Undelivered", "");
+                    var tid = $(this).attr('data-tag');
+                    ShowFullScreenLoader();
+                    $.ajax({
+                        type: "POST",
+                        url: '/Plots/MarkAllotmentLtrUnDelivered/',
+                        data: { id: tid, reason: rzn },
+                        success: function (data) {
+                            HideFullScreenLoader();
+                            if (data) {
+                                //alert("Allotment letter has been marked as undelivered.");
+                                Swal.fire({
+                                    icon: 'success',
+                                    text: 'Allotment letter marked undelivered successfully'
+                                }).then(() => {
+                                    window.location.reload(true);
+                                })
+                            }
+                            else {
+                                //alert("Failed to mark allotment letter as undelivered.");
+                                Swal.fire({
+                                    icon: 'error',
+                                    text: 'Something went wrong'
+                                });
+                            }
+                        }
+                        , error: function (xmlhttprequest, textstatus, message) {
+                            HideFullScreenLoader();
+                            if (textstatus === "timeout") {
+                                //alert("got timeout");
+                                Swal.fire({
+                                    icon: 'error',
+                                    text: 'Request timed out'
+                                });
+                            } else {
+                                //alert(textstatus);
+                                Swal.fire({
+                                    icon: 'error',
+                                    text: 'Something went wrong'
+                                });
+                            }
+                        }
+                    });
                 }
             });
         });

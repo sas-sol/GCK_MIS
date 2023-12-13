@@ -48,24 +48,41 @@
         var type = $(this).val();
         if (type == null || type == '')
         {
-            alert('Select type');
+            //alert('Select type');
+            Swal.fire({
+                icon: 'info',
+                text: 'Select a plot to proceed'
+            });
             return false;
         }
-        var con = confirm("Are you sure you want to Move this Letter");
-        if (con) {
-            $.ajax({
-                type: "POST",
-                url: '/Plots/WarningIssuesPlotsMove/',
-                data: { Id: id, OwnerId: ownid, Type: type },
-                success: function (data) {
-                    $('#over').load('/Plots/QualifyingPlots/');
-                    return false;
-                },
-                error: function () {
-                    alert("Error Occured");
-                }
-            });
-        }
+        //var con = confirm("Are you sure you want to Move this Letter");
+        //if (con) {
+        Swal.fire({
+            text: 'Are you sure you want to transition this letter to another status?',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Yes',
+            cancelButtonText: 'No'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    type: "POST",
+                    url: '/Plots/WarningIssuesPlotsMove/',
+                    data: { Id: id, OwnerId: ownid, Type: type },
+                    success: function (data) {
+                        $('#over').load('/Plots/QualifyingPlots/');
+                        return false;
+                    },
+                    error: function () {
+                        //alert("Error Occured");
+                        Swal.fire({
+                            icon: 'error',
+                            text: 'Something went wrong'
+                        });
+                    }
+                });
+            }
+        });
     });
 
 
@@ -76,24 +93,39 @@
         var ownid = $(this).data("ownid");
         var type = $(this).val();
         if (type == null || type == '') {
-            alert('Select type');
+            //alert('Select type');
+            Swal.fire({
+                icon: 'info',
+                text: 'Select a plot to proceed'
+            });
             return false;
         }
-        var con = confirm("Are you sure you want to Move this Letter");
-        if (con) {
-            $.ajax({
-                type: "POST",
-                url: '/Plots/WarningIssuesPlotsMove/',
-                data: { Id: id, OwnerId: ownid, Type: type },
-                success: function (data) {
-                    $('#over').load('/Plots/FirstWarning/');
-                    return false;
-                },
-                error: function () {
-                    alert("Error Occured");
-                }
-            });
-        }
+        Swal.fire({
+            text: 'Are you sure you want to transition this letter to another status?',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Yes',
+            cancelButtonText: 'No'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    type: "POST",
+                    url: '/Plots/WarningIssuesPlotsMove/',
+                    data: { Id: id, OwnerId: ownid, Type: type },
+                    success: function (data) {
+                        $('#over').load('/Plots/FirstWarning/');
+                        return false;
+                    },
+                    error: function () {
+                        //alert("Error Occured");
+                        Swal.fire({
+                            icon: 'error',
+                            text: 'Something went wrong'
+                        });
+                    }
+                });
+            }
+        });
     });
 
 
@@ -106,24 +138,39 @@
         var ownid = $(this).data("ownid");
         var type = $(this).val();
         if (type == null || type == '') {
-            alert('Select type');
+            //alert('Select type');
+            Swal.fire({
+                icon: 'info',
+                text: 'Select a plot to proceed'
+            });
             return false;
         }
-        var con = confirm("Are you sure you want to Move this Letter");
-        if (con) {
-            $.ajax({
-                type: "POST",
-                url: '/Plots/WarningIssuesPlotsMove/',
-                data: { Id: id, OwnerId: ownid, Type: type },
-                success: function (data) {
-                    $('#over').load('/Plots/SecWarning/');
-                    return false;
-                },
-                error: function () {
-                    alert("Error Occured");
-                }
-            });
-        }
+        Swal.fire({
+            text: 'Are you sure you want to transition this letter to another status?',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Yes',
+            cancelButtonText: 'No'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    type: "POST",
+                    url: '/Plots/WarningIssuesPlotsMove/',
+                    data: { Id: id, OwnerId: ownid, Type: type },
+                    success: function (data) {
+                        $('#over').load('/Plots/SecWarning/');
+                        return false;
+                    },
+                    error: function () {
+                        //alert("Error Occured");
+                        Swal.fire({
+                            icon: 'error',
+                            text: 'Something went wrong'
+                        });
+                    }
+                });
+            }
+        });
     });
 
 
@@ -135,24 +182,39 @@
         var ownid = $(this).data("ownid");
         var type = $(this).val();
         if (type == null || type == '') {
-            alert('Select type');
+            //alert('Select type');
+            Swal.fire({
+                icon: 'info',
+                text: 'Select a plot to proceed'
+            });
             return false;
         }
-        var con = confirm("Are you sure you want to Move this Letter");
-        if (con) {
-            $.ajax({
-                type: "POST",
-                url: '/Plots/WarningIssuesPlotsMove/',
-                data: { Id: id, OwnerId: ownid, Type: type },
-                success: function (data) {
-                    $('#over').load('/Plots/CancelledPlotsLetter/');
-                    return false;
-                },
-                error: function () {
-                    alert("Error Occured");
-                }
-            });
-        }
+        Swal.fire({
+            text: 'Are you sure you want to transition this letter to another status?',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Yes',
+            cancelButtonText: 'No'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    type: "POST",
+                    url: '/Plots/WarningIssuesPlotsMove/',
+                    data: { Id: id, OwnerId: ownid, Type: type },
+                    success: function (data) {
+                        $('#over').load('/Plots/CancelledPlotsLetter/');
+                        return false;
+                    },
+                    error: function () {
+                        //alert("Error Occured");
+                        Swal.fire({
+                            icon: 'error',
+                            text: 'Something went wrong'
+                        });
+                    }
+                });
+            }
+        });
     });
     //$('#overdue-plts').load('/FileSystem/OverDueFilesReport/')
     $('#overdue-plts').load('/Plots/OverDuePlotsReport/')
