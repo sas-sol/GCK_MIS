@@ -1,78 +1,102 @@
 ﻿@model MeherEstateDevelopers.Models.OverdueQualifying_Shops
 
+@{
+    Layout = null;
+}
 
-
-<div class="main-lt-cont">
-    <div class="lh-head" style="display: flex; justify-content: center; align-items: center; padding-top:2%;">
-
-        <img src="~/images/LH-Head.png" style="width:15%; height:15%;" />
-    </div>
-    <div class="lt-cont">
-        @{
-            var seven = DateTime.Now.AddDays(14);
-        }
-        <p style="text-align: center;"><strong><u><span style="font-size: 14.0pt; font-family: 'Abadi',sans-serif;">@Model.Project – @Model.Type Cancellation Warning Letter</span></u></strong></p>
-        <p style="text-align: center;"><strong><span style="font-family: 'Abadi',sans-serif;">Submission of Installments / Arrears / Dues</span></strong></p>
-        <p><strong><span style="font-family: 'Abadi',sans-serif;">Respected Customer,</span></strong></p>
-        <p style="line-height:1"><span style="font-family: 'Abadi',sans-serif;">Hope you are having a great day!</span></p>
-
-        <p style="text-align: justify; text-justify: inter-ideograph;line-height:1.3"><span style="font-family: 'Abadi',sans-serif;">This letter and/or reminder is hereby being issued in continuation to the previous reminder dated @string.Format("{0:dd-MMMM-yyyy}", Model.FirstNotice) which was lodged in regards to the non-payment of your Installment as due amounting to Rs. @string.Format("{0:n0}", Math.Round(Convert.ToDecimal(Model.OverDueAmount))).  You are hereby yet again henceforth advised to make the outstanding payment (as already encapsulated above) within a seven working day(s) since the date as prescribed on this letter, and please be advised in an event of any omission in regards thereto, your @Model.Type shall be qualified to be cancelled.</span></p>
-
-        <p style="text-align: justify; text-justify: inter-ideograph;line-height:1"><span style="font-family: 'Abadi',sans-serif;">Name: @Model.Name</span></p>
-        <p style="text-align: justify; text-justify: inter-ideograph;line-height:1"><span style="font-family: 'Abadi',sans-serif;">@Model.Type Number: @Model.Shop_No</span></p>
-        <p style="text-align: justify; text-justify: inter-ideograph;line-height:1"><span style="font-family: 'Abadi',sans-serif;">Size: @Model.Area</span></p>
-        <p style="text-align: justify; text-justify: inter-ideograph;line-height:1"><span style="font-family: 'Abadi',sans-serif;">Due Balance: @string.Format("{0:n0}", Model.OverDueAmount)</span></p>
-        <p style="text-align: justify; text-justify: inter-ideograph;line-height:1"><span style="font-family: 'Abadi',sans-serif;">Due Installments: @Model.Installments</span></p>
-
-        <p style="line-height:1.3"><strong><span style="font-family: 'Abadi',sans-serif;">Note: Amount mentioned above is subject to verification at the time of Payment/Cancellation. If there is any ambiguity in this case, please visit our Head Office along with the complete file and receipts in 14 days’ time for rectification.</span></strong></p>
-
-        <p></p>
-        <p><span style="font-family: 'Abadi',sans-serif;">Regards,</span></p>
-        <p><span style="font-family: 'Abadi',sans-serif;">&nbsp;</span></p>
-        <p style="line-height:1"><span style="font-family: 'Abadi',sans-serif;">_________________</span></p>
-        <p style="line-height:1"><span style="font-family: 'Abadi',sans-serif;">Faheem Yousif, </span></p>
-        <p style="line-height:1"><span style="font-family: 'Abadi',sans-serif;">Manager Records,</span></p>
-        <p style="line-height:1"><span style="font-family: 'Abadi',sans-serif;">Date: @string.Format("{0:dd-MMMM-yyyy}", DateTime.Now)</span></p>
-        <p style="line-height:1;font-size:20px"><span style="font-family: 'Abadi',sans-serif;"><b>042-111-724-786</b></span></p>
-    </div>
-    <div class="lh-foot"><img src="~/images/LH-Footer.png" style="width:100%" /></div>
-</div>
-<div style="page-break-after:always"></div>
-
-<style>
-    @@page {
-        margin: 0 !important;
-    }
-
-    p {
-        color: black !important;
-        font-size: 14px
-    }
-
-    .lt-cont {
-        padding: 10px 2% !important
-    }
-
-    .main-lt-cont {
-        width: 60%;
-    }
-
-    @@media print {
-        @@Page {
-            size: A4
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Reminder</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 30px;
+            /*padding: 5px;*/
         }
 
-        .main-lt-cont {
-            width: 100%;
+        header {
+            text-align: right;
+            margin-bottom: 30px;
         }
 
-        .lh-foot {
+        h2, h3 {
+            margin-bottom: 5px;
+        }
+
+        ol, ul {
+            margin-top: 5px;
+            margin-bottom: 10px;
+        }
+
+        footer {
+            text-align: right;
             position: fixed;
-            bottom: 0;
+            bottom: 70px;
+            right: 65px; /* Adjusted right margin for the signature */
+            width: calc(100% - 40px); /* Calculated width to match the company details */
+            padding-top: 10px;
         }
 
-        .lt-cont {
-            padding: 10px 2% !important
+        .signature-line {
+            border-top: 2px solid #000;
+            margin-top: 10px;
+            margin-left: 65%; /* Right margin for the signature line */
+            width: 35%; /* Match the width of the company details */
         }
-    }
-</style>
+    </style>
+</head>
+<body>
+    <header>
+        <p><b><u>COMPANY DETAILS</u></b></p>
+        <p>Telephone No.</p>
+        <p>0544-111-11-55-11</p>
+        <p>0333-0862601</p>
+        <p>0333-0862603</p>
+        <p>Dated @DateTime.Now.ToString("dd MMMM, yyyy")</p>
+    </header>
+
+    <div>
+        <h4><b>To: @Model.Name</b></h4>
+        @*<p>Reg No. A2EX-0010</p>*@
+        <p><b>Unit No</b> @Model.Shop_No</p>
+        @*<p>Payment Code. 10-M</p>*@
+        <p><b>Mobile No.</b> @Model.Mobile_1</p>
+        @*<p><b>Address.</b> @Model.PostalAddress</p>*@
+    </div>
+
+    <div>
+        <h3><b>Subject: <u>2nd Reminder Notice on Overdue Installments</u></b></h3>
+        <ol>
+            <li>
+                <p>That subject unit is provisionally book in your name and management of The Grand City is regretfully pointed out that an amount of Rs. <b>@string.Format("{0:n0}", Math.Round(Convert.ToDecimal(Model.OverDueAmount)))/-</b> is outstanding against you, as arrears of Installments regarding your residential unit.</p>
+            </li>
+            <li>
+                <p>You are requested to deposit the installments / outstanding dues with a fine of 0.1% per day. Kindly pay your Outstanding Installments before @DateTime.Now.AddDays(14).ToString("dd MMMM, yyyy") through demand draft or pay order in the name of “Eurobiz Corporation” against receipt directly in given account of “Eurobiz Corporation”.</p>
+                <p>Details of account is as under:</p>
+                <ul>
+                    <li>Account No. 0000-102535994087 &nbsp;&nbsp; Bank Al Baraka</li>
+                    <li>Account No. 0023-487000510503 &nbsp;&nbsp; Bank HBL</li>
+                    <li>Account No. 0109-000228187019 &nbsp;&nbsp; Bank UBL</li>
+                </ul>
+            </li>
+            <li>
+                <p>Please treat this letter as <b>1st REMINDER NOTICE</b>, failing which the management of The Grand City will be constrained to take an appropriate action as per rules & policies, which includes the cancellation of provisional allotment / sale agreement of your unit.</p>
+            </li>
+            <li>
+                <p><b><u>In case you have already paid installment / dues of your plot, please disregard this notice.</u></b></p>
+            </li>
+            <li>
+                <p>Assuring you of full cooperation and you may visit our site office or head office at any working hours for further assistance.</p>
+            </li>
+        </ol>
+    </div>
+
+    <footer>
+        <div class="signature-line"></div>
+        <p>Company Official Signature</p>
+    </footer>
+</body>
+</html>

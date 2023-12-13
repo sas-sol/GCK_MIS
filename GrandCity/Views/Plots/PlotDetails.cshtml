@@ -17,6 +17,10 @@ else
     </script>
 }
 <style>
+
+    .plotStatus{
+        padding-top: 10px;
+    }
     .vertical-menu {
         width: 200px;
     }
@@ -120,27 +124,27 @@ else
                 {
                     //if (User.IsInRole("Request For Verification"))
                     //{
-                        <div class="col-md-4">
-                            <h6 style="width: auto;float: left;margin: 7px;">Request For Verifcation</h6>
-                            @if (Model.PlotData.Verification_Req == true)
-                            {
-                                <label class="switch"><input type="checkbox" id="veri-req" checked><span class="slider round"></span></label>
-                            }
-                            else
-                            {
-                                <label class="switch"><input type="checkbox" id="veri-req"><span class="slider round"></span></label>
-                            }
-                        </div>
-                        //}
-                    }
-                    if (User.IsInRole("Customer File"))
-                    {
+                    <div class="col-md-4">
+                        <h6 style="width: auto;float: left;margin: 7px;">Request For Verifcation</h6>
+                        @if (Model.PlotData.Verification_Req == true)
+                        {
+                            <label class="switch"><input type="checkbox" id="veri-req" checked><span class="slider round"></span></label>
+                        }
+                        else
+                        {
+                            <label class="switch"><input type="checkbox" id="veri-req"><span class="slider round"></span></label>
+                        }
+                    </div>
+                    //}
+                }
+                if (User.IsInRole("Customer File"))
+                {
 
-                            <div class="col-md-4">
-                                <button class="btn btn-info" data-id="@Model.PlotData.Id" id="plot_file-sa">Generate Customer File</button>
-                            </div>
-                        
-                    }
+                    <div class="col-md-4" style="padding-top: 15px;">
+                        <button class="btn btn-info" data-id="@Model.PlotData.Id" id="plot_file-sa">Generate Customer File</button>
+                    </div>
+
+                }
             }
             @{
                 if (Model.PlotOwners.Any())
@@ -148,7 +152,7 @@ else
                     var allot = Model.PlotOwners.OrderByDescending(x => x.Ownership_DateTime).FirstOrDefault();
                     if (allot.Allotment_Letter == 1)
                     {
-                        <div class="col-md-2"><div class="alert alert-primary" style="text-align:center" role="alert">Allotment Letter Generated</div></div>
+                        <div class="col-md-3"><div class="alert alert-primary" style="text-align:center" role="alert">Allotment Letter Generated</div></div>
                         if (User.IsInRole("Duplicate Allotment Letter") || User.IsInRole("Administrator"))
                         {
                             <div class="col-md-2">
@@ -165,7 +169,7 @@ else
                         if (User.IsInRole("Regenerate Allotment Letter") || User.IsInRole("Administrator"))
                         {
                             <div class="col-md-2">
-                                <button class="btn btn-secondary ver-allotment-let" data-toggle="modal" data-target="#Modal" id="@Model.PlotData.Id">ReGenerate Allotment Letter</button>
+                                <button class="btn btn-secondary ver-allotment-let" data-toggle="modal" data-target="#Modal" id="@Model.PlotData.Id">Regenerate Allotment Letter</button>
                             </div>
                         }
                     }
@@ -255,7 +259,7 @@ else
             <div class="form-row row">
                 <div class="col-md-12">
                     <div class="form-row">
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-2">
                             <label>Plot No.</label>
                             <h5 id="plt-no">@Model.PlotData.Plot_No</h5>
                             <input type="hidden" class="form-control" id="plt-id" name="Plot_Id" value="@Model.PlotData.Id" readonly>
@@ -264,7 +268,7 @@ else
                             <label>Block</label>
                             <h5 id="plt-blk">@Model.PlotData.Block_Name</h5>
                         </div>
-                        <div class="form-group col-md-1">
+                        <div class="form-group col-md-2">
                             <label>Plot Size</label>
                             <h5 id="plt-size">@Model.PlotData.Plot_Size</h5>
                         </div>
@@ -272,19 +276,20 @@ else
                             <label>Type</label>
                             <h5 id="plt-type">@Model.PlotData.Type</h5>
                         </div>
-                        <div class="form-group col-md-2">
+                        <div class="form-group col-md-4">
                             <label>Dimension</label>
                             <h5 id="plt-dim">@Model.PlotData.Dimension</h5>
                         </div>
+                        <br />
                         <div class="form-group col-md-2">
                             <label>Status</label>
                             <h5 id="plt-status"> @Model.PlotData.Develop_Status.Replace('_', ' ')</h5>
                         </div>
-                        <div class="form-group col-md-1">
+                        <div class="form-group col-md-2">
                             <label>Road</label>
                             <h5 id="plt-road">@Model.PlotData.Road_Type</h5>
                         </div>
-                        <div class="form-group col-md-1">
+                        <div class="form-group col-md-2">
                             <label>Area</label>
                             <h5 id="plt-area">@Convert.ToDecimal(Model.PlotData.Area).ToString("0.##") Sq-Ft</h5>
                         </div>
@@ -294,26 +299,26 @@ else
                         </div>
                         @if (Model.PlotData.Development_Charges == true)
                         {
-                            <div class="form-group col-md-3">
+                            <div class="form-group col-md-2">
                                 <label>Development Charges</label>
                                 <h5 id="dev-ch">With Development Charges</h5>
                             </div>
                         }
                         else if (Model.PlotData.Development_Charges == false)
                         {
-                            <div class="form-group col-md-3">
+                            <div class="form-group col-md-2">
                                 <label>Development Charges</label>
                                 <h5 id="dev-ch">Non Development Charges</h5>
                             </div>
                         }
-                        else if (Model.PlotData.Development_Charges == null && Model.PlotData.Block_Name == "Sher Afghan" && Model.PlotData.Application_FileNo != null)
+                        @*else if (Model.PlotData.Development_Charges == null && Model.PlotData.Block_Name == "Sher Afghan" && Model.PlotData.Application_FileNo != null)
                         {
                             <div class="form-group col-md-3">
                                 <label>Development Charges</label>
                                 <h5 id="dev-ch">To Be Announced</h5>
                             </div>
-                        }
-                        <div class="form-group col-md-3">
+                        }*@
+                        <div class="form-group col-md-2">
                             <label>Status</label>
                             <h5>@Model.PlotData.Status.Replace("_", " ")</h5>
                             @if (User.IsInRole("Reinstate Plot Status") || User.IsInRole("Administrator"))
@@ -340,7 +345,7 @@ else
                             }*@
 
                     </div>
-                    <h6>Booking Details</h6>
+                    <h4><b>Booking Details</b></h4>
                     <div class="form-row">
                         <div class="form-group col-md-2">
                             <label>Plot Price</label>
@@ -352,7 +357,8 @@ else
                         </div>
                         <div class="form-group col-md-2">
                             <label>Booking Date</label>
-                            <h5 id="booking-date">@Model.PlotInstallments.FirstOrDefault().DueDate</h5>
+                            @*<h5 id="booking-date">@Model.PlotOwners.FirstOrDefault().Ownership_DateTime</h5>*@
+                            <h5 id="booking-date">@((Model.PlotOwners.FirstOrDefault()?.Ownership_DateTime)?.ToString("MM/dd/yyyy"))</h5>
                             @*.ToString("MM/dd/yyyy")*@
                         </div>
                         <div class="form-group col-md-2">
@@ -391,7 +397,7 @@ else
                 @{ int ownercount = 1;
                     foreach (var item in Model.PlotOwners.OrderByDescending(x => x.Ownership_DateTime).GroupBy(x => x.GroupTag))
                     {
-                        <div class="panel-heading central-text-align" style="background-color:rgba(255, 0, 0,0.5);color:white;">
+                        <div class="panel-heading central-text-align" style="background-color:black;color:white;">
                             <h5>@item.Select(x => x.Ownership_Status).FirstOrDefault() - @string.Format("{0: dd-MMM-yyyy}", item.Select(x => x.Ownership_DateTime).FirstOrDefault())</h5>
                         </div>
                         foreach (var own in item)
@@ -438,29 +444,31 @@ else
                             <div class="panel panel-default">
                                 <div class="panel-heading">
                                     <h5 class="panel-title">
-                                        <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#@own.Id" aria-expanded="true">
+                                        <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#@own.Id" aria-expanded="true" style="margin-right: 5%;">
                                             @own.Name
                                         </a>
                                         @if (own.Ownership_Status == "Owner" && (User.IsInRole("Customer File") || User.IsInRole("Administrator")))
                                         {
-                                            if (Model.PlotData.Block_Name == "Sher Afghan")
-                                            {
-                                                <button class="btn btn-info" data-id="@Model.PlotData.Id" id="plot_file-sa">Generate Customer File</button>
-                                            }
-                                            else
-                                            {
-                                                <button class="btn btn-info" data-id="@Model.PlotData.Id" id="plot_file">Generate Customer File</button>
-                                            }
+                                            <button class="btn btn-info" data-id="@Model.PlotData.Id" id="plot_file">Generate Customer File</button>
+
+                                            @*if (Model.PlotData.Block_Name == "Sher Afghan")
+            {
+                <button class="btn btn-info" data-id="@Model.PlotData.Id" id="plot_file-sa">Generate Customer File</button>
+            }
+            else
+            {
+                <button class="btn btn-info" data-id="@Model.PlotData.Id" id="plot_file">Generate Customer File</button>
+            }*@
                                         }
                                         @if (User.IsInRole("Generate Plots Transfer Letter") || User.IsInRole("Administrator"))
                                         {
                                             if (Model.PlotData.Mortgage == true)
                                             {
-                                                <button class="btn btn-info" disabled style="margin-left:10%">Generate Transfer Letter Blocked</button>
+                                                <button class="btn btn-info" disabled style="margin-left:5%">Generate Transfer Letter Blocked</button>
                                             }
                                             else
                                             {
-                                                <button class="btn btn-info p-tran-lett" data-ownid="@own.Id" style="margin-left:10%">Generate Transfer Letter</button>
+                                                <button class="btn btn-info p-tran-lett" data-ownid="@own.Id" style="margin-left:5%">Generate Transfer Letter</button>
                                             }
                                         }
                                     </h5>
@@ -485,10 +493,7 @@ else
                                                     <label>CNIC / NICOP</label>
                                                     <input type="text" class="form-control" name="CNIC_NICOP" value="@own.CNIC_NICOP" placeholder="12345-1234567-1   or   123456-123456-1" readonly>
                                                 </div>
-                                                <div class="form-group col-md-2">
-                                                    <label>Date Of Birth</label>
-                                                    <input type="text" class="form-control" data-provide="datepicker" value="@own.Date_Of_Birth" placeholder="mm/dd/yyyy" name="Date_Of_Birth" readonly>
-                                                </div>
+
                                                 <div class="form-group col-md-6">
                                                     <label>Postal Address</label>
                                                     <input type="text" class="form-control" name="Postal_Address" value="@own.Postal_Address" placeholder="1234 Main St" readonly>
@@ -497,7 +502,11 @@ else
                                                     <label>Residential Address</label>
                                                     <input type="text" class="form-control" name="Residential_Address" value="@own.Residential_Address" placeholder="Apartment, Plot, or floor" readonly>
                                                 </div>
-                                                <div class="form-group col-md-2">
+                                                <div class="form-group col-md-3">
+                                                    <label>Date Of Birth</label>
+                                                    <input type="text" class="form-control" data-provide="datepicker" value="@own.Date_Of_Birth" placeholder="mm/dd/yyyy" name="Date_Of_Birth" readonly>
+                                                </div>
+                                                <div class="form-group col-md-3">
                                                     <label>City</label>
                                                     <input type="text" class="form-control" value="@own.City" readonly>
                                                 </div>
@@ -505,7 +514,7 @@ else
                                                     <label>Occupation</label>
                                                     <input type="text" class="form-control" value="@own.Occupation" name="Occupation" readonly>
                                                 </div>
-                                                <div class="form-group col-md-2">
+                                                <div class="form-group col-md-3">
                                                     <label>Nationality</label>
                                                     <input type="text" class="form-control" value="@own.Nationality" name="Nationality" readonly>
                                                 </div>
@@ -513,8 +522,7 @@ else
                                                     <label>Email</label>
                                                     <input type="text" class="form-control" value="@own.Email" name="Email" readonly>
                                                 </div>
-                                            </div>
-                                            <div class="form-row">
+
                                                 <div class="form-group col-md-3">
                                                     <label>Phone Office</label>
                                                     <input type="text" class="form-control" value="@own.Phone_Office" name="Phone_Office" readonly>
@@ -532,7 +540,25 @@ else
                                                     <input type="text" class="form-control" value="@own.Mobile_2" pattern="^0\d{10}" placeholder="03121234567" name="Mobile_2" readonly>
                                                 </div>
                                             </div>
-                                            <h6 class="c-grey-900">Nominee</h6>
+                                            @*<div class="form-row">
+                                                <div class="form-group col-md-3">
+                                                    <label>Phone Office</label>
+                                                    <input type="text" class="form-control" value="@own.Phone_Office" name="Phone_Office" readonly>
+                                                </div>
+                                                <div class="form-group col-md-3">
+                                                    <label>Residential</label>
+                                                    <input type="text" class="form-control" value="@own.Residential" name="Residential" readonly>
+                                                </div>
+                                                <div class="form-group col-md-3">
+                                                    <label>Mobile 1</label>
+                                                    <input type="text" class="form-control" value="@own.Mobile_1" placeholder="03121234567" name="Mobile_1" readonly>
+                                                </div>
+                                                <div class="form-group col-md-3">
+                                                    <label>Mobile 2</label>
+                                                    <input type="text" class="form-control" value="@own.Mobile_2" pattern="^0\d{10}" placeholder="03121234567" name="Mobile_2" readonly>
+                                                </div>
+                                            </div>*@
+                                            <h5 class="c-grey-900"><b>Nominee</b></h5>
                                             <div class="form-row">
                                                 <div class="form-group col-md-3">
                                                     <label>Name</label>
@@ -582,8 +608,27 @@ else
                 }
             </div>
         </div>
-        <a class="btn btn-primary" style="color:white" href="/Plots/PlotStatment?Plotid=@Model.PlotData.Id" target="_blank">Ledger Report</a>
-        <button class="btn btn-primary up_inst_btn_plot" data-toggle="modal" data-target="#Modal">Update Installment</button>
+        <button class="btn btn-primary" style="margin-bottom: 1%;"><a style="color:white;" href="/Plots/PlotStatment?Plotid=@Model.PlotData.Id" target="_blank">Ledger Report</a></button>
+        <button class="btn btn-primary up_inst_btn_plot" style="margin-bottom: 1%;" data-toggle="modal" data-target="#Modal">Update Installment</button>
+    </div>
+    <div class="col-md-3" id="det-rep">
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item"><a class="nav-link active" data-lead="1" role="tab" data-toggle="tab" aria-controls="home" aria-selected="true" href="#assigned">History</a></li>
+            <li class="nav-item"><a class="nav-link" role="tab" data-lead="1" data-toggle="tab" aria-controls="home" aria-selected="true" href="#created">Reminders</a></li>
+        </ul>
+        <div class="tab-content">
+            <div id="assigned" class="tab-pane active">
+                @{ Html.RenderAction("PlotsComments", "Messages", new { Plotid = Model.PlotData.Id });}
+            </div>
+            <div id="created" class="tab-pane">
+                @{ Html.RenderAction("GetUpcomingRemindersByModule", "Reminders", new { module = "Plot", modId = Model.PlotData.Id });}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="bgc-white p-20 bd row">
+    <div class="col-md-12">
         <div class="form-row">
             @if (Model.PlotInstallments.Any())
             {
@@ -766,25 +811,10 @@ else
             }
         </div>
         <div class="form-row">
-            <div id="plot-rep" style="margin-top:1%"></div>
-        </div>
-    </div>
-    <div class="col-md-3" id="det-rep">
-        <ul class="nav nav-tabs" id="myTab" role="tablist">
-            <li class="nav-item"><a class="nav-link active" data-lead="1" role="tab" data-toggle="tab" aria-controls="home" aria-selected="true" href="#assigned">History</a></li>
-            <li class="nav-item"><a class="nav-link" role="tab" data-lead="1" data-toggle="tab" aria-controls="home" aria-selected="true" href="#created">Reminders</a></li>
-        </ul>
-        <div class="tab-content">
-            <div id="assigned" class="tab-pane active">
-                @{ Html.RenderAction("PlotsComments", "Messages", new { Plotid = Model.PlotData.Id });}
-            </div>
-            <div id="created" class="tab-pane">
-                @{ Html.RenderAction("GetUpcomingRemindersByModule", "Reminders", new { module = "Plot", modId = Model.PlotData.Id });}
-            </div>
+            <div class="col-md-12" id="plot-rep" style="margin-top:1%"></div>
         </div>
     </div>
 </div>
-
 <script>
     $(document).ready(function () {
         $('#plot-rep').load('/Plots/PlotInstallmentsReports/', { Plotid: @Model.PlotData.Id});

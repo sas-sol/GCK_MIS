@@ -627,6 +627,7 @@ namespace MeherEstateDevelopers.Controllers
                 //Id = x.Id,
                 Owner_Id = lastOwns.Select(x => x.Group_Tag).FirstOrDefault(),
                 Block = res2.Block,
+                Phase = res2?.Phase ?? "Phase",
                 CNIC_NICOP = string.Join(" , ", lastOwns.Select(x => x.CNIC_NICOP)),
                 Plot_No = res2.FileFormNumber.ToString(),
                 Mobile_1 = string.Join(" , ", lastOwns.Select(x => x.Mobile_1)),
@@ -639,7 +640,11 @@ namespace MeherEstateDevelopers.Controllers
                 Transfer_Date = transdate,
                 Received = res4,
                 IsCompanyProperty = lastOwns.Any(x => x.IsCompanyProperty == true),
-                Discount = disc.Sum(x => x.Discount_Amount)
+                Discount = disc.Sum(x => x.Discount_Amount),
+                Address = string.Join(" , ", lastOwns.Select(x => x.Postal_Address)),
+                T_Address = seclastowns.Select(x => x.Postal_Address).FirstOrDefault(),
+                City = string.Join(" , ", lastOwns.Select(x => x.City)),
+                T_City = seclastowns.Select(x => x.City).FirstOrDefault()
             };
             db.Sp_Add_Activity(userid, "Generate File Transfer Letter of this : " + Id, "Create", Modules.FileManagement.ToString(), "File transfer Letter", userid);
 
@@ -668,7 +673,8 @@ namespace MeherEstateDevelopers.Controllers
                 //Id = x.Id,
                 Owner_Id = lastOwns.Select(x => x.GroupTag).FirstOrDefault(),
                 Block = res2.Block_Name,
-                CNIC_NICOP = string.Join(" , ", lastOwns.Select(x => x.CNIC_NICOP)),
+                Phase = res2?.Phase_Name ?? "Phase",
+            CNIC_NICOP = string.Join(" , ", lastOwns.Select(x => x.CNIC_NICOP)),
                 Plot_No = res2.Plot_No,
                 Mobile_1 = string.Join(" , ", lastOwns.Select(x => x.Mobile_1)),
                 Name = string.Join(" , ", lastOwns.Select(x => x.Name)),
@@ -680,7 +686,12 @@ namespace MeherEstateDevelopers.Controllers
                 Transfer_Date = transdate,
                 Received = res4,
                 IsCompanyProperty = lastOwns.Any(x => x.IsCompanyProperty == true),
-                Discount = disc.Sum(x => x.Discount_Amount)
+                Discount = disc.Sum(x => x.Discount_Amount),
+                Address= string.Join(" , ", lastOwns.Select(x => x.Postal_Address)),
+                T_Address = seclastowns.Select(x => x.Postal_Address).FirstOrDefault(),
+                City = string.Join(" , ", lastOwns.Select(x => x.City)),
+                T_City = seclastowns.Select(x => x.City).FirstOrDefault()
+                
             };
 
 
@@ -1076,6 +1087,7 @@ namespace MeherEstateDevelopers.Controllers
                 //Id = x.Id,
                 Owner_Id = lastOwns.Select(x => x.GroupTag).FirstOrDefault(),
                 Block = res2.Floor,
+                Phase = res2.Project_Name,
                 CNIC_NICOP = string.Join(" , ", lastOwns.Select(x => x.CNIC_NICOP)),
                 Plot_No = res2.ApplicationNo.ToString(),
                 Mobile_1 = string.Join(" , ", lastOwns.Select(x => x.Mobile_1)),
@@ -1088,7 +1100,11 @@ namespace MeherEstateDevelopers.Controllers
                 Transfer_Date = transdate,
                 Received = res4,
                 IsCompanyProperty = lastOwns.Any(x => x.IsCompanyProperty == true),
-                Discount = disc.Sum(x => x.Discount_Amount)
+                Discount = disc.Sum(x => x.Discount_Amount),
+                Address = string.Join(" , ", lastOwns.Select(x => x.Postal_Address)),
+                T_Address = seclastowns.Select(x => x.Postal_Address).FirstOrDefault(),
+                City = string.Join(" , ", lastOwns.Select(x => x.City)),
+                T_City = seclastowns.Select(x => x.City).FirstOrDefault()
             };
             return View(res1);
         }

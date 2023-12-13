@@ -491,6 +491,12 @@ namespace MeherEstateDevelopers.Models
         public DateTime? Transfer_Date { get; set; }
         public bool IsCompanyProperty { get; set; }
         public decimal? Discount { get; set; }
+        public string T_Address { get; set; }
+        public string Address { get; set; }
+        public string T_City { get; set; }
+        public string City { get; set; }
+        public string Phase { get; set; }
+       
     }
 
     public class PropertyDeal
