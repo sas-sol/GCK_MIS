@@ -2396,26 +2396,26 @@ namespace MeherEstateDevelopers.Controllers
                 var res = db.Sp_Get_PlotData(PlotId).FirstOrDefault();
                 if (res.Status == PlotsStatus.Available_For_Sale.ToString())
                 {
-                    var res5 = new Return { Status = false, Msg = "You can not Change plot status from Registered to Available For Sale" };
+                    var res5 = new Return { Status = false, Msg = "Plot status cannot be changed from 'Registered' to 'Available for Sale'" };
                     return Json(res5);
                 }
                 db.Sp_Update_PlotStatus(PlotId, PlotsStatus.Available_For_Sale.ToString());
                 db.Sp_Add_PlotComments(PlotId, "Updated to Avaialable for Sale. \n\r" + Remarks, userid, ActivityType.Plot_Status_Updation.ToString());
-                return Json(new Return { Status = true, Msg = "Updated" });
+                return Json(new Return { Status = true, Msg = "Plot status updated to 'Available for Sale' successfully" });
             }
             else if (PlotStatus == PlotsStatus.Temporary_Cancelled.ToString())
             {
                 db.Sp_Update_PlotStatus(PlotId, PlotsStatus.Temporary_Cancelled.ToString());
                 db.Sp_Add_Activity(userid, "Updated Status to Temporary Cancelled <a class='plt-data' data-id=' " + PlotId + "'>" + PlotId + "</a>", "Create", Modules.PlotManagement.ToString(), ActivityType.Plot_Status_Updation.ToString(), PlotId);
                 db.Sp_Add_PlotComments(PlotId, "Updated to Temporary Cancelled. \n\r" + Remarks, userid, ActivityType.Plot_Status_Updation.ToString());
-                return Json(new Return { Status = true, Msg = "Updated" });
+                return Json(new Return { Status = true, Msg = "Plot status updated to 'Temporary Cancelled' successfully" });
             }
             else if (PlotStatus == PlotsStatus.Cancelled.ToString())
             {
                 var res = db.Plot_Cancelation_Req.Any(x => x.Plot_Id == PlotId && x.PlotsMang_Approval != true && x.FinancMang_Approval != true && x.Type == "Cancelled");
                 if (res)
                 {
-                    return Json(new Return { Status = false, Msg = "Request Already Exists" });
+                    return Json(new Return { Status = false, Msg = "Plot cancellation request already requested" });
                 }
                 var res1 = db.Sp_Get_PlotData(PlotId).SingleOrDefault();
                 var res2 = db.Sp_Get_PlotLastOwner(PlotId).SingleOrDefault();
@@ -2423,14 +2423,14 @@ namespace MeherEstateDevelopers.Controllers
                 db.Sp_Add_PlotCancelation_Req(PlotId, res2.Id, userid, Remarks, res1.Plot_No, res1.Block_Name, PlotsStatus.Cancelled.ToString());
                 db.Sp_Add_Activity(userid, "Updated Status to Cancel Request <a class='plt-data' data-id=' " + PlotId + "'>" + PlotId + "</a>", "Create", Modules.PlotManagement.ToString(), ActivityType.Plot_Status_Updation.ToString(), PlotId);
                 db.Sp_Add_PlotComments(PlotId, "Requested to Cancel. \n\r" + Remarks, userid, ActivityType.Plot_Status_Updation.ToString());
-                return Json(new Return { Status = true, Msg = "Requested" });
+                return Json(new Return { Status = true, Msg = "Cancellation request for the plot has been submitted successfully" });
             }
             else if (PlotStatus == PlotsStatus.Disputed.ToString())
             {
                 db.Sp_Add_Activity(userid, "Updated Status to Disputed <a class='plt-data' data-id=' " + PlotId + "'>" + PlotId + "</a>", "Create", Modules.PlotManagement.ToString(), ActivityType.Plot_Status_Updation.ToString(), PlotId);
                 db.Sp_Update_PlotStatus(PlotId, PlotsStatus.Disputed.ToString());
                 db.Sp_Add_PlotComments(PlotId, "Updated to Disputed. \n\r" + Remarks, userid, ActivityType.Plot_Status_Updation.ToString());
-                return Json(new Return { Status = true, Msg = "Updated" });
+                return Json(new Return { Status = true, Msg = "Plot status updated to 'Disputed' successfully" });
             }
             else if (PlotStatus == PlotsStatus.Hold.ToString())
             {
@@ -2438,28 +2438,28 @@ namespace MeherEstateDevelopers.Controllers
                 db.Sp_Update_PlotStatus(PlotId, PlotsStatus.Hold.ToString());
                 db.Sp_Add_PlotComments(PlotId, "Updated to Hold. \n\r" + Remarks, userid, ActivityType.Plot_Status_Updation.ToString());
                 db.Sp_Update_PlotOwnershipStatus(PlotId, Ownership_Status.Cancelled.ToString());
-                return Json(new Return { Status = true, Msg = "Updated" });
+                return Json(new Return { Status = true, Msg = "Plot status updated to 'Hold' successfully" });
             }
             else if (PlotStatus == PlotsStatus.Registered.ToString())
             {
                 db.Sp_Add_Activity(userid, "Updated Status to Registered <a class='plt-data' data-id=' " + PlotId + "'>" + PlotId + "</a>", "Create", Modules.PlotManagement.ToString(), ActivityType.Plot_Status_Updation.ToString(), PlotId);
                 db.Sp_Update_PlotStatus(PlotId, PlotsStatus.Registered.ToString());
                 db.Sp_Add_PlotComments(PlotId, "Updated to Registered. \n\r" + Remarks, userid, ActivityType.Plot_Status_Updation.ToString());
-                return Json(new Return { Status = true, Msg = "Updated" });
+                return Json(new Return { Status = true, Msg = "Plot status updated to 'Registered' successfully" });
             }
             else if (PlotStatus == PlotsStatus.Repurchased.ToString())
             {
                 var res = db.Plot_Cancelation_Req.Any(x => x.Plot_Id == PlotId && x.PlotsMang_Approval != true && x.FinancMang_Approval != true && x.Type == "Repurchased");
                 if (res)
                 {
-                    return Json(new Return { Status = false, Msg = "Request Already Exists" });
+                    return Json(new Return { Status = false, Msg = "Plot repurchase request already requested" });
                 }
                 var res1 = db.Sp_Get_PlotData(PlotId).SingleOrDefault();
                 var res2 = db.Sp_Get_PlotLastOwner(PlotId).SingleOrDefault();
                 db.Sp_Add_PlotCancelation_Req(PlotId, res2.Id, userid, Remarks, res1.Plot_No, res1.Block_Name, PlotsStatus.Repurchased.ToString());
                 db.Sp_Add_PlotComments(PlotId, "Requested to Repurchased. \n\r" + Remarks, userid, ActivityType.Plot_Status_Updation.ToString());
                 db.Sp_Add_Activity(userid, "Updated Status to Repurchased <a class='plt-data' data-id=' " + PlotId + "'>" + PlotId + "</a>", "Create", Modules.PlotManagement.ToString(), ActivityType.Plot_Status_Updation.ToString(), PlotId);
-                return Json(new Return { Status = true, Msg = "Requested" });
+                return Json(new Return { Status = true, Msg = "Repurchase request for the plot has been submitted successfully" });
             }
             else if (PlotStatus == "Repurchase")
             {
@@ -2630,7 +2630,7 @@ namespace MeherEstateDevelopers.Controllers
                         if (Type == "Repurchased")
                         {
                             db.Sp_Update_PlotStatus(PlotId, PlotsStatus.Repurchased.ToString());
-                            db.Sp_Add_PlotTransfer("", "Meher Estate Developers", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", PlotId, "", null, "Owner", "", DateTime.Now, TransId).FirstOrDefault();
+                            db.Sp_Add_PlotTransfer("", "Grand City", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", PlotId, "", null, "Owner", "", DateTime.Now, TransId).FirstOrDefault();
                         }
 
                         Transaction.Commit();
@@ -2640,7 +2640,7 @@ namespace MeherEstateDevelopers.Controllers
                     {
                         Transaction.Rollback();
                         db.Sp_Add_ErrorLog(ex.Message, (ex.InnerException is null) ? string.Empty : ex.InnerException.ToString(), ex.StackTrace, this.ControllerContext.RouteData.Values["controller"].ToString(), this.ControllerContext.RouteData.Values["action"].ToString());
-                        return Json(new { Status = false, Msg = "Error Occured" });
+                        return Json(new { Status = false, Msg = "Something went wrong" });
                     }
                 }
             }
@@ -2701,7 +2701,7 @@ namespace MeherEstateDevelopers.Controllers
                         if (Type == "Repurchased")
                         {
                             db.Sp_Update_FileStatus(res1.Id, "5");
-                            //db.Sp_Add_FileTransfer("", "Meher Estate Developers", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", res1.Id, 0, res1.Block_Id, "", res2.Rate, res2.Total, res2.GrandTotal, 0).FirstOrDefault();
+                            //db.Sp_Add_FileTransfer("", "Grand City", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", res1.Id, 0, res1.Block_Id, "", res2.Rate, res2.Total, res2.GrandTotal, 0).FirstOrDefault();
                             db.Sp_Add_FileTransfer(0).FirstOrDefault();
                         }
 
@@ -2784,7 +2784,7 @@ namespace MeherEstateDevelopers.Controllers
             var res2 = db.Sp_Get_PlotLastOwner(PlotId).ToList();
             var text = "Dear " + string.Join(",", res2.Select(x => x.Name)) + ",\n\r" +
                 "Your Allotment Letter for Plot No: " + res1.Plot_No + " Block: " + res1.Block_Name + " is ready. Please collect your Allotment Letter. \n\r " +
-                "Thank you for choosing Meher Estate Developers. \n\r " +
+                "Thank you for choosing Grand City. \n\r " +
                 "For more information Dial: 111 724 786.";
             try
             {
@@ -3054,9 +3054,9 @@ namespace MeherEstateDevelopers.Controllers
             long userid = long.Parse(User.Identity.GetUserId());
             var res1 = db.Sp_Get_PlotDetailData(Id).SingleOrDefault();
             db.Sp_Add_Activity(userid, "Generated a New Allotment Letter of Plot No." + res1.Plot_No + " Block:" + res1.Block_Name + " For : Meher Estate Developers", "Create", Modules.PlotManagement.ToString(), ActivityType.Allotment_Letter_Generate.ToString(), Id);
-            db.Sp_Add_PlotComments(Id, "Generated a New Allotment Letter of Meher Estate Developers", userid, ActivityType.Allotment_Letter_Generate.ToString());
+            db.Sp_Add_PlotComments(Id, "Generated a New Allotment Letter of Grand City", userid, ActivityType.Allotment_Letter_Generate.ToString());
             //db.Sp_Update_AllotmentLetter(res2.Id);
-            var res = db.Sp_Add_AllotmentLetter(null, "SA Gardnes", "CEO", "-", "Meher Estate Developers", res1.Project_Name, res1.Phase_Name,
+            var res = db.Sp_Add_AllotmentLetter(null, "SA Gardnes", "CEO", "-", "Grand City", res1.Project_Name, res1.Phase_Name,
                 res1.Block_Name, res1.Plot_No, res1.Plot_Size, res1.Type, res1.Area.ToString(), res1.Dimension, Witness1, Witness2, userid, res1.Id, null, null, null, null, null, null, null, Name, Designation).FirstOrDefault();
             Helpers helpers = new Helpers(Modules.PlotManagement, Types.Plots);
             object[] data = new object[6];
@@ -3214,13 +3214,13 @@ namespace MeherEstateDevelopers.Controllers
             {
                 if (plot.Front == B.Position)
                 {
-                    var res1 = new { Status = false, Msg = "Plot Front Cannot be Bound" };
+                    var res1 = new { Status = false, Msg = "The front of the plot cannot be bounded" };
                     return Json(res1);
                 }
             }
             if (B.Plot_Id == B.BoundedPlotId)
             {
-                var res1 = new { Status = false, Msg = "Same Plot Cannot be Bound" };
+                var res1 = new { Status = false, Msg = "The same plot cannot be bound" };
                 return Json(res1);
             }
             long userid = long.Parse(User.Identity.GetUserId());
@@ -3768,7 +3768,7 @@ namespace MeherEstateDevelopers.Controllers
                 "Kindly note last date for the submission of your Plot no:" + res.Plot_No + "-" + res.Type + " - " + res.Block_Name + " instalment has passed.You are requested to make payment within next 7 days’ time.Failing to do so will be resulting in qualification for cancellation.\n\r" +
                 "Therefore; Submit your dues timely to ensure the safety of your plot.\n\r" +
                 "Best Regards,\n\r" +
-                "Meher Estate Developers.\n\r" +
+                "Grand City.\n\r" +
                 "042 – 111 724 786\n\r";
                 SmsService s = new SmsService();
                 s.SendMsg(text, res.Mobile_1);
@@ -3781,7 +3781,7 @@ namespace MeherEstateDevelopers.Controllers
               "Respected Customer,\n\r" +
               "This is to inform you that your installment is still pending against your plot no:" + res.Plot_No + "-" + res.Type + " - " + res.Block_Name + ". A reminder message was also sent to you on (" + string.Format("{0:dd-MMM-yyyy}", res.FirstNotice) + ") along with a letter. You are requested to submit due instalments within next 7 days, otherwise your plot will be cancelled.\n\r" +
               "Best Regards,\n\r" +
-              "Meher Estate Developers.\n\r" +
+              "Grand City.\n\r" +
               "042 – 111 724 786\n\r";
                 SmsService s = new SmsService();
                 s.SendMsg(text, res.Mobile_1);
@@ -3795,7 +3795,7 @@ namespace MeherEstateDevelopers.Controllers
            "This is to remind you that your plot no:" + res.Plot_No + "-" + res.Type + " - " + res.Block_Name + " has been cancelled, because of ample amount due on your side. It has been reminded two times before but despite these reminders, you haven't paid your remaining amount.\n\r" +
            "You are kindly requested to visit our Head Office and submit your complete documents for the processing of your refund.\n\r" +
            "Best Regards,\n\r" +
-           "Meher Estate Developers.\n\r" +
+           "Grand City.\n\r" +
            "042 – 111 724 786\n\r";
                 SmsService s = new SmsService();
                 s.SendMsg(text, res.Mobile_1);
@@ -4182,7 +4182,7 @@ namespace MeherEstateDevelopers.Controllers
                         //    "\n\r" +
                         //    "For more information contact our helpline UAN 111 724 786.\n\r" +
                         //    "Best Regards, \n\r" +
-                        //    "Meher Estate Developers.\n\r";
+                        //    "Grand City.\n\r";
                         //    try
                         //    {
                         //        SmsService smsService = new SmsService();

@@ -1262,7 +1262,7 @@ namespace MeherEstateDevelopers.Controllers
                 }
 
                 var re = db.Sp_Update_FileVerificationToNull(fileinfo.Id);
-                var data1 = new { Status = true, Msg = "Updated" };
+                var data1 = new { Status = true, Msg = "Receipt updated successfully" };
                 return Json(data1);
             }
             else if (rece.Module == Modules.PlotManagement.ToString())
@@ -1291,7 +1291,7 @@ namespace MeherEstateDevelopers.Controllers
                 {
                     db.SP_Update_PlotVerificationToNull(rece.File_Plot_No);
                 }
-                var data1 = new { Status = true, Msg = "Updated" };
+                var data1 = new { Status = true, Msg = "Receipt updated successfully" };
                 return Json(data1);
             }
             else if (rece.Module == Modules.CommercialManagement.ToString())
@@ -1320,14 +1320,14 @@ namespace MeherEstateDevelopers.Controllers
                 {
                     db.SP_Update_VerificationToNull(rece.File_Plot_No, ProjectCategory.Building.ToString());
                 }
-                var data1 = new { Status = true, Msg = "Updated" };
+                var data1 = new { Status = true, Msg = "Receipt updated successfully" };
                 return Json(data1);
             }
             //else if (rece.Module == Modules.OfficeManagement.ToString())
             //{
             //    return Json(true);
             //}
-            var data = new { Status = false, Msg = "Irregular Data" };
+            var data = new { Status = false, Msg = "Invalid data" };
             return Json(data);
         }
         public JsonResult SupervisePndReceipts(List<long> Id)
@@ -1445,7 +1445,7 @@ namespace MeherEstateDevelopers.Controllers
                 db.SP_Update_VerificationToNull(res1.Id, Modules.PlotManagement.ToString());
                 if (res == "0")
                 {
-                    return Json(new Return { Status = false, Msg = "Transaction cannot be duplicate" });
+                    return Json(new Return { Status = false, Msg = "Duplicate transactions are not allowed" });
                 }
                 else
                 {
@@ -1464,7 +1464,7 @@ namespace MeherEstateDevelopers.Controllers
 
                 if (res == "0")
                 {
-                    return Json(new Return { Status = false, Msg = "Transaction cannot be duplicate" });
+                    return Json(new Return { Status = false, Msg = "Duplicate transactions are not allowed" });
                 }
                 else
                 {
@@ -1483,7 +1483,7 @@ namespace MeherEstateDevelopers.Controllers
 
                 if (res == "0")
                 {
-                    return Json(new Return { Status = false, Msg = "Transaction cannot be duplicate" });
+                    return Json(new Return { Status = false, Msg = "Duplicate transactions are not allowed" });
                 }
                 else
                 {
@@ -1492,7 +1492,7 @@ namespace MeherEstateDevelopers.Controllers
             }
             else
             {
-                return Json(new Return { Status = false, Msg = "Transaction cannot be duplicate" });
+                return Json(new Return { Status = false, Msg = "Duplicate transactions are not allowed" });
             }
         }
         [HttpPost]
@@ -1512,7 +1512,7 @@ namespace MeherEstateDevelopers.Controllers
                 db.SP_Update_VerificationToNull(res1.Id, Modules.PlotManagement.ToString());
                 if (res == "0")
                 {
-                    return Json(new Return { Status = false, Msg = "Transaction cannot be duplicate" });
+                    return Json(new Return { Status = false, Msg = "Duplicate transactions are not allowed" });
                 }
                 else
                 {
@@ -1531,7 +1531,7 @@ namespace MeherEstateDevelopers.Controllers
 
                 if (res == "0")
                 {
-                    return Json(new Return { Status = false, Msg = "Transaction cannot be duplicate" });
+                    return Json(new Return { Status = false, Msg = "Duplicate transactions are not allowed" });
                 }
                 else
                 {
@@ -1550,7 +1550,7 @@ namespace MeherEstateDevelopers.Controllers
 
                 if (res == "0")
                 {
-                    return Json(new Return { Status = false, Msg = "Transaction cannot be duplicate" });
+                    return Json(new Return { Status = false, Msg = "Duplicate transactions are not allowed" });
                 }
                 else
                 {
@@ -1559,7 +1559,7 @@ namespace MeherEstateDevelopers.Controllers
             }
             else
             {
-                return Json(new Return { Status = false, Msg = "Transaction cannot be duplicate" });
+                return Json(new Return { Status = false, Msg = "Duplicate transactions are not allowed" });
             }
         }
         public ActionResult PlotReceipt(string Id, long Token)
@@ -1670,7 +1670,7 @@ namespace MeherEstateDevelopers.Controllers
                                         var receiptno1 = db.Sp_Get_ReceiptNo("Normal").FirstOrDefault();
                                         var res1 = db.Sp_Add_Receipt(v.Amount, v.AmountInWords, v.Bank, v.PayChqNo, v.Ch_bk_Pay_Date, v.Branch, rcid.Receipt.Contact
                                                                     , rcid.Receipt.Father_Name, rcid.Receipt.File_Plot_No, rcid.Receipt.Name, v.PaymentType, null,
-                                                                    "Meher Estate Developers", null, null, rcid.Receipt.Size, ReceiptTypes.Cancellation.ToString(), userid, userid, "Cancelled against Dishonored Cheque " + bank + "  " + Cheq_No + "  " + receipt + " Date:" + date, null, rcid.Receipt.Module, "", file, rcid.Receipt.Block, rcid.Receipt.Plot_Type, Owner_Id, TransactionId, rcid.Receipt.Dealership, receiptno1, comp.Id).FirstOrDefault();
+                                                                    "Grand City", null, null, rcid.Receipt.Size, ReceiptTypes.Cancellation.ToString(), userid, userid, "Cancelled against Dishonored Cheque " + bank + "  " + Cheq_No + "  " + receipt + " Date:" + date, null, rcid.Receipt.Module, "", file, rcid.Receipt.Block, rcid.Receipt.Plot_Type, Owner_Id, TransactionId, rcid.Receipt.Dealership, receiptno1, comp.Id).FirstOrDefault();
                                         {
                                             bool headcashier = false;
                                             if (User.IsInRole("Head Cashier"))

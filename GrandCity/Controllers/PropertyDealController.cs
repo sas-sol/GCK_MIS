@@ -564,12 +564,12 @@ namespace MeherEstateDevelopers.Controllers
             {
                 if (res2 || res3)
                 {
-                    var ret1 = new { Status = false, Msg = "Cannot Update Offered Price Because Receipts / Vouchers Exists" };
+                    var ret1 = new { Status = false, Msg = "The offered price cannot be updated as there are existing receipts/vouchers" };
                     return Json(ret1);
                 }
             }
             var res = db.Sp_Update_DealParty_Information(p.Id, p.Name, p.Mobile, p.Address, p.Offered_Rate, p.Rate_Per_Marla, p.Commession, p.Status, p.Commission_Type);
-            var ret = new { Status = true, Msg = "Information Updated" };
+            var ret = new { Status = true, Msg = "Information updated successfully" };
             return Json(ret);
         }
         public JsonResult PaymentRequest(string Type, decimal Amount, string Description, long Deal_Id, long Party_Id)
@@ -647,7 +647,7 @@ namespace MeherEstateDevelopers.Controllers
             //else
             //{
             var res = db.Sp_Add_PropertyDeal_Request(Type, Amount, Description, Deal_Id, Party_Id, userid);
-            return Json(new Return { Status = true, Msg = "Your Payment has been requested" });
+            return Json(new Return { Status = true, Msg = "Payment has been requested successfully" });
             //}
         }
         public ActionResult PaymentsRequest()
@@ -1203,7 +1203,7 @@ namespace MeherEstateDevelopers.Controllers
         //
         public ActionResult SAGardenUnassignedLeads(DateTime? From, DateTime? To)
         {
-            var project = "Meher Estate Developers";
+            var project = "Grand City";
             ViewBag.Project = project;
             if (From == null || To == null)
             {
@@ -1223,7 +1223,7 @@ namespace MeherEstateDevelopers.Controllers
         public ActionResult SAGardenAssignNewLeads()
         {
             var All = db.Users.Where(x => x.Roles.Any(y => y.Name == "Sales Executive") && x.Active == 1).ToList();
-            var project = "Meher Estate Developers";
+            var project = "Grand City";
             ViewBag.Project = project;
             var fy = GetFinancialYear();
             ViewBag.TotalLeads = db.Leads.Where(x => x.Project == project && x.AssignedTo == 0).Count();
@@ -1233,7 +1233,7 @@ namespace MeherEstateDevelopers.Controllers
         {
             if (SalesLeads.Any())
             {
-                var project = "Meher Estate Developers";
+                var project = "Grand City";
                 foreach (var v in SalesLeads)
                 {
                     db.Sp_Update_Leads_Assign(project, v.SalesPersonId, v.LeadsCount);

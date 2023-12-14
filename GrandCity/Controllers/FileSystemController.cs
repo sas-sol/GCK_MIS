@@ -156,7 +156,7 @@ namespace MeherEstateDevelopers.Controllers
             }
             if (!installmentstructure.Any())
             {
-                return Json(new Return { Status = false, Msg = "No Installment Plan Is Found" });
+                return Json(new Return { Status = false, Msg = "No Installment Plan Found for the Respective File" });
             }
             using (var Transaction = db.Database.BeginTransaction())
             {
@@ -258,7 +258,7 @@ namespace MeherEstateDevelopers.Controllers
                     else
                     {
                         Transaction.Rollback();
-                        var data = new Return { Status = false, Msg = "Installment Plan Already Generated" };
+                        var data = new Return { Status = false, Msg = "Installment Plan Has Already Been Generated" };
                         return Json(data);
                     }
                 }
@@ -1899,7 +1899,7 @@ namespace MeherEstateDevelopers.Controllers
                 "Kindly note last date for the submission of your plot no:" + res1.FileFormNumber + "-" + res1.Type + " - " + res1.Block + " instalment has passed.You are requested to make payment. Failing to do so will be resulting in qualification for cancellation.\n\r" +
                 "Therefore; Submit your dues timely to ensure the safety of your plot.\n\r" +
                 "Best Regards,\n\r" +
-                "Meher Estate Developers.\n\r" +
+                "Grand City.\n\r" +
                 "042 – 111 724 786\n\r";
                 try
                 {
@@ -1920,7 +1920,7 @@ namespace MeherEstateDevelopers.Controllers
                "Respected Customer,\n\r" +
                "This is to inform you that your installment is still pending against your plot no:" + res1.FileFormNumber + "-" + res1.Type + " - " + res1.Block + ". A reminder message was also sent to you on (" + string.Format("{0:dd-MMM-yyyy}", res.First_Notice) + ") along with a letter. You are requested to submit due instalments, otherwise your plot will be cancelled.\n\r" +
                "Best Regards,\n\r" +
-               "Meher Estate Developers.\n\r" +
+               "Grand City.\n\r" +
                "042 – 111 724 786\n\r";
                 try
                 {
@@ -1942,7 +1942,7 @@ namespace MeherEstateDevelopers.Controllers
           "This is to remind you that your plot no:" + res1.FileFormNumber + "-" + res1.Type + " - " + res1.Block + " has been cancelled, because of ample amount due on your side you haven’t paid your remaining amount.\n\r" +
           "You are kindly requested to visit our Head Office and submit your complete documents for the processing of your refund.\n\r" +
           "Best Regards,\n\r" +
-          "Meher Estate Developers.\n\r" +
+          "Grand City.\n\r" +
           "042 – 111 724 786\n\r";
                 try
                 {

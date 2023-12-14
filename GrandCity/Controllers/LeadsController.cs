@@ -41,8 +41,9 @@ namespace MeherEstateDevelopers.Controllers
             db.Sp_Add_Activity(userid, "Created New Lead With description " + Description + " For " + Block + " Block", "Create", "Activity_Record", ActivityType.Lead.ToString(), userid);
 
             var res2 = db.Sp_Add_Lead(L.Address, userid, Block, L.Mobile_1, L.Name, L.Father_Husband, L.Offered_Price, L.Source, L.Plot_Size, L.LeadStatus, L.Project, null).FirstOrDefault();
-            var res3 = db.Sp_Add_LeadFollowup(Description, res2, userid, "Text");
-            return Json(true);
+            var res3 = db.Sp_Add_LeadFollowup(Description, res2, userid, "Text",null);
+            return Json(new Return { Status = true, Msg = "Lead created successfully" });
+
         }
         
         [HttpPost]
@@ -71,7 +72,7 @@ namespace MeherEstateDevelopers.Controllers
         
         public ActionResult SAMLead()
         {
-            ViewBag.Project = "Meher Estate Developers";
+            ViewBag.Project = "Grand City";
             var All = db.Users.Where(x => x.Roles.Any(y => y.Name == "Sales Executive")).ToList();
             ViewBag.LeadsUser = new SelectList(All, "Id", "Name");
             long userid = User.Identity.GetUserId<long>();
@@ -130,7 +131,7 @@ namespace MeherEstateDevelopers.Controllers
             
             db.Sp_Add_Activity(userid, "Updated Lead " + PreLeadStatus, "Read", "Activity_Record", ActivityType.Page_Access.ToString(), L.Id);
 
-            if (Project == "Meher Estate Developers")
+            if (Project == "Grand City")
             {
                 db.Sp_Update_Lead(L.Id, L.Name, L.Father_Husband, L.Mobile_1, L.Address, L.Offered_Price, L.LeadStatus, Block, Plot_Size);
             }

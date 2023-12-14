@@ -9874,15 +9874,16 @@ $(document).on("click", ".allo-sign", function () {
         cancelButtonText: 'No'
     }).then((result) => {
         if (result.isConfirmed) {
-        $.post("/Plots/SignAllotmentLetter/", { Id: id, PlotId: plotid }, function () {
-            //alert("Signed");
-            Swal.fire({
-                icon: 'success',
-                text: 'Allotment letter signed successfully'
+            $.post("/Plots/SignAllotmentLetter/", { Id: id, PlotId: plotid }, function () {
+                //alert("Signed");
+                Swal.fire({
+                    icon: 'success',
+                    text: 'Allotment letter signed successfully'
+                });
+                $("#" + id).remove();
             });
-            $("#" + id).remove();
-        });
-    }
+        }
+    });
 });
 //
 $(document).on("click", ".allo-unsign", function () {
@@ -10839,7 +10840,6 @@ $(document).on("change", ".dealers-detail", function () {
 });
 //
 $(document).on("change", "#dealers", function (e) {
-    sndebugger;
     var deal = $(this).val();
     if (deal == null || deal == '') {
         return;
@@ -11697,23 +11697,24 @@ $(document).on("click", "#ref-plot-f-btn", function (e) {
         cancelButtonText: 'No'
     }).then((result) => {
         if (result.isConfirmed) {
-        $.ajax({
-            type: "POST",
-            url: $("#plt-fin-ref").attr('action'),
-            data: $("#plt-fin-ref").serialize(),
-            success: function (data) {
-                window.open("/Vouchers/Voucher?GroupId=" + data.Token, '_blank');
-            },
-            error: function () {
-                //alert("Error Occured");
-                Swal.fire({
-                    icon: 'error',
-                    text: 'Something went wrong'
-                });
-                $('#gen-rec').attr("disabled", false);
-            }
-        });
-    }
+            $.ajax({
+                type: "POST",
+                url: $("#plt-fin-ref").attr('action'),
+                data: $("#plt-fin-ref").serialize(),
+                success: function (data) {
+                    window.open("/Vouchers/Voucher?GroupId=" + data.Token, '_blank');
+                },
+                error: function () {
+                    //alert("Error Occured");
+                    Swal.fire({
+                        icon: 'error',
+                        text: 'Something went wrong'
+                    });
+                    $('#gen-rec').attr("disabled", false);
+                }
+            });
+        }
+    });
 });
 // Final Cancelatio of file
 $(document).on("click", "#can-file-f", function (e) {
@@ -13448,17 +13449,18 @@ $(document).on("click", ".del-sec-fee-ret", function () {
                         if (data.Status == true) {
                             window.open("/Vouchers/Voucher?GroupId=" + data.Token, '_blank');
 
-                        window.location.reload();
+                            window.location.reload();
+                        }
+                        else {
+                            alert(data.Msg)
+                        }
+                    },
+                    error: function () {
+                        alert("Error Occured");
                     }
-                    else {
-                        alert(data.Msg)
-                    }
-                },
-                error: function () {
-                    alert("Error Occured");
-                }
-            });
-        }
+                });
+            }
+        })
     }
     else {
         //alert("Invalid Amount");
