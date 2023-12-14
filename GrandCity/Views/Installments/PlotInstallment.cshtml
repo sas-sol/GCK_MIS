@@ -1,4 +1,9 @@
-﻿@using (Html.BeginForm("PayPlotInstallmentWithReceipt", "Installments", FormMethod.Post, new { @id = "re-plot-ins", @class = "", role = "form" }))
+﻿<link href="~/Content/albery.css" rel="stylesheet" />
+<!-- SweetAlert2 CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+<!-- SweetAlert2 JS -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+@using (Html.BeginForm("PayPlotInstallmentWithReceipt", "Installments", FormMethod.Post, new { @id = "re-plot-ins", @class = "", role = "form" }))
 {
     @Html.AntiForgeryToken()
     <div class="form-row">
@@ -56,51 +61,14 @@
             <label>Date</label>
             <input type="text" class="form-control" data-provide="datepicker" name="Ch_bk_Pay_Date" placeholder="mm/dd/yyyy" disabled required>
         </div>
-        <div class="form-group col-md-3 paymentotherinfo">
-            @*<input type="button" onclick="UpFileee()" id="btnUpload" value="Upload Files" />*@
-            <div style="padding-bottom: 10px !important; cursor: pointer;" onclick="UpFileee()" id="btnUpload" value="Upload Files">Upload</div>
-            <input type="file" id="FileUpload1" />
+        <div class="form-group col-md-1 paymentotherinfo">
+            <label>Scan File </label>
+            <button class=" btn btn-primary" data-v="1" type="button" id="scanbtn">Scan</button>
         </div>
         <div id="images-1" class="col-md-10 images"></div>
     </div>
 }
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 <script>
-        function UpFileee() {
-            if (window.FormData !== undefined) {
-
-                var fileUpload = $("#FileUpload1").get(0);
-                var files = fileUpload.files;
-                var fileData = new FormData();
-
-                var IdofPlot = $("#plotid").val();
-                var CPDNumber = $("#paymenttype").val();
-
-                for (var i = 0; i < files.length; i++) {
-                    fileData.append(files[i].name, files[i]);
-                }
-
-                fileData.append('pltid', IdofPlot);
-                fileData.append('cpdnum', CPDNumber);
-
-
-    $.ajax({
-        url: '/Installments/UploadInstrument/',
-    type: "POST",
-    contentType: false,
-    processData: false,
-    data: fileData,
-    success: function (result) {
-        alert(result.Msg);
-            },
-        error: function (result) {
-            alert(result.Msg);
-            }
-        });
-    } else {
-        alert("FormData is not supported.");
-    }
-}
     $(function () {
         $('.modal-footer').append('<button class="btn btn-success" id="gen-plot-rec" type="submit">Generate Receipt</button>');
         $("#name").val($("#Name").val());
@@ -108,9 +76,8 @@
         $("#mbl").val($("#Mobile_1").val());
 
         $("#amt-file-no").val($("#plt-no").text());
-        $("#total-amt").val($("#ttl-amt").val());
-        debugger
-        $("#prj-name").val($("#Project_Name").val());
+        $("#total-amt").val($("#ttl-amt").val());//
+        $("#prj-name").val($("#prj").val());
         $("#blk-nam").val($("#Block option:selected").text());
 
         $("#plot-size").val($("#plt-size").text());

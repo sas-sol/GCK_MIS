@@ -1,4 +1,8 @@
-﻿@using (Html.BeginForm("PayPlotInstallment", "Installments", FormMethod.Post, new { @id = "pay-plot-ins", @class = "", role = "form", autocomplete = "off" }))
+﻿<!-- SweetAlert2 CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+<!-- SweetAlert2 JS -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+@using (Html.BeginForm("PayPlotInstallment", "Installments", FormMethod.Post, new { @id = "pay-plot-ins", @class = "", role = "form", autocomplete = "off" }))
 {
     @Html.AntiForgeryToken()
     <div class="form-row">
@@ -79,15 +83,15 @@
         </div>
     </div>
     @*<div class="form-row">
-        <div class="col-md-6">
-            <div id="my_camera"></div>
-            <input class="btn btn-primary" style="margin-top:3%" onClick="take_snapshot()" value="Take Photo">
-        </div>
-        <div class="col-md-6"><div id="results" style="width:455px;height:270px"></div></div>
-    </div>*@
+            <div class="col-md-6">
+                <div id="my_camera"></div>
+                <input class="btn btn-primary" style="margin-top:3%" onClick="take_snapshot()" value="Take Photo">
+            </div>
+            <div class="col-md-6"><div id="results" style="width:455px;height:270px"></div></div>
+        </div>*@
 }
 
-    <script>
+<script>
     $(function () {
         $('.modal-footer').append('<button class="btn btn-info" id="sav-plt-rece" type="submit">Save</button>');
         $('.modal-Header').text('Plot Installment');
@@ -117,26 +121,26 @@
         });
     }
 
-        Webcam.set({
-            // live preview size
-            width: 455,
-            height: 270,
+    Webcam.set({
+        // live preview size
+        width: 455,
+        height: 270,
 
-            // device capture size
-            dest_width: 1280,
-            dest_height: 720,
+        // device capture size
+        dest_width: 1280,
+        dest_height: 720,
 
-            // final cropped size
-            crop_width: 1280,
-            crop_height: 720,
+        // final cropped size
+        crop_width: 1280,
+        crop_height: 720,
 
-            // format and quality
-            image_format: 'png',
-            jpeg_quality: 90
-        });
+        // format and quality
+        image_format: 'png',
+        jpeg_quality: 90
+    });
 
 
-        Webcam.attach('#my_camera');
+    Webcam.attach('#my_camera');
 </script>
 <style>
     .paymentotherinfo {
@@ -147,6 +151,7 @@
         height: 1245px;
         overflow-y: scroll;
     }
+
     video {
         -webkit-transform: rotate(180deg);
         -moz-transform: rotate(180deg);
