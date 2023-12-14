@@ -1,4 +1,8 @@
-﻿@model MeherEstateDevelopers.Models.Sp_Get_Receipt_Result_Result
+@model MeherEstateDevelopers.Models.Sp_Get_Receipt_Result_Result
+<!-- SweetAlert2 CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+<!-- SweetAlert2 JS -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 @using (Html.BeginForm("UpdateReceipt", "Banking", FormMethod.Post, new { @id = "up-rece", @class = "", role = "form" }))
 {
     if (Model.CompType == true)
@@ -56,17 +60,18 @@
     </div>
 }
 @if (User.IsInRole("Receipts Update"))
-{
-    <script>
-        $('.modal-footer').append('<button class="btn btn-primary" id="up-rece-btn" type="button">Update</button>');
-    </script>
-}
-@if (User.IsInRole("Receipts Delete"))
-{
-    <script>
-        $('.modal-footer').append('<button class="btn btn-danger del__rece__btn" id="@Model.Id" type="button">Delete</button>');
-    </script>
-}
+    {
+        <script>
+            $('.modal-footer').append('<button class="btn btn-primary" id="up-rece-btn" type="button">Update</button>');
+        </script>
+    }
+    @if (User.IsInRole("Receipts Delete"))
+    {
+        <script>
+            $('.modal-footer').append('<button class="btn btn-danger del__rece__btn" id="@Model.Id" type="button">Delete</button>');
+        </script>
+    }
+
 <script>
     $(function () {
         $(".modal-header").text("Update Information");

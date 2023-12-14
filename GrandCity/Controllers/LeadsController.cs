@@ -41,7 +41,8 @@ namespace MeherEstateDevelopers.Controllers
             db.Sp_Add_Activity(userid, "Created New Lead With description " + Description + " For " + Block + " Block", "Create", "Activity_Record", ActivityType.Lead.ToString(), userid);
 
             var res2 = db.Sp_Add_Lead(L.Address, userid, Block, L.Mobile_1, L.Name, L.Father_Husband, L.Offered_Price, L.Source, L.Plot_Size, L.LeadStatus, L.Project, null).FirstOrDefault();
-            var res3 = db.Sp_Add_LeadFollowup(Description, res2, userid, "Text",null);
+
+            var res3 = db.Sp_Add_LeadFollowup(Description, res2, userid, "Text");
             return Json(new Return { Status = true, Msg = "Lead created successfully" });
 
         }
