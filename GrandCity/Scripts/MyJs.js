@@ -382,17 +382,33 @@ $(document).on("submit", "#r-c", function (e) {
         data: $("#r-c").serialize(),
         success: function (data) {
             if (data) {
-                alert("Role added");
+                //alert("Role added");
+                Swal.fire({
+                    icon: 'success',
+                    text: "Role added successfully"
+                });
             }
             else {
-                alert("This Role is already Exist");
+                //alert("This Role is already Exist");
+                Swal.fire({
+                    icon: 'info',
+                    text: "The role already exists"
+                });
             }
         }
         , error: function (xmlhttprequest, textstatus, message) {
             if (textstatus === "timeout") {
-                alert("got timeout");
+                //alert("got timeout");
+                Swal.fire({
+                    icon: 'error',
+                    text: 'Something went wrong'
+                });
             } else {
-                alert(textstatus);
+                //alert(textstatus);
+                Swal.fire({
+                    icon: 'error',
+                    text: 'Something went wrong'
+                });
             }
         }
     });
@@ -406,17 +422,33 @@ $(document).on("submit", "#a-r", function (e) {
         data: $("#a-r").serialize(),
         success: function (data) {
             if (data) {
-                alert("Role Assigned");
+                //alert("Role Assigned");
+                Swal.fire({
+                    icon: 'success',
+                    text: "Role assigned successfully"
+                });
             }
             else {
-                alert("This Role is already Assigned to this User");
+                //alert("This Role is already Assigned to this User");
+                Swal.fire({
+                    icon: 'info',
+                    text: "This role is already assigned to the User"
+                });
             }
         },
         error: function (xmlhttprequest, textstatus, message) {
             if (textstatus === "timeout") {
-                alert("got timeout");
+                //alert("got timeout");
+                Swal.fire({
+                    icon: 'error',
+                    text: 'Something went wrong'
+                });
             } else {
-                alert(textstatus);
+                //alert(textstatus);
+                Swal.fire({
+                    icon: 'error',
+                    text: 'Something went wrong'
+                });
             }
         }
     });
@@ -8310,16 +8342,34 @@ $(document).on("click", ".all-file-rec-veri", function () {
 //
 $(document).on("click", "#ver-plot", function () {
     var id = $("#plt-id").val();
-    $.ajax({
-        type: "POST",
-        url: '/Plots/VerifingPlot/',
-        data: { Id: id },
-        success: function (data) {
-            alert("Plot is Verified");
-            $("#ver-plot").prop("Disabled", true);
-        },
-        error: function () {
-            alert("Error Occured");
+    Swal.fire({
+        text: 'Are you sure you want to verify this plot?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                type: "POST",
+                url: '/Plots/VerifingPlot/',
+                data: { Id: id },
+                success: function (data) {
+                    //alert("Plot is Verified");
+                    Swal.fire({
+                        icon: 'success',
+                        text: "Plot verified successfully"
+                    });
+                    $("#ver-plot").prop("Disabled", true);
+                },
+                error: function () {
+                    //alert("Error Occured");
+                    Swal.fire({
+                        icon: 'error',
+                        text: 'Something went wrong'
+                    });
+                }
+            });
         }
     });
 });
@@ -8727,12 +8777,21 @@ $(document).on("click", ".for-tick", function () {
     var reas = $("#Reason").val();
     if (reas == "" || reas == null) {
         $("#Reason").focus();
-        alert("Please Enter the Reason");
+        //alert("Please Enter the Reason");
+        Swal.fire({
+            icon: 'info',
+            text: "Enter the reason to proceed"
+        });
         return false;
     }
     $.post('/Tickets/ForwardTicket/', { Id: id, Dep_Id: depid, Dep: depnam, AssignedTo: to, Reason: reas }, function () {
-        alert("Forwarded");
-        window.location.reload();
+        //alert("Forwarded");
+        Swal.fire({
+            icon: 'success',
+            text: "Ticket forwarded successfully"
+        }).then(() => {
+            window.location.reload();
+        })
     });
 });
 //
@@ -8742,12 +8801,21 @@ $(document).on("click", ".reop-tick", function () {
     var reas = $("#reopen-rem").val();
     if (reas == "" || reas == null) {
         $("#reopen-rem").focus();
-        alert("Please Enter the Reason");
+        //alert("Please Enter the Reason");
+        Swal.fire({
+            icon: 'info',
+            text: "Enter reason to reopen the ticket to proceed"
+        });
         return false;
     }
     $.post('/Tickets/Reopenticket/', { Id: id, Reason: reas }, function () {
-        alert("Ticket is Reopened");
-        window.location.reload();
+        //alert("Ticket is Reopened");
+        Swal.fire({
+            icon: 'success',
+            text: "The ticket has been reopened"
+        }).then(() => {
+            window.location.reload();
+        })
     });
 });
 //

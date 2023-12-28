@@ -1,4 +1,8 @@
-﻿@model MeherEstateDevelopers.Models.PlotDetailData
+﻿<!-- SweetAlert2 CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+<!-- SweetAlert2 JS -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+@model MeherEstateDevelopers.Models.PlotDetailData
 @{
     string[] Types = { "Booking", "Installment" };
 
@@ -168,40 +172,40 @@
                             if (ownercount == 1)
                             {
                                 @*<script>
-                                    var pltprice = "@own.Total_Price";
-                                    if (pltprice > 0) {
-                                        $("#plt-price").text(Number(parseFloat(pltprice).toFixed(0)).toLocaleString());
-                                    }
-                                    else {
-                                        var instprice = "@Model.PlotInstallments.Sum(x=> x.Amount)";
-                                        $("#plt-price").text(Number(parseFloat(instprice).toFixed(0)).toLocaleString());
-                                    }
-                                    var disamt = "@own.Discount";
-                                    if (disamt > 0 || disamt != "") {
-                                        $("#dis-amt-sec").show();
-                                        $("#dis-amt").text(Number(parseFloat(disamt).toFixed(0)).toLocaleString());
-                                    }
-                                </script>*@
+                                        var pltprice = "@own.Total_Price";
+                                        if (pltprice > 0) {
+                                            $("#plt-price").text(Number(parseFloat(pltprice).toFixed(0)).toLocaleString());
+                                        }
+                                        else {
+                                            var instprice = "@Model.PlotInstallments.Sum(x=> x.Amount)";
+                                            $("#plt-price").text(Number(parseFloat(instprice).toFixed(0)).toLocaleString());
+                                        }
+                                        var disamt = "@own.Discount";
+                                        if (disamt > 0 || disamt != "") {
+                                            $("#dis-amt-sec").show();
+                                            $("#dis-amt").text(Number(parseFloat(disamt).toFixed(0)).toLocaleString());
+                                        }
+                                    </script>*@
                                 show = "show";
                             }
                             else
                             {
                                 var det = Model.PlotOwners.Where(x => x.Ownership_Status == "Transfered").OrderByDescending(x => x.Ownership_DateTime).Select(x => x.Total_Price).FirstOrDefault();
                                 @*<script>
-                                    var pltprice = "@det";
-                                    if (pltprice > 0) {
-                                        $("#plt-price").text(Number(parseFloat(pltprice).toFixed(0)).toLocaleString());
-                                    }
-                                    else {
-                                        var instprice = "@Model.PlotInstallments.Sum(x=> x.Amount)";
-                                        $("#plt-price").text(Number(parseFloat(instprice).toFixed(0)).toLocaleString());
-                                    }
-                                    var disamt = "@own.Discount";
-                                    if (disamt > 0 || disamt != "") {
-                                        $("#dis-amt-sec").show();
-                                        $("#dis-amt").text(Number(parseFloat(disamt).toFixed(0)).toLocaleString());
-                                    }
-                                </script>*@
+                                        var pltprice = "@det";
+                                        if (pltprice > 0) {
+                                            $("#plt-price").text(Number(parseFloat(pltprice).toFixed(0)).toLocaleString());
+                                        }
+                                        else {
+                                            var instprice = "@Model.PlotInstallments.Sum(x=> x.Amount)";
+                                            $("#plt-price").text(Number(parseFloat(instprice).toFixed(0)).toLocaleString());
+                                        }
+                                        var disamt = "@own.Discount";
+                                        if (disamt > 0 || disamt != "") {
+                                            $("#dis-amt-sec").show();
+                                            $("#dis-amt").text(Number(parseFloat(disamt).toFixed(0)).toLocaleString());
+                                        }
+                                    </script>*@
                             }
                             <div class="panel panel-default">
                                 <div class="panel-heading">
@@ -452,9 +456,9 @@
                             <tr>
                                 <td colspan="2"><a class="btn btn-primary" href="/Plots/PlotDetailReport?Plotid=@Model.PlotData.Id" target="_blank">Ledger Report</a></td>
                                 @*@if (User.IsInRole("Verification Authorization"))
-                                {*@
-                                    <td colspan="4"><button id="ver-plot" style="display:none" class="btn btn-success">Verify</button></td>
-                               @* }*@
+                                    {*@
+                                <td colspan="4"><button id="ver-plot" style="display:none" class="btn btn-success">Verify</button></td>
+                                @* }*@
                             </tr>
                         </tbody>
                     </table>
