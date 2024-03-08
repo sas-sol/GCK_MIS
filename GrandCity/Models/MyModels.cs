@@ -1268,6 +1268,8 @@ namespace MeherEstateDevelopers.Models
         public List<Discount> Discounts { get; set; }
         public File_Plot_Balance PlotBalDets { get; set; }
         public Cancellation_Receipts Refunded_Repurchased { get; set; }
+        public List<Plot_Installments_Surcharge> PlotInstallmentsSurcharge { get; set; }
+        public List<Sp_Get_PlotInstallments_Wht_Result> PlotInstallmentsWHT { get; set; }
     }
     public class PlotCancelDetailData
     {
@@ -1314,6 +1316,7 @@ namespace MeherEstateDevelopers.Models
         public List<Sp_Get_FileInstallments_Result> FileInstallments { get; set; }
         public List<Sp_Get_ReceivedAmounts_Result> FileReceipts { get; set; }
         public List<Installment_Structure> InstalmentStructureDetail { get; set; }
+        public List<Plot_Installments_Surcharge> PlotInstallmentsSurcharge { get; set; }
         public List<Discount> Discounts { get; set; }
         public List<Voucher> PaymentVoucher { get; set; }
     }

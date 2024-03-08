@@ -41,18 +41,19 @@
                         <div class="form-group col-md-3">
                             <label>Phases</label>
                             <select class="form-control pha-blk" name="Phase" id="phase">
-                                <option>Select Project</option>
+                                <option>Select Phases</option>
                             </select>
                         </div>
                         <div class="form-group col-md-3">
                             <label>Block</label>
                             <select class="form-control pha-blk" name="Block" id="block">
-                                <option>Select Phase</option>
+                                <option>Select Block</option>
                             </select>
                         </div>
                         <div class="form-group col-md-3">
                             <label>Type</label>
                             <select class="form-control type" name="Type" id="type">
+                                <option>Select Type</option>
                                 <option value="Residential">Residential</option>
                                 <option value="Commercial">Commercial</option>
                             </select>
@@ -61,11 +62,12 @@
                             <label>Dealership</label>
                             @Html.DropDownList("Dealership", null, "Select Dealership", htmlAttributes: new { @class = "form-control" })
                         </div>
+                          
                         @*<div class="form-group col-md-3">
                                 <label>Valid Date</label>
                                 <input type="text" id="valid_Date" name="valid_Date" placeholder="MM/DD/YYYY" data-provide="datepicker" class="form-control" />
                             </div>*@
-                        <div class="form-group col-md-1">
+                        @*<div class="form-group col-md-1">
                             <label>Sector</label>
                             <select class="form-control type" name="Sector" id="Sector">
                                 <option value="A">A</option>
@@ -74,7 +76,7 @@
                                 <option value="D">D</option>
                                 <option value="E">E</option>
                             </select>
-                        </div>
+                        </div>*@
                     </div>
                     @*<div class="form-row">
                             <div class="col-md-3">
@@ -182,23 +184,29 @@
             }
             $("#del-sub-btn").attr("disabled", true);
             $("#reset").show();
-            $.ajax({
-                type: "POST",
-                contentType: "application/json; charset=utf-8",
-                url: $("#de-fo-as").attr('action'),
-                data: JSON.stringify(filesformdata),
-                success: function (data) {
-                    $('#re-fi-for').load('/FileSystem/ShowFileFormList/', { dealerFileForm: data })
-                    window.open("/Dealership/NewFileDesign?Group_Id=" + data[0].Group_Id, '_blank');
-                }
-                , error: function (xmlhttprequest, textstatus, message) {
-                    if (textstatus === "timeout") {
-                        alert("got timeout");
-                    } else {
-                        alert(textstatus);
+            var InstallId = $('#plt-ins').val();
+            if (InstallId == "") {
+                $.ajax({
+                    type: "POST",
+                    contentType: "application/json; charset=utf-8",
+                    url: $("#de-fo-as").attr('action'),
+                    data: JSON.stringify(filesformdata),
+                    success: function (data) {
+                        $('#re-fi-for').load('/FileSystem/ShowFileFormList/', { dealerFileForm: data })
+                        window.open("/Dealership/NewFileDesign?Group_Id=" + data[0].Group_Id, '_blank');
                     }
-                }
-            });
+                    , error: function (xmlhttprequest, textstatus, message) {
+                        if (textstatus === "timeout") {
+                            alert("got timeout");
+                        } else {
+                            alert(textstatus);
+                        }
+                    }
+                });
+            }
+            else {
+                alert("Select Installment Plan.");
+            }
         }
     });
 

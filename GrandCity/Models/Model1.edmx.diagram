@@ -281,6 +281,8 @@
         <AssociationConnector Association="Grand_CityModel.FK_HangFire_JobParameter_Job" ManuallyRouted="false" />
         <AssociationConnector Association="Grand_CityModel.FK_HangFire_State_Job" ManuallyRouted="false" />
         <AssociationConnector Association="Grand_CityModel.UserRoles" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="Grand_CityModel.Plot_Installments_Wht" Width="1.5" PointX="55.375" PointY="41.75" />
+        <EntityTypeShape EntityType="Grand_CityModel.Plot_Installments_Surcharge" Width="1.5" PointX="55.375" PointY="36.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

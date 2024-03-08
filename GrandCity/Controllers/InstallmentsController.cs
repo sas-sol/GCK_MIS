@@ -10,6 +10,8 @@ using MeherEstateDevelopers.Models;
 using Microsoft.AspNet.Identity;
 using Newtonsoft.Json;
 using Microsoft.SqlServer.Server;
+using System.Globalization;
+using System.Data.Entity.Migrations;
 
 namespace MeherEstateDevelopers.Controllers
 {
@@ -2706,5 +2708,414 @@ namespace MeherEstateDevelopers.Controllers
             }
             base.Dispose(disposing);
         }
+        //public void SurchargePlot()
+        //{
+        //    using (Grand_CityEntities db = new Grand_CityEntities())
+        //    {
+        //        //var res = db.Plots.Where(x => x.Status == "Registered").Where(x => x.Id == 250).ToList();  // For testing 
+
+        //        var res = db.Plots.Where(x => x.Status == "Registered").ToList();
+        //        //var res = db.Plots.Where(x => x.Id ==6 ).ToList();
+        //        foreach (var v in res)
+        //        {
+        //            int b = 0;
+        //            double fineamount = 0;
+        //            double fine = 0;
+        //            decimal? TotalAmt = 0, AmttoPaid = 0, TotalAmount = 0; decimal? balance = 0;
+        //            var ins = db.Plot_Installments.Where(x => x.Status == "NotPaid" && x.Cancelled == null && x.Plot_Id == v.Id).ToList();
+        //            if (ins.Any())
+        //            {
+        //                var res5surcharge = db.Plot_Installments.Where(x => x.Plot_Id == v.Id && x.Cancelled == null).OrderBy(x => x.DueDate).ToList();
+        //                var res6surcharge = db.Sp_Get_ReceivedAmounts(v.Id, "PlotManagement").ToList();
+        //                string[] Type = { "Advance", "Booking", "Installment", "Possession" };
+        //                //TotalAmount = res6surcharge.Where(x => Type.Contains(x.Type) /*&& (x.Status == null || x.Status == "Approved")*/).Sum(x => x.Amount);
+        //                TotalAmount = res6surcharge.Sum(x => x.Amount);
+        //                List<AmountToPaidInfo> latpi = new List<AmountToPaidInfo>();
+        //                foreach (var item1 in res5surcharge)
+        //                {
+        //                    AmountToPaidInfo atpi = new AmountToPaidInfo();
+        //                    TotalAmt += item1.Amount;
+        //                    if (Math.Round(Convert.ToDecimal(TotalAmt)) <= Math.Round(Convert.ToDecimal(TotalAmount)))
+        //                    {
+        //                        AmttoPaid += item1.Amount;
+        //                        atpi.Id = item1.Id;
+        //                        latpi.Add(atpi);
+        //                    }
+        //                    else
+        //                    {
+        //                        balance = TotalAmt - TotalAmount;
+        //                        var PrimaryId = item1.Id;
+        //                        break;
+        //                    }
+        //                }
+        //            }
+        //            foreach (var a in ins)
+        //            {
+        //                DateTime today = DateTime.Now;
+        //                DateTime AddDays = a.DueDate.Date.AddDays(0);
+        //                TimeSpan t = today - AddDays;
+        //                int NrOfDays = (int)t.TotalDays;
+        //                if (NrOfDays >= 1)
+        //                {
+        //                    if (b == 0)
+        //                    {
+        //                        //fine = Convert.ToDouble(balance) * 013.34;
+        //                        fine = Convert.ToDouble(balance) * (0.05 / 30);
+        //                        fineamount = fine * (NrOfDays);
+        //                    }
+        //                    else
+        //                    {
+        //                        //fine = Convert.ToDouble(a.Amount) * 013.34;
+        //                        fine = Convert.ToDouble(a.Amount) * (0.05 / 30);
+        //                        fineamount = fine * (NrOfDays);
+        //                    }
+        //                    b = 1;
+        //                    var checksurcharge = db.Plot_Installments_Surcharge.Where(x => x.Plot_Id == a.Plot_Id && x.Plot_install_id == a.Id && x.Status == "NotPaid" && x.Modules == "PlotManagement").FirstOrDefault();
+        //                    if (checksurcharge != null)
+        //                    {
+        //                        checksurcharge.Surchargefine = Convert.ToDecimal(fine);
+        //                        checksurcharge.SurchargeAmount = Convert.ToDecimal(fineamount);
+        //                        checksurcharge.DueDate_New = DateTime.Now;
+        //                        checksurcharge.Surchargedays = NrOfDays;
+        //                        checksurcharge.Installment_Name = "Surcharge against " + a.Installment_Name;
+        //                        db.Plot_Installments_Surcharge.AddOrUpdate(checksurcharge);
+        //                        db.SaveChanges();
+        //                    }
+        //                    else
+        //                    {
+        //                        var checksurchargeagain = db.Plot_Installments_Surcharge.Where(x => x.Plot_Id == a.Plot_Id && x.Plot_install_id == a.Id && x.Status == "Paid" && x.Modules == "PlotManagement").FirstOrDefault();
+        //                        if (checksurchargeagain == null)
+        //                        {
+        //                            Plot_Installments_Surcharge pi = new Plot_Installments_Surcharge
+        //                            {
+        //                                Amount = a.Amount,
+        //                                SurchargeAmount = Convert.ToDecimal(fineamount),
+        //                                DueDate = a.DueDate,
+        //                                DueDate_New = DateTime.Now,
+        //                                Installment_Name = "Surcharge against " + a.Installment_Name,
+        //                                Installment_Type = a.Installment_Type,
+        //                                Status = "NotPaid",
+        //                                Plot_install_id = a.Id,
+        //                                Plot_Id = a.Plot_Id,
+        //                                Surchargefine = (decimal?)fine,
+        //                                Surchargedays = NrOfDays,
+        //                                Modules = "PlotManagement"
+        //                            };
+        //                            db.Plot_Installments_Surcharge.Add(pi);
+        //                            db.SaveChanges();
+        //                        }
+        //                    }
+        //                }
+        //            }
+        //        }
+        //    }
+
+        //}
+        //public void SurchargeFile()
+        //{
+        //    using (Grand_CityEntities db = new Grand_CityEntities())
+        //    {
+        //        //var res = db.Plots.Where(x => x.Status == "Registered").Where(x => x.Id == 250).ToList();  // For testing 
+
+        //        var res = db.File_Form.Where(x => x.Status == 1).ToList();
+        //        //var res = db.Plots.Where(x => x.Id ==6 ).ToList();
+        //        foreach (var v in res)
+        //        {
+        //            int b = 0;
+        //            double fineamount = 0;
+        //            double fine = 0;
+        //            decimal? TotalAmt = 0, AmttoPaid = 0, TotalAmount = 0; decimal? balance = 0;
+        //            var ins = db.File_Installments.Where(x => x.Status == "NotPaid" && x.Cancelled == null && x.File_Id == v.Id).ToList();
+        //            if (ins.Any())
+        //            {
+        //                var res5surcharge = db.File_Installments.Where(x => x.File_Id == v.Id && x.Cancelled == null).OrderBy(x => x.Due_Date).ToList();
+        //                var res6surcharge = db.Sp_Get_ReceivedAmounts(v.Id, "FileManagement").ToList();
+        //                string[] Type = { "Advance", "Booking", "Installment", "Possession" };
+        //                //TotalAmount = res6surcharge.Where(x => Type.Contains(x.Type) /*&& (x.Status == null || x.Status == "Approved")*/).Sum(x => x.Amount);
+        //                TotalAmount = res6surcharge.Sum(x => x.Amount);
+        //                List<AmountToPaidInfo> latpi = new List<AmountToPaidInfo>();
+        //                foreach (var item1 in res5surcharge)
+        //                {
+        //                    AmountToPaidInfo atpi = new AmountToPaidInfo();
+        //                    TotalAmt += item1.Amount;
+        //                    if (Math.Round(Convert.ToDecimal(TotalAmt)) <= Math.Round(Convert.ToDecimal(TotalAmount)))
+        //                    {
+        //                        AmttoPaid += item1.Amount;
+        //                        atpi.Id = item1.Id;
+        //                        latpi.Add(atpi);
+        //                    }
+        //                    else
+        //                    {
+        //                        balance = TotalAmt - TotalAmount;
+        //                        var PrimaryId = item1.Id;
+        //                        break;
+        //                    }
+        //                }
+        //            }
+        //            foreach (var a in ins)
+        //            {
+        //                DateTime today = DateTime.Now;
+        //                DateTime AddDays = a.Due_Date.Date.AddDays(0);
+        //                TimeSpan t = today - AddDays;
+        //                int NrOfDays = (int)t.TotalDays;
+        //                if (NrOfDays >= 1)
+        //                {
+        //                    if (b == 0)
+        //                    {
+        //                        //fine = Convert.ToDouble(balance) * 013.34;
+        //                        fine = Convert.ToDouble(balance) * (0.05 / 30);
+        //                        fineamount = fine * (NrOfDays);
+        //                    }
+        //                    else
+        //                    {
+        //                        //fine = Convert.ToDouble(a.Amount) * 013.34;
+        //                        fine = Convert.ToDouble(a.Amount) * (0.05 / 30);
+        //                        fineamount = fine * (NrOfDays);
+        //                    }
+        //                    b = 1;
+        //                    var checksurcharge = db.Plot_Installments_Surcharge.Where(x => x.Plot_Id == a.File_Id && x.Plot_install_id == a.Id && x.Status == "NotPaid" && x.Modules == "FileManagement").FirstOrDefault();
+        //                    if (checksurcharge != null)
+        //                    {
+        //                        checksurcharge.Surchargefine = Convert.ToDecimal(fine);
+        //                        checksurcharge.SurchargeAmount = Convert.ToDecimal(fineamount);
+        //                        checksurcharge.DueDate_New = DateTime.Now;
+        //                        checksurcharge.Surchargedays = NrOfDays;
+        //                        checksurcharge.Installment_Name = "Surcharge against " + a.Installment_Name;
+        //                        db.Plot_Installments_Surcharge.AddOrUpdate(checksurcharge);
+        //                        db.SaveChanges();
+        //                    }
+        //                    else
+        //                    {
+        //                        var checksurchargeagain = db.Plot_Installments_Surcharge.Where(x => x.Plot_Id == a.File_Id && x.Plot_install_id == a.Id && x.Status == "Paid" && x.Modules == "FileManagement").FirstOrDefault();
+        //                        if (checksurchargeagain == null)
+        //                        {
+        //                            Plot_Installments_Surcharge pi = new Plot_Installments_Surcharge
+        //                            {
+        //                                Amount = a.Amount,
+        //                                SurchargeAmount = Convert.ToDecimal(fineamount),
+        //                                DueDate = a.Due_Date,
+        //                                DueDate_New = DateTime.Now,
+        //                                Installment_Name = "Surcharge against " + a.Installment_Name,
+        //                                Installment_Type = a.Installment_Type,
+        //                                Status = "NotPaid",
+        //                                Plot_install_id = a.Id,
+        //                                Plot_Id = a.File_Id,
+        //                                Surchargefine = (decimal?)fine,
+        //                                Surchargedays = NrOfDays,
+        //                                Modules = "FileManagement"
+        //                            };
+        //                            db.Plot_Installments_Surcharge.Add(pi);
+        //                            db.SaveChanges();
+        //                        }
+        //                    }
+        //                }
+        //            }
+        //        }
+        //    }
+
+        //}
+        //public void Surcharge(string Modules)
+        //{
+        //    using (Grand_CityEntities db = new Grand_CityEntities())
+        //    {
+        //        //var res = db.Plots.Where(x => x.Status == "Registered").Where(x => x.Id == 250).ToList();  // For testing 
+        //        if (Modules == "PlotManagement") 
+        //        {
+        //            var res = db.Plots.Where(x => x.Status == "Registered").ToList();
+        //             //var res = db.Plots.Where(x => x.Id ==6 ).ToList();
+        //            foreach (var v in res)
+        //            {
+        //                int b = 0;
+        //                double fineamount = 0;
+        //                double fine = 0;
+        //                decimal? TotalAmt = 0, AmttoPaid = 0, TotalAmount = 0; decimal? balance = 0;
+        //                var ins = db.Plot_Installments.Where(x => x.Status == "NotPaid" && x.Cancelled == null && x.Plot_Id == v.Id).ToList();
+        //                if (ins.Any())
+        //                {
+        //                    var res5surcharge = db.Plot_Installments.Where(x => x.Plot_Id == v.Id && x.Cancelled == null).OrderBy(x => x.DueDate).ToList();
+        //                    var res6surcharge = db.Sp_Get_ReceivedAmounts(v.Id, "PlotManagement").ToList();
+        //                    string[] Type = { "Advance", "Booking", "Installment", "Possession" };
+        //                    //TotalAmount = res6surcharge.Where(x => Type.Contains(x.Type) /*&& (x.Status == null || x.Status == "Approved")*/).Sum(x => x.Amount);
+        //                    TotalAmount = res6surcharge.Sum(x => x.Amount);
+        //                    List<AmountToPaidInfo> latpi = new List<AmountToPaidInfo>();
+        //                    foreach (var item1 in res5surcharge)
+        //                    {
+        //                        AmountToPaidInfo atpi = new AmountToPaidInfo();
+        //                        TotalAmt += item1.Amount;
+        //                        if (Math.Round(Convert.ToDecimal(TotalAmt)) <= Math.Round(Convert.ToDecimal(TotalAmount)))
+        //                        {
+        //                            AmttoPaid += item1.Amount;
+        //                            atpi.Id = item1.Id;
+        //                            latpi.Add(atpi);
+        //                        }
+        //                        else
+        //                        {
+        //                            balance = TotalAmt - TotalAmount;
+        //                            var PrimaryId = item1.Id;
+        //                            break;
+        //                        }
+        //                    }
+        //                }
+        //                foreach (var a in ins)
+        //                {
+        //                    DateTime today = DateTime.Now;
+        //                    DateTime AddDays = a.DueDate.Date.AddDays(0);
+        //                    TimeSpan t = today - AddDays;
+        //                    int NrOfDays = (int)t.TotalDays;
+        //                    if (NrOfDays >= 1)
+        //                    {
+        //                        if (b == 0)
+        //                        {
+        //                            //fine = Convert.ToDouble(balance) * 013.34;
+        //                            fine = Convert.ToDouble(balance) * (0.05 / 30);
+        //                            fineamount = fine * (NrOfDays);
+        //                        }
+        //                        else
+        //                        {
+        //                            //fine = Convert.ToDouble(a.Amount) * 013.34;
+        //                            fine = Convert.ToDouble(a.Amount) * (0.05 / 30);
+        //                            fineamount = fine * (NrOfDays);
+        //                        }
+        //                        b = 1;
+        //                        var checksurcharge = db.Plot_Installments_Surcharge.Where(x => x.Plot_Id == a.Plot_Id && x.Plot_install_id == a.Id && x.Status == "NotPaid" && x.Modules == "PlotManagement").FirstOrDefault();
+        //                        if (checksurcharge != null)
+        //                        {
+        //                            checksurcharge.Surchargefine = Convert.ToDecimal(fine);
+        //                            checksurcharge.SurchargeAmount = Convert.ToDecimal(fineamount);
+        //                            checksurcharge.DueDate_New = DateTime.Now;
+        //                            checksurcharge.Surchargedays = NrOfDays;
+        //                            checksurcharge.Installment_Name = "Surcharge against " + a.Installment_Name;
+        //                            db.Plot_Installments_Surcharge.AddOrUpdate(checksurcharge);
+        //                            db.SaveChanges();
+        //                        }
+        //                        else
+        //                        {
+        //                            var checksurchargeagain = db.Plot_Installments_Surcharge.Where(x => x.Plot_Id == a.Plot_Id && x.Plot_install_id == a.Id && x.Status == "Paid" && x.Modules == "PlotManagement").FirstOrDefault();
+        //                            if (checksurchargeagain == null)
+        //                            {
+        //                                Plot_Installments_Surcharge pi = new Plot_Installments_Surcharge
+        //                                {
+        //                                    Amount = a.Amount,
+        //                                    SurchargeAmount = Convert.ToDecimal(fineamount),
+        //                                    DueDate = a.DueDate,
+        //                                    DueDate_New = DateTime.Now,
+        //                                    Installment_Name = "Surcharge against " + a.Installment_Name,
+        //                                    Installment_Type = a.Installment_Type,
+        //                                    Status = "NotPaid",
+        //                                    Plot_install_id = a.Id,
+        //                                    Plot_Id = a.Plot_Id,
+        //                                    Surchargefine = (decimal?)fine,
+        //                                    Surchargedays = NrOfDays,
+        //                                    Modules = "PlotManagement"
+        //                                };
+        //                                db.Plot_Installments_Surcharge.Add(pi);
+        //                                db.SaveChanges();
+        //                            }
+        //                        }
+        //                    }
+        //                }
+        //        }
+        //        }
+        //        else if (Modules == "FileManagement")
+        //        {
+        //            var res = db.File_Form.Where(x => x.Status== 1).ToList();
+        //            //var res = db.Plots.Where(x => x.Id ==6 ).ToList();
+        //            foreach (var v in res)
+        //            {
+        //                int b = 0;
+        //                double fineamount = 0;
+        //                double fine = 0;
+        //                decimal? TotalAmt = 0, AmttoPaid = 0, TotalAmount = 0; decimal? balance = 0;
+        //                var ins = db.File_Installments.Where(x => x.Status == "NotPaid" && x.Cancelled == null && x.File_Id == v.Id).ToList();
+        //                if (ins.Any())
+        //                {
+        //                    var res5surcharge = db.File_Installments.Where(x => x.File_Id == v.Id && x.Cancelled == null).OrderBy(x => x.Due_Date).ToList();
+        //                    var res6surcharge = db.Sp_Get_ReceivedAmounts(v.Id, "FileManagement").ToList();
+        //                    string[] Type = { "Advance", "Booking", "Installment", "Possession" };
+        //                    //TotalAmount = res6surcharge.Where(x => Type.Contains(x.Type) /*&& (x.Status == null || x.Status == "Approved")*/).Sum(x => x.Amount);
+        //                    TotalAmount = res6surcharge.Sum(x => x.Amount);
+        //                    List<AmountToPaidInfo> latpi = new List<AmountToPaidInfo>();
+        //                    foreach (var item1 in res5surcharge)
+        //                    {
+        //                        AmountToPaidInfo atpi = new AmountToPaidInfo();
+        //                        TotalAmt += item1.Amount;
+        //                        if (Math.Round(Convert.ToDecimal(TotalAmt)) <= Math.Round(Convert.ToDecimal(TotalAmount)))
+        //                        {
+        //                            AmttoPaid += item1.Amount;
+        //                            atpi.Id = item1.Id;
+        //                            latpi.Add(atpi);
+        //                        }
+        //                        else
+        //                        {
+        //                            balance = TotalAmt - TotalAmount;
+        //                            var PrimaryId = item1.Id;
+        //                            break;
+        //                        }
+        //                    }
+        //                }
+        //                foreach (var a in ins)
+        //                {
+        //                    DateTime today = DateTime.Now;
+        //                    DateTime AddDays = a.Due_Date.Date.AddDays(0);
+        //                    TimeSpan t = today - AddDays;
+        //                    int NrOfDays = (int)t.TotalDays;
+        //                    if (NrOfDays >= 1)
+        //                    {
+        //                        if (b == 0)
+        //                        {
+        //                            //fine = Convert.ToDouble(balance) * 013.34;
+        //                            fine = Convert.ToDouble(balance) * (0.05 / 30);
+        //                            fineamount = fine * (NrOfDays);
+        //                        }
+        //                        else
+        //                        {
+        //                            //fine = Convert.ToDouble(a.Amount) * 013.34;
+        //                            fine = Convert.ToDouble(a.Amount) * (0.05 / 30);
+        //                            fineamount = fine * (NrOfDays);
+        //                        }
+        //                        b = 1;
+        //                        var checksurcharge = db.Plot_Installments_Surcharge.Where(x => x.Plot_Id == a.File_Id && x.Plot_install_id == a.Id && x.Status == "NotPaid" && x.Modules == "FileManagement").FirstOrDefault();
+        //                        if (checksurcharge != null)
+        //                        {
+        //                            checksurcharge.Surchargefine = Convert.ToDecimal(fine);
+        //                            checksurcharge.SurchargeAmount = Convert.ToDecimal(fineamount);
+        //                            checksurcharge.DueDate_New = DateTime.Now;
+        //                            checksurcharge.Surchargedays = NrOfDays;
+        //                            checksurcharge.Installment_Name = "Surcharge against " + a.Installment_Name;
+        //                            db.Plot_Installments_Surcharge.AddOrUpdate(checksurcharge);
+        //                            db.SaveChanges();
+        //                        }
+        //                        else
+        //                        {
+        //                            var checksurchargeagain = db.Plot_Installments_Surcharge.Where(x => x.Plot_Id == a.File_Id && x.Plot_install_id == a.Id && x.Status == "Paid" && x.Modules == "FileManagement").FirstOrDefault();
+        //                            if (checksurchargeagain == null)
+        //                            {
+        //                                Plot_Installments_Surcharge pi = new Plot_Installments_Surcharge
+        //                                {
+        //                                    Amount = a.Amount,
+        //                                    SurchargeAmount = Convert.ToDecimal(fineamount),
+        //                                    DueDate = a.Due_Date,
+        //                                    DueDate_New = DateTime.Now,
+        //                                    Installment_Name = "Surcharge against " + a.Installment_Name,
+        //                                    Installment_Type = a.Installment_Type,
+        //                                    Status = "NotPaid",
+        //                                    Plot_install_id = a.Id,
+        //                                    Plot_Id = a.File_Id,
+        //                                    Surchargefine = (decimal?)fine,
+        //                                    Surchargedays = NrOfDays,
+        //                                    Modules = "FileManagement"
+        //                                };
+        //                                db.Plot_Installments_Surcharge.Add(pi);
+        //                                db.SaveChanges();
+        //                            }
+        //                        }
+        //                    }
+        //                }
+        //            }
+        //        }
+        //    }
+        //}
+
+
     }
 }

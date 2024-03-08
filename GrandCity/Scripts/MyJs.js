@@ -1195,56 +1195,62 @@ $(document).on("submit", "#cr-inst-str", function (e) {
     $(".value").each(function () {
         actcalprice = parseFloat(actcalprice | 0) + parseFloat(RemoveComma($(this).val()) | 0);
     });
-    if (totalprice !== actcalprice) {
-        alert("Sum of all Values are not equal to Total Price of File / Plot");
-        return false;
-    }
+   
     var de;
     var plot = $('#Plots').val();
     var block = $("#blocks option:selected").val();
     var rate = Number(RemoveComma($("#rate-marla").val()));
     var total = Number(RemoveComma($("#f-p-pric").val()));
     var grandtotal = Number(RemoveComma($("#gr-tlt").val()));
-    var inststrdata = [];
-    for (var i = 1; i <= instcoutstrc; i++) {
-        var installtypes = { Installment_Name: "", Installment_Type: "", Rate: "", Plot_Size: "", Amount: "", Block_Id: "", After: "", Interval: "" };
-        installtypes.Installment_Name = $('#inst-strc-' + i + ' .inst-name').val();
-        installtypes.Installment_Type = $('#inst-strc-' + i + ' .inst-type').val();
-        debugger
-        installtypes.Rate = $('#inst-strc-' + i + ' .hid-rate').val();
-        installtypes.After = $('#inst-strc-' + i + ' .af-tim').val();
-        debugger
-        installtypes.Interval = $('#inst-strc-' + i + ' .interval').val();
-        installtypes.Amount = $('#inst-strc-' + i + ' .value').val();
-        inststrdata.push(installtypes);
+    var remaining = Number(RemoveComma($("#remain").val()));
+    debugger
+    if (grandtotal == total && remaining == 0) {
+        var inststrdata = [];
+        for (var i = 1; i <= instcoutstrc; i++) {
+            var installtypes = { Installment_Name: "", Installment_Type: "", Rate: "", Plot_Size: "", Amount: "", Block_Id: "", After: "", Interval: "" };
+            installtypes.Installment_Name = $('#inst-strc-' + i + ' .inst-name').val();
+            installtypes.Installment_Type = $('#inst-strc-' + i + ' .inst-type').val();
+            debugger
+            installtypes.Rate = $('#inst-strc-' + i + ' .hid-rate').val();
+            installtypes.After = $('#inst-strc-' + i + ' .af-tim').val();
+            debugger
+            installtypes.Interval = $('#inst-strc-' + i + ' .interval').val();
+            installtypes.Amount = $('#inst-strc-' + i + ' .value').val();
+            inststrdata.push(installtypes);
+        }
+        var finaldata = { I_S: inststrdata, Plot: plot, Block: block, Rate: rate, Total: total, GrandTotal: grandtotal };
+
+        $.ajax({
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            url: $("#cr-inst-str").attr('action'),
+            data: JSON.stringify(finaldata),
+            success: function (data) {
+                if (data) {
+                    alert("Installment Plan Created!");
+                    window.location.reload();
+                }
+                else {
+                    alert("Installment Structure of " + + " of Plot Size :" + +" is already Present");
+                }
+            },
+            error: function () {
+                alert("Error Occured Try Again")
+            }
+            , error: function (xmlhttprequest, textstatus, message) {
+                if (textstatus === "timeout") {
+                    alert("got timeout");
+                } else {
+                    alert(textstatus);
+                }
+            }
+        });
     }
-    var finaldata = { I_S: inststrdata, Plot: plot, Block: block, Rate: rate, Total: total, GrandTotal: grandtotal };
-    $.ajax({
-        type: "POST",
-        contentType: "application/json; charset=utf-8",
-        url: $("#cr-inst-str").attr('action'),
-        data: JSON.stringify(finaldata),
-        success: function (data) {
-            if (data) {
-                alert("Installment Plan Created!");
-                window.location.reload();
-            }
-            else {
-                alert("Installment Structure of " + + " of Plot Size :" + +" is already Present");
-            }
-        },
-        error: function () {
-            alert("Error Occured Try Again")
-        }
-        , error: function (xmlhttprequest, textstatus, message) {
-            if (textstatus === "timeout") {
-                alert("got timeout");
-            } else {
-                alert(textstatus);
-            }
-        }
-    });
+    else {
+        alert("Sum of all Values are not equal to Total Price.")
+    }
 });
+   
 // Create Commercial Structure
 $(document).on("submit", "#cr-com-inst-str", function (e) {
     e.preventDefault();
@@ -1392,14 +1398,16 @@ $(document).on("change", "#phase", function () {
         $("#block").append('<option value=' + value.Id + '>' + value.Block_Name + '</option>');
     });
 });
+
 // Get Security Fees of Phase and Block
 $(document).on("change", ".pha-blk", function () {
     var blockid = $("#block").val();
     var phaseid = $("#phase").val();
+   /* var sectorid = $("#sector").val();  */
     $.ajax({
         type: "POST",
         url: '/FileSystem/GetFileSecurity/',
-        data: { Phase: phaseid, Block: blockid },
+        data: { Phase: phaseid, Block: blockid},
         success: function (data) {
             $("#sec-fee").html(data.Price)
         }
@@ -1505,23 +1513,28 @@ $(document).on("submit", "#de-fo-as", function (e) {
         }
         $("#del-sub-btn").attr("disabled", true);
         $("#reset").show();
-        $.ajax({
-            type: "POST",
-            contentType: "application/json; charset=utf-8",
-            url: $("#de-fo-as").attr('action'),
-            data: JSON.stringify(filesformdata),
-            success: function (data) {
-                $('#re-fi-for').load('/FileSystem/ShowFileFormList/', { dealerFileForm: data })
-                window.open("/Dealership/NewFileDesign?Group_Id=" + data[0].Group_Id, '_blank');
-            }
-            , error: function (xmlhttprequest, textstatus, message) {
-                if (textstatus === "timeout") {
-                    alert("got timeout");
-                } else {
-                    alert(textstatus);
+        if (Installment_Plan == null) {
+            $.ajax({
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                url: $("#de-fo-as").attr('action'),
+                data: JSON.stringify(filesformdata),
+                success: function (data) {
+                    $('#re-fi-for').load('/FileSystem/ShowFileFormList/', { dealerFileForm: data })
+                    window.open("/Dealership/NewFileDesign?Group_Id=" + data[0].Group_Id, '_blank');
                 }
-            }
-        });
+                , error: function (xmlhttprequest, textstatus, message) {
+                    if (textstatus === "timeout") {
+                        alert("got timeout");
+                    } else {
+                        alert(textstatus);
+                    }
+                }
+            });
+        }
+        else {
+            alert("Select Installment Plan.");
+        }
     }
 });
 // Get Application Form Details
@@ -10186,18 +10199,20 @@ $(document).on("submit", "#pay-con-char", function (e) {
 //
 $(document).on("submit", "#pay-fin-char", function (e) {
     e.preventDefault();
+    debugger
     $('#pay-fin-char-btn').attr("disabled", true);
-    //var con = confirm("Are you sure you want to Generate Receipt");
-    //if (con) {
-    Swal.fire({
-        text: 'Are you sure you want to generate the Receipt?',
-        icon: 'question',
-        showCancelButton: true,
-        confirmButtonText: 'Yes',
-        cancelButtonText: 'No'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            $.ajax({
+    var con = confirm("Are you sure you want to Generate Receipt");
+    if (con) {
+    //Swal.fire({
+    //    text: 'Are you sure you want to generate the Receipt?',
+    //    icon: 'question',
+    //    showCancelButton: true,
+    //    confirmButtonText: 'Yes',
+    //    cancelButtonText: 'No'
+    //}).then((result) => {
+    //    if (result.isConfirmed) {
+    
+                $.ajax({
                 type: "POST",
                 url: $("#pay-fin-char").attr('action'),
                 data: $("#pay-fin-char").serialize(),
@@ -10229,7 +10244,6 @@ $(document).on("submit", "#pay-fin-char", function (e) {
                 }
             });
         }
-    });
 });
 //
 $(document).on("click", "#gen-elec-ch-rec", function (e) {
@@ -24863,6 +24877,35 @@ $(document).on("click", "#sup-on-bank", function () {
     }
 });
 
+$(document).on("change", ".WHTCharge", function () {
+    var id = $('.hid-plt-id').val();
+    var status = $('#WHTCharge').val();
+
+    var ch = confirm('Are you sure you want to Apply With Holding Tax');
+    if (ch) {
+        $.ajax({
+            type: "POST",
+            url: "/Plots/WHTChargerPlotInstallment/",
+            data: { PlotId: id, Status: status },
+            success: function (data) {
+                if (data) {
+                    let plotIdData = $('.hid-plt-id').val();
+                    SASLoad($('.inst-n-pmts'));
+                    $('.inst-n-pmts').load('/Plots/WHTPlotInstallmentAndReceiptsPartial/', { Plotid: plotIdData }, function () {
+                        SASUnLoad($('.inst-n-pmts'));
+                    });
+                }
+            }
+            , error: function (xmlhttprequest, textstatus, message) {
+                if (textstatus === "timeout") {
+                    alert("got timeout");
+                } else {
+                    alert(textstatus);
+                }
+            }
+        });
+    }
+});
 
 $(document).on("click", ".SAGarden-lead-prem-uns-search", function () {
     var from = $("#startdate").val();

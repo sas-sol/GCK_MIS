@@ -901,6 +901,12 @@
     <Compile Include="Models\Plot_Installments.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Plot_Installments_Surcharge.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Plot_Installments_Wht.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Plot_LastOwner.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -2495,6 +2501,12 @@
     <Compile Include="Models\Sp_Get_PlotInstallments_Result.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Sp_Get_PlotInstallments_Surcharge_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Sp_Get_PlotInstallments_Wht_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Sp_Get_PlotLastBill_SC_Result.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -2805,6 +2817,9 @@
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Sp_Get_ReceivedAmounts_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Sp_Get_ReceivedAmounts_Surcharge_Result.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Sp_Get_ReceivedAmtCancelledOwner_Result.cs">
@@ -6978,6 +6993,7 @@
     <Content Include="Views\Plots\AddPlotCategory.cshtml" />
     <Content Include="Views\Plots\PlotsInventory.cshtml" />
     <Content Include="Views\Plots\OverDuePlotsReport.cshtml" />
+    <Content Include="Views\Plots\WHTPlotInstallmentAndReceiptsPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
