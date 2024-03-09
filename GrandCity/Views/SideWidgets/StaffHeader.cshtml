@@ -18,6 +18,16 @@
             margin: 0px -90px 0px 0px;
         }
     }
+    .background {
+        color: #1d1c1c;
+        width: 70px;
+        height: 70px;
+        background-color: #1d1c1c;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 8px /*#C4A484*/
+    }
 </style>
 <script src="~/Scripts/Notification.js"></script>
 <script src="~/Scripts/MIS_Reminders.js"></script>
@@ -73,9 +83,11 @@
                         <div class="peer peer-greed">
                             <a class="sidebar-link td-n" href="@Url.Action("Index","Home")">
                                 <div class="peers ai-c fxw-nw">
-                                    <div class="peer">
-                                        <div class="logo" style="padding:20px 10px 10px 10px">
-                                            <img style="width: 75%; height: 34px " src="~/assets/static/images/logo2.png" alt="">
+                                    <div class="background">
+                                        <div class="peer">
+                                            <div class="logo" style="padding:20px 10px 10px 10px">
+                                                <img style="width: 100%; height: 50px" src="~/assets/static/images/logo2_black.JPG" alt="">
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="peer peer-greed">

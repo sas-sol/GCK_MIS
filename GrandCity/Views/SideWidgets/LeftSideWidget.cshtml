@@ -1,4 +1,19 @@
-﻿<div class="sidebar">
+﻿<style>
+    .background {
+        color: #1d1c1c;
+        width: 60px;
+        height: 60px;
+        background-color: /*antiquewhite*/ #1d1c1c;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 5px;
+        margin-bottom: 5px;
+        margin-left: 4px;
+        border-radius: 8px /*#C4A484*/
+    }
+</style>
+<div class="sidebar">
     <div class="sidebar-inner" style="background-color: #C4A484; box-shadow: 20px 0px 5px rgba(0, 0, 0, 0.5); ">
         @*#9ED1CA;*@
         <div class="sidebar-logo">
@@ -6,13 +21,15 @@
                 <div class="peer peer-greed">
                     <a class="sidebar-link td-n" href="/Home/Index">
                         <div class="peers ai-c fxw-nw">
-                            <div class="peer">
-                                <div class="logo" style="padding:20px 10px 10px 10px">
-                                    <img style="width: 100%; height: 50px" src="~/assets/static/images/logo2.png" alt="">
+                            <div class="background">
+                                <div class="peer">
+                                    <div class="logo" style="padding:20px 10px 10px 10px">
+                                        <img style="width: 100%; height: 50px; margin-top: 5px; margin-bottom: 5px;" src="~/assets/static/images/logo2_black.JPG" alt="">
+                                    </div>
                                 </div>
                             </div>
                             <div class="peer peer-greed">
-                                <h5 class="lh-1 mB-0 logo-text">Grand City</h5>
+                                <h5 class="lh-1 mB-0 logo-text" style="margin-left:10px;">Grand City</h5>
                             </div>
                         </div>
                     </a>
@@ -69,7 +86,8 @@
                     </a>
                     <ul class="dropdown-menu">
                         <li>
-                            <a class='sidebar-link get-link' data-link="/RealEstateProjects/ProjectConfiguration/" href="javascript:void(0);" style="color: black !important;">Projects Configuration </a>
+                            <a class='sidebar-link get-link' data-link="/RealEstateProjects/ProjectsDetail/" href="javascript:void(0);">Projects Configuration </a>
+                            @*<a class='sidebar-link get-link' data-link="/RealEstateProjects/ProjectConfiguration/" href="javascript:void(0);" style="color: black !important;">Projects Configuration </a>*@
                         </li>
                         <li>
                             <a class='sidebar-link get-link' data-link="/Plots/PlotsModuleConfiguration/" href="javascript:void(0);" style="color: black !important;">Transfer </a>
@@ -137,14 +155,14 @@
                 <span class="title" style="color: black !important;">Accounts</span>
             </a>
         </li>*@
-        <li class="nav-item dropdown">
+        @*<li class="nav-item dropdown">
             <a class="dropdown-toggle dash-tile" href="javascript:void(0);" data-dash="tickets">
                 <span class="icon-holder">
                     <i class="c-pink-500 ti-ticket"></i>
                 </span>
                 <span class="title" style="color: black !important;">Tickets</span>
             </a>
-        </li>
+        </li>*@
             @if (User.IsInRole("Audit_Auth"))
             {
                 <li class="nav-item dropdown">

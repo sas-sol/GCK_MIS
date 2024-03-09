@@ -16,7 +16,7 @@
     $(function () {
         $.each(plots, function (key, value) {
             var uniplot = { Id: "", Text: "" };
-            var plt = unipllotdata.find(function (e) {  return e.Text == value.Text });
+            var plt = unipllotdata.find(function (e) { return e.Text == value.Text });
             if (plt == null) {
                 uniplot.Id = value.Value; uniplot.Text = value.Text;
                 unipllotdata.push(uniplot);
@@ -111,9 +111,9 @@
                                 <input type="text" class="form-control com" />
                             </div>
                             @*<div class="form-group col-md-2">
-                                    <label>Security</label>
-                                    <input type="text" class="form-control sec" readonly />
-                                </div>*@
+            <label>Security</label>
+            <input type="text" class="form-control sec" readonly />
+        </div>*@
                             <div class="form-group col-md-3">
                                 <label>Choose Installment Structure</label>
                                 <select class="form-control plt-ins">
@@ -155,7 +155,6 @@
             //    alert("Please Enter Total MAX 50 Files");
             //    return false;
             //}
-            debugger
             formcontrolToken = true;
             var filesformdata = [];
             for (var i = 1; i <= filealloccounter; i++) {

@@ -9,11 +9,11 @@
                 <div class="form-row">
                     <div class="form-group col-md-6">
                         <label>Project</label>
-                        @Html.DropDownList("Projects", null, "Select Project", htmlAttributes: new { @class = "form-control prj-ph-blk" })
+                        @Html.DropDownList("Projects", null, "Select Project", htmlAttributes: new { @class = "form-control prj-ph-blk", required = "required" })
                     </div>
                     <div class="form-group col-md-6">
                         <label>Block</label>
-                        <select class="form-control" id="blocks"></select>
+                        <select class="form-control" id="blocks" required></select>
                     </div>
                 </div>
                 <hr />
@@ -39,7 +39,7 @@
             </div>
         </div>
     </div>
-     
+
 </div>
 <script>
     var AllData;
@@ -70,6 +70,7 @@
     }
     function Upload() {
         //Reference the FileUpload element.
+        debugger;
         var fileUpload = document.getElementById("fileUpload");
         handleFileSelect(fileUpload);
         //Validate whether File is valid Excel file.
@@ -140,7 +141,7 @@
         headerCell = document.createElement("th");
         headerCell.innerHTML = "Size";
         row.appendChild(headerCell);
-        
+
         headerCell = document.createElement("th");
         headerCell.innerHTML = "Area";
         row.appendChild(headerCell);
@@ -188,7 +189,7 @@
 
                 cell = row.insertCell(-1);
                 cell.innerHTML = (excelRows[i].Size == undefined) ? "-" : excelRows[i].Size;
-                
+
                 cell = row.insertCell(-1);
                 cell.innerHTML = (excelRows[i].Area == undefined) ? "-" : excelRows[i].Area;
 
@@ -228,7 +229,7 @@
             complete: function () {
 
             },
-            data: JSON.stringify({ plotsData: dataForUpload, Block:block }),
+            data: JSON.stringify({ plotsData: dataForUpload, Block: block }),
         }).done(function (data) {
             if (data == true) {
                 alert('Plots inventory has been added.');
@@ -242,7 +243,7 @@
 
     });
     $(document).on("change", "#fileUpload", function (e) {
-        
+
         e.preventDefault();
         var $this = $(this);
         var data = new FormData();
@@ -256,3 +257,5 @@
         }
     });
 </script>
+
+

@@ -99,10 +99,21 @@ namespace MeherEstateDevelopers.Controllers
         
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public JsonResult Create([Bind(Include = "Id,Project_Name,Description,Type")] RealEstate_Projects realEstate_Projects)
+        public ActionResult Create([Bind(Include = "Id,Project_Name,Description,Type")] RealEstate_Projects realEstate_Projects)
         {
             var res = db.Sp_Add_RealEstateProject(realEstate_Projects.Project_Name, realEstate_Projects.Description, realEstate_Projects.Type).FirstOrDefault();
-            return Json(res);
+            //if (res == true)
+            //{
+                TempData["SuccessMessage"] = "Project added successfully.";
+                //return Json(res);
+                return RedirectToAction("ProjectsDetail", "RealEstateProjects");
+            //}
+            //else
+            //{
+            //    TempData["SuccessMessage"] = "Error Occur, Project not added.";
+            //    //return Json(res);
+            //    return RedirectToAction("ProjectsDetail", "RealEstateProjects");
+            //}
         }
         
         public ActionResult Edit(long? id)
