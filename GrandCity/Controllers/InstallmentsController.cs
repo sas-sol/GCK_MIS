@@ -1699,7 +1699,7 @@ namespace MeherEstateDevelopers.Controllers
             var rem = Math.Round(Convert.ToDouble(balance.Outstanding_Amount), 0) - Math.Round(Convert.ToDouble(rd.Amount), 0);
             if (rem < 0)
             {
-                return Json(new { Status = false, Msg = "Amount is Greater than Outstanding Amount" });
+                return Json(new { Status = false, Msg = "The entered amount exceeds the outstanding balance" });
             }
 
             var lastowner = db.Sp_Get_PlotLastOwner(Plotid).ToList();
@@ -1784,7 +1784,7 @@ namespace MeherEstateDevelopers.Controllers
                     }
                     else
                     {
-                        var res = new { Status = false, Msg = "Transaction already done." };
+                        var res = new { Status = false, Msg = "Transaction already completed" };
                         return Json(res);
                     }
 
@@ -1794,7 +1794,7 @@ namespace MeherEstateDevelopers.Controllers
                     Transaction.Rollback();
                     db.Sp_Add_ErrorLog(ex.Message + ex.InnerException.ToString() + ex.StackTrace, "", "", this.ControllerContext.RouteData.Values["controller"].ToString(), this.ControllerContext.RouteData.Values["action"].ToString());
 
-                    var res = new { Status = false, Msg = "Error Occured" };
+                    var res = new { Status = false, Msg = "Something went wrong" };
                     return Json(res);
                 }
             }
@@ -1909,7 +1909,7 @@ namespace MeherEstateDevelopers.Controllers
                 };
                 db.RefundAmountsReqs.Add(refa);
                 db.SaveChanges();
-                var res5 = new { Status = "Requested", ReceiptNo = res4.Receipt_No, ReceiptId = res4.Receipt_Id, Token = userid };
+                var res5 = new { Status = "Receipt refund requested successfully", ReceiptNo = res4.Receipt_No, ReceiptId = res4.Receipt_Id, Token = userid };
                 return Json(res5);
             }
             else if (res.Module == Modules.FileManagement.ToString())
@@ -2144,7 +2144,7 @@ namespace MeherEstateDevelopers.Controllers
             var rem = Math.Round(Convert.ToDouble(balance.Outstanding_Amount), 0) - Math.Round(Convert.ToDouble(rd.Amount), 0);
             if (rem < 0)
             {
-                return Json(new { Status = false, Msg = "Amount is Greater than Outstanding Amount" });
+                return Json(new { Status = false, Msg = "The entered amount exceeds the outstanding balance" });
             }
             var lastowner = db.Sp_Get_CommercialLastOwner(Comid).FirstOrDefault();
             Helpers H = new Helpers();
@@ -2167,7 +2167,7 @@ namespace MeherEstateDevelopers.Controllers
                     if (res2.Receipt_No == "-1")
                     {
                         Transaction.Rollback();
-                        var resdata = new { Status = false, Msg = "Error Occured" };
+                        var resdata = new { Status = false, Msg = "Something went wrong" };
                         return Json(resdata);
                     }
 
@@ -2205,14 +2205,14 @@ namespace MeherEstateDevelopers.Controllers
 
                     }
                     Transaction.Commit();
-                    var res = new { Status = true, Receiptid = res2.Receipt_No, Token = userid };
+                    var res = new { Status = true, Msg = "Receipt generated successfully" ,Receiptid = res2.Receipt_No, Token = userid };
                     return Json(res);
                 }
                 catch (Exception ex)
                 {
                     Transaction.Rollback();
                     db.Sp_Add_ErrorLog(ex.Message + ex.InnerException.ToString() + ex.StackTrace, "", "", this.ControllerContext.RouteData.Values["controller"].ToString(), this.ControllerContext.RouteData.Values["action"].ToString());
-                    var res = new { Status = false, Msg = "Error Occured" };
+                    var res = new { Status = false, Msg = "Something went wrong" };
                     return Json(res);
                 }
             }

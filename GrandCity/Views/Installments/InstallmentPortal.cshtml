@@ -8,6 +8,11 @@
     }
 }
 <script src="~/Scripts/scanning.js"></script>
+<!-- SweetAlert2 CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+<!-- SweetAlert2 JS -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <div class="row gap-20 pos-r">
     <div class="col-md-12">
         <div class="bgc-white p-20">
@@ -30,10 +35,10 @@
                             </select>
                         </div>
 
-                        @*@if (!User.IsInRole("ReadOnly"))
-                        {*@
+                        @if (!User.IsInRole("ReadOnly"))
+                        {
                             <div class="col-md-1 form-group"><button type="button" id="plot-info-searcher" style="margin-top:29px" class="btn btn-primary">Search</button></div>
-                        
+                        }
                     </div>
                 </div>
             </div>
@@ -59,11 +64,19 @@
             let blk = $('#Block option:selected').val();
 
             if (plt == '' || plt == undefined) {
-                alert('Enter a file number before proceeding.');
+                //alert('Enter a file number before proceeding.');
+                Swal.fire({
+                    icon: 'info',
+                    text: 'Enter a file or plot number before proceeding'
+                });
                 return;
             }
             else if (blk == undefined || blk == '') {
-                alert('Please select a block before proceeding.');
+                //alert('Please select a block before proceeding.');
+                Swal.fire({
+                    icon: 'info',
+                    text: "Please select a block before proceeding"
+                });
                 return;
             }
             ShowFullScreenLoader();
@@ -76,15 +89,27 @@
                         $('#plot-det-dfasgjkhafjkdgs').append(data);
                     }
                     else {
-                        alert('Failed to find any record.');
+                        //alert('Failed to find any record.');
+                        Swal.fire({
+                            icon: 'error',
+                            text: "No Record Found"
+                            })
                     }
                     HideFullScreenLoader();
                 }
                 , error: function (xmlhttprequest, textstatus, message) {
                     if (textstatus === "timeout") {
-                        alert("got timeout");
+                        //alert("got timeout");
+                        Swal.fire({
+                            icon: 'error',
+                            text: "Request timed out"
+                        });
                     } else {
-                        alert('Failed to proceed with the request.');
+                        //alert('Failed to proceed with the request.');
+                        Swal.fire({
+                            icon: 'error',
+                            text: 'Failed to proceed with the request'
+                        });
                     }
                     HideFullScreenLoader();
                 }

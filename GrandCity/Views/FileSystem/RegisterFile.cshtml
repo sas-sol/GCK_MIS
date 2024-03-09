@@ -10,6 +10,11 @@
     }
 
 }
+<!-- SweetAlert2 CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+<!-- SweetAlert2 JS -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <input type="hidden" id="grptag" value="@ViewBag.grp" name="Group_Tag">
 <script>
     var banklist = @Html.Raw(Json.Encode(ViewBag.Bank));
@@ -352,7 +357,16 @@
     }
 
         let ownsCount = 2;
-        $('.add-new-own-applicant').unbind().click(function () {
+    $('.add-new-own-applicant').unbind().click(function () {
+        Swal.fire({
+            //title: 'Are you sure you want to Add New Owner?',
+            text: 'Are you sure you want to Add another Owner?',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Yes',
+            cancelButtonText: 'No'
+        }).then((result) => {
+            if (result.isConfirmed) {
 
             let strct = `<div class="owner"> <h4>Applicant <span class="own-count-info"> ${($('.owner').length + 1)}</span>         <i class="fa fa-trash pointer rmv-owns-applicant" title="Remove this Owner"></i></h4>
 
@@ -459,29 +473,68 @@
 
         });
         $(document).on('click', '.rmv-owns-applicant', function () {
-            let confi = confirm('Are you sure you want to remove this owner?');
-            if (!confi) {
-                return;
-            }
-            $(this).closest('.owner').remove();
-            $('.owner').each(function (ind, val) {
-                $(this).find('.own-count-info').text((ind + 1));
+            //let confi = confirm('Are you sure you want to remove this owner?');
+            //if (!confi) {
+            Swal.fire({
+                //title: 'Are you sure?',
+                text: 'Are you sure you want to Remove the Owner?',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'Yes',
+                cancelButtonText: 'No'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $(this).closest('.owner').remove();
+                    $('.owner').each(function (ind, val) {
+                        $(this).find('.own-count-info').text((ind + 1));
+                    });
+
+                } else {
+                    return;
+                }
             });
-
-
 
         });
         // Register  a file
         $(document).on("submit", "#re-fil-new-fil", function (e) {
             e.preventDefault();
             var advamt = parseFloat(RemoveComma($("#adv-pmt").text()));
-            var totalamt = 0
-            $(".amt").each(function () {
-                totalamt = parseFloat(totalamt) + parseFloat($(this).val());
-            });
-            if (advamt != totalamt) {
-                alert("Received Amount is not equal to Booking Amount");
-                return false;
+
+            var payType = $(".pay-check option:selected").val();
+
+            var recamt = $("#rec-amt").val();
+            recamt = recamt.replace(/,/g, '');
+            var avlbal = $("#avl-bal").text();
+            avlbal = avlbal.replace(/,/g, '');
+            // Convert strings to integers
+            var recamtInt = parseInt(recamt, 10);
+            var avlbalInt = parseInt(avlbal, 10);
+
+            if (payType == "DealerAdjustment") {
+
+                if (avlbalInt < recamtInt) {
+                    //alert("Plot Cannot be Register Due to Low Dealer Balance"); }
+                    Swal.fire({
+                        icon: 'info',
+                        text: "Unable to Register File Due to Insufficient Dealer Balance"
+                    });
+                    return false;
+                }
+            }
+            else
+            {
+                var totalamt = 0
+                $(".amt").each(function () {
+                    totalamt = parseFloat(totalamt) + parseFloat($(this).val());
+                });
+                if (advamt != totalamt) {
+                    //alert("Received Amount is not equal to Booking Amount");
+                    Swal.fire({
+                        icon: 'info',
+                        text: "Received Amount is not equal to the Booking Amount"
+                    });
+                    return false;
+                }
             }
             var flag = true;
             for (var i = 1; i <= paycont; i++) {
@@ -561,36 +614,69 @@
                 FullPaid: fulpaid,
                 DelerId: delerId
             };
-            var con = confirm("Are you sure you want to Register File");
-            if (con) {
-                $.ajax({
-                    type: "POST",
-                    url: $(this).attr("action"),
-                    contentType: "application/json; charset=utf-8",
-                    data: JSON.stringify(alldata),
-                    success: function (data) {
-                        if (!data.Status) {
-                            alert(data.Msg)
+            //var con = confirm("Are you sure you want to Register File");
+            //if (con) {
+            Swal.fire({
+                title: 'Are you sure you want to Register the File?',
+                //text: 'Do you want to Register the File?',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'Yes',
+                cancelButtonText: 'No'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        type: "POST",
+                        url: $(this).attr("action"),
+                        contentType: "application/json; charset=utf-8",
+                        data: JSON.stringify(alldata),
+                        success: function (data) {
+                            if (!data.Status) {
+                                //alert(data.Msg)
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Success!',
+                                    text: data.Msg
+                                });
+                                $("#reg-file").removeAttr("disabled");
+                            }
+                            else {
+                                //alert(data.Msg);
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Success!',
+                                    text: data.Msg
+                                });
+                                $(data.Receiptid).each(function (i) {
+                                    window.open("/Banking/Receipt?Id=" + data.Receiptid[i] + "&Token=" + data.Token, '_blank');
+                                });
+                                if (data.PaymentNo != '0') {
+                                    window.open("/Vouchers/SAGVouchers_Vendor?Id=" + data.PaymentNo + "&Token=" + data.TokenV, '_blank');
+                                }
+                                //window.location.reload();
+                            }
+                        }
+                        , error: function (xmlhttprequest, textstatus, message) {
                             $("#reg-file").removeAttr("disabled");
+                            if (textstatus === "timeout") {
+                                //alert("got timeout");
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Error!',
+                                    text: "Request Timed Out."
+                                });
+                            } else {
+                                Swal.fire({
+                                    icon: 'info',
+                                    title: 'Error!',
+                                    text: textstatus
+                                });
+                                //alert(textstatus);
+                            }
                         }
-                        else {
-                            alert(data.Msg);
-                            $(data.Receiptid).each(function (i) {
-                                window.open("/Banking/Receipt?Id=" + data.Receiptid[i] + "&Token=" + data.Token, '_blank');
-                            });
-                            window.location.reload();
-                        }
-                    }
-                    , error: function (xmlhttprequest, textstatus, message) {
-                        $("#reg-file").removeAttr("disabled");
-                        if (textstatus === "timeout") {
-                            alert("got timeout");
-                        } else {
-                            alert(textstatus);
-                        }
-                    }
-                });
-            }
+                    });
+                }
+            });
         });
 
         $(document).ready(function () {

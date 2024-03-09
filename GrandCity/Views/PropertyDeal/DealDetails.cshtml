@@ -1,4 +1,8 @@
 ﻿@model MeherEstateDevelopers.Models.DealModel
+<!-- SweetAlert2 CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+<!-- SweetAlert2 JS -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 @{ if (User.IsInRole("Administrator")) { Layout = "~/Views/Shared/_AdminLayout.cshtml"; } else { Layout = "~/Views/Shared/_StaffLayout.cshtml"; }
     string[] types = { "Commession", "Cancellation" };
     var dire = Model.Receipts.Where(x => x.Type == "Direct Payment" && x.Cancel is null).ToList();

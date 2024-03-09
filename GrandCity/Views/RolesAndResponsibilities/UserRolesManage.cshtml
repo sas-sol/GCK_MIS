@@ -1,7 +1,10 @@
 ﻿
 @model IEnumerable<MeherEstateDevelopers.Models.Sp_Get_UserAllRoles_Result>
-
- <button style="float:right" class="btn btn-danger reset-paswd">Reset Password</button>
+<!-- SweetAlert2 CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+<!-- SweetAlert2 JS -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<button style="float:right" class="btn btn-danger reset-paswd">Reset Password</button>
 <input type="hidden" value="@ViewBag.Username" id="unamee" />
 <input type="hidden" value="@ViewBag.Id" id="User_Id" />
 <table class="table table-striped table-bordered rolesss" cellspacing="0" width="100%">
@@ -42,106 +45,139 @@
         $(".unroleuser").click(function () {
             var uid = $('#Users option:selected').attr("Value");
             var rid = $(this).attr('rid');
-            if (confirm("Are you Sure You want to Unassign " + $('#Users option:selected').text() + " From This Role?")) {
-                $.ajax({
-                    type: "POST",
-                    url: '/RolesAndResponsibilities/UnassignRole/',
-                    data: { Id: rid, uid: uid },
-                    success: function (data) {
-                        alert("Updated Successfull");
-                        $('#userName').text('Roles Assigned To ' + $('#Users option:selected').text());
-                        $('.rolesuser').load('/RolesAndResponsibilities/UserRolesManage/', { Id: uid });
-                        
-                        var chat = $.connection.authHub;
-                        chat.client.Signout = function () {
-                            $('#logoutForm').submit();
-                            $.connection.hub.stop();
-                        };
-                        $.connection.hub.start().done(function () {
+            //if (confirm("Are you Sure You want to Unassign " + $('#Users option:selected').text() + " From This Role?")) {
+            Swal.fire({
+                text: "Are you sure you want to unassign the role for " + $('#Users option:selected').text() + " ?",
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'Yes',
+                cancelButtonText: 'No'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        type: "POST",
+                        url: '/RolesAndResponsibilities/UnassignRole/',
+                        data: { Id: rid, uid: uid },
+                        success: function (data) {
+                            //alert("Updated Successfull");
+                            Swal.fire({
+                                icon: 'success',
+                                text: "Role unassigned successfully"
+                            }).then(() => {
+                                $('#userName').text('Roles Assigned To ' + $('#Users option:selected').text());
+                                $('.rolesuser').load('/RolesAndResponsibilities/UserRolesManage/', { Id: uid });
+                            })
+                            var chat = $.connection.authHub;
+                            chat.client.Signout = function () {
+                                $('#logoutForm').submit();
+                                $.connection.hub.stop();
+                            };
+                            $.connection.hub.start().done(function () {
 
 
-                            chat.server.getConnectedUsers().done(function (users) {
-                                $.each(users, function (i, username) {
-                                    $("#usersTable").append("<tr><th scope='row'>" + (i + 1) + "</th><td>" + username + "</td><td><a href='javascript:void(0)' data-user='" + username + "' class='btn btn-primary btn-sm btn-logout'>Logout User</a></td></tr>");
+                                chat.server.getConnectedUsers().done(function (users) {
+                                    $.each(users, function (i, username) {
+                                        $("#usersTable").append("<tr><th scope='row'>" + (i + 1) + "</th><td>" + username + "</td><td><a href='javascript:void(0)' data-user='" + username + "' class='btn btn-primary btn-sm btn-logout'>Logout User</a></td></tr>");
+                                    });
                                 });
+
+
                             });
-
-
-                        });
-                        chat.server.forceLogOut(uid);
-                    },
-                    error: function () {
-                        alert("Error Occured");
-                    }
-                });
-            }
-
+                            chat.server.forceLogOut(uid);
+                        },
+                        error: function () {
+                            //alert("Error Occured");
+                            Swal.fire({
+                                icon: 'error',
+                                text: 'Something went wrong'
+                            });
+                        }
+                    });
+                }
+            });
         });
 
         $('.rolesss').DataTable();
     });
 </script>
 <div class="row  " style="display:none;">
-        <div class="col-md-12">
-            <h2>This is Admin's Page</h2>
-            <p><a id="displayActiveUsers" href="javascript:void(0)" class="btn btn-success btn-md">Show All Active User</a></p>
-            <p>
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Username</th>
-                            <th scope="col">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody id="usersTable">
-                    </tbody>
-                </table>
-            </p>
-        </div>
+    <div class="col-md-12">
+        <h2>This is Admin's Page</h2>
+        <p><a id="displayActiveUsers" href="javascript:void(0)" class="btn btn-success btn-md">Show All Active User</a></p>
+        <p>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Username</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                </thead>
+                <tbody id="usersTable">
+                </tbody>
+            </table>
+        </p>
     </div>
-    <script>
+</div>
+<script>
 
 
 
 
-        $(function () {
-            var chat = $.connection.authHub;
-            chat.client.Signout = function () {
-                $('#logoutForm').submit();
-                $.connection.hub.stop();
-            };
-            $.connection.hub.start().done(function () {
+    $(function () {
+        var chat = $.connection.authHub;
+        chat.client.Signout = function () {
+            $('#logoutForm').submit();
+            $.connection.hub.stop();
+        };
+        $.connection.hub.start().done(function () {
 
 
-                chat.server.getConnectedUsers().done(function (users) {
-                    $.each(users, function (i, username) {
-                        $("#usersTable").append("<tr><th scope='row'>" + (i + 1) + "</th><td>" + username + "</td><td><a href='javascript:void(0)' data-user='" + username + "' class='btn btn-primary btn-sm btn-logout'>Logout User</a></td></tr>");
-                    });
+            chat.server.getConnectedUsers().done(function (users) {
+                $.each(users, function (i, username) {
+                    $("#usersTable").append("<tr><th scope='row'>" + (i + 1) + "</th><td>" + username + "</td><td><a href='javascript:void(0)' data-user='" + username + "' class='btn btn-primary btn-sm btn-logout'>Logout User</a></td></tr>");
                 });
-
-
             });
-        });
 
-        //
-        $(document).on("click", ".reset-paswd", function () {
-            var id = $("#User_Id").val();
-            var con = confirm("Are you sure you want to Reset Password");
-            if (con) {
+
+        });
+    });
+
+    //
+    $(document).on("click", ".reset-paswd", function () {
+        var id = $("#User_Id").val();
+        //var con = confirm("Are you sure you want to Reset Password");
+        //if (con) {
+        Swal.fire({
+            text: 'Are you sure you want to reset the password?',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Yes',
+            cancelButtonText: 'No'
+        }).then((result) => {
+            if (result.isConfirmed) {
                 $.ajax({
                     type: "POST",
                     url: '/RolesAndResponsibilities/ResetEmployeePassword/',
                     data: { Id: id },
                     success: function (data) {
-                        alert("Password Reset Successfully");
+                        //alert("Password Reset Successfully");
+                        Swal.fire({
+                            icon: 'success',
+                            text: 'Password reset successfully'
+                        });
                     },
                     error: function () {
-                        alert("Error Occured");
+                        //alert("Error Occured");
+                        Swal.fire({
+                            icon: 'error',
+                            text: 'Something went wrong'
+                        });
                     }
                 });
             }
         });
+    });
 
-    </script>
+</script>
 

@@ -5,6 +5,11 @@
 <script>
     var banklist = @Html.Raw(Json.Encode(ViewBag.Bank));
 </script>
+<!-- SweetAlert2 CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+<!-- SweetAlert2 JS -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <div class="row gap-20 pos-r">
     <input type="hidden" id="transaction-id" value="@ViewBag.TransactionId" />
     <div class="col-md-12">
@@ -309,7 +314,11 @@
         var availbal = -(Number(RemoveComma($('#avl-bal').text())));
         var pltpric = Number(RemoveComma($('#plt-pric').text()));
         if (availbal < pltpric) {
-            alert("Plot Cannot be Register Due to Low Dealer Balance");
+          //alert("Plot Cannot be Register Due to Low Dealer Balance");
+            Swal.fire({
+                        icon: 'info',
+                        text: "Unable to Register Plot Due to Insufficient Dealer Balance"
+                    });
             return false;
         }
         var own = []; 
@@ -361,38 +370,62 @@
         }
         //debugger
         var data = { Owners: own, Plot_Id: $("#plt-id").val(), TransactionId: trans, isPayment: true, DealersId: DealersId, brdd: rd };
-        var conf = confirm("Are You sure? - Submit Owners Informations");
-        if (conf) {
-            $.ajax({
-                type: "POST",
-                contentType: "application/json; charset=utf-8",
-                url: '/Plots/RegisterDealerPlot/',
-                data: JSON.stringify(data),
-                success: function (data) {
-                    debugger
-                    if (data.Status) {
-                        alert("Plot Registered");
-                        window.open("/Banking/PlotReceipt?Id=" + data.ReceiptId + "&Token=" + data.Token, '_blank');
-                        window.location.reload();
-                    }
-                    else {
-                        alert(data.Msg);
-                    }
+        //var conf = confirm("Are You Want to Submit Owners Informations");
+        //if (conf) {
+        Swal.fire({
+            //title: 'Are you sure you want to Register the Plot?',
+            text: 'Are you sure you want to Register the Plot?',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Yes',
+            cancelButtonText: 'No'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    type: "POST",
+                    contentType: "application/json; charset=utf-8",
+                    url: '/Plots/RegisterDealerPlot/',
+                    data: JSON.stringify(data),
+                    success: function (data) {
+                        if (data.Status) {
+                            //alert("Plot Registered")
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Success!',
+                                text: "Plot has been Registered Successfully"
+                            });
+                            window.open("/Banking/PlotReceipt?Id=" + data.ReceiptId + "&Token=" + data.Token, '_blank');
+                            window.location.reload();
+                        }
+                        else {
+                            //alert(data.Msg)
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error!',
+                                text: data.Msg
+                            });
+                        }
 
-                }
-            });
-        }
+                    }
+                });
+            }
+        });
     });
     $(document).ready(function () {
         $('#Dealership').select2();
-        $(document).off("click", ".add__Owner__from__plts__reg").on("click", ".add__Owner__from__plts__reg", function () {
-        //$('.add__Owner__from__plts').click(function () {
-        //$('.add__Owner__from__plts__reg').unbind().click(function () {
-            alert("here");
-            //debugger
-            let strct = `<hr/>
-<h6 class="c-grey-900" style="color:black !important"><b>Owner Information</b></h6>
-<div class="row own-row-dat Tran-own">
+        $('.add__Owner__from__plts').click(function () {
+            Swal.fire({
+                //title: 'Are you sure you want to Add New Owner?',
+                text: 'Are you sure you want to Add another Owner?',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'Yes',
+                cancelButtonText: 'No'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    let strct = `<hr/>
+<div class="row own-row-dat">
+
                                 <div class="col-md-12">
                                     <div class="form-row">
 <div class="form-group col-md-3">

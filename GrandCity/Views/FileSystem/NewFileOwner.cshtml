@@ -1,4 +1,8 @@
-﻿<input type="hidden" class="flid" value="@ViewBag.fileId" />
+﻿<!-- SweetAlert2 CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+<!-- SweetAlert2 JS -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<input type="hidden" class="flid" value="@ViewBag.fileId" />
 <div class="form-row new-file-owner-data-nsdjk">
     <input type="hidden" class="file-trans-id" />
     <div class="form-group col-md-2">
@@ -126,21 +130,39 @@
                 , Ownership_Status: $(actualRow).find('.owner-stat-jfkldgf option:selected').val()
                 , FileId: $('.flid').val()
             };
-            $.ajax({
-                type: "POST",
-                contentType: "application/json; charset=utf-8",
-                url: '/FileSystem/SaveNewFileOwner/',
-                data: JSON.stringify(od),
-                success: function (data) {
-                    $("#upd-info").show();
-                    $(".updt-exstng-owner-rec-dsffskfs").hide();
-                    $(".up-info :input").prop("readonly", true);
-                    $(".owner-stat-jfkldgf").prop("disabled", true);
-                    alert("Data Updated");
-                    closeModal();
-                    $('.owners-trail-fjhdsf').load('/FileSystem/FileOwnersData/', { fileId: od.FileId });
-                },
-                error: function (data) {
+            Swal.fire({
+                text: 'Are you sure you want to this file owner?',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'Yes',
+                cancelButtonText: 'No'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        type: "POST",
+                        contentType: "application/json; charset=utf-8",
+                        url: '/FileSystem/SaveNewFileOwner/',
+                        data: JSON.stringify(od),
+                        success: function (data) {
+                            $("#upd-info").show();
+                            $(".updt-exstng-owner-rec-dsffskfs").hide();
+                            $(".up-info :input").prop("readonly", true);
+                            $(".owner-stat-jfkldgf").prop("disabled", true);
+                            //alert("Data Updated");
+                            Swal.fire({
+                                icon: 'success',
+                                text: 'File owner added successfully'
+                            });
+                            closeModal();
+                            $('.owners-trail-fjhdsf').load('/FileSystem/FileOwnersData/', { fileId: od.FileId });
+                        },
+                        error: function (data) {
+                            Swal.fire({
+                                icon: 'error',
+                                text: 'Something went wrong'
+                            });
+                        }
+                    });
                 }
             });
         });

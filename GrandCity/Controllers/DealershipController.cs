@@ -463,7 +463,7 @@ namespace MeherEstateDevelopers.Controllers
                     }
 
                     Transaction.Commit();
-                    return Json(new { Status = true, Receiptid = res4.Receipt_No, Token = userid });
+                    return Json(new { Status = true, Msg= "Receipt generated successfully", Receiptid = res4.Receipt_No, Token = userid });
                 }
                 catch (Exception e)
                 {
@@ -496,7 +496,7 @@ namespace MeherEstateDevelopers.Controllers
                 {
 
                     var voch = db.Sp_Add_Voucher_Vendor("-", Amount , GeneralMethods.NumberToWords(Convert.ToInt32(Amount)), null, null, Inst_Date, Inst_No, "", Description, "", null, Modules.Dealers.ToString(), string.Join(",", res1.Select(x => x.Name)),
-                        PaymentType, "Meher Estate Developers", "", TransactionId, "Dealer Payment", userid, res2.Id, TransactionId, user.Name, userid, DateTime.Now, user.Name, null, null, TransactionId).FirstOrDefault();
+                        PaymentType, "Grand City", "", TransactionId, "Dealer Payment", userid, res2.Id, TransactionId, user.Name, userid, DateTime.Now, user.Name, null, null, TransactionId).FirstOrDefault();
 
 
                     var a = db.Sp_Add_VoucherDetails(Amount, Description, null, null, null, voch.Receipt_Id).FirstOrDefault();
@@ -543,7 +543,7 @@ namespace MeherEstateDevelopers.Controllers
                 catch (Exception e)
                 {
                     Transaction.Rollback();
-                    return Json(new Return { Status = false, Msg = "Error Occured" });
+                    return Json(new Return { Status = false, Msg = "Something went wrong" });
                 }
             }
         }

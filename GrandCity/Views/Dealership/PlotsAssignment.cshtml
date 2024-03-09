@@ -7,117 +7,101 @@
         Layout = "~/Views/Shared/_StaffLayout.cshtml";
     }
 }
-
-<script>
-    var plotinsstr = @Html.Raw(Json.Encode(ViewBag.PlotInst));
-    var plotalloccounter = 1;
-</script>
-<div class="col-md-12 bgc-white">
-    <hr />
-    <h5 class="central-text-align">Dealer Plot Assignment</h5>
-    <hr />
-    <div class="row mt-md-3">
-        <div class="col-md-1">
-            <label>Dealership :</label>
-        </div>
-        <div class="col-md-4">
-            <select class="form-control dlrs-lst"></select>
-        </div>
-        <div class="col-md-1"></div>
-        <div class="col-md-1">
-            <label>Deal Title :</label>
-        </div>
-        <div class="col-md-4">
-            <input type="text" class="form-control dl-ttl" placeholder="Title of deal" />
-        </div>
-    </div>
-    <div class="col-md-12 mt-md-3">
-        <div class="row mt-md-2">
-            <div class="col-md-3">
-                <label><b>Plot</b></label>
+    <div class="col-md-12 bgc-white">
+        <hr />
+        <h5 class="central-text-align">Dealer Plot Assignment</h5>
+        <hr />
+        <div class="row mt-md-3">
+            <div class="col-md-1">
+                <label>Dealership :</label>
             </div>
-            <div class="col-md-2">
-                <label><b>Installment Plan</b></label>
+            <div class="col-md-4">
+                <select class="form-control dlrs-lst"></select>
             </div>
-            <div class="col-md-2">
-                <label><b>Plot Price</b></label>
+            <div class="col-md-1"></div>
+            <div class="col-md-1">
+                <label>Deal Title :</label>
             </div>
-            @*<div class="col-md-2">
-                <label><b>Special Charges</b></label>
+            <div class="col-md-4">
+                <input type="text" class="form-control dl-ttl" placeholder="Title of deal" />
             </div>
-            <div class="col-md-2">
-                <label><b>Development Charges</b></label>
+        </div>
+        <div class="col-md-12 mt-md-3">
+            <div class="row mt-md-2">
+                <div class="col-md-2">
+                    <label><b>Plot</b></label>
+                </div>
+                <div class="col-md-2">
+                    <label><b>Plot Price</b></label>
+                </div>
+                <div class="col-md-1">
+                    <label><b>Discount</b></label>
+                </div>
+                <div class="col-md-2">
+                    <label><b>Special Charges</b></label>
+                </div>
+                <div class="col-md-1">
+                    <label><b>Development Charges</b></label>
+                </div>
+                <div class="col-md-1">
+                    <label><b>Dealer Commission</b></label>
+                </div>
+                <div class="col-md-1">
+                    <label><b>Total Price</b></label>
+                </div>
+                <div class="col-md-1">
+                    <label><b>Percentage Adj</b></label>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12 plts-asgnmnt-area mt-md-3">
+            @*<div class="row plt-asgnmnt-data mt-md-2">
+                <div class="col-md-2">
+                    <select class="form-control plts-lst">
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <input type="text" class="form-control coma plt-prc-fld" placeholder="Plot Price" value="0" />
+                </div>
+                <div class="col-md-2">
+                    <input type="text" class="form-control coma plt-sp-chg-fld" placeholder="Special Charges" value="0" />
+                </div>
+                <div class="col-md-2">
+                    <input type="text" class="form-control coma plt-dc-chg-fld" placeholder="Development Charges" value="0" />
+                </div>
+                <div class="col-md-2">
+                    <input type="text" class="form-control coma plt-deal-com-chg-fld" placeholder="Dealer Commission" value="0" />
+                </div>
+                <div class="col-md-2">
+                    <label><b class="ttl-plt-prc-inclsv-all"></b></label>
+                </div>
+                <div class="col-md-1">
+                    <button class="btn btn-outline-danger rmv-row-plt-assgnmnt"><i class="fa fa-trash"></i></button>
+                </div>
             </div>*@
+        </div>
+        <hr />
+        <div class="row mt-md-3" style="justify-content:center;">
+            <button class="btn btn-outline-primary add-plt-rw" title="Add another plot for this dealer."><i class="fa fa-plus-circle"></i></button>
+        </div>
+        <hr />
+        <div class="row" style="justify-content:flex-end; align-items:center;">
             <div class="col-md-2">
-                <label><b>Dealer Commission</b></label>
+                <button class="btn btn-outline-success sv-deal-btn-sjfhkg"><i class="fa fa-save"></i>&nbsp;Save Deal</button>
             </div>
-            <div class="col-md-1">
-                <label><b>Total Price</b></label>
+            <div class="col-md-2" style="height:75px;">
+                <div class="row" style="box-shadow:-3px 10px 8px #888888; justify-content:center;align-items:center; height:60px;">
+                    <label><b>Total Plots:</b></label> &nbsp;<label class="ttl-plts-cnt"><b>0</b></label>
+                </div>
             </div>
-            <div class="col-md-1">
-                <label><b>Percentage Adj</b></label>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-12 plts-asgnmnt-area mt-md-3">
-        @*Where Plots Rows are appended*@
-    </div>
-    <hr />
-    <div class="row mt-md-3" style="justify-content:center;">
-        <button class="btn btn-outline-primary add-plt-rw" title="Add another plot for this dealer."><i class="fa fa-plus-circle"></i></button>
-    </div>
-    <hr />
-    @*Footer elements*@
-    <div class="row" style="justify-content:flex-end; align-items:center;">
-        <div class="col-md-2">
-            <button class="btn btn-outline-success sv-deal-btn-sjfhkg"><i class="fa fa-save"></i>&nbsp;Save Deal</button>
-        </div>
-        <div class="col-md-2" style="height:75px;">
-            <div class="row" style="box-shadow:-3px 10px 8px #888888; justify-content:center;align-items:center; height:60px;">
-                <label><b>Total Plots:</b></label> &nbsp;<label class="ttl-plts-cnt"><b>0</b></label>
-            </div>
-        </div>
-        <div class="col-md-2" style="height:75px;">
-            <div class="row" style="box-shadow:-3px 10px 8px #888888; justify-content:center;align-items:center; height:60px;">
-                <label><b>Grand Total :</b></label>&nbsp; <label class="ttl-prc"><b>0</b></label>
+            <div class="col-md-2" style="height:75px;">
+                <div class="row" style="box-shadow:-3px 10px 8px #888888; justify-content:center;align-items:center; height:60px;">
+                    <label><b>Grand Total :</b></label>&nbsp; <label class="ttl-prc"><b>0</b></label>
+                </div>
             </div>
         </div>
     </div>
-</div>
-<script>  
-    debugger
-    function InitPlotInstallmentPlann(pltgroup, id) {
-        //alert("got here plot assign");
-
-        $("#" + id + " .plt-ins").empty();
-        var $prevGroup, prevGroupName;
-        var fdata = plotinsstr.filter(x => x.Group.Name == pltgroup);
-        //alert("got here plot assign 2");
-        $.each(fdata, function () {
-            if (prevGroupName !== this.Group.Name) {
-                alert(this.Group.Name);
-                $prevGroup = $('<optgroup />').prop('label', this.Group.Name).appendTo("#" + id + ".plt-ins");
-            }
-            console.log(this.Value);
-            $("<option />").val(this.Value).text(this.Text).appendTo($prevGroup);
-            prevGroupName = this.Group.Name;
-            alert(this.Group.Name);
-        });
-        //alert("got here plot assign 3");
-    }
-    //var plts = [];
-    var unipllotdata = [];
-    //function GettingDataForIns(data) {
-    //    $.each(data, function (key, value) {
-    //        var uniplot = { Id: "", Size: "" };
-    //        var plt = unipllotdata.find(function (e) { return e.Size == value.size });
-    //        if (plt == null) {
-    //            uniplot.Id = value.Value; uniplot.Size = value.size;
-    //            unipllotdata.push(uniplot);
-    //        }
-    //    });
-    //   // InitPlots(1);
-    //}
+<script>
     function removeAssignmentRow(element) {
         if (!confirm('Are you sure you want to remove this row?')) {
             return;
@@ -131,16 +115,15 @@
         let ttlAmt = 0;
         $('.plt-asgnmnt-data').each(function (i, v) {
             let dumAmt = parseFloat(RemoveComma($(this).find('.plt-prc-fld').val()));
-            //let dumSpAmt = parseFloat(RemoveComma($(this).find('.plt-sp-chg-fld').val()));
-            //let dumDCAmt = parseFloat(RemoveComma($(this).find('.plt-dc-chg-fld').val()));
+            let dumSpAmt = parseFloat(RemoveComma($(this).find('.plt-sp-chg-fld').val()));
+            let dumDCAmt = parseFloat(RemoveComma($(this).find('.plt-dc-chg-fld').val()));
             let dumDealComAmt = parseFloat(RemoveComma($(this).find('.plt-deal-com-chg-fld').val()));
             let lineTotal = 0;
             dumAmt = isNaN(dumAmt) ? 0 : dumAmt;
-            //dumSpAmt = isNaN(dumSpAmt) ? 0 : dumSpAmt;
-            //dumDCAmt = isNaN(dumDCAmt) ? 0 : dumDCAmt;
+            dumSpAmt = isNaN(dumSpAmt) ? 0 : dumSpAmt;
+            dumDCAmt = isNaN(dumDCAmt) ? 0 : dumDCAmt;
             dumDealComAmt = isNaN(dumDealComAmt) ? 0 : dumDealComAmt;
-            lineTotal = (dumAmt + dumDealComAmt);
-            //lineTotal = (dumAmt + dumSpAmt + dumDCAmt + dumDealComAmt);
+            lineTotal = (dumAmt + dumSpAmt + dumDCAmt + dumDealComAmt);
             ttlAmt += lineTotal;
             $(this).find('.ttl-plt-prc-inclsv-all').text(lineTotal.toLocaleString());
         });
@@ -169,23 +152,24 @@
         });
         $('.add-plt-rw').unbind().click(function () {
             // yahan pe new row append krani hai
-            
-            let __strctr__ = `<div class="row plt-asgnmnt-data mt-md-2" id="file-asoc-${filealloccounter}">
-                <div class="col-md-3">
+            let __strctr__ = `<div class="row plt-asgnmnt-data mt-md-2">
+                <div class="col-md-2">
                     <select class="form-control plts-lst">
                     </select>
                 </div>
- <div class="col-md-2">
-<select class="form-control plt-ins">
-                                </select>
-   
- </div >
-
                 <div class="col-md-2">
                     <input type="text" class="form-control coma plt-prc-fld" placeholder="Plot Price" value="" />
                 </div>
-                
+<div class="col-md-1">
+                    <input type="text" class="form-control coma plt-disc-fld" placeholder="Discount" value="" />
+                </div>
                 <div class="col-md-2">
+                    <input type="text" class="form-control coma plt-sp-chg-fld" placeholder="Special Charges" value="0" />
+                </div>
+                <div class="col-md-1">
+                    <input type="text" class="form-control coma plt-dc-chg-fld" placeholder="Development Charges" value="0" />
+                </div>
+                <div class="col-md-1">
                     <input type="text" class="form-control coma plt-deal-com-chg-fld" placeholder="Dealer Commission" value="0" />
                 </div>
                 <div class="col-md-1">
@@ -213,28 +197,16 @@
                         return query;
                     },
                     processResults: function (data) {
-                         //Transforms the top-level key of the response object from 'items' to 'results'
-                        $.each(data, function (key, value) {
-                            var uniplot = { Id: "", Size: "" };
-                            var plt = unipllotdata.find(function (e) { return e.Size == value.size });
-                            if (plt == null) {
-                                uniplot.Id = value.Value; uniplot.Size = value.size;
-                                unipllotdata.push(uniplot);
-                            }
-                        });
+                        // Transforms the top-level key of the response object from 'items' to 'results'
                         return {
                             results: data
                         };
                     }
                 }
             });
-
-
             $('.plts-lst').last().unbind().change(function () {
-
                 let chosenVal = $(this).val();
                 let that = $(this);
-                alert(chosenVal);
                 $('.plts-lst').not(this).each(function (i,v) {
                     if ($(this).val() == chosenVal) {
                         alert('Cannot assign same plot multiple times. This plot is already selected');
@@ -242,67 +214,16 @@
                         return;
                     }
                 });
-
-                // To Extract Size from Plot Value
-                var inputString = $(this).text();
-                alert($(this).text());
-                var regex = /\(([^)]+)\)$/; // Matches the content within the last parentheses
-                var match = inputString.match(regex);
-                var result = match ? match[1] : '';
-
-                console.log(result); // Output: " 6.67 Marla "
-                alert(result);
-                var pltmarla = result;
-                var id = $(this).parent().parent().attr("id");
-                alert(id);
-                debugger
-                InitPlotInstallmentPlann(pltmarla, id);
-                debugger
-                //Newly Added code to add installment plans
-
-                //let chosenVal = $(this).val();
-                //$.ajax({
-                //    type: "POST",
-                //    url: '/Plots/GetPlotData/',
-                //    data: { Id: chosenVal },
-                //    success: function (data) {
-                //        //var no = plts.filter(x => x.Id == data.Id);
-                //        //debugger;
-                //        //if (no == null) {
-                //        plts.push({
-                //            Id: data.Id,
-                //            Block: data.Block_Name,
-                //            PlotNo: data.Plot_No,
-                //            Type: data.Type,
-                //            PlotSize: data.Plot_Size
-                //        });
-                //        //}
-                //        //debugger;
-                //        GenSection();
-                //        //debugger;
-                //    }
-                //    , error: function (xmlhttprequest, textstatus, message) {
-                //        HideFullScreenLoader();
-                //        if (textstatus === "timeout") {
-                //            alert("got timeout");
-                //        } else {
-                //            alert(textstatus);
-                //        }
-                //    }
-                //});
-
-
-                ////ends here
             });
             $('.plt-prc-fld').last().unbind().change(function () {
                 UpdateGrandTotalSection();
             });
-            //$('.plt-sp-chg-fld').last().unbind().change(function () {
-            //    UpdateGrandTotalSection();
-            //});
-            //$('.plt-dc-chg-fld').last().unbind().change(function () {
-            //    UpdateGrandTotalSection();
-            //});
+            $('.plt-sp-chg-fld').last().unbind().change(function () {
+                UpdateGrandTotalSection();
+            });
+            $('.plt-dc-chg-fld').last().unbind().change(function () {
+                UpdateGrandTotalSection();
+            });
             $('.plt-deal-com-chg-fld').last().unbind().change(function () {
                 UpdateGrandTotalSection();
             });
@@ -346,23 +267,25 @@
                 }
                 else {
                     let _prc = parseFloat(RemoveComma($(this).find('.plt-prc-fld').val()));
-                    //let _prc_sp_chg = parseFloat(RemoveComma($(this).find('.plt-sp-chg-fld').val()));
-                    //let _prc_dc_chg = parseFloat(RemoveComma($(this).find('.plt-dc-chg-fld').val()));
+                    let _disc = parseFloat(RemoveComma($(this).find('.plt-disc-fld').val()));
+                    let _prc_sp_chg = parseFloat(RemoveComma($(this).find('.plt-sp-chg-fld').val()));
+                    let _prc_dc_chg = parseFloat(RemoveComma($(this).find('.plt-dc-chg-fld').val()));
                     let _prc_deal_comm = parseFloat(RemoveComma($(this).find('.plt-deal-com-chg-fld').val()));
                     let _plt_deal_adj = parseFloat(RemoveComma($(this).find('.plt-deal-adj').val()));
                     let _pltId = $(this).find('.plts-lst option:selected').val();
                     let _pltNum = $(this).find('.plts-lst option:selected').text();
-                    //_prc_dc_chg = isNaN(_prc_dc_chg) ? 0 : _prc_dc_chg;
+                    _prc_dc_chg = isNaN(_prc_dc_chg) ? 0 : _prc_dc_chg;
                     _prc_deal_comm = isNaN(_prc_deal_comm) ? 0 : _prc_deal_comm;
-                    //_prc_sp_chg = isNaN(_prc_sp_chg) ? 0 : _prc_sp_chg;
+                    _prc_sp_chg = isNaN(_prc_sp_chg) ? 0 : _prc_sp_chg;
                     __temp__dat_hldr.push({
                         Plot_Id: _pltId,
                         PlotNum: _pltNum,
                         DealerName: _dlrNm,
                         PlotPrice: _prc,
+                        Discount_Amount: _disc,
                         Dealer_Id: _dlrId,
-                        //SpecialPrefAmount: _prc_sp_chg,
-                        //DCAmount: _prc_dc_chg,
+                        SpecialPrefAmount: _prc_sp_chg,
+                        DCAmount: _prc_dc_chg,
                         CommisionAmount: _prc_deal_comm,
                         Percentage_Adj: _plt_deal_adj
                     });
@@ -397,42 +320,4 @@
             }
         });
     });
-
-    //function GenSection() {
-    //    alert('Here');
-    //    //section removed from appended div
-    //    //${key}
-    //                        //<ol></ol>
-    //    //$("#plt-asgnmnt-data .insta-plans").val("New Value");
-    //    $('#plt-asgnmnt-data .insta-plans').empty();
-    //    var group_to_values = plts.reduce(function (obj, item) {
-    //        obj[item.PlotSize] = obj[item.PlotSize] || [];
-    //        obj[item.PlotSize].push(item);
-    //        return obj;
-    //    }, {});
-
-    //    var groups = Object.keys(group_to_values).map(function (key) {
-
-    //        var newid = key.replace(" ", "_").replace(".", "_");
-
-    //        var html = `<div class="col-md-4" id='${newid}'>
-                            
-    //                        <select class="form-control plt-ins"></select>
-    //                        </div>`
-    //        $('.insta-plans').append(html);
-    //        $.each(group_to_values[key], function (abc) {
-    //            $('#' + newid + ' ol').append(`<li id="${group_to_values[key][abc].Id}">${group_to_values[key][abc].PlotNo}  &nbsp&nbsp&nbsp&nbsp <i class="fas fa-trash del-plt"></i> </li>`)
-    //        });
-
-    //        var $prevGroup, prevGroupName;
-    //        var fdata = plotins.filter(x => x.Group.Name == key);
-    //        $.each(fdata, function () {
-    //            if (prevGroupName !== this.Group.Name) {
-    //                $prevGroup = $('<optgroup />').prop('label', this.Group.Name).appendTo("#" + newid + " .plt-ins");
-    //            }
-    //            $("<option />").val(this.Value).text(this.Text).appendTo($prevGroup);
-    //            prevGroupName = this.Group.Name;
-    //        });
-    //    });
-    //}
 </script>

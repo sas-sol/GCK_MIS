@@ -1,9 +1,14 @@
 ﻿@model MeherEstateDevelopers.Models.LeadsData
+<!-- SweetAlert2 CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+<!-- SweetAlert2 JS -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 @using (Html.BeginForm("PayLeadPaymentWithReceipt", "Installments", FormMethod.Post, new { @id = "sam-rece", @class = "", role = "form" }))
 {
     <input type="hidden" id="bal-val" name="Balance" value="0" />
     <input type="hidden" id="trans-id" name="TransactionId" value="@ViewBag.TransactionId" />
-    
+
     <input type="hidden" id="amt-file-id" value="@Model.Lead.Id" name="Filefromid" />
     <input type="hidden" id="amt-file-no" name="FilePlotNumber" />
     <input type="hidden" id="amt-in-wrds" name="AmountInWords" />
