@@ -178,17 +178,17 @@
                     </div>
                 </a>
                 <ul class="dropdown-menu fsz-sm" style="width:250px">
-                    <li><a href="javascript:void()" data-toggle="modal" data-target="#Modal" class="gen-tick d-b td-n pY-5 bgcH-grey-100 c-grey-700"><i class="ti-panel mR-10"></i> <span>Report a Problem</span></a></li>
+                    @*<li><a href="javascript:void()" data-toggle="modal" data-target="#Modal" class="gen-tick d-b td-n pY-5 bgcH-grey-100 c-grey-700"><i class="ti-panel mR-10"></i> <span>Report a Problem</span></a></li>*@
                     @if (User.IsInRole("Cashier"))
                     {
                         <li><a href="/Finance/Receipts/" target="_blank" class="d-b td-n pY-5 bgcH-grey-100 c-grey-700"><i class="ti-user mR-10"></i> <span>Receipts</span></a></li>
-                        <li><a href="/Finance/MarketingReceipts/" target="_blank" class="d-b td-n pY-5 bgcH-grey-100 c-grey-700"><i class="ti-user mR-10"></i> <span>Marketing Receipts</span></a></li>
-                        <li><a href="/Banking/DishonredCheqList/" target="_blank" class="d-b td-n pY-5 bgcH-grey-100 c-grey-700"><i class="ti-user mR-10"></i> <span>Dishoner Cheques List</span></a></li>
-                        <li><a href="/Banking/LeadsDishonoredCheqs/" target="_blank" class="d-b td-n pY-5 bgcH-grey-100 c-grey-700"><i class="ti-user mR-10"></i> <span>Leads Dishoner Cheques List</span></a></li>
+                        @*<li><a href="/Finance/MarketingReceipts/" target="_blank" class="d-b td-n pY-5 bgcH-grey-100 c-grey-700"><i class="ti-user mR-10"></i> <span>Marketing Receipts</span></a></li>*@
+                        @*<li><a href="/Banking/DishonredCheqList/" target="_blank" class="d-b td-n pY-5 bgcH-grey-100 c-grey-700"><i class="ti-user mR-10"></i> <span>Dishoner Cheques List</span></a></li>*@
+                        @*<li><a href="/Banking/LeadsDishonoredCheqs/" target="_blank" class="d-b td-n pY-5 bgcH-grey-100 c-grey-700"><i class="ti-user mR-10"></i> <span>Leads Dishoner Cheques List</span></a></li>*@
                         <li><a href="/Banking/DailyCashReport/" target="_blank" class="d-b td-n pY-5 bgcH-grey-100 c-grey-700"><i class="ti-user mR-10"></i> <span>Daily Report</span></a></li>
                         if (User.IsInRole("SAM Cashier"))
                         {
-                            <li><a href="/Banking/DailySAMCashReport/" target="_blank" class="d-b td-n pY-5 bgcH-grey-100 c-grey-700"><i class="ti-user mR-10"></i> <span>Daily SAM Report</span></a></li>
+                            @*<li><a href="/Banking/DailySAMCashReport/" target="_blank" class="d-b td-n pY-5 bgcH-grey-100 c-grey-700"><i class="ti-user mR-10"></i> <span>Daily SAM Report</span></a></li>*@
                         }
                     }
                     <li><a href="/Activity/MyActivity" class="d-b td-n pY-5 bgcH-grey-100 c-grey-700"><i class="ti-user mR-10"></i> <span>My Activity</span></a></li>
