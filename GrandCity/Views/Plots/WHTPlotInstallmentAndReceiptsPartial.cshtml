@@ -1,0 +1,235 @@
+﻿@model MeherEstateDevelopers.Models.PlotDetailData
+
+
+@if (Model.PlotInstallments.Any())
+{
+    @*<link href="https://unpkg.com/bootstrap-table@1.20.2/dist/bootstrap-table.min.css" rel="stylesheet">
+
+        <script src="https://unpkg.com/bootstrap-table@1.20.2/dist/bootstrap-table.min.js"></script>
+        <script src="https://unpkg.com/bootstrap-table@1.20.2/dist/extensions/print/bootstrap-table-print.min.js"></script>
+
+        <script>
+            var $table = $('#table01')
+
+            $(function () {
+                $table.bootstrapTable()
+            })
+        </script>*@
+
+    <div class="col-md-6 plan-rece" style="max-height:500px; overflow-y:scroll">
+
+        <table id="table01" data-show-print="true" class="table table-striped table-borderless dark-table" cellspacing="0" width="100%" style="margin-bottom:0px">
+            <thead>
+                <tr class="thead-dark">
+                    <th>Particulars</th>
+                    <th>Days</th>
+                    <th>Amount</th>
+                    <th>Surcharge Amount</th>
+                    <th>Due Date</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                    @* <th><button style="padding:5px;" class="btn btn-primary btn-success btn-outline-success up_inst_btn_plot">Update Plan</button></th>*@
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    decimal overduetotal = 0;
+                    foreach (var item in Model.PlotInstallmentsSurcharge.OrderBy(x => x.DueDate))
+                    {
+
+                        var statuscolor = "";
+                        if (item.Status == "NotPaid")
+                        {
+                            statuscolor = "bgc-red-50";
+                            overduetotal = overduetotal + item.Amount;
+                        }
+                        else if (item.Status == "Paid")
+                        {
+                            statuscolor = "bgc-green-50";
+                        }
+                        if (item.Waveoff == 1)
+                        {
+                            statuscolor = "bgc-black-50";
+                        }
+
+                        <tr class="@statuscolor" style="background-color:white">
+                            <td>@item.Installment_Name</td>
+                            <td>@item.Surchargedays</td>
+                            <td>@string.Format("{0:00.00}", item.Amount)</td>
+                            <td>@string.Format("{0:00.00}", item.SurchargeAmount)</td>
+                            <td>@string.Format("{0:dd-MMM-yyyy}", item.DueDate_New)</td>
+                            @if (item.Waveoff == 1)
+                            {
+                                <td> Wave Off  </td>
+                            }
+                            else
+                            {
+                                <td> @item.Status </td>
+                            }
+                            @if (item.Status == "NotPaid" && item.Waveoff == null)
+                            {
+                                <td>
+                                    <ul style="list-style:none;margin-left:0px;">
+                                        <li class="dropdown">
+                                            <a href="" class="dropdown-toggle no-after peers " data-toggle="dropdown">
+                                                <i class="ti-more-alt" style="transform:rotate(90deg);"></i>
+                                            </a>
+                                            <ul class="dropdown-menu" style="padding:10px;width:auto !important">
+                                                <li><a id="@item.Id" class="wave-off-surcharge pointer"><span>Wave off Surcharge</span></a></li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </td>
+                            }
+                            else
+                            {
+                                <td>  </td>
+                            }
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="col-md-6 plan-rece" style="max-height:500px; overflow-y:scroll">
+        @*<button class="btn btn-primary up_inst_btn_plot">Update Installment</button>*@
+        <table id="table02" data-show-print="true" class="table table-striped table-borderless dark-table" cellspacing="0" width="100%" style="margin-bottom:0px">
+            <thead>
+                <tr class="thead-dark">
+                    <th>Particulars</th>
+                    <th>Amount</th>
+                    <th>Due Date</th>
+                    <th>Status</th>
+                    <th>WHT Charge Status</th>
+                    <th><button style="padding:5px;" class="btn btn-primary btn-success btn-outline-success up_inst_wht_btn_plot">Update Wht Plan</button></th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    decimal overduetotal1 = 0;
+
+                    foreach (var item in Model.PlotInstallmentsWHT.OrderBy(x => x.DueDate))
+                    {
+
+                        var statuscolor = "";
+                        if (item.Status == "NotPaid")
+                        {
+                            statuscolor = "bgc-red-50";
+                            overduetotal1 = overduetotal1 + item.Amount;
+                        }
+                        else if (item.Status == "Paid")
+                        {
+                            statuscolor = "bgc-green-50";
+                        }
+                        if (item.Installment_Name == "Advance" || item.Installment_Name == "Booking")
+                        {
+                            @*<script>
+                                var res = "@string.Format("{0:MMM dd yyyy}", item.DueDate)";
+                                $("#booking-date").text(res);
+                                        </script>*@
+                        }
+
+
+                        <tr class="@statuscolor" style="background-color:white">
+                            <td>@item.Installment_Name</td>
+                            <td>@string.Format("{0:00.00}", item.Amount)</td>
+                            <td>@string.Format("{0:dd-MMM-yyyy}", item.DueDate)</td>
+                            <td>@item.Status</td>
+                            <td>
+                                @item.WHT_Status
+                            @if (@item.Charge == "0.01")
+                            {
+                                <label>1%</label>
+                            }
+                            else if (@item.Charge == "0.02")
+                            {
+                                <label>2%</label>
+                            }
+                            else if (@item.Charge == "0.07")
+                            {
+                                <label>7%</label>
+                            }
+
+
+                        </td>
+                        <td>
+                            <ul style="list-style:none;margin-left:0px;">
+                                <li class="dropdown">
+                                    <a href="" class="dropdown-toggle no-after peers " data-toggle="dropdown">
+                                        <i class="ti-more-alt" style="transform:rotate(90deg);"></i>
+                                    </a>
+                                    <ul class="dropdown-menu" style="padding:10px;width:auto !important">
+                                        @*  <li><a id="@item.Id" class="pointer Ins__rec__upd" data-toggle="modal" data-target="#Modal"><span>Update</span></a></li>*@
+                                        @*<hr />*@
+                                        <li><a id="@item.Id" class="del-inst-wht pointer"><span>Delete</span></a></li>
+
+                                    </ul>
+                                </li>
+                            </ul>
+                        </td>
+                    </tr>
+                }
+                }
+            </tbody>
+        </table>
+    </div>
+}
+
+<style>
+    .plan-rece tbody tr td {
+        color: black;
+    }
+</style>
+<script>
+
+    $(document).ready(function () {
+        $('#table01').DataTable({
+            dom: 'Bfrtip',
+            "paging": false,
+            "ordering": false,
+            buttons: [
+                {
+                    extend: 'print',
+                    exportOptions: {
+                        columns: 'th:not(:last-child)'
+                    }
+                }
+
+            ]
+        });
+    });
+    $(document).ready(function () {
+        $('#table02').DataTable({
+            dom: 'Bfrtip',
+            "paging": false,
+            "ordering": false,
+            buttons: [
+                {
+                    extend: 'print',
+                    exportOptions: {
+                        columns: 'th:not(:last-child)'
+                    }
+                }
+
+            ]
+        });
+    });
+    $('.sideLink').unbind().click(function () {
+        if (!$(this).hasClass('active')) {
+            $(this).addClass('active');
+            let typeOfLink = $(this).attr('data-typ');
+
+            if (typeOfLink == 'instrecfile') {
+                $('.instrecviewfile').show();
+                $('.otherrecviewfile').hide();
+                $('.otherrecfile').removeClass('active');;
+            }
+            else {
+                $('.instrecviewfile').hide();
+                $('.instrecfile').removeClass('active');
+                $('.otherrecviewfile').show();
+            }
+        }
+    });
+
+</script>

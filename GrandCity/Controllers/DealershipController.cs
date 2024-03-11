@@ -1348,6 +1348,22 @@ namespace MeherEstateDevelopers.Controllers
 
                 db.Biding_Reserve_Plots.AddRange(DealData);
                 db.SaveChanges();
+                // Add this code for update plot dealership  
+                var plotIdsToUpdate = DealData.Select(x => x.Plot_Id).ToList();
+
+                var plotsToUpdate = db.Plots.Where(x => plotIdsToUpdate.Contains(x.Id)).ToList();
+
+                foreach (var plot in plotsToUpdate)
+                {
+                    var dealDataForPlot = DealData.FirstOrDefault(x => x.Plot_Id == plot.Id);
+                    if (dealDataForPlot != null)
+                    {
+                        plot.Dealership_Id = dealDataForPlot.Dealer_Id;
+                        plot.Dealership_Name = dealDataForPlot.DealerName;
+                    }
+                }
+
+                db.SaveChanges();
 
                 DealerDeal dd = new DealerDeal
                 {

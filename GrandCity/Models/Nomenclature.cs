@@ -630,7 +630,9 @@ namespace MeherEstateDevelopers.Models
         Posession_Charges,
         DealerAdvance,
         Receivable_Receipt,
-        LoanSettlement
+        LoanSettlement,
+        SurCharge,
+        Completion_Charges
     }
     public enum Payments
     {
@@ -1212,5 +1214,6 @@ namespace MeherEstateDevelopers.Models
         After_Time = 4,
         Special_Preference = 5,
         Other_Charges = 0,
+        Possession_Charges = 7    // add new 
     }
 }

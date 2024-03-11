@@ -3,6 +3,7 @@
     var TotalPric = Model.FileInstallments.Where(x => x.Installment_Type != "2").Sum(x => x.Amount);
     var receAmt = Model.FileReceipts.Sum(x => x.Amount);
     var bookdate = Model.FileReceipts.Where(x => x.Type == "Booking").OrderByDescending(x => x.DateTime).Select(x => x.DateTime).FirstOrDefault();
+   
 }
 <style>
     tr td, tr th {
@@ -161,8 +162,8 @@
                                         }
                                         @if (item.Ownership_Status == "Owner" && (User.IsInRole("Deliver File") || User.IsInRole("Administrator")))
                                         {
-                                                        if (item.Delivery == true)
-                                                        {
+                                            if (item.Delivery == true)
+                                            {
                                                 <button class="btn btn-success"><i class="ti-check"></i>&nbsp;&nbsp;File Deliverd</button>
                                             }
                                             else
@@ -474,7 +475,7 @@
                                 }
                                 <tr>
                                     <td colspan="4">
-                                            <a class="btn btn-primary" style="color:white" href="/Reports/FileStatmentAcc?Token=@Model.FileData.FileFormNumber">File Statment</a>
+                                        <a class="btn btn-primary" style="color:white" href="/Reports/FileStatmentAcc?Token=@Model.FileData.FileFormNumber">File Statment</a>
                                     </td>
                                     <td colspan="4">Received Amount : <b>@string.Format("{0:n0}", Model.FileReceipts.Where(x => (x.Status is null || x.Status == "Approved") && Types.Contains(x.Type)).Sum(x => x.Amount))</b> </td>
                                 </tr>
@@ -497,7 +498,7 @@
                         <tbody>
                             @{ srcount = 1;
 
-                                foreach (var g in Model.FileReceipts.Where(x =>x.Type != "Booking" && x.Type != "Installment" && x.Type != "Adjusted").GroupBy(x => x.Type))
+                                foreach (var g in Model.FileReceipts.Where(x => x.Type != "Booking" && x.Type != "Installment" && x.Type != "Adjusted").GroupBy(x => x.Type))
                                 {
                                     <tr><td colspan="8" style="text-align:center;font-size:15px"><b>@g.Key</b></td></tr>
                                     foreach (var item in g)
@@ -556,7 +557,7 @@
                                 }
                                 <tr>
                                     <td colspan="4">
-                                            <a class="btn btn-primary" style="color:white" href="/Reports/FileStatmentAcc?Token=@Model.FileData.FileFormNumber">File Statment</a>
+                                        <a class="btn btn-primary" style="color:white" href="/Reports/FileStatmentAcc?Token=@Model.FileData.FileFormNumber">File Statment</a>
                                     </td>
                                     <td colspan="4">Received Amount : <b>@string.Format("{0:n0}", Model.FileReceipts.Where(x => (x.Status is null || x.Status == "Approved") && Types.Contains(x.Type)).Sum(x => x.Amount))</b> </td>
                                 </tr>
@@ -591,6 +592,113 @@
                     </table>
                 </div>
             </div>
+
+
+        </div>
+
+    </div>
+   <br />
+    <br />
+    <div class="col-md-12">
+        <div class="form-row">
+
+            @if (Model.FileInstallments.Any())
+            {
+                @*<link href="https://unpkg.com/bootstrap-table@1.20.2/dist/bootstrap-table.min.css" rel="stylesheet">
+
+                    <script src="https://unpkg.com/bootstrap-table@1.20.2/dist/bootstrap-table.min.js"></script>
+                    <script src="https://unpkg.com/bootstrap-table@1.20.2/dist/extensions/print/bootstrap-table-print.min.js"></script>
+
+                    <script>
+                        var $table = $('#table01')
+
+                        $(function () {
+                            $table.bootstrapTable()
+                        })
+                    </script>*@
+
+                <div class="col-md-6 plan-rece" style="max-height:500px; overflow-y:scroll">
+
+                    <table id="table01" data-show-print="true" class="table table-striped table-borderless dark-table" cellspacing="0" width="100%" style="margin-bottom:0px">
+                        <thead>
+                            <tr class="thead-dark">
+                                <th>Particulars</th>
+                                <th>Days</th>
+                                <th>Amount</th>
+                                <th>Surcharge Amount</th>
+                                <th>Due Date</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                                @* <th><button style="padding:5px;" class="btn btn-primary btn-success btn-outline-success up_inst_btn_plot">Update Plan</button></th>*@
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+
+                                foreach (var item in Model.PlotInstallmentsSurcharge.OrderBy(x => x.DueDate))
+                                {
+                                    decimal overduetotalAmount = 0;
+                                    var statuscolor = "";
+                                    if (item.Status == "NotPaid")
+                                    {
+                                        statuscolor = "bgc-red-50";
+                                        overduetotalAmount = overduetotalAmount + item.Amount;
+                                    }
+                                    else if (item.Status == "Paid")
+                                    {
+                                        statuscolor = "bgc-green-50";
+                                    }
+                                    if (item.Waveoff == 1)
+                                    {
+                                        statuscolor = "bgc-black-50";
+                                    }
+
+                                    <tr class="@statuscolor" style="background-color:white">
+                                        <td>@item.Installment_Name</td>
+                                        <td>@item.Surchargedays</td>
+                                        <td>@string.Format("{0:00.00}", item.Amount)</td>
+                                        <td>@string.Format("{0:00.00}", item.SurchargeAmount)</td>
+                                        <td>@string.Format("{0:dd-MMM-yyyy}", item.DueDate_New)</td>
+                                        @if (item.Waveoff == 1)
+                                        {
+                                            <td> Wave Off  </td>
+                                        }
+                                        else
+                                        {
+                                            <td> @item.Status </td>
+                                        }
+                                        @if (item.Status == "NotPaid" && item.Waveoff == null)
+                                        {
+                                            <td>
+                                                <ul style="list-style:none;margin-left:0px;">
+                                                    <li class="dropdown">
+                                                        <a href="" class="dropdown-toggle no-after peers " data-toggle="dropdown">
+                                                            <i class="ti-more-alt" style="transform:rotate(90deg);"></i>
+                                                        </a>
+                                                        <ul class="dropdown-menu" style="padding:10px;width:auto !important">
+                                                            @*<li><a id="@item.Id" class="wave-off-surcharge pointer"><span>Wave off Surcharge</span></a></li>*@
+                                                            <li><a href="~/Plots/UpdateWaveOffStatus?id=@item.Id" class="wave-off-surcharge pointer"><span>Wave off Surcharge</span></a></li>
+                                                        </ul>
+                                                    </li>
+                                                </ul>
+                                            </td>
+                                        }
+                                        else
+                                        {
+                                            <td>  </td>
+                                        }
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+            }
+
+        </div>
+        <div class="form-row">
+            <div class="col-md-12" id="plot-rep" style="margin-top:1%"></div>
         </div>
     </div>
 </div>

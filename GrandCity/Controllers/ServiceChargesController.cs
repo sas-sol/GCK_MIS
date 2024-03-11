@@ -1682,22 +1682,21 @@ namespace MeherEstateDevelopers.Controllers
             long userid = long.Parse(User.Identity.GetUserId());
             AccountHandlerController ah = new AccountHandlerController();
             var comp = ah.Company_Attr(userid);
-            
             if (Module == Modules.FileManagement.ToString())
             {
-
-                var fileno = db.File_Form.Where(x => x.FileFormNumber == PlotId.ToString()).FirstOrDefault();
+               // var fileNo = PlotId;
+                //var Fileid = db.File_Form.Where(x => x.FileFormNumber == fileno).Select(x => x.Id).FirstOrDefault();
+                var fileno = db.File_Form.Where(x => x.FileFormNumber == PlotId.ToString()).FirstOrDefault(); // Add fileformNumber
                 List<Sp_Get_FileFormData_Result> res = db.Sp_Get_FileFormData(fileno.Id).ToList();
-
                 if (Type == ReceiptTypes.Duplicate_Customer_File.ToString())
                 {
                     var a = db.Sp_Update_Duplicate_Check(res.FirstOrDefault().File_Transfer_Id, Modules.FileManagement.ToString(), Type);
                 }
-
                 var receiptno = db.Sp_Get_ReceiptNo("Normal").FirstOrDefault();
                 var Narration = "Cash Amount Received against Plot no:" + res.FirstOrDefault().FileFormNumber + " Block: " + res.FirstOrDefault().Block + " Plot Type : " + res.FirstOrDefault().Plot_Type;
-                var res4 = db.Sp_Add_Receipt(Amount, GeneralMethods.NumberToWords(Convert.ToInt32(Amount)), null, null, null, null, string.Join("," ,  res.Select(x=>x.Mobile_1))
-                       , string.Join(",", res.Select(x => x.Father_Husband)) , PlotId, string.Join(",", res.Select(x => x.Name)) , "Cash", 0, "Meher Estate Developers", 0, null, res.FirstOrDefault().Plot_Size, Type, userid, userid, "", null, Modules.FileManagement.ToString(), Remarks, res.FirstOrDefault().FileFormNumber.ToString(), res.FirstOrDefault().Block, res.FirstOrDefault().Plot_Type, 0, TransactionId, "", receiptno, comp.Id).FirstOrDefault();
+                var res4 = db.Sp_Add_Receipt(Amount, GeneralMethods.NumberToWords(Convert.ToInt32(Amount)), null, null, null, null, string.Join(",", res.Select(x => x.Mobile_1))
+                       , string.Join(",", res.Select(x => x.Father_Husband)), fileno.Id, string.Join(",", res.Select(x => x.Name)), "Cash", 0, "SA Gardens", 0, null, res.FirstOrDefault().Plot_Size, Type, userid, userid, "", null, Modules.FileManagement.ToString(), Remarks, res.FirstOrDefault().FileFormNumber.ToString(), res.FirstOrDefault().Block, res.FirstOrDefault().Plot_Type, 0, TransactionId, "", receiptno, comp.Id).FirstOrDefault();
+
                 bool headcashier = false;
                 if (User.IsInRole("Head Cashier"))
                 {
@@ -1712,55 +1711,75 @@ namespace MeherEstateDevelopers.Controllers
                 {
                     db.Sp_Add_ErrorLog(ex.Message + ex.InnerException.ToString() + ex.StackTrace, "", "", this.ControllerContext.RouteData.Values["controller"].ToString(), this.ControllerContext.RouteData.Values["action"].ToString());
                 }
-
                 var res1 = new { Receiptid = res4.Receipt_No, Token = userid };
-
                 db.Sp_Add_Activity(userid, "Pay Fine Charges" + Amount + " Remarks: " + Remarks, "Update", "Activity_Record", ActivityType.Services.ToString(), TransactionId);
-
                 return Json(res1);
             }
             else if (Module == Modules.PlotManagement.ToString())
             {
                 var res1 = db.Sp_Get_PlotDetailData(PlotId).SingleOrDefault();
                 var res2 = db.Sp_Get_PlotLastOwner(PlotId).FirstOrDefault();
-
                 if (Type == ReceiptTypes.Duplicate_Customer_File.ToString())
                 {
                     var a = db.Sp_Update_Duplicate_Check(res2.Id, Modules.PlotManagement.ToString(), Type);
-
                 }
                 else if (Type == ReceiptTypes.Duplicate_Allotment_Letter.ToString())
                 {
                     var a = db.Sp_Update_Duplicate_Check(res2.Id, Modules.PlotManagement.ToString(), Type);
                 }
+                //else if (Type == ReceiptTypes.Completion_Charges.ToString())
+                //{
+
+                //    var Plots = db.Plots.Where(x => x.Id == PlotId && x.Status == "Registered").FirstOrDefault();
+                //    string[] parts = Plots.Plot_Size.Split(' ');
+                //    string valueString = parts[0];
+                //    decimal.TryParse(valueString, out decimal numericValue);
+                //    decimal rate = 0;
+                //    if (Plots.Type == "Residential")
+                //    {
+                //         rate = numericValue * 5000;
+                //    }
+                //    else if (Plots.Type == "Commercial")
+                //    {
+                //         rate = numericValue * 10000;
+                //    }
+                //    int rateAsInt = Convert.ToInt32(rate);
+                //    //if (Amount==0) 
+                //    //{
+                //    //    return Json(false);
+                //    //}
+                //    //if (rateAsInt != Amount)
+                //    //{
+                //    //    return Json(false);
+                //    //}
+
+                //}
                 Helpers h = new Helpers();
                 var receiptno = db.Sp_Get_ReceiptNo("Normal").FirstOrDefault();
                 var Narration = "Cash Amount Received against Plot no:" + res1.Plot_No + " Block: " + res1.Block_Name + " Plot Type : " + res1.Type;
                 var res4 = db.Sp_Add_Receipt(Amount, GeneralMethods.NumberToWords(Convert.ToInt32(Amount)), null, null, null, null, res2.Mobile_1
-                       , res2.Father_Husband, PlotId, res2.Name, "Cash", 0, "Meher Estate Developers", 0, null, res1.Plot_Size, Type, userid, userid, "", null, Modules.PlotManagement.ToString(), Remarks, res1.Plot_No, res1.Block_Name, res1.Type, 0, TransactionId, "", receiptno, comp.Id).FirstOrDefault();
-                bool headcashier = false;
-                if (User.IsInRole("Head Cashier"))
-                {
-                    headcashier = true;
-                }
-                try
-                {
-                    AccountHandlerController de = new AccountHandlerController();
-                    var res5 = de.Other_Recovery(Amount, res1.Plot_No.ToString(), res1.Type, res1.Block_Name.ToString(), "Cash", "", null, "", Narration + " " + Remarks, TransactionId, userid, res4.Receipt_No, 1, Type, headcashier, AccountingModuleFP);
-                }
-                catch (Exception ex)
-                {
-                    db.Sp_Add_ErrorLog(ex.Message + ex.InnerException.ToString() + ex.StackTrace, "", "", this.ControllerContext.RouteData.Values["controller"].ToString(), this.ControllerContext.RouteData.Values["action"].ToString());
-                }
+                       , res2.Father_Husband, PlotId, res2.Name, "Cash", 0, "SA Gardens", 0, null, res1.Plot_Size, Type, userid, userid, "", null, Modules.PlotManagement.ToString(), Remarks, res1.Plot_No, res1.Block_Name, res1.Type, 0, TransactionId, "", receiptno, comp.Id).FirstOrDefault();
+                //bool headcashier = false;
+                //if (User.IsInRole("Head Cashier"))
+                //{
+                //    headcashier = true;
+                //}
+                //try
+                //{
+                //    AccountHandlerController de = new AccountHandlerController();
+                //    var res5 = de.Other_Recovery(Amount, res1.Plot_No.ToString(), res1.Type, res1.Block_Name.ToString(), "Cash", "", null, "", Narration + " " + Remarks, TransactionId, userid, res4.Receipt_No, 1, Type, headcashier, AccountingModuleFP);
+                //}
+                //catch (Exception ex)
+                //{
+                //    db.Sp_Add_ErrorLog(ex.Message + ex.InnerException.ToString() + ex.StackTrace, "", "", this.ControllerContext.RouteData.Values["controller"].ToString(), this.ControllerContext.RouteData.Values["action"].ToString());
+                //}
                 var res = new { Receiptid = res4.Receipt_No, Token = userid };
                 return Json(res);
             }
             else
             {
                 return Json(false);
-
             }
-
         }
         //}
         //public ActionResult 

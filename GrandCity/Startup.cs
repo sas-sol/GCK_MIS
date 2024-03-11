@@ -15,6 +15,7 @@ using System.Web.Hosting;
 using System.Web;
 using Hangfire.Annotations;
 using System.Configuration;
+using System.Data.Entity.Migrations;
 
 [assembly: OwinStartupAttribute(typeof(MeherEstateDevelopers.Startup))]
 namespace MeherEstateDevelopers
@@ -34,19 +35,23 @@ namespace MeherEstateDevelopers
 
             var server = new BackgroundJobServer();
 
-            var manager = new RecurringJobManager();
+            var manager = new RecurringJobManager();  //confirm 
+            manager.AddOrUpdate("SurchargePlot", Hangfire.Common.Job.FromExpression(() => SurchargePlot()), "0 0 1 * * ? ");  // Fire at 01:00 AM every day
+            manager.AddOrUpdate("SurchargeFile", Hangfire.Common.Job.FromExpression(() => SurchargeFile()), "0 0 1 * * ? ");  // Fire at 01:00 AM every day
+
             //manager.RemoveIfExists("daily-cancellation-sms");
             //manager.RemoveIfExists("Monthly-Generate-Electricity-Bills");
             //manager.RemoveIfExists("Monthly-Generate-Service-Bills");
             //manager.RemoveIfExists("reminders-dispatcher");
-            
+
             //////////////////////////////////////////////////////////////////
-            
+
             //manager.AddOrUpdate("daily-cancellation-sms", Hangfire.Common.Job.FromExpression(() => WarningMsg()), "0 1 1,15 * *");
             //manager.AddOrUpdate("Monthly-Generate-Electricity-Bills", Hangfire.Common.Job.FromExpression(() => GenerateElectircBills()), "30 0 1 * *");
             //manager.AddOrUpdate("Monthly-Generate-Service-Bills", Hangfire.Common.Job.FromExpression(() => GenerateSerrviceBills()), "30 0 1 * *");
             //manager.AddOrUpdate("reminders-dispatcher", Hangfire.Common.Job.FromExpression(() => DispatchReminders()), "*/30 * * * *");
         }
+
         public void Attendance_Wrapper_Connectivity()
         {
             if (WebAppEnvironment.LastAttendanceSync is null)
@@ -149,6 +154,7 @@ namespace MeherEstateDevelopers
                 db.SaveChanges();
             }
         }
+
         //public void WarningMsg()
         //{
         //    using (Grand_CityEntities db = new Grand_CityEntities())
@@ -232,35 +238,35 @@ namespace MeherEstateDevelopers
         //                e.SendEmail(res1.Plot_No, "taimoor@sasystems.solutions", "Msg Not Sent");
         //            }
         //        }
-                //var plres = db.Sp_Get_SherAfghan_Balance_Amount().ToList();
-                //foreach (var v in plres)
-                //{
-                //    try
-                //    {
-                //        var msgtext = "Dear " + res1.Name + ",\n\r" +
-                //            "Your pending payable balance is PKR " + string.Format("{0:n0}", (res1.Balance_Amount * -1)) + "- against File Number " + res1.FileFormNumber + " as at " + string.Format("{0:dd-MMM-yyyy}", DateTime.Now) + ". You are requested to clear your dues to avoid any furthur inconvenience.\n\r" +
-                //            "If you have already made the payment please ignore this message\n\r" +
-                //            "For further information call at our help line.\n\r" +
-                //             "Meher Estate Developers\n\r" +
-                //             "042 - 111 724 786";
+        //var plres = db.Sp_Get_SherAfghan_Balance_Amount().ToList();
+        //foreach (var v in plres)
+        //{
+        //    try
+        //    {
+        //        var msgtext = "Dear " + res1.Name + ",\n\r" +
+        //            "Your pending payable balance is PKR " + string.Format("{0:n0}", (res1.Balance_Amount * -1)) + "- against File Number " + res1.FileFormNumber + " as at " + string.Format("{0:dd-MMM-yyyy}", DateTime.Now) + ". You are requested to clear your dues to avoid any furthur inconvenience.\n\r" +
+        //            "If you have already made the payment please ignore this message\n\r" +
+        //            "For further information call at our help line.\n\r" +
+        //             "Meher Estate Developers\n\r" +
+        //             "042 - 111 724 786";
 
-                //        try
-                //        {
-                //            SmsService smsService = new SmsService();
-                //            smsService.SendMsg(msgtext, item.Mobile_1);
-                //            db.Sp_Add_FileComments(item.Id, msgtext, 0, "Text");
-                //        }
-                //        catch (Exception ee)
-                //        {
+        //        try
+        //        {
+        //            SmsService smsService = new SmsService();
+        //            smsService.SendMsg(msgtext, item.Mobile_1);
+        //            db.Sp_Add_FileComments(item.Id, msgtext, 0, "Text");
+        //        }
+        //        catch (Exception ee)
+        //        {
 
-                //            db.Sp_Add_ErrorLog(ee.Message + ee.InnerException, "", ee.StackTrace, "", "");
+        //            db.Sp_Add_ErrorLog(ee.Message + ee.InnerException, "", ee.StackTrace, "", "");
 
-                //        }
-                //    }
-                //    catch (Exception ex)
-                //    { 
-                //    }
-                //}
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    { 
+        //    }
+        //}
         //    }
         //}
         public void Transfer()
@@ -339,7 +345,7 @@ namespace MeherEstateDevelopers
 
                             //tag lagao history main
                             SmsService smsService = new SmsService();
-                            smsService.SendMsg("Reminder for " + v.ReminderNo + "\nTitle : " + v.Title+"\nPlease Login to MIS to view details of this reminder.\n\n(Sent by MIS)", phone);
+                            smsService.SendMsg("Reminder for " + v.ReminderNo + "\nTitle : " + v.Title + "\nPlease Login to MIS to view details of this reminder.\n\n(Sent by MIS)", phone);
                             var cmtSms = db.Sp_Add_ReminderComment(v.Id, "SMS for reminder sent at : " + phone, "text", 0);
                         }
                         else
@@ -352,5 +358,212 @@ namespace MeherEstateDevelopers
                 }
             }
         }
+        public void SurchargePlot()
+        {
+            using (Grand_CityEntities db = new Grand_CityEntities())
+            {
+                //var res = db.Plots.Where(x => x.Status == "Registered").Where(x => x.Id == 250).ToList();  // For testing 
+
+                var res = db.Plots.Where(x => x.Status == "Registered").ToList();
+                //var res = db.Plots.Where(x => x.Id ==6 ).ToList();
+                foreach (var v in res)
+                {
+                    int b = 0;
+                    double fineamount = 0;
+                    double fine = 0;
+                    decimal? TotalAmt = 0, AmttoPaid = 0, TotalAmount = 0; decimal? balance = 0;
+                    var ins = db.Plot_Installments.Where(x => x.Status == "NotPaid" && x.Cancelled == null && x.Plot_Id == v.Id).ToList();
+                    if (ins.Any())
+                    {
+                        var res5surcharge = db.Plot_Installments.Where(x => x.Plot_Id == v.Id && x.Cancelled == null).OrderBy(x => x.DueDate).ToList();
+                        var res6surcharge = db.Sp_Get_ReceivedAmounts(v.Id, "PlotManagement").ToList();
+                        string[] Type = { "Advance", "Booking", "Installment", "Possession" };
+                        //TotalAmount = res6surcharge.Where(x => Type.Contains(x.Type) /*&& (x.Status == null || x.Status == "Approved")*/).Sum(x => x.Amount);
+                        TotalAmount = res6surcharge.Sum(x => x.Amount);
+                        List<AmountToPaidInfo> latpi = new List<AmountToPaidInfo>();
+                        foreach (var item1 in res5surcharge)
+                        {
+                            AmountToPaidInfo atpi = new AmountToPaidInfo();
+                            TotalAmt += item1.Amount;
+                            if (Math.Round(Convert.ToDecimal(TotalAmt)) <= Math.Round(Convert.ToDecimal(TotalAmount)))
+                            {
+                                AmttoPaid += item1.Amount;
+                                atpi.Id = item1.Id;
+                                latpi.Add(atpi);
+                            }
+                            else
+                            {
+                                balance = TotalAmt - TotalAmount;
+                                var PrimaryId = item1.Id;
+                                break;
+                            }
+                        }
+                    }
+                    foreach (var a in ins)
+                    {
+                        DateTime today = DateTime.Now;
+                        DateTime AddDays = a.DueDate.Date.AddDays(0);
+                        TimeSpan t = today - AddDays;
+                        int NrOfDays = (int)t.TotalDays;
+                        if (NrOfDays >= 1)
+                        {
+                            if (b == 0)
+                            {
+                                //fine = Convert.ToDouble(balance) * 013.34;
+                                fine = Convert.ToDouble(balance) * (0.05 / 30);
+                                fineamount = fine * (NrOfDays);
+                            }
+                            else
+                            {
+                                //fine = Convert.ToDouble(a.Amount) * 013.34;
+                                fine = Convert.ToDouble(a.Amount) * (0.05 / 30);
+                                fineamount = fine * (NrOfDays);
+                            }
+                            b = 1;
+                            var checksurcharge = db.Plot_Installments_Surcharge.Where(x => x.Plot_Id == a.Plot_Id && x.Plot_install_id == a.Id && x.Status == "NotPaid" && x.Modules == "PlotManagement").FirstOrDefault();
+                            if (checksurcharge != null)
+                            {
+                                checksurcharge.Surchargefine = Convert.ToDecimal(fine);
+                                checksurcharge.SurchargeAmount = Convert.ToDecimal(fineamount);
+                                checksurcharge.DueDate_New = DateTime.Now;
+                                checksurcharge.Surchargedays = NrOfDays;
+                                checksurcharge.Installment_Name = "Surcharge against " + a.Installment_Name;
+                                db.Plot_Installments_Surcharge.AddOrUpdate(checksurcharge);
+                                db.SaveChanges();
+                            }
+                            else
+                            {
+                                var checksurchargeagain = db.Plot_Installments_Surcharge.Where(x => x.Plot_Id == a.Plot_Id && x.Plot_install_id == a.Id && x.Status == "Paid" && x.Modules == "PlotManagement").FirstOrDefault();
+                                if (checksurchargeagain == null)
+                                {
+                                    Plot_Installments_Surcharge pi = new Plot_Installments_Surcharge
+                                    {
+                                        Amount = a.Amount,
+                                        SurchargeAmount = Convert.ToDecimal(fineamount),
+                                        DueDate = a.DueDate,
+                                        DueDate_New = DateTime.Now,
+                                        Installment_Name = "Surcharge against " + a.Installment_Name,
+                                        Installment_Type = a.Installment_Type,
+                                        Status = "NotPaid",
+                                        Plot_install_id = a.Id,
+                                        Plot_Id = a.Plot_Id,
+                                        Surchargefine = (decimal?)fine,
+                                        Surchargedays = NrOfDays,
+                                        Modules = "PlotManagement"
+                                    };
+                                    db.Plot_Installments_Surcharge.Add(pi);
+                                    db.SaveChanges();
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+        }
+        public void SurchargeFile()
+        {
+            using (Grand_CityEntities db = new Grand_CityEntities())
+            {
+                //var res = db.Plots.Where(x => x.Status == "Registered").Where(x => x.Id == 250).ToList();  // For testing 
+
+                var res = db.File_Form.Where(x => x.Status == 1).ToList();
+                //var res = db.Plots.Where(x => x.Id ==6 ).ToList();
+                foreach (var v in res)
+                {
+                    int b = 0;
+                    double fineamount = 0;
+                    double fine = 0;
+                    decimal? TotalAmt = 0, AmttoPaid = 0, TotalAmount = 0; decimal? balance = 0;
+                    var ins = db.File_Installments.Where(x => x.Status == "NotPaid" && x.Cancelled == null && x.File_Id == v.Id).ToList();
+                    if (ins.Any())
+                    {
+                        var res5surcharge = db.File_Installments.Where(x => x.File_Id == v.Id && x.Cancelled == null).OrderBy(x => x.Due_Date).ToList();
+                        var res6surcharge = db.Sp_Get_ReceivedAmounts(v.Id, "FileManagement").ToList();
+                        string[] Type = { "Advance", "Booking", "Installment", "Possession" };
+                        //TotalAmount = res6surcharge.Where(x => Type.Contains(x.Type) /*&& (x.Status == null || x.Status == "Approved")*/).Sum(x => x.Amount);
+                        TotalAmount = res6surcharge.Sum(x => x.Amount);
+                        List<AmountToPaidInfo> latpi = new List<AmountToPaidInfo>();
+                        foreach (var item1 in res5surcharge)
+                        {
+                            AmountToPaidInfo atpi = new AmountToPaidInfo();
+                            TotalAmt += item1.Amount;
+                            if (Math.Round(Convert.ToDecimal(TotalAmt)) <= Math.Round(Convert.ToDecimal(TotalAmount)))
+                            {
+                                AmttoPaid += item1.Amount;
+                                atpi.Id = item1.Id;
+                                latpi.Add(atpi);
+                            }
+                            else
+                            {
+                                balance = TotalAmt - TotalAmount;
+                                var PrimaryId = item1.Id;
+                                break;
+                            }
+                        }
+                    }
+                    foreach (var a in ins)
+                    {
+                        DateTime today = DateTime.Now;
+                        DateTime AddDays = a.Due_Date.Date.AddDays(0);
+                        TimeSpan t = today - AddDays;
+                        int NrOfDays = (int)t.TotalDays;
+                        if (NrOfDays >= 1)
+                        {
+                            if (b == 0)
+                            {
+                                //fine = Convert.ToDouble(balance) * 013.34;
+                                fine = Convert.ToDouble(balance) * (0.05 / 30);
+                                fineamount = fine * (NrOfDays);
+                            }
+                            else
+                            {
+                                //fine = Convert.ToDouble(a.Amount) * 013.34;
+                                fine = Convert.ToDouble(a.Amount) * (0.05 / 30);
+                                fineamount = fine * (NrOfDays);
+                            }
+                            b = 1;
+                            var checksurcharge = db.Plot_Installments_Surcharge.Where(x => x.Plot_Id == a.File_Id && x.Plot_install_id == a.Id && x.Status == "NotPaid" && x.Modules == "FileManagement").FirstOrDefault();
+                            if (checksurcharge != null)
+                            {
+                                checksurcharge.Surchargefine = Convert.ToDecimal(fine);
+                                checksurcharge.SurchargeAmount = Convert.ToDecimal(fineamount);
+                                checksurcharge.DueDate_New = DateTime.Now;
+                                checksurcharge.Surchargedays = NrOfDays;
+                                checksurcharge.Installment_Name = "Surcharge against " + a.Installment_Name;
+                                db.Plot_Installments_Surcharge.AddOrUpdate(checksurcharge);
+                                db.SaveChanges();
+                            }
+                            else
+                            {
+                                var checksurchargeagain = db.Plot_Installments_Surcharge.Where(x => x.Plot_Id == a.File_Id && x.Plot_install_id == a.Id && x.Status == "Paid" && x.Modules == "FileManagement").FirstOrDefault();
+                                if (checksurchargeagain == null)
+                                {
+                                    Plot_Installments_Surcharge pi = new Plot_Installments_Surcharge
+                                    {
+                                        Amount = a.Amount,
+                                        SurchargeAmount = Convert.ToDecimal(fineamount),
+                                        DueDate = a.Due_Date,
+                                        DueDate_New = DateTime.Now,
+                                        Installment_Name = "Surcharge against " + a.Installment_Name,
+                                        Installment_Type = a.Installment_Type,
+                                        Status = "NotPaid",
+                                        Plot_install_id = a.Id,
+                                        Plot_Id = a.File_Id,
+                                        Surchargefine = (decimal?)fine,
+                                        Surchargedays = NrOfDays,
+                                        Modules = "FileManagement"
+                                    };
+                                    db.Plot_Installments_Surcharge.Add(pi);
+                                    db.SaveChanges();
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+        }
     }
+
 }

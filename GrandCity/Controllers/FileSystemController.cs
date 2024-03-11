@@ -51,7 +51,7 @@ namespace MeherEstateDevelopers.Controllers
             long userid = long.Parse(User.Identity.GetUserId());
             return Json(res);
         }
-        public JsonResult GetFileSecurity(long? Phase, long? Block)
+        public JsonResult GetFileSecurity(long? Phase, long? Block ,long? Sector)
         {
             var res = db.Sp_Get_File_Security(Phase, Block).SingleOrDefault();
             if (res != null)
@@ -307,6 +307,14 @@ namespace MeherEstateDevelopers.Controllers
             var FileFormNo = db.Sp_Add_FileForm(null, item.Plot_Size + " Marla", item.Dealership_Id, item.Security, item.Phase, item.Block,
                 (int)FileStatus.Pending, item.Dev_Charges_Id, helpers.GetBool(item.Sec_NoSec_Id), item.Security,
                 item.Group_Id, item.Installment_Plan, item.userid, item.Type, item.Commession, item.Block_Name, item.Sector, no).FirstOrDefault();
+            string newFileFormno = $"{item.Block_Name}-{FileFormNo.File_Form_Id} ";
+            var fileFormToUpdate = db.File_Form.FirstOrDefault(f => f.Id == FileFormNo.Id);
+            if (fileFormToUpdate != null)
+            {
+                fileFormToUpdate.FileFormNumber = newFileFormno;
+                db.SaveChanges();
+            }
+
             object[] data = new object[6];
             data[0] = FileFormNo.File_Form_Id;
             data[1] = item.Phase_Name;
@@ -416,11 +424,66 @@ namespace MeherEstateDevelopers.Controllers
             var res4 = db.Sp_Get_ReceivedAmounts(res1.Id, Modules.FileManagement.ToString()).ToList();
             var res5 = db.Discounts.Where(x => x.Module_Id == res1.Id && x.Module == Modules.FileManagement.ToString()).ToList();
             var res6 = db.Vouchers.Where(x => x.File_Plot_Id == res1.Id && x.Module == Modules.FileManagement.ToString()).ToList();
-            var res = new FileDetailData { FileData = res1, FilesOwners = res2, FileInstallments = res3, FileReceipts = res4, Discounts = res5 };
+            // surcharge
+            var res7= db.Plot_Installments_Surcharge.Where(x => x.Plot_Id == res1.Id && x.Modules == Modules.FileManagement.ToString()).ToList();
+            var res5surcharge = db.Plot_Installments_Surcharge.Where(x => x.Plot_Id == res1.Id && x.Cancelled == null && x.Waveoff == null).OrderBy(x => x.DueDate).ToList();
+            var res6surcharge = db.Sp_Get_ReceivedAmounts_Surcharge(res1.Id, Modules.FileManagement.ToString()).ToList();
+            UpdatePlotInstallmentStatusSurcharge(res5surcharge, res6surcharge, res1.Id);
+
+            var res = new FileDetailData { FileData = res1, FilesOwners = res2, FileInstallments = res3, FileReceipts = res4, Discounts = res5, PlotInstallmentsSurcharge = res7 };
             db.Sp_Add_Activity(userid, "Get full Details of File  <a class='file-data' data-id=' " + FileId + "'>" + FileId + "</a>  ", "Read", Modules.FileManagement.ToString(), ActivityType.Details_Access.ToString(), res11.Id);
 
             return PartialView(res);
         }
+        public void UpdatePlotInstallmentStatusSurcharge(List<Plot_Installments_Surcharge> inst, List<Sp_Get_ReceivedAmounts_Surcharge_Result> Receipts, long? Plotid)
+        {
+            // db.Test_UpdatePendingPlotinstallmentWht(Plotid);
+
+            decimal? TotalAmt = 0, AmttoPaid = 0, remamt = 0, TotalAmount = 0;
+
+            string[] Type = { "SurCharge" };
+
+            TotalAmount = Receipts.Where(x => Type.Contains(x.Type) /*&& (x.Status == null || x.Status == "Approved")*/).Sum(x => x.Amount);
+            //if (Dis.Any())
+            //{
+            //    TotalAmount += Dis.Sum(x => x.Discount_Amount);
+            //}
+            var Actamt = TotalAmount;
+
+            List<AmountToPaidInfo> latpi = new List<AmountToPaidInfo>();
+
+            foreach (var item1 in inst)
+            {
+                AmountToPaidInfo atpi = new AmountToPaidInfo();
+                TotalAmt += item1.SurchargeAmount;
+                if (Math.Round(Convert.ToDecimal(TotalAmt)) <= Math.Round(Convert.ToDecimal(Actamt)))
+                {
+                    AmttoPaid += item1.SurchargeAmount;
+                    atpi.Id = item1.Id;
+                    latpi.Add(atpi);
+                }
+                else
+                {
+                    break;
+                }
+            }
+
+            var allids = new XElement("IS", latpi.Select(x => new XElement("ISS", new XAttribute("Id", x.Id)))).ToString();
+            remamt = Actamt - AmttoPaid;
+            db.Test_UpdatePlotinstallment_Surcharge(allids);
+
+            var curdate = DateTime.Now;
+            var res3 = db.Sp_Get_PlotInstallments_Surcharge(Plotid).ToList();
+            var id = res3.Where(x => x.DueDate <= curdate && x.Status != "Paid").ToList();
+            var nopaidis = new XElement("IS", id.Select(x => new XElement("ISS", new XAttribute("Id", x.Id)))).ToString();
+
+            remamt = remamt - id.Sum(x => x.Amount);
+
+            db.Test_UpdatePlotsNotPaidinstallment_Surcharge(nopaidis);
+            //  db.Test_updatebalanceWht(remamt, inst.Sum(x => x.Amount), TotalAmount, Plotid, Modules.PlotManagement.ToString(), id.Count(), 0, 0, 0, 0, 0, 0);
+
+        }
+
         public ActionResult GenerateCustomerFile(long Id)
         {
             long userid = long.Parse(User.Identity.GetUserId());
@@ -1523,25 +1586,26 @@ namespace MeherEstateDevelopers.Controllers
                     item.TotalAmount += dis.Sum(x => x.Discount_Amount);
                 }
                 db.Test_PendingInst(item.Id);
-                var res1 = db.Test_FileInstallments(item.Id).ToList();
+                var res1 = db.File_Installments.Where(x => x.File_Id == item.Id).ToList();
                 var inst = res1.Where(x => x.Installment_Type != "3").OrderBy(x => x.Due_Date).ToList();
                 var advinst = res1.Where(x => x.Installment_Type == "3").OrderBy(x => x.Due_Date).FirstOrDefault();
                 List<AmountToPaidInfo> latpi = new List<AmountToPaidInfo>();
                 decimal? Actamt = item.TotalAmount;
                 decimal? TotalAmt = 0, AmttoPaid = 0;
-                Actamt = Actamt - advinst.Amount;
-                if (Actamt >= 0)
-                {
-                    AmountToPaidInfo atpi = new AmountToPaidInfo()
-                    {
-                        Id = advinst.Id
-                    };
-                    latpi.Add(atpi);
-                }
-                else
-                {
-                    Actamt = item.TotalAmount;
-                }
+                //if(advinst!= null)   //  comment this 
+                //Actamt = Actamt - advinst.Amount; 
+                //if (Actamt >= 0)
+                //{
+                //    AmountToPaidInfo atpi = new AmountToPaidInfo()
+                //    {
+                //        Id = advinst.Id
+                //    };
+                //    latpi.Add(atpi);
+                //}
+                //else
+                //{
+                //    Actamt = item.TotalAmount;
+                //}
                 foreach (var item1 in inst)
                 {
                     AmountToPaidInfo atpi = new AmountToPaidInfo();
