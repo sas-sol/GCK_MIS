@@ -381,7 +381,7 @@ namespace execldataimport.Controllers
                     COA_Mapper_Modules.Projects.ToString(), COA_Mapper_ModuleTypes.Projects_List.ToString(), item.Id, headcode.Id, 1);
             }
         }
-        
+
         public void PlotsUpdation()
         {
             Excel.Application xlApp = new Excel.Application();
@@ -398,7 +398,7 @@ namespace execldataimport.Controllers
                 //this.ParentAccount(Code, Head);
             }
         }
-        
+
         public void InvMap()
         {
 
@@ -429,7 +429,7 @@ namespace execldataimport.Controllers
 
             }
         }
-        
+
         public void updaste()
         {
             var a = db.Salaries.Where(x => x.Stipend != 0).ToList();

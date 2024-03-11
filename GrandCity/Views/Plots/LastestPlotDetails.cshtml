@@ -60,18 +60,16 @@
                         <div class="alert alert-dark" style="text-align:center" role="alert">This Plot is Holded by Company<i class="ti-check"></i></div>
                     }
                 </div>
-            </div>
-
-            @{
-
-                if (Model.PlotData.Status == "Registered")
-                {
-                    <div class="col-md-3" id="rec-inst">
-                        <button class="btn btn-info" id="rec-plot-install" data-toggle="modal" data-target="#Modal">Receive Installment</button>
-                    </div>
+                @{ if (Model.PlotData.Status == "Registered")
+                    {
+                        <div class="col-md-12" @*id="rec-inst"*@>
+                            <button class="btn btn-info" id="rec-plot-install" data-toggle="modal" data-target="#Modal">Receive Installment</button>
+                        </div>
+                    }
                 }
-            }
+            </div>
         </div>
+
         <div class="mT-30">
             <div class="form-row row">
                 <div class="col-md-12">
@@ -284,3 +282,4 @@ else
         <h5 class="c-grey-900">No Record Found</h5>
     </div>
 }
+

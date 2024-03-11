@@ -1516,6 +1516,10 @@ namespace MeherEstateDevelopers.Controllers
             ViewBag.Name = name;
             var res1 = db.Sp_Get_PlotData(Plotid).SingleOrDefault();
             var res2 = db.Sp_Get_PlotOwnerList(Plotid).ToList();
+            //get company name
+            var claim = db.UserClaims.Where(x => x.UserId == userid).ToList();
+            ViewBag.Company = claim.Where(x => x.ClaimType == "Company").Select(x => x.ClaimValue).FirstOrDefault();
+
             var inst = db.Sp_Get_PlotInstallments(Plotid).Select(x => new PlotStatment
             {
                 Description = x.Installment_Name,

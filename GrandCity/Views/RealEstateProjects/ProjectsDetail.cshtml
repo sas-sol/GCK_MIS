@@ -1,5 +1,39 @@
-﻿
+﻿﻿@{
+    if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else if (User.IsInRole("Staff"))
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+}
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+@if (TempData["SuccessMessage"] != null)
+{
+    <script>
+        Swal.fire({
+            icon: 'success',
+            title: '@TempData["SuccessMessage"]',
+            showConfirmButton: false,
+            timer: 3000 // 3 seconds
+        });
+    </script>
+}
+@*@if (TempData["SuccessMessage"] != null)
+    {
+        <div id="successAlert" class="alert alert-success">
+            @TempData["SuccessMessage"]
+        </div>
+
+        <script>
+            // Automatically hide the success message after 10 seconds
+            setTimeout(function() {
+                $('#successAlert').fadeOut('slow');
+            }, 5000); // 10 seconds (10000 milliseconds)
+        </script>
+    }*@
 <div class="form-row">
     <div class="col-md-12" style="text-align:center">
         <h4><u>Real Estate Project Configuration</u></h4>

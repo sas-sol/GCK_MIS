@@ -916,6 +916,7 @@ $(document).on("click", ".rm-dealer", function () {
 });
 // Add Dealership with dealers list
 $(document).on("submit", "#a-d", function (e) {
+    debugger;
     e.preventDefault();
     var dealersdata = [];
     var dealership = $('#Dealership_Name').val();

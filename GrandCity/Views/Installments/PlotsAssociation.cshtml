@@ -94,8 +94,17 @@
         function GenSection() {
             $('.plts-asgnmnt-area').empty();
             var group_to_values = plts.reduce(function (obj, item) {
-                obj[item.PlotSize] = obj[item.PlotSize] || [];
-                obj[item.PlotSize].push(item);
+                ////obj[item.PlotSize] = obj[item.PlotSize] || [];
+                ////obj[item.PlotSize].push(item);
+                //obj[item.PlotSize.toFixed(2)] = obj[item.PlotSize.toFixed(2)] || [];
+                //obj[item.PlotSize.toFixed(2)].push(item);
+                var key = item.PlotSize; // Original key
+                var parts = key.split(" "); // Split into numeric and unit parts
+                var numericPart = parseFloat(parts[0]).toFixed(2); // Format numeric part to two decimal places
+                var formattedKey = numericPart + " " + parts[1]; // Concatenate back together
+                obj[formattedKey] = obj[formattedKey] || [];
+                obj[formattedKey].push(item);
+                return obj;
                 return obj;
             }, {});
 
@@ -114,7 +123,18 @@
                 });
 
                 var $prevGroup, prevGroupName;
-                var fdata = plotins.filter(x => x.Group.Name == key);
+                var g = 5.000;
+                var f = parseFloat(g).toFixed(2);
+                console.log(plotins.length);
+                var fdata = plotins.filter(x => {
+                    // Extract the numeric part from x.Group.Name
+                    var numericPart = parseFloat(x.Group.Name);
+
+                    // Compare the numeric part with key
+                    return numericPart === parseFloat(key);
+                });
+                //var fdata = plotins.filter(x => parseFloat(x.Group.Name) == key);
+                console.log(fdata.length);
                 $.each(fdata, function () {
                     if (prevGroupName !== this.Group.Name) {
                         $prevGroup = $('<optgroup />').prop('label', this.Group.Name).appendTo("#" + newid + " .plt-ins");

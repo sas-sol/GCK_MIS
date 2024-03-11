@@ -43,10 +43,22 @@ namespace MeherEstateDevelopers.Controllers
         } 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public JsonResult Create([Bind(Include = "Id,Phase_Name,Description,Project_Id")] RealEstate_Phases realEstate_Phases)
+        public ActionResult Create([Bind(Include = "Id,Phase_Name,Description,Project_Id")] RealEstate_Phases realEstate_Phases)
         {
             var res = db.Sp_Add_Phase(realEstate_Phases.Phase_Name, realEstate_Phases.Description, realEstate_Phases.Project_Id).FirstOrDefault();
-            return Json(res);
+            if(res == true)
+            {
+                TempData["SuccessMessage"] = "Phase added successfully.";
+                //return Json(res);
+                return RedirectToAction("ProjectsDetail", "RealEstateProjects");
+            }
+            else
+            {
+                TempData["SuccessMessage"] = "Error Occur, Phase not added.";
+                //return Json(res);
+                return RedirectToAction("ProjectsDetail", "RealEstateProjects");
+            }
+
         }
         public ActionResult Edit(long? id)
         {
