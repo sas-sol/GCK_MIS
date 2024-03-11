@@ -962,4 +962,30 @@ else
             }
         }
     });
+    $(document).ready(function () {
+        $(".wave-off-surcharge").click(function (e) {
+            e.preventDefault(); // Prevent the default action of the link
+
+            var url = $(this).attr("href");
+
+            $.ajax({
+                type: "POST",
+                url: url,
+                success: function (response) {
+                    if (response.success) {
+                        // Success message or action (optional)
+                        alert("Surcharge waved off successfully.");
+                    } else {
+                        // Handle failure (optional)
+                        alert("Failed to wave off surcharge.");
+                    }
+                },
+                error: function () {
+                    // Handle errors (optional)
+                    alert("An error occurred while processing your request.");
+                }
+            });
+        });
+    });
+
 </script>

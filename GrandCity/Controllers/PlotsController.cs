@@ -1235,7 +1235,7 @@ namespace MeherEstateDevelopers.Controllers
             return PartialView(res);
         }
 
-        public void UpdateWaveOfFStatus(int id)
+        public ActionResult UpdateWaveOffStatus(int id)
         {
             var plotInstallment = db.Plot_Installments_Surcharge.FirstOrDefault(p => p.Id == id);
 
@@ -1246,8 +1246,13 @@ namespace MeherEstateDevelopers.Controllers
 
                 // Save the changes to the database
                 db.SaveChanges();
+
+                return Json(new { success = true }, JsonRequestBehavior.AllowGet);
             }
+
+            return Json(new { success = false }, JsonRequestBehavior.AllowGet);
         }
+
         public void UpdatePlotInstallmentStatusSurcharge(List<Plot_Installments_Surcharge> inst, List<Sp_Get_ReceivedAmounts_Surcharge_Result> Receipts, long? Plotid)
         {
             // db.Test_UpdatePendingPlotinstallmentWht(Plotid);
@@ -5411,7 +5416,7 @@ namespace MeherEstateDevelopers.Controllers
 
         //    return null;
         //}
-        //public JsonResult DataDumpMeherOnly()
+        //public JsonResult DataDumpMeherOnly()  
         //{
         //    double plotSize = 0;
         //    string plotNo = "";
@@ -5838,7 +5843,7 @@ namespace MeherEstateDevelopers.Controllers
         //    }
         //}
 
-        public JsonResult DataDumpDealershipMeherOnly()
+        public JsonResult DataDumpDealershipMeherOnly()   //comment for office missing 
         {
             string plotNo = "";
             string sector = "";
