@@ -5907,6 +5907,7 @@ $(document).on("change", ".blk-plts", function () {
 });
 // Get Plot Data
 $(document).on("click", ".sec-plt-lst", function () {
+    debugger;
     var id = $('#plt-lst').val();
     $.ajax({
         traditional: true,
@@ -5937,6 +5938,7 @@ $(document).on("click", ".sec-plt-lst", function () {
             $('#plt-loc').text(data.Plot_Location);
             $('#plt-id').val(data.Id);
             $('#pl-size').val(data.Plot_Size);
+            $('#dealership').text(data.Dealership_Name);
 
         },
         error: function () {

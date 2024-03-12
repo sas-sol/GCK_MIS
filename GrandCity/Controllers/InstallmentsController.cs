@@ -114,7 +114,9 @@ namespace MeherEstateDevelopers.Controllers
             ViewBag.PlotInst = new SelectList(res, "Id", "Text", "Group", 1);
             return View();
         }
-        public JsonResult SavePlotDeals(List<DealersPlots> PlotsList)
+        public int Plan_Id { get; set; }
+        public long Plot_Id { get; set; }
+        public JsonResult SavePlotDeals(List<DealersPlots> PlotsList, int Dealer_Id)
         {
             long userid = long.Parse(User.Identity.GetUserId());
 
@@ -124,8 +126,8 @@ namespace MeherEstateDevelopers.Controllers
 
                 if (plots.Status == PlotsStatus.Available_For_Sale.ToString())
                 {
-                    plots.Installment_Plan_Id = item.Plan_Id;
-
+                    plots.Installment_Plan_Id = Dealer_Id;
+                 
                     db.Plots.Attach(plots);
                     db.Entry(plots).Property(x => x.Installment_Plan_Id).IsModified = true;
 
@@ -2100,7 +2102,8 @@ namespace MeherEstateDevelopers.Controllers
                 }
                 else 
                 {
-                    long val = Convert.ToInt64(plotnoSeg[0]);
+                    //long val = Convert.ToInt64(plotnoSeg[0]);
+                    var val = plotnoSeg[0];
                     return RedirectToAction("FetchInstallmentData", "FileSystem", new { Filefromid = val });
                 }
 

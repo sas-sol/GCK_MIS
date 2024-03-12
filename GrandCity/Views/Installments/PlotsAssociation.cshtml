@@ -152,11 +152,12 @@
             });
             GenSection();
         });
-
+        /*dlrs - lst*/
+        
         $('.sv-deal-btn-sjfhkg').unbind().click(function () {
             debugger;
             var flag = true;
-            var dealer_id = $('.dlrs-lst option:selected').val();
+            var dealer_id = $('.plt-ins option:selected').val();
             var group_to_values = plts.reduce(function (obj, item) {
                 obj[item.PlotSize] = obj[item.PlotSize] || [];
                 obj[item.PlotSize].push(item);

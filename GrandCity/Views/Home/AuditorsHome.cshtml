@@ -1,191 +1,197 @@
 ﻿@model MeherEstateDevelopers.Models.AuditorHome_Report
 
-<h4 class="c-grey-900">Plots</h4>
-<div class="form-row">
-    <div class='col-md-2' style="box-shadow: 3px 0px 15px rgba(0, 0, 0, 0.3); margin-top: 10px;">
-        <div class="layers bd bgc-white p-10 mt-2">
-            <div class="layer w-100">
-                <div class="peers ai-sb fxw-nw">
-                    <div class="peer peer-greed">
-                        <h6 class="lh-1">Total Plots</h6>
+<div class="form-row col-md-12">
+    <h4 class="c-grey-900">Plots</h4>
+    <div class="col-md-12">
+
+        <div class="form-row">
+            <div class='col-md-2' style="box-shadow: 3px 0px 15px rgba(0, 0, 0, 0.3); margin-top: 10px;">
+                <div class="layers bd bgc-white p-10 mt-2">
+                    <div class="layer w-100">
+                        <div class="peers ai-sb fxw-nw">
+                            <div class="peer peer-greed">
+                                <h6 class="lh-1">Total Plots</h6>
+                            </div>
+                            <div class="peer">
+                                <span class="d-ib lh-0 va-m fw-600 bdrs-10em pX-15 pY-15 bgc-green-50 c-green-500">@Model.Summary.Total_Plots</span>
+                            </div>
+                        </div>
                     </div>
-                    <div class="peer">
-                        <span class="d-ib lh-0 va-m fw-600 bdrs-10em pX-15 pY-15 bgc-green-50 c-green-500">@Model.Summary.Total_Plots</span>
-                    </div>
-                </div>
-            </div>
-            <div class="layer w-100">
-                <a href="/Plots/PlotsDataDetailView/">View all</a>
-            </div>
-        </div>
-    </div>
-    <div class='col-md-2' style="box-shadow: 3px 0px 15px rgba(0, 0, 0, 0.3); margin-top: 10px;">
-        <div class="layers bd bgc-white p-10 mt-2">
-            <div class="layer w-100">
-                <div class="peers ai-sb fxw-nw">
-                    <div class="peer peer-greed">
-                        <h6 class="lh-1">Verified Plots</h6>
-                    </div>
-                    <div class="peer">
-                        <span class="d-ib lh-0 va-m fw-600 bdrs-10em pX-15 pY-15 bgc-green-50 c-green-500">@Model.Summary.VerifiedPlots</span>
+                    <div class="layer w-100">
+                        <a href="/Plots/PlotsDataDetailView/">View all</a>
                     </div>
                 </div>
             </div>
-            <div class="layer w-100">
-                <a href="/Plots/VerifiedPlots/">View all</a>
-            </div>
-        </div>
-    </div>
-    <div class='col-md-2' style="box-shadow: 3px 0px 15px rgba(0, 0, 0, 0.3); margin-top: 10px;">
-        <div class="layers bd bgc-white p-10 mt-2">
-            <div class="layer w-100">
-                <div class="peers ai-sb fxw-nw">
-                    <div class="peer peer-greed">
-                        <h6 class="lh-1">Disputed Plots</h6>
+            <div class='col-md-2' style="box-shadow: 3px 0px 15px rgba(0, 0, 0, 0.3); margin-top: 10px;">
+                <div class="layers bd bgc-white p-10 mt-2">
+                    <div class="layer w-100">
+                        <div class="peers ai-sb fxw-nw">
+                            <div class="peer peer-greed">
+                                <h6 class="lh-1">Verified Plots</h6>
+                            </div>
+                            <div class="peer">
+                                <span class="d-ib lh-0 va-m fw-600 bdrs-10em pX-15 pY-15 bgc-green-50 c-green-500">@Model.Summary.VerifiedPlots</span>
+                            </div>
+                        </div>
                     </div>
-                    <div class="peer">
-                        <span class="d-ib lh-0 va-m fw-600 bdrs-10em pX-15 pY-15 bgc-purple-50 c-purple-500">@Model.Summary.DisputedPlots</span>
-                    </div>
-                </div>
-            </div>
-            <div class="layer w-100">
-                <a href="/Plots/DisputedPlots/">View all</a>
-            </div>
-        </div>
-    </div>
-    <div class='col-md-2' style="box-shadow: 3px 0px 15px rgba(0, 0, 0, 0.3); margin-top: 10px;">
-        <div class="layers bd bgc-white p-10 mt-2">
-            <div class="layer w-100">
-                <div class="peers ai-sb fxw-nw">
-                    <div class="peer peer-greed">
-                        <h6 class="lh-1">Pending For Approval</h6>
-                    </div>
-                    <div class="peer">
-                        <span class="d-ib lh-0 va-m fw-600 bdrs-10em pX-15 pY-15 bgc-blue-50 c-blue-500">@Model.Summary.PendingForApproval</span>
+                    <div class="layer w-100">
+                        <a href="/Plots/VerifiedPlots/">View all</a>
                     </div>
                 </div>
             </div>
-            <div class="layer w-100">
-                <a href="/Plots/PendingApproval/">View all</a>
-            </div>
-        </div>
-    </div>
-    <div class='col-md-2' style="box-shadow: 3px 0px 15px rgba(0, 0, 0, 0.3); margin-top: 10px;">
-        <div class="layers bd bgc-white p-10 mt-2">
-            <div class="layer w-100">
-                <div class="peers ai-sb fxw-nw">
-                    <div class="peer peer-greed">
-                        <h6 class="lh-1">Not Verified</h6>
+            <div class='col-md-2' style="box-shadow: 3px 0px 15px rgba(0, 0, 0, 0.3); margin-top: 10px;">
+                <div class="layers bd bgc-white p-10 mt-2">
+                    <div class="layer w-100">
+                        <div class="peers ai-sb fxw-nw">
+                            <div class="peer peer-greed">
+                                <h6 class="lh-1">Not Verified</h6>
+                            </div>
+                            <div class="peer">
+                                <span class="d-ib lh-0 va-m fw-600 bdrs-10em pX-15 pY-15 bgc-red-50 c-red-500">@Model.Summary.NotVerified</span>
+                            </div>
+                        </div>
                     </div>
-                    <div class="peer">
-                        <span class="d-ib lh-0 va-m fw-600 bdrs-10em pX-15 pY-15 bgc-red-50 c-red-500">@Model.Summary.NotVerified</span>
-                    </div>
-                </div>
-            </div>
-            <div class="layer w-100">
-                <a href="/Plots/NotVerified/">View all</a>
-            </div>
-        </div>
-    </div>
-    <div class='col-md-2' style="box-shadow: 3px 0px 15px rgba(0, 0, 0, 0.3); margin-top: 10px;">
-        <div class="layers bd bgc-white p-10 mt-2">
-            <div class="layer w-100">
-                <div class="peers ai-sb fxw-nw">
-                    <div class="peer peer-greed">
-                        <h6 class="lh-1">Cancelled Plots</h6>
-                    </div>
-                    <div class="peer">
-                        <span class="d-ib lh-0 va-m fw-600 bdrs-10em pX-15 pY-15 bgc-red-50 c-red-500">@Model.Summary.Cancelled</span>
+                    <div class="layer w-100">
+                        <a href="/Plots/NotVerified/">View all</a>
                     </div>
                 </div>
             </div>
-            <div class="layer w-100">
-                <a href="/Plots/CancelledPlots/">View all</a>
-            </div>
-        </div>
-    </div>
-    <div class='col-md-2' style="box-shadow: 3px 0px 15px rgba(0, 0, 0, 0.3); margin-top: 10px; margin-top: 10px;">
-        <div class="layers bd bgc-white p-10 mt-2">
-            <div class="layer w-100">
-                <div class="peers ai-sb fxw-nw">
-                    <div class="peer peer-greed">
-                        <h6 class="lh-1">Hold Plots</h6>
+            <div class='col-md-2' style="box-shadow: 3px 0px 15px rgba(0, 0, 0, 0.3); margin-top: 10px;">
+                <div class="layers bd bgc-white p-10 mt-2">
+                    <div class="layer w-100">
+                        <div class="peers ai-sb fxw-nw">
+                            <div class="peer peer-greed">
+                                <h6 class="lh-1">Cancelled Plots</h6>
+                            </div>
+                            <div class="peer">
+                                <span class="d-ib lh-0 va-m fw-600 bdrs-10em pX-15 pY-15 bgc-red-50 c-red-500">@Model.Summary.Cancelled</span>
+                            </div>
+                        </div>
                     </div>
-                    <div class="peer">
-                        <span class="d-ib lh-0 va-m fw-600 bdrs-10em pX-15 pY-15 bgc-red-50 c-red-500">@Model.Summary.Holded</span>
-                    </div>
-                </div>
-            </div>
-            <div class="layer w-100">
-                <a href="/Plots/HoldedPlots/">View all</a>
-            </div>
-        </div>
-    </div>
-    <div class='col-md-2' style="box-shadow: 3px 0px 15px rgba(0, 0, 0, 0.3); margin-top: 10px;">
-        <div class="layers bd bgc-white p-10 mt-2">
-            <div class="layer w-100">
-                <div class="peers ai-sb fxw-nw">
-                    <div class="peer peer-greed">
-                        <h6 class="lh-1">Available for Sale</h6>
-                    </div>
-                    <div class="peer">
-                        <span class="d-ib lh-0 va-m fw-600 bdrs-10em pX-15 pY-15 bgc-red-50 c-red-500">@Model.Summary.AvaiableforSale</span>
+                    <div class="layer w-100">
+                        <a href="/Plots/CancelledPlots/">View all</a>
                     </div>
                 </div>
             </div>
-            <div class="layer w-100">
-                <a href="/Plots/AvaiableForSalePlots/">View all</a>
-            </div>
-        </div>
-    </div>
-    <div class='col-md-2' style="box-shadow: 3px 0px 15px rgba(0, 0, 0, 0.3); margin-top: 10px;">
-        <div class="layers bd bgc-white p-10 mt-2">
-            <div class="layer w-100">
-                <div class="peers ai-sb fxw-nw">
-                    <div class="peer peer-greed">
-                        <h6 class="lh-1">Repurchased Plots</h6>
+            <div class='col-md-2' style="box-shadow: 3px 0px 15px rgba(0, 0, 0, 0.3); margin-top: 10px; margin-top: 10px;">
+                <div class="layers bd bgc-white p-10 mt-2">
+                    <div class="layer w-100">
+                        <div class="peers ai-sb fxw-nw">
+                            <div class="peer peer-greed">
+                                <h6 class="lh-1">Hold Plots</h6>
+                            </div>
+                            <div class="peer">
+                                <span class="d-ib lh-0 va-m fw-600 bdrs-10em pX-15 pY-15 bgc-red-50 c-red-500">@Model.Summary.Holded</span>
+                            </div>
+                        </div>
                     </div>
-                    <div class="peer">
-                        <span class="d-ib lh-0 va-m fw-600 bdrs-10em pX-15 pY-15 bgc-red-50 c-red-500">@Model.Summary.Repurchased</span>
-                    </div>
-                </div>
-            </div>
-            <div class="layer w-100">
-                <a href="/Plots/Repurchased/">View all</a>
-            </div>
-        </div>
-    </div>
-    <div class='col-md-2' style="box-shadow: 3px 0px 15px rgba(0, 0, 0, 0.3); margin-top: 10px;">
-        <div class="layers bd bgc-white p-10 mt-2">
-            <div class="layer w-100">
-                <div class="peers ai-sb fxw-nw">
-                    <div class="peer peer-greed">
-                        <h6 class="lh-1">Constructed</h6>
-                    </div>
-                    <div class="peer">
-                        <span class="d-ib lh-0 va-m fw-600 bdrs-10em pX-15 pY-15 bgc-red-50 c-red-500">@Model.Summary.Constructed</span>
+                    <div class="layer w-100">
+                        <a href="/Plots/HoldedPlots/">View all</a>
                     </div>
                 </div>
             </div>
-            <div class="layer w-100">
-                <a href="/Plots/ContructedPlots/">View all</a>
-            </div>
-        </div>
-    </div>
-    <div class='col-md-2' style="box-shadow: 3px 0px 15px rgba(0, 0, 0, 0.3); margin-top: 10px;">
-        <div class="layers bd bgc-white p-10 mt-2">
-            <div class="layer w-100">
-                <div class="peers ai-sb fxw-nw">
-                    <div class="peer peer-greed">
-                        <h6 class="lh-1">Non Developed</h6>
+            <div class='col-md-2' style="box-shadow: 3px 0px 15px rgba(0, 0, 0, 0.3); margin-top: 10px;">
+                <div class="layers bd bgc-white p-10 mt-2">
+                    <div class="layer w-100">
+                        <div class="peers ai-sb fxw-nw">
+                            <div class="peer peer-greed">
+                                <h6 class="lh-1">Available For Sale</h6>
+                            </div>
+                            <div class="peer">
+                                <span class="d-ib lh-0 va-m fw-600 bdrs-10em pX-15 pY-15 bgc-red-50 c-red-500">@Model.Summary.AvaiableforSale</span>
+                            </div>
+                        </div>
                     </div>
-                    <div class="peer">
-                        <span class="d-ib lh-0 va-m fw-600 bdrs-10em pX-15 pY-15 bgc-red-50 c-red-500">@Model.Summary.NonDeveloped</span>
+                    <div class="layer w-100">
+                        <a href="/Plots/AvaiableForSalePlots/">View all</a>
                     </div>
                 </div>
             </div>
-            <div class="layer w-100">
-                <a href="/Plots/NonDevelopedPlots/">View all</a>
+            @*<div class='col-md-2' style="box-shadow: 3px 0px 15px rgba(0, 0, 0, 0.3); margin-top: 10px;">
+                    <div class="layers bd bgc-white p-10 mt-2">
+                        <div class="layer w-100">
+                            <div class="peers ai-sb fxw-nw">
+                                <div class="peer peer-greed">
+                                    <h6 class="lh-1">Disputed Plots</h6>
+                                </div>
+                                <div class="peer">
+                                    <span class="d-ib lh-0 va-m fw-600 bdrs-10em pX-15 pY-15 bgc-purple-50 c-purple-500">@Model.Summary.DisputedPlots</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layer w-100">
+                            <a href="/Plots/DisputedPlots/">View all</a>
+                        </div>
+                    </div>
+                </div>*@
+            @*<div class='col-md-2' style="box-shadow: 3px 0px 15px rgba(0, 0, 0, 0.3); margin-top: 10px;">
+                    <div class="layers bd bgc-white p-10 mt-2">
+                        <div class="layer w-100">
+                            <div class="peers ai-sb fxw-nw">
+                                <div class="peer peer-greed">
+                                    <h6 class="lh-1">Pending For Approval</h6>
+                                </div>
+                                <div class="peer">
+                                    <span class="d-ib lh-0 va-m fw-600 bdrs-10em pX-15 pY-15 bgc-blue-50 c-blue-500">@Model.Summary.PendingForApproval</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layer w-100">
+                            <a href="/Plots/PendingApproval/">View all</a>
+                        </div>
+                    </div>
+                </div>*@
+
+            @*<div class='col-md-2' style="box-shadow: 3px 0px 15px rgba(0, 0, 0, 0.3); margin-top: 10px;">
+                    <div class="layers bd bgc-white p-10 mt-2">
+                        <div class="layer w-100">
+                            <div class="peers ai-sb fxw-nw">
+                                <div class="peer peer-greed">
+                                    <h6 class="lh-1">Repurchased Plots</h6>
+                                </div>
+                                <div class="peer">
+                                    <span class="d-ib lh-0 va-m fw-600 bdrs-10em pX-15 pY-15 bgc-red-50 c-red-500">@Model.Summary.Repurchased</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layer w-100">
+                            <a href="/Plots/Repurchased/">View all</a>
+                        </div>
+                    </div>
+                </div>*@
+            <div class='col-md-2' style="box-shadow: 3px 0px 15px rgba(0, 0, 0, 0.3); margin-top: 10px;">
+                <div class="layers bd bgc-white p-10 mt-2">
+                    <div class="layer w-100">
+                        <div class="peers ai-sb fxw-nw">
+                            <div class="peer peer-greed">
+                                <h6 class="lh-1">Constructed</h6>
+                            </div>
+                            <div class="peer">
+                                <span class="d-ib lh-0 va-m fw-600 bdrs-10em pX-15 pY-15 bgc-red-50 c-red-500">@Model.Summary.Constructed</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layer w-100">
+                        <a href="/Plots/ContructedPlots/">View all</a>
+                    </div>
+                </div>
+            </div>
+            <div class='col-md-2' style="box-shadow: 3px 0px 15px rgba(0, 0, 0, 0.3); margin-top: 10px;">
+                <div class="layers bd bgc-white p-10 mt-2">
+                    <div class="layer w-100">
+                        <div class="peers ai-sb fxw-nw">
+                            <div class="peer peer-greed">
+                                <h6 class="lh-1">Non Constructed</h6>
+                            </div>
+                            <div class="peer">
+                                <span class="d-ib lh-0 va-m fw-600 bdrs-10em pX-15 pY-15 bgc-red-50 c-red-500">@Model.Summary.NonDeveloped</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layer w-100">
+                        <a href="/Plots/NonDevelopedPlots/">View all</a>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -193,216 +199,217 @@
 @{
     if (User.IsInRole("Files Summary") || User.IsInRole("Administrator"))
     {
-        <div class="form-row">
+        <div class="form-row col-md-12">
             <h4 class="c-grey-900">Files Summary</h4>
-            <div class="form-row">
-                <div class='col-md-2' style="box-shadow: 3px 0px 15px rgba(0, 0, 0, 0.3); margin-top: 10px;">
-                    <div class="layers bd bgc-white p-10 mt-2" data-toggle="tooltip" data-placement="top" title="" data-original-title="Files which are processed for Cancellation but not refunded to customers yet">
-                        <div class="layer w-100">
-                            <div class="peers ai-sb fxw-nw">
-                                <div class="peer peer-greed">
-                                    <h6 class="lh-1">Cancelled Not Refunded</h6>
+            <div class="col-md-12">
+                <div class="form-row">
+                    <div class='col-md-2' style="box-shadow: 3px 0px 15px rgba(0, 0, 0, 0.3); margin-top: 10px;">
+                        <div class="layers bd bgc-white p-10 mt-2" data-toggle="tooltip" data-placement="top" title="" data-original-title="Files which are processed for Cancellation but not refunded to customers yet">
+                            <div class="layer w-100">
+                                <div class="peers ai-sb fxw-nw">
+                                    <div class="peer peer-greed">
+                                        <h6 class="lh-1">Cancelled Not Refunded</h6>
+                                    </div>
+                                    <div class="peer">
+                                        <span class="d-ib lh-0 va-m fw-600 bdrs-10em pX-15 pY-15 bgc-red-50 c-red-500">@Model.FilesSummary.Cancelled_Not_Refunded</span>
+                                    </div>
                                 </div>
-                                <div class="peer">
-                                    <span class="d-ib lh-0 va-m fw-600 bdrs-10em pX-15 pY-15 bgc-red-50 c-red-500">@Model.FilesSummary.Cancelled_Not_Refunded</span>
+                            </div>
+                            <div class="layer w-100">
+                                <a href="/FileSystem/FileStatusView?status=15">View all</a>
+                            </div>
+                        </div>
+                    </div>
+                    @*<div class='col-md-2' style="box-shadow: 3px 0px 15px rgba(0, 0, 0, 0.3); margin-top: 10px;">
+                        <div class="layers bd bgc-white p-10 mt-2" data-toggle="tooltip" data-placement="top" title="" data-original-title="Files which are marked Disputed for any reason">
+                            <div class="layer w-100">
+                                <div class="peers ai-sb fxw-nw">
+                                    <div class="peer peer-greed">
+                                        <h6 class="lh-1">Disputed</h6>
+                                    </div>
+                                    <div class="peer">
+                                        <span class="d-ib lh-0 va-m fw-600 bdrs-10em pX-15 pY-15 bgc-red-50 c-red-500">@Model.FilesSummary.Disputed</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layer w-100">
+                                <a href="/FileSystem/FileStatusView?status=11">View all</a>
+                            </div>
+                        </div>
+                    </div>*@
+                    <div class='col-md-2' style="box-shadow: 3px 0px 15px rgba(0, 0, 0, 0.3); margin-top: 10px;">
+                        <div class="layers bd bgc-white p-10 mt-2" data-toggle="tooltip" data-placement="top" title="" data-original-title="Application Forms which are still in market for registeration">
+                            <div class="layer w-100">
+                                <div class="peers ai-sb fxw-nw">
+                                    <div class="peer peer-greed">
+                                        <h6 class="lh-1">Pending Application Form</h6>
+                                    </div>
+                                    <div class="peer">
+                                        <span class="d-ib lh-0 va-m fw-600 bdrs-10em pX-15 pY-15 bgc-red-50 c-red-500">@Model.FilesSummary.Pending</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layer w-100">
+                                <a href="/FileSystem/FileStatusView?status=2">View all</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class='col-md-2' style="box-shadow: 3px 0px 15px rgba(0, 0, 0, 0.3); margin-top: 10px;">
+                        <div class="layers bd bgc-white p-10 mt-2" data-toggle="tooltip" data-placement="top" title="" data-original-title="Files which are refunded to customer after cancellation process">
+                            <div class="layer w-100">
+                                <div class="peers ai-sb fxw-nw">
+                                    <div class="peer peer-greed">
+                                        <h6 class="lh-1">Cancelled Refunded Files</h6>
+                                    </div>
+                                    <div class="peer">
+                                        <span class="d-ib lh-0 va-m fw-600 bdrs-10em pX-15 pY-15 bgc-red-50 c-red-500">@Model.FilesSummary.Refund</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layer w-100">
+                                <a href="/FileSystem/FileStatusView?status=13">View all</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class='col-md-2' style="box-shadow: 3px 0px 15px rgba(0, 0, 0, 0.3); margin-top: 10px;">
+                        <div class="layers bd bgc-white p-10 mt-2" data-toggle="tooltip" data-placement="top" title="" data-original-title="Registered Files of Customers">
+                            <div class="layer w-100">
+                                <div class="peers ai-sb fxw-nw">
+                                    <div class="peer peer-greed">
+                                        <h6 class="lh-1">Registered</h6>
+                                    </div>
+                                    <div class="peer">
+                                        <span class="d-ib lh-0 va-m fw-600 bdrs-10em pX-15 pY-15 bgc-red-50 c-red-500">@Model.FilesSummary.Registered</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layer w-100">
+                                <a href="/FileSystem/FileStatusView?status=1">View all</a>
+                            </div>
+                        </div>
+                    </div>
+                    @*<div class='col-md-2' style="box-shadow: 3px 0px 15px rgba(0, 0, 0, 0.3); margin-top: 10px;">
+                            <div class="layers bd bgc-white p-10 mt-2" data-toggle="tooltip" data-placement="top" title="" data-original-title="Cancellation requested by Customers">
+                                <div class="layer w-100">
+                                    <div class="peers ai-sb fxw-nw">
+                                        <div class="peer peer-greed">
+                                            <h6 class="lh-1">Initiated Cancellation</h6>
+                                        </div>
+                                        <div class="peer">
+                                            <span class="d-ib lh-0 va-m fw-600 bdrs-10em pX-15 pY-15 bgc-red-50 c-red-500">@Model.FilesSummary.Hold</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="layer w-100">
+                                    <a href="/FileSystem/FileStatusView?status=8">View all</a>
                                 </div>
                             </div>
                         </div>
-                        <div class="layer w-100">
-                            <a href="/FileSystem/FileStatusView?status=15">View all</a>
-                        </div>
-                    </div>
-                </div>
-                <div class='col-md-2' style="box-shadow: 3px 0px 15px rgba(0, 0, 0, 0.3); margin-top: 10px;">
-                    <div class="layers bd bgc-white p-10 mt-2" data-toggle="tooltip" data-placement="top" title="" data-original-title="Files which are marked Disputed for any reason">
-                        <div class="layer w-100">
-                            <div class="peers ai-sb fxw-nw">
-                                <div class="peer peer-greed">
-                                    <h6 class="lh-1">Disputed</h6>
+                        <div class='col-md-2' style="box-shadow: 3px 0px 15px rgba(0, 0, 0, 0.3); margin-top: 10px;">
+                            <div class="layers bd bgc-white p-10 mt-2" data-toggle="tooltip" data-placement="top" title="" data-original-title="Files which are pending for Registeration in Dubai Expo">
+                                <div class="layer w-100">
+                                    <div class="peers ai-sb fxw-nw">
+                                        <div class="peer peer-greed">
+                                            <h6 class="lh-1">Pending Registeration</h6>
+                                        </div>
+                                        <div class="peer">
+                                            <span class="d-ib lh-0 va-m fw-600 bdrs-10em pX-15 pY-15 bgc-red-50 c-red-500">@Model.FilesSummary.Inprocess</span>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="peer">
-                                    <span class="d-ib lh-0 va-m fw-600 bdrs-10em pX-15 pY-15 bgc-red-50 c-red-500">@Model.FilesSummary.Disputed</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="layer w-100">
-                            <a href="/FileSystem/FileStatusView?status=11">View all</a>
-                        </div>
-                    </div>
-                </div>
-                <div class='col-md-2' style="box-shadow: 3px 0px 15px rgba(0, 0, 0, 0.3); margin-top: 10px;">
-                    <div class="layers bd bgc-white p-10 mt-2" data-toggle="tooltip" data-placement="top" title="" data-original-title="Cancellation requested by Customers">
-                        <div class="layer w-100">
-                            <div class="peers ai-sb fxw-nw">
-                                <div class="peer peer-greed">
-                                    <h6 class="lh-1">Initiated Cancellation</h6>
-                                </div>
-                                <div class="peer">
-                                    <span class="d-ib lh-0 va-m fw-600 bdrs-10em pX-15 pY-15 bgc-red-50 c-red-500">@Model.FilesSummary.Hold</span>
+                                <div class="layer w-100">
+                                    <a href="/FileSystem/FileStatusView?status=4">View all</a>
                                 </div>
                             </div>
                         </div>
-                        <div class="layer w-100">
-                            <a href="/FileSystem/FileStatusView?status=8">View all</a>
-                        </div>
-                    </div>
-                </div>
-                <div class='col-md-2' style="box-shadow: 3px 0px 15px rgba(0, 0, 0, 0.3); margin-top: 10px;">
-                    <div class="layers bd bgc-white p-10 mt-2" data-toggle="tooltip" data-placement="top" title="" data-original-title="Files which are pending for Registeration in Dubai Expo">
-                        <div class="layer w-100">
-                            <div class="peers ai-sb fxw-nw">
-                                <div class="peer peer-greed">
-                                    <h6 class="lh-1">Pending Registeration</h6>
+                        <div class='col-md-2' style="box-shadow: 3px 0px 15px rgba(0, 0, 0, 0.3); margin-top: 10px;">
+                            <div class="layers bd bgc-white p-10 mt-2" data-toggle="tooltip" data-placement="top" title="" data-original-title="Open Files">
+                                <div class="layer w-100">
+                                    <div class="peers ai-sb fxw-nw">
+                                        <div class="peer peer-greed">
+                                            <h6 class="lh-1">Open Files</h6>
+                                        </div>
+                                        <div class="peer">
+                                            <span class="d-ib lh-0 va-m fw-600 bdrs-10em pX-15 pY-15 bgc-red-50 c-red-500">@Model.FilesSummary.OpenFile</span>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="peer">
-                                    <span class="d-ib lh-0 va-m fw-600 bdrs-10em pX-15 pY-15 bgc-red-50 c-red-500">@Model.FilesSummary.Inprocess</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="layer w-100">
-                            <a href="/FileSystem/FileStatusView?status=4">View all</a>
-                        </div>
-                    </div>
-                </div>
-                <div class='col-md-2' style="box-shadow: 3px 0px 15px rgba(0, 0, 0, 0.3); margin-top: 10px;">
-                    <div class="layers bd bgc-white p-10 mt-2" data-toggle="tooltip" data-placement="top" title="" data-original-title="Open Files">
-                        <div class="layer w-100">
-                            <div class="peers ai-sb fxw-nw">
-                                <div class="peer peer-greed">
-                                    <h6 class="lh-1">Open Files</h6>
-                                </div>
-                                <div class="peer">
-                                    <span class="d-ib lh-0 va-m fw-600 bdrs-10em pX-15 pY-15 bgc-red-50 c-red-500">@Model.FilesSummary.OpenFile</span>
+                                <div class="layer w-100">
+                                    <a href="/FileSystem/FileStatusView?status=5">View all</a>
                                 </div>
                             </div>
                         </div>
-                        <div class="layer w-100">
-                            <a href="/FileSystem/FileStatusView?status=5">View all</a>
-                        </div>
-                    </div>
-                </div>
-                <div class='col-md-2' style="box-shadow: 3px 0px 15px rgba(0, 0, 0, 0.3); margin-top: 10px;">
-                    <div class="layers bd bgc-white p-10 mt-2" data-toggle="tooltip" data-placement="top" title="" data-original-title="Open files of Dealers which are suspended due to Dealership Cancellation/Suspention">
-                        <div class="layer w-100">
-                            <div class="peers ai-sb fxw-nw">
-                                <div class="peer peer-greed">
-                                    <h6 class="lh-1">Open Suspend Files</h6>
+                        <div class='col-md-2' style="box-shadow: 3px 0px 15px rgba(0, 0, 0, 0.3); margin-top: 10px;">
+                            <div class="layers bd bgc-white p-10 mt-2" data-toggle="tooltip" data-placement="top" title="" data-original-title="Open files of Dealers which are suspended due to Dealership Cancellation/Suspention">
+                                <div class="layer w-100">
+                                    <div class="peers ai-sb fxw-nw">
+                                        <div class="peer peer-greed">
+                                            <h6 class="lh-1">Open Suspend Files</h6>
+                                        </div>
+                                        <div class="peer">
+                                            <span class="d-ib lh-0 va-m fw-600 bdrs-10em pX-15 pY-15 bgc-red-50 c-red-500">@Model.FilesSummary.Open_Suspend</span>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="peer">
-                                    <span class="d-ib lh-0 va-m fw-600 bdrs-10em pX-15 pY-15 bgc-red-50 c-red-500">@Model.FilesSummary.Open_Suspend</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="layer w-100">
-                            <a href="/FileSystem/FileStatusView?status=16">View all</a>
-                        </div>
-                    </div>
-                </div>
-                <div class='col-md-2' style="box-shadow: 3px 0px 15px rgba(0, 0, 0, 0.3); margin-top: 10px;">
-                    <div class="layers bd bgc-white p-10 mt-2" data-toggle="tooltip" data-placement="top" title="" data-original-title="Application Forms which are still in market for registeration">
-                        <div class="layer w-100">
-                            <div class="peers ai-sb fxw-nw">
-                                <div class="peer peer-greed">
-                                    <h6 class="lh-1">Pending Application Form</h6>
-                                </div>
-                                <div class="peer">
-                                    <span class="d-ib lh-0 va-m fw-600 bdrs-10em pX-15 pY-15 bgc-red-50 c-red-500">@Model.FilesSummary.Pending</span>
+                                <div class="layer w-100">
+                                    <a href="/FileSystem/FileStatusView?status=16">View all</a>
                                 </div>
                             </div>
                         </div>
-                        <div class="layer w-100">
-                            <a href="/FileSystem/FileStatusView?status=2">View all</a>
-                        </div>
-                    </div>
-                </div>
-                <div class='col-md-2' style="box-shadow: 3px 0px 15px rgba(0, 0, 0, 0.3); margin-top: 10px;">
-                    <div class="layers bd bgc-white p-10 mt-2" data-toggle="tooltip" data-placement="top" title="" data-original-title="Files which are refunded to customer after cancellation process">
-                        <div class="layer w-100">
-                            <div class="peers ai-sb fxw-nw">
-                                <div class="peer peer-greed">
-                                    <h6 class="lh-1">Cancelled Refunded Files</h6>
+                        <div class='col-md-2' style="box-shadow: 3px 0px 15px rgba(0, 0, 0, 0.3); margin-top: 10px;">
+                            <div class="layers bd bgc-white p-10 mt-2" data-toggle="tooltip" data-placement="top" title="" data-original-title="Application Forms which are issued to Dealers but cancelled due to non registeration">
+                                <div class="layer w-100">
+                                    <div class="peers ai-sb fxw-nw">
+                                        <div class="peer peer-greed">
+                                            <h6 class="lh-1">Cancelled Application Form</h6>
+                                        </div>
+                                        <div class="peer">
+                                            <span class="d-ib lh-0 va-m fw-600 bdrs-10em pX-15 pY-15 bgc-red-50 c-red-500">@Model.FilesSummary.Rejected</span>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="peer">
-                                    <span class="d-ib lh-0 va-m fw-600 bdrs-10em pX-15 pY-15 bgc-red-50 c-red-500">@Model.FilesSummary.Refund</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="layer w-100">
-                            <a href="/FileSystem/FileStatusView?status=13">View all</a>
-                        </div>
-                    </div>
-                </div>
-                <div class='col-md-2' style="box-shadow: 3px 0px 15px rgba(0, 0, 0, 0.3); margin-top: 10px;">
-                    <div class="layers bd bgc-white p-10 mt-2" data-toggle="tooltip" data-placement="top" title="" data-original-title="Registered Files of Customers">
-                        <div class="layer w-100">
-                            <div class="peers ai-sb fxw-nw">
-                                <div class="peer peer-greed">
-                                    <h6 class="lh-1">Registered</h6>
-                                </div>
-                                <div class="peer">
-                                    <span class="d-ib lh-0 va-m fw-600 bdrs-10em pX-15 pY-15 bgc-red-50 c-red-500">@Model.FilesSummary.Registered</span>
+                                <div class="layer w-100">
+                                    <a href="/FileSystem/FileStatusView?status=0">View all</a>
                                 </div>
                             </div>
                         </div>
-                        <div class="layer w-100">
-                            <a href="/FileSystem/FileStatusView?status=1">View all</a>
-                        </div>
-                    </div>
-                </div>
-                <div class='col-md-2' style="box-shadow: 3px 0px 15px rgba(0, 0, 0, 0.3); margin-top: 10px;">
-                    <div class="layers bd bgc-white p-10 mt-2" data-toggle="tooltip" data-placement="top" title="" data-original-title="Application Forms which are issued to Dealers but cancelled due to non registeration">
-                        <div class="layer w-100">
-                            <div class="peers ai-sb fxw-nw">
-                                <div class="peer peer-greed">
-                                    <h6 class="lh-1">Cancelled Application Form</h6>
+                        <div class='col-md-2' style="box-shadow: 3px 0px 15px rgba(0, 0, 0, 0.3); margin-top: 10px;">
+                            <div class="layers bd bgc-white p-10 mt-2" data-toggle="tooltip" data-placement="top" title="" data-original-title="Files which are repurchased by the Meher Estate Developers">
+                                <div class="layer w-100">
+                                    <div class="peers ai-sb fxw-nw">
+                                        <div class="peer peer-greed">
+                                            <h6 class="lh-1">Repurchased</h6>
+                                        </div>
+                                        <div class="peer">
+                                            <span class="d-ib lh-0 va-m fw-600 bdrs-10em pX-15 pY-15 bgc-red-50 c-red-500">@Model.FilesSummary.Repurchased</span>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="peer">
-                                    <span class="d-ib lh-0 va-m fw-600 bdrs-10em pX-15 pY-15 bgc-red-50 c-red-500">@Model.FilesSummary.Rejected</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="layer w-100">
-                            <a href="/FileSystem/FileStatusView?status=0">View all</a>
-                        </div>
-                    </div>
-                </div>
-                <div class='col-md-2' style="box-shadow: 3px 0px 15px rgba(0, 0, 0, 0.3); margin-top: 10px;">
-                    <div class="layers bd bgc-white p-10 mt-2" data-toggle="tooltip" data-placement="top" title="" data-original-title="Files which are repurchased by the Meher Estate Developers">
-                        <div class="layer w-100">
-                            <div class="peers ai-sb fxw-nw">
-                                <div class="peer peer-greed">
-                                    <h6 class="lh-1">Repurchased</h6>
-                                </div>
-                                <div class="peer">
-                                    <span class="d-ib lh-0 va-m fw-600 bdrs-10em pX-15 pY-15 bgc-red-50 c-red-500">@Model.FilesSummary.Repurchased</span>
+                                <div class="layer w-100">
+                                    <a href="/FileSystem/FileStatusView?status=9">View all</a>
                                 </div>
                             </div>
                         </div>
-                        <div class="layer w-100">
-                            <a href="/FileSystem/FileStatusView?status=9">View all</a>
-                        </div>
-                    </div>
-                </div>
-                <div class='col-md-2' style="box-shadow: 3px 0px 15px rgba(0, 0, 0, 0.3); margin-top: 10px;">
-                    <div class="layers bd bgc-white p-10 mt-2" data-toggle="tooltip" data-placement="top" title="" data-original-title="Application Forms are issued to Dealers but Suspended due to Dealership Cancellation/Suspention">
-                        <div class="layer w-100">
-                            <div class="peers ai-sb fxw-nw">
-                                <div class="peer peer-greed">
-                                    <h6 class="lh-1">Suspend Application Forms</h6>
+                        <div class='col-md-2' style="box-shadow: 3px 0px 15px rgba(0, 0, 0, 0.3); margin-top: 10px;">
+                            <div class="layers bd bgc-white p-10 mt-2" data-toggle="tooltip" data-placement="top" title="" data-original-title="Application Forms are issued to Dealers but Suspended due to Dealership Cancellation/Suspention">
+                                <div class="layer w-100">
+                                    <div class="peers ai-sb fxw-nw">
+                                        <div class="peer peer-greed">
+                                            <h6 class="lh-1">Suspend Application Forms</h6>
+                                        </div>
+                                        <div class="peer">
+                                            <span class="d-ib lh-0 va-m fw-600 bdrs-10em pX-15 pY-15 bgc-red-50 c-red-500">@Model.FilesSummary.Suspend</span>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="peer">
-                                    <span class="d-ib lh-0 va-m fw-600 bdrs-10em pX-15 pY-15 bgc-red-50 c-red-500">@Model.FilesSummary.Suspend</span>
+                                <div class="layer w-100">
+                                    <a href="/FileSystem/FileStatusView?status=14">View all</a>
                                 </div>
                             </div>
-                        </div>
-                        <div class="layer w-100">
-                            <a href="/FileSystem/FileStatusView?status=14">View all</a>
-                        </div>
-                    </div>
+                        </div>*@
                 </div>
             </div>
         </div>
-
         <div class="form-row col-md-12">
             <h4 class="c-grey-900">Overdue Files Report</h4>
             <div class="col-md-12">
@@ -496,7 +503,7 @@
 </div>
 
 <script>
-                //$(document).ready(function () {
-                //    $('.files-tab-rep').load('/Reports/FilesTabularSummary/');
-                //});
+                            //$(document).ready(function () {
+                            //    $('.files-tab-rep').load('/Reports/FilesTabularSummary/');
+                            //});
 </script>
