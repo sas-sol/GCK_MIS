@@ -176,31 +176,30 @@ namespace MeherEstateDevelopers.Controllers
                         var a = db.File_Form.Where(x => x.FileFormNumber == FileFormNumber).FirstOrDefault();
                         var b = db.Sp_Update_FileForm_dealerId(a.Id, DelerId, "File", null);
                     }
-
                     var ffid = filedatas.Select(x => x.File_Form_Id).FirstOrDefault();
                     var appdetail = (from x in db.File_Form
                                      join y in db.Dealerships on x.Dealership_Id equals y.Id
                                      where x.Id == ffid
                                      select new { File = x, Dealership = y }).FirstOrDefault();
-                                    {
-                                        Dealer_Commession d = new Dealer_Commession()
-                                        {
-                                            Module = Modules.FileManagement.ToString(),
-                                            Com_Type = "Percentage",
-                                            Com_Maturity = 25,
-                                            Percentage = appdetail.File.Commession,
-                                            File_Plot_Id = appdetail.File.Id,
-                                            Com_Amount = (appdetail.File.Commession * installmentstructure.FirstOrDefault().Total) / 100,
-                                            Dealer_Id = appdetail.Dealership.Id,
-                                            Dealer_Name = appdetail.Dealership.Dealership_Name,
-                                            Plot_No = appdetail.File.FileFormNumber.ToString(),
-                                            Plot_Type = appdetail.File.Type,
-                                            Block = appdetail.File.Block,
-                                            Total_Price = installmentstructure.FirstOrDefault().Total
-                                        };
-                                        DealershipController dc = new DealershipController();
-                                        dc.AddCommession(d);
-                                    }
+                    {
+                        Dealer_Commession d = new Dealer_Commession()
+                        {
+                            Module = Modules.FileManagement.ToString(),
+                            Com_Type = "Percentage",
+                            Com_Maturity = 25,
+                            Percentage = appdetail.File.Commession,
+                            File_Plot_Id = appdetail.File.Id,
+                            Com_Amount = (appdetail.File.Commession * installmentstructure.FirstOrDefault().Total) / 100,
+                            Dealer_Id = appdetail.Dealership.Id,
+                            Dealer_Name = appdetail.Dealership.Dealership_Name,
+                            Plot_No = appdetail.File.FileFormNumber.ToString(),
+                            Plot_Type = appdetail.File.Type,
+                            Block = appdetail.File.Block,
+                            Total_Price = installmentstructure.FirstOrDefault().Total
+                        };
+                        DealershipController dc = new DealershipController();
+                        dc.AddCommession(d);
+                    }
                     InstallmentsController ic = new InstallmentsController();
                     var file_Installments = ic.AddInstallmentPlan(installmentstructure, DevCharStatus, Convert.ToInt64(filedatas.Select(x => x.File_Form_Id).FirstOrDefault()), DateTime.UtcNow);
                     if (file_Installments.Status)
@@ -237,7 +236,7 @@ namespace MeherEstateDevelopers.Controllers
                                 try
                                 {
                                     var Imgres = H.SaveBase64Image(rd.FileImage, pathMain, res2.ToString());
-                                   // smsService.SendMsg(Msg, rd.Mobile_1);
+                                    // smsService.SendMsg(Msg, rd.Mobile_1);
                                 }
                                 catch (Exception)
                                 {

@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
-using Excel = Microsoft.Office.Interop.Excel;
+//using Excel = Microsoft.Office.Interop.Excel;
 using MeherEstateDevelopers.Models;
 using System.Xml.Linq;
 using Newtonsoft.Json;
@@ -382,53 +382,53 @@ namespace execldataimport.Controllers
             }
         }
 
-        public void PlotsUpdation()
-        {
-            Excel.Application xlApp = new Excel.Application();
-            Excel.Workbook xlWorkbook = xlApp.Workbooks.Open(@"D:\Refined_COA.xlsx");
-            Excel._Worksheet xlWorksheet = xlWorkbook.Sheets[1];
-            Excel.Range xlRange = xlWorksheet.UsedRange;
-            int rowCount = xlRange.Rows.Count;
-            int colCount = xlRange.Columns.Count;
-            for (int i = 2; i <= rowCount; i++)
-            {
-                string Code = Convert.ToString(xlRange.Cells[i, 1].Value2);
-                string Head = Convert.ToString(xlRange.Cells[i, 2].Value2);
+        //public void PlotsUpdation()
+        //{
+        //    Excel.Application xlApp = new Excel.Application();
+        //    Excel.Workbook xlWorkbook = xlApp.Workbooks.Open(@"D:\Refined_COA.xlsx");
+        //    Excel._Worksheet xlWorksheet = xlWorkbook.Sheets[1];
+        //    Excel.Range xlRange = xlWorksheet.UsedRange;
+        //    int rowCount = xlRange.Rows.Count;
+        //    int colCount = xlRange.Columns.Count;
+        //    for (int i = 2; i <= rowCount; i++)
+        //    {
+        //        string Code = Convert.ToString(xlRange.Cells[i, 1].Value2);
+        //        string Head = Convert.ToString(xlRange.Cells[i, 2].Value2);
 
-                //this.ParentAccount(Code, Head);
-            }
-        }
+        //        //this.ParentAccount(Code, Head);
+        //    }
+        //}
 
-        public void InvMap()
-        {
+        //public void InvMap()
+        //{
 
-            Excel.Application xlApp = new Excel.Application();
-            Excel.Workbook xlWorkbook = xlApp.Workbooks.Open(@"D:\Item.xlsx");
-            Excel._Worksheet xlWorksheet = xlWorkbook.Sheets[1];
-            Excel.Range xlRange = xlWorksheet.UsedRange;
-            int rowCount = xlRange.Rows.Count;
-            int colCount = xlRange.Columns.Count;
-            for (int i = 2; i <= rowCount; i++)
-            {
-                string sku = Convert.ToString(xlRange.Cells[i, 1].Value2);
-                string head = Convert.ToString(xlRange.Cells[i, 2].Value2);
+        //    Excel.Application xlApp = new Excel.Application();
+        //    Excel.Workbook xlWorkbook = xlApp.Workbooks.Open(@"D:\Item.xlsx");
+        //    Excel._Worksheet xlWorksheet = xlWorkbook.Sheets[1];
+        //    Excel.Range xlRange = xlWorksheet.UsedRange;
+        //    int rowCount = xlRange.Rows.Count;
+        //    int colCount = xlRange.Columns.Count;
+        //    for (int i = 2; i <= rowCount; i++)
+        //    {
+        //        string sku = Convert.ToString(xlRange.Cells[i, 1].Value2);
+        //        string head = Convert.ToString(xlRange.Cells[i, 2].Value2);
 
-                var item = db.Inventories.Where(x => x.SKU == sku).FirstOrDefault();
-                var headcode = db.Sp_Get_COA_Head_Code("/1" + head + "/").FirstOrDefault();
+        //        var item = db.Inventories.Where(x => x.SKU == sku).FirstOrDefault();
+        //        var headcode = db.Sp_Get_COA_Head_Code("/1" + head + "/").FirstOrDefault();
 
-                var a = db.COA_Mapper.Any(x => x.Module == COA_Mapper_Modules.Procurement.ToString() &&
-                            x.ModuleType == COA_Mapper_ModuleTypes.Item_List.ToString() && x.Module_Id == item.Id);
-                if (a)
-                {
-                    continue;
-                }
+        //        var a = db.COA_Mapper.Any(x => x.Module == COA_Mapper_Modules.Procurement.ToString() &&
+        //                    x.ModuleType == COA_Mapper_ModuleTypes.Item_List.ToString() && x.Module_Id == item.Id);
+        //        if (a)
+        //        {
+        //            continue;
+        //        }
 
-                AccountHandlerController ah = new AccountHandlerController();
-                ah.AddCOA_Mapper(COA_Mapper_HeadType.Transaction_Head.ToString(),
-                    COA_Mapper_Modules.Procurement.ToString(), COA_Mapper_ModuleTypes.Item_List.ToString(), item.Id, headcode.Id, 1);
+        //        AccountHandlerController ah = new AccountHandlerController();
+        //        ah.AddCOA_Mapper(COA_Mapper_HeadType.Transaction_Head.ToString(),
+        //            COA_Mapper_Modules.Procurement.ToString(), COA_Mapper_ModuleTypes.Item_List.ToString(), item.Id, headcode.Id, 1);
 
-            }
-        }
+        //    }
+        //}
 
         public void updaste()
         {

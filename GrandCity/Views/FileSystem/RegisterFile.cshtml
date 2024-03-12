@@ -367,7 +367,7 @@
         //}).then((result) => {
         //    if (result.isConfirmed) {
 
-                let strct = `<div class="owner"> <h4>Applicant <span class="own-count-info"> ${($('.owner').length + 1)}</span>         <i class="fa fa-trash pointer rmv-owns-applicant" title="Remove this Owner"></i></h4>
+            let strct = `<div class="owner"> <h4>Applicant <span class="own-count-info"> ${($('.owner').length + 1)}</span>         <i class="fa fa-trash pointer rmv-owns-applicant" title="Remove this Owner"></i></h4>
 
                     <div class="mT-30 own-${ownsCount}">
 
@@ -461,15 +461,15 @@
                     </div>
                 </div>
                 <hr />
-            </div> `
+</div> `
 
 
-                $('.owns-list').append(strct);
+            $('.owns-list').append(strct);
 
-                $('.City').last().select2();
+            $('.City').last().select2();
 
-                ownsCount++;
-            }
+            ownsCount++;
+
         });
         //$(document).on('click', '.rmv-owns-applicant', function () {
         //    /let confi = confirm('Are you sure you want to remove this owner?');
@@ -700,4 +700,3 @@
 
 
 </script>
-

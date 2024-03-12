@@ -12,7 +12,7 @@ using Newtonsoft.Json;
 using System.Threading;
 using UnityEngine.SocialPlatforms;
 using System.Runtime.InteropServices;
-using Excel = Microsoft.Office.Interop.Excel;
+//using Excel = Microsoft.Office.Interop.Excel;
 
 namespace MeherEstateDevelopers.Controllers
 {
@@ -5847,60 +5847,60 @@ namespace MeherEstateDevelopers.Controllers
         //    }
         //}
 
-        public JsonResult DataDumpDealershipMeherOnly()   //comment for Microsoft.Office.Interop.Excel missing
-        {
-            string plotNo = "";
-            string sector = "";
-            decimal Com_Amount = 0;
-            decimal Sales_Amount = 0;
-            decimal Base_Amount = 0;
-            Excel.Application xlApp = new Excel.Application();
-            Excel.Workbook xlWorkbook = xlApp.Workbooks.Open("C:\\p21\\DataDump2.xlsx");
-            Excel._Worksheet xlWorksheet = xlWorkbook.Sheets[1];
-            Excel.Range xlRange = xlWorksheet.UsedRange;
-            for (int i = 2; i <= xlRange.Rows.Count; i++)
-            {
-                plotNo = Convert.ToString(xlRange.Cells[i, 1].Value2);
-                sector = Convert.ToString(xlRange.Cells[i, 2].Value2);
-                Sales_Amount = Convert.ToDecimal(Convert.ToString(xlRange.Cells[i, 9].Value2));
-                Com_Amount = Convert.ToDecimal(Convert.ToString(xlRange.Cells[i, 11].Value2));
-                Base_Amount = Sales_Amount - Com_Amount;
+        //public JsonResult DataDumpDealershipMeherOnly()   //comment for Microsoft.Office.Interop.Excel missing
+        //{
+        //    string plotNo = "";
+        //    string sector = "";
+        //    decimal Com_Amount = 0;
+        //    decimal Sales_Amount = 0;
+        //    decimal Base_Amount = 0;
+        //    Excel.Application xlApp = new Excel.Application();
+        //    Excel.Workbook xlWorkbook = xlApp.Workbooks.Open("C:\\p21\\DataDump2.xlsx");
+        //    Excel._Worksheet xlWorksheet = xlWorkbook.Sheets[1];
+        //    Excel.Range xlRange = xlWorksheet.UsedRange;
+        //    for (int i = 2; i <= xlRange.Rows.Count; i++)
+        //    {
+        //        plotNo = Convert.ToString(xlRange.Cells[i, 1].Value2);
+        //        sector = Convert.ToString(xlRange.Cells[i, 2].Value2);
+        //        Sales_Amount = Convert.ToDecimal(Convert.ToString(xlRange.Cells[i, 9].Value2));
+        //        Com_Amount = Convert.ToDecimal(Convert.ToString(xlRange.Cells[i, 11].Value2));
+        //        Base_Amount = Sales_Amount - Com_Amount;
 
 
-                var plot = db.Plots.Where(a => a.Plot_Number == plotNo && a.Sector == sector).FirstOrDefault();
-                if (plot != null && plot.Status == "Registered")
-                {
-                    var plotOwnership = db.Plot_Ownership.Where(x => x.Plot_Id == plot.Id).FirstOrDefault();
-                    Biding_Reserve_Plots biding_Reserve_Plots = new Biding_Reserve_Plots
-                    {
-                        Dealer_Id = (long)plot.Dealership_Submission_Id,
-                        Plot_Id = plot.Id,
-                        DealerName = plot.Dealership_Submission_Name,
-                        PlotPrice = Base_Amount,
-                        GroupTag = plotOwnership.GroupTag,
-                        DealDate = plotOwnership.Ownership_DateTime,
-                        AddedBy_Id = 1,
-                        AddedBy_Name = "Testing User",
-                        PlotNum = plot.Plot_Number + "-" + plot.Sector + "-" + plot.Type + " - " + plot.Sector + " ( " + plot.Plot_Location + " ) ",
-                        PlotStatus = "Registered",
-                        SpecialPrefAmount = 0,
-                        DCAmount = 0,
-                        CommisionAmount = Com_Amount,
-                        Installments_Seg = null,
-                        Percentage_Adj = 0
-                    };
+        //        var plot = db.Plots.Where(a => a.Plot_Number == plotNo && a.Sector == sector).FirstOrDefault();
+        //        if (plot != null && plot.Status == "Registered")
+        //        {
+        //            var plotOwnership = db.Plot_Ownership.Where(x => x.Plot_Id == plot.Id).FirstOrDefault();
+        //            Biding_Reserve_Plots biding_Reserve_Plots = new Biding_Reserve_Plots
+        //            {
+        //                Dealer_Id = (long)plot.Dealership_Submission_Id,
+        //                Plot_Id = plot.Id,
+        //                DealerName = plot.Dealership_Submission_Name,
+        //                PlotPrice = Base_Amount,
+        //                GroupTag = plotOwnership.GroupTag,
+        //                DealDate = plotOwnership.Ownership_DateTime,
+        //                AddedBy_Id = 1,
+        //                AddedBy_Name = "Testing User",
+        //                PlotNum = plot.Plot_Number + "-" + plot.Sector + "-" + plot.Type + " - " + plot.Sector + " ( " + plot.Plot_Location + " ) ",
+        //                PlotStatus = "Registered",
+        //                SpecialPrefAmount = 0,
+        //                DCAmount = 0,
+        //                CommisionAmount = Com_Amount,
+        //                Installments_Seg = null,
+        //                Percentage_Adj = 0
+        //            };
 
-                    db.Biding_Reserve_Plots.Add(biding_Reserve_Plots);
-                    db.SaveChanges();
-                }
-            }
+        //            db.Biding_Reserve_Plots.Add(biding_Reserve_Plots);
+        //            db.SaveChanges();
+        //        }
+        //    }
 
-            xlWorkbook.Close(false, Type.Missing, Type.Missing);
-            Marshal.ReleaseComObject(xlWorkbook);
-            Marshal.ReleaseComObject(xlApp);
+        //    xlWorkbook.Close(false, Type.Missing, Type.Missing);
+        //    Marshal.ReleaseComObject(xlWorkbook);
+        //    Marshal.ReleaseComObject(xlApp);
 
-            return null;
-        }
+        //    return null;
+        //}
 
         public JsonResult DD()
         {
