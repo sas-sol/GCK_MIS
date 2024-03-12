@@ -27,7 +27,7 @@
             <!-- Tab panes -->
             <div class="tab-content">
                 <div id="over" class="tab-pane active bd bdrs-3 p-20">
-                    @*@{ Html.RenderAction("QualifyingFiles", "FileSystem", new MeherEstateDevelopers.Models.Search_OverDue { Installments = null, S_Inst_Range = null, E_Inst_Range = null, Plot_Size = null, Dealer_Id = null, Range = null, S_Range = null, E_Range = null, G_Amt = null, L_Amt = null });}*@
+                   @*@{ Html.RenderAction("QualifyingFiles", "FileSystem", new MeherEstateDevelopers.Models.Search_OverDue { Installments = null, S_Inst_Range = null, E_Inst_Range = null, Plot_Size = null, Dealer_Id = null, Range = null, S_Range = null, E_Range = null, G_Amt = null, L_Amt = null });}*@
                 </div>
             </div>
         </div>
@@ -43,10 +43,6 @@
     $(function () {
         $('#over').load('/FileSystem/QualifyingFiles/')
     });
-
-
-
-
 
 
     // Second warning to File owner

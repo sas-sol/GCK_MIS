@@ -1,5 +1,4 @@
-﻿
-@{
+﻿@{
     if (User.IsInRole("Administrator"))
     {
         Layout = "~/Views/Shared/_AdminLayout.cshtml";
@@ -11,15 +10,15 @@
 
 }
 <!-- SweetAlert2 CSS -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+<!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">-->
 <!-- SweetAlert2 JS -->
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<!--<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>-->
 
 <input type="hidden" id="grptag" value="@ViewBag.grp" name="Group_Tag">
 <script>
     var banklist = @Html.Raw(Json.Encode(ViewBag.Bank));
 </script>
-<script src="~/Scripts/scanning.js"></script>
+@*<script src="~/Scripts/scanning.js"></script>*@
 <div class="row gap-20 pos-r">
     <div class="col-md-12">
         <div class="bgc-white p-20 bd">
@@ -320,7 +319,7 @@
 }
 
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+@*<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>*@
 
 <script>
 
@@ -358,15 +357,15 @@
 
         let ownsCount = 2;
     $('.add-new-own-applicant').unbind().click(function () {
-        Swal.fire({
-            //title: 'Are you sure you want to Add New Owner?',
-            text: 'Are you sure you want to Add another Owner?',
-            icon: 'question',
-            showCancelButton: true,
-            confirmButtonText: 'Yes',
-            cancelButtonText: 'No'
-        }).then((result) => {
-            if (result.isConfirmed) {
+        //Swal.fire({
+        //    //title: 'Are you sure you want to Add New Owner?',
+        //    text: 'Are you sure you want to Add another Owner?',
+        //    icon: 'question',
+        //    showCancelButton: true,
+        //    confirmButtonText: 'Yes',
+        //    cancelButtonText: 'No'
+        //}).then((result) => {
+        //    if (result.isConfirmed) {
 
                 let strct = `<div class="owner"> <h4>Applicant <span class="own-count-info"> ${($('.owner').length + 1)}</span>         <i class="fa fa-trash pointer rmv-owns-applicant" title="Remove this Owner"></i></h4>
 
@@ -472,29 +471,30 @@
                 ownsCount++;
             }
         });
-        $(document).on('click', '.rmv-owns-applicant', function () {
-            //let confi = confirm('Are you sure you want to remove this owner?');
-            //if (!confi) {
-            Swal.fire({
-                //title: 'Are you sure?',
-                text: 'Are you sure you want to Remove the Owner?',
-                icon: 'question',
-                showCancelButton: true,
-                confirmButtonText: 'Yes',
-                cancelButtonText: 'No'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    $(this).closest('.owner').remove();
-                    $('.owner').each(function (ind, val) {
-                        $(this).find('.own-count-info').text((ind + 1));
-                    });
+        //$(document).on('click', '.rmv-owns-applicant', function () {
+        //    /let confi = confirm('Are you sure you want to remove this owner?');
+        //    if (!confi) {
+        //    //Swal.fire({
+        //    //    //title: 'Are you sure?',
+        //    //    text: 'Are you sure you want to Remove the Owner?',
+        //    //    icon: 'question',
+        //    //    showCancelButton: true,
+        //    //    confirmButtonText: 'Yes',
+        //    //    cancelButtonText: 'No'
+        //    //}).then((result) => {
+        //    //    if (result.isConfirmed) {
 
-                } else {
-                    return;
-                }
-            });
+        //            $(this).closest('.owner').remove();
+        //            $('.owner').each(function (ind, val) {
+        //                $(this).find('.own-count-info').text((ind + 1));
+        //            });
 
-        });
+        //        } else {
+        //            return;
+        //        }
+        //    });
+
+        //});
         // Register  a file
         $(document).on("submit", "#re-fil-new-fil", function (e) {
             debugger;
@@ -504,9 +504,9 @@
             var payType = $(".pay-check option:selected").val();
 
             var recamt = $("#rec-amt").val();
-            recamt = recamt.replace(/,/g, '');
+           /* recamt = recamt.replace(/,/g, '');*/
             var avlbal = $("#avl-bal").text();
-            avlbal = avlbal.replace(/,/g, '');
+    /*        avlbal = avlbal.replace(/,/g, '');*/
             // Convert strings to integers
             var recamtInt = parseInt(recamt, 10);
             var avlbalInt = parseInt(avlbal, 10);
@@ -529,11 +529,11 @@
                     totalamt = parseFloat(totalamt) + parseFloat($(this).val());
                 });
                 if (advamt != totalamt) {
-                    //alert("Received Amount is not equal to Booking Amount");
-                    Swal.fire({
-                        icon: 'info',
-                        text: "Received Amount is not equal to the Booking Amount"
-                    });
+                    alert("Received Amount is not equal to Booking Amount");
+                    //Swal.fire({
+                    //    icon: 'info',
+                    //    text: "Received Amount is not equal to the Booking Amount"
+                    //});
                     return false;
                 }
             }
@@ -559,6 +559,8 @@
                 recedata.Branch = $("#pay-" + i + " #Branch").val();
                 recedata.Ch_bk_Pay_Date = $("#pay-" + i + " #cbp-date").val();
                 recedata.FileImage = $("#pay-" + i + " #scanned").attr('src');
+                recedata.Mobile_1 = $(this).find("input[name=Mobile_1]").val();
+                    debugger;
                 allrecepts.push(recedata);
             }
             $("#reg-file").prop("disabled", true);
@@ -615,17 +617,17 @@
                 FullPaid: fulpaid,
                 DelerId: delerId
             };
-            //var con = confirm("Are you sure you want to Register File");
-            //if (con) {
-            Swal.fire({
-                title: 'Are you sure you want to Register the File?',
-                //text: 'Do you want to Register the File?',
-                icon: 'question',
-                showCancelButton: true,
-                confirmButtonText: 'Yes',
-                cancelButtonText: 'No'
-            }).then((result) => {
-                if (result.isConfirmed) {
+            var con = confirm("Are you sure you want to Register File");
+            if (con) {
+            //Swal.fire({
+            //    title: 'Are you sure you want to Register the File?',
+            //    //text: 'Do you want to Register the File?',
+            //    icon: 'question',
+            //    showCancelButton: true,
+            //    confirmButtonText: 'Yes',
+            //    cancelButtonText: 'No'
+            //}).then((result) => {
+            //    if (result.isConfirmed) {
                     $.ajax({
                         type: "POST",
                         url: $(this).attr("action"),
@@ -633,21 +635,21 @@
                         data: JSON.stringify(alldata),
                         success: function (data) {
                             if (!data.Status) {
-                                //alert(data.Msg)
-                                Swal.fire({
-                                    icon: 'success',
-                                    title: 'Success!',
-                                    text: data.Msg
-                                });
+                                alert(data.Msg)
+                                //Swal.fire({
+                                //    icon: 'success',
+                                //    title: 'Success!',
+                                //    text: data.Msg
+                                //});
                                 $("#reg-file").removeAttr("disabled");
                             }
                             else {
-                                //alert(data.Msg);
-                                Swal.fire({
-                                    icon: 'success',
-                                    title: 'Success!',
-                                    text: data.Msg
-                                });
+                                alert(data.Msg);
+                                //Swal.fire({
+                                //    icon: 'success',
+                                //    title: 'Success!',
+                                //    text: data.Msg
+                                //});
                                 $(data.Receiptid).each(function (i) {
                                     window.open("/Banking/Receipt?Id=" + data.Receiptid[i] + "&Token=" + data.Token, '_blank');
                                 });
@@ -677,7 +679,7 @@
                         }
                     });
                 }
-            });
+            //});
         });
 
         $(document).ready(function () {
@@ -698,5 +700,4 @@
 
 
 </script>
-
 
