@@ -138,7 +138,7 @@ namespace MeherEstateDevelopers.Controllers
             return Json(true, JsonRequestBehavior.AllowGet);
         }
         [HttpPost]
-        public JsonResult RegisterFile(List<Files_Transfer> filedatas, bool Flag, string DevCharStatus, string FileFormNumber, List<ReceiptData> Receiptdata, bool FullPaid, long? DelerId)
+        public JsonResult RegisterFile(List<Files_Transfer> filedatas, bool? Flag, string DevCharStatus, string FileFormNumber, List<ReceiptData> Receiptdata, bool? FullPaid, long? DelerId)
         {
             long userid = long.Parse(User.Identity.GetUserId());
             AccountHandlerController ah = new AccountHandlerController();
@@ -237,7 +237,7 @@ namespace MeherEstateDevelopers.Controllers
                                 try
                                 {
                                     var Imgres = H.SaveBase64Image(rd.FileImage, pathMain, res2.ToString());
-                                    smsService.SendMsg(Msg, rd.Mobile_1);
+                                   // smsService.SendMsg(Msg, rd.Mobile_1);
                                 }
                                 catch (Exception)
                                 {
@@ -245,7 +245,7 @@ namespace MeherEstateDevelopers.Controllers
                             }
                             try
                             {
-                                smsService.SendMsg(text, rd.Mobile_1);
+                                //smsService.SendMsg(text, rd.Mobile_1);
                             }
                             catch (Exception)
                             {

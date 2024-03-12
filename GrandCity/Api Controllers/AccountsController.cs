@@ -280,7 +280,7 @@ namespace MeherEstateDevelopers.Api_Controllers
                                 string otp = t.ToString();
                                 string message = "This is an automated SMS from website / app url Your verification pin is "+otp+".Please enter the PIN for instant verification. Thank you!";
  
-                                 ss.SendMsg(message, Phone);
+                                // ss.SendMsg(message, Phone);
                                 return Ok(f);
                             }
                         }
