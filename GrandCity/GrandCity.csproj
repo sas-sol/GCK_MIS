@@ -6994,6 +6994,7 @@
     <Content Include="Views\Plots\PlotsInventory.cshtml" />
     <Content Include="Views\Plots\OverDuePlotsReport.cshtml" />
     <Content Include="Views\Plots\WHTPlotInstallmentAndReceiptsPartial.cshtml" />
+    <Content Include="Views\FileSystem\OverDueFile.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
