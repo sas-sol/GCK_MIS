@@ -12,7 +12,7 @@ using Newtonsoft.Json;
 using System.Threading;
 using UnityEngine.SocialPlatforms;
 using System.Runtime.InteropServices;
-using Excel = Microsoft.Office.Interop.Excel;
+//using Excel = Microsoft.Office.Interop.Excel;
 
 namespace MeherEstateDevelopers.Controllers
 {
@@ -5165,6 +5165,7 @@ namespace MeherEstateDevelopers.Controllers
             AdjPlotRequest spr = JsonConvert.DeserializeObject<AdjPlotRequest>(res.Details);
             return PartialView(spr);
         }
+
         public ActionResult Noti(long? id, NotifierMsg? tp, long? noti)
         {
             Thread notiReader = new Thread(() => Notifier.ReadNotification((long)noti));
@@ -5274,12 +5275,26 @@ namespace MeherEstateDevelopers.Controllers
             db.Sp_Add_Activity(userid, "Accessed Employee Plots  ", "Read", "Activity_Record", ActivityType.Details_Access.ToString(), userid);
             return View(res);
         }
-        public void UpdatePlotBalances(long Plotid)
+        public void UpdatePlot_Balances()
         {
-            var res3 = db.Sp_Get_PlotInstallments(Plotid).ToList();
-            var res4 = db.Sp_Get_ReceivedAmounts(Plotid, Modules.PlotManagement.ToString()).ToList();
-            var discount = db.Discounts.Where(x => x.Module_Id == Plotid && x.Plot_Is_Cancelled == null && x.Module == Modules.PlotManagement.ToString()).ToList();
-            UpdatePlotInstallmentStatus(res3, res4, discount, Plotid);
+            var res = db.Plots.Where(x => x.Status == "Registered").ToList();
+            foreach (var item in res)
+            {
+                var res3 = db.Sp_Get_PlotInstallments(item.Id).ToList();
+                var res4 = db.Sp_Get_ReceivedAmounts(item.Id, Modules.PlotManagement.ToString()).ToList();
+                var discount = db.Discounts.Where(x => x.Module_Id == item.Id && x.Plot_Is_Cancelled == null && x.Module == Modules.PlotManagement.ToString()).ToList();
+                UpdatePlotInstallmentStatus(res3, res4, discount, item.Id);
+            }
+
+        }
+       
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                db.Dispose();
+            }
+            base.Dispose(disposing);
         }
         //public ActionResult WHTPlotInstallmentAndReceiptsPartial(long Plotid)
         //{
@@ -5359,15 +5374,6 @@ namespace MeherEstateDevelopers.Controllers
         //    }
         //    return Json(true);
         //}
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
-        }
-
         //Meher Only
         //public JsonResult DataDumpDealershipMeherOnly()
         //{
@@ -5847,60 +5853,60 @@ namespace MeherEstateDevelopers.Controllers
         //    }
         //}
 
-        public JsonResult DataDumpDealershipMeherOnly()   //comment for Microsoft.Office.Interop.Excel missing
-        {
-            string plotNo = "";
-            string sector = "";
-            decimal Com_Amount = 0;
-            decimal Sales_Amount = 0;
-            decimal Base_Amount = 0;
-            Excel.Application xlApp = new Excel.Application();
-            Excel.Workbook xlWorkbook = xlApp.Workbooks.Open("C:\\p21\\DataDump2.xlsx");
-            Excel._Worksheet xlWorksheet = xlWorkbook.Sheets[1];
-            Excel.Range xlRange = xlWorksheet.UsedRange;
-            for (int i = 2; i <= xlRange.Rows.Count; i++)
-            {
-                plotNo = Convert.ToString(xlRange.Cells[i, 1].Value2);
-                sector = Convert.ToString(xlRange.Cells[i, 2].Value2);
-                Sales_Amount = Convert.ToDecimal(Convert.ToString(xlRange.Cells[i, 9].Value2));
-                Com_Amount = Convert.ToDecimal(Convert.ToString(xlRange.Cells[i, 11].Value2));
-                Base_Amount = Sales_Amount - Com_Amount;
+        //public JsonResult DataDumpDealershipMeherOnly()   //comment for Microsoft.Office.Interop.Excel missing
+        //{
+        //    string plotNo = "";
+        //    string sector = "";
+        //    decimal Com_Amount = 0;
+        //    decimal Sales_Amount = 0;
+        //    decimal Base_Amount = 0;
+        //    Excel.Application xlApp = new Excel.Application();
+        //    Excel.Workbook xlWorkbook = xlApp.Workbooks.Open("C:\\p21\\DataDump2.xlsx");
+        //    Excel._Worksheet xlWorksheet = xlWorkbook.Sheets[1];
+        //    Excel.Range xlRange = xlWorksheet.UsedRange;
+        //    for (int i = 2; i <= xlRange.Rows.Count; i++)
+        //    {
+        //        plotNo = Convert.ToString(xlRange.Cells[i, 1].Value2);
+        //        sector = Convert.ToString(xlRange.Cells[i, 2].Value2);
+        //        Sales_Amount = Convert.ToDecimal(Convert.ToString(xlRange.Cells[i, 9].Value2));
+        //        Com_Amount = Convert.ToDecimal(Convert.ToString(xlRange.Cells[i, 11].Value2));
+        //        Base_Amount = Sales_Amount - Com_Amount;
 
 
-                var plot = db.Plots.Where(a => a.Plot_Number == plotNo && a.Sector == sector).FirstOrDefault();
-                if (plot != null && plot.Status == "Registered")
-                {
-                    var plotOwnership = db.Plot_Ownership.Where(x => x.Plot_Id == plot.Id).FirstOrDefault();
-                    Biding_Reserve_Plots biding_Reserve_Plots = new Biding_Reserve_Plots
-                    {
-                        Dealer_Id = (long)plot.Dealership_Submission_Id,
-                        Plot_Id = plot.Id,
-                        DealerName = plot.Dealership_Submission_Name,
-                        PlotPrice = Base_Amount,
-                        GroupTag = plotOwnership.GroupTag,
-                        DealDate = plotOwnership.Ownership_DateTime,
-                        AddedBy_Id = 1,
-                        AddedBy_Name = "Testing User",
-                        PlotNum = plot.Plot_Number + "-" + plot.Sector + "-" + plot.Type + " - " + plot.Sector + " ( " + plot.Plot_Location + " ) ",
-                        PlotStatus = "Registered",
-                        SpecialPrefAmount = 0,
-                        DCAmount = 0,
-                        CommisionAmount = Com_Amount,
-                        Installments_Seg = null,
-                        Percentage_Adj = 0
-                    };
+        //        var plot = db.Plots.Where(a => a.Plot_Number == plotNo && a.Sector == sector).FirstOrDefault();
+        //        if (plot != null && plot.Status == "Registered")
+        //        {
+        //            var plotOwnership = db.Plot_Ownership.Where(x => x.Plot_Id == plot.Id).FirstOrDefault();
+        //            Biding_Reserve_Plots biding_Reserve_Plots = new Biding_Reserve_Plots
+        //            {
+        //                Dealer_Id = (long)plot.Dealership_Submission_Id,
+        //                Plot_Id = plot.Id,
+        //                DealerName = plot.Dealership_Submission_Name,
+        //                PlotPrice = Base_Amount,
+        //                GroupTag = plotOwnership.GroupTag,
+        //                DealDate = plotOwnership.Ownership_DateTime,
+        //                AddedBy_Id = 1,
+        //                AddedBy_Name = "Testing User",
+        //                PlotNum = plot.Plot_Number + "-" + plot.Sector + "-" + plot.Type + " - " + plot.Sector + " ( " + plot.Plot_Location + " ) ",
+        //                PlotStatus = "Registered",
+        //                SpecialPrefAmount = 0,
+        //                DCAmount = 0,
+        //                CommisionAmount = Com_Amount,
+        //                Installments_Seg = null,
+        //                Percentage_Adj = 0
+        //            };
 
-                    db.Biding_Reserve_Plots.Add(biding_Reserve_Plots);
-                    db.SaveChanges();
-                }
-            }
+        //            db.Biding_Reserve_Plots.Add(biding_Reserve_Plots);
+        //            db.SaveChanges();
+        //        }
+        //    }
 
-            xlWorkbook.Close(false, Type.Missing, Type.Missing);
-            Marshal.ReleaseComObject(xlWorkbook);
-            Marshal.ReleaseComObject(xlApp);
+        //    xlWorkbook.Close(false, Type.Missing, Type.Missing);
+        //    Marshal.ReleaseComObject(xlWorkbook);
+        //    Marshal.ReleaseComObject(xlApp);
 
-            return null;
-        }
+        //    return null;
+        //}
 
         public JsonResult DD()
         {

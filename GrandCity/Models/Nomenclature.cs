@@ -1214,6 +1214,8 @@ namespace MeherEstateDevelopers.Models
         After_Time = 4,
         Special_Preference = 5,
         Other_Charges = 0,
-        Possession_Charges = 7    // add new 
+        Possession_Charges = 7,// add new 
+        Balloting = 8, // add new 
+        Half_Yearly = 9    // add new 
     }
 }
