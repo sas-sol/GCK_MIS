@@ -1586,7 +1586,8 @@ namespace MeherEstateDevelopers.Controllers
                 }
                 db.Test_PendingInst(item.Id);
                 var res1 = db.File_Installments.Where(x => x.File_Id == item.Id).ToList();
-                var inst = res1.Where(x => x.Installment_Type != "3").OrderBy(x => x.Due_Date).ToList();
+              /*  var inst = res1.Where(x => x.Installment_Type != "3").OrderBy(x => x.Due_Date).ToList();*/  //remove this check
+                var inst = res1.Where(x => x.Installment_Type != "-1").OrderBy(x => x.Due_Date).ToList();
                 var advinst = res1.Where(x => x.Installment_Type == "3").OrderBy(x => x.Due_Date).FirstOrDefault();
                 List<AmountToPaidInfo> latpi = new List<AmountToPaidInfo>();
                 decimal? Actamt = item.TotalAmount;
@@ -1624,7 +1625,8 @@ namespace MeherEstateDevelopers.Controllers
                 db.Test_updateinstallment(allids);
                 var curdate = DateTime.Now;
                 var res3 = db.Test_FileInstallments(item.Id).ToList();
-                var inst1 = res3.Where(x => x.Installment_Type != "3").ToList();
+                /*   var inst1 = res3.Where(x => x.Installment_Type != "3").ToList();*/  // also
+                var inst1 = res3.Where(x => x.Installment_Type != "-1").ToList();
                 var id = inst1.Where(x => x.Due_Date <= curdate && x.Status != "Paid").ToList();
                 var nopaidis = new XElement("IS", id.Select(x => new XElement("ISS", new XAttribute("Id", x.Id)))).ToString();
                 db.Test_updateNotPaidinstallment(nopaidis);
@@ -1869,9 +1871,18 @@ namespace MeherEstateDevelopers.Controllers
         ////////////////////
         //   OVerDue Files
         ////////////////////
+        public ActionResult OverDueFile()
+        {
+            long userid = long.Parse(User.Identity.GetUserId());
+            db.Sp_Add_Activity(userid, "Accessed  Overdue Files Page ", "Read", "Activity_Record", ActivityType.Details_Access.ToString(), userid);
+            var blocks = db.RealEstate_Blocks.Select(x => new NameValuestring { Value = x.Id.ToString(), Name = x.Block_Name }).ToList();
+            ViewBag.Blocks = new SelectList(blocks, "Name", "Name");
+            return View();
+        }
         public ActionResult OverDueFiles()
         {
             long userid = long.Parse(User.Identity.GetUserId());
+            ViewBag.Block = new SelectList(db.RealEstate_Blocks.Where(x => x.Block_Name != null), "Id", "Block_Name").ToList();
             db.Sp_Add_Activity(userid, "Accessed  Overdue Files Page ", "Read", "Activity_Record", ActivityType.Details_Access.ToString(), userid);
             return View();
         }
@@ -2054,10 +2065,11 @@ namespace MeherEstateDevelopers.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public JsonResult FileStatusUpdate(string Remarks, string FileId, string Status)
+        public JsonResult FileStatusUpdate(string Remarks, long FileId, string Status)
         {
             var userid = long.Parse(User.Identity.GetUserId());
-            var res1 = db.Sp_Get_FileAppFormData(FileId).SingleOrDefault();
+            var res = db.File_Form.Where(x => x.Id== FileId).FirstOrDefault();
+            var res1 = db.Sp_Get_FileAppFormData(res.FileFormNumber).SingleOrDefault();
             if (Status == FileStatus.Temporary_Cancelled.ToString())
             {
                 db.Sp_Update_FileStatus(res1.Id, "6");
@@ -2871,6 +2883,15 @@ namespace MeherEstateDevelopers.Controllers
                 return View(res);
             }
         }
+        public void UpdateFileBalances()
+        {
+            var res = db.File_Form.Where(x => x.Status == 1 || x.Status == 6).ToList();
+            foreach (var item in res)
+            {
+                this.UpdateOwners(item.Id);
+                this.TestAdjustIntallments(item.Id);
+            }
+        }
         public ActionResult FileReceiptRefundDetails(long FileNo, long ReqId)
         {
             var res1 = db.Sp_Get_FileFormData(FileNo).FirstOrDefault();
@@ -2985,12 +3006,12 @@ namespace MeherEstateDevelopers.Controllers
             var res = db.Sp_Get_FilesPlots_Details_Report(block, id).ToList();
             return PartialView(res);
         }
-        public void UpdateFileBalances()
+    
+        public void UpdateFile_Balances()
         {
-            var res = db.File_Form.Where(x => x.Status == 1 || x.Status == 6).ToList();
+            var res = db.File_Form.Where(x => x.Status == 1).ToList();
             foreach (var item in res)
             {
-                this.UpdateOwners(item.Id);
                 this.TestAdjustIntallments(item.Id);
             }
         }

@@ -1,0 +1,52 @@
+﻿
+@{
+    if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+}
+
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="bdrs-3 ov-h bgc-white p-10 bd">
+            <div class="form-row">
+                <h4 class="c-grey-900 mB-20" style="text-align:center">Overdue Files </h4>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-2">
+                    <label style="width:100%">Blocks</label>
+                    @Html.DropDownList("Blocks", null, "Choose..", new { @class = "form-control", required = "" })
+                </div>
+                <div class="form-group col-md-2">
+                    <button class="btn btn-info sea-do-ovrdue-rprt" style="margin-top:29px">Search</button>
+                </div>
+            </div>
+            <div id="over1">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>$(document).ready(function () {
+        var blockValue = "A";
+    $("#over1").load("/FileSystem/OverDueFiles/", { Block: blockValue }, function () {
+        SASUnLoad($("#over1"));
+    });
+});
+
+    $('.sea-do-ovrdue-rprt').click(function () {
+        SASLoad($("#over1"));
+        var block = $("#Blocks").val();
+        debugger
+        $("#over1").load("/FileSystem/OverDueFiles/", { Block: block }, function () {
+            SASUnLoad($("#over1"));
+        });
+    });
+</script>
+

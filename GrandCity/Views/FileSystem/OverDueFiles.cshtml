@@ -8,9 +8,26 @@
         Layout = "~/Views/Shared/_StaffLayout.cshtml";
     }
 }
+
 <div class="row">
     <div class="col-md-12">
         <div class="bgc-white bd bdrs-3 p-20 mB-20">
+            <div class="row">
+                <div class="row col-md-12">
+                    <div class="col-md-5">
+                        <label style="width:100%">BLock</label>
+                        @Html.DropDownList("Block", null, "Select Block..", new { Name = "Id", @class = "form-control select2" })
+                    </div>
+                    <div class="col-md-2" style="margin-top:2%">
+                        <button class="btn btn-primary sea-do-ovrdue-rprt">Search</button>
+                    </div>
+                </div>
+                <div class="tab-content col-md-12">
+                    <div role="tabpanel" id="ndcwdctba" class="tab-pane active p-20 table-responsive">
+
+                    </div>
+                </div>
+            </div>
             <h4 class="c-grey-900 mB-20" style="text-align:center">Overdue Files</h4>
             <div id="overdue-rep">
             </div>
@@ -27,7 +44,7 @@
             <!-- Tab panes -->
             <div class="tab-content">
                 <div id="over" class="tab-pane active bd bdrs-3 p-20">
-                   @*@{ Html.RenderAction("QualifyingFiles", "FileSystem", new MeherEstateDevelopers.Models.Search_OverDue { Installments = null, S_Inst_Range = null, E_Inst_Range = null, Plot_Size = null, Dealer_Id = null, Range = null, S_Range = null, E_Range = null, G_Amt = null, L_Amt = null });}*@
+                    @*@{ Html.RenderAction("QualifyingFiles", "FileSystem", new MeherEstateDevelopers.Models.Search_OverDue { Installments = null, S_Inst_Range = null, E_Inst_Range = null, Plot_Size = null, Dealer_Id = null, Range = null, S_Range = null, E_Range = null, G_Amt = null, L_Amt = null });}*@
                 </div>
             </div>
         </div>
@@ -43,7 +60,21 @@
     $(function () {
         $('#over').load('/FileSystem/QualifyingFiles/')
     });
+    $(document).ready(function () {
+        var blockValue = "A";
+        $("#over1").load("/FileSystem/OverDueFiles/", { Block: blockValue }, function () {
+            SASUnLoad($("#over1"));
+        });
+    });
 
+    $('.sea-do-ovrdue-rprt').click(function () {
+        SASLoad($("#over1"));
+        var block = $("#Block").val();
+        debugger
+        $("#over1").load("/FileSystem/OverDueFiles/", { Block: block }, function () {
+            SASUnLoad($("#over1"));
+        });
+    });
 
     // Second warning to File owner
     $(document).on("change", ".Qualify-war-com-File", function () {

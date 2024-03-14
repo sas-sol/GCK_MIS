@@ -3446,6 +3446,7 @@ function fnExcelReport(filename) {
 //
 $(document).on("click", ".get-f-res", function () {
     var val = $('#app-num').val();
+    debugger
     $.ajax({
         type: "POST",
         url: '/FileSystem/GetFileResult/',
@@ -13380,10 +13381,19 @@ $(document).on("click", ".get-b-res-ver", function () {
     window.open('/Commercial/DetailInformation?Commercial_Id=' + val, '_blank');
 });
 //
+//$(document).on("click", ".up-f-stat", function () {
+//    debugger
+//    var id = $("#app-num").val();
+//    var stat = $("#status").text();
+//    EmptyModel();
+//    $('#modalbody').load('/FileSystem/UpdateFileStatus/', { FileId: id, Status: stat }, function () { });
+//});
 $(document).on("click", ".up-f-stat", function () {
-    var id = $("#app-num").val();
+    debugger
+    var id = $("#file-id").val();
     var stat = $("#status").text();
     EmptyModel();
+    $('#ModalLabel').text("Update Status");
     $('#modalbody').load('/FileSystem/UpdateFileStatus/', { FileId: id, Status: stat }, function () { });
 });
 //

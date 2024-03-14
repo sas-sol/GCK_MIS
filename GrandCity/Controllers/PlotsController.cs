@@ -5165,6 +5165,7 @@ namespace MeherEstateDevelopers.Controllers
             AdjPlotRequest spr = JsonConvert.DeserializeObject<AdjPlotRequest>(res.Details);
             return PartialView(spr);
         }
+
         public ActionResult Noti(long? id, NotifierMsg? tp, long? noti)
         {
             Thread notiReader = new Thread(() => Notifier.ReadNotification((long)noti));
@@ -5274,12 +5275,26 @@ namespace MeherEstateDevelopers.Controllers
             db.Sp_Add_Activity(userid, "Accessed Employee Plots  ", "Read", "Activity_Record", ActivityType.Details_Access.ToString(), userid);
             return View(res);
         }
-        public void UpdatePlotBalances(long Plotid)
+        public void UpdatePlot_Balances()
         {
-            var res3 = db.Sp_Get_PlotInstallments(Plotid).ToList();
-            var res4 = db.Sp_Get_ReceivedAmounts(Plotid, Modules.PlotManagement.ToString()).ToList();
-            var discount = db.Discounts.Where(x => x.Module_Id == Plotid && x.Plot_Is_Cancelled == null && x.Module == Modules.PlotManagement.ToString()).ToList();
-            UpdatePlotInstallmentStatus(res3, res4, discount, Plotid);
+            var res = db.Plots.Where(x => x.Status == "Registered").ToList();
+            foreach (var item in res)
+            {
+                var res3 = db.Sp_Get_PlotInstallments(item.Id).ToList();
+                var res4 = db.Sp_Get_ReceivedAmounts(item.Id, Modules.PlotManagement.ToString()).ToList();
+                var discount = db.Discounts.Where(x => x.Module_Id == item.Id && x.Plot_Is_Cancelled == null && x.Module == Modules.PlotManagement.ToString()).ToList();
+                UpdatePlotInstallmentStatus(res3, res4, discount, item.Id);
+            }
+
+        }
+       
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                db.Dispose();
+            }
+            base.Dispose(disposing);
         }
         //public ActionResult WHTPlotInstallmentAndReceiptsPartial(long Plotid)
         //{
@@ -5359,15 +5374,6 @@ namespace MeherEstateDevelopers.Controllers
         //    }
         //    return Json(true);
         //}
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
-        }
-
         //Meher Only
         //public JsonResult DataDumpDealershipMeherOnly()
         //{
