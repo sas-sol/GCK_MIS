@@ -145,6 +145,8 @@ namespace MeherEstateDevelopers.Controllers
             var comp = ah.Company_Attr(userid);
             List<Sp_Get_InstallmentStructure_Current_Result> installmentstructure = db.Sp_Get_InstallmentStructure_Current(filedatas.Select(x => x.File_Form_Id).FirstOrDefault()).ToList();
             string Devchar = "";
+            var FileForm = db.File_Form.Where(x => x.FileFormNumber == FileFormNumber).FirstOrDefault();
+
             Helpers H = new Helpers();
             if (DevCharStatus == "true")
             {
@@ -213,7 +215,7 @@ namespace MeherEstateDevelopers.Controllers
                             var receiptno = db.Sp_Get_ReceiptNo("Normal").FirstOrDefault();
                             var res = db.Sp_Add_Receipt(rd.Amount, rd.AmountInWords, rd.Bank, rd.PayChqNo, rd.Ch_bk_Pay_Date, rd.Branch, string.Join(",", filedatas.Select(x => x.Mobile_1))
                                                 , string.Join(",", filedatas.Select(x => x.Father_Husband)), fileno.Id, string.Join(",", filedatas.Select(x => x.Name)), rd.PaymentType, file_Installments.Total,
-                                                rd.Project_Name, file_Installments.Rate, null, filedatas.Select(x => x.Plot_Size).FirstOrDefault(), ReceiptTypes.Booking.ToString(), filedatas.Select(x => x.File_Form_Id).FirstOrDefault(), userid, "File Booking", null, Modules.FileManagement.ToString(), Devchar, FileFormNumber, appdetail.File.Block, appdetail.File.Type, filedatas.Select(x => x.Group_Tag).FirstOrDefault(), H.RandomNumber(), appdetail.Dealership.Dealership_Name, receiptno, comp.Id).FirstOrDefault();
+                                                FileForm.Project, file_Installments.Rate, null, filedatas.Select(x => x.Plot_Size).FirstOrDefault(), ReceiptTypes.Booking.ToString(), filedatas.Select(x => x.File_Form_Id).FirstOrDefault(), userid, "File Booking", null, Modules.FileManagement.ToString(), Devchar, FileFormNumber, appdetail.File.Block, appdetail.File.Type, filedatas.Select(x => x.Group_Tag).FirstOrDefault(), H.RandomNumber(), appdetail.Dealership.Dealership_Name, receiptno, comp.Id).FirstOrDefault();
                             ids.Add(res.Receipt_No);
                             string text = "";
                             if (rd.PaymentType == "Cash")

@@ -12,17 +12,21 @@
 <script>
     var plots = @Html.Raw(Json.Encode(ViewBag.Plots));
     var plotins = @Html.Raw(Json.Encode(ViewBag.PlotInst));
+    console.log(plotins);
     var unipllotdata = [];
     $(function () {
+        debugger;
         $.each(plots, function (key, value) {
             var uniplot = { Id: "", Text: "" };
             var plt = unipllotdata.find(function (e) { return e.Text == value.Text });
+            debugger;
             if (plt == null) {
                 uniplot.Id = value.Value; uniplot.Text = value.Text;
                 unipllotdata.push(uniplot);
             }
         });
         InitPlots(1);
+
     });
 </script>
 <div class="row gap-20 pos-r">
@@ -144,6 +148,7 @@
 
     // Add the file forms
     $(document).on("submit", "#de-fo-as", function (e) {
+        debugger;
         e.preventDefault();
         if (formcontrolToken) {
             return false;

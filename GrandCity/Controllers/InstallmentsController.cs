@@ -1698,7 +1698,9 @@ namespace MeherEstateDevelopers.Controllers
             AccountHandlerController ah = new AccountHandlerController();
             var comp = ah.Company_Attr(userid);
             var plot = db.Sp_Get_PlotData(Plotid).FirstOrDefault();
-
+            var block = db.RealEstate_Blocks.Where(b => b.Id == plot.BlockIden).FirstOrDefault();
+            var phase = db.RealEstate_Phases.Where(p => p.Id == block.Phase_Id).FirstOrDefault();
+            var project = db.RealEstate_Projects.Where(p => p.Id == phase.Project_Id).FirstOrDefault();
             var balance = db.File_Plot_Balance.Where(x => x.File_Plot_Id == plot.Id && x.Module == Modules.PlotManagement.ToString()).FirstOrDefault();
             var rem = Math.Round(Convert.ToDouble(balance.Outstanding_Amount), 0) - Math.Round(Convert.ToDouble(rd.Amount), 0);
             if (rem < 0)
@@ -1719,7 +1721,7 @@ namespace MeherEstateDevelopers.Controllers
 
                     var res2 = db.Sp_Add_Receipt(rd.Amount, rd.AmountInWords, rd.Bank, rd.PayChqNo, rd.Ch_bk_Pay_Date, rd.Branch, string.Join(",", lastowner.Select(x => x.Mobile_1).Distinct())
                         , string.Join(",", lastowner.Select(x => x.Father_Husband).Distinct()), Plotid, string.Join(",", lastowner.Select(x => x.Name)), rd.PaymentType, rd.TotalAmount,
-                        rd.Project_Name, rd.Rate, null, rd.Plot_Size, ReceiptTypes.Installment.ToString(), userid, userid, "", null, Modules.PlotManagement.ToString(), "", plot.Plot_No, plot.Block_Name, plot.Type, lastowner.FirstOrDefault().GroupTag, TransactionId, "", receiptno, comp.Id).FirstOrDefault();
+                        project.Project_Name, rd.Rate, null, rd.Plot_Size, ReceiptTypes.Installment.ToString(), userid, userid, "", null, Modules.PlotManagement.ToString(), "", plot.Plot_No, plot.Block_Name, plot.Type, lastowner.FirstOrDefault().GroupTag, TransactionId, "", receiptno, comp.Id).FirstOrDefault();
 
                     if (res2.Receipt_Id > 0)
                     {
