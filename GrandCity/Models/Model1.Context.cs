@@ -15128,72 +15128,7 @@ namespace MeherEstateDevelopers.Models
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Sp_Get_PlotInstallments_Result>("Sp_Get_PlotInstallments", plotidParameter);
         }
-        public virtual int Sp_Add_plotInstallmet_WHT(Nullable<long> id, Nullable<decimal> amount, string installment_Name, Nullable<System.DateTime> dueDate, string paymentStatus, string status, string installment_Type, string charge)
-        {
-            var idParameter = id.HasValue ?
-                new ObjectParameter("id", id) :
-                new ObjectParameter("id", typeof(long));
-
-            var amountParameter = amount.HasValue ?
-                new ObjectParameter("Amount", amount) :
-                new ObjectParameter("Amount", typeof(decimal));
-
-            var installment_NameParameter = installment_Name != null ?
-                new ObjectParameter("Installment_Name", installment_Name) :
-                new ObjectParameter("Installment_Name", typeof(string));
-
-            var dueDateParameter = dueDate.HasValue ?
-                new ObjectParameter("DueDate", dueDate) :
-                new ObjectParameter("DueDate", typeof(System.DateTime));
-
-            var paymentStatusParameter = paymentStatus != null ?
-                new ObjectParameter("PaymentStatus", paymentStatus) :
-                new ObjectParameter("PaymentStatus", typeof(string));
-
-            var statusParameter = status != null ?
-                new ObjectParameter("Status", status) :
-                new ObjectParameter("Status", typeof(string));
-
-            var installment_TypeParameter = installment_Type != null ?
-                new ObjectParameter("Installment_Type", installment_Type) :
-                new ObjectParameter("Installment_Type", typeof(string));
-
-            var chargeParameter = charge != null ?
-                new ObjectParameter("Charge", charge) :
-                new ObjectParameter("Charge", typeof(string));
-
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("Sp_Add_plotInstallmet_WHT", idParameter, amountParameter, installment_NameParameter, dueDateParameter, paymentStatusParameter, statusParameter, installment_TypeParameter, chargeParameter);
-        }
-
-        public virtual int Sp_Update_plotInstallmet_WHT(Nullable<long> id, Nullable<decimal> amount, string installment_Name, string status, string paymentStatus, string charge)
-        {
-            var idParameter = id.HasValue ?
-                new ObjectParameter("id", id) :
-                new ObjectParameter("id", typeof(long));
-
-            var amountParameter = amount.HasValue ?
-                new ObjectParameter("Amount", amount) :
-                new ObjectParameter("Amount", typeof(decimal));
-
-            var installment_NameParameter = installment_Name != null ?
-                new ObjectParameter("Installment_Name", installment_Name) :
-                new ObjectParameter("Installment_Name", typeof(string));
-
-            var statusParameter = status != null ?
-                new ObjectParameter("Status", status) :
-                new ObjectParameter("Status", typeof(string));
-
-            var paymentStatusParameter = paymentStatus != null ?
-                new ObjectParameter("PaymentStatus", paymentStatus) :
-                new ObjectParameter("PaymentStatus", typeof(string));
-
-            var chargeParameter = charge != null ?
-                new ObjectParameter("Charge", charge) :
-                new ObjectParameter("Charge", typeof(string));
-
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("Sp_Update_plotInstallmet_WHT", idParameter, amountParameter, installment_NameParameter, statusParameter, paymentStatusParameter, chargeParameter);
-        }
-
+    
         public virtual ObjectResult<Sp_Get_PlotLastBill_SC_Result> Sp_Get_PlotLastBill_SC(Nullable<long> plotid)
         {
             var plotidParameter = plotid.HasValue ?
@@ -24558,6 +24493,15 @@ namespace MeherEstateDevelopers.Models
                 new ObjectParameter("ids", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("Test_UpdatePlotsNotPaidinstallment_Surcharge", idsParameter);
+        }
+    
+        public virtual ObjectResult<Sp_Get_Reports_FilesOutstandingByBlock_Result> Sp_Get_Reports_FilesOutstandingByBlock(Nullable<long> id)
+        {
+            var idParameter = id.HasValue ?
+                new ObjectParameter("Id", id) :
+                new ObjectParameter("Id", typeof(long));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Sp_Get_Reports_FilesOutstandingByBlock_Result>("Sp_Get_Reports_FilesOutstandingByBlock", idParameter);
         }
     }
 }
