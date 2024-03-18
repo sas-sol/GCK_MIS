@@ -36,13 +36,13 @@
             $("input").attr('autocomplete', 'off');
         });
     </script>
-    <div>
+    <div @*style="background-color: #eaeaea"*@>
         @*<script src="~/Scripts/jquery.signalR-2.4.1.min.js"></script>
         <script src="~/signalr/hubs"></script>*@
         @{Html.RenderAction("LeftSideWidget", "SideWidgets"); }
         <div class="page-container">
             @{Html.RenderAction("Header", "SideWidgets"); }
-            <main class="main-content bgc-grey-100">
+            <main class="main-content" style="background-color: #eaeaea" >
                 <div id="mainContent">
                     @RenderBody()
                 </div>
