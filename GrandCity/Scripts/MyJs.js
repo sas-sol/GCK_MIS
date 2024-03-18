@@ -6866,6 +6866,7 @@ $(document).on("change", ".al-plt-det", function () {
 //
 $(document).on("click", ".plt-details", function () {
     var id = $(this).data("id");
+    debugger
     SASLoad($("#plot-det"));
     $("#plot-det").load("/Plots/PlotDetails/", { Plotid: id }, function () {
         SASUnLoad($("#plot-det"));
@@ -11880,6 +11881,163 @@ $(document).on("click", "#ser-out-st", function (e) {
         }
     });
 });
+$(document).on("click", "#ser-out-files", function (e) {
+    e.preventDefault();
+    var id = $("#Blocks").val();
+    debugger
+    SASLoad('#rpt-data');
+    $.ajax({
+        type: "POST",
+        url: "/Reports/FilesOutStandingReport/",
+        data: { Id: id },
+        success: function (data) {
+            SASUnLoad('#rpt-data');
+            $('#rpt-data').empty();
+            var html1 = `<table class="table table-striped table-bordered rpttable" >
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th width="80px">File No</th>
+                                    <th width="100px">Type</th>
+                                    <th width="100px">Status</th>
+                                    <th width="150px">Total Amount</th>
+                                    <th width="150px">Received</th>
+                                    <th width="150px">Discount</th>
+                                    <th width="150px">Remaining</th>
+                            </thead>
+                        <tbody style="max-height: 300px !important;"></tbody>
+                        <tfoot>
+                        </tfoot>
+                        </table>`;
+            $('#tab-data').html(html1);
+            var srcount = 1;
+            $(data.Result).each(function (i) {
+                debugger
+                var html = `<tr class="pointer get-file-res" data-id="${data.Result[i].FileFormNumber}">
+                                <td width="80px">${data.Result[i].FileFormNumber}</td>
+                                <td width="80px">${data.Result[i].Type}</td>
+                                <td width="80px">${data.Result[i].Status}</td>
+                                <td width="150px">${Number(parseFloat(data.Result[i].total).toFixed(0)).toLocaleString('en')}</td>
+                                <td width="150px">${Number(parseFloat(data.Result[i].Received).toFixed(0)).toLocaleString('en')}</td>
+                                <td width="150px">${Number(parseFloat(data.Result[i].Discount).toFixed(0)).toLocaleString('en')}</td>
+                                <td width="150px">${Number(parseFloat(data.Result[i].Remaining).toFixed(0)).toLocaleString('en')}</td>
+                            </tr>`;
+                $('#tab-data tbody').append(html);
+                srcount++;
+            });
+            var html = `<h5>Total Amount:  ${Number(parseFloat(data.TotalAmt).toFixed(0)).toLocaleString()}</h5>
+                        <h5>Received Amount:  ${Number(parseFloat(data.ReceivedAmt).toFixed(0)).toLocaleString()}</h5>
+                        <h5>Discount Amount:  ${Number(parseFloat(data.Discount).toFixed(0)).toLocaleString()}</h5>
+                        <h5>Excess Amount:  ${Number(parseFloat(data.Access).toFixed(0)).toLocaleString()}</h5>
+                        <h5>Remaining Amount:  ${Number(parseFloat(data.Remaining).toFixed(0)).toLocaleString()}</h5>`
+            $('#rpt-data').append(html);
+            $('.rpttable').DataTable({
+                dom: 'Bfrtip'
+            });
+        },
+        error: function (data) {
+            SASUnLoad('#rpt-data');
+        }
+    });
+});
+$(document).on("click", "#ser-out-Plot-files", function (e) {
+    e.preventDefault();
+    var id = $("#Blocks").val();
+    debugger
+    SASLoad('#rpt-data');
+    $.ajax({
+        type: "POST",
+        url: "/Reports/FilesPlotsOutStandingReport/",
+        data: { Id: id },
+        success: function (data) {
+            debugger
+            SASUnLoad('#rpt-data');
+            $('#rpt-data').empty();
+
+            // HTML table headers
+            var html1 = `<table class="table table-striped table-bordered rpttable">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th width="80px">File_Plot No</th>
+                            <th width="100px">Type</th>
+                            <th width="100px">Status</th>
+                            <th width="150px">Total Amount</th>
+                            <th width="150px">Received</th>
+                            <th width="150px">Discount</th>
+                            <th width="150px">Remaining</th>
+                        </tr>
+                    </thead>
+                    <tbody style="max-height: 300px !important;"></tbody>
+                    <tfoot></tfoot>
+                </table>`;
+            $('#tab-data').html(html1);
+            debugger
+            // Append rows for plots data
+            $(data.PlotResult.Result).each(function (i) {
+                debugger
+                var html = `<tr class="pointer get-file-res" data-id="${data.PlotResult.Result[i].Id}">
+                        <td width="80px">${data.PlotResult.Result[i].Plot_No}</td>
+                        <td width="80px">${data.PlotResult.Result[i].Type}</td>
+                        <td width="80px">${data.PlotResult.Result[i].Status}</td>
+                        <td width="150px">${Number(parseFloat(data.PlotResult.Result[i].total).toFixed(0)).toLocaleString('en')}</td>
+                        <td width="150px">${Number(parseFloat(data.PlotResult.Result[i].Received).toFixed(0)).toLocaleString('en')}</td>
+                        <td width="150px">${Number(parseFloat(data.PlotResult.Result[i].Discount).toFixed(0)).toLocaleString('en')}</td>
+                        <td width="150px">${Number(parseFloat(data.PlotResult.Result[i].Remaining).toFixed(0)).toLocaleString('en')}</td>
+                    </tr>`;
+                $('#tab-data tbody').append(html);
+            });
+
+            // Append rows for files data
+            $(data.fileResult.Result).each(function (i) {
+                debugger
+                var html = `<tr class="pointer get-file-res" data-id="${data.fileResult.Result[i].FileFormNumber}">
+                        <td width="80px">${data.fileResult.Result[i].FileFormNumber}</td>
+                        <td width="80px">${data.fileResult.Result[i].Type}</td>
+                        <td width="80px">${data.fileResult.Result[i].Status}</td>
+                        <td width="150px">${Number(parseFloat(data.fileResult.Result[i].total).toFixed(0)).toLocaleString('en')}</td>
+                        <td width="150px">${Number(parseFloat(data.fileResult.Result[i].Received).toFixed(0)).toLocaleString('en')}</td>
+                        <td width="150px">${Number(parseFloat(data.fileResult.Result[i].Discount).toFixed(0)).toLocaleString('en')}</td>
+                        <td width="150px">${Number(parseFloat(data.fileResult.Result[i].Remaining).toFixed(0)).toLocaleString('en')}</td>
+                    </tr>`;
+                $('#tab-data tbody').append(html);
+            });
+
+            // Display totals and other summary information
+            var html = `<h5>Plot Total Amount:  ${Number(parseFloat(data.PlotResult.PlotTotalAmt).toFixed(0)).toLocaleString()}</h5>
+                        <h5>Plot Received Amount:  ${Number(parseFloat(data.PlotResult.PlotReceivedAmt).toFixed(0)).toLocaleString()}</h5>
+                        <h5>Plot Discount Amount:  ${Number(parseFloat(data.PlotResult.PlotDiscount).toFixed(0)).toLocaleString()}</h5>
+                        <h5>Plot Access Amount:  ${Number(parseFloat(data.PlotResult.PlotAccess).toFixed(0)).toLocaleString()}</h5>
+                        <h5>Plot Remaining Amount:  ${Number(parseFloat(data.PlotResult.PlotRemaining).toFixed(0)).toLocaleString()}</h5>
+                        <h5>File Total Amount:  ${Number(parseFloat(data.fileResult.fileTotalAmt).toFixed(0)).toLocaleString()}</h5>
+                        <h5>File Received Amount:  ${Number(parseFloat(data.fileResult.fileReceivedAmt).toFixed(0)).toLocaleString()}</h5>
+                        <h5>File Discount Amount:  ${Number(parseFloat(data.fileResult.fileDiscount).toFixed(0)).toLocaleString()}</h5>
+                        <h5>File Access Amount:  ${Number(parseFloat(data.fileResult.fileAccess).toFixed(0)).toLocaleString()}</h5>
+                        <h5>File Remaining Amount:  ${Number(parseFloat(data.fileResult.fileRemaining).toFixed(0)).toLocaleString()}</h5>`
+            $('#rpt-data').append(html);
+
+            // Apply DataTables plugin
+            $('.rpttable').DataTable({
+                dom: 'Bfrtip'
+            });
+        },
+
+        error: function (data) {
+            SASUnLoad('#rpt-data');
+        }
+    });
+});
+
+$(document).on("click", ".get-file-res", function () {
+    var id = $(this).data("id");
+    debugger;
+    SASLoad($("#file-details"));
+    $("#file-details").load('/FileSystem/GetFileDetails/', { FileId: id }, function () {
+        SASUnLoad($("#file-details"));
+        $('html, body').animate({
+            scrollTop: $("#file-details").offset().top
+        }, 1000);
+    });
+});
+
 //
 $(document).on("change", "#full-paid", function (e) {
     var token = $("#full-paid").is(":checked");

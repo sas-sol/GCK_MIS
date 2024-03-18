@@ -181,6 +181,10 @@ namespace MeherEstateDevelopers.Models
     {
         public decimal? Remaining { get { return total - Received - Discount; } }
     }
+    public partial class Sp_Get_Reports_FilesOutstandingByBlock_Result
+    {
+        public decimal? Remaining { get { return total - Received - Discount; } }
+    }
     public partial class Sp_Get_InventoryList_Dep_Result
     {
         public decimal? Remaining { get { return Total_In_Qty - Total_Out_Qty; } }

@@ -539,6 +539,17 @@ namespace MeherEstateDevelopers.Controllers
             ViewBag.Blocks = new SelectList(db.Sp_Get_Block(), "Id", "Block_Name", "Phase_Name");
             return View();
         }
+        public ActionResult FilesOutstanding()
+        {
+            ViewBag.Blocks = new SelectList(db.Sp_Get_Block(), "Id", "Block_Name", "Phase_Name");
+            return View();
+        }
+        public ActionResult PlotsfilesCosolidatedReports()
+        {
+            ViewBag.Blocks = new SelectList(db.Sp_Get_Block(), "Id", "Block_Name", "Phase_Name");
+            return View();
+        }
+
         public ActionResult FilesStatus()
         {
             var res = db.Sp_Reports_FilesStatus().ToList();
@@ -584,6 +595,40 @@ namespace MeherEstateDevelopers.Controllers
             var access = res1.Where(x => x.Remaining < 0).Sum(x => x.Remaining);
             var res = new { Result = res1, TotalAmt = Total, ReceivedAmt = Received, Discount = Discount, Remaining = Remain, Access = access };
             return Json(res);
+        }
+        public JsonResult FilesOutStandingReport(long Id)
+        {
+            var res1 = db.Sp_Get_Reports_FilesOutstandingByBlock(Id).ToList();
+            var Total = res1.Sum(x => x.total);
+            var Received = res1.Sum(x => x.Received);
+            var Discount = res1.Sum(x => x.Discount);
+            var Remain = res1.Where(x => x.Remaining > 0).Sum(x => x.Remaining);
+            var access = res1.Where(x => x.Remaining < 0).Sum(x => x.Remaining);
+            var res = new { Result = res1, TotalAmt = Total, ReceivedAmt = Received, Discount = Discount, Remaining = Remain, Access = access };
+            return Json(res);
+        }
+        public JsonResult FilesPlotsOutStandingReport(long Id)  // working  on this 
+        {
+            var res = db.Sp_Get_Reports_PlotOutstandingByBlock(Id).ToList();
+            var PlotTotal = res.Sum(x => x.total);
+            var PlotReceived = res.Sum(x => x.Received);
+            var PlotDiscount = res.Sum(x => x.Discount);
+            var PlotRemain = res.Where(x => x.Remaining > 0).Sum(x => x.Remaining);
+            var Plotaccess = res.Where(x => x.Remaining < 0).Sum(x => x.Remaining);
+            var res1 = new { Result = res, PlotTotalAmt = PlotTotal, PlotReceivedAmt = PlotReceived, PlotDiscount = PlotDiscount, PlotRemaining = PlotRemain, PlotAccess = Plotaccess };
+            var res2 = db.Sp_Get_Reports_FilesOutstandingByBlock(Id).ToList();
+            var fileTotal = res2.Sum(x => x.total);
+            var fileReceived = res2.Sum(x => x.Received);
+            var fileDiscount = res2.Sum(x => x.Discount);
+            var fileRemain = res2.Where(x => x.Remaining > 0).Sum(x => x.Remaining);
+            var fileaccess = res2.Where(x => x.Remaining < 0).Sum(x => x.Remaining);
+            var res3 = new { Result = res2, fileTotalAmt = fileTotal, fileReceivedAmt = fileReceived, fileDiscount = fileDiscount, fileRemaining = fileRemain, fileAccess = fileaccess };
+            var result = new { PlotResult = res1, fileResult = res3 };
+            return Json(result);
+            // var res1 = PlotsOutStandingReport(Id);
+            // var res2 = FilesOutStandingReport(Id);
+            // var result = new { PlotResult = res1, fileResult = res2 };
+            //return Json(result);
         }
         public ActionResult PlotsOutStandingReport_View(string Block)
         {
