@@ -1,509 +1,552 @@
 ﻿@model MeherEstateDevelopers.Models.AuditorHome_Report
-
-<div class="form-row col-md-12">
-    <h4 class="c-grey-900">Plots</h4>
-    <div class="col-md-12">
-
-        <div class="form-row">
-            <div class='col-md-2' style="box-shadow: 3px 0px 15px rgba(0, 0, 0, 0.3); margin-top: 10px;">
-                <div class="layers bd bgc-white p-10 mt-2">
-                    <div class="layer w-100">
-                        <div class="peers ai-sb fxw-nw">
-                            <div class="peer peer-greed">
-                                <h6 class="lh-1">Total Plots</h6>
-                            </div>
-                            <div class="peer">
-                                <span class="d-ib lh-0 va-m fw-600 bdrs-10em pX-15 pY-15 bgc-green-50 c-green-500">@Model.Summary.Total_Plots</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="layer w-100">
-                        <a href="/Plots/PlotsDataDetailView/">View all</a>
-                    </div>
-                </div>
-            </div>
-            <div class='col-md-2' style="box-shadow: 3px 0px 15px rgba(0, 0, 0, 0.3); margin-top: 10px;">
-                <div class="layers bd bgc-white p-10 mt-2">
-                    <div class="layer w-100">
-                        <div class="peers ai-sb fxw-nw">
-                            <div class="peer peer-greed">
-                                <h6 class="lh-1">Verified Plots</h6>
-                            </div>
-                            <div class="peer">
-                                <span class="d-ib lh-0 va-m fw-600 bdrs-10em pX-15 pY-15 bgc-green-50 c-green-500">@Model.Summary.VerifiedPlots</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="layer w-100">
-                        <a href="/Plots/VerifiedPlots/">View all</a>
-                    </div>
-                </div>
-            </div>
-            <div class='col-md-2' style="box-shadow: 3px 0px 15px rgba(0, 0, 0, 0.3); margin-top: 10px;">
-                <div class="layers bd bgc-white p-10 mt-2">
-                    <div class="layer w-100">
-                        <div class="peers ai-sb fxw-nw">
-                            <div class="peer peer-greed">
-                                <h6 class="lh-1">Not Verified</h6>
-                            </div>
-                            <div class="peer">
-                                <span class="d-ib lh-0 va-m fw-600 bdrs-10em pX-15 pY-15 bgc-red-50 c-red-500">@Model.Summary.NotVerified</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="layer w-100">
-                        <a href="/Plots/NotVerified/">View all</a>
-                    </div>
-                </div>
-            </div>
-            <div class='col-md-2' style="box-shadow: 3px 0px 15px rgba(0, 0, 0, 0.3); margin-top: 10px;">
-                <div class="layers bd bgc-white p-10 mt-2">
-                    <div class="layer w-100">
-                        <div class="peers ai-sb fxw-nw">
-                            <div class="peer peer-greed">
-                                <h6 class="lh-1">Cancelled Plots</h6>
-                            </div>
-                            <div class="peer">
-                                <span class="d-ib lh-0 va-m fw-600 bdrs-10em pX-15 pY-15 bgc-red-50 c-red-500">@Model.Summary.Cancelled</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="layer w-100">
-                        <a href="/Plots/CancelledPlots/">View all</a>
-                    </div>
-                </div>
-            </div>
-            <div class='col-md-2' style="box-shadow: 3px 0px 15px rgba(0, 0, 0, 0.3); margin-top: 10px; margin-top: 10px;">
-                <div class="layers bd bgc-white p-10 mt-2">
-                    <div class="layer w-100">
-                        <div class="peers ai-sb fxw-nw">
-                            <div class="peer peer-greed">
-                                <h6 class="lh-1">Hold Plots</h6>
-                            </div>
-                            <div class="peer">
-                                <span class="d-ib lh-0 va-m fw-600 bdrs-10em pX-15 pY-15 bgc-red-50 c-red-500">@Model.Summary.Holded</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="layer w-100">
-                        <a href="/Plots/HoldedPlots/">View all</a>
-                    </div>
-                </div>
-            </div>
-            <div class='col-md-2' style="box-shadow: 3px 0px 15px rgba(0, 0, 0, 0.3); margin-top: 10px;">
-                <div class="layers bd bgc-white p-10 mt-2">
-                    <div class="layer w-100">
-                        <div class="peers ai-sb fxw-nw">
-                            <div class="peer peer-greed">
-                                <h6 class="lh-1">Available For Sale</h6>
-                            </div>
-                            <div class="peer">
-                                <span class="d-ib lh-0 va-m fw-600 bdrs-10em pX-15 pY-15 bgc-red-50 c-red-500">@Model.Summary.AvaiableforSale</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="layer w-100">
-                        <a href="/Plots/AvaiableForSalePlots/">View all</a>
-                    </div>
-                </div>
-            </div>
-            @*<div class='col-md-2' style="box-shadow: 3px 0px 15px rgba(0, 0, 0, 0.3); margin-top: 10px;">
-                    <div class="layers bd bgc-white p-10 mt-2">
-                        <div class="layer w-100">
-                            <div class="peers ai-sb fxw-nw">
-                                <div class="peer peer-greed">
-                                    <h6 class="lh-1">Disputed Plots</h6>
-                                </div>
-                                <div class="peer">
-                                    <span class="d-ib lh-0 va-m fw-600 bdrs-10em pX-15 pY-15 bgc-purple-50 c-purple-500">@Model.Summary.DisputedPlots</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="layer w-100">
-                            <a href="/Plots/DisputedPlots/">View all</a>
-                        </div>
-                    </div>
-                </div>*@
-            @*<div class='col-md-2' style="box-shadow: 3px 0px 15px rgba(0, 0, 0, 0.3); margin-top: 10px;">
-                    <div class="layers bd bgc-white p-10 mt-2">
-                        <div class="layer w-100">
-                            <div class="peers ai-sb fxw-nw">
-                                <div class="peer peer-greed">
-                                    <h6 class="lh-1">Pending For Approval</h6>
-                                </div>
-                                <div class="peer">
-                                    <span class="d-ib lh-0 va-m fw-600 bdrs-10em pX-15 pY-15 bgc-blue-50 c-blue-500">@Model.Summary.PendingForApproval</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="layer w-100">
-                            <a href="/Plots/PendingApproval/">View all</a>
-                        </div>
-                    </div>
-                </div>*@
-
-            @*<div class='col-md-2' style="box-shadow: 3px 0px 15px rgba(0, 0, 0, 0.3); margin-top: 10px;">
-                    <div class="layers bd bgc-white p-10 mt-2">
-                        <div class="layer w-100">
-                            <div class="peers ai-sb fxw-nw">
-                                <div class="peer peer-greed">
-                                    <h6 class="lh-1">Repurchased Plots</h6>
-                                </div>
-                                <div class="peer">
-                                    <span class="d-ib lh-0 va-m fw-600 bdrs-10em pX-15 pY-15 bgc-red-50 c-red-500">@Model.Summary.Repurchased</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="layer w-100">
-                            <a href="/Plots/Repurchased/">View all</a>
-                        </div>
-                    </div>
-                </div>*@
-            <div class='col-md-2' style="box-shadow: 3px 0px 15px rgba(0, 0, 0, 0.3); margin-top: 10px;">
-                <div class="layers bd bgc-white p-10 mt-2">
-                    <div class="layer w-100">
-                        <div class="peers ai-sb fxw-nw">
-                            <div class="peer peer-greed">
-                                <h6 class="lh-1">Constructed</h6>
-                            </div>
-                            <div class="peer">
-                                <span class="d-ib lh-0 va-m fw-600 bdrs-10em pX-15 pY-15 bgc-red-50 c-red-500">@Model.Summary.Constructed</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="layer w-100">
-                        <a href="/Plots/ContructedPlots/">View all</a>
-                    </div>
-                </div>
-            </div>
-            <div class='col-md-2' style="box-shadow: 3px 0px 15px rgba(0, 0, 0, 0.3); margin-top: 10px;">
-                <div class="layers bd bgc-white p-10 mt-2">
-                    <div class="layer w-100">
-                        <div class="peers ai-sb fxw-nw">
-                            <div class="peer peer-greed">
-                                <h6 class="lh-1">Non Constructed</h6>
-                            </div>
-                            <div class="peer">
-                                <span class="d-ib lh-0 va-m fw-600 bdrs-10em pX-15 pY-15 bgc-red-50 c-red-500">@Model.Summary.NonDeveloped</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="layer w-100">
-                        <a href="/Plots/NonDevelopedPlots/">View all</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-@{
-    if (User.IsInRole("Files Summary") || User.IsInRole("Administrator"))
-    {
-        <div class="form-row col-md-12">
-            <h4 class="c-grey-900">Files Summary</h4>
-            <div class="col-md-12">
-                <div class="form-row">
-                    <div class='col-md-2' style="box-shadow: 3px 0px 15px rgba(0, 0, 0, 0.3); margin-top: 10px;">
-                        <div class="layers bd bgc-white p-10 mt-2" data-toggle="tooltip" data-placement="top" title="" data-original-title="Files which are processed for Cancellation but not refunded to customers yet">
-                            <div class="layer w-100">
-                                <div class="peers ai-sb fxw-nw">
-                                    <div class="peer peer-greed">
-                                        <h6 class="lh-1">Cancelled Not Refunded</h6>
-                                    </div>
-                                    <div class="peer">
-                                        <span class="d-ib lh-0 va-m fw-600 bdrs-10em pX-15 pY-15 bgc-red-50 c-red-500">@Model.FilesSummary.Cancelled_Not_Refunded</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="layer w-100">
-                                <a href="/FileSystem/FileStatusView?status=15">View all</a>
-                            </div>
-                        </div>
-                    </div>
-                    @*<div class='col-md-2' style="box-shadow: 3px 0px 15px rgba(0, 0, 0, 0.3); margin-top: 10px;">
-                        <div class="layers bd bgc-white p-10 mt-2" data-toggle="tooltip" data-placement="top" title="" data-original-title="Files which are marked Disputed for any reason">
-                            <div class="layer w-100">
-                                <div class="peers ai-sb fxw-nw">
-                                    <div class="peer peer-greed">
-                                        <h6 class="lh-1">Disputed</h6>
-                                    </div>
-                                    <div class="peer">
-                                        <span class="d-ib lh-0 va-m fw-600 bdrs-10em pX-15 pY-15 bgc-red-50 c-red-500">@Model.FilesSummary.Disputed</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="layer w-100">
-                                <a href="/FileSystem/FileStatusView?status=11">View all</a>
-                            </div>
-                        </div>
-                    </div>*@
-                    <div class='col-md-2' style="box-shadow: 3px 0px 15px rgba(0, 0, 0, 0.3); margin-top: 10px;">
-                        <div class="layers bd bgc-white p-10 mt-2" data-toggle="tooltip" data-placement="top" title="" data-original-title="Application Forms which are still in market for registeration">
-                            <div class="layer w-100">
-                                <div class="peers ai-sb fxw-nw">
-                                    <div class="peer peer-greed">
-                                        <h6 class="lh-1">Pending Application Form</h6>
-                                    </div>
-                                    <div class="peer">
-                                        <span class="d-ib lh-0 va-m fw-600 bdrs-10em pX-15 pY-15 bgc-red-50 c-red-500">@Model.FilesSummary.Pending</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="layer w-100">
-                                <a href="/FileSystem/FileStatusView?status=2">View all</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class='col-md-2' style="box-shadow: 3px 0px 15px rgba(0, 0, 0, 0.3); margin-top: 10px;">
-                        <div class="layers bd bgc-white p-10 mt-2" data-toggle="tooltip" data-placement="top" title="" data-original-title="Files which are refunded to customer after cancellation process">
-                            <div class="layer w-100">
-                                <div class="peers ai-sb fxw-nw">
-                                    <div class="peer peer-greed">
-                                        <h6 class="lh-1">Cancelled Refunded Files</h6>
-                                    </div>
-                                    <div class="peer">
-                                        <span class="d-ib lh-0 va-m fw-600 bdrs-10em pX-15 pY-15 bgc-red-50 c-red-500">@Model.FilesSummary.Refund</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="layer w-100">
-                                <a href="/FileSystem/FileStatusView?status=13">View all</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class='col-md-2' style="box-shadow: 3px 0px 15px rgba(0, 0, 0, 0.3); margin-top: 10px;">
-                        <div class="layers bd bgc-white p-10 mt-2" data-toggle="tooltip" data-placement="top" title="" data-original-title="Registered Files of Customers">
-                            <div class="layer w-100">
-                                <div class="peers ai-sb fxw-nw">
-                                    <div class="peer peer-greed">
-                                        <h6 class="lh-1">Registered</h6>
-                                    </div>
-                                    <div class="peer">
-                                        <span class="d-ib lh-0 va-m fw-600 bdrs-10em pX-15 pY-15 bgc-red-50 c-red-500">@Model.FilesSummary.Registered</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="layer w-100">
-                                <a href="/FileSystem/FileStatusView?status=1">View all</a>
-                            </div>
-                        </div>
-                    </div>
-                    @*<div class='col-md-2' style="box-shadow: 3px 0px 15px rgba(0, 0, 0, 0.3); margin-top: 10px;">
-                            <div class="layers bd bgc-white p-10 mt-2" data-toggle="tooltip" data-placement="top" title="" data-original-title="Cancellation requested by Customers">
-                                <div class="layer w-100">
-                                    <div class="peers ai-sb fxw-nw">
-                                        <div class="peer peer-greed">
-                                            <h6 class="lh-1">Initiated Cancellation</h6>
-                                        </div>
-                                        <div class="peer">
-                                            <span class="d-ib lh-0 va-m fw-600 bdrs-10em pX-15 pY-15 bgc-red-50 c-red-500">@Model.FilesSummary.Hold</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="layer w-100">
-                                    <a href="/FileSystem/FileStatusView?status=8">View all</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class='col-md-2' style="box-shadow: 3px 0px 15px rgba(0, 0, 0, 0.3); margin-top: 10px;">
-                            <div class="layers bd bgc-white p-10 mt-2" data-toggle="tooltip" data-placement="top" title="" data-original-title="Files which are pending for Registeration in Dubai Expo">
-                                <div class="layer w-100">
-                                    <div class="peers ai-sb fxw-nw">
-                                        <div class="peer peer-greed">
-                                            <h6 class="lh-1">Pending Registeration</h6>
-                                        </div>
-                                        <div class="peer">
-                                            <span class="d-ib lh-0 va-m fw-600 bdrs-10em pX-15 pY-15 bgc-red-50 c-red-500">@Model.FilesSummary.Inprocess</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="layer w-100">
-                                    <a href="/FileSystem/FileStatusView?status=4">View all</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class='col-md-2' style="box-shadow: 3px 0px 15px rgba(0, 0, 0, 0.3); margin-top: 10px;">
-                            <div class="layers bd bgc-white p-10 mt-2" data-toggle="tooltip" data-placement="top" title="" data-original-title="Open Files">
-                                <div class="layer w-100">
-                                    <div class="peers ai-sb fxw-nw">
-                                        <div class="peer peer-greed">
-                                            <h6 class="lh-1">Open Files</h6>
-                                        </div>
-                                        <div class="peer">
-                                            <span class="d-ib lh-0 va-m fw-600 bdrs-10em pX-15 pY-15 bgc-red-50 c-red-500">@Model.FilesSummary.OpenFile</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="layer w-100">
-                                    <a href="/FileSystem/FileStatusView?status=5">View all</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class='col-md-2' style="box-shadow: 3px 0px 15px rgba(0, 0, 0, 0.3); margin-top: 10px;">
-                            <div class="layers bd bgc-white p-10 mt-2" data-toggle="tooltip" data-placement="top" title="" data-original-title="Open files of Dealers which are suspended due to Dealership Cancellation/Suspention">
-                                <div class="layer w-100">
-                                    <div class="peers ai-sb fxw-nw">
-                                        <div class="peer peer-greed">
-                                            <h6 class="lh-1">Open Suspend Files</h6>
-                                        </div>
-                                        <div class="peer">
-                                            <span class="d-ib lh-0 va-m fw-600 bdrs-10em pX-15 pY-15 bgc-red-50 c-red-500">@Model.FilesSummary.Open_Suspend</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="layer w-100">
-                                    <a href="/FileSystem/FileStatusView?status=16">View all</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class='col-md-2' style="box-shadow: 3px 0px 15px rgba(0, 0, 0, 0.3); margin-top: 10px;">
-                            <div class="layers bd bgc-white p-10 mt-2" data-toggle="tooltip" data-placement="top" title="" data-original-title="Application Forms which are issued to Dealers but cancelled due to non registeration">
-                                <div class="layer w-100">
-                                    <div class="peers ai-sb fxw-nw">
-                                        <div class="peer peer-greed">
-                                            <h6 class="lh-1">Cancelled Application Form</h6>
-                                        </div>
-                                        <div class="peer">
-                                            <span class="d-ib lh-0 va-m fw-600 bdrs-10em pX-15 pY-15 bgc-red-50 c-red-500">@Model.FilesSummary.Rejected</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="layer w-100">
-                                    <a href="/FileSystem/FileStatusView?status=0">View all</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class='col-md-2' style="box-shadow: 3px 0px 15px rgba(0, 0, 0, 0.3); margin-top: 10px;">
-                            <div class="layers bd bgc-white p-10 mt-2" data-toggle="tooltip" data-placement="top" title="" data-original-title="Files which are repurchased by the Meher Estate Developers">
-                                <div class="layer w-100">
-                                    <div class="peers ai-sb fxw-nw">
-                                        <div class="peer peer-greed">
-                                            <h6 class="lh-1">Repurchased</h6>
-                                        </div>
-                                        <div class="peer">
-                                            <span class="d-ib lh-0 va-m fw-600 bdrs-10em pX-15 pY-15 bgc-red-50 c-red-500">@Model.FilesSummary.Repurchased</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="layer w-100">
-                                    <a href="/FileSystem/FileStatusView?status=9">View all</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class='col-md-2' style="box-shadow: 3px 0px 15px rgba(0, 0, 0, 0.3); margin-top: 10px;">
-                            <div class="layers bd bgc-white p-10 mt-2" data-toggle="tooltip" data-placement="top" title="" data-original-title="Application Forms are issued to Dealers but Suspended due to Dealership Cancellation/Suspention">
-                                <div class="layer w-100">
-                                    <div class="peers ai-sb fxw-nw">
-                                        <div class="peer peer-greed">
-                                            <h6 class="lh-1">Suspend Application Forms</h6>
-                                        </div>
-                                        <div class="peer">
-                                            <span class="d-ib lh-0 va-m fw-600 bdrs-10em pX-15 pY-15 bgc-red-50 c-red-500">@Model.FilesSummary.Suspend</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="layer w-100">
-                                    <a href="/FileSystem/FileStatusView?status=14">View all</a>
-                                </div>
-                            </div>
-                        </div>*@
-                </div>
-            </div>
-        </div>
-        <div class="form-row col-md-12">
-            <h4 class="c-grey-900">Overdue Files Report</h4>
-            <div class="col-md-12">
-                <div class="form-row">
-                    <div class="col-md-2" style="box-shadow: 3px 0px 15px rgba(0, 0, 0, 0.3); margin-top: 10px;">
-                        <div class="layers bd bgc-white p-10 mt-2" data-toggle="tooltip" data-placement="top" title="" data-original-title="Qualifying for First warning Letter">
-                            <div class="layer w-100">
-                                <div class="peers ai-sb fxw-nw">
-                                    <div class="peer peer-greed">
-                                        <h6 class="lh-1">Qualifying for Warning</h6>
-                                    </div>
-                                    <div class="peer">
-                                        <span class="d-ib lh-0 va-m fw-600 bdrs-10em pX-15 pY-15 bgc-red-50 c-red-500">@Model.OverDueFiles.Qualifying</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="layer w-100">
-                                <a href="/FileSystem/OverDueFiles">View all</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-2" style="box-shadow: 3px 0px 15px rgba(0, 0, 0, 0.3); margin-top: 10px;">
-                        <div class="layers bd bgc-white p-10 mt-2" data-toggle="tooltip" data-placement="top" title="" data-original-title="First Warning Letter Issued Files">
-                            <div class="layer w-100">
-                                <div class="peers ai-sb fxw-nw">
-                                    <div class="peer peer-greed">
-                                        <h6 class="lh-1">First Warning Letter</h6>
-                                    </div>
-                                    <div class="peer">
-                                        <span class="d-ib lh-0 va-m fw-600 bdrs-10em pX-15 pY-15 bgc-red-50 c-red-500">@Model.OverDueFiles.First_Warning</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="layer w-100">
-                                <a href="/FileSystem/OverDueFiles">View all</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class='col-md-2' style="box-shadow: 3px 0px 15px rgba(0, 0, 0, 0.3); margin-top: 10px;">
-                        <div class="layers bd bgc-white p-10 mt-2" data-toggle="tooltip" data-placement="top" title="" data-original-title="Second Warning Letter Issued Files">
-                            <div class="layer w-100">
-                                <div class="peers ai-sb fxw-nw">
-                                    <div class="peer peer-greed">
-                                        <h6 class="lh-1">Second Warning Letter</h6>
-                                    </div>
-                                    <div class="peer">
-                                        <span class="d-ib lh-0 va-m fw-600 bdrs-10em pX-15 pY-15 bgc-red-50 c-red-500">@Model.OverDueFiles.Second_Warning</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="layer w-100">
-                                <a href="/FileSystem/OverDueFiles">View all</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class='col-md-2' style="box-shadow: 3px 0px 15px rgba(0, 0, 0, 0.3); margin-top: 10px;">
-                        <div class="layers bd bgc-white p-10 mt-2" data-toggle="tooltip" data-placement="top" title="" data-original-title="Cancellation Letter Issued Files">
-                            <div class="layer w-100">
-                                <div class="peers ai-sb fxw-nw">
-                                    <div class="peer peer-greed">
-                                        <h6 class="lh-1">Cancellation Letter</h6>
-                                    </div>
-                                    <div class="peer">
-                                        <span class="d-ib lh-0 va-m fw-600 bdrs-10em pX-15 pY-15 bgc-red-50 c-red-500">@Model.OverDueFiles.Cancellation_Warning</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="layer w-100">
-                                <a href="/FileSystem/OverDueFiles">View all</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+<style>
+    .cover-back-area {
+        background: url('../assets/static/images/default-cover-copy.png');
+        background-size: cover;
     }
-}
-
-<div class="form-row">
-    <div class="col-md-6">
-        @*<div id="transfercontainer54" style="min-width: 310px; height: 400px; max-width: 600px; margin: 0 auto"></div>*@
-        <div id="transfercontainer54" style="min-width: 50px; height: 100px; max-width: 300px; margin: 0 auto"></div>
+       /* .cover-back-area::after {
+            background-image: linear-gradient(to bottom, transparent, #eaeaea);
+            content: '';
+            display: block;
+            height: 8%;
+            bottom: 0px;
+            position: absolute;
+            width: 100%;
+            left: 0%;
+        }*/
+</style>,
+<div class="form-row col-md-12 cover-back-area">
+    <div class="form-row col-md-12 ">
+        <div class="col-md-12" style="text-align: center;">
+            <div class="form-row" style="display: inline-block;">
+                <h4 style="color: White">Plots</h4>
+            </div>
+        </div>       
+        <div class="col-md-12">
+            <div class="form-row">
+                <div class="col-md-2"></div>
+                @*<div class='col-md-2' style="box-shadow: 3px 0px 15px rgba(0, 0, 0, 0.3); margin-top: 10px;">
+            <div class="layers bd bgc-white p-10 mt-2">
+                <div class="layer w-100">
+                    <div class="peers ai-sb fxw-nw">
+                        <div class="peer peer-greed">
+                            <h6 class="lh-1">Total Plots</h6>
+                        </div>
+                        <div class="peer">
+                            <span class="d-ib lh-0 va-m fw-600 bdrs-10em pX-15 pY-15 bgc-green-50 c-green-500">@Model.Summary.Total_Plots</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="layer w-100">
+                    <a href="/Plots/PlotsDataDetailView/">View all</a>
+                </div>
+            </div>
+        </div>*@
+            <div class="col-md-8" style="align-items: center; justify-content: center; display: flex; flex-direction: row;">
+                <div class="hexy">
+                    <div class="hexy-overlay row">
+                        <button class="btn btn-outline-primary dets-btn-hexy" data-lnk="/Plots/PlotsDataDetailView/">Details &nbsp;<i class="fas fa-arrow-right view-dets-anim"></i>&nbsp;&nbsp;&nbsp;</button>
+                    </div>
+                    <div class="hex-content">
+                        <h6 class="hexy-title-lbl">Total Plots</h6>
+                        <span style="font-size: 0.9vw" class="">@Model.Summary.Total_Plots</span>
+                    </div>
+                </div>
+                <div class="hexy">
+                    <div class="hexy-overlay row">
+                        <button class="btn btn-outline-primary dets-btn-hexy" data-lnk="/Plots/VerifiedPlots/">Details &nbsp;<i class="fas fa-arrow-right view-dets-anim"></i>&nbsp;&nbsp;&nbsp;</button>
+                    </div>
+                    <div class="hex-content">
+                        <h6 class="hexy-title-lbl">Verified Plots</h6>
+                        <span style="font-size: 0.9vw " class="">@Model.Summary.VerifiedPlots</span>
+                    </div>
+                </div>
+                <div class="hexy">
+                    <div class="hexy-overlay row">
+                        <button class="btn btn-outline-primary dets-btn-hexy" data-lnk="/Plots/NotVerified/">Details &nbsp;<i class="fas fa-arrow-right view-dets-anim"></i>&nbsp;&nbsp;&nbsp;</button>
+                    </div>
+                    <div class="hex-content">
+                        <h6 class="hexy-title-lbl">Not Verified</h6>
+                        <span style="font-size: 0.9vw " class="">@Model.Summary.NotVerified</span>
+                    </div>
+                </div>
+                <div class="hexy">
+                    <div class="hexy-overlay row">
+                        <button class="btn btn-outline-primary dets-btn-hexy" data-lnk="/Plots/CancelledPlots/">Details &nbsp;<i class="fas fa-arrow-right view-dets-anim"></i>&nbsp;&nbsp;&nbsp;</button>
+                    </div>
+                    <div class="hex-content">
+                        <h6 class="hexy-title-lbl">Cancelled Plots</h6>
+                        <span style="font-size: 0.9vw " class="">@Model.Summary.Cancelled</span>
+                    </div>
+                </div>
+                <div class="hexy">
+                    <div class="hexy-overlay row">
+                        <button class="btn btn-outline-primary dets-btn-hexy" data-lnk="/Plots/HoldedPlots/">Details &nbsp;<i class="fas fa-arrow-right view-dets-anim"></i>&nbsp;&nbsp;&nbsp;</button>
+                    </div>
+                    <div class="hex-content">
+                        <h6 class="hexy-title-lbl">Hold Plots</h6>
+                        <span style="font-size: 0.9vw " class="">@Model.Summary.Holded</span>
+                    </div>
+                </div>
+                <div class="hexy">
+                    <div class="hexy-overlay row">
+                        <button class="btn btn-outline-primary dets-btn-hexy" data-lnk="/Plots/AvaiableForSalePlots/">Details &nbsp;<i class="fas fa-arrow-right view-dets-anim"></i>&nbsp;&nbsp;&nbsp;</button>
+                    </div>
+                    <div class="hex-content">
+                        <h6 class="hexy-title-lbl">Available For Sale</h6>
+                        <span style="font-size: 0.9vw " class="">@Model.Summary.AvaiableforSale</span>
+                    </div>
+                </div>
+                <div class="hexy">
+                    <div class="hexy-overlay row">
+                        <button class="btn btn-outline-primary dets-btn-hexy" data-lnk="/Plots/ContructedPlots/">Details &nbsp;<i class="fas fa-arrow-right view-dets-anim"></i>&nbsp;&nbsp;&nbsp;</button>
+                    </div>
+                    <div class="hex-content">
+                        <h6 class="hexy-title-lbl">Constructed</h6>
+                        <span style="font-size: 0.9vw " class="">@Model.Summary.Constructed</span>
+                    </div>
+                </div>
+                <div class="hexy">
+                    <div class="hexy-overlay row">
+                        <button class="btn btn-outline-primary dets-btn-hexy" data-lnk="/Plots/NonDevelopedPlots/">Details &nbsp;<i class="fas fa-arrow-right view-dets-anim"></i>&nbsp;&nbsp;&nbsp;</button>
+                    </div>
+                    <div class="hex-content">
+                        <h6 class="hexy-title-lbl">Non Constructed</h6>
+                        <span style="font-size: 0.9vw " class="">@Model.Summary.NonDeveloped</span>
+                    </div>
+                </div>
+            </div>
+                <div class="col-md-2"></div>
+            </div>
+        </div>
     </div>
-    <div class="col-md-6">
-        @if (User.IsInRole("Files Summary") || User.IsInRole("Administrator"))
+    <hr/>
+    @{
+        if (User.IsInRole("Files Summary") || User.IsInRole("Administrator"))
         {
-            @*<div id="transfercontainer544" style="min-width: 310px; height: 400px; max-width: 600px; margin: 0 auto"></div>*@
-            <div id="transfercontainer54" style="min-width: 10px; height: 50px; max-width: 100px; margin: 0 auto"></div>
-        }
-    </div>
-</div>
+        <div class="form-row col-md-12">
+                <div class="col-md-12"style="text-align: center;">
+                    <div class="form-row" style="display: inline-block;">
+                                <h4 style="color: White; margin-top: 50px;">Files Summary</h4>
+                     </div>
+                </div>
+                    <div class="col-md-12">
+                        <div class="form-row">
+                            <div class="col-md-2"></div>
+                            <div class="col-md-8" style="align-items: center; justify-content: center; display: flex; flex-direction: row; ">
+                                <div class="hexy">
+                                    <div class="hexy-overlay row">
+                                        <button class="btn btn-outline-primary dets-btn-hexy" data-lnk="/FileSystem/FileStatusView?status=15">Details &nbsp;<i class="fas fa-arrow-right view-dets-anim"></i>&nbsp;&nbsp;&nbsp;</button>
+                                    </div>
+                                    <div class="hex-content">
+                                        <h6 class="hexy-title-lbl">Cancelled Not Refunded</h6>
+                                        <span style="font-size: 0.9vw " class="">@Model.FilesSummary.Cancelled_Not_Refunded</span>
+                                    </div>
+                                </div>
+                                <div class="hexy">
+                                    <div class="hexy-overlay row">
+                                        <button class="btn btn-outline-primary dets-btn-hexy" data-lnk="/FileSystem/FileStatusView?status=2">Details &nbsp;<i class="fas fa-arrow-right view-dets-anim"></i>&nbsp;&nbsp;&nbsp;</button>
+                                    </div>
+                                    <div class="hex-content">
+                                        <h6 class="hexy-title-lbl">Pending Application Form</h6>
+                                        <span style="font-size: 0.9vw " class="">@Model.FilesSummary.Pending</span>
+                                    </div>
+                                </div>
+                                <div class="hexy">
+                                    <div class="hexy-overlay row">
+                                        <button class="btn btn-outline-primary dets-btn-hexy" data-lnk="/FileSystem/FileStatusView?status=13">Details &nbsp;<i class="fas fa-arrow-right view-dets-anim"></i>&nbsp;&nbsp;&nbsp;</button>
+                                    </div>
+                                    <div class="hex-content">
+                                        <h6 class="hexy-title-lbl">Cancelled Refunded Files</h6>
+                                        <span style="font-size: 0.9vw " class="">@Model.FilesSummary.Refund</span>
+                                    </div>
+                                </div>
+                                <div class="hexy">
+                                    <div class="hexy-overlay row">
+                                        <button class="btn btn-outline-primary dets-btn-hexy" data-lnk="/FileSystem/FileStatusView?status=1">Details &nbsp;<i class="fas fa-arrow-right view-dets-anim"></i>&nbsp;&nbsp;&nbsp;</button>
+                                    </div>
+                                    <div class="hex-content">
+                                        <h6 class="hexy-title-lbl">Registered</h6>
+                                        <span style="font-size: 0.9vw " class="">@Model.FilesSummary.Registered</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-2"></div>
 
+                        </div>
+                    </div>
+                </div>
+        <div class="form-row col-md-12">
+            <div class="col-md-12" style="text-align: center;">
+                <div class="form-row" style="display: inline-block;">
+                    <h4 style="color: White; margin-top: 50px;">Overdue Files Report</h4>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="form-row">
+                    <div class="col-md-2"></div>
+                    <div class="col-md-8" style="align-items: center; justify-content: center; display: flex; flex-direction: row; ">
+                        <div class="hexy">
+                            <div class="hexy-overlay row">
+                                <button class="btn btn-outline-primary dets-btn-hexy" data-lnk="/FileSystem/OverDueFiles">Details &nbsp;<i class="fas fa-arrow-right view-dets-anim"></i>&nbsp;&nbsp;&nbsp;</button>
+                            </div>
+                            <div class="hex-content">
+                                <h6 class="hexy-title-lbl">Qualifying for Warning</h6>
+                                <span style="font-size: 0.9vw " class="">@Model.OverDueFiles.Qualifying</span>
+                            </div>
+                        </div>
+                        <div class="hexy">
+                            <div class="hexy-overlay row">
+                                <button class="btn btn-outline-primary dets-btn-hexy" data-lnk="/FileSystem/OverDueFiles">Details &nbsp;<i class="fas fa-arrow-right view-dets-anim"></i>&nbsp;&nbsp;&nbsp;</button>
+                            </div>
+                            <div class="hex-content">
+                                <h6 class="hexy-title-lbl">First Warning Letter</h6>
+                                <span style="font-size: 0.9vw " class="">@Model.OverDueFiles.First_Warning</span>
+                            </div>
+                        </div>
+                        <div class="hexy">
+                            <div class="hexy-overlay row">
+                                <button class="btn btn-outline-primary dets-btn-hexy" data-lnk="/FileSystem/OverDueFiles">Details &nbsp;<i class="fas fa-arrow-right view-dets-anim"></i>&nbsp;&nbsp;&nbsp;</button>
+                            </div>
+                            <div class="hex-content">
+                                <h6 class="hexy-title-lbl">Second Warning Letter</h6>
+                                <span style="font-size: 0.9vw " class="">@Model.OverDueFiles.Second_Warning</span>
+                            </div>
+                        </div>
+                        <div class="hexy">
+                            <div class="hexy-overlay row">
+                                <button class="btn btn-outline-primary dets-btn-hexy" data-lnk="/FileSystem/OverDueFiles">Details &nbsp;<i class="fas fa-arrow-right view-dets-anim"></i>&nbsp;&nbsp;&nbsp;</button>
+                            </div>
+                            <div class="hex-content">
+                                <h6 class="hexy-title-lbl">Cancellation Letter</h6>
+                                <span style="font-size: 0.9vw " class="">@Model.OverDueFiles.Cancellation_Warning</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2"></div>
+
+                </div>
+            </div>
+            @*<div class="col-md-12">
+            <div class="form-row">
+                <div class="col-md-2" style="box-shadow: 3px 0px 15px rgba(0, 0, 0, 0.3); margin-top: 10px;">
+                    <div class="layers bd bgc-white p-10 mt-2" data-toggle="tooltip" data-placement="top" title="" data-original-title="Qualifying for First warning Letter">
+                        <div class="layer w-100">
+                            <div class="peers ai-sb fxw-nw">
+                                <div class="peer peer-greed">
+                                    <h6 class="lh-1">Qualifying for Warning</h6>
+                                </div>
+                                <div class="peer">
+                                    <span class="d-ib lh-0 va-m fw-600 bdrs-10em pX-15 pY-15 bgc-red-50 c-red-500">@Model.OverDueFiles.Qualifying</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layer w-100">
+                            <a href="/FileSystem/OverDueFiles">View all</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2" style="box-shadow: 3px 0px 15px rgba(0, 0, 0, 0.3); margin-top: 10px;">
+                    <div class="layers bd bgc-white p-10 mt-2" data-toggle="tooltip" data-placement="top" title="" data-original-title="First Warning Letter Issued Files">
+                        <div class="layer w-100">
+                            <div class="peers ai-sb fxw-nw">
+                                <div class="peer peer-greed">
+                                    <h6 class="lh-1">First Warning Letter</h6>
+                                </div>
+                                <div class="peer">
+                                    <span class="d-ib lh-0 va-m fw-600 bdrs-10em pX-15 pY-15 bgc-red-50 c-red-500">@Model.OverDueFiles.First_Warning</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layer w-100">
+                            <a href="/FileSystem/OverDueFiles">View all</a>
+                        </div>
+                    </div>
+                </div>
+                <div class='col-md-2' style="box-shadow: 3px 0px 15px rgba(0, 0, 0, 0.3); margin-top: 10px;">
+                    <div class="layers bd bgc-white p-10 mt-2" data-toggle="tooltip" data-placement="top" title="" data-original-title="Second Warning Letter Issued Files">
+                        <div class="layer w-100">
+                            <div class="peers ai-sb fxw-nw">
+                                <div class="peer peer-greed">
+                                    <h6 class="lh-1">Second Warning Letter</h6>
+                                </div>
+                                <div class="peer">
+                                    <span class="d-ib lh-0 va-m fw-600 bdrs-10em pX-15 pY-15 bgc-red-50 c-red-500">@Model.OverDueFiles.Second_Warning</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layer w-100">
+                            <a href="/FileSystem/OverDueFiles">View all</a>
+                        </div>
+                    </div>
+                </div>
+                <div class='col-md-2' style="box-shadow: 3px 0px 15px rgba(0, 0, 0, 0.3); margin-top: 10px;">
+                    <div class="layers bd bgc-white p-10 mt-2" data-toggle="tooltip" data-placement="top" title="" data-original-title="Cancellation Letter Issued Files">
+                        <div class="layer w-100">
+                            <div class="peers ai-sb fxw-nw">
+                                <div class="peer peer-greed">
+                                    <h6 class="lh-1">Cancellation Letter</h6>
+                                </div>
+                                <div class="peer">
+                                    <span class="d-ib lh-0 va-m fw-600 bdrs-10em pX-15 pY-15 bgc-red-50 c-red-500">@Model.OverDueFiles.Cancellation_Warning</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layer w-100">
+                            <a href="/FileSystem/OverDueFiles">View all</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>*@
+        </div>
+            }
+            }
+
+            <div class="form-row">
+                <div class="col-md-6">
+                    @*<div id="transfercontainer54" style="min-width: 310px; height: 400px; max-width: 600px; margin: 0 auto"></div>*@
+                    <div id="transfercontainer54" style="min-width: 50px; height: 100px; max-width: 300px; margin: 0 auto"></div>
+                </div>
+                <div class="col-md-6">
+                    @if (User.IsInRole("Files Summary") || User.IsInRole("Administrator"))
+                    {
+                        @*<div id="transfercontainer544" style="min-width: 310px; height: 400px; max-width: 600px; margin: 0 auto"></div>*@
+                        <div id="transfercontainer54" style="min-width: 10px; height: 50px; max-width: 100px; margin: 0 auto"></div>
+                    }
+                </div>
+            </div>
+        </div>
 <script>
-                            //$(document).ready(function () {
-                            //    $('.files-tab-rep').load('/Reports/FilesTabularSummary/');
-                            //});
+    //$(document).ready(function () {
+    //    $('.files-tab-rep').load('/Reports/FilesTabularSummary/');
+    //});
 </script>
+<script>
+    $(document).ready(function () {
+        $('.dets-btn-hexy').unbind().click(function () {
+            let link = $(this).attr('data-lnk');
+            window.open(link, "_blank");
+        });
+    });
+</script>
+<style>
+    .hexy-title-lbl {
+        /*font-weight: bolder;*/
+        /*font-size: 0.8vw;*/
+        /*width: 85%;*/
+        word-break: break-word;
+        margin-bottom: 0px;
+    }
+</style>
+
+<style>
+    /* #1f1f1f #f1c07b  #8b6d48  */
+    .hexy {
+        position: relative;
+        margin: 5px 5px;
+        background: transparent linear-gradient( 151deg, #8b6d48 4%, #b38961 24%, #d5a07a 45%, #eac194 61%, #f1c07b 70%) 0% 0% no-repeat padding-box;
+        /* height: 113.2050807569px;
+        width: 65px;*/
+        height: 150px;  Adjust height if necessary 
+        width: 130px;  Adjust width if necessary 
+        /*height: 113.2050807569px;
+        width: 65px;*/
+        /*outline: 1px solid red;*/
+        display: inline-block;
+        margin-left: 60px; /* Half the height of the hexagon */
+    }
+
+    .hexy,
+    .hexy:before,
+    .hexy:after {
+        height: 113.2050807569px;
+        width: 65px;
+    }
+
+    .hexy:hover,
+    .hexy:before:hover,
+    .hexy:after:hover {
+        background: transparent linear-gradient( 151deg, #8b6d48 4%, #b38961 24%, #d5a07a 45%, #eac194 61%, #f1c07b 70%) 0% 0% no-repeat padding-box;
+        /* background: transparent linear-gradient( 151deg, black 4%, #1f1f1f 24%, #f1c07b 45%, #8b6d48 61%, #f1c07b 70%) 0% 0% no-repeat padding-box;*/
+        cursor: pointer;
+    }
+
+    .hexy:before {
+        position: absolute;
+        content: "";
+        background: transparent linear-gradient( 151deg, #8b6d48 4%, #b38961 24%, #d5a07a 45%, #eac194 61%, #f1c07b 70%) 0% 0% no-repeat padding-box;
+        /*                background: transparent linear-gradient( 151deg, black 4%, #1f1f1f 24%, #f1c07b 45%, #f1c07b 61%, #8b6d48 70%) 0% 0% no-repeat padding-box;
+        */ transform: rotate(60deg);
+        overflow: hidden;
+    }
+
+    .hexy:after {
+        position: absolute;
+        content: "";
+        background: transparent linear-gradient( 151deg, #8b6d48 4%, #b38961 24%, #d5a07a 45%, #eac194 61%, #f1c07b 70%) 0% 0% no-repeat padding-box;
+        /*                background: transparent linear-gradient( 151deg, black 4%, #1f1f1f 24%, #f1c07b 45%, #f1c07b 61%, #8b6d48 70%) 0% 0% no-repeat padding-box;
+        */ transform: rotate(-60deg);
+        /*overflow: hidden;*/
+    }
+
+    /*.hexy:hover {
+    background-color: #E48B34;
+    cursor: pointer;
+    z-index: 105;
+    }*/
+    .hexy:nth-child(odd) {
+        top: 0px;
+    }
+
+    .hexynone {
+        position: relative;
+        display: inline-block;
+        height: 113.2050807569px;
+        width: 65px;
+        margin: 1px 26px;
+    }
+
+        .hexynone:nth-child(odd) {
+            top: 60px;
+        }
+
+    .hex-content {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 100px;
+        font-size: 1rem;
+        text-align: center;
+        z-index: 4;
+        color: black;
+    }
+
+            /*.hex-img {
+    background-color: green;
+    background-position: 50% 50%;
+    background-size: 100%;
+    background-repeat: no-repeat;
+    margin-bottom: 0;
+    height: $height;
+    width: $width*2;
+    }*/
+    .hex-container {
+        width: 85%;
+        height: auto;
+        margin: 0 auto;
+    }
+
+    .ibws-fix {
+        /* inline-block whitespace fix */
+        font-size: 0;
+    }
+
+    .hexyinner {
+        position: absolute;
+        /*margin: 1px $hex-margin;*/
+        background-color: black;
+        opacity: 0.5;
+        height: 113.8845726812px;
+        width: 65px;
+        top: 0px;
+        left: 0px;
+        /*outline: 1px solid red;*/
+        display: inline-block;
+    }
+
+    .hexyinner,
+    .hexyinner:before,
+    .hexyinner:after {
+        height: 113.8845726812px;
+        width: 65px;
+        z-index: 20;
+    }
+
+    .hexyinner:before {
+        position: absolute;
+        content: "";
+        background-color: inherit;
+        transform: rotate(60deg);
+        overflow: hidden;
+    }
+
+    .hexyinner:after {
+        position: absolute;
+        content: "";
+        background-color: inherit;
+        transform: rotate(-60deg);
+        overflow: hidden;
+    }
+
+    .hexy-overlay {
+        width: 130px;
+        height: 100%;
+        position: absolute;
+        background-color: rgba(0,0,0,0.85);
+        left: -27%;
+        top: 0;
+        z-index: 6;
+        clip-path: polygon(20% 0, 80% 0, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
+        display: none;
+        transition: .3s linear;
+        justify-content: center;
+        align-items: center;
+        transition: .3s linear;
+    }
+
+    .hexy:hover .hexy-overlay {
+        display: flex;
+        transition: .3s linear;
+    }
+
+            /*.hexy:hover {
+    transform: rotateZ( 360deg );
+    transition: .8s linear;
+                }*/
+
+    .hexy:hover .view-dets-anim {
+        animation: arrow-anim;
+        transform-origin: 0% 0%;
+        transition: .1s linear;
+        animation-duration: 2s;
+        animation-iteration-count: infinite;
+    }
+
+    @@keyframes arrow-anim {
+        0% {
+            transform: scaleX(1.0);
+        }
+                /*10% {
+        transform: scaleX(1.1);
+    }
+    20% {
+        transform: scaleX(1.2);
+    }
+    30% {
+        transform: scaleX(1.3);
+    }
+    40% {
+        transform: scaleX(1.4);
+    }*/
+                50% {
+                    transform: scaleX(1.8);
+                }
+                /*60% {
+        transform: scaleX(1.4);
+    }
+    70% {
+        transform: scaleX(1.3);
+    }
+    80% {
+        transform: scaleX(1.2);
+    }
+    90% {
+        transform: scaleX(1.1);
+    }*/
+                100% {
+                    transform: scaleX(1.0);
+                }
+            }
+</style>

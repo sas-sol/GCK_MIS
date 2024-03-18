@@ -17,8 +17,7 @@
         .header .header-container .nav-left .notifications .dropdown-menu, .header .header-container .nav-right .notifications .dropdown-menu {
             max-width: 300px;
             margin: 0px -90px 0px 0px;
-      /* font-style:Papyrus */   
-
+            /* font-style:Papyrus */
         }
     }
 </style>
@@ -66,11 +65,12 @@
         });
 
     </script>*@
+@*#8b6d48 this is the gold dark shade #8B0000*@
 <div class="header navbar no-print">
-    <div class="header-container gradient" style="background-color: #C4A484; box-shadow: 5px 5px 10px; height:65px;">
+    <div class="header-container gradient" style="background: linear-gradient(to right, #1f1f1f, #8b6d48); box-shadow: 5px 5px 10px; height: 65px; ">
         <ul class="nav-left">
             <li><a id="sidebar-toggle" class="sidebar-toggle" href="javascript:void(0);"><i class="ti-menu"></i></a></li>
-            <li style="padding:10px"><span style="font-size: 25px; color:black; font-family: Arial;"><p>@ViewBag.Company</p></span> </li>
+            <li style="padding:10px"><span style="font-size: 25px; color: #f1c07b; font-family: Arial;"><p>@ViewBag.Company</p></span> </li>
         </ul>
         <ul class="nav-right">
             <li class="notifications dropdown">
@@ -137,10 +137,10 @@
                                         </a>
                                     </li>
                                     @*<script>
-                                        var date = '@item.CreatedAt';
-                                        var t = moment(date).fromNow();
-                                        $("#t-@item.Id").text(t);
-                                    </script>*@
+                                            var date = '@item.CreatedAt';
+                                            var t = moment(date).fromNow();
+                                            $("#t-@item.Id").text(t);
+                                        </script>*@
                                 }
                             }
                             else
@@ -192,7 +192,7 @@
                         }
                     }
                     <li><a href="/Activity/MyActivity" class="d-b td-n pY-5 bgcH-grey-100 c-grey-700"><i class="ti-user mR-10"></i> <span>My Activity</span></a></li>
-                   @* <li><a href="/HumanResource/Detail/" class="d-b td-n pY-5 bgcH-grey-100 c-grey-700"><i class="ti-user mR-10"></i> <span>Profile</span></a></li>*@
+                    @* <li><a href="/HumanResource/Detail/" class="d-b td-n pY-5 bgcH-grey-100 c-grey-700"><i class="ti-user mR-10"></i> <span>Profile</span></a></li>*@
                     <li role="separator" class="divider"></li>
                     <li><a href="javascript:document.getElementById('logoutForm').submit()" class="d-b td-n pY-5 bgcH-grey-100 c-grey-700"><i class="ti-power-off mR-10"></i> <span>Logout</span></a></li>
                     @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm" }))
