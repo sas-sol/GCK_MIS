@@ -653,9 +653,9 @@
                                 $(data.Receiptid).each(function (i) {
                                     window.open("/Banking/Receipt?Id=" + data.Receiptid[i] + "&Token=" + data.Token, '_blank');
                                 });
-                                if (data.PaymentNo != '0') {
-                                    window.open("/Vouchers/SAGVouchers_Vendor?Id=" + data.PaymentNo + "&Token=" + data.TokenV, '_blank');
-                                }
+                                //if (data.PaymentNo != '0') {
+                                //    window.open("/Vouchers/SAGVouchers_Vendor?Id=" + data.PaymentNo + "&Token=" + data.TokenV, '_blank');
+                                //}
                                 //window.location.reload();
                             }
                         }

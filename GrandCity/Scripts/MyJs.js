@@ -5775,6 +5775,7 @@ $(document).on("click", "#plt-transf-veri", function () {
 });
 //
 $(document).on("click", "#file-tran-req-det", function () {
+    debugger;
     var fileno = $("#req-file-no").val();
     if (fileno) {
         $("#tran-data").empty();

@@ -31,22 +31,28 @@
         foreach (var item in Model.Where(x => x.Type == MeherEstateDevelopers.Models.ReceiptTypes.Transfer.ToString()))
         {
 
-            <table cellspacing="0" border="0" style="width:1000px">
+            <table cellspacing="0" border="0" style="width:1000px;    position: absolute;margin-top: 30px;">
                 <tr>
-                    <td width="800px" align="right" valign=bottom style="padding-right: 95px;">
-                        <img src="~/assets/static/images/TransferReceipt/customer.png" width=450 height=125>
+                    <td width="238px" align="left" valign=bottom style="padding-right: 95px;"></td>
+                    <td width="215px" align="center" valign="bottom">
+                        <div style="background-color:#EBA752;color:white;font-weight:bold;font-size:large ">
+                            @item.Type.ToUpper() RECEIPT
+                        </div>
                     </td>
-                    <td width="200px" align="right" valign=bottom>
-                        <img src="~/assets/static/images/customer-copy.png" width=125 height=125>
-                    </td>
+                    <td width="333px" align="right" valign=bottom></td>s
                 </tr>
             </table>
             <table cellspacing="0" border="0" style="width:1000px">
                 <tr>
-                    <td width="250px"></td>
+                    <td width="238px" align="left" valign=bottom style="padding-right: 95px;">
+                        <img src="~/assets/static/images/K-04.png" style="height:90px;width:140px;padding-left:10px">
+                    </td>
                     <td width="90px" valign=bottom style="font-weight:bold">Receipt No.</td>
                     <td width="125px" align="center" valign=bottom style="border-bottom:1px solid">@item.ReceiptNo</td>
-                    <td width="246x" valign=bottom></td>
+
+                    <td width="333px" align="right" valign=bottom>
+                        <img src="~/assets/static/images/customer-copy_i.png" width=80 height=90>
+                    </td>
                 </tr>
             </table>
             @*<table cellspacing="0" border="0" style="width:1000px">
@@ -138,22 +144,28 @@
                     <td align="center" valign="middle"></td>
                 </tr>
             </table>
-            <table bgcolor="#F7DCF7" cellspacing="0" border="0" style="width:1000px">
+            <table cellspacing="0" border="0" style="width:1000px;    position: absolute;margin-top: 30px;">
                 <tr>
-                    <td width="800px" align="right" valign=bottom style="padding-right: 95px;">
-                        <img src="~/assets/static/images/TransferReceipt/accounts.png" width=450 height=125>
+                    <td width="238px" align="left" valign=bottom style="padding-right: 95px;"></td>
+                    <td width="215px" align="center" valign="bottom">
+                        <div style="background-color:#EBA752;color:white;font-weight:bold;font-size:large ">
+                            @item.Type.ToUpper() RECEIPT
+                        </div>
                     </td>
-                    <td width="200px" align="right" valign=bottom>
-                        <img src="~/assets/static/images/accounts-copy.png" width=125 height=125>
-                    </td>
+                    <td width="333px" align="right" valign=bottom></td>
                 </tr>
             </table>
-            <table bgcolor="#F7DCF7" cellspacing="0" border="0" style="width:1000px">
+            <table cellspacing="0" border="0" style="width:1000px">
                 <tr>
-                    <td width="250px"></td>
+                    <td width="238px" align="left" valign=bottom style="padding-right: 95px;">
+                        <img src="~/assets/static/images/K-04.png" style="height:90px;width:140px;padding-left:10px">
+                    </td>
                     <td width="90px" valign=bottom style="font-weight:bold">Receipt No.</td>
                     <td width="125px" align="center" valign=bottom style="border-bottom:1px solid">@item.ReceiptNo</td>
-                    <td width="246x" valign=bottom></td>
+
+                    <td width="333px" align="right" valign=bottom>
+                        <img src="~/assets/static/images/accounts-copy.png" width=80 height=90>
+                    </td>
                 </tr>
             </table>
             @*<table bgcolor="#F7DCF7" cellspacing="0" border="0" style="width:1000px">
@@ -248,22 +260,28 @@
             </table>
 
 
-            <table bgcolor="#FAFAC6" cellspacing="0" border="0" style="width:1000px">
+            <table cellspacing="0" border="0" style="width:1000px;    position: absolute;margin-top: 30px;">
                 <tr>
-                    <td width="800px" align="right" valign=bottom style="padding-right: 95px;">
-                        <img src="~/assets/static/images/TransferReceipt/file.png" width=450 height=125>
+                    <td width="238px" align="left" valign=bottom style="padding-right: 95px;"></td>
+                    <td width="215px" align="center" valign="bottom">
+                        <div style="background-color:#EBA752;color:white;font-weight:bold;font-size:large ">
+                            @item.Type.ToUpper() RECEIPT
+                        </div>
                     </td>
-                    <td width="200px" align="right" valign=bottom>
-                        <img src="~/assets/static/images/files-copy.png" width=125 height=125>
-                    </td>
+                    <td width="333px" align="right" valign=bottom></td>
                 </tr>
             </table>
-            <table bgcolor="#FAFAC6" cellspacing="0" border="0" style="width:1000px">
+            <table cellspacing="0" border="0" style="width:1000px">
                 <tr>
-                    <td width="250px"></td>
+                    <td width="238px" align="left" valign=bottom style="padding-right: 95px;">
+                        <img src="~/assets/static/images/K-04.png" style="height:90px;width:140px;padding-left:10px">
+                    </td>
                     <td width="90px" valign=bottom style="font-weight:bold">Receipt No.</td>
                     <td width="125px" align="center" valign=bottom style="border-bottom:1px solid">@item.ReceiptNo</td>
-                    <td width="246x" valign=bottom></td>
+
+                    <td width="333px" align="right" valign=bottom>
+                        <img src="~/assets/static/images/files-copy.png" width=80 height=90>
+                    </td>
                 </tr>
             </table>
             @*<table bgcolor="#FAFAC6" cellspacing="0" border="0" style="width:1000px">

@@ -25,61 +25,28 @@
     </style>
 </head>
 <body>
-    <table cellspacing="0" border="0" style="width:1000px">
+    <table cellspacing="0" border="0" style="width:1000px;    position: absolute;margin-top: 30px;">
         <tr>
-            <td width="800px" align="right" valign=bottom style="padding-right: 95px;">
-                @if (Model.Type == "Fines_Penalities")
-                {
-                    <img src="~/assets/static/images/fine_penalties/customer.png" width=450 height=125>
-                }
-                else if (Model.Type == "Power_Of_Attorney")
-                {
-                    <img src="~/assets/static/images/pow attor/customer.png" width=450 height=125>
-                }
-                else if (Model.Type == "Duplicate_AllotmentLetter")
-                {
-                    <img src="~/assets/static/images/duplicate allot/customer.png" width=450 height=125>
-                }
-                else if (Model.Type == "Duplicate_Customer_File")
-                {
-                    <img src="~/assets/static/images/dup-cust-file/customer.png" width=450 height=125>
-                }
-                else if (Model.Type == "Out_Station_Charges")
-                {
-                    <img src="~/assets/static/images/outstation/customer.png" width=450 height=125>
-                }
-                else if (Model.Type == "Other_Recovery")
-                {
-                    <img src="~/assets/static/images/otherrec/customer.png" width=450 height=125>
-                }
-                else if (Model.Type == "Other_Transfer_Charges")
-                {
-                    <img src="~/assets/static/images/othertransfer/customer.png" width=450 height=125>
-                }
-                else if (Model.Type == "Advance_Tax_236_C")
-                {
-                    <img src="~/assets/static/images/advancetax236c/customer.png" width=450 height=125>
-                }
-                else if (Model.Type == MeherEstateDevelopers.Models.ReceiptTypes.Other_Transfer_Charges.ToString())
-                {
-                    <img src="~/assets/static/images/Other_Transfer/customer.png" width=450 height=125>
-                }
-                else if (Model.Type == MeherEstateDevelopers.Models.ReceiptTypes.Possession_Charges.ToString())
-                {
-                    <img src="~/assets/static/images/possession/customer.png" width=450 height=125>
-                }
+            <td width="238px" align="left" valign=bottom style="padding-right: 95px;"></td>
+            <td width="215px" align="center" valign="bottom">
+                <div style="background-color:#EBA752;color:white;font-weight:bold;font-size:large ">
+                    @Model.Type.ToUpper() RECEIPT
+                </div>
             </td>
-            <td width="200px" align="right" valign=bottom>
-                <img src="~/assets/static/images/customer-copy.png" width=125 height=125>
-            </td>
+            <td width="333px" align="right" valign=bottom></td>
         </tr>
     </table>
     <table cellspacing="0" border="0" style="width:1000px">
         <tr>
-            <td width="250px"></td>
+            <td width="238px" align="left" valign=bottom style="padding-right: 95px;">
+                <img src="~/assets/static/images/K-04.png" style="height:90px;width:140px;padding-left:10px">
+            </td>
             <td width="90px" valign=bottom style="font-weight:bold">Receipt No.</td>
             <td width="125px" align="center" valign=bottom style="border-bottom:1px solid">@Model.ReceiptNo</td>
-            <td width="246x" valign=bottom></td>
+
+            <td width="333px" align="right" valign=bottom>
+                <img src="~/assets/static/images/customer-copy_i.png" width=80 height=90>
+            </td>
         </tr>
     </table>
     <table cellspacing="0" border="0" style="width:1000px">
@@ -110,14 +77,14 @@
             <td width="260px" align="center" valign=bottom style="border-bottom:1px solid">@string.Format("{0:D}", DateTime.Now)</td>
         </tr>
     </table>
-  
-        <table class="bank" cellspacing="0" border="0" style="width:1000px">
-            <tr>
-                <td width="100px" align="left" valign=bottom style="font-weight:bold">Reason</td>
-                <td width="900px" align="center" valign=bottom style="border-bottom:1px solid">@Model.DevelopmentCharges</td>
-            </tr>
-        </table>
-  
+
+    <table class="bank" cellspacing="0" border="0" style="width:1000px">
+        <tr>
+            <td width="100px" align="left" valign=bottom style="font-weight:bold">Reason</td>
+            <td width="900px" align="center" valign=bottom style="border-bottom:1px solid">@Model.DevelopmentCharges</td>
+        </tr>
+    </table>
+
     <table cellspacing="0" border="0" style="width:1000px">
         <tr>
             <td width="100px" align="left" valign=bottom style="font-weight:bold">Plot No </td>
@@ -162,61 +129,28 @@
         </tr>
     </table>
 
-    <table bgcolor="#F7DCF7" cellspacing="0" border="0" style="width:1000px">
+    <table cellspacing="0" border="0" style="width:1000px;    position: absolute;margin-top: 30px;">
         <tr>
-            <td width="800px" align="right" valign=bottom style="padding-right: 95px;">
-                @if (Model.Type == "Fines_Penalities")
-                {
-                    <img src="~/assets/static/images/fine_penalties/accounts.png" width=450 height=125>
-                }
-                else if (Model.Type == "Power_Of_Attorney")
-                {
-                    <img src="~/assets/static/images/pow attor/accounts.png" width=450 height=125>
-                }
-                else if (Model.Type == "Duplicate_AllotmentLetter")
-                {
-                    <img src="~/assets/static/images/duplicate allot/accounts.png" width=450 height=125>
-                }
-                else if (Model.Type == "Duplicate_Customer_File")
-                {
-                    <img src="~/assets/static/images/dup-cust-file/accounts.png" width=450 height=125>
-                }
-                else if (Model.Type == "Other_Recovery")
-                {
-                    <img src="~/assets/static/images/otherrec/accounts.png" width=450 height=125>
-                }
-                else if (Model.Type == "Out_Station_Charges")
-                {
-                    <img src="~/assets/static/images/outstation/accounts.png" width=450 height=125>
-                }
-                else if (Model.Type == "Other_Transfer_Charges")
-                {
-                    <img src="~/assets/static/images/othertransfer/accounts.png" width=450 height=125>
-                }
-                else if (Model.Type == "Advance_Tax_236_C")
-                {
-                    <img src="~/assets/static/images/advancetax236c/accounts.png" width=450 height=125>
-                }
-                else if (Model.Type == MeherEstateDevelopers.Models.ReceiptTypes.Other_Transfer_Charges.ToString())
-                {
-                    <img src="~/assets/static/images/Other_Transfer/accounts.png" width=450 height=125>
-                }
-                else if (Model.Type == MeherEstateDevelopers.Models.ReceiptTypes.Possession_Charges.ToString())
-                {
-                    <img src="~/assets/static/images/possession/accounts.png" width=450 height=125>
-                }
+            <td width="238px" align="left" valign=bottom style="padding-right: 95px;"></td>
+            <td width="215px" align="center" valign="bottom">
+                <div style="background-color:#EBA752;color:white;font-weight:bold;font-size:large ">
+                    @Model.Type.ToUpper() RECEIPT
+                </div>
             </td>
-            <td width="200px" align="right" valign=bottom>
-                <img src="~/assets/static/images/accounts-copy.png" width=125 height=125>
-            </td>
+            <td width="333px" align="right" valign=bottom></td>
         </tr>
     </table>
-    <table bgcolor="#F7DCF7" cellspacing="0" border="0" style="width:1000px">
+    <table cellspacing="0" border="0" style="width:1000px">
         <tr>
-            <td width="250px"></td>
+            <td width="238px" align="left" valign=bottom style="padding-right: 95px;">
+                <img src="~/assets/static/images/K-04.png" style="height:90px;width:140px;padding-left:10px">
+            </td>
             <td width="90px" valign=bottom style="font-weight:bold">Receipt No.</td>
             <td width="125px" align="center" valign=bottom style="border-bottom:1px solid">@Model.ReceiptNo</td>
-            <td width="246x" valign=bottom></td>
+
+            <td width="333px" align="right" valign=bottom>
+                <img src="~/assets/static/images/accounts-copy.png" width=80 height=90>
+            </td>
         </tr>
     </table>
 
@@ -248,14 +182,14 @@
             <td width="260px" align="center" valign=bottom style="border-bottom:1px solid">@string.Format("{0:D}", DateTime.Now)</td>
         </tr>
     </table>
-  
+
     <table bgcolor="#F7DCF7" class="bank" cellspacing="0" border="0" style="width:1000px">
         <tr>
             <td width="100px" align="left" valign=bottom style="font-weight:bold">Reason</td>
             <td width="900px" align="center" valign=bottom style="border-bottom:1px solid">@Model.DevelopmentCharges</td>
         </tr>
     </table>
-    
+
     <table bgcolor="#F7DCF7" cellspacing="0" border="0" style="width:1000px">
         <tr>
 
@@ -302,63 +236,28 @@
             <td align="center" valign="middle"></td>
         </tr>
     </table>
-
-
-    <table bgcolor="#FAFAC6" cellspacing="0" border="0" style="width:1000px">
+    <table cellspacing="0" border="0" style="width:1000px;    position: absolute;margin-top: 30px;">
         <tr>
-            <td width="800px" align="right" valign=bottom style="padding-right: 95px;">
-                @if (Model.Type == "Fines_Penalities")
-                {
-                    <img src="~/assets/static/images/fine_penalties/file.png" width=450 height=125>
-                }
-                else if (Model.Type == "Power_Of_Attorney")
-                {
-                    <img src="~/assets/static/images/pow attor/file.png" width=450 height=125>
-                }
-                else if (Model.Type == "Duplicate_AllotmentLetter")
-                {
-                    <img src="~/assets/static/images/duplicate allot/file.png" width=450 height=125>
-                }
-                else if (Model.Type == "Duplicate_Customer_File")
-                {
-                    <img src="~/assets/static/images/dup-cust-file/file.png" width=450 height=125>
-                }
-                else if (Model.Type == "Other_Recovery")
-                {
-                    <img src="~/assets/static/images/otherrec/file.png" width=450 height=125>
-                }
-                else if (Model.Type == "Out_Station_Charges")
-                {
-                    <img src="~/assets/static/images/outstation/file.png" width=450 height=125>
-                }
-                else if (Model.Type == "Other_Transfer_Charges")
-                {
-                    <img src="~/assets/static/images/othertransfer/file.png" width=450 height=125>
-                }
-                else if (Model.Type == "Advance_Tax_236_C")
-                {
-                    <img src="~/assets/static/images/advancetax236c/file.png" width=450 height=125>
-                }
-                else if (Model.Type == MeherEstateDevelopers.Models.ReceiptTypes.Other_Transfer_Charges.ToString())
-                {
-                    <img src="~/assets/static/images/Other_Transfer/file.png" width=450 height=125>
-                }
-                else if (Model.Type == MeherEstateDevelopers.Models.ReceiptTypes.Possession_Charges.ToString())
-                {
-                    <img src="~/assets/static/images/possession/file.png" width=450 height=125>
-                }
+            <td width="238px" align="left" valign=bottom style="padding-right: 95px;"></td>
+            <td width="215px" align="center" valign="bottom">
+                <div style="background-color:#EBA752;color:white;font-weight:bold;font-size:large ">
+                    @Model.Type.ToUpper() RECEIPT
+                </div>
             </td>
-            <td width="200px" align="right" valign=bottom>
-                <img src="~/assets/static/images/files-copy.png" width=125 height=125>
-            </td>
+            <td width="333px" align="right" valign=bottom></td>
         </tr>
     </table>
-    <table bgcolor="#FAFAC6" cellspacing="0" border="0" style="width:1000px">
+    <table cellspacing="0" border="0" style="width:1000px">
         <tr>
-            <td width="250px"></td>
+            <td width="238px" align="left" valign=bottom style="padding-right: 95px;">
+                <img src="~/assets/static/images/K-04.png" style="height:90px;width:140px;padding-left:10px">
+            </td>
             <td width="90px" valign=bottom style="font-weight:bold">Receipt No.</td>
             <td width="125px" align="center" valign=bottom style="border-bottom:1px solid">@Model.ReceiptNo</td>
-            <td width="246x" valign=bottom></td>
+
+            <td width="333px" align="right" valign=bottom>
+                <img src="~/assets/static/images/files-copy.png" width=80 height=90>
+            </td>
         </tr>
     </table>
 
@@ -390,14 +289,14 @@
             <td width="260px" align="center" valign=bottom style="border-bottom:1px solid">@string.Format("{0:D}", DateTime.Now)</td>
         </tr>
     </table>
-   
+
     <table bgcolor="#FAFAC6" class="bank" cellspacing="0" border="0" style="width:1000px">
         <tr>
             <td width="100px" align="left" valign=bottom style="font-weight:bold">Reason</td>
             <td width="900px" align="center" valign=bottom style="border-bottom:1px solid">@Model.DevelopmentCharges</td>
         </tr>
     </table>
-    
+
     <table bgcolor="#FAFAC6" cellspacing="0" border="0" style="width:1000px">
         <tr>
 
