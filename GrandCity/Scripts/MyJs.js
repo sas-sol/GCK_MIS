@@ -2500,12 +2500,32 @@ $(document).on("click", "#sea-file-data-deliv", function () {
     });
 });
 // enable all inputs of a user to update a information
+//$(document).on("click", "#upd-info", function () {
+//    alert("Are you sure you want to save updated owner information?");
+//    $(".file-owner-data-nsdjk :input").prop("readonly", false);
+//    $(".owner-stat-jfkldgf").prop("disabled", false);
+//    $("#upd-info").hide();
+//    //$("#sav-info").show();
+//    $(".updt-exstng-owner-rec-dsffskfs").show();
+//});
 $(document).on("click", "#upd-info", function () {
-    $(".file-owner-data-nsdjk :input").prop("readonly", false);
-    $(".owner-stat-jfkldgf").prop("disabled", false);
-    $("#upd-info").hide();
-    //$("#sav-info").show();
-    $(".updt-exstng-owner-rec-dsffskfs").show();
+   // alert("Are you sure you want to save updated owner information?");
+    Swal.fire({
+        text: 'Are you sure you want to update the owners information?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $(".file-owner-data-nsdjk :input").prop("readonly", false);
+            $(".owner-stat-jfkldgf").prop("disabled", false);
+            $("#upd-info").hide();
+            //$("#sav-info").show();
+            $(".updt-exstng-owner-rec-dsffskfs").show();
+        }
+    });
+
 });
 // SAve the updated information
 $(document).on("click", "#sav-info", function () {
@@ -7426,6 +7446,14 @@ $(document).on("click", ".up-plot-det", function () {
        SASUnLoad("#plot-det")
     });
 });
+$(document).on("click", ".up-file-det", function () {
+    debugger;
+    var id = $('#file-id').val();
+    SASLoad("#File-det")
+    $("#File-det").load("/FileSystem/UpdateFileInformation?", { fileid: id }, function () {
+        SASUnLoad("#File-det")
+    });
+});
 
 // 
 $(document).on("click", ".up-com-det", function () {
@@ -7557,6 +7585,7 @@ $(document).on("click", "#addplot", function () {
 //......
 $(document).on("click", ".upd-info", function () {
     debugger
+    //alert("Are you sure you want to update the owners information?");
     Swal.fire({
         text: 'Are you sure you want to update the owners information?',
         icon: 'question',
@@ -7571,9 +7600,9 @@ $(document).on("click", ".upd-info", function () {
             $("#" + id + " .sav-info").show();
             $("#" + id + " .own-img").show();
         }
-
     });
 });
+
 //.....update commercial..
 $(document).on("click", ".com-upd-info", function () {
     var id = $(this).closest(".own-det").attr("id");
@@ -7643,14 +7672,15 @@ $(document).on("click", ".sav-info", function () {
         });
         return false;
     }
-    Swal.fire({
-        text: 'Are you sure you want to save updated owner information?',
-        icon: 'question',
-        showCancelButton: true,
-        confirmButtonText: 'Yes',
-        cancelButtonText: 'No'
-    }).then((result) => {
-        if (result.isConfirmed) {
+    //alert("Are you sure you want to save updated owner information?");
+    //Swal.fire({
+    //    text: 'Are you sure you want to save updated owner information?',
+    //    icon: 'question',
+    //    showCancelButton: true,
+    //    confirmButtonText: 'Yes',
+    //    cancelButtonText: 'No'
+    //}).then((result) => {
+    //    if (result.isConfirmed) {
             $.ajax({
                 type: "POST",
                 contentType: "application/json; charset=utf-8",
@@ -7661,7 +7691,7 @@ $(document).on("click", ".sav-info", function () {
                     $("#" + id + " .sav-info").hide();
                     $("#" + id + " .own-img").hide();
                     $("#" + id + " :input").prop("readonly", true);
-                    //alert("Data Updated");
+                    //alert("Owner's information updated successfully");
                     Swal.fire({
                         icon: 'success',
                         text: "Owner's information updated successfully"
@@ -7674,8 +7704,8 @@ $(document).on("click", ".sav-info", function () {
                     });
                 }
             });
-        }
-    });
+       /* }*/
+   /* });*/
 });
 //...... save the updated information of commercial
 $(document).on("click", ".sav-com-info", function () {

@@ -49,6 +49,7 @@ namespace MeherEstateDevelopers.Models
         public Nullable<System.DateTime> First_Notice { get; set; }
         public Nullable<System.DateTime> Sec_Notice { get; set; }
         public Nullable<System.DateTime> Cancel_Notice { get; set; }
+        public Nullable<System.DateTime> Third_Notice { get; set; }
         public Nullable<decimal> Balance_Amount { get; set; }
         public Nullable<int> Installments { get; set; }
     }

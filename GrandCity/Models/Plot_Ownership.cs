@@ -69,5 +69,6 @@ namespace MeherEstateDevelopers.Models
         public Nullable<bool> IsCompanyProperty { get; set; }
         public Nullable<long> Sale_Id { get; set; }
         public string Currency_Note_No { get; set; }
+        public Nullable<System.DateTime> Third_Notice { get; set; }
     }
 }

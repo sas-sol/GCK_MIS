@@ -180,7 +180,7 @@
             @if (!User.IsInRole("File Customer Image Update"))
             {
                 <div class="col-md-12 central-text-align mt-md-3 mb-md-3">
-                    <button class="btn btn-success updt-exstng-owner-rec-dsffskfs" style="display:none;">Update Record Of @v.Name</button>
+                    <button class="btn btn-success updt-exstng-owner-rec-dsffskfs" style="display:none;">Save Record</button>
                 </div>
             }
 
@@ -229,9 +229,17 @@
                     $(".updt-exstng-owner-rec-dsffskfs").hide();
                     $(".up-info :input").prop("readonly", true);
                     $(".owner-stat-jfkldgf").prop("disabled", true);
-                    alert("Data Updated");
+                   // alert("Owner's information updated successfully");
+                    Swal.fire({
+                        icon: 'success',
+                        text: "Owner's information updated successfully"
+                    });
                 },
                 error: function (data) {
+                    Swal.fire({
+                        icon: 'error',
+                        text: 'Something went wrong'
+                    });
                 }
             });
         });

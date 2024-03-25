@@ -332,6 +332,7 @@
     <Compile Include="Controllers\LandController.cs" />
     <Compile Include="Controllers\LeadsController.cs" />
     <Compile Include="Controllers\LeaveController.cs" />
+    <Compile Include="Controllers\LetterController.cs" />
     <Compile Include="Controllers\LoanController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\MessagesController.cs" />
@@ -766,6 +767,7 @@
     <Compile Include="Models\Leave_HD_Requisitions.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Letter.cs" />
     <Compile Include="Models\Level.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -7005,6 +7007,7 @@
     <Content Include="Views\Reports\FilesOutstanding.cshtml" />
     <Content Include="Views\Reports\PlotsfilesConsultedReports.cshtml" />
     <Content Include="Views\Reports\PlotsfilesCosolidatedReports.cshtml" />
+    <Content Include="Views\FileSystem\UpdateFileInformation.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -7013,6 +7016,7 @@
     <Folder Include="Views\Deployment\" />
     <Folder Include="Views\Error\" />
     <Folder Include="Views\HumanResource\" />
+    <Folder Include="Views\Letter\" />
     <Folder Include="Views\SAUniverse\" />
   </ItemGroup>
   <ItemGroup>

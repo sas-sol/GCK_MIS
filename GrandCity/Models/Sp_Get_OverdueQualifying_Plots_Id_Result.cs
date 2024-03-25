@@ -23,6 +23,7 @@ namespace MeherEstateDevelopers.Models
         public string Postal_Address { get; set; }
         public Nullable<bool> Verified { get; set; }
         public Nullable<bool> Verification_Req { get; set; }
+        public string Currency_Note_No { get; set; }
         public string Dimension { get; set; }
         public Nullable<decimal> Area { get; set; }
         public string Develop_Status { get; set; }
@@ -33,6 +34,7 @@ namespace MeherEstateDevelopers.Models
         public Nullable<System.DateTime> First_Notice { get; set; }
         public Nullable<System.DateTime> Sec_Notice { get; set; }
         public Nullable<System.DateTime> Cancel_Notice { get; set; }
+        public Nullable<System.DateTime> Third_Notice { get; set; }
         public decimal Balance_Amount { get; set; }
         public Nullable<int> Installments { get; set; }
     }

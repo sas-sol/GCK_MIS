@@ -1216,6 +1216,7 @@ namespace MeherEstateDevelopers.Models
         Other_Charges = 0,
         Possession_Charges = 7,// add new 
         Balloting = 8, // add new 
-        Half_Yearly = 9    // add new 
+        Half_Yearly = 9 ,   // add new 
+        Not_Included = 10   // add new 
     }
 }

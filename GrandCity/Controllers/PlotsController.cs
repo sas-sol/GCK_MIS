@@ -1444,7 +1444,8 @@ namespace MeherEstateDevelopers.Controllers
             }
             var res3 = db.Sp_Get_PlotInstallments(Plotid).ToList();
             var res4 = db.Sp_Get_ReceivedAmounts(Plotid, Modules.PlotManagement.ToString()).ToList();
-            var res = new PlotDetailData { PlotData = res1, PlotOwners = res2, PlotInstallments = res3, PlotReceipts = res4 };
+            var res5 = db.Plot_Installments_Surcharge.Where(x => x.Plot_Id == Plotid && x.Modules == "PlotManagement").ToList();
+            var res = new PlotDetailData { PlotData = res1, PlotOwners = res2, PlotInstallments = res3, PlotReceipts = res4, PlotInstallmentsSurcharge = res5 };
             return PartialView(res);
         }
         public JsonResult UpdateConstructionStatus(long Id, string DevelopStatus)
@@ -3711,7 +3712,7 @@ namespace MeherEstateDevelopers.Controllers
                 Plot_Size = x.Plot_Size,
                 Road_Type = x.Road_Type,
                 Status = x.STATUS,
-                PostalAddress = x.Postal_Address,
+                Postal_Address = x.Postal_Address,
                 Type = x.Type,
                 Verified = x.Verified,
                 Mobile_1 = x.Mobile_1,
@@ -3743,7 +3744,7 @@ namespace MeherEstateDevelopers.Controllers
                 Verification_Req = x.Verification_Req,
                 Installments = x.Installments,
                 FirstNotice = x.First_Notice,
-                PostalAddress = x.Postal_Address
+                Postal_Address = x.Postal_Address
             }).ToList();
             return PartialView(res);
         }
@@ -3770,7 +3771,7 @@ namespace MeherEstateDevelopers.Controllers
                 Installments = x.Installments,
                 FirstNotice = x.First_Notice,
                 SecNotice = x.Sec_Notice,
-                PostalAddress = x.Postal_Address
+                Postal_Address = x.Postal_Address
             }).ToList();
             return PartialView(res);
         }
@@ -3792,7 +3793,7 @@ namespace MeherEstateDevelopers.Controllers
                 Type = x.Type,
                 Verified = x.Verified,
                 Mobile_1 = x.Mobile_1,
-                PostalAddress = x.Postal_Address,
+                Postal_Address = x.Postal_Address,
                 Owner_Id = x.Owner_Id,
                 Verification_Req = x.Verification_Req,
                 Installments = x.Installments,
@@ -3906,7 +3907,7 @@ namespace MeherEstateDevelopers.Controllers
                 FirstNotice = x.First_Notice,
                 SecNotice = x.Sec_Notice,
                 CancelNotice = x.Cancel_Notice,
-                PostalAddress = x.Postal_Address,
+                Postal_Address = x.Postal_Address,
                 Installments = x.Installments
             }).FirstOrDefault();
             return View(res);

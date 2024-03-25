@@ -51,41 +51,108 @@
     </style>
 </head>
 <body>
-    <header>
-        <p><b><u>COMPANY DETAILS</u></b></p>
-        <p>Telephone No.</p>
-        <p>0544-111-11-55-11</p>
-        <p>0333-0862601</p>
-        <p>0333-0862603</p>
-        <p>Dated @DateTime.Now.ToString("dd MMMM, yyyy")</p>
-    </header>
+    <table cellspacing="0" border="0" style="width:1000px;font-size: 21px;margin-top: 7px;">
+        <tr>
+            <td width="900px" valign="top">
+                <table style="margin-top:10px">
+                    <tbody>
+                        <tr>
+                            <td width="800px" align="center" valign="bottom"><img src="~/assets/static/images/K-04.png" width=200 height=150></td>
+                        </tr>
+                        <tr>
+                            <td width="800px" align="right" valign="bottom">Telephone No</td>
+                        </tr>
+                        <tr>
+                            <td width="800px" align="right" valign="bottom">0333-0862601</td>
+                        </tr>
+                        <tr>
+                            <td width="800px" align="right" valign="bottom">0333-0862603</td>
+                        </tr>
+                        <tr>
+                            <td width="800px" align="right" valign="bottom">0544-111-11-55-11</td>
 
-    <div>
-        <h4><b>To: @Model.Name</b></h4>
-        @*<p>Reg No. A2EX-0010</p>*@
-        <p><b>File No</b> @Model.FileFormNumber</p>
-        @*<p>Payment Code. 10-M</p>*@
-        <p><b>Mobile No.</b> @Model.Mobile_1</p>
-        <p><b>Address.</b> @Model.Postal_Address</p>
-    </div>
+                        </tr>
+                        @*<tr>
+                                <td width="800px" align="right" valign="bottom">Head Office(170 CCA Phase VI DHA Lahore)</td>
+                            </tr>
+                            <tr>
+                                <td width="800px" align="right" valign="bottom">Site Office(Main GT Road Kharian/ Sara-i-Alamgir)</td>
 
-    <div>
-        <h3><b>Subject: <u>Cancellation of Provisional Residential File, File No. @Model.FileFormNumber Measuring @Model.Plot_Size</u></b></h3>
-        <ol>
-            <li>
-                <p>That file was provisionally booked in your name, and Management of 'The Grand City' regrets to point out that Rs. <b>@string.Format("{0:n0}", Math.Round(Convert.ToDecimal(-1 * Model.Balance_Amount)))/-</b> are outstanding against your subject provisional file.</p>
-            </li>
-            <li>
-                <p>In pursuance of 1st and 2nd Reminder Letters regarding the clearance of outstanding dues against your provisional file in The Grand City, you have not paid installments of the due amount as per the payment plan agreed upon by you. The Management has intimated to you regarding outstanding installments against your provisional file, but there is no response on your behalf till today.</p>
-            </li>
-            <li>
-                <p>The provisional allotment / sale agreement of the subject provisional file is hereby canceled due to the non-deposit of installments / outstanding dues. Kindly submit the original file and other documents to the Customer Services Department. We appreciate the relationship we had and thank you for providing us the opportunity to serve you.</p>
-            </li>
-            <li>
-                <p>You may visit our Head Office or Site Office during working hours for further assistance, please.</p>
-            </li>
-        </ol>
-    </div>
+                            </tr>*@
+                        <tr>
+                            <td width="800px" align="right" valign="bottom">Dated @DateTime.Now.ToString("dd MMMM, yyyy")</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+            </td>
+            @*<td width="200px" align="center" valign=top><img style="border: 1px solid;padding: 5px;" src="@Model.Own_Img" width=170 height=200></td>*@
+        </tr>
+
+    </table>
+    <table cellspacing="0" border="0" style="width:1000px;font-size: 21px;margin-top: 7px;">
+        <tr>
+            <td width="800px" valign="top">
+                <table style="margin-top:10px">
+                    <tbody>
+
+                        <tr>
+                            <td width="800px" align="left" valign="bottom"><b>To: </b>@Model.Name </td>
+
+                        </tr>
+                        <tr>
+                            <td width="800px" align="left" valign="bottom"><b>Reg No:</b>@Model.FileFormNumber</td>
+                        </tr>
+                        @*<tr>
+                                <td width="800px" align="left" valign="bottom"><b>Plot Size:</b>@Model.Plot_Size</td>
+                            </tr>*@
+                        <tr>
+                            <td width="800px" align="left" valign="bottom"><b>Mobile No:</b> @Model.Mobile_1</td>
+
+                        </tr>
+                        <tr>
+                            <td width="800px" align="left" valign="bottom"><b>Address:</b> @Model.Postal_Address</td>
+                        </tr>
+
+                    </tbody>
+                </table>
+
+            </td>
+            @*<td width="200px" align="center" valign=top><img style="border: 1px solid;padding: 5px;" src="@Model.Own_Img" width=170 height=200></td>*@
+        </tr>
+
+    </table>
+    <table cellspacing="0" border="0" style="width:1000px;font-size: 11.5pt;">
+        <h3>
+            <b>
+                Subject: <u>
+                    Cancellation of Provisional Residential Reg. No. @Model.FileFormNumber Measuring
+                    5 Marla Sector Overseas Enclave
+                </u>
+            </b>
+        </h3>
+        <tr>
+            <td width="1000px" align="left" valign=bottom>
+                <ol>
+                    <li>
+                        That subject plot is provisionally book in your name and management of The Grand City is regretfully pointed out that an amount of Rs. <b>@string.Format("{0:n0}", Math.Round(Convert.ToDecimal(Model.Balance_Amount)))/-</b>
+                        is outstanding against you, as arrears of Installments regarding your residential plot.
+
+                    </li>
+                    <li>
+                        In pursuance of 1st, 2nd and 3rd Reminder Letters regarding clearance of outstanding dues against your provisional plot in The Grand City, you have not paid installments of the due amount as per the payment plan agreed by you. The Management has intimated to you regarding outstanding installments against your provisional plot but there is no response on your behalf till today.
+                    </li>
+                    <li>
+                        The provisional allotment / sale agreement of subject provisional plot is hereby cancelled due to non-deposit of Installments / outstanding dues. Kindly submit the original file and other documents to Customer Services Department. We appreciate the relationship we had and thank you for providing us the opportunity to serve you.
+                    </li>
+                    <li>
+                        You may visit our Head Office or Site Office during working hours for further assistance, please.
+                    </li>
+                </ol>
+            </td>
+        </tr>
+    </table>
+   
 
     <footer>
         <div class="signature-line"></div>

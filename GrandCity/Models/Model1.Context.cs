@@ -111,7 +111,6 @@ namespace MeherEstateDevelopers.Models
         public virtual DbSet<File_Installments> File_Installments { get; set; }
         public virtual DbSet<File_Plot_Balance> File_Plot_Balance { get; set; }
         public virtual DbSet<Files_Comments> Files_Comments { get; set; }
-        public virtual DbSet<Files_Transfer> Files_Transfer { get; set; }
         public virtual DbSet<Files_Transfer_Request> Files_Transfer_Request { get; set; }
         public virtual DbSet<Final_Deal_Plans> Final_Deal_Plans { get; set; }
         public virtual DbSet<FinancialAssistance> FinancialAssistances { get; set; }
@@ -178,7 +177,6 @@ namespace MeherEstateDevelopers.Models
         public virtual DbSet<Plot_Installments> Plot_Installments { get; set; }
         public virtual DbSet<Plot_LastOwner> Plot_LastOwner { get; set; }
         public virtual DbSet<Plot_NOC> Plot_NOC { get; set; }
-        public virtual DbSet<Plot_Ownership> Plot_Ownership { get; set; }
         public virtual DbSet<Plot_Prefrence> Plot_Prefrence { get; set; }
         public virtual DbSet<Plot_Rates> Plot_Rates { get; set; }
         public virtual DbSet<Plot_Rental> Plot_Rental { get; set; }
@@ -291,6 +289,8 @@ namespace MeherEstateDevelopers.Models
         public virtual DbSet<Counter> Counters { get; set; }
         public virtual DbSet<Plot_Installments_Wht> Plot_Installments_Wht { get; set; }
         public virtual DbSet<Plot_Installments_Surcharge> Plot_Installments_Surcharge { get; set; }
+        public virtual DbSet<Files_Transfer> Files_Transfer { get; set; }
+        public virtual DbSet<Plot_Ownership> Plot_Ownership { get; set; }
     
         public virtual int Add_CustomerLogin(string name, string father_Husband, string email, string phone, string cNIC, string password)
         {
@@ -11949,15 +11949,6 @@ namespace MeherEstateDevelopers.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Sp_Get_CurrentOwner_File_Result>("Sp_Get_CurrentOwner_File", fileformnumParameter);
         }
     
-        public virtual ObjectResult<Sp_Get_CurrentOwner_File_Id_Result> Sp_Get_CurrentOwner_File_Id(Nullable<long> id)
-        {
-            var idParameter = id.HasValue ?
-                new ObjectParameter("id", id) :
-                new ObjectParameter("id", typeof(long));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Sp_Get_CurrentOwner_File_Id_Result>("Sp_Get_CurrentOwner_File_Id", idParameter);
-        }
-    
         public virtual ObjectResult<Sp_Get_CustomerFamilyProperties_Result> Sp_Get_CustomerFamilyProperties(Nullable<int> cust_ID)
         {
             var cust_IDParameter = cust_ID.HasValue ?
@@ -14007,15 +13998,6 @@ namespace MeherEstateDevelopers.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Sp_Get_LastAttendance_ByCheckin_Result>("Sp_Get_LastAttendance_ByCheckin", checkInParameter, empIdParameter);
         }
     
-        public virtual ObjectResult<Sp_Get_LastOwners_File_Id_Result> Sp_Get_LastOwners_File_Id(Nullable<long> id)
-        {
-            var idParameter = id.HasValue ?
-                new ObjectParameter("id", id) :
-                new ObjectParameter("id", typeof(long));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Sp_Get_LastOwners_File_Id_Result>("Sp_Get_LastOwners_File_Id", idParameter);
-        }
-    
         public virtual ObjectResult<Sp_Get_LateComers_Result> Sp_Get_LateComers(Nullable<System.DateTime> attDate)
         {
             var attDateParameter = attDate.HasValue ?
@@ -14738,15 +14720,6 @@ namespace MeherEstateDevelopers.Models
         public virtual ObjectResult<Sp_Get_OverdueQualifying_Plots_Result> Sp_Get_OverdueQualifying_Plots()
         {
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Sp_Get_OverdueQualifying_Plots_Result>("Sp_Get_OverdueQualifying_Plots");
-        }
-    
-        public virtual ObjectResult<Sp_Get_OverdueQualifying_Plots_Id_Result> Sp_Get_OverdueQualifying_Plots_Id(Nullable<long> id)
-        {
-            var idParameter = id.HasValue ?
-                new ObjectParameter("id", id) :
-                new ObjectParameter("id", typeof(long));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Sp_Get_OverdueQualifying_Plots_Id_Result>("Sp_Get_OverdueQualifying_Plots_Id", idParameter);
         }
     
         public virtual ObjectResult<Sp_Get_OverdueQualifying_Shop_Id_Result> Sp_Get_OverdueQualifying_Shop_Id(Nullable<long> id)
@@ -24502,6 +24475,33 @@ namespace MeherEstateDevelopers.Models
                 new ObjectParameter("Id", typeof(long));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Sp_Get_Reports_FilesOutstandingByBlock_Result>("Sp_Get_Reports_FilesOutstandingByBlock", idParameter);
+        }
+    
+        public virtual ObjectResult<Sp_Get_CurrentOwner_File_Id_Result> Sp_Get_CurrentOwner_File_Id(Nullable<long> id)
+        {
+            var idParameter = id.HasValue ?
+                new ObjectParameter("id", id) :
+                new ObjectParameter("id", typeof(long));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Sp_Get_CurrentOwner_File_Id_Result>("Sp_Get_CurrentOwner_File_Id", idParameter);
+        }
+    
+        public virtual ObjectResult<Sp_Get_LastOwners_File_Id_Result> Sp_Get_LastOwners_File_Id(Nullable<long> id)
+        {
+            var idParameter = id.HasValue ?
+                new ObjectParameter("id", id) :
+                new ObjectParameter("id", typeof(long));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Sp_Get_LastOwners_File_Id_Result>("Sp_Get_LastOwners_File_Id", idParameter);
+        }
+    
+        public virtual ObjectResult<Sp_Get_OverdueQualifying_Plots_Id_Result> Sp_Get_OverdueQualifying_Plots_Id(Nullable<long> id)
+        {
+            var idParameter = id.HasValue ?
+                new ObjectParameter("id", id) :
+                new ObjectParameter("id", typeof(long));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Sp_Get_OverdueQualifying_Plots_Id_Result>("Sp_Get_OverdueQualifying_Plots_Id", idParameter);
         }
     }
 }

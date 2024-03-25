@@ -604,7 +604,8 @@ namespace MeherEstateDevelopers.Models
         public DateTime? FirstNotice { get; set; }
         public DateTime? SecNotice { get; set; }
         public DateTime? CancelNotice { get; set; }
-        public string PostalAddress { get; set; }
+        public string Postal_Address { get; set; }
+        public string Currency_Note_No { get; set; }
     }
 
 

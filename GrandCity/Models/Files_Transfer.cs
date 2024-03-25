@@ -69,5 +69,6 @@ namespace MeherEstateDevelopers.Models
         public Nullable<long> Group_Tag { get; set; }
         public Nullable<bool> IsCompanyProperty { get; set; }
         public Nullable<long> Sale_Id { get; set; }
+        public Nullable<System.DateTime> Third_Notice { get; set; }
     }
 }
