@@ -2817,6 +2817,23 @@ namespace MeherEstateDevelopers.Controllers
             db.Sp_Add_Activity(userid, "Accessed Plot File Page ", "Read", "Activity_Record", ActivityType.Details_Access.ToString(), Id);
             return View(res);
         }
+
+        //create a function for generate Qr code of plots
+        public ActionResult PlotsQrCode()
+        {
+            var plots = db.Plots.ToList();
+            Helpers h = new Helpers(Modules.PlotManagement, Types.Booking);
+            foreach (var item in plots)
+            {
+                object[] data = new object[4];
+                data[0] = item.Plot_Number;
+                data[1] = item.Block_Name;
+                data[2] = item.Type;
+                data[3] = item.Plot_Size;
+                var QR_Data = h.GenerateQRCode(data);
+            }
+               return Json("ok", JsonRequestBehavior.AllowGet);
+        }
         public ActionResult BlockFile(string Id)
         {
             var res = db.Sp_Get_PlotList_Block_Parameter(Id).Select(x => new Sp_Get_PlotData_Result

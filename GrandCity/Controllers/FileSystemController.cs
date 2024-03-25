@@ -11,6 +11,7 @@ using System.IO;
 using MeherEstateDevelopers.Filters;
 using Microsoft.Ajax.Utilities;
 using System.Threading;
+using System.Web.Razor.Tokenizer;
 
 namespace MeherEstateDevelopers.Controllers
 {
@@ -328,6 +329,54 @@ namespace MeherEstateDevelopers.Controllers
             df.FileCode = FileFormNo.File_Form_Id;
             return df;
         }
+        //create a methode to generate Qr code for all files
+        //public ActionResult AddFileQrCode()
+        //{
+        //    Helpers helpers = new Helpers(Modules.FileManagement, Types.FileForm);
+        //    var files = db.File_Form.ToList();
+        //    foreach(var item in files)
+        //    {
+        //        var DealerShip = db.Dealerships.Where(d => d.Id == item.Dealership_Id).FirstOrDefault();
+        //        var phase = db.RealEstate_Phases.Where(d => d.Id == item.Phase_Id).FirstOrDefault();
+        //        var block = db.RealEstate_Blocks.Where(b => b.Id == item.Block_Id).FirstOrDefault();
+        //        object[] data = new object[6];
+        //        data[0] = item.FileFormNumber;
+        //        data[1] = phase.Phase_Name;
+        //        data[2] =  block.Block_Name + " " + item.Type;
+        //        data[3] = DealerShip.Dealership_Name;
+        //        data[4] = item.Plot_Size + " Marla";
+        //        data[5] = "TBA";
+        //        var QR_Data = helpers.GenerateQRCode(data);
+        //        var res = db.Sp_Update_FileForm_QR(QR_Data.Id, item.Id);
+        //    }
+        //    return Json("ok", JsonRequestBehavior.AllowGet);
+        //}
+        //public ActionResult AddFileQrCodes(long Id)
+        //{
+        //    Helpers helpers = new Helpers(Modules.FileManagement, Types.FileForm);
+        //    for (long fileId = Id; fileId <= 8596; fileId++)
+        //    {
+        //        var file = db.File_Form.Where(f => f.Id == fileId).FirstOrDefault();
+        //        //var files = db.File_Form.ToList();
+        //        //foreach (var item in files)
+        //        //{
+        //        var DealerShip = db.Dealerships.Where(d => d.Id == file.Dealership_Id).FirstOrDefault();
+        //        var phase = db.RealEstate_Phases.Where(d => d.Id == file.Phase_Id).FirstOrDefault();
+        //        var block = db.RealEstate_Blocks.Where(b => b.Id == file.Block_Id).FirstOrDefault();
+        //        object[] data = new object[6];
+        //        data[0] = file.FileFormNumber;
+        //        data[1] = phase.Phase_Name;
+        //        data[2] = block.Block_Name + " " + file.Type;
+        //        data[3] = DealerShip.Dealership_Name;
+        //        data[4] = file.Plot_Size + " Marla";
+        //        data[5] = "TBA";
+        //        var QR_Data = helpers.GenerateQRCode(data);
+        //        var res = db.Sp_Update_FileForm_QR(QR_Data.Id, file.Id);
+        //        //}
+        //    }
+        //    return Json("ok", JsonRequestBehavior.AllowGet);
+        //}
+
         [HttpPost]
         public JsonResult FiesImageUploader(long ImageId, long File_Id)
         {
@@ -2139,6 +2188,7 @@ namespace MeherEstateDevelopers.Controllers
             else
             {
                 var res = db.Sp_Get_FilesCancelation_Req("Files Manager").ToList();
+               
                 return View(res);
             }
         }
