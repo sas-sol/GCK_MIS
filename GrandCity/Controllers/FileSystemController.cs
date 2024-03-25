@@ -39,6 +39,10 @@ namespace MeherEstateDevelopers.Controllers
             db.Sp_Add_Activity(userid, "Accessed  File Short Details Page For  " + FileNumber, "Read", "Activity_Record", ActivityType.Details_Access.ToString(), userid);
             return PartialView(res);
         }
+        public ActionResult Application_Form_GCK()
+        {
+            return View();
+        }
         public ActionResult AddSecurity()
         {
             ViewBag.Projects = new SelectList(db.Sp_Get_RealEstateProjects(), "Id", "Project_Name");

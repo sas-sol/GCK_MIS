@@ -7005,6 +7005,7 @@
     <Content Include="Views\Reports\FilesOutstanding.cshtml" />
     <Content Include="Views\Reports\PlotsfilesConsultedReports.cshtml" />
     <Content Include="Views\Reports\PlotsfilesCosolidatedReports.cshtml" />
+    <Content Include="Views\FileSystem\Application_Form_GCK.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
