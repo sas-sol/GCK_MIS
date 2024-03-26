@@ -1,6 +1,6 @@
 ﻿@model MeherEstateDevelopers.Models.FileDetailData
 @{
-    var TotalPric = Model.FileInstallments.Where(x => x.Installment_Type != "2").Sum(x => x.Amount);
+    var TotalPric = Model.FileInstallments.Where(x => x.Installment_Type != "10").Sum(x => x.Amount);
     var receAmt = Model.FileReceipts.Sum(x => x.Amount);
     var bookdate = Model.FileReceipts.Where(x => x.Type == "Booking").OrderByDescending(x => x.DateTime).Select(x => x.DateTime).FirstOrDefault();
 

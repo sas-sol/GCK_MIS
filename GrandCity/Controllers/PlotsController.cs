@@ -1365,6 +1365,8 @@ namespace MeherEstateDevelopers.Controllers
                 Rm = Rm.OrderBy(x => x.Date).ToList();
                 var bal = db.File_Plot_Balance.Where(x => x.File_Plot_Id == Plotid && x.Module == Modules.PlotManagement.ToString()).FirstOrDefault();
                 var res = new NewPlotLedger { PlotData = res1, Report = Rm, Discount = discount, Balance = bal };
+                //var TotalPric = db.Plot_Installments.Where(x => x.Installment_Type != "10").Sum(x => x.Amount);
+                //ViewBag.TotalPric = TotalPric;
                 return PartialView(res);
             }
             catch (Exception ex)
@@ -2021,14 +2023,19 @@ namespace MeherEstateDevelopers.Controllers
             remamt = remamt - id.Sum(x => x.Amount);
             db.Test_UpdatePlotsNotPaidinstallment(nopaidis);
             var duedate = inst.OrderBy(x => x.DueDate).FirstOrDefault();
+            var res1 = db.Plot_Installments.Where(x => x.Plot_Id == Plotid).ToList();
             if (duedate != null)
             {
-                db.Test_updatebalance(remamt, inst.Sum(x => x.Amount), ReceivedAmount, Dis.Sum(x => x.Discount_Amount), Plotid, Modules.PlotManagement.ToString(), id.Count(), duedate.DueDate, voucher.Sum(x => x.Amount));
+                //db.Test_updatebalance(remamt, inst.Sum(x => x.Amount), ReceivedAmount, Dis.Sum(x => x.Discount_Amount), Plotid, Modules.PlotManagement.ToString(), id.Count(), duedate.DueDate, voucher.Sum(x => x.Amount));
+                db.Test_updatebalance(remamt, res1.Where(x => x.Installment_Type != "10").Sum(x => x.Amount), ReceivedAmount, Dis.Sum(x => x.Discount_Amount), Plotid, Modules.PlotManagement.ToString(), id.Count(), duedate.DueDate, voucher.Sum(x => x.Amount));
+
             }
             else
             {
                 //.Where(x => x.Installment_Type != "2")
-                db.Test_updatebalance(remamt, inst.Sum(x => x.Amount), ReceivedAmount, Dis.Sum(x => x.Discount_Amount), Plotid, Modules.PlotManagement.ToString(), id.Count(), null, voucher.Sum(x => x.Amount));
+                //db.Test_updatebalance(remamt, inst.Sum(x => x.Amount), ReceivedAmount, Dis.Sum(x => x.Discount_Amount), Plotid, Modules.PlotManagement.ToString(), id.Count(), null, voucher.Sum(x => x.Amount));
+                db.Test_updatebalance(remamt, res1.Where(x => x.Installment_Type != "10").Sum(x => x.Amount), ReceivedAmount, Dis.Sum(x => x.Discount_Amount), Plotid, Modules.PlotManagement.ToString(), id.Count(), duedate.DueDate, voucher.Sum(x => x.Amount));
+
             }
         }
         public JsonResult VerifyReq(long Id)
@@ -5276,12 +5283,17 @@ namespace MeherEstateDevelopers.Controllers
         }
         public JsonResult UpdateInstallmentInfoPlot(long id, List<Plot_Installments> installmentData)
         {
+            //var InstallmentStructureData = new XElement("InstallmentData", installmentData.Select(x => new XElement("InstallmentDataInfo",
+            //    new XAttribute("InstallmentType", x.Installment_Type ?? "1"),
+            //    //new XAttribute("InstallmentType", x.Installment_Type),
+            //    new XAttribute("InstallmentName", x.Installment_Name),
+            //    new XAttribute("Amount", x.Amount),
+            //    new XAttribute("DueDate", x.DueDate)))).ToString();
             var InstallmentStructureData = new XElement("InstallmentData", installmentData.Select(x => new XElement("InstallmentDataInfo",
-                new XAttribute("InstallmentType", x.Installment_Type ?? "1"),
-                //new XAttribute("InstallmentType", x.Installment_Type),
-                new XAttribute("InstallmentName", x.Installment_Name),
-                new XAttribute("Amount", x.Amount),
-                new XAttribute("DueDate", x.DueDate)))).ToString();
+             new XAttribute("InstallmentType", x.Installment_Type),
+             new XAttribute("InstallmentName", x.Installment_Name),
+             new XAttribute("Amount", x.Amount),
+             new XAttribute("DueDate", x.DueDate)))).ToString();
 
             var res = db.Sp_Update_Installment_File_Plot_Comm(id, "PlotManagement", InstallmentStructureData);
             return Json(new { Status = true, Msg = "Updated Succesfully" });

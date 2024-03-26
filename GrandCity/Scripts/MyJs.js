@@ -24028,6 +24028,7 @@ $(document).on('click', '.up_inst_btn_com', function () {
 });
 $(document).on('click', '.up_inst_btn_file', function () {
     EmptyModel();
+    debugger;
     var id = $("#file-id").val();
     $('#ModalLabel').text("File Installments");
     $('#modalbody').load('/FileSystem/UpdateInstallmentInfo/', { id: id }, function () { });

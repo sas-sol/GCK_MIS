@@ -1,4 +1,5 @@
 ﻿@model MeherEstateDevelopers.Models.NewPlotLedger
+
 <style>
     @@media print {
         table, tr, td, th {
@@ -136,6 +137,7 @@
             <tr>
                 <td><b>Total Amount</b></td>
                 <td>@string.Format("{0:n0}", Math.Round(Convert.ToDecimal(Model.Balance.Total_Amount)))</td>
+                @*<td>@string.Format("{0:n0}", Math.Round(Convert.ToDecimal(ViewBag.TotalPric)))</td>*@
                 <td><b>Received Amount</b></td>
                 <td>@string.Format("{0:n0}", Math.Round(Convert.ToDecimal(Model.Balance.Received_Amount)))</td>
                 <td><b>Refund Amount</b></td>

@@ -4,7 +4,8 @@
 <!-- SweetAlert2 JS -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 @{string[] Type = { "Booking", "Installments", "Installment" };
-var CurrencyNoteNo = ViewBag.CNo;}
+    var CurrencyNoteNo = ViewBag.CNo;
+    var TotalPric = Model.PlotInstallments.Where(x => x.Installment_Type != "10").Sum(x => x.Amount);}
 @if (Model.PlotData.Verified == true)
 {
     <script>
@@ -354,7 +355,7 @@ else
                     <div class="form-row">
                         <div class="form-group col-md-2">
                             <label>Plot Price</label>
-                            <h5 id="plt-price">@string.Format("{0:n0}", Model.PlotBalDets.Total_Amount)</h5>
+                            <h5 id="plt-price">@string.Format("{0:n0}", TotalPric)</h5>
                         </div>
                         <div class="form-group col-md-2" id="dis-amt-sec" style="display:none">
                             <label>Discount Amount</label>
