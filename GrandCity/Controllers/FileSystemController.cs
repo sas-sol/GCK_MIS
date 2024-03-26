@@ -43,6 +43,10 @@ namespace MeherEstateDevelopers.Controllers
         {
             return View();
         }
+        public ActionResult New_Application_Form_GCK()
+        {
+            return View();
+        }
         public ActionResult AddSecurity()
         {
             ViewBag.Projects = new SelectList(db.Sp_Get_RealEstateProjects(), "Id", "Project_Name");
