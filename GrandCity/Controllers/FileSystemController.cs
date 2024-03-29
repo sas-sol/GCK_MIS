@@ -39,6 +39,14 @@ namespace MeherEstateDevelopers.Controllers
             db.Sp_Add_Activity(userid, "Accessed  File Short Details Page For  " + FileNumber, "Read", "Activity_Record", ActivityType.Details_Access.ToString(), userid);
             return PartialView(res);
         }
+        public ActionResult Application_Form_GCK()
+        {
+            return View();
+        }
+        public ActionResult New_Application_Form_GCK()
+        {
+            return View();
+        }
         public ActionResult AddSecurity()
         {
             ViewBag.Projects = new SelectList(db.Sp_Get_RealEstateProjects(), "Id", "Project_Name");
@@ -713,7 +721,7 @@ namespace MeherEstateDevelopers.Controllers
             if (res.Nominee_CNIC_NICOP != od.Nominee_CNIC_NICOP && res.Nominee_CNIC_NICOP != null) { db.Sp_Add_FileComments(od.FileId, "Update Nominee CNIC: " + res.Nominee_CNIC_NICOP + " To: " + od.Nominee_CNIC_NICOP, userid, ActivityType.Record_Upatation.ToString()); }
             return Json(true);
         }
-        public JsonResult DeliverFile(long id)
+        public JsonResult DeliverFile(long? id)
         {
             long userid = long.Parse(User.Identity.GetUserId());
             var res1 = db.Files_Transfer.Where(x => x.Group_Tag == id).ToList();

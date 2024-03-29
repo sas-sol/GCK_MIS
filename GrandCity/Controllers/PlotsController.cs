@@ -2226,6 +2226,8 @@ namespace MeherEstateDevelopers.Controllers
             var res3 = db.Sp_Get_PlotInstallments(Plotid).ToList();
             var res4 = db.Sp_Get_ReceivedAmounts(Plotid, Modules.PlotManagement.ToString()).ToList();
             var discount = db.Discounts.Where(x => x.Module_Id == Plotid && x.Plot_Is_Cancelled == null && x.Module == Modules.PlotManagement.ToString()).ToList();
+            var total_dis_amount = discount.Sum(x => x.Discount_Amount);
+            ViewBag.Discount = total_dis_amount;
             UpdatePlotInstallmentStatus(res3, res4, discount, Plotid);
             var res5 = db.Sp_Get_PlotInstallments(Plotid).ToList();
             db.Sp_Add_Activity(userid, "Generate Customer File for Plot Id  <a class='plt-data' data-id=' " + Plotid + "'>" + Plotid + "</a>  ", "Create", Modules.PlotManagement.ToString(), ActivityType.Customer_File.ToString(), Plotid);

@@ -567,8 +567,10 @@
                                 @{
                                     string[] types = { "Booking", "Installment", "Advance" };
                                     var lastInstDate = Model.PlotReceipts.Where(x => types.Contains(x.Type)).OrderByDescending(x => x.DateTime).Select(x => x.DateTime).FirstOrDefault();
-                                    v.Ownership_DateTime = (v.Ownership_DateTime.Value.Date < lastInstDate.Value.Date) ? lastInstDate : v.Ownership_DateTime;
-
+                                    if (v.Ownership_DateTime.HasValue && lastInstDate.HasValue)
+                                    {
+                                        v.Ownership_DateTime = (v.Ownership_DateTime.Value.Date < lastInstDate.Value.Date) ? lastInstDate : v.Ownership_DateTime;
+                                    }
 
                                 }
 

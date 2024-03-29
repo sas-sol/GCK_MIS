@@ -2,370 +2,355 @@
 @{
 
     Layout = null;
+    string[] types = { "Booking", "Installment" };
+    var price = Math.Round(Model.FileInstallments.Sum(x => x.Amount));
+    var size = Convert.ToDecimal(Model.FileData.Plot_Size.Split(' ')[0]);
+    var rate = Math.Round((price / size), 2);
+    //var advaAmt = Model.PlotInstallments?.SingleOrDefault(x => x.Installment_Name.Contains("advance") || x.Installment_Name.Contains("BOOKING"))?.Amount;
+    //var advadate = Model.PlotInstallments?.SingleOrDefault(x => x.Installment_Name.Contains("advance") || x.Installment_Name.Contains("BOOKING"))?.DueDate;
+    var AmtRec = Model.FileReceipts.Where(x => types.Contains(x.Type) && x.Status != "Dishonored").Sum(x => x.Amount);
+    var bal = Math.Round(Convert.ToDecimal(price - AmtRec), 2);
+    var Ttlinst = Model.FileInstallments.Count(x => !x.Installment_Name.Contains("Advance"));
+    var Monthist = Model.FileInstallments.FirstOrDefault(x => !x.Installment_Name.Contains("Advance"));
+    // Calculate the percentage
+    double percentageReceived = ((double)AmtRec / (double)price) * 100;
+    var discount = ViewBag.Discount;
+    if(discount ==  null)
+    {
+        discount = 0;
+    }
+    var netprice = price - discount;
+    if (discount == null)
+    {
+        netprice = price;
+    }
 }
+
 <!DOCTYPE html>
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
+    <link rel="stylesheet" href="~/assets/styles/pagebreak.css">
+
+
     <style>
         body {
-            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif
+            font-family: Roboto,-apple-system,system-ui,BlinkMacSystemFont,Segoe UI,Oxygen,Ubuntu,Cantarell,Fira Sans,Droid Sans,Helvetica Neue,Arial,sans-serif;
         }
 
         .bg {
-            height: 1045px;
-            width: 1850px;
-            background-image: url('../../images/file-resi.jpg');
-            background-size: 1850px 1045px;
+            height: 1400px;
+            width: 1100px;
+            background-image: url('../../Repository/New_App_Form_Bg_Image.png');
+            background-size: 1100px 1400px;
             background-repeat: no-repeat;
         }
 
-        .back-side {
-            height: 1045px;
-            width: 1850px;
+        .row {
+            display: flex;
+            flex-wrap: wrap;
         }
 
-        .badge-Holder {
-            width: 200px;
-            height: 200px;
-            position: absolute;
-            right: 35%;
-            top: 8%;
+        .column {
+            flex: 1;
+            padding: 5px;
         }
 
-        .badge-holder-fds {
-            width: 200px;
-            height: 200px;
-            position: absolute;
-            right: 15%;
-            top: 8%;
-        }
-
-        .badge-Holder img {
-            width: 100%;
-        }
-
-        .badge-holder-fds img {
-            width: 100%;
-        }
-
-        table, th, td {
-            border: 1px solid black;
-            border-collapse: collapse;
-        }
-
-        table {
-            width: 40%;
-        }
-
-        tr, td, th {
-            height: 35px;
-            text-align: center;
-        }
-
-        @@media print {
-            .bg {
-                height: 1045px;
-                width: 1850px;
-                background-size: 1850px 1045px;
-                background-repeat: no-repeat;
-            }
-
-            .badge-Holder {
-                width: 200px;
-                height: 200px;
-                position: absolute;
-                right: 35%;
-                top: 0%;
-            }
-
-                .badge-Holder img {
-                    width: 100%;
-                }
-
-            .badge-Holder {
-                width: 200px;
-                height: 200px;
-                position: absolute;
-                right: 35%;
-                top: 8%;
-            }
-
-            .badge-holder-fds {
-                width: 200px;
-                height: 200px;
-                position: absolute;
-                right: 15%;
-                top: 8%;
-            }
-
-            .badge-Holder img {
-                width: 100%;
-            }
-
-            .badge-holder-fds img {
-                width: 100%;
-            }
-
-            .back-side {
-                height: 1045px;
-                width: 1850px;
-            }
-
-            table, th, td {
-                border: 1px solid black;
-                border-collapse: collapse;
-            }
-
-            table {
-                width: 40%;
-            }
-
-            tr, td, th {
-                height: 35px;
-                text-align: center;
-            }
+        .logo {
+            width: 200px; /* Adjust width as needed */
+            height: 200px; /* Adjust height as needed */
+            /* Other styling properties */
         }
     </style>
+
 </head>
-<body style="padding: 0; margin: 0">
+<body>
+    <div class="bg" style="padding: 0; margin: 0">
 
-    <div class="badge-Holder">
-        @if (ViewBag.isTrans == true)
-        {
-            <img src="~/assets/static/images/FileStatus/Transferred.png" />
-        }
+        <table cellspacing="0" border="0" style="width:500px; margin-top: 0px; margin-left:30px;">
+            <tr>
+                <br />
+                <td width="200px" valign=bottom style="font-weight: bold;"><b>Serial No.</b> @*@Model.CurrentTransferRequest.Select(x => x.TransferRequestNo).FirstOrDefault()*@</td>
+            </tr>
+            <tr>
+                <br />
+
+                <td width="300px" valign=bottom><b>Date</b> <u>@string.Format("{0:ddd, MMMM dd yyyy}", DateTime.Now)</u></td>
+
+            </tr>
+        </table>
+        <table cellspacing="0" border="0" style="width:500px; margin-left:600px; margin-top:-70px;">
+            <tr>
+                <td width="200px" align="center" valign="bottom"></td>
+                <td width="200px" align="center" valign="bottom">
+                    <img src="~/Repository/QR Codes/@(Model.FileData.FileFormNumber).png" alt="Alternate Text" style="height: 150px;width: 150px;margin-left: 1.5%;" />
+                </td>
+            </tr>
+        </table>
+        <table cellspacing="0" border="0" style="width:300px;font-size: 21px;margin-top: 30px; margin-left:30px;">
+            <tr>
+                <td align="left" valign=bottom style="line-height: 45px;">
+                    <p>
+
+                        <b>FILE/PLOT NO </b><u style="text-align:center">@Model.FileData.FileFormNumber</u> <br />
+                        <b>FILE/PLOT Size </b> <u style="text-align:center">@Model.FileData.Plot_Size</u> <br />
+                        <b>PLOT PREFERENCE</b><u style="text-align:center">@string.Join(",", Model.FilesOwners.Select(x => x.Plot_Prefrence))</u>
+                    </p>
+                </td>
+            </tr>
+        </table>
+        @*<div class="logo" style="background-image: url('../../Repository/@(Model.PlotData.Block_Name).png');"></div>*@
+        <div style="text-align: center; margin-top: -200px;">
+            <img src="../../Repository/@(Model.FileData.Block_Name).png" style="width: 400px; height: auto;">
+        </div>
+        <h4 style="text-align: center; background-color: black; color: antiquewhite; font-size: 21px; margin-left: 20px; margin-right: 20px; width: 1060px; margin-top: 0px;">PERSONAL INFORMATION</h4>
+        <div class="row">
+            <div class="column" style="margin-left:40px;">
+                <b>APPLICANT NAME</b>
+            </div>
+            <div class="column">
+                @string.Join(",", Model.FilesOwners.Select(x => x.Name))
+            </div>
+            <div class="column">
+                <b>FATHER/HUSBAND NAME</b>
+            </div>
+            <div class="column">
+                @string.Join(",", Model.FilesOwners.Select(x => x.Father_Husband))
+            </div>
+        </div>
+        <div class="row">
+            <div class="column" style="margin-left:40px;">
+                <b>CNIC#</b><br>
+            </div>
+            <div class="column">
+                @string.Join(",", Model.FilesOwners.Select(x => x.CNIC_NICOP))
+
+            </div>
+            <div class="column">
+                <b>EMAIL</b>
+
+            </div>
+            <div class="column">
+                @string.Join(",", Model.FilesOwners.Select(x => x.Email))
+            </div>
+        </div>
+        <div class="row">
+            <div class="column" style="margin-left:40px;">
+                <b>PHONE</b><br>
+            </div>
+            <div class="column">
+                @string.Join(",", Model.FilesOwners.Select(x => x.Phone_Office))
+            </div>
+            <div class="column">
+                <b>MOBILE#</b><br>
+            </div>
+            <div class="column">
+                @string.Join(",", Model.FilesOwners.Select(x => x.Mobile_1))
+            </div>
+        </div>
+        <div class="row">
+            <div class="column" style="margin-left:40px;">
+                <b>RES. ADDRESS</b>
+            </div>
+            <div class="column">
+                @string.Join(",", Model.FilesOwners.Select(x => x.Residential_Address))
+            </div>
+        </div>
+        <h4 style="text-align: center; background-color: black; color: antiquewhite; font-size: 21px; margin-left: 20px; margin-right: 20px; width: 1060px;">NOMINEE DETAILS</h4>
+        <div class="row">
+            <div class="column" style="margin-left:40px;">
+                <b>Nominee Name</b>
+            </div>
+            <div class="column">
+                @string.Join(",", Model.FilesOwners.Select(x => x.Nominee_Name))
+            </div>
+            <div class="column">
+                <b>FATHER/HUSBAND NAME</b>
+            </div>
+            <div class="column">
+                Null
+            </div>
+        </div>
+        <div class="row">
+            <div class="column" style="margin-left:40px;">
+                <b>MAILING ADDRESS</b><br>
+            </div>
+            <div class="column">
+                @string.Join(",", Model.FilesOwners.Select(x => x.Nominee_Address))
+
+            </div>
+            <div class="column">
+                <b>NOMINEE CNIC #</b>
+
+            </div>
+            <div class="column">
+                @string.Join(",", Model.FilesOwners.Select(x => x.Nominee_CNIC_NICOP))
+            </div>
+        </div>
+        <div class="row">
+            <div class="column" style="margin-left:40px;">
+                <b>PHONE</b><br>
+            </div>
+            <div class="column">
+                Null
+            </div>
+            <div class="column">
+                <b>RELATIONSHIP WITH APPLICANT</b><br>
+            </div>
+            <div class="column">
+                @string.Join(",", Model.FilesOwners.Select(x => x.Nominee_Relation))
+            </div>
+        </div>
+        <h4 style="text-align: center; background-color: black; color: antiquewhite; font-size: 21px; margin-left: 20px; margin-right: 20px; width: 1060px;">PAYMENT DETAILS</h4>
+        <div class="row">
+            <div class="column" style="margin-left:40px;">
+                <b>FILE/PLOT PRICE</b>
+            </div>
+            <div class="column">
+                @string.Format("{0:n0}", price)
+            </div>
+            <div class="column">
+                <b>NET PRICE</b>
+            </div>
+            <div class="column">
+                @if (netprice != null)
+                {
+                    @Html.Raw(string.Format("{0:n0}", netprice))
+                }
+            </div>
+        </div>
+        <div class="row">
+            <div class="column" style="margin-left:40px;">
+                <b>PAYMENT RECEIVED</b><br>
+            </div>
+            <div class="column">
+                @string.Format("{0:n0}", AmtRec)
+            </div>
+            <div class="column">
+                <b>PERCENTAGE RECEIVED</b>
+            </div>
+            <div class="column">
+                @string.Format("{0:0.00} %", percentageReceived)
+            </div>
+        </div>
+        <div class="row">
+            <div class="column" style="margin-left:40px;">
+                <b>BALANCE</b><br>
+            </div>
+            <div class="column">
+                @string.Format("{0:n0}", bal)
+            </div>
+            <div class="column">
+                <b>DISCOUNT/PREMIUN</b><br>
+            </div>
+            <div class="column">
+                    @discount
+            </div>
+        </div>
+
+        <table cellspacing="0" border="0" style="width: 1070px; font-size: 22px; margin-top: 180px;">
+            <tr>
+                <td width="400px" align="left" valign=bottom style="font-weight:bold; text-align:center; border-top:1px solid">BOOKING OFFICER & DATE</td>
+                <td width="30px" align="left" valign=bottom></td>
+                <td width="400px" align="left" valign=bottom style="font-weight:bold; text-align:center; border-top:1px solid">MANAGER</td>
+                <td width="30px" align="left" valign=bottom></td>
+                <td width="400px" align="left" valign=bottom style="font-weight:bold; text-align:center; border-top:1px solid">Applicant Signature</td>
+
+                @*<td width="200px" align="right" valign=bottom style="font-weight:bold">Date</td>
+                    <td width="200px" align="center" valign=bottom style="border-bottom:1px solid;font-size: 17px;">@string.Format("{0:ddd, MMMM dd yyyy}", DateTime.Now)</td>*@
+            </tr>
+        </table>
+        <div class="page-break">
+            <div class="row" style="margin-top: 100px;">
+                <div class="column" style="margin-left:40px; text-align:center; font-size:20px;">
+                    <b>TERMS & CONDITIONS</b>
+                </div>
+            </div>
+            <div class="row">
+                <div class="column" style="margin-left: 40px; margin-top: 10px; text-align: left;">
+                    Applicant/Purchaser shall pay to Eurobiz Corporation (hereinafter referred to as the “Seller”) a non-refundable reservation deposit of the purchase price and reserve the property subject to which the Eurobiz Corporation/Seller will hold the property off-sale strictly on and subject to the conditions set out below.
+                </div>
+            </div>
+            <div class="row">
+                <div class="column" style="margin-left: 40px; margin-top: 10px; text-align: left; ">
+                    <b>*</b>I/we the applicant/purchaser(s) undertake that Eurobiz Corporation/Seller will reserve the property for me/us until the payments are made in full and in accordance with the schedule of payment provide therein.
+                </div>
+            </div>
+            <div class="row">
+                <div class="column" style="margin-left: 40px; margin-top: 10px; text-align: left; ">
+                    <b>*</b> One application form will only be considered for one plot file and allocated plot shall not be used for any other purpose except applied for.
+                </div>
+            </div>
+            <div class="row">
+                <div class="column" style="margin-left: 40px; margin-top: 10px; text-align: left; ">
+                    <b>*</b>The down payment / booking amount is non-refundable and non-adjustable.
+                </div>
+            </div>
+            <div class="row">
+                <div class="column" style="margin-left: 40px; margin-top: 10px; text-align: left; ">
+                    <b>*</b>If three (03) consecutive installments are overdue where of a notice of outstanding  payments along with surcharge will be forwarded; failure to make payments within the specified time will result in cancellation and such reserved plot/property will be re-offered for sale.
+                </div>
+            </div>
+            <div class="row">
+                <div class="column" style="margin-left: 40px; margin-top: 10px; text-align: left; ">
+                    <b>*</b>Any installment paid after due date will only be acceptable with charge of 5% per installment.
+                </div>
+            </div>
+            <div class="row">
+                <div class="column" style="margin-left: 40px; margin-top: 10px; text-align: left; ">
+                    <b>*</b>In case of refund the payment will be returned to the applicant after deduction of 20% within 01-year without interest/markup.
+                </div>
+            </div>
+            <div class="row">
+                <div class="column" style="margin-left: 40px; margin-top: 10px; text-align: left; ">
+                    <b>*</b>Size of the plot is tentative and is subject to adjustment after demarcation and measurements. In case of extra land forming part of the plot, there shall be a further charge in addition to the total amount; to be calculated at that stage, which I/we agree to pay.
+                </div>
+            </div>
+            <div class="row">
+                <div class="column" style="margin-left: 40px; margin-top: 10px; text-align: left; ">
+                    <b>*</b>The Management of Eurobiz Corporation reserves the right to allot/sell a plot surrendered by me/us or cancelled from my/our name due to non-payment to any other applicant or person and that I/we shall have no rights left over the plot.
+                </div>
+            </div>
+            <div class="row">
+                <div class="column" style="margin-left: 40px; margin-top: 10px; text-align: left; ">
+                    <b>*</b>That the transfer of the plot shall only take place once all the payments have been cleared including surcharges (if applicable) and agree that all registration/mutation charges along with any other Government Tax in vogue shall be borne by me/us.
+                </div>
+            </div>
+            <div class="row">
+                <div class="column" style="margin-left: 40px; margin-top: 10px; text-align: left; ">
+                    <b>*</b>That I/we will not be allowed to mortgage or sublease my/our plot of the land till such time that all the payments including surcharge have been cleared.
+                </div>
+            </div>
+            <div class="row">
+                <div class="column" style="margin-left: 40px; margin-top: 10px; text-align: left; ">
+                    <b>*</b>I/we will abide by terms and conditions in addition to the byelaws, rules and regulations governing allotments, possession, ownership, construction and transfer of plots, enforced from time to time by the Management of Eurobiz Corporation.
+                </div>
+            </div>
+            <div class="row">
+                <div class="column" style="margin-left: 40px; margin-top: 10px; text-align: left; ">
+                    <b>*</b>The Management reserves the right to change and/or modify the Master Plan of the project / Eurobiz Corporation if necessary and also has the right to amend the rules, regulations, policies and Bye-laws.
+                </div>
+            </div>
+            <div class="row">
+                <div class="column" style="margin-left: 40px; margin-top: 10px; text-align: left; ">
+                    <b>*</b>I/we the applicant/ purchaser(S) undertake and declare that I/we have read the terms and conditions and agree the same.
+                </div>
+            </div>
+            <div class="row">
+                <div class="column" style="margin-left: 40px; margin-top: 10px; text-align: left; ">
+                    <b>*</b> In case of any dispute, the matter will be referred to the Arbitration Committee of Eurobiz Corporation constituted under the provisions of Arbitration Act, 1940 and its decision shall be considered as final.
+                </div>
+            </div>
+            <div class="row">
+                <div class="column" style="margin-left: 40px; margin-top: 40px; text-align: left;">
+                    <b style="border-top: 1px solid">Signature of Applicant/Purchaser(S)</b>
+                </div>
+                <div class="column" style="margin-left:40px; margin-top:40px; text-align:center;">
+                    <b style="border-top: 1px solid">Eurobiz Corporation (Sales Executive)</b>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <div class="badge-holder-fds">
-        @if (Model.FilesOwners.OrderByDescending(x => x.DateTime).FirstOrDefault().Dup_Customer_file == true)
-        {
-            <img src="~/assets/static/images/FileStatus/Duplicate.png" />
-        }
-    </div>
-
-    @foreach (var item in Model.FilesOwners.GroupBy(x => x.Group_Tag))
-    {
-        string a = Model.FileData.FileFormNumber + ".png";
-        string dev = "";
-        <div class="bg" style="padding: 0;margin: 0">
-            <div style="height:58% ; margin-right:0px">
-                <img src="~/Repository/CustomerImages/@item.Select(x=>x.Id).FirstOrDefault()/@item.Select(x=>x.Image1).FirstOrDefault()" alt="Alternate Text" style="height: 35.7%;width: 10%;margin-left: 70.3%;margin-top: 8%;" />
-                <img src="~/Repository/QR Codes/@a" alt="Alternate Text" style="height: 36%;width: 12.7%;margin-left: 1.5%;" />
-                @for (int i = 1; i < item.Count(); i++)
-                {
-
-                    @*if (@item.Select(x => x.Image1).FirstOrDefault() != null)
-                        {
-                            <img src="~/Repository/CustomerImages/@item.ElementAt(i).Id/@item.ElementAt(i).Image2" alt="Alternate Text" style="height: 35.7%;width: 11%;margin-left: 81.5%;margin-top: 1.3%;" />
-                        }*@
-                    <img src="~/Repository/CustomerImages/@item.ElementAt(i).Id/@item.ElementAt(i).Image1" alt="@item.Count()" style="height: 35.7%;width: 11%;margin-left: 81.5%;margin-top: 1.3%;" />
-                }
-                @*<img src="~/Repository/CustomerImages/@item.Id/@item.Image1" alt="Alternate Text" style="height: 35.7%;width: 10%;margin-left: 70.3%;margin-top: 8%;" />
-                    <img src="~/QR Codes/@a" alt="Alternate Text" style="height: 36%;width: 12.7%;margin-left: 1.5%;" />*@
-                @if (item.Select(x => x.Image2).FirstOrDefault() != null)
-                {
-                    <img src="~/Repository/CustomerImages/@item.Select(x=>x.Id).FirstOrDefault()/@item.Select(x=>x.Image2).FirstOrDefault()" alt="Alternate Text" style="height: 35.7%;width: 11%;margin-left: 81.5%;margin-top: 1.3%;" />
-                }
-                @if (item.Select(x => x.Image3).FirstOrDefault() != null)
-                {
-                    <img src="~/Repository/CustomerImages/@item.Select(x=>x.Id).FirstOrDefault()/@item.Select(x=>x.Image3).FirstOrDefault()" alt="Alternate Text" style="height: 35.7%;width: 11%;margin-left: 81.5%;margin-top: 1.3%;" />
-                }
-                @if (@item.Select(x => x.Image4).FirstOrDefault() != null)
-                {
-                    <img src="~/Repository/CustomerImages/@item.Select(x=>x.Id).FirstOrDefault()/@item.Select(x=>x.Image4).FirstOrDefault()" alt="Alternate Text" style="height: 35.7%;width: 11%;margin-left: 81.5%;margin-top: 1.3%;" />
-                }
-            </div>
-            <div style="margin-top: -21%;">
-                @if (Model.FileData.Development_Charges == true)
-                {
-                    dev = "With Development Charges";
-                }
-                else if (Model.FileData.Development_Charges == false)
-                {
-                    dev = "No Development Charges";
-                }
-                else
-                {
-                    dev = "To Be Announced";
-                }
-                <label style="margin-left: 4.5%;width: 16%;text-align:center">
-                    <b>Plot No.</b> <u>@Model.FileData.FileFormNumber - @Model.FileData.Type</u> &nbsp;&nbsp;
-                    <b>Block.</b> <u>@Model.FileData.Block_Name @Model.FileData.Sector</u> &nbsp;&nbsp;
-                    @*<b>Membership no.</b> <u>@Model.FileData.Dealership_Id</u> &nbsp;&nbsp;*@
-                    <b>Plot Size.</b> <u>@Model.FileData.Plot_Size</u>  &nbsp;&nbsp;
-                    <b>Development Charges.</b><u>@dev</u>
-                </label>
-            </div>
-            <div style="margin-top: 9.5%;">
-                <label style="margin-left: 7.5%;max-width: 32%;width: 32%;text-align:center">@string.Join(" , ", item.Select(x => x.Name).Distinct())</label>
-                <label style="margin-left: 10.5%;max-width: 30%;width: 30%;text-align:center">@string.Join(" , ", item.Select(x => x.Father_Husband).Distinct())</label>
-            </div>
-
-            <div style="margin-top: 0.5%;">
-                <label style="margin-left: 10.5%;max-width: 70%;width: 70%;text-align:center">@string.Join(" , ", item.Select(x => x.Postal_Address).Distinct())</label>
-            </div>
-            <div style="margin-top: 0.8%;">
-                <label style="margin-left: 10.5%;max-width: 70%;width: 70%;text-align:center">@string.Join(" , ", item.Select(x => x.Residential_Address).Distinct())</label>
-            </div>
-            <div style="margin-top:0.8% ">
-                <label style="margin-left: 9.5%;max-width: 15%;width: 15%;text-align:center">@string.Join(" , ", item.Select(x => x.Phone_Office).Distinct())</label>
-                <label style="margin-left: 2.5%;max-width: 13%;width: 13%;text-align:center">@string.Join(" , ", item.Select(x => x.Residential).Distinct())</label>
-                <label style="margin-left: 4%;max-width: 16%;width: 16%;text-align:center">@string.Join(" , ", item.Select(x => x.Mobile_1).Distinct())</label>
-                <label style="margin-left: 4%;max-width: 15%;width: 15%;text-align:center">@string.Join(" , ", item.Select(x => x.Mobile_2).Distinct())</label>
-            </div>
-
-            <div style="margin-top: 0.8%">
-                <label style="margin-left: 7%;max-width: 33%;width: 33%;text-align:center">@string.Join(" , ", item.Select(x => x.Email).Distinct())</label>
-                <label style="margin-left: 4%;max-width: 17.5%;width: 17.5%;text-align:center">@string.Join(" , ", item.Select(x => x.Occupation).Distinct())</label>
-                <label style="margin-left: 4%;max-width: 14%;width: 14%;text-align:center">@string.Join(" , ", item.Select(x => x.Nationality).Distinct())</label>
-            </div>
-            <div style="margin-top: 0.8%;">
-                <label style="margin-left: 11%;">@string.Join(" , ", item.Select(x => x.Date_Of_Birth).Distinct())</label>
-            </div>
-            <div style="margin-top: 0.8%;">
-                <label style="margin-left: 11%;text-align:center">@string.Join(" , ", item.Select(x => x.CNIC_NICOP).Distinct())</label>
-            </div>
-            <div style="margin-top: 1.7%;">
-                <label style="margin-left: 12%;max-width: 24%;width: 24%;text-align:center">@string.Join(" , ", item.Select(x => x.Nominee_Name).Distinct())</label>
-                <label style="margin-left: 3%;max-width: 17%;width: 17%;text-align:center">@string.Join(" , ", item.Select(x => x.Nominee_Relation).Distinct())</label>
-            </div>
-            <div style="margin-top: 0.8%">
-                <label style="margin-left: 13%;max-width: 47%;width: 47%;text-align:center">@string.Join(" , ", item.Select(x => x.Nominee_Address).Distinct())</label>
-            </div>
-            <div style="margin-top: 1.3%;">
-                <label style="margin-left: 11.25%;text-align:center">@string.Join(" , ", item.Select(x => x.Nominee_CNIC_NICOP).Distinct())</label>
-            </div>
-            <div style="margin-top: 4.25%;">
-                <label style="margin-left: 16.5%;max-width: 8.5%;width: 8.5%;text-align:center">
-                    @foreach (var i in Model.FileReceipts.Where(x => x.Type == "Booking" && (x.Status == null || x.Status == "Approved")).ToList())
-                    {
-                        <span>@string.Format("{0:n0}", i.Amount)</span>
-                        <br />
-                    }
-                </label>
-                <label style="margin-left: 18%;max-width: 11%;width: 11%;text-align:center">
-                    @foreach (var i in Model.FileReceipts.Where(x => x.Type == "Booking" && (x.Status == null || x.Status == "Approved")).ToList())
-                    {
-                        <span>@i.PaymentType - @i.Ch_Pay_Draft_No</span>
-                        <br />
-                    }
-                </label>
-                <label style="margin-left: 2.5%;max-width: 10%;width: 10%;text-align:center">
-
-                    @foreach (var i in Model.FileReceipts.Where(x => x.Type == "Booking" && (x.Status == null || x.Status == "Approved")).ToList())
-                    {
-                        <span>@string.Format("{0:dd MMMM yyyy}", i.DateTime)</span>
-                        <br />
-                    }
-                </label>
-                <label style="margin-left: 2.5%;max-width: 11%;width: 11%;text-align:center">
-                    @foreach (var i in Model.FileReceipts.Where(x => x.Type == "Booking" && (x.Status == null || x.Status == "Approved")).ToList())
-                    {
-                        <span>@i.Bank</span>
-                        <br />
-                    }
-                </label>
-            </div>
-            <div style="margin-top: 2.8%;">
-                <label style="margin-left: 7.5%;max-width: 12%;width: 12%;">@string.Format("{0:dd-MMMM-yyyy}", DateTime.UtcNow) </label>
-            </div>
-        </div>
-    }
-
-
-
-    @*back side of the file*@
-    <div style="page-break-after:always"></div>
-
-    <div class="back-side" style="padding: 0;margin: 0">
-        <div style="margin-top:5%;">
-            <table style="margin:0 auto;font-family:Arial, Helvetica, sans-serif;">
-                <thead>
-                    <tr>
-                        <th>Instalment Name</th>
-                        <th>Amount</th>
-                    </tr>
-                </thead>
-
-                <tbody>
-                    @foreach (var ins in Model.InstalmentStructureDetail.OrderByDescending(x => x.Installment_Type))
-                    {
-                        if (ins.Installment_Type == "2" && (Model.FileData.Development_Charges == false || Model.FileData.Development_Charges == null))
-                        {
-                            continue;
-                        }
-                        <tr>
-                            <td>@ins.Installment_Name</td>
-                            <td>@string.Format("{0:n0}", ins.Amount)</td>
-                        </tr>
-                    }
-                </tbody>
-                <tfoot>
-                    <tr>
-                        <th>Grand Total</th>
-                        @if (Model.FileData.Development_Charges == false || Model.FileData.Development_Charges == null)
-                        {
-                            <th>@string.Format("{0:n0}", Model.InstalmentStructureDetail.Where(x => x.Installment_Type != "2").Sum(x => x.Amount))</th>
-                        }
-                        else
-                        {
-                            <th>@string.Format("{0:n0}", Model.InstalmentStructureDetail.Sum(x => x.Amount))</th>
-                        }
-                    </tr>
-                </tfoot>
-            </table>
-        </div>
-
-        <div style="margin-top:2%; margin-left:5%;">
-            <div style="width:25%; height:60px;background-color:#d0232A; color:white; font-size:35px; font-weight:bolder;font-family:Arial, Helvetica, sans-serif;display:flex;align-items:center;padding-left: 10px;">
-                <sigma style="width:90%;height:50%">TERMS &amp; CONDITIONS</sigma>
-            </div>
-        </div>
-
-        <div class="terms-contain" style="width:90%;margin-left:5%;margin-top:1%;">
-            <ol style="width:100%; font-family:Arial, Helvetica, sans-serif; line-height:1.5;font-size:14px;">
-                <li>Booking forms can be submitted along with payment via Cheque / Cash / Bank Draft / Pay Order only in favour of Meher Estate Developers (Pvt) Ltd.</li>
-                <li>The Size and location of the plot is tentative and subject to adjustment after demarcation / measurement of the plot at the time of handing over the possession.</li>
-                <li>All payments are to be made according to the schedule given by Meher Estate Developers (Pvt) Ltd.</li>
-                <li>If allottee fails to pay 3 consecutive installments within specified time then the allotment will be liable for cancellation.</li>
-                <li>Current pricing structure includes cost of land only.</li>
-                <li>In case of extra land with any plot, extra land charges will be added to the total amount as determined by Meher Estate Developers (Pvt) Ltd.</li>
-                <li>One application / Booking Form can be used for booking of one plot only.</li>
-                <li>Construction is only permissible with prior permission of the design studio / management committee of the Meher Estate Developers (Pvt) Ltd.</li>
-                <li>In case of any dispute between buyer / allottee and Meher Estate Developers (Pvt) Ltd. The dispute will be referred to the arbitration committee of Meher Estate Developers (Pvt) Ltd.</li>
-                <li>Promp payments at the due date for each and every installment as per annexure of the schedule of payments / installments must be paid by each calendar month.</li>
-                <li>Transfer and Possession commencing from the date of taking possession of the plot given by the seller to the buyer, the buyer shall be liable to bear and pay all Government  Tax charges, for Electricity, gas, telephone, registration, legal fees and other charges imposed by the concerned authorities.</li>
-                <li>In case of cancellation / refund, 10% of the unit price will be deducted as service charges and the balance will be paid after resale of the plot, or a six month post dated cheque of balance amount shall be presented.</li>
-                <li>Eligibility for balloting will be confirmed after the applicable balloting charges.</li>
-                <li>Each applicant will abide by these Terms &amp; Conditions in addition to the by-law, rules and regulations of Meher Estate Developers (Pvt) Ltd.</li>
-                <li>Due to any ground variations and technicalities the allotted plot &amp; the size of the allotted plot can be changed.</li>
-                <li>Meher Estate Developers (Pvt) Ltd. will not be responsible for the project, if delayed due to the changes in the rules and regulation set by the Government authorities.</li>
-                <li>Owner of the plot will follow the rules of LDA / TMA or Meher Estate Developers (Pvt) Ltd by-law for the construction of their plots.</li>
-                <li>Development charges are to be paid within a year after the last installment. Any changes/variations in the rate of development shall be charged as escalation charges from the allottee.</li>
-                <li>Meher Estate Developers (Pvt) Ltd. shall not be considered liable to the extent that performance of their respective obligations is prevented by an Event of Force Majeure that arises at the later date.</li>
-            </ol>
-        </div>
-
-        <div style="margin-left:5%">
-            <p style="font-size:14px;text-transform:uppercase;font-family:Arial, Helvetica, sans-serif;"><b>declaration: </b>i have read these terms &amp; conditions carefully and i hereby agree to be legally bound by the terms and conditions described herein and by all terms, policies and guidelines incorporated by reference. these terms may be amended at any time by Meher Estate Developers (pvt) ltd. and its management committee and i can not challenge thse at any court of law or any other forum.</p>
-        </div>
-
-
-        <div style="display:flex;margin-left:35%;align-items: center; margin-top:5%;">
-            <b style="text-transform:uppercase;">thumb impression : </b>
-            <div style="height:80px; width:250px;border:1px solid #000;margin-left: 20px;"></div>
-            <b style="text-transform:uppercase;margin-left:5%;">signature of applicant : ___________________________________________</b>
-        </div>
-
-    </div>
 </body>
-</html>
 
-<style>
-    label {
-        display: inline-block;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        font-size: 20px
-    }
-</style>
+</html>

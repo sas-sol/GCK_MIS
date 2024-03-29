@@ -5,315 +5,349 @@
     var price = Math.Round(Model.PlotInstallments.Sum(x => x.Amount));
     var size = Convert.ToDecimal(Model.PlotData.Plot_Size.Split(' ')[0]);
     var rate = Math.Round((price / size), 2);
-    var advaAmt = Model.PlotInstallments.SingleOrDefault(x => x.Installment_Name.Contains("Advance") || x.Installment_Name.Contains("Booking")).Amount;
-    var advadate = Model.PlotInstallments.SingleOrDefault(x => x.Installment_Name.Contains("Advance") || x.Installment_Name.Contains("Booking")).DueDate;
+    var advaAmt = Model.PlotInstallments?.SingleOrDefault(x => x.Installment_Name.Contains("advance") || x.Installment_Name.Contains("BOOKING"))?.Amount;
+    var advadate = Model.PlotInstallments?.SingleOrDefault(x => x.Installment_Name.Contains("advance") || x.Installment_Name.Contains("BOOKING"))?.DueDate;
     var AmtRec = Model.PlotReceipts.Where(x => types.Contains(x.Type) && x.Status != "Dishonored").Sum(x => x.Amount);
     var bal = Math.Round(Convert.ToDecimal(price - AmtRec), 2);
     var Ttlinst = Model.PlotInstallments.Count(x => !x.Installment_Name.Contains("Advance"));
     var Monthist = Model.PlotInstallments.FirstOrDefault(x => !x.Installment_Name.Contains("Advance"));
+    // Calculate the percentage
+    double percentageReceived = ((double)AmtRec / (double)price) * 100;
+    var discount = ViewBag.Discount;
+    var netprice = price - discount;
+
+    
+
+    @*<meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+        <link href="~/assets/styles/Dealertemplate/base.min.css" rel="stylesheet" />
+        <link href="~/assets/styles/Dealertemplate/fancy.min.css" rel="stylesheet" />
+        <link href="~/assets/styles/Dealertemplate/main.css" rel="stylesheet" />
+        <title></title>*@
 }
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-    <link href="~/assets/styles/Dealertemplate/base.min.css" rel="stylesheet" />
-    <link href="~/assets/styles/Dealertemplate/fancy.min.css" rel="stylesheet" />
-    <link href="~/assets/styles/Dealertemplate/main.css" rel="stylesheet" />
-    <title></title>
+    <link rel="stylesheet" href="~/assets/styles/pagebreak.css">
+
+
     <style>
-        body, div, table, thead, tbody, tfoot, tr, th, td, p {
-            font-family: "Calibri";
-            font-size: 19px;
+        body {
+            font-family: Roboto,-apple-system,system-ui,BlinkMacSystemFont,Segoe UI,Oxygen,Ubuntu,Cantarell,Fira Sans,Droid Sans,Helvetica Neue,Arial,sans-serif;
         }
 
-        .w0 {
-            width: 1000px !important;
+        .bg {
+            height: 1400px;
+            width: 1100px;
+            background-image: url('../../Repository/New_App_Form_Bg_Image.png');
+            background-size: 1100px 1400px;
+            background-repeat: no-repeat;
         }
 
-        p {
-            margin-left: 5%;
-            margin-right: 5%;
+        .row {
+            display: flex;
+            flex-wrap: wrap;
         }
 
-        table {
-            margin-left: 5%;
+        .column {
+            flex: 1;
+            padding: 5px;
+        }
+        .logo {
+            width: 200px; /* Adjust width as needed */
+            height: 200px; /* Adjust height as needed */
+            /* Other styling properties */
         }
 
-            table tr td {
-                padding: 5px;
-            }
-
-                table tr td p {
-                    margin: 0;
-                    padding: 5px;
-                }
-
-        @@media print {
-            p {
-                margin-left: 5%;
-                margin-right: 5%;
-            }
-
-            table {
-                margin-left: 5%;
-            }
-
-                table tr td {
-                    padding: 5px;
-                }
-        }
     </style>
+
 </head>
 <body>
-    <div id="page-container">
-        <div id="pf1" class="pf w0" data-page-no="1">
-            <center><img src="~/assets/static/images/logo2.png" width="200" height="90" style="padding-top: 5%"></center>
-            <div style="margin-top:15%">
-                <p align="center" style="background-color:#ccc;">
-                    <strong>APPLICATION FORM</strong><br />
-                    <strong>(Annexure-A)</strong>
-                </p>
-                <p>
-                    <strong></strong>
-                </p>
-                <p>
-                    <strong>Dear Sir</strong><br />
-                    I / we, the undersigned request you to please register my / our name for booking of following Plot in your project    <strong>“Meher Estate Developers”</strong> on the prescribed schedule of payment:
-                </p>
-                <table border="1" style="width:450px;font-size:16px;border-collapse:collapse;float:left">
-                    <tbody>
-                        <tr style="visibility:hidden">
-                            <td width="115" valign="top"></td>
-                            <td width="87" valign="top"></td>
-                            <td width="112" valign="top"></td>
-                            <td width="124" valign="top"></td>
-                        </tr>
-                        <tr>
-                            <td width="115" valign="top"><b>PLOT NO.</b></td>
-                            <td width="87" valign="top">@Model.PlotData.Plot_No</td>
-                            <td width="112" valign="top"><b>BLOCK</b></td>
-                            <td width="124" valign="top">@Model.PlotData.Block_Name</td>
-                        </tr>
-                        <tr>
-                            <td valign="top"><b>Type</b></td>
-                            <td valign="top">@Model.PlotData.Type</td>
-                            <td valign="top"><b>MARLA</b></td>
-                            <td valign="top">@Model.PlotData.Plot_Size</td>
-                        </tr>
-                        <tr>
-                            <td valign="top"><b>Rate / Marla</b></td>
-                            <td valign="top">@string.Format("{0:n0}", rate)</td>
-                            <td valign="top"><b>PRICE</b></td>
-                            <td valign="top">@string.Format("{0:n0}", price)</td>
-                        </tr>
-                    </tbody>
-                </table>
-                <table style="width:450px;float:right">
-                    <tbody>
-                        <tr>
-                            <td align="center">
-                                @{
-                                    foreach (var item in Model.PlotOwners)
-                                    {
-                                        if (!string.IsNullOrEmpty(item.Owner_Img))
-                                        {
-                                            <img src="~/Repository/CustomerImagesPlots/@Model.PlotData.Id/@item.Id/@item.Owner_Img" width="160" height="170" />
-                                        }
-                                    }
-                                }
+    <div class="bg" style="padding: 0; margin: 0">
 
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+        <table cellspacing="0" border="0" style="width:1100px; margin-top: 0px; margin-left:30px;">
+            <tr>
                 <br />
-                <div style="clear:both"></div>
-                <p style="line-height:30px">
-                    @if (Model.PlotOwners.Any(x => x.IsCompanyProperty == true))
-                    {
-                        <span>Company:</span><b><u> &nbsp;&nbsp;&nbsp; @string.Join(",", Model.PlotOwners.Select(x => x.Name)) &nbsp;&nbsp;&nbsp;</u></b> <span>NTN.:    </span><b><u>&nbsp;&nbsp;&nbsp;  @string.Join(",", Model.PlotOwners.Select(x => x.CNIC_NICOP)) &nbsp;&nbsp;&nbsp;</u></b>
-                    }
-                    else
-                    {
-                        <span>NAME:</span><b><u> &nbsp;&nbsp;&nbsp; @string.Join(",", Model.PlotOwners.Select(x => x.Name)) &nbsp;&nbsp;&nbsp;</u></b> <span>CNIC NO.:    </span><b><u>&nbsp;&nbsp;&nbsp;  @string.Join(",", Model.PlotOwners.Select(x => x.CNIC_NICOP)) &nbsp;&nbsp;&nbsp;</u></b>
-                        <span>S/O, W/O, D/O  </span><b><u> &nbsp;&nbsp;&nbsp; @string.Join(",", Model.PlotOwners.Select(x => x.Father_Husband)).&nbsp;&nbsp;&nbsp;</u></b>
-                    }
+                <td width="200px" valign=bottom style="font-weight: bold;"><b>Serial No.</b> @*@Model.CurrentTransferRequest.Select(x => x.TransferRequestNo).FirstOrDefault()*@</td>
+            </tr>
+            <tr>
+                <br />
 
-                    NATIONALITY:<b><u>&nbsp;&nbsp;&nbsp; @string.Join(",", Model.PlotOwners.Select(x => x.Nationality))  &nbsp;&nbsp;&nbsp; </u></b>
-                    OCCUPATION: <b><u> &nbsp;&nbsp;&nbsp; @string.Join(",", Model.PlotOwners.Select(x => x.Occupation)) &nbsp;&nbsp;&nbsp; </u></b> POSTAL ADDRESS: <b><u>&nbsp;&nbsp;&nbsp; @string.Join(",", Model.PlotOwners.Select(x => x.Postal_Address)) &nbsp;&nbsp;&nbsp; </u></b>
-                    RESIDENTIAL ADDRESS:<b><u> &nbsp;&nbsp;&nbsp;  @string.Join(",", Model.PlotOwners.Select(x => x.Residential_Address)). &nbsp;&nbsp;&nbsp; </u></b>
+                <td width="300px" valign=bottom><b>Date</b> <u>@string.Format("{0:ddd, MMMM dd yyyy}", DateTime.Now)</u></td>
 
-                    PH. NO. (MOB): <b><u>&nbsp;&nbsp;&nbsp; @string.Join(",", Model.PlotOwners.Select(x => x.Mobile_1)) &nbsp;&nbsp;&nbsp; </u></b> Email ID: <b><u> &nbsp;&nbsp;&nbsp; @string.Join(",", Model.PlotOwners.Select(x => x.Email)) &nbsp;&nbsp;&nbsp; </u></b>
-                    PH. NO. (MOB 2):<b><u>&nbsp;&nbsp;&nbsp; @string.Join(",", Model.PlotOwners.Select(x => x.Mobile_2)) .&nbsp;&nbsp;&nbsp;</u></b>
-                    NOMINEE’S NAME AND RELATION:    <b><u> &nbsp;&nbsp;&nbsp; @string.Join(",", Model.PlotOwners.Select(x => x.Nominee_Name)) ( @string.Join(",", Model.PlotOwners.Select(x => x.Nominee_Relation))) Respectivly &nbsp;&nbsp;&nbsp;  </u></b>
-                    <br />
-                    I /we hereby declare that I /we have read all the terms and conditions of booking in the project, attached with this application form and I/we accept
-                    the same. It is further declared that I/we shall abide by the payment schedule Annexure-B, existing and future terms and conditions, which have
-                    been or may be prescribed by you for the purchase of Plot in this project from time to time.
-                </p>
-                <p>
-                    Your’s faithfully,
-                </p>
-                <table style="margin-top:40px">
-                    <tbody>
-                        <tr>
-                            <td width="200" valign="top" style="border-top:1px solid">Signature of Applicant</td>
-                            <td width="87" valign="top"></td>
-                            <td width="200" valign="top" style="border-top:1px solid">Place &amp; Date</td>
-                        </tr>
-                    </tbody>
-                </table>
-                <p><strong></strong></p>
-                <p><strong></strong></p>
-                <br clear="ALL" />
-                <p>
-                    <strong>Thumb Impression of Applicant:</strong>
-                </p>
-                <p><strong></strong></p>
-                <p><strong></strong></p>
-                <table style="margin-top:40px">
-                    <tbody>
-                        <tr>
-                            <td width="200" valign="top" style="border-top:1px solid">Signature of Director</td>
-                            <td width="87" valign="top"></td>
-                            <td width="200" valign="top" style="border-top:1px solid">Place &amp; Date</td>
-                        </tr>
-                    </tbody>
-                </table>
+            </tr>
+        </table>
+        <table cellspacing="0" border="0" style="width:1100px">
+            <tr>
+                <td width="200px" align="center" valign="bottom"></td>
+                <td width="200px" align="center" valign="bottom"></td>
+            </tr>
+        </table>
+        <table cellspacing="0" border="0" style="width:300px;font-size: 21px;margin-top: 30px; margin-left:30px;">
+            <tr>
+                <td align="left" valign=bottom style="line-height: 45px;">
+                    <p>
+
+                        <b>FILE/PLOT NO </b><u style="text-align:center">@Model.PlotData.Plot_No</u> <br />
+                        <b>FILE/PLOT Size </b> <u style="text-align:center">@Model.PlotData.Plot_Size</u> <br />
+                        <b>PLOT PREFERENCE</b><u style="text-align:center"> added later</u>
+                    </p>
+                </td>
+            </tr>
+        </table>
+        @*<div class="logo" style="background-image: url('../../Repository/@(Model.PlotData.Block_Name).png');"></div>*@
+        <div style="text-align: center; margin-top: -130px;">
+            <img src="../../Repository/@(Model.PlotData.Block_Name).png" style="width: 400px; height: auto;">
+        </div>
+        <h4 style="text-align: center; background-color: black; color: antiquewhite; font-size: 21px; margin-left: 20px; margin-right: 20px; width: 1060px; margin-top: 0px;">PERSONAL INFORMATION</h4>
+        <div class="row">
+            <div class="column" style="margin-left:40px;">
+                <b>APPLICANT NAME</b>
             </div>
-            <br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
-            <center><img src="~/assets/static/images/logo2.png" width="200" height="90" style="padding-top: 5%"></center>
-            <div style="margin-top:15%">
+            <div class="column">
+                @string.Join(",", Model.PlotOwners.Select(x => x.Name))
+            </div>
+            <div class="column">
+                <b>FATHER/HUSBAND NAME</b>
+            </div>
+            <div class="column">
+                @string.Join(",", Model.PlotOwners.Select(x => x.Father_Husband))
+            </div>
+        </div>
+        <div class="row">
+            <div class="column" style="margin-left:40px;">
+                <b>CNIC#</b><br>
+            </div>
+            <div class="column">
+                @string.Join(",", Model.PlotOwners.Select(x => x.CNIC_NICOP))
 
-                <p align="center" style="background-color:#ccc;margin-top:10%">
-                    <strong>Payment Schedule</strong><br />
-                    <strong>(Annexure B)</strong>
-                </p>
-                <p>
-                    <strong><u></u></strong>
-                </p>
-                <p>
-                    Please find the required Plot fill up the desired data of your selected Plot &amp; its price, Consult with Sales Head at Site Office for
-                    Confirmation of availability &amp; details of Installments of your Plot, sign these both forms.
-                </p>
-                <p>
-                    <strong></strong>
-                </p>
-                @{
-                    if (bal > 0)
-                    {
-                        <table border="1" cellspacing="0" cellpadding="0">
-                            <tbody>
-                                <tr>
-                                    <td width="120" valign="top"><p align="center"><b>Block</b></p><p align="center"><b>@Model.PlotData.Block_Name</b></p></td>
-                                    <td width="76" valign="top"><p align="center"><b>Total Area</b></p></td>
-                                    <td width="76" valign="top"><p align="center"><b>Rate Per Marla</b></p></td>
-                                    <td width="88" valign="top"><p align="center"><b>Total Amount</b></p></td>
-                                    <td width="95" valign="top"><p align="center"><b>Booking Amount</b></p><p align="center"><b>Dated: @string.Format("{0:dd.MM.yy}", advadate)</b></p></td>
-                                    <td width="92" valign="top"><p align="center"><b>Balance</b></p></td>
-                                    <td width="92" valign="top"><p><b>Installments per Month</b></p></td>
-                                    <td width="92" valign="top"><p><b>Total Installments</b></p></td>
-                                </tr>
-                                <tr>
-                                    <td width="120" valign="top"><p align="center">Plot Number @Model.PlotData.Plot_No</p></td>
-                                    <td width="76" valign="top"><p align="center">@Model.PlotData.Plot_Size</p></td>
-                                    <td width="76" valign="top"><p align="center">@string.Format("{0:n0}", rate)</p></td>
-                                    <td width="88" valign="top"><p align="center">@string.Format("{0:n0}", price)</p></td>
-                                    <td width="95" valign="top"><p align="center">@string.Format("{0:n0}", advaAmt)</p></td>
-                                    <td width="92" valign="top"><p align="center">@string.Format("{0:n0}", bal)</p></td>
-                                    @{
-                                        if (Monthist != null)
-                                        {
-                                            <td width="92" valign="top"><p align="center">@string.Format("{0:n0}", Monthist.Amount)</p></td>
-                                        }
-                                        else
-                                        {
-                                            <td width="92" valign="top"><p align="center">@string.Format("{0:n0}", advaAmt)</p></td>
-                                        }
-                                    }
-                                    <td width="92" valign="top"><p align="center">@Ttlinst</p></td>
-                                </tr>
-                            </tbody>
-                        </table>
+            </div>
+            <div class="column">
+                <b>EMAIL</b>
 
-                    }
-                    else
-                    {
-                        <table border="1" cellspacing="0" cellpadding="0">
-                            <tbody>
-                                <tr>
-                                    <td width="120" valign="top"><p align="center"><b>Block</b></p><p align="center"><b>@Model.PlotData.Block_Name</b></p></td>
-                                    <td width="76" valign="top"><p align="center"><b>Total Area</b></p></td>
-                                    <td width="76" valign="top"><p align="center"><b>Rate Per Marla</b></p></td>
-                                    <td width="88" valign="top"><p align="center"><b>Total Amount</b></p></td>
-                                    <td width="95" valign="top"><p align="center"><b>Booking Amount</b></p><p align="center"><b>Dated: @string.Format("{0:dd.MM.yy}", advadate)</b></p></td>
-                                    <td width="92" valign="top"><p><b>Total Amount Received</b></p></td>
-                                    <td width="92" valign="top"><p align="center"><b>Balance</b></p></td>
-                                </tr>
-                                <tr>
-                                    <td width="120" valign="top"><p align="center">Plot Number @Model.PlotData.Plot_No</p></td>
-                                    <td width="76" valign="top"><p align="center">@Model.PlotData.Plot_Size</p></td>
-                                    <td width="76" valign="top"><p align="center">@string.Format("{0:n0}", rate)</p></td>
-                                    <td width="88" valign="top"><p align="center">@string.Format("{0:n0}", price)</p></td>
-                                    <td width="95" valign="top"><p align="center">@string.Format("{0:n0}", advaAmt)</p></td>
-                                    <td width="92" valign="top"><p align="center">@AmtRec</p></td>
-                                    <td width="92" valign="top"><p align="center">@string.Format("{0:n0}", bal)</p></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    }
+            </div>
+            <div class="column">
+                @string.Join(",", Model.PlotOwners.Select(x => x.Email))
+            </div>
+        </div>
+        <div class="row">
+            <div class="column" style="margin-left:40px;">
+                <b>PHONE</b><br>
+            </div>
+            <div class="column">
+                @string.Join(",", Model.PlotOwners.Select(x => x.Phone_Office))
+            </div>
+            <div class="column">
+                <b>MOBILE#</b><br>
+            </div>
+            <div class="column">
+                @string.Join(",", Model.PlotOwners.Select(x => x.Mobile_1))
+            </div>
+        </div>
+        <div class="row">
+            <div class="column" style="margin-left:40px;">
+                <b>RES. ADDRESS</b>
+            </div>
+            <div class="column">
+                @string.Join(",", Model.PlotOwners.Select(x => x.Residential_Address))
+            </div>
+        </div>
+        <h4 style="text-align: center; background-color: black; color: antiquewhite; font-size: 21px; margin-left: 20px; margin-right: 20px; width: 1060px;">NOMINEE DETAILS</h4>
+        <div class="row">
+            <div class="column" style="margin-left:40px;">
+                <b>Nominee Name</b>
+            </div>
+            <div class="column">
+                @string.Join(",", Model.PlotOwners.Select(x => x.Nominee_Name))
+            </div>
+            <div class="column">
+                <b>FATHER/HUSBAND NAME</b>
+            </div>
+            <div class="column">
+                Null
+            </div>
+        </div>
+        <div class="row">
+            <div class="column" style="margin-left:40px;">
+                <b>MAILING ADDRESS</b><br>
+            </div>
+            <div class="column">
+                @string.Join(",", Model.PlotOwners.Select(x => x.Nominee_Address))
+
+            </div>
+            <div class="column">
+                <b>NOMINEE CNIC #</b>
+
+            </div>
+            <div class="column">
+                @string.Join(",", Model.PlotOwners.Select(x => x.Nominee_CNIC_NICOP))
+            </div>
+        </div>
+        <div class="row">
+            <div class="column" style="margin-left:40px;">
+                <b>PHONE</b><br>
+            </div>
+            <div class="column">
+                Null
+            </div>
+            <div class="column">
+                <b>RELATIONSHIP WITH APPLICANT</b><br>
+            </div>
+            <div class="column">
+                @string.Join(",", Model.PlotOwners.Select(x => x.Nominee_Relation))
+            </div>
+        </div>
+        <h4 style="text-align: center; background-color: black; color: antiquewhite; font-size: 21px; margin-left: 20px; margin-right: 20px; width: 1060px;">PAYMENT DETAILS</h4>
+        <div class="row">
+            <div class="column" style="margin-left:40px;">
+                <b>FILE/PLOT PRICE</b>
+            </div>
+            <div class="column">
+                @string.Format("{0:n0}", price)
+            </div>
+            <div class="column">
+                <b>NET PRICE</b>
+            </div>
+            <div class="column">
+                @if (netprice != null)
+                {
+                    @Html.Raw(string.Format("{0:n0}", netprice))
                 }
-                <br />
-                <br />
-                <table>
-                    <tbody>
-                        <tr>
-                            <td width="220">Booked / Received by:</td>
-                            <td width="75">Name:</td>
-                            <td width="250"></td>
-                            <td width="75">Signed:</td>
-                            <td width="150"></td>
-                        </tr>
-                        <tr>
-                            <td>Witness:</td>
-                            <td>Name:</td>
-                            <td></td>
-                            <td>Signed:</td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td>Allotted & Approved by:</td>
-                            <td>Name:</td>
-                            <td><b>Muhammad Naeem</b></td>
-                            <td>Signed:</td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td>Prepared by:</td>
-                            <td>Name:</td>
-                            <td><b>@ViewBag.Name</b></td>
-                            <td>Signed:</td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td colspan="3"></td>
-                            <td>Date:</td>
-                            <td>@string.Format("{0:MMM dd yyyy}", DateTime.UtcNow)</td>
-                        </tr>
-                    </tbody>
-                </table>
+            </div>
+        </div>
+        <div class="row">
+            <div class="column" style="margin-left:40px;">
+                <b>PAYMENT RECEIVED</b><br>
+            </div>
+            <div class="column">
+                @string.Format("{0:n0}", AmtRec)
+            </div>
+            <div class="column">
+                <b>PERCENTAGE RECEIVED</b>
+            </div>
+            <div class="column">
+                @string.Format("{0:0.00} %", percentageReceived)
+            </div>
+        </div>
+        <div class="row">
+            <div class="column" style="margin-left:40px;">
+                <b>BALANCE</b><br>
+            </div>
+            <div class="column">
+                @string.Format("{0:n0}", bal)
+            </div>
+            <div class="column">
+                <b>DISCOUNT/PREMIUN</b><br>
+            </div>
+            <div class="column">
+                @discount
+            </div>
+        </div>
 
-                <p>
-                    <b>
-                        This application form &amp; it's receipt is subject to approval from the directors &amp; site heads after receipt of payment in bank account
-                        after clearance of cheque. In case of cash, receipt must be taken by the client from the site office otherwise no claim shall be entertained
-                        in respect of payment receipt.
-                    </b>
-                </p>
-                <p></p>
+        <table cellspacing="0" border="0" style="width: 1070px; font-size: 22px; margin-top: 230px;">
+            <tr>
+                <td width="400px" align="left" valign=bottom style="font-weight:bold; text-align:center; border-top:1px solid">BOOKING OFFICER & DATE</td>
+                <td width="30px" align="left" valign=bottom></td>
+                <td width="400px" align="left" valign=bottom style="font-weight:bold; text-align:center; border-top:1px solid">MANAGER</td>
+                <td width="30px" align="left" valign=bottom></td>
+                <td width="400px" align="left" valign=bottom style="font-weight:bold; text-align:center; border-top:1px solid">Applicant Signature</td>
+
+                @*<td width="200px" align="right" valign=bottom style="font-weight:bold">Date</td>
+                <td width="200px" align="center" valign=bottom style="border-bottom:1px solid;font-size: 17px;">@string.Format("{0:ddd, MMMM dd yyyy}", DateTime.Now)</td>*@
+            </tr>
+        </table>
+        <div class="page-break">
+            <div class="row" style="margin-top: 100px;">
+                <div class="column" style="margin-left:40px; text-align:center; font-size:20px;">
+                    <b>TERMS & CONDITIONS</b>
+                </div>
+            </div>
+            <div class="row">
+                <div class="column" style="margin-left: 40px; margin-top: 10px; text-align: left;">
+                    Applicant/Purchaser shall pay to Eurobiz Corporation (hereinafter referred to as the “Seller”) a non-refundable reservation deposit of the purchase price and reserve the property subject to which the Eurobiz Corporation/Seller will hold the property off-sale strictly on and subject to the conditions set out below.
+                </div>
+            </div>
+            <div class="row">
+                <div class="column" style="margin-left: 40px; margin-top: 10px; text-align: left; ">
+                    <b>*</b>I/we the applicant/purchaser(s) undertake that Eurobiz Corporation/Seller will reserve the property for me/us until the payments are made in full and in accordance with the schedule of payment provide therein.
+                </div>
+            </div>
+            <div class="row">
+                <div class="column" style="margin-left: 40px; margin-top: 10px; text-align: left; ">
+                    <b>*</b> One application form will only be considered for one plot file and allocated plot shall not be used for any other purpose except applied for.
+                </div>
+            </div>
+            <div class="row">
+                <div class="column" style="margin-left: 40px; margin-top: 10px; text-align: left; ">
+                    <b>*</b>The down payment / booking amount is non-refundable and non-adjustable.
+                </div>
+            </div>
+            <div class="row">
+                <div class="column" style="margin-left: 40px; margin-top: 10px; text-align: left; ">
+                    <b>*</b>If three (03) consecutive installments are overdue where of a notice of outstanding  payments along with surcharge will be forwarded; failure to make payments within the specified time will result in cancellation and such reserved plot/property will be re-offered for sale.
+                </div>
+            </div>
+            <div class="row">
+                <div class="column" style="margin-left: 40px; margin-top: 10px; text-align: left; ">
+                    <b>*</b>Any installment paid after due date will only be acceptable with charge of 5% per installment.
+                </div>
+            </div>
+            <div class="row">
+                <div class="column" style="margin-left: 40px; margin-top: 10px; text-align: left; ">
+                    <b>*</b>In case of refund the payment will be returned to the applicant after deduction of 20% within 01-year without interest/markup.
+                </div>
+            </div>
+            <div class="row">
+                <div class="column" style="margin-left: 40px; margin-top: 10px; text-align: left; ">
+                    <b>*</b>Size of the plot is tentative and is subject to adjustment after demarcation and measurements. In case of extra land forming part of the plot, there shall be a further charge in addition to the total amount; to be calculated at that stage, which I/we agree to pay.
+                </div>
+            </div>
+            <div class="row">
+                <div class="column" style="margin-left: 40px; margin-top: 10px; text-align: left; ">
+                    <b>*</b>The Management of Eurobiz Corporation reserves the right to allot/sell a plot surrendered by me/us or cancelled from my/our name due to non-payment to any other applicant or person and that I/we shall have no rights left over the plot.
+                </div>
+            </div>
+            <div class="row">
+                <div class="column" style="margin-left: 40px; margin-top: 10px; text-align: left; ">
+                    <b>*</b>That the transfer of the plot shall only take place once all the payments have been cleared including surcharges (if applicable) and agree that all registration/mutation charges along with any other Government Tax in vogue shall be borne by me/us.
+                </div>
+            </div>
+            <div class="row">
+                <div class="column" style="margin-left: 40px; margin-top: 10px; text-align: left; ">
+                    <b>*</b>That I/we will not be allowed to mortgage or sublease my/our plot of the land till such time that all the payments including surcharge have been cleared.
+                </div>
+            </div>
+            <div class="row">
+                <div class="column" style="margin-left: 40px; margin-top: 10px; text-align: left; ">
+                    <b>*</b>I/we will abide by terms and conditions in addition to the byelaws, rules and regulations governing allotments, possession, ownership, construction and transfer of plots, enforced from time to time by the Management of Eurobiz Corporation.
+                </div>
+            </div>
+            <div class="row">
+                <div class="column" style="margin-left: 40px; margin-top: 10px; text-align: left; ">
+                    <b>*</b>The Management reserves the right to change and/or modify the Master Plan of the project / Eurobiz Corporation if necessary and also has the right to amend the rules, regulations, policies and Bye-laws.
+                </div>
+            </div>
+            <div class="row">
+                <div class="column" style="margin-left: 40px; margin-top: 10px; text-align: left; ">
+                    <b>*</b>I/we the applicant/ purchaser(S) undertake and declare that I/we have read the terms and conditions and agree the same.
+                </div>
+            </div>
+            <div class="row">
+                <div class="column" style="margin-left: 40px; margin-top: 10px; text-align: left; ">
+                    <b>*</b> In case of any dispute, the matter will be referred to the Arbitration Committee of Eurobiz Corporation constituted under the provisions of Arbitration Act, 1940 and its decision shall be considered as final.
+                </div>
+            </div>
+            <div class="row">
+                <div class="column" style="margin-left: 40px; margin-top: 40px; text-align: left;">
+                    <b style="border-top: 1px solid">Signature of Applicant/Purchaser(S)</b>
+                </div>
+                <div class="column" style="margin-left:40px; margin-top:40px; text-align:center;">
+                    <b style="border-top: 1px solid">Eurobiz Corporation (Sales Executive)</b>
+                </div>
             </div>
         </div>
     </div>
+    
 </body>
+
 </html>

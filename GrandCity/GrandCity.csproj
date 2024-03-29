@@ -7007,7 +7007,11 @@
     <Content Include="Views\Reports\FilesOutstanding.cshtml" />
     <Content Include="Views\Reports\PlotsfilesConsultedReports.cshtml" />
     <Content Include="Views\Reports\PlotsfilesCosolidatedReports.cshtml" />
+<<<<<<< HEAD
     <Content Include="Views\FileSystem\UpdateFileInformation.cshtml" />
+=======
+    <Content Include="Views\FileSystem\Application_Form_GCK.cshtml" />
+>>>>>>> usama_n
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
