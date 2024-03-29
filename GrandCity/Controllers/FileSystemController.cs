@@ -12,6 +12,7 @@ using MeherEstateDevelopers.Filters;
 using Microsoft.Ajax.Utilities;
 using System.Threading;
 using System.Web.Razor.Tokenizer;
+using System.Data.Entity;
 
 namespace MeherEstateDevelopers.Controllers
 {
@@ -3017,17 +3018,50 @@ namespace MeherEstateDevelopers.Controllers
             var res = db.File_Installments.Where(x => x.File_Id == id).ToList();
             return PartialView(res);
         }
-        public JsonResult UpdateInstallmentInfoFile(long id, List<File_Installments> installmentData)
-        {
-            var InstallmentStructureData = new XElement("InstallmentData", installmentData.Select(x => new XElement("InstallmentDataInfo",
-                new XAttribute("InstallmentType", x.Installment_Type),
-                new XAttribute("InstallmentName", x.Installment_Name),
-                new XAttribute("Amount", x.Amount),
-                new XAttribute("DueDate", x.Due_Date)))).ToString();
+        //public JsonResult UpdateInstallmentInfoFile(long id, List<File_Installments> installmentData)
+        //{
+        //    var InstallmentStructureData = new XElement("InstallmentData", installmentData.Select(x => new XElement("InstallmentDataInfo",
+        //        new XAttribute("InstallmentType", x.Installment_Type),
+        //        new XAttribute("InstallmentName", x.Installment_Name),
+        //        new XAttribute("Amount", x.Amount),
+        //        new XAttribute("DueDate", x.Due_Date)))).ToString();
 
-            var res = db.Sp_Update_Installment_File_Plot_Comm(id, "FileManagement", InstallmentStructureData);
-            return Json(new { Status = true, Msg = "Updated Succesfully" });
+        //    var res = db.Sp_Update_Installment_File_Plot_Comm(id, "FileManagement", InstallmentStructureData);
+        //    return Json(new { Status = true, Msg = "Updated Succesfully" });
+        //}
+        public JsonResult UpdateInstallmentInfoFile(long fileid, List<File_Installments> installmentData)
+        {
+            foreach (var item in installmentData)
+            {
+                if(item.Id==0)
+                { 
+                    var InstallmentStructureData = new XElement("InstallmentData", new XElement("InstallmentDataInfo",
+                        new XAttribute("Id", item.Id),
+                        new XAttribute("InstallmentType", item.Installment_Type),
+                        new XAttribute("InstallmentName", item.Installment_Name),
+                        new XAttribute("Amount", item.Amount),
+                        new XAttribute("DueDate", item.Due_Date))).ToString();
+
+                    // Call the stored procedure for each installment
+                    var res = db.Sp_InsertUpdate_Installment_File_Plot_Comm(fileid, "FileManagement", InstallmentStructureData);
+                }
+                else
+                {
+                    var InstallmentStructureData = new XElement("InstallmentData", new XElement("InstallmentDataInfo",
+                       new XAttribute("Id", item.Id),
+                       new XAttribute("InstallmentType", item.Installment_Type),
+                       new XAttribute("InstallmentName", item.Installment_Name),
+                       new XAttribute("Amount", item.Amount),
+                       new XAttribute("DueDate", item.Due_Date))).ToString();
+
+                    // Call the stored procedure for each installment
+                    var res = db.Sp_InsertUpdate_Installment_File_Plot_Comm(item.Id, "FileManagement", InstallmentStructureData);
+                }
+            }
+
+            return Json(new { Status = true, Msg = "Updated Successfully" });
         }
+
 
         public ActionResult FilesPlotsReport()
         {

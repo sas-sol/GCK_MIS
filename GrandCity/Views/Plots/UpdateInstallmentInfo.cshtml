@@ -176,7 +176,7 @@
                     type: "POST",
                     url: '/Plots/UpdateInstallmentInfoPlot/',
                     dataType: "json",
-                    data: { id: id, installmentData: arr },
+                    data: { plotid: id, installmentData: arr },
                     success: function (data) {
                         //alert('Successfully done');
                         Swal.fire({

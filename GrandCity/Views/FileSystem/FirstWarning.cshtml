@@ -53,29 +53,30 @@
                         <td>@item.Mobile_2</td>
                         <td>
                             @*@{
-                                    if (item.Verified == true)
-                                    {
-                                        <button class="btn btn-primary sec-war-f" data-id="@item.Id" data-ownid="@item.Owner_Id" style="font-size:13px;padding: 3px;">Second Warning</button>
-                                    }
-                                    else
-                                    {
-                                        if (item.Verification_Req == true)
-                                        {
-                                            <label class="switch" style="height:20px;width:46px;margin:0px"><input type="checkbox" data-id="@item.Id" id="veri-req-f-id" checked><span class="slider round"></span></label>
-                                        }
-                                        else
-                                        {
-                                            <label class="switch" style="height:20px;width:46px;margin:0px"><input type="checkbox" data-id="@item.Id" id="veri-req-f-id"><span class="slider round"></span></label>
-                                        }
-                                    }
-                                }*@
+            if (item.Verified == true)
+            {
+                <button class="btn btn-primary sec-war-f" data-id="@item.Id" data-ownid="@item.Owner_Id" style="font-size:13px;padding: 3px;">Second Warning</button>
+            }
+            else
+            {
+                if (item.Verification_Req == true)
+                {
+                    <label class="switch" style="height:20px;width:46px;margin:0px"><input type="checkbox" data-id="@item.Id" id="veri-req-f-id" checked><span class="slider round"></span></label>
+                }
+                else
+                {
+                    <label class="switch" style="height:20px;width:46px;margin:0px"><input type="checkbox" data-id="@item.Id" id="veri-req-f-id"><span class="slider round"></span></label>
+                }
+            }
+        }*@
                             @*@if (item.Installments < -3)
-                                {
-                                    <button class="btn btn-primary can-let-f" data-id="@item.Id" data-num="@item.FileFormNumber" data-ownid="@item.Owner_Id" style="font-size:13px;padding: 3px;">Cancellation Letter</button>
-                                }
-                                else
-                                {*@
+        {
+            <button class="btn btn-primary can-let-f" data-id="@item.Id" data-num="@item.FileFormNumber" data-ownid="@item.Owner_Id" style="font-size:13px;padding: 3px;">Cancellation Letter</button>
+        }
+        else
+        {*@
                             <a href="/FileSystem/FirstWarningLetter?Id=@item.Id" target="_blank" class="btn btn-dark" data-id="@item.Id" data-num="@item.FileFormNumber" data-ownid="@item.Owner_Id" style="font-size:13px;padding: 3px;color:white !important">View First Letter</a>
+                            @*<a href="/Letter/GenerateLetter?letterType=FirstWarningLetter&Id=@item.Id&Module=FileManagement" target="_blank" class="btn btn-dark" data-id="@item.Id" data-num="@item.FileFormNumber" data-ownid="@item.Owner_Id" style="font-size:13px;padding: 3px;color:white !important">View First Letter</a>*@
                             <button class="btn btn-primary sec-war-f" data-id="@item.Id" data-ownid="@item.Owner_Id" data-num="@item.FileFormNumber" style="font-size:13px;padding: 3px;">Second Warning</button>
                             @* } *@
                         </td>

@@ -632,7 +632,16 @@ namespace MeherEstateDevelopers.Models
         Receivable_Receipt,
         LoanSettlement,
         SurCharge,
-        Completion_Charges
+        Completion_Charges,
+        Development_Charges,
+        Special_Preference,
+        Other_Charges,
+        Possession_Charges,
+        Balloting,
+        Activation_Charges,
+        Demarcation,
+        Govt_Tax,
+        Processing_Fee
     }
     public enum Payments
     {

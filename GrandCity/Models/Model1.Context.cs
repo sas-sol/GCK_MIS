@@ -24503,5 +24503,22 @@ namespace MeherEstateDevelopers.Models
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Sp_Get_OverdueQualifying_Plots_Id_Result>("Sp_Get_OverdueQualifying_Plots_Id", idParameter);
         }
+    
+        public virtual int Sp_InsertUpdate_Installment_File_Plot_Comm(Nullable<long> comid, string mod, string installmentData)
+        {
+            var comidParameter = comid.HasValue ?
+                new ObjectParameter("comid", comid) :
+                new ObjectParameter("comid", typeof(long));
+    
+            var modParameter = mod != null ?
+                new ObjectParameter("mod", mod) :
+                new ObjectParameter("mod", typeof(string));
+    
+            var installmentDataParameter = installmentData != null ?
+                new ObjectParameter("InstallmentData", installmentData) :
+                new ObjectParameter("InstallmentData", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("Sp_InsertUpdate_Installment_File_Plot_Comm", comidParameter, modParameter, installmentDataParameter);
+        }
     }
 }
