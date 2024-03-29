@@ -721,7 +721,7 @@ namespace MeherEstateDevelopers.Controllers
             if (res.Nominee_CNIC_NICOP != od.Nominee_CNIC_NICOP && res.Nominee_CNIC_NICOP != null) { db.Sp_Add_FileComments(od.FileId, "Update Nominee CNIC: " + res.Nominee_CNIC_NICOP + " To: " + od.Nominee_CNIC_NICOP, userid, ActivityType.Record_Upatation.ToString()); }
             return Json(true);
         }
-        public JsonResult DeliverFile(long id)
+        public JsonResult DeliverFile(long? id)
         {
             long userid = long.Parse(User.Identity.GetUserId());
             var res1 = db.Files_Transfer.Where(x => x.Group_Tag == id).ToList();

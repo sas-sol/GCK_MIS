@@ -2549,50 +2549,30 @@ $(document).on("click", "#sav-info", function () {
 });
 // Update File Delivery
 $(document).on("click", "#fil-del", function () {
+    debugger;
     var overdueamt = parseFloat($("#ov-du-amt").text());
     if (overdueamt > singleinst) {
-        //alert("Clear the Over Due Amount First");
-        Swal.fire({
-            icon: 'info',
-            text: 'File with overdue amount cannot be marked as Delivered'
-        })
+        alert('File with overdue amount cannot be marked as Delivered');
         return false;
     }
     var id = $(this).data('grptag')
-    //var act = confirm("Are you Sure you want Deliver this File")
-    //if (act == true) {
-    Swal.fire({
-        text: 'Are you sure you want to mark this file as delivered?',
-        icon: 'question',
-        showCancelButton: true,
-        confirmButtonText: 'Yes',
-        cancelButtonText: 'No'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            $.ajax({
-                type: "POST",
-                url: '/FileSystem/DeliverFile/',
-                data: { Id: id },
-                success: function (data) {
-                    //alert("File Delivered Sucessfully");
-                    Swal.fire({
-                        icon: 'success',
-                        text: 'File marked as delivered successfully'
-                    }).then(() => {
-                        var html = '<button id="fil-del" style="width:100%" class="btn btn-success"><i class="ti-check"></i>&nbsp;&nbsp;File Deliverd</button>';
-                        $('#file-del').html(html);
-                    })
-                },
-                error: function (data) {
-                    Swal.fire({
-                        icon: 'error',
-                        text: 'Something went wrong'
-                    });
-                }
-            });
-        }
-    });
+    if (confirm('Are you Sure you want Deliver this File')) {
+        $.ajax({
+            type: "POST",
+            url: '/FileSystem/DeliverFile/',
+            data: { Id: id },
+            success: function (data) {
+                alert("File Delivered Sucessfully");
+                var html = '<button id="fil-del" style="width:100%" class="btn btn-success"><i class="ti-check"></i>&nbsp;&nbsp;File Delivered</button>';
+                $('#file-del').html(html);
+            },
+            error: function (data) {
+                alert('Something went wrong');
+            }
+        });
+    }
 });
+
 // search file for Transfer
 $(document).on("click", "#sea-file-data-trans", function () {
     var val = $('#app-num').val();
