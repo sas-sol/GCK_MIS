@@ -125,7 +125,7 @@
                     type: "POST",
                     url: '/FileSystem/UpdateInstallmentInfoFile/',
                     dataType: "json",
-                    data: { id: id, installmentData: arr },
+                    data: { fileid: id, installmentData: arr },
                     success: function (data) {
                         //alert('Successfully done');
                         Swal.fire({

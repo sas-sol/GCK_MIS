@@ -10344,54 +10344,149 @@ $(document).on("submit", "#pay-con-char", function (e) {
     });
 });
 //
-$(document).on("submit", "#pay-fin-char", function (e) {
+$(document).on("click", "#gen-fine-rec", function (e) {
     e.preventDefault();
-    debugger
-    $('#pay-fin-char-btn').attr("disabled", true);
-    var con = confirm("Are you sure you want to Generate Receipt");
-    if (con) {
-    //Swal.fire({
-    //    text: 'Are you sure you want to generate the Receipt?',
-    //    icon: 'question',
-    //    showCancelButton: true,
-    //    confirmButtonText: 'Yes',
-    //    cancelButtonText: 'No'
-    //}).then((result) => {
-    //    if (result.isConfirmed) {
-    
-                $.ajax({
-                type: "POST",
-                url: $("#pay-fin-char").attr('action'),
-                data: $("#pay-fin-char").serialize(),
-                success: function (data) {
-                    if (!data) {
-                        //alert("Error Occured");
-                        Swal.fire({
-                            icon: 'error',
-                            text: 'Something went wrong'
-                        });
-                    }
-                    else {
-                        Swal.fire({
-                            icon: 'success',
-                            text: 'Receipt generated successfully'
-                        }).then(() => {
-                            window.open("/Receipts/FineCharges?Id=" + data.Receiptid + "&Token=" + data.Token, '_blank');
-                            window.location.reload();
-                        });   
-                    }
-                },
-                error: function () {
-                    //alert("Error Occured");
-                    Swal.fire({
-                        icon: 'error',
-                        text: 'Something went wrong'
-                    });
-                    $('#gen-plot-rec').attr("disabled", false);
-                }
-            });
+
+    // Validate amount
+    if ($("#amt").val() <= 0) {
+        alert("Enter a valid amount to proceed");
+        return false;
+    }
+
+    // Confirm action
+    if (!confirm("Are you sure you want to generate the Receipt?")) {
+        return false;
+    }
+
+    // Proceed with AJAX request
+    $.ajax({
+        type: "POST",
+        url: $("#pay-fin-char").attr('action'),
+        data: $("#pay-fin-char").serialize(),
+        success: function (data) {
+            if (data.Status == false) {
+                alert(data.Msg);
+            } else if (data.Status == true) {
+                alert("Receipt generated successfully");
+                window.open("/Receipts/FineCharges?Id=" + data.Receiptid + "&ReceiptType=" + data.ReceiptType + "&Token=" + data.Token, '_blank');
+
+            }
+        },
+        error: function () {
+            alert("An error occurred while processing your request");
         }
+    });
 });
+
+//$(document).on("click", "#gen-fine-rec", function (e) {
+//    //alert("Clicked.");
+//   debugger;
+//    e.preventDefault();
+//    $("#amt-in-wrds").val(InWords($("#amt").val()));
+//    var img = $("#scanned").attr('src');
+//    $("#scanimage").val(img);
+//    if ($("#amt").val() <= 0) {
+//        //Swal.fire({
+//        //    icon: 'info',
+//        //    text: 'Enter a valid amount to proceed'
+//        //});
+//        alert("Enter a valid amount to proceed");
+//        return false;
+//    }
+//    //var con = confirm("Are you sure you want to Generate Receipt");
+//    //if (con) {
+//    debugger;
+//    Swal.fire({
+//        text: 'Are you sure you want to generate the Receipt?',
+//        icon: 'question',
+//        showCancelButton: true,
+//        confirmButtonText: 'Yes',
+//        cancelButtonText: 'No'
+//    }).then((result) => {
+//        if (result.isConfirmed) {
+//            $('#pay-fin-char').attr("disabled", true);
+//            $.ajax({
+//                type: "POST",
+//                url: $("#pay-fin-char").attr('action'),
+//                data: $("#pay-fin-char").serialize(),
+//                success: function (data) {
+//                    debugger;
+//                    if (data.Status == false) {
+//                        //alert(data.Msg);
+//                        Swal.fire({
+//                            icon: 'error',
+//                            text: data.Msg
+//                        });
+//                    }
+//                    else if (data.Status == true) {
+//                        //alert(data.Msg);
+//                        Swal.fire({
+//                            icon: 'success',
+//                            text: data.Msg
+//                        });
+//                        window.open("/Receipts/FineCharges?Id=" + data.Receiptid + "&Token=" + data.Token, '_blank');
+//                    }
+//                },
+//                error: function () {
+//                    //alert("Error Occured");
+//                    Swal.fire({
+//                        icon: 'error',
+//                        text: "Something went wrong"
+//                    });
+//                    $('#gen-fine-rec').attr("disabled", false);
+//                }
+//            });
+//        }
+//    });
+//});
+//$(document).on("submit", "#pay-fin-char", function (e) {
+//    e.preventDefault();
+//    debugger
+//    $('#pay-fin-char-btn').attr("disabled", true);
+//    var con = confirm("Are you sure you want to Generate Receipt");
+//    if (con) {
+//    //Swal.fire({
+//    //    text: 'Are you sure you want to generate the Receipt?',
+//    //    icon: 'question',
+//    //    showCancelButton: true,
+//    //    confirmButtonText: 'Yes',
+//    //    cancelButtonText: 'No'
+//    //}).then((result) => {
+//    //    if (result.isConfirmed) {
+    
+//                $.ajax({
+//                type: "POST",
+//                url: $("#pay-fin-char").attr('action'),
+//                data: $("#pay-fin-char").serialize(),
+//                success: function (data) {
+//                    if (!data) {
+//                        //alert("Error Occured");
+//                        Swal.fire({
+//                            icon: 'error',
+//                            text: 'Something went wrong'
+//                        });
+//                    }
+//                    else {
+//                        Swal.fire({
+//                            icon: 'success',
+//                            text: 'Receipt generated successfully'
+//                        }).then(() => {
+//                            window.open("/Receipts/FineCharges?Id=" + data.Receiptid + "&Token=" + data.Token, '_blank');
+//                            window.location.reload();
+//                        });   
+//                    }
+//                },
+//                error: function () {
+//                    //alert("Error Occured");
+//                    Swal.fire({
+//                        icon: 'error',
+//                        text: 'Something went wrong'
+//                    });
+//                    $('#gen-plot-rec').attr("disabled", false);
+//                }
+//            });
+//        }
+//});
 //
 $(document).on("click", "#gen-elec-ch-rec", function (e) {
     var payable = RemoveComma($(".p__am").attr("id"));

@@ -38,20 +38,58 @@
                         <hr />
                         <div class="form-row">
                             <div class="form-group col-md-2">
-                                <label>Type</label>
+                                <label>Receipt Type</label>
                                 <select class="form-control rec-type" name="Type">
-                                    <option value="Fines_And_Penalties">Fine & Penalties</option>
+                                    <option value="">Select Receipt Type</option>
+                                    <option value="Confirmation">Confirmation</option>
                                     <option value="SurCharge">SurCharge</option>
-                                    @*<option value="Duplicate_AllotmentLetter">Duplicate Allotment Letter</option>
-                                    <option value="Duplicate_Customer_File">Duplicate Customer File</option>
-                                    <option value="Out_Station_Charges">Out Station Charges</option>
-                                    <option value="Power_Of_Attorney">Power of Attorney</option>*@
+                                    <option value="Completion_Charges">Completion_Charges</option>
+                                    <option value="Development_Charges">Development_Charges</option>
+                                    <option value="Special_Preference">Special_Preference</option>
+                                    <option value="Other_Charges">Other_Charges</option>
+                                    <option value="Possession_Charges">Possession_Charges</option>
+                                    <option value="Balloting">Balloting</option>
+                                    <option value="Activation_Charges">Activation_Charges</option>
+                                    <option value="Demarcation">Demarcation</option>
+                                    <option value="Govt_Tax">Govt_Tax</option>
+                                    <option value="Processing_Fee">Processing_Fee</option>
+
                                 </select>
                             </div>
                             <div class="form-group col-md-2">
                                 <label>Amount</label>
-                                <input class="form-control coma" placeholder="12,345" required>
-                                <input type="hidden" id="amt" name="Amount" class="amt" required>
+                                <input class="form-control coma" placeholder="12,345">
+                                <input type="hidden" id="amt" name="Amount" class="amt">
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label>Payment Type</label>
+                                <select class="form-control paytypesel-test" id="cah-chq-bak" name="PaymentType">
+                                    <option value="Cash">Select Payment Type</option>
+                                    <option value="Cash">Cash</option>
+                                    <option value="BankDraft">Bank Draft</option>
+                                    <option value="Cheque">Cheque</option>
+                                    <option value="PayOrder">Pay Order</option>
+                                    <option value="Online_Cash">Online - Cash</option>
+                                    <option value="Online_Cheque">Online - Cheque</option>
+                                    <option value="Online_Payorder">Online - PayOrder</option>
+                                    <option value="Online_Bankdraft">Online - BankDraft</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-3 paymentotherinfo">
+                                <label id="paytypelabel"></label>
+                                <input type="text" class="form-control" id="paymenttype" name="PayChqNo" placeholder="" disabled>
+                            </div>
+                            <div class="form-group col-md-3 paymentotherinfo">
+                                <label>Bank</label>
+                                @Html.DropDownList("Bank", null, "Choose..", new { @class = "form-control", disabled = "" })
+                            </div>
+                            <div class="form-group col-md-2 paymentotherinfo">
+                                <label>Branch </label>
+                                <input type="text" class="form-control" id="Branch" name="Branch" placeholder="Mall Rd" disabled>
+                            </div>
+                            <div class="form-group col-md-2 paymentotherinfo">
+                                <label>Date</label>
+                                <input type="text" class="form-control" data-provide="datepicker" name="Ch_bk_Pay_Date" placeholder="mm/dd/yyyy" disabled required>
                             </div>
                             <div class="form-group col-md-4">
                                 <label>Description</label>
@@ -59,7 +97,7 @@
                             </div>
                         </div>
                         <div class="form-row">
-                            <button class="btn btn-info" type="submit" id="pay-fin-char-btn">Generate Receipt</button>
+                            <button class="btn btn-info" type="button" id="gen-fine-rec">Generate Receipt</button>
                         </div>
                     </div>
 
@@ -77,6 +115,25 @@ else
     </div>
 }
 <script>
+    $(function () {
+        $('.modal-footer').append('<button class="btn btn-success" id="pay-fin-char" type="submit">Generate Receipt</button>');
+        $("#name").val($("#Name").val());
+        $("#fth-husbad").val($("#Father_Husband").val());
+        $("#mbl").val($("#Mobile_1").val());
+
+        $("#amt-file-no").val($("#plt-no").text());
+
+        $("#total-amt").val($("#ttl-amt").val());
+        $("#prj-name").val($("#prj").val());
+
+        $("#blk-nam").val($("#Block option:selected").text());
+
+        $("#plot-size").val($("#plt-size").text());
+        $("#plotid").val($("#plot-details").val());
+
+    });
+</script>
+@*<script>
     $(document).on("change", ".rec-type", function () {
         var val = $(this).val();
         if (val == "Fines_Penalities" || val == "Out_Station_Charges") {
@@ -106,5 +163,5 @@ else
             $(".amt , .coma ").attr("readonly", "true")
         }
     });
-</script>
+</script>*@
 

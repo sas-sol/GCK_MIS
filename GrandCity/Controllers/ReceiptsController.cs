@@ -89,8 +89,9 @@ namespace MeherEstateDevelopers.Controllers
             var res = db.Sp_Get_Receipt_Parameter(Id, Token).SingleOrDefault();
             return View(res);
         }
-        public ActionResult FineCharges(string Id, long Token)
+        public ActionResult FineCharges(string Id,string ReceiptType, long Token)
         {
+            ViewBag.type = ReceiptType;
             var res = db.Sp_Get_Receipt_Parameter(Id, Token).SingleOrDefault();
             return View(res);
         }

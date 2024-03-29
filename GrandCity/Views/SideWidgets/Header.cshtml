@@ -5,7 +5,7 @@
         width: 30px;
         height: 30px;
         border-radius: 50%;
-        background: #FF5733;
+        background: #2a100a /*#FF5733*/;
         font-size: 24px;
         color: #fff;
         text-align: center;
@@ -67,7 +67,8 @@
     </script>*@
 @*#8b6d48 this is the gold dark shade #8B0000*@
 <div class="header navbar no-print">
-    <div class="header-container gradient" style="background: linear-gradient(to right, #1f1f1f, #8b6d48); box-shadow: 5px 5px 10px; height: 65px; ">
+    <div class="header-container gradient" style="background: linear-gradient(to right, #1f1f1f, #f44336); box-shadow: 5px 5px 10px; height: 65px; ">
+        @*#8b6d48   brown color*@
         <ul class="nav-left">
             <li><a id="sidebar-toggle" class="sidebar-toggle" href="javascript:void(0);"><i class="ti-menu"></i></a></li>
             <li style="padding:10px"><span style="font-size: 25px; color: #f1c07b; font-family: Arial;"><p>@ViewBag.Company</p></span> </li>
@@ -75,7 +76,7 @@
         <ul class="nav-right">
             <li class="notifications dropdown">
                 <a href="" class="dropdown-toggle no-after" data-toggle="dropdown">
-                    <i class="ti-cloud" style="color: #f1c07b;"></i>
+                    <i class="ti-cloud" style="color: #150d02"></i>
                 </a>
                 <ul class="dropdown-menu">
                     <li class="pX-20 pY-15 bdB"><span class="fsz-sm fw-600 c-grey-900">Company</span></li>
@@ -106,9 +107,9 @@
                     <span class="counter bgc-red">@Model.Details.Total_Notifications</span>
                 }
 
-                <a href="" class="dropdown-toggle no-after" data-toggle="dropdown">
-                    <i class="ti-bell" style="color: #f1c07b;"></i>
-                </a>
+            <a href="" class="dropdown-toggle no-after" data-toggle="dropdown">
+                <i class="ti-bell" style="color: #150d02"></i> @*#f1c07b*@
+            </a>
                 <ul class="dropdown-menu">
                     <li class="pX-20 pY-15 bdB"><i class="ti-bell pR-10"></i> <span class="fsz-sm fw-600 c-grey-900">Notifications</span></li>
                     <li>
@@ -137,10 +138,10 @@
                                         </a>
                                     </li>
                                     @*<script>
-                                            var date = '@item.CreatedAt';
-                                            var t = moment(date).fromNow();
-                                            $("#t-@item.Id").text(t);
-                                        </script>*@
+                                        var date = '@item.CreatedAt';
+                                        var t = moment(date).fromNow();
+                                        $("#t-@item.Id").text(t);
+                                    </script>*@
                                 }
                             }
                             else
@@ -181,20 +182,21 @@
                     @*<li><a href="javascript:void()" data-toggle="modal" data-target="#Modal" class="gen-tick d-b td-n pY-5 bgcH-grey-100 c-grey-700"><i class="ti-panel mR-10"></i> <span>Report a Problem</span></a></li>*@
                     @if (User.IsInRole("Cashier"))
                     {
-                        <li><a href="/Finance/Receipts/" target="_blank" class="d-b td-n pY-5 bgcH-grey-100 c-grey-700"><i class="ti-user mR-10"></i> <span>Receipts</span></a></li>
+                        <li><a href="/Finance/Receipts/" target="_blank" style="color:black"><i class="ti-user mR-10"></i> <span>Receipts</span></a></li>
+                        @*<li><a href="/Finance/Receipts/" target="_blank" class="d-b td-n pY-5 bgcH-grey-100 c-grey-700"><i class="ti-user mR-10"></i> <span>Receipts</span></a></li>*@
                         @*<li><a href="/Finance/MarketingReceipts/" target="_blank" class="d-b td-n pY-5 bgcH-grey-100 c-grey-700"><i class="ti-user mR-10"></i> <span>Marketing Receipts</span></a></li>*@
                         @*<li><a href="/Banking/DishonredCheqList/" target="_blank" class="d-b td-n pY-5 bgcH-grey-100 c-grey-700"><i class="ti-user mR-10"></i> <span>Dishoner Cheques List</span></a></li>*@
                         @*<li><a href="/Banking/LeadsDishonoredCheqs/" target="_blank" class="d-b td-n pY-5 bgcH-grey-100 c-grey-700"><i class="ti-user mR-10"></i> <span>Leads Dishoner Cheques List</span></a></li>*@
-                        <li><a href="/Banking/DailyCashReport/" target="_blank" class="d-b td-n pY-5 bgcH-grey-100 c-grey-700"><i class="ti-user mR-10"></i> <span>Daily Report</span></a></li>
+                        <li><a href="/Banking/DailyCashReport/" target="_blank" style="color:black"><i class="ti-user mR-10"></i> <span>Daily Report</span></a></li>
                         if (User.IsInRole("SAM Cashier"))
                         {
                             @*<li><a href="/Banking/DailySAMCashReport/" target="_blank" class="d-b td-n pY-5 bgcH-grey-100 c-grey-700"><i class="ti-user mR-10"></i> <span>Daily SAM Report</span></a></li>*@
                         }
                     }
-                    <li><a href="/Activity/MyActivity" class="d-b td-n pY-5 bgcH-grey-100 c-grey-700"><i class="ti-user mR-10"></i> <span>My Activity</span></a></li>
+                    <li><a href="/Activity/MyActivity" style="color:black"><i class="ti-user mR-10"></i> <span>My Activity</span></a></li>
                     @* <li><a href="/HumanResource/Detail/" class="d-b td-n pY-5 bgcH-grey-100 c-grey-700"><i class="ti-user mR-10"></i> <span>Profile</span></a></li>*@
                     <li role="separator" class="divider"></li>
-                    <li><a href="javascript:document.getElementById('logoutForm').submit()" class="d-b td-n pY-5 bgcH-grey-100 c-grey-700"><i class="ti-power-off mR-10"></i> <span>Logout</span></a></li>
+                    <li><a href="javascript:document.getElementById('logoutForm').submit()" style="color:black"><i class="ti-power-off mR-10"></i> <span>Logout</span></a></li>
                     @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm" }))
                     {
                         @Html.AntiForgeryToken()
