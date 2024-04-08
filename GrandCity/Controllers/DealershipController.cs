@@ -1095,7 +1095,7 @@ namespace MeherEstateDevelopers.Controllers
             {
                 decimal? Bal = 0;
                 var res2 = db.Dealerships.Where(x => x.Id == DealerId).FirstOrDefault();
-                string Baseurl = "http://192.168.11.164/";
+                string Baseurl = "http://116.58.24.62:82/";
                 using (var client = new HttpClient())
                 {
                     //Passing service base url
@@ -1104,7 +1104,7 @@ namespace MeherEstateDevelopers.Controllers
                     //Define request data format
                     client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
                     //Sending request to find web api REST service resource GetAllEmployees using HttpClient
-                    HttpResponseMessage Res = await client.GetAsync("sag_app1.1/accounts/ledger_method_report_balance2/"+res2.COA_Code);
+                    HttpResponseMessage Res = await client.GetAsync("grand_city1.1/accounts/ledger_method_report_balance2/" + res2.COA_Code);
                     //Checking the response is successful or not which is sent using HttpClient
                     if (Res.IsSuccessStatusCode)
                     {
@@ -1140,17 +1140,31 @@ namespace MeherEstateDevelopers.Controllers
         public JsonResult DealerPlot_Details(long Id)
         {
             var res1 = db.Sp_Get_PlotData(Id).FirstOrDefault();
-            var res2 = db.Biding_Reserve_Plots.Where(x => x.Plot_Id == Id && x.PlotStatus == "Available_For_Sale").FirstOrDefault();
+            var price = db.Installment_Structure.Where(x => x.Installment_Plot_Id == res1.Installment_Plan_Id && x.Installment_Type == "3").FirstOrDefault();
+            var Totalprice = db.Installment_Structure.Where(x => x.Installment_Plot_Id == res1.Installment_Plan_Id).ToList().Sum(x => x.Amount);
+
+            var res2 = db.Biding_Reserve_Plots.Where(x => x.Plot_Id == Id && x.PlotStatus == "Available").FirstOrDefault();
             if (res2 is null)
             {
-                var res = new { PlotData = res1 };
+                var res = new { PlotData = res1, Dealer = true, GrandTotal = price.Amount, TotalAmount = Totalprice };
                 return Json(res);
             }
             else
-            { 
-                var res3 = db.Dealerships.Where(x => x.Id == res2.Dealer_Id).FirstOrDefault();
-                var res = new { PlotData = res1, Dealership = res3, GrandTotal = res2.GrandTotal };
-                return Json(res);
+            {
+                if (Totalprice > 0)
+                {
+                    var res3 = db.Dealerships.Where(x => x.Id == res2.Dealer_Id).FirstOrDefault();
+                    var res = new { PlotData = res1, Dealer = false, Dealership = res3, GrandTotal = price.Amount, TotalAmount = Totalprice };
+                    return Json(res);
+                }
+                else
+                {
+                    var res3 = db.Dealerships.Where(x => x.Id == res2.Dealer_Id).FirstOrDefault();
+                    var res = new { PlotData = res1, Dealer = false, Dealership = res3, GrandTotal = res2.GrandTotal, TotalAmount = res2.GrandTotal };
+                    return Json(res);
+
+                }
+              
             }
         }
         // Add Deal Allotment Plan

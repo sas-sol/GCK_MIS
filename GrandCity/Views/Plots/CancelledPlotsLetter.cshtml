@@ -49,7 +49,7 @@
                                         <td class="file-num">@item.Plot_No <i style="float:right; z-index:1111111" class="ti-info-alt cust-plt-info" data-toggle="modal" data-target="#Modal"></i></td>
                                         <td>@item.Plot_Size</td>
                                         <td>@item.Type</td>
-                                        <td>@item.PostalAddress</td>
+                                        <td>@item.Postal_Address</td>
                                         <td>@string.Format("{0:n0}", Math.Round(Convert.ToDecimal(item.OverDueAmount)))</td>
                                         <td>@item.Installments</td>
                                         <td>@item.Mobile_1</td>
@@ -57,7 +57,9 @@
                                         <td>@string.Format("{0:dd-MMM-yyyy}", item.SecNotice)</td>
                                         <td>@string.Format("{0:dd-MMM-yyyy}", item.CancelNotice)</td>
                                         <td>
-                                            <a href="/Plots/CancellationLetter?Id=@item.Id" target="_blank" class="btn btn-dark" data-id="@item.Id" data-ownid="@item.Owner_Id" style="font-size:13px;padding: 3px;color:white">View Cancelled Letter</a>
+                                            @*<a href="/Plots/CancellationLetter?Id=@item.Id" target="_blank" class="btn btn-dark" data-id="@item.Id" data-ownid="@item.Owner_Id" style="font-size:13px;padding: 3px;color:white">View Cancelled Letter</a>*@
+                                             <a href="/Letter/GenerateLetter?letterType=CancellationLetter&Id=@item.Id&Module=PlotManagement" target="_blank" class="btn btn-dark" data-id="@item.Id" data-ownid="@item.Owner_Id" style="font-size:13px;padding: 3px;color:white">View Cancelled Letter</a>
+
                                             @*@{
                                                     if (item.Verified == true)
                                                     {
@@ -86,6 +88,7 @@
                                                     <option value="Qualify">Qualify</option>
                                                     <option value="First">First Warning</option>
                                                     <option value="Second">Second Warning</option>
+                                                    <option value="Third">3rd Warning</option>
                                                 </select>
                                             </div>
                                         </td>

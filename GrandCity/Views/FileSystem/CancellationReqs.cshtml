@@ -36,7 +36,7 @@
                                     foreach (var item in Model.Where(x => x.FileMang_Approval == null && x.FinancMang_Approval == null).ToList())
                                     {
                                         string rol = "";
-                                        if (User.IsInRole("Finance Manager") || User.IsInRole("Files Manager"))
+                                        if (User.IsInRole("Finance Manager") || User.IsInRole("Files Manager") || User.IsInRole("Administrator"))
                                         {
                                             rol = "file-can-det";
                                         }
@@ -96,7 +96,7 @@
                                     foreach (var item in Model.Where(x => x.FileMang_Approval == true && x.FinancMang_Approval == null).ToList())
                                     {
                                         string rol = "";
-                                        if (User.IsInRole("Finance Manager") || User.IsInRole("Files Manager"))
+                                        if (User.IsInRole("Finance Manager") || User.IsInRole("Files Manager") || User.IsInRole("Administrator"))
                                         {
                                             rol = "file-can-det";
                                         }
@@ -160,7 +160,7 @@
                                     foreach (var item in Model.Where(x => x.FinancMang_Approval == null && x.FileMang_Approval == true).ToList())
                                     {
                                         string rol = "";
-                                        if (User.IsInRole("Finance Manager") || User.IsInRole("Files Manager"))
+                                        if (User.IsInRole("Finance Manager") || User.IsInRole("Files Manager") || User.IsInRole("Administrator"))
                                         {
                                             rol = "file-can-det";
                                         }
@@ -224,7 +224,7 @@
                                     foreach (var item in Model.Where(x => x.FinancMang_Approval == true && x.FileMang_Approval == true).ToList())
                                     {
                                         string rol = "";
-                                        if (User.IsInRole("Finance Manager") || User.IsInRole("Files Manager"))
+                                        if (User.IsInRole("Finance Manager") || User.IsInRole("Files Manager") || User.IsInRole("Administrator"))
                                         {
                                             rol = "file-can-det";
                                         }

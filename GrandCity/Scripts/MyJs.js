@@ -5973,20 +5973,66 @@ $(document).on("click", ".register-plot", function (e) {
     e.preventDefault();
     //To disable after click
     $(this).prop("disabled", true);
+    var isCompPropCheck = $('.comp-prop-check').is(':checked');
     var trans = $('#transaction-id').val();
     var DealersId = $('#Dealers').val();
-    var availbal = -(Number(RemoveComma($('#avl-bal').text())));
+    var availbal = (Number(RemoveComma($('#avl-bal').text())));
+    var recamt = Number(RemoveComma($('#rec-amt').val()));
     var pltpric = Number(RemoveComma($('#plt-pric').text()));
-    if (availbal < pltpric) {
-        //alert("Plot Cannot be Register Due to Low Dealer Balance");
-        Swal.fire({
-            icon: 'info',
-            text: "Unable to Register Plot Due to Insufficient Dealer Balance"
-        });
-        return false;
+    var Amount = Number(RemoveComma($('#Amount').val()));
+    //if (availbal < pltpric) {
+    //    //alert("Plot Cannot be Register Due to Low Dealer Balance");
+    //    Swal.fire({
+    //        icon: 'info',
+    //        text: "Unable to Register Plot Due to Insufficient Dealer Balance"
+    //    });
+    //    return false;
+    //}
+    debugger
+    var payType = $(".pay-check option:selected").val();
+    var isPay = true;
+    if (payType == "DealerAdjustment") {
+        if (availbal < recamt) {
+            alert("Plot Cannot be Register Due to Low Dealer Balance");
+            return false;
+        }
+        isPay = false;
     }
+    var received = 0;
+    if (isPay == true) {
+        var DealersId = $('#Dealership').val();
+        if (DealersId == '0' || DealersId == '' || DealersId == 'Select Dealer ') {
+            alert("Select DealerShip");
+            return false;
+        }
+        if (Amount == '0' || Amount == null) {
+            alert("Please Enter Booking Amount")
+            return false;
+        }
+        if (pltpric > Amount) {
+            alert("Plot Cannot be Register Due to Recieved Amount is Less than Advance");
+            return false;
+        }
+        received = Amount;
+    }
+    else {
+        //For DealerShip
+        var Dealership = $('#dealership').text();
+
+        if (recamt == '0' || recamt == null) {
+            alert("Please Enter Booking Amount")
+            return false;
+        }
+        received = recamt;
+    }
+    mobileptrn = true;
+    CNICptrn = true;
+
     var own = [];
     $('.Tran-own').each(function () {
+        var mobilePattern = /^\d{11}$/; // A simple pattern for a 10-digit mobile number
+        var cnicPattern = /^\d{5,6}-\d{6,7}-\d{1}$/; // Pattern for CNIC/NICOP
+
         var plotowndata = {
             Id: 0,
             Name: $(this).find("input[name=Name]").val(),
@@ -6011,10 +6057,75 @@ $(document).on("click", ".register-plot", function (e) {
             City: $("#City option:selected").val(),
             //City: $("#City").val(),
             Currency_Note_No: $(this).find("input[name=CN]").val(),
-            Total_Price: Number(RemoveComma($('#plt-pric').text()))
+            Total_Price: Number(RemoveComma($('#plt-pric').text())),
+             IsCompanyProperty: isCompPropCheck
+
         }
+        if (!plotowndata.Mobile_1.match(mobilePattern)) {
+            mobileptrn = false;
+        }
+
+        if (!plotowndata.CNIC_NICOP.match(cnicPattern)) {
+            CNICptrn = false;
+        }
+
         own.push(plotowndata)
     });
+    if (!mobileptrn) {
+        alert("Invalid mobile number format for owner.");
+        return false;
+    }
+    if (!CNICptrn) {
+        alert("Invalid CNIC format for owner.");
+        return false;
+    }
+    var isValid = own.every(function (owner) {
+        return owner.Name && owner.Father_Husband && owner.Mobile_1 && owner.CNIC_NICOP && owner.Date_Of_Birth && owner.Nominee_CNIC_NICOP && owner.Nominee_Name && owner.Postal_Address && owner.Residential_Address && owner.City && owner.Nominee_Address;
+    });
+
+    if (!isValid) {
+        alert("Please fill in all required fields for each owner.");
+        // Find the first input that is missing and set focus
+        $('.Tran-own').each(function () {
+            if (!$(this).find("input[name=Name]").val()) {
+                $(this).find("input[name=Name]").focus();
+                return false; // Stop the loop
+            } else if (!$(this).find("input[name=Father_Husband]").val()) {
+                $(this).find("input[name=Father_Husband]").focus();
+                return false; // Stop the loop
+            } else if (!$(this).find("input[name=Date_Of_Birth]").val()) {
+                $(this).find("input[name=Date_Of_Birth]").focus();
+                return false; // Stop the loop
+            } else if (!$(this).find("input[name=Postal_Address]").val()) {
+                $(this).find("input[name=Postal_Address]").focus();
+                return false; // Stop the loop
+            } else if (!$(this).find("input[name=Residential_Address]").val()) {
+                $(this).find("input[name=Residential_Address]").focus();
+                return false; // Stop the loop
+            } else if (!$(this).find("input[name=Mobile_1]").val()) {
+                $(this).find("input[name=Mobile_1]").focus();
+                return false; // Stop the loop
+            } else if (!$(this).find("input[name=City]").val()) {
+                $(this).find("input[name=City]").focus();
+                return false; // Stop the loop
+            } else if (!$(this).find("input[name=Nominee_Name]").val()) {
+                $(this).find("input[name=Nominee_Name]").focus();
+                return false; // Stop the loop
+            } else if (!$(this).find("input[name=Nominee_CNIC_NICOP]").val()) {
+                $(this).find("input[name=Nominee_CNIC_NICOP]").focus();
+                return false; // Stop the loop
+            } else if (!$(this).find("input[name=Nominee_Relation]").val()) {
+                $(this).find("input[name=Nominee_Address]").focus();
+                return false; // Stop the loop
+            } else if (!$(this).find("input[name=Nominee_Address]").val()) {
+                $(this).find("input[name=Nominee_Address]").focus();
+                return false; // Stop the loop
+            }
+        });
+
+        return false;
+    }
+
 
     //debugger
     //var PaymentT = $('#cah-chq-bak').val();
@@ -6033,7 +6144,7 @@ $(document).on("click", ".register-plot", function (e) {
         Branch: $('#Branch').val()
     }
     //debugger
-    var data = { Owners: own, Plot_Id: $("#plt-id").val(), TransactionId: trans, isPayment: true, DealersId: DealersId, brdd: rd };
+    var data = { Owners: own, Plot_Id: $("#plt-id").val(), TransactionId: trans, isPayment: true, DealersId: DealersId, brdd: rd ,recamt: received};
     //var conf = confirm("Are You Want to Submit Owners Informations");
     //if (conf) {
     Swal.fire({
@@ -6052,14 +6163,18 @@ $(document).on("click", ".register-plot", function (e) {
                 data: JSON.stringify(data),
                 success: function (data) {
                     if (data.Status) {
-                        //alert("Plot Registered")
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Success!',
-                            text: "Plot has been Registered Successfully"
-                        });
+                        alert("Plot Registered")
+                        //Swal.fire({
+                        //    icon: 'success',
+                        //    title: 'Success!',
+                        //    text: "Plot has been Registered Successfully"
+                        //});
                         window.open("/Banking/PlotReceipt?Id=" + data.ReceiptId + "&Token=" + data.Token, '_blank');
-                        window.location.reload();
+                        if (data.PaymentNo != 0) {
+                            window.open("/Vouchers/SAGVouchers_Vendor?Id=" + data.PaymentNo + "&Token=" + data.Token, '_blank');
+                        }
+
+                        //window.location.reload();
                     }
                     else {
                         //alert(data.Msg)
@@ -6076,6 +6191,144 @@ $(document).on("click", ".register-plot", function (e) {
     });
 });
 
+$('.pay-check').change(function () {
+    debugger
+    var val = $(this).val();
+    if (val == "Payment") {
+        $('.pay-div').show();
+        $('.del-bal-div').hide();
+    }
+    else if (val == "DealerAdjustment") {
+        $('.del-bal-div').show();
+        $('.pay-div').hide();
+        var id = $('#dealer-id').val();
+        $.ajax({
+            type: "POST",
+            url: '/Dealership/DealerBalance/',
+            data: { DealerId: id, Led_Nature: "Advance" },
+            beforeSend: function () {
+                SASLoad($('.load-div'))
+            },
+            complete: function () {
+                SASUnLoad($('.load-div'))
+            },
+            success: function (data) {
+                $('#del-nam').text($('#dealership').text());
+                $('#avl-bal').text(Number(data.Balance).toLocaleString());
+            }
+            , error: function (xmlhttprequest, textstatus, message) {
+                if (textstatus === "timeout") {
+                    alert("got timeout");
+                } else {
+                    alert(textstatus);
+                }
+            }
+        });
+    }
+});
+//get plot against dealer
+$('.sear-del-plt').click(function () {
+    debugger
+    var id = $('.bid-plt-lst').val();
+    $.ajax({
+        type: "POST",
+        url: '/Dealership/DealerPlot_Details/',
+        data: { Id: id },
+        //beforeSend: function () {
+        //    SASLoad($('#plt-det-deal'));
+        //},
+        //complete: function () {
+        //    SASUnLoad($('#plt-det-deal'));
+        //},
+        success: function (data) {
+            $("#plt-det-deal").empty();
+            debugger
+
+            if (data.PlotData == null) {
+                var html = '<div class="alert alert-danger" style="text-align:center" role="alert">Record is Not Found</div>';
+                $("#plt-det-deal").prepend(html);
+                $("#reg-btn").hide();
+                return False;
+            }
+            if (data.Dealer == true) {
+                //alert("This Plot is not assigned to Dealership")
+                var html = '<div class="alert alert-danger" style="text-align:center" role="alert">This Plot is not assigned to Dealership</div>';
+                $("#plt-det-deal").prepend(html);
+                //$("#reg-btn").hide();
+                //return false;
+            }
+            //if (data.PlotData.Status == 'Registered') {
+            //    var html = '<div class="alert alert-danger" style="text-align:center" role="alert">This Plot is Already Registered</div>';
+            //    $("#plt-det-deal").prepend(html);
+            //    $("#reg-btn").hide();
+            //    return False;
+            //}
+            //else if (data.PlotData.Status == 'Hold') {
+            //    var html = '<div class="alert alert-danger" style="text-align:center" role="alert">This Plot is Holded By SA Gardens</div>';
+            //    $("#plt-det-deal").prepend(html);
+            //    $("#reg-btn").hide();
+            //    return False;
+            //}
+            if (data.PlotData.Status != 'Available_For_Sale') {
+                var html = '<div class="alert alert-danger" style="text-align:center" role="alert">This Plot cannot be Register</div>';
+                $("#plt-det-deal").prepend(html);
+                $("#register-plot").hide();
+                return false;
+
+            }
+            else {
+                $("#register-plot").show();
+
+            }
+            SASUnLoad($('#plt-det-deal'));
+            $('#plt-no').text(data.PlotData.Plot_No);
+            $('#plt-size').text(data.PlotData.Plot_Size);
+            $('#plt-dim').text(data.PlotData.Dimension);
+            $('#plt-type').text(data.PlotData.Type);
+            $('#plt-status').text(data.PlotData.Develop_Status);
+            $('#plt-area').text(data.PlotData.Area + " Sq-ft");
+            $('#plt-road').text(data.PlotData.Road_Type);
+            $('#plt-loc').text(data.PlotData.Plot_Location);
+            $('#plt-id').val(data.PlotData.Id);
+            $('#pl-size').val(data.PlotData.Plot_Size);
+            $('#plt-pric').text(Number(data.GrandTotal).toLocaleString());
+            $('#plt-Totalpric').text(Number(data.TotalAmount).toLocaleString());
+            //$('#rec-amt').val(Number(data.GrandTotal).toLocaleString());
+            if (data.Dealer == false) {
+                //$(".del-bal-div").show();
+                //$("#pay-list").hide();
+                $('#dealership').text(data.Dealership.Dealership_Name);
+                $('#dealer-id').val(data.Dealership.Id);
+                $.ajax({
+                    traditional: true,
+                    type: "POST",
+                    data: { id: data.Dealership.Id },
+                    url: "/Dealership/DealerListForSelect/",
+                    success: function (data) {
+                        $('.dealerselected').append('<option value="">Select Dealer</option>');
+                        $.each(data, function (key, value) {
+                            $('.dealerselected').append('<option value=' + value.Id + '>' + value.Name + '</option>');
+                        });
+                    },
+                    error: function () {
+                    }
+                });
+
+            }
+            else {
+                $(".del-bal-div").hide();
+                $("#pay-list").show();
+            }
+        }
+        , error: function (xmlhttprequest, textstatus, message) {
+            if (textstatus === "timeout") {
+                alert("got timeout");
+            } else {
+                alert(textstatus);
+            }
+        }
+    });
+});
 // Get Plot Data
 $(document).on("change", ".plt-reg-lst", function () {
     var id = $(this).val();
@@ -7361,7 +7614,8 @@ $(document).on("click", "#gen-allot-let", function () {
                         }).then(() => {
                             $("#gen-allot-let").prop("disabled", true);
                             $("#ver-allotment-let").prop("disabled", true);
-                            window.open("/Plots/AllotmentLetter?Id=" + data.Id, '_blank');
+                            /*window.open("/Plots/AllotmentLetter?Id=" + data.Id, '_blank');*/
+                            window.open("/Letter/GenerateLetter?letterType=CancellationLetter&Module=PlotManagement&Id=" + data.Id, '_blank'); /*Access from LetterController*/
                         })
                     }
                     else {
@@ -9234,10 +9488,52 @@ $(document).on("click", "#veri-req-f-id", function () {
     });
 });
 // First warning to File owner
+//$(document).on("click", ".fir-war-f", function () {
+//    var id = $(this).data("id");
+//    var ownid = $(this).data("ownid");
+//    var num = $(this).data("num");
+//    debugger;
+//    //var con = confirm("Are you sure you want to Generate First Warning Letter");
+//    //if (con) {
+//    Swal.fire({
+//        text: 'Are you sure you want to generate the first warning letter?',
+//        icon: 'question',
+//        showCancelButton: true,
+//        confirmButtonText: 'Yes',
+//        cancelButtonText: 'No'
+//    }).then((result) => {
+//        if (result.isConfirmed) {
+//            $.ajax({
+//                type: "POST",
+//                url: '/FileSystem/WarningIssues/',
+//                data: { Id: id, OwnerId: ownid, Type: "First" },
+//                success: function (data) {
+//                    if (data) {
+//                        Swal.fire({
+//                            icon: 'success',
+//                            text: 'First warning letter generated successfully'
+//                        }).then(() => {
+//                            window.open("/Letter/GenerateLetter?letterType=FirstWarningLetter&Module=PlotManagement&Id=" + id, '_blank');
+//                        })
+//                        //window.open("/Reports/FileStatmentAcc?Token=" + num, '_blank');
+//                    }
+//                },
+//                error: function () {
+//                    //alert("Error Occured");
+//                    Swal.fire({
+//                        icon: 'error',
+//                        text: 'Something went wrong'
+//                    });
+//                }
+//            });
+//        }
+//    });
+//});
 $(document).on("click", ".fir-war-f", function () {
     var id = $(this).data("id");
     var ownid = $(this).data("ownid");
     var num = $(this).data("num");
+    debugger;
     //var con = confirm("Are you sure you want to Generate First Warning Letter");
     //if (con) {
     Swal.fire({
@@ -9253,15 +9549,7 @@ $(document).on("click", ".fir-war-f", function () {
                 url: '/FileSystem/WarningIssues/',
                 data: { Id: id, OwnerId: ownid, Type: "First" },
                 success: function (data) {
-                    if (data) {
-                        Swal.fire({
-                            icon: 'success',
-                            text: 'First warning letter generated successfully'
-                        }).then(() => {
-                            window.open("/FileSystem/FirstWarningLetter?Id=" + id, '_blank');
-                        })
-                        //window.open("/Reports/FileStatmentAcc?Token=" + num, '_blank');
-                    }
+                    window.open("/Letter/GenerateLetter?letterType=FirstWarningLetter&Module=FileManagement&Id=" + id, '_blank');
                 },
                 error: function () {
                     //alert("Error Occured");
@@ -9293,7 +9581,7 @@ $(document).on("click", ".fir-war-p", function () {
                 url: '/Plots/WarningIssues/',
                 data: { Id: id, OwnerId: ownid, Type: "First" },
                 success: function (data) {
-                    window.open("/Plots/FirstWarningLetter?Id=" + id, '_blank');
+                    window.open("/Letter/GenerateLetter?letterType=FirstWarningLetter&Module=PlotManagement&Id=" + id, '_blank');
                     window.open("/Plots/PlotStatment?Plotid=" + id, '_blank');
                 },
                 error: function () {
@@ -9326,7 +9614,40 @@ $(document).on("click", ".sec-war-p", function () {
                 url: '/Plots/WarningIssues/',
                 data: { Id: id, OwnerId: ownid, Type: "Second" },
                 success: function (data) {
-                    window.open("/Plots/SecondWarningLetter?Id=" + id, '_blank');
+                    window.open("/Letter/GenerateLetter?letterType=SecondWarningLetter&Module=PlotManagement&Id=" + id, '_blank');
+                    window.open("/Plots/PlotStatment?Plotid=" + id, '_blank');
+                },
+                error: function () {
+                    //alert("Error Occured");
+                    Swal.fire({
+                        icon: 'error',
+                        text: 'Something went wrong'
+                    });
+                }
+            });
+        }
+    });
+});
+// 3rd warning to File owner
+$(document).on("click", ".third-war-p", function () {
+    var id = $(this).data("id");
+    var ownid = $(this).data("ownid");
+    //var con = confirm("Are you sure you want to Generate Second Warning Letter");
+    //if (con) {
+    Swal.fire({
+        text: 'Are you sure you want to generate the second warning letter?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                type: "POST",
+                url: '/Plots/WarningIssues/',
+                data: { Id: id, OwnerId: ownid, Type: "Third" },
+                success: function (data) {
+                    window.open("/Letter/GenerateLetter?letterType=ThirdWarningLetter&Module=PlotManagement&Id=" + id, '_blank');
                     window.open("/Plots/PlotStatment?Plotid=" + id, '_blank');
                 },
                 error: function () {
@@ -9359,7 +9680,7 @@ $(document).on("click", ".can-let-p", function () {
                 url: '/Plots/WarningIssues/',
                 data: { Id: id, OwnerId: ownid, Type: "Last" },
                 success: function (data) {
-                    window.open("/Plots/CancellationLetter?Id=" + id, '_blank');
+                    window.open("/Letter/GenerateLetter?letterType=CancellationLetter&Module=PlotManagement&Id=" + id, '_blank');
                     //window.open("/Plots/PlotStatment?Plotid=" + id, '_blank');
                 },
                 error: function () {
@@ -9398,13 +9719,47 @@ $(document).on("click", ".sec-war-f", function () {
                             icon: 'success',
                             text: 'Second warning letter generated successfully'
                         }).then(() => {
-                            window.open("/FileSystem/SecondWarningLetter?Id=" + id, '_blank');
+                            window.open("/Letter/GenerateLetter?letterType=SecondWarningLetter&Module=FileManagement&Id=" + id, '_blank');
                         })
                         /*     window.open("/Reports/FileStatmentAcc?Token=" + num, '_blank');*/
                     }
                     //else {
                     //    alert("Installments are Settled")
                     //}
+                },
+                error: function () {
+                    //alert("Error Occured");
+                    Swal.fire({
+                        icon: 'error',
+                        text: 'Something went wrong'
+                    });
+                }
+            });
+        }
+    });
+});
+$(document).on("click", ".third-war-f", function () {
+    var id = $(this).data("id");
+    var ownid = $(this).data("ownid");
+    var num = $(this).data("num");
+    debugger;
+    //var con = confirm("Are you sure you want to Generate Second Warning Letter");
+    //if (con) {
+    Swal.fire({
+        text: 'Are you sure you want to generate the second warning letter?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                type: "POST",
+                url: '/FileSystem/WarningIssues/',
+                data: { Id: id, OwnerId: ownid, Type: "Third" },
+                success: function (data) {
+                    window.open("/Letter/GenerateLetter?letterType=ThirdWarningLetter&Module=FileManagement&Id=" + id, '_blank');
+                    //window.open("/Plots/PlotStatment?Plotid=" + id, '_blank');
                 },
                 error: function () {
                     //alert("Error Occured");
@@ -9442,7 +9797,7 @@ $(document).on("click", ".can-let-f", function () {
                             icon: 'success',
                             text: 'Cancellation letter generated successfully'
                         }).then(() => {
-                            window.open("/FileSystem/CancellationLetter?Id=" + id, '_blank');
+                            window.open("/Letter/GenerateLetter?letterType=CancellationLetter&Module=FileManagement&Id=" + id, '_blank');
                         })
                         //window.open("/Reports/FileStatmentAcc?Token=" + num, '_blank');
                     }
@@ -10357,7 +10712,7 @@ $(document).on("click", "#gen-fine-rec", function (e) {
     if (!confirm("Are you sure you want to generate the Receipt?")) {
         return false;
     }
-
+    debugger;
     // Proceed with AJAX request
     $.ajax({
         type: "POST",
@@ -11505,6 +11860,7 @@ $(document).on("click", "#up-com-stat", function (e) {
 });
 //
 $(document).on("click", ".plot-can-det", function () {
+    debugger;
     var id = $(this).attr("id");
     var pltid = $(this).attr("data-pltid");
     window.location = "/Plots/PlotCancellationDetails?Plotid=" + pltid + "&Id=" + id;
@@ -11683,6 +12039,9 @@ $(document).on("click", "#can-file", function () {
         $("#stat").focus();
         return false;
     }
+    //var fileNumberString = '"' + filnum + '"';
+    //var remarksString = '"' + remark + '"';
+    debugger;
     //if (confirm("Are you sure you want to Process")) {
     Swal.fire({
         text: 'Are you sure you want to process this file for cancellation?',
@@ -11697,6 +12056,7 @@ $(document).on("click", "#can-file", function () {
                 url: "/FileSystem/UpdateCancelStat/",
                 data: { Id: id, FileId: pltid, FileNumber: filnum, Remarks: remark, Status: stat, Deduction: per, Repurchase: repur },
                 success: function (data) {
+                    console.log(data);
                     //alert("Updated and Requested to Finance")
                     Swal.fire({
                         icon: 'success',

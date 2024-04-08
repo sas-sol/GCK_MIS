@@ -46,7 +46,7 @@
                                         <td class="name">@item.Name </td>
                                         <td class="file-num">@item.Plot_No <i style="float:right; z-index:1111111" class="ti-info-alt cust-plt-info" data-toggle="modal" data-target="#Modal"></i></td>
                                         <td>@item.Type</td>
-                                        <td>@item.PostalAddress</td>
+                                        <td>@item.Postal_Address</td>
                                         <td>@item.Plot_Size</td>
                                         <td>@item.Block_Name</td>
                                         <td>@string.Format("{0:n0}", Math.Round(Convert.ToDecimal(item.OverDueAmount)))</td>
@@ -54,7 +54,9 @@
                                         <td>@item.Mobile_1</td>
                                         <td>@string.Format("{0:dd-MMM-yyyy}", item.FirstNotice)</td>
                                         <td>
-                                            <a href="/Plots/FirstWarningLetter?Id=@item.Id" target="_blank" class="btn btn-dark" data-id="@item.Id" data-ownid="@item.Owner_Id" style="font-size:13px;padding: 3px;color:white">View First Letter</a>
+                                            @*<a href="/Plots/FirstWarningLetter?Id=@item.Id" target="_blank" class="btn btn-dark" data-id="@item.Id" data-ownid="@item.Owner_Id" style="font-size:13px;padding: 3px;color:white">View First Letter</a>*@
+                                            <a href="/Letter/GenerateLetter?letterType=FirstWarningLetter&Id=@item.Id&Module=PlotManagement" target="_blank" class="btn btn-dark" data-id="@item.Id" data-ownid="@item.Owner_Id" style="font-size:13px;padding: 3px;color:white">View First Letter</a>
+
                                             <button class="btn btn-primary sec-war-p" data-id="@item.Id" data-ownid="@item.Owner_Id" style="font-size:13px;padding: 3px;">Second Warning</button>
                                         </td>
                                         @*<td><i data-ownid="@item.Owner_Id" data-id="@item.Id" data-let="1" class="fas fa-backward war-step-p"></i></td>*@
@@ -64,6 +66,7 @@
                                                     <option value="">Select One</option>
                                                     <option value="Qualify">Qualify</option>
                                                     <option value="Second">Second Warning</option>
+                                                     <option value="Third">3rd Warning</option>
                                                     <option value="Last">Cancelled</option>
                                                 </select>
                                             </div>

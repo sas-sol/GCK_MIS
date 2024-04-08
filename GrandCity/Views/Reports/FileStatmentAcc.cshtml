@@ -98,7 +98,13 @@
         <td width="150">@string.Format("{0:n0}", rate)</td>
 
         <td width="150"><b>Booking Date</b></td>
-        <td width="150" id="booking-date"></td>
+        @{
+            var formattedDates = Model.OwnerData.Select(x => x.DateTime?.ToString("MMM dd yyyy"));
+            var concatenatedDates = string.Join(",", formattedDates);
+            @*@concatenatedDates*@
+        }
+        <td width="150">@string.Format("{0:n0}", concatenatedDates)</td>
+
     </tr>
 </table>
 <hr />
@@ -122,11 +128,12 @@
             decimal? Total_Amt = 0;
             decimal? Rec_amt = 0;
         }
-        @foreach (var item in Model.Report.Where(z => z.Date <= DateTime.Now).OrderBy(x => x.Date))
+        @foreach (var item in Model.Report.Where(z => z.Date <= DateTime.Now && z.Type != "10").OrderBy(x => x.Date))
         {
             if (item.Description == "Advance")
             {
                 <script>
+                    debugger;
                     var res = "@string.Format("{0:MMM dd yyyy}", item.Date)"
                     $("#booking-date").text(res);
                 </script>
