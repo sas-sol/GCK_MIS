@@ -18,12 +18,14 @@ namespace MeherEstateDevelopers.Models
         public string Plot_Size { get; set; }
         public Nullable<int> STATUS { get; set; }
         public string From_Name { get; set; }
+        public string Residential_Address { get; set; }
         public string From_FatherName { get; set; }
         public string From_CNIC_NICOP { get; set; }
         public string From_Mobile1 { get; set; }
         public string To_Name { get; set; }
         public string To_FatherName { get; set; }
         public string Postal_Address { get; set; }
+        public string To_Residential_Address { get; set; }
         public string To_CNIC_NICOP { get; set; }
         public string To_Mobile1 { get; set; }
         public string Nominee_Name { get; set; }

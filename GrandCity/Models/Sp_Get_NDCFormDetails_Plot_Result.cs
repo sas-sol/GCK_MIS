@@ -24,5 +24,6 @@ namespace MeherEstateDevelopers.Models
         public string From_FatherName { get; set; }
         public string From_CNIC_NICOP { get; set; }
         public string From_Mobile1 { get; set; }
+        public string Residential_Address { get; set; }
     }
 }

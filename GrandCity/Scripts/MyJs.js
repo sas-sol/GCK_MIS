@@ -5620,21 +5620,25 @@ $(document).on("click", ".f-tran-paper", function (e) {
 //Generate plot Request 
 $(document).on("click", ".p-tran-paper", function (e) {
     var id = $(this).attr("id");
-    //if (confirm("Are you sure you want to Generate Letter")) {
-    Swal.fire({
-        text: 'Are you sure you want to generate the transfer paper?',
-        icon: 'question',
-        showCancelButton: true,
-        confirmButtonText: 'Yes',
-        cancelButtonText: 'No'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            window.open("/Transfer/PlotsTransferLetter?Id=" + id, '_blank');
-        }
-    });
+    if (confirm("Are you sure you want to generate the transfer paper?")) {
+        window.open("/Transfer/PlotsTransferLetter?Id=" + id, '_blank');
+    }
+    ////if (confirm("Are you sure you want to Generate Letter")) {
+    //Swal.fire({
+    //    text: 'Are you sure you want to generate the transfer paper?',
+    //    icon: 'question',
+    //    showCancelButton: true,
+    //    confirmButtonText: 'Yes',
+    //    cancelButtonText: 'No'
+    //}).then((result) => {
+    //    if (result.isConfirmed) {
+    //        window.open("/Transfer/PlotsTransferLetter?Id=" + id, '_blank');
+    //    }
+    //});
 });
 // List of all Track list
 $(document).on("click", ".trans-det", function () {
+    debugger;
     var id = $(this).attr("id");
     window.location = "/FileSystem/FileTransferRequestDetails?Id=" + id;
 });
@@ -5721,42 +5725,32 @@ $(document).on("change", ".rec-plt-pres", function () {
 });
 // 
 $(document).on("click", "#transf-veri", function () {
+    debugger;
     var tranreqid = $("#req-id").val();
+    var fileformnum = $("#app-num").val();
     var blod_rel = $("#blod-rel").val();
     var wave = $("#Trans-val").val();
     var othtranval = $("#oth-Trans-val").val();
     var rate = $("#amt").val();
     var remarks = $("#remarks").val();
-    //if (confirm("Are you sure you want to approve the Transfer Request")) {
-    Swal.fire({
-        text: 'Are you sure you want to approve the transfer request?',
-        icon: 'question',
-        showCancelButton: true,
-        confirmButtonText: 'Yes',
-        cancelButtonText: 'No'
-    }).then((result) => {
-        if (!result.isConfirmed) {
+    if (confirm("Are you sure you want to approve the Transfer Request")) {
             $.post('/FileSystem/OkForTransfer/', { Reqid: tranreqid, Blood_rel: blod_rel, Wave_off: wave, OtherTransferCharges: othtranval, Rate: rate, Remarks: remarks }, function (data) {
                 if (data == true) {
-                    //alert("Ready for Transfer");
-                    Swal.fire({
-                        icon: 'success',
-                        text: 'Transfer request processed successfully'
-                    });
+                    alert("Ready for Transfer");
+                    window.open("/Transfer/File_SellerFeeFormat?Id=" + fileformnum, '_Blank');
+                    window.open("/Transfer/File_Undertaking_By_Purchaser?Id=" + fileformnum, '_Blank');
                 }
             }).fail(function () {
-                //alert("System Not Responding");
-                Swal.fire({
-                    icon: 'error',
-                    text: 'Something went wrong'
-                });
+                alert("System Not Responding");
+
             });
-        }
-    });
+    }
 });
 // 
 $(document).on("click", "#plt-transf-veri", function () {
+    debugger;
     var Plot_Id = $("#Plot_Id").val();
+    var TransferId = $("#TransferId").val();
     var tranreqid = $("#req-id").val();
     var blod_rel = $("#blod-rel").val();
     var wave = $("#Trans-val").val();
@@ -5767,6 +5761,10 @@ $(document).on("click", "#plt-transf-veri", function () {
         $.post('/Transfer/PlotOkForTransfer/', { Plot_Id: Plot_Id, Reqid: tranreqid, Blood_rel: blod_rel, Wave_off: wave, OtherTransferCharges: othtranval, Rate: rate, Remarks: remarks }, function (data) {
             if (data == true) {
                 alert("Ready for Transfer");
+                window.open("/Transfer/SellerFeeFormat?Id=" + TransferId, '_Blank');
+                window.open("/Transfer/Undertaking_By_Purchaser?Id=" + TransferId, '_Blank');
+
+            //    window.open("/Transfer/TransferSheet?SerialNum=" + data.Transcation, '_Blank');
             }
         }).fail(function () {
             alert("System Not Responding");

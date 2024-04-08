@@ -555,6 +555,10 @@ namespace MeherEstateDevelopers.Controllers
                 return RedirectToAction("GenerateCustomerFile_Com", new { Id = Id });
             }
             var res1 = db.Sp_Get_FileAppFormData(FileId.FileFormNumber).SingleOrDefault();
+            if (res1 != null && !string.IsNullOrEmpty(res1.Block_Name))
+            {
+                res1.Block_Name = res1.Block_Name.Trim();
+            }
             long[] size = { 1, 6 };
             if (size.Contains(res1.Status))
             {
@@ -1410,11 +1414,12 @@ namespace MeherEstateDevelopers.Controllers
             return View(res);
         }
         [HttpGet]
-        public ActionResult FileTransferRequestDetails(long Id)
+        public ActionResult FileTransferRequestDetails(string Id)
         {
-            Sp_Get_FileFormData_Result res = db.Sp_Get_FileFormData(Id).FirstOrDefault();
+            var fileform = db.File_Form.Where( f => f.FileFormNumber == Id).FirstOrDefault();
+            Sp_Get_FileFormData_Result res = db.Sp_Get_FileFormData(fileform.Id).FirstOrDefault();
             long userid = long.Parse(User.Identity.GetUserId());
-            db.Sp_Add_Activity(userid, "Accessed Details For File Transfer Request ", "Read", "Activity_Record", ActivityType.Details_Access.ToString(), Id);
+            db.Sp_Add_Activity(userid, "Accessed Details For File Transfer Request ", "Read", "Activity_Record", ActivityType.Details_Access.ToString(), fileform.Id);
             if (res == null) { return Json(false); }
             List<Sp_Get_FileInstallments_Result> Allinstallments = db.Sp_Get_FileInstallments(res.Id).ToList();
             var installments = Allinstallments.Where(x => x.Installment_Type == "1").ToList();
@@ -1947,10 +1952,10 @@ namespace MeherEstateDevelopers.Controllers
             db.Sp_Add_Activity(userid, "Accessed  Overdue Files Page ", "Read", "Activity_Record", ActivityType.Details_Access.ToString(), userid);
             return View();
         }
-        public ActionResult OverDueFilesReport()
+        public ActionResult OverDueFilesReport(string Block)
         {
-            var res1 = db.Sp_Get_Report_OverDue().ToList();
-            var res2 = db.Sp_Get_CancelFilesReport().ToList();
+            var res1 = db.Sp_Get_Report_OverDue(Block).ToList();
+            var res2 = db.Sp_Get_CancelFilesReport(Block).ToList();
             foreach (var item in res2)
             {
                 item.Deduction = (item.Total * 10) / 100;
@@ -1959,40 +1964,40 @@ namespace MeherEstateDevelopers.Controllers
             var res = new Overdue_CancelReport { CancelFiles = res2, OverdueFiles = res1 };
             return PartialView(res);
         }
-        public ActionResult testingrep()
+        //public ActionResult testingrep()
+        //{
+        //    var res2 = db.Sp_Get_CancelFilesReport().ToList();
+        //    foreach (var item in res2)
+        //    {
+        //        item.Deduction = (item.Total * 10) / 100;
+        //        item.Payable = (item.Received_Amount - item.Deduction);
+        //    }
+        //    return View(res2);
+        //}
+        public ActionResult QualifyingFiles(Search_OverDue s, string Block)
         {
-            var res2 = db.Sp_Get_CancelFilesReport().ToList();
-            foreach (var item in res2)
-            {
-                item.Deduction = (item.Total * 10) / 100;
-                item.Payable = (item.Received_Amount - item.Deduction);
-            }
-            return View(res2);
-        }
-        public ActionResult QualifyingFiles(Search_OverDue s)
-        {
-            var res = db.Sp_Get_OverDueAmount_Search(s.Installments, s.S_Inst_Range, s.E_Inst_Range, s.Plot_Size, s.Dealer_Id, s.S_Range, s.E_Range, s.G_Amt, s.L_Amt).ToList();
+            var res = db.Sp_Get_OverDueAmount_Search(s.Installments, s.S_Inst_Range, s.E_Inst_Range, s.Plot_Size, s.Dealer_Id, s.S_Range, s.E_Range, s.G_Amt, s.L_Amt, Block).ToList();
             long userid = long.Parse(User.Identity.GetUserId());
             db.Sp_Add_Activity(userid, "Accessed Qualifying Files Page ", "Read", "Activity_Record", ActivityType.Details_Access.ToString(), userid);
             return PartialView(res);
         }
-        public ActionResult FirstWarning(Search_OverDue s)
+        public ActionResult FirstWarning(Search_OverDue s, string Block)
         {
-            var res = db.Sp_Get_FirstWarning_File(s.Installments, s.S_Inst_Range, s.E_Inst_Range, s.Plot_Size, s.Dealer_Id, s.S_Range, s.E_Range, s.G_Amt, s.L_Amt).ToList();
+            var res = db.Sp_Get_FirstWarning_File(s.Installments, s.S_Inst_Range, s.E_Inst_Range, s.Plot_Size, s.Dealer_Id, s.S_Range, s.E_Range, s.G_Amt, s.L_Amt, Block).ToList();
             long userid = long.Parse(User.Identity.GetUserId());
             db.Sp_Add_Activity(userid, "Accessed  First Warning Files Page ", "Read", "Activity_Record", ActivityType.Details_Access.ToString(), userid);
             return PartialView(res);
         }
-        public ActionResult SecWarning(Search_OverDue s)
+        public ActionResult SecWarning(Search_OverDue s, string Block)
         {
-            var res = db.Sp_Get_SecWarning_File(s.Installments, s.S_Inst_Range, s.E_Inst_Range, s.Plot_Size, s.Dealer_Id, s.S_Range, s.E_Range, s.G_Amt, s.L_Amt).ToList();
+            var res = db.Sp_Get_SecWarning_File(s.Installments, s.S_Inst_Range, s.E_Inst_Range, s.Plot_Size, s.Dealer_Id, s.S_Range, s.E_Range, s.G_Amt, s.L_Amt, Block).ToList();
             long userid = long.Parse(User.Identity.GetUserId());
             db.Sp_Add_Activity(userid, "Accessed  Second Warning Files Page ", "Read", "Activity_Record", ActivityType.Details_Access.ToString(), userid);
             return PartialView(res);
         }
-        public ActionResult CancelledFiles(Search_OverDue s)
+        public ActionResult CancelledFiles(Search_OverDue s , string Block)
         {
-            var res = db.Sp_Get_TempCancel_File(s.Installments, s.S_Inst_Range, s.E_Inst_Range, s.Plot_Size, s.Dealer_Id, s.S_Range, s.E_Range, s.G_Amt, s.L_Amt).ToList();
+            var res = db.Sp_Get_TempCancel_File(s.Installments, s.S_Inst_Range, s.E_Inst_Range, s.Plot_Size, s.Dealer_Id, s.S_Range, s.E_Range, s.G_Amt, s.L_Amt, Block).ToList();
             long userid = long.Parse(User.Identity.GetUserId());
             db.Sp_Add_Activity(userid, "Accessed  Canclled Files Page ", "Read", "Activity_Record", ActivityType.Details_Access.ToString(), userid);
             return PartialView(res);
@@ -2005,15 +2010,15 @@ namespace MeherEstateDevelopers.Controllers
 
             return Json(true);
         }
-        public void FirstsaySecond()
-        {
-            Search_OverDue s = new Search_OverDue();
-            var res = db.Sp_Get_FirstWarning_File(s.Installments, s.S_Inst_Range, s.E_Inst_Range, s.Plot_Size, s.Dealer_Id, s.S_Range, s.E_Range, s.G_Amt, s.L_Amt).ToList();
-            foreach (var item in res)
-            {
-                this.WarningIssues(item.Id, item.Owner_Id, "Second");
-            }
-        }
+        //public void FirstsaySecond()
+        //{
+        //    Search_OverDue s = new Search_OverDue();
+        //    var res = db.Sp_Get_FirstWarning_File(s.Installments, s.S_Inst_Range, s.E_Inst_Range, s.Plot_Size, s.Dealer_Id, s.S_Range, s.E_Range, s.G_Amt, s.L_Amt).ToList();
+        //    foreach (var item in res)
+        //    {
+        //        this.WarningIssues(item.Id, item.Owner_Id, "Second");
+        //    }
+        //}
         public JsonResult WarningIssues(long? Id, long? OwnerId, string Type)
         {
             long userid = long.Parse(User.Identity.GetUserId());

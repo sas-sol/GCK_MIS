@@ -65,7 +65,7 @@
 <body>
     <div class="bg" style="padding: 0; margin: 0">
 
-        <table cellspacing="0" border="0" style="width:1100px; margin-top: 0px; margin-left:30px;">
+        <table cellspacing="0" border="0" style="width: 500px; margin-top: 0px; margin-left: 30px;">
             <tr>
                 <br />
                 <td width="200px" valign=bottom style="font-weight: bold;"><b>Serial No.</b> @*@Model.CurrentTransferRequest.Select(x => x.TransferRequestNo).FirstOrDefault()*@</td>
@@ -77,10 +77,24 @@
 
             </tr>
         </table>
-        <table cellspacing="0" border="0" style="width:1100px">
+        <table cellspacing="0" border="0" style="width:500px; margin-left:600px; margin-top:-70px;">
             <tr>
                 <td width="200px" align="center" valign="bottom"></td>
-                <td width="200px" align="center" valign="bottom"></td>
+                <td width="200px" align="center" valign="bottom">
+                    @{
+                        string QrImagePath = $"~/Repository/QR Codes/{Model.PlotData.Plot_No}.png";
+                        string defaultQrImagePath = "~/Repository/QR Codes/QrPlainImg.jpg"; // Path to default image
+                    }
+                    @if (!string.IsNullOrEmpty(QrImagePath) && System.IO.File.Exists(Server.MapPath(QrImagePath)))
+                    {
+                        <img src="@Url.Content(QrImagePath)" alt="Alternate Text" style="height: 150px;width: 150px;margin-left: 1.5%;" />
+                    }
+                    else
+                    {
+                        <img src="@Url.Content(defaultQrImagePath)" alt="Alternate Text" style="height: 150px;width: 150px;margin-left: 1.5%;" />
+                    }
+                    @*<img src="~/Repository/QR Codes/@(Model.FileData.FileFormNumber).png" alt="Alternate Text" style="height: 150px;width: 150px;margin-left: 1.5%;" />*@
+                </td>
             </tr>
         </table>
         <table cellspacing="0" border="0" style="width:300px;font-size: 21px;margin-top: 30px; margin-left:30px;">
@@ -88,17 +102,32 @@
                 <td align="left" valign=bottom style="line-height: 45px;">
                     <p>
 
-                        <b>FILE/PLOT NO </b><u style="text-align:center">@Model.PlotData.Plot_No</u> <br />
-                        <b>FILE/PLOT Size </b> <u style="text-align:center">@Model.PlotData.Plot_Size</u> <br />
-                        <b>PLOT PREFERENCE</b><u style="text-align:center"> added later</u>
+                        <b>FILE/PLOT NO: </b><u style="text-align:center">@Model.PlotData.Plot_No</u> <br />
+                        <b>FILE/PLOT Size: </b> <u style="text-align:center">@Model.PlotData.Plot_Size</u> <br />
+                        <b>PLOT PREFERENCE: </b><u style="text-align:center">@Model.PlotData.Plot_Location</u>
                     </p>
                 </td>
             </tr>
         </table>
         @*<div class="logo" style="background-image: url('../../Repository/@(Model.PlotData.Block_Name).png');"></div>*@
-        <div style="text-align: center; margin-top: -130px;">
-            <img src="../../Repository/@(Model.PlotData.Block_Name).png" style="width: 400px; height: auto;">
+        <div style="text-align: center; margin-top: -200px; ">
+            @{
+                string blockImagePath = $"~/Repository/{Model.PlotData.Block_Name}.png";
+                string defaultImagePath = "~/Repository/PlainImage.JPG"; // Path to default image
+            }
+            @if (!string.IsNullOrEmpty(blockImagePath) && System.IO.File.Exists(Server.MapPath(blockImagePath)))
+            {
+                <img src="@Url.Content(blockImagePath)" style="width: 400px; height: auto;">
+            }
+            else
+            {
+                <img src="@Url.Content(defaultImagePath)" style="width: 50px; height: auto;">
+            }
         </div>
+
+        @*<div style="text-align: center; margin-top: -130px;">
+            <img src="../../Repository/@(Model.PlotData.Block_Name).png" style="width: 400px; height: auto;">
+        </div>*@
         <h4 style="text-align: center; background-color: black; color: antiquewhite; font-size: 21px; margin-left: 20px; margin-right: 20px; width: 1060px; margin-top: 0px;">PERSONAL INFORMATION</h4>
         <div class="row">
             <div class="column" style="margin-left:40px;">
@@ -161,10 +190,10 @@
                 @string.Join(",", Model.PlotOwners.Select(x => x.Nominee_Name))
             </div>
             <div class="column">
-                <b>FATHER/HUSBAND NAME</b>
+                <b>RELATIONSHIP WITH APPLICANT</b><br>
             </div>
             <div class="column">
-                Null
+                @string.Join(",", Model.PlotOwners.Select(x => x.Nominee_Relation))
             </div>
         </div>
         <div class="row">
@@ -181,20 +210,6 @@
             </div>
             <div class="column">
                 @string.Join(",", Model.PlotOwners.Select(x => x.Nominee_CNIC_NICOP))
-            </div>
-        </div>
-        <div class="row">
-            <div class="column" style="margin-left:40px;">
-                <b>PHONE</b><br>
-            </div>
-            <div class="column">
-                Null
-            </div>
-            <div class="column">
-                <b>RELATIONSHIP WITH APPLICANT</b><br>
-            </div>
-            <div class="column">
-                @string.Join(",", Model.PlotOwners.Select(x => x.Nominee_Relation))
             </div>
         </div>
         <h4 style="text-align: center; background-color: black; color: antiquewhite; font-size: 21px; margin-left: 20px; margin-right: 20px; width: 1060px;">PAYMENT DETAILS</h4>

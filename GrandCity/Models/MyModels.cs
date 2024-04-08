@@ -2884,6 +2884,19 @@ namespace MeherEstateDevelopers.Models
         public List<Sp_Get_NDCFormDetails_Plot_Result> PreviousOwners { get; set; }
         public List<Plots_Transfer_Request> CurrentTransferRequest { get; set; }
     }
+    public class NDC_Views
+    {
+        public List<Sp_Get_NDCFormDetails_Plot_Result> PreviousOwners { get; set; }
+        public List<Plots_Transfer_Request> CurrentTransferRequest { get; set; }
+        public Plot Plots { get; set; }
+    }
+
+    public class SellerFeeFormatView
+    {
+        public List<Sp_Get_NDCFormDetails_Plot_Result> PreviousOwners { get; set; }
+        public List<Sp_Get_TransferRequestDetails_Plot_Result> CurrentOwner { get; set; }
+        public Plot Plots { get; set; }
+    }
     public class NDC_View_Commercial
     {
         public List<Sp_Get_NDCFormDetails_Commercial_Result> PreviousOwners { get; set; }

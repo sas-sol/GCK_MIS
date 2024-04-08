@@ -22,14 +22,14 @@
     <table cellspacing="0" border="0" style="width:1000px">
         <tr>
             <td width="300px" align="center" valign=bottom style="font-weight:bold"><b>Serial No.</b> @Model.CurrentTransferRequest.Select(x => x.TransferRequestNo).FirstOrDefault()</td>
-            <td width="600px" align="center" valign=bottom style="font-weight:bold"><font size="7">Plot TRANSFER</font></td>
+            <td width="600px" align="center" valign=bottom style="font-weight: bold;"><font size="5" style="border-bottom: 1px solid black;">ISSUANCE OF NDC</font></td>
             <td width="200px" align="center" valign=bottom style="font-weight:bold"></td>
         </tr>
     </table>
     <table cellspacing="0" border="0" style="width:1000px">
         <tr>
             <td width="200px" align="center" valign="bottom"></td>
-            <td width="600px" align="center" valign="bottom"><font size="6">REQUEST FORM</font></td>
+            <td width="600px" align="center" valign="bottom"><font size="6"></font></td>
             <td width="200px" align="center" valign="bottom"></td>
         </tr>
     </table>
@@ -99,80 +99,159 @@
             <td width="300px" align="right" valign=bottom style="border-bottom: 13px solid red;"></td>
         </tr>
     </table>
-    <table cellspacing="0" border="0" style="width:1000px;font-size: 25px;margin-top: 30px;">
+    <table cellspacing="0" border="1" style="width: 1015px; font-size: 21px; margin-top: 10px; ">
         <tr>
-            <td width="1000px" align="left" valign=bottom><b>NO DEMAND CERTIFICATE</b></td>
-        </tr>
-    </table>
-    <table cellspacing="0" border="0" style="width:1000px;font-size: 22px;margin-top: 30px;">
-        <tr>
-            <td width="500px" align="left" valign=bottom><b>All Documents in File</b></td>
-            <td width="500px" align="left" valign=bottom><b>Cash Payments Verified</b></td>
-        </tr>
-    </table>
-    <table cellspacing="0" border="0" style="width:1000px;font-size: 22px;margin-top: 20px;">
-        <tr>
-            <td width="150px" align="left" valign=bottom><input type="checkbox" /> Yes</td>
-            <td width="300px" align="left" valign=bottom><input type="checkbox" /> No</td>
-            <td width="150px" align="left" valign=bottom><input type="checkbox" /> Yes</td>
-            <td width="300px" align="left" valign=bottom><input type="checkbox" /> No</td>
-        </tr>
-    </table>
-    <table cellspacing="0" border="0" style="width:1000px;font-size: 22px;margin-top: 30px;">
-        <tr>
-            <td width="500px" align="left" valign=bottom><b>Computer Record Updated</b></td>
-            <td width="500px" align="left" valign=bottom><b>Cheques / Demand Drafts / Payorders Verified</b></td>
-        </tr>
-    </table>
-    <table cellspacing="0" border="0" style="width:1000px;font-size: 22px;margin-top: 20px;">
-        <tr>
-            <td width="150px" align="left" valign=bottom><input type="checkbox" /> Yes</td>
-            <td width="300px" align="left" valign=bottom><input type="checkbox" /> No</td>
-            <td width="150px" align="left" valign=bottom><input type="checkbox" /> Yes</td>
-            <td width="300px" align="left" valign=bottom><input type="checkbox" /> No</td>
-        </tr>
-    </table>
-    <table cellspacing="0" border="0" style="width:1000px;font-size: 22px;margin-top: 35px;">
-        <tr>
-            <td width="1000px" align="left" valign=bottom><b>DOCUMENTS REQUIRED</b></td>
-        </tr>
-    </table>
-    <table cellspacing="0" border="0" style="width:1000px;font-size: 22px;margin-top: 10px;">
-        <tr>
-            <td width="1000px" align="left" valign=bottom>- Original Documents</td>
-        </tr>
-    </table>
-    <table cellspacing="0" border="0" style="width:1000px;font-size: 22px;margin-top: 10px;">
-        <tr>
-            <td width="1000px" align="left" valign=bottom>- Plot Transfer Payment Receipts</td>
-        </tr>
-    </table>
-    <table cellspacing="0" border="0" style="width:1000px;font-size: 22px;margin-top: 10px;">
-        <tr>
-            <td width="1000px" align="left" valign=bottom>- Plot Transfer Tax Challan</td>
-        </tr>
-    </table>
-    <table cellspacing="0" border="0" style="width:1000px;font-size: 22px;margin-top: 10px;">
-        <tr>
-            <td width="1000px" align="left" valign=bottom>- CNIC copy of buyer & Seller & 2 Pictures of Buyer</td>
-        </tr>
-    </table>
-    <table cellspacing="0" border="0" style="width:1000px;font-size: 22px;margin-top: 10px;">
-        <tr>
-            <td width="1000px" align="left" valign=bottom>- Copy of file application form with aggreement on Rs. 100/- stamp paper</td>
-        </tr>
-    </table>
-    <table cellspacing="0" border="0" style="width:1000px;font-size: 22px;margin-top: 10px;">
-        <tr>
-            <td width="1000px" align="left" valign=bottom>- Copy of last payment Receipt</td>
-        </tr>
-    </table>
-    <table cellspacing="0" border="0" style="width:1000px;font-size: 22px;margin-top: 10px;">
-        <tr>
-            <td width="1000px" align="center" valign=bottom style="padding-right: 95px;">
-                <img src="~/assets/static/images/footer_urdu_logo.png" width=450 height=125>
+            <td align="center" valign="top" style="height: 100px; width: 200px; ">
+                <b>Two Planner</b>
             </td>
+            <td align="center" valign="bottom" style="height: 100px; width: 700px; ">
+                <div style="float: left; width: calc(50% - 1px); border-right: 1px solid black; height: 100px;">
+                    <div style="height: 50%; border-bottom: 1px solid black;">
+                        <b>Plot Size</b>
+                    </div>
+                    <!-- Second row -->
+                    <div style="height: 50%;">
+                        <b>Category</b>
+                    </div>
+                </div>
+                <!-- Second column of the second cell -->
+                <div style="float: left; width: calc(50% - 1px); height: 100px;">
+
+                </div>
+                <!-- Clear floating elements -->
+                <div style="clear: both;"></div>
+            </td>
+
+        </tr>
+        <tr>
+            <td align="center" valign="top" style="height: 100px; width: 200px; ">
+                <b>GM Record</b>
+            </td>
+            <td align="center" valign="bottom" style="height: 100px; width: 700px; ">
+            </td>
+
+        </tr>
+        <tr>
+            <td align="center" valign="top" style="height: 100px; width: 200px; ">
+                <b>External Auditor</b>
+            </td>
+            <td align="center" valign="bottom" style="height: 100px; width: 700px; ">
+            </td>
+
+        </tr>
+        <tr>
+            <td align="center" valign="top" style="height: 100px; width: 200px; ">
+                <b>EDF</b>
+            </td>
+            <td align="center" valign="bottom" style="height:100px; width: 700px; ">
+                <div style="float: left; width: calc(50% - 1px); border-right: 1px solid black; height: 100px;">
+                    <div style="height: 50%; border-bottom: 1px solid black;">
+                        <b>Verified By</b>
+                    </div>
+                    <!-- Second row -->
+                    <div style="height: 50%;">
+
+                    </div>
+                </div>
+                <!-- Second column of the second cell -->
+                <div style="float: left; width: calc(50% - 1px); height: 100px;">
+
+                </div>
+                <!-- Clear floating elements -->
+                <div style="clear: both;"></div>
+            </td>
+
+        </tr>
+        <tr>
+            <td align="center" valign="top" style="height: 100px; width: 200px; ">
+                <b>EDO</b>
+            </td>
+            <td align="center" valign="bottom" style="height: 100px; width: 700px; ">
+            </td>
+
         </tr>
     </table>
+    <div class="row">
+        <div class="column" style="margin-left:40px; margin-top:10px; text-align:left">
+            Note: This NDC is valid for NEXT FIFTEEN DAYS only. Please bring all Orignal documents at
+            the time of transfer like booking application, intimation letter, allotment letter, and transfer intimation
+            letter.
+        </div>
+    </div>
+    @*<table cellspacing="0" border="0" style="width:1000px;font-size: 25px;margin-top: 30px;">
+            <tr>
+                <td width="1000px" align="left" valign=bottom><b>NO DEMAND CERTIFICATE</b></td>
+            </tr>
+        </table>
+        <table cellspacing="0" border="0" style="width:1000px;font-size: 22px;margin-top: 30px;">
+            <tr>
+                <td width="500px" align="left" valign=bottom><b>All Documents in File</b></td>
+                <td width="500px" align="left" valign=bottom><b>Cash Payments Verified</b></td>
+            </tr>
+        </table>
+        <table cellspacing="0" border="0" style="width:1000px;font-size: 22px;margin-top: 20px;">
+            <tr>
+                <td width="150px" align="left" valign=bottom><input type="checkbox" /> Yes</td>
+                <td width="300px" align="left" valign=bottom><input type="checkbox" /> No</td>
+                <td width="150px" align="left" valign=bottom><input type="checkbox" /> Yes</td>
+                <td width="300px" align="left" valign=bottom><input type="checkbox" /> No</td>
+            </tr>
+        </table>
+        <table cellspacing="0" border="0" style="width:1000px;font-size: 22px;margin-top: 30px;">
+            <tr>
+                <td width="500px" align="left" valign=bottom><b>Computer Record Updated</b></td>
+                <td width="500px" align="left" valign=bottom><b>Cheques / Demand Drafts / Payorders Verified</b></td>
+            </tr>
+        </table>
+        <table cellspacing="0" border="0" style="width:1000px;font-size: 22px;margin-top: 20px;">
+            <tr>
+                <td width="150px" align="left" valign=bottom><input type="checkbox" /> Yes</td>
+                <td width="300px" align="left" valign=bottom><input type="checkbox" /> No</td>
+                <td width="150px" align="left" valign=bottom><input type="checkbox" /> Yes</td>
+                <td width="300px" align="left" valign=bottom><input type="checkbox" /> No</td>
+            </tr>
+        </table>
+        <table cellspacing="0" border="0" style="width:1000px;font-size: 22px;margin-top: 35px;">
+            <tr>
+                <td width="1000px" align="left" valign=bottom><b>DOCUMENTS REQUIRED</b></td>
+            </tr>
+        </table>
+        <table cellspacing="0" border="0" style="width:1000px;font-size: 22px;margin-top: 10px;">
+            <tr>
+                <td width="1000px" align="left" valign=bottom>- Original Documents</td>
+            </tr>
+        </table>
+        <table cellspacing="0" border="0" style="width:1000px;font-size: 22px;margin-top: 10px;">
+            <tr>
+                <td width="1000px" align="left" valign=bottom>- Plot Transfer Payment Receipts</td>
+            </tr>
+        </table>
+        <table cellspacing="0" border="0" style="width:1000px;font-size: 22px;margin-top: 10px;">
+            <tr>
+                <td width="1000px" align="left" valign=bottom>- Plot Transfer Tax Challan</td>
+            </tr>
+        </table>
+        <table cellspacing="0" border="0" style="width:1000px;font-size: 22px;margin-top: 10px;">
+            <tr>
+                <td width="1000px" align="left" valign=bottom>- CNIC copy of buyer & Seller & 2 Pictures of Buyer</td>
+            </tr>
+        </table>
+        <table cellspacing="0" border="0" style="width:1000px;font-size: 22px;margin-top: 10px;">
+            <tr>
+                <td width="1000px" align="left" valign=bottom>- Copy of file application form with aggreement on Rs. 100/- stamp paper</td>
+            </tr>
+        </table>
+        <table cellspacing="0" border="0" style="width:1000px;font-size: 22px;margin-top: 10px;">
+            <tr>
+                <td width="1000px" align="left" valign=bottom>- Copy of last payment Receipt</td>
+            </tr>
+        </table>
+        <table cellspacing="0" border="0" style="width:1000px;font-size: 22px;margin-top: 10px;">
+            <tr>
+                <td width="1000px" align="center" valign=bottom style="padding-right: 95px;">
+                    <img src="~/assets/static/images/footer_urdu_logo.png" width=450 height=125>
+                </td>
+            </tr>
+        </table>*@
 </body>
 </html>

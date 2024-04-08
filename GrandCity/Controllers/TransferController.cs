@@ -116,6 +116,7 @@ namespace MeherEstateDevelopers.Controllers
         }
         public ActionResult PlotTransferDetails(long Id)
         {
+            ViewBag.TransferRequestId = Id;
             long userid = long.Parse(User.Identity.GetUserId());
             //db.Sp_Add_Activity(userid, "", "Create", Modules.PlotManagement.ToString());
 
@@ -1161,5 +1162,220 @@ namespace MeherEstateDevelopers.Controllers
                 return Json(false);
             }
         }
+        //public ActionResult TransferIntimation(long Id)
+        //{ 
+        //    return View();
+        //}
+        public ActionResult SellerFeeFormat(long Id)
+        {
+            var res5 = db.Sp_Get_TransferRequestDetails_Plot(Id).ToList();
+            var res = db.Sp_Get_NDCFormDetails_Plot(res5.Select(x => x.Plot_Id).FirstOrDefault()).ToList();
+            var plotid = (res5.Select(x => x.Plot_Id).FirstOrDefault());
+            var plt = db.Plots.Where(p => p.Id == plotid).FirstOrDefault();
+            return View(new SellerFeeFormatView { CurrentOwner = res5, PreviousOwners = res, Plots = plt });
+        }
+        public ActionResult File_SellerFeeFormat(string Id)
+        {
+            var fileform = db.File_Form.Where(f => f.FileFormNumber == Id).FirstOrDefault();
+            Sp_Get_FileFormData_Result res = db.Sp_Get_FileFormData(fileform.Id).FirstOrDefault();
+            long userid = long.Parse(User.Identity.GetUserId());
+            db.Sp_Add_Activity(userid, "Accessed Details For File Transfer Request ", "Read", "Activity_Record", ActivityType.Details_Access.ToString(), fileform.Id);
+            if (res == null) { return Json(false); }
+            List<Sp_Get_FileInstallments_Result> Allinstallments = db.Sp_Get_FileInstallments(res.Id).ToList();
+            var installments = Allinstallments.Where(x => x.Installment_Type == "1").ToList();
+            var otherinstallments = Allinstallments.Where(x => x.Installment_Type != "1").ToList();
+            var Receivedamts = db.Sp_Get_ReceivedAmounts(res.Id, Modules.FileManagement.ToString()).ToList();
+            var tranres = db.Sp_Get_TransferRequestDetails_File(res.Id).ToList();
+            FileStatus filestat = (FileStatus)res.Status;
+            string status = filestat.ToString();
+            FileData fa = new FileData()
+            {
+                Id = Convert.ToInt64(res.Id),
+                Block_Name = res.Block,
+                Dealership_Name = res.Dealership_Name,
+                Development_Charges = res.Development_Charges.ToString(),
+                Development_Charges_Val = res.Development_Charges,
+                Phase_Name = res.Phase,
+                Plot_Size = res.Plot_Size,
+                Project_Name = res.Project,
+                Status = ((FileStatus)res.Status).ToString(),
+                City = res.City,
+                CNIC_NICOP = res.CNIC_NICOP,
+                Date_Of_Birth = res.Date_Of_Birth,
+                Email = res.Email,
+                Father_Husband = res.Father_Husband,
+                Mobile_1 = res.Mobile_1,
+                Mobile_2 = res.Mobile_2,
+                Name = res.Name,
+                Nationality = res.Nationality,
+                Nominee_Address = res.Nominee_Address,
+                Nominee_CNIC_NICOP = res.Nominee_CNIC_NICOP,
+                Nominee_Name = res.Nominee_Name,
+                Nominee_Relation = res.Nominee_Relation,
+                Occupation = res.Occupation,
+                Phone_Office = res.Phone_Office,
+                Postal_Address = res.Postal_Address,
+                Residential = res.Residential,
+                Residential_Address = res.Residential_Address,
+                Balance_Amount = res.Balance_Amount,
+                Rate = res.Rate,
+                TotalPlotVal = res.Total,
+                File_Transfer_Id = res.File_Transfer_Id,
+                Delivery = res.Delivery,
+                Block_Id = res.Block_Id,
+                File_Form_Number = res.FileFormNumber,
+                GrandTotal = res.GrandTotal,
+                Phase_Id = res.Phase_Id,
+                QR_Id = res.FileFormNumber,
+                Plot_Prefrence = res.Plot_Prefrence,
+                Verification_Req = res.Verification_Req,
+                Verify = res.Verify,
+                AuditVerified = res.Verified
+            };
+            var newres = new TransferRequestDetails { File = fa, TransferTo = tranres, Installments = installments, OtherInstallments = otherinstallments, ReceivedAmounts = Receivedamts };
+            return View(newres);
+        }
+        public ActionResult File_Undertaking_By_Purchaser(string Id)
+        {
+            var fileform = db.File_Form.Where(f => f.FileFormNumber == Id).FirstOrDefault();
+            Sp_Get_FileFormData_Result res = db.Sp_Get_FileFormData(fileform.Id).FirstOrDefault();
+            long userid = long.Parse(User.Identity.GetUserId());
+            db.Sp_Add_Activity(userid, "Accessed Details For File Transfer Request ", "Read", "Activity_Record", ActivityType.Details_Access.ToString(), fileform.Id);
+            if (res == null) { return Json(false); }
+            List<Sp_Get_FileInstallments_Result> Allinstallments = db.Sp_Get_FileInstallments(res.Id).ToList();
+            var installments = Allinstallments.Where(x => x.Installment_Type == "1").ToList();
+            var otherinstallments = Allinstallments.Where(x => x.Installment_Type != "1").ToList();
+            var Receivedamts = db.Sp_Get_ReceivedAmounts(res.Id, Modules.FileManagement.ToString()).ToList();
+            var tranres = db.Sp_Get_TransferRequestDetails_File(res.Id).ToList();
+            FileStatus filestat = (FileStatus)res.Status;
+            string status = filestat.ToString();
+            FileData fa = new FileData()
+            {
+                Id = Convert.ToInt64(res.Id),
+                Block_Name = res.Block,
+                Dealership_Name = res.Dealership_Name,
+                Development_Charges = res.Development_Charges.ToString(),
+                Development_Charges_Val = res.Development_Charges,
+                Phase_Name = res.Phase,
+                Plot_Size = res.Plot_Size,
+                Project_Name = res.Project,
+                Status = ((FileStatus)res.Status).ToString(),
+                City = res.City,
+                CNIC_NICOP = res.CNIC_NICOP,
+                Date_Of_Birth = res.Date_Of_Birth,
+                Email = res.Email,
+                Father_Husband = res.Father_Husband,
+                Mobile_1 = res.Mobile_1,
+                Mobile_2 = res.Mobile_2,
+                Name = res.Name,
+                Nationality = res.Nationality,
+                Nominee_Address = res.Nominee_Address,
+                Nominee_CNIC_NICOP = res.Nominee_CNIC_NICOP,
+                Nominee_Name = res.Nominee_Name,
+                Nominee_Relation = res.Nominee_Relation,
+                Occupation = res.Occupation,
+                Phone_Office = res.Phone_Office,
+                Postal_Address = res.Postal_Address,
+                Residential = res.Residential,
+                Residential_Address = res.Residential_Address,
+                Balance_Amount = res.Balance_Amount,
+                Rate = res.Rate,
+                TotalPlotVal = res.Total,
+                File_Transfer_Id = res.File_Transfer_Id,
+                Delivery = res.Delivery,
+                Block_Id = res.Block_Id,
+                File_Form_Number = res.FileFormNumber,
+                GrandTotal = res.GrandTotal,
+                Phase_Id = res.Phase_Id,
+                QR_Id = res.FileFormNumber,
+                Plot_Prefrence = res.Plot_Prefrence,
+                Verification_Req = res.Verification_Req,
+                Verify = res.Verify,
+                AuditVerified = res.Verified
+            };
+            var newres = new TransferRequestDetails { File = fa, TransferTo = tranres, Installments = installments, OtherInstallments = otherinstallments, ReceivedAmounts = Receivedamts };
+            return View(newres);
+        }
+        public ActionResult Undertaking_By_Purchaser(long Id)
+        {
+            var res5 = db.Sp_Get_TransferRequestDetails_Plot(Id).ToList();
+            var res = db.Sp_Get_NDCFormDetails_Plot(res5.Select(x => x.Plot_Id).FirstOrDefault()).ToList();
+            var plotid = (res5.Select(x => x.Plot_Id).FirstOrDefault());
+            var plt = db.Plots.Where(p => p.Id == plotid).FirstOrDefault();
+            return View(new SellerFeeFormatView { CurrentOwner = res5, PreviousOwners = res, Plots = plt });
+        }
+        public ActionResult TransferSheet(long SerialNum)
+        {
+            var ptr = db.Plots_Transfer_Request.Where(x => x.GroupTag == SerialNum).ToList();
+            var res = db.Sp_Get_NDCFormDetails_Plot(ptr.Select(x => x.Plot_Id).FirstOrDefault()).ToList();
+            var plotId = ptr.FirstOrDefault()?.Plot_Id;
+            var plt = db.Plots.Where(p => p.Id == plotId).FirstOrDefault();
+            var phs= db.RealEstate_Phases.Where(p => p.Id == plt.Phase_Id).FirstOrDefault();
+            ViewBag.PhaseName = phs.Phase_Name;
+            //ViewBag.SerialNum = SerialNum;
+            long userid = long.Parse(User.Identity.GetUserId());
+
+            db.Sp_Add_Activity(userid, "Accessecd NDC Form " + SerialNum + " At " + DateTime.Now.ToString(), "Read", Modules.PlotManagement.ToString(), ActivityType.Details_Access.ToString(), userid);
+
+            return View(new NDC_Views { CurrentTransferRequest = ptr, PreviousOwners = res, Plots = plt });
+        }
+        public ActionResult FileTransferSheet(long SerialNum)
+        {
+            var res = db.Sp_Get_NDCFormDetails(SerialNum).FirstOrDefault();
+            var new_owners = db.Files_Transfer_Request.Where(x => x.Group_Tag == SerialNum).ToList();
+            var fileformid = new_owners.Select(y => y.File_Form_Id).FirstOrDefault();
+            var filedata = db.File_Form.Where(y => y.Id == fileformid).FirstOrDefault();
+            var phase = db.RealEstate_Phases.Where(p => p.Id == filedata.Phase_Id).FirstOrDefault();
+            ViewBag.PhaseName = phase.Phase_Name;
+            var old_owners_all = db.Sp_Get_FileLastOwner(fileformid).ToList();
+            Sp_Get_NDCFormDetails_Result ress = new Sp_Get_NDCFormDetails_Result();
+            ress.Id = res.Id;
+            ress.FileFormNumber = res.FileFormNumber;
+            ress.Block = filedata.Block;
+            ress.Plot_Size = res.Plot_Size;
+            ress.STATUS = res.STATUS;
+            ress.TransactionId = res.TransactionId;
+            ress.TransferReqNo = res.TransferReqNo;
+            ress.Transfer_Success = res.Transfer_Success;
+            ress.From_Name = string.Join(",", old_owners_all.Select(x => x.Name));
+            ress.From_FatherName = string.Join(",", old_owners_all.Select(x => x.Father_Husband));
+            ress.From_CNIC_NICOP = string.Join(",", old_owners_all.Select(x => x.CNIC_NICOP));
+            ress.From_Mobile1 = string.Join(",", old_owners_all.Select(x => x.Mobile_1));
+            ress.Residential_Address = res.Residential_Address;
+            if (new_owners.Count == 1)
+            {
+                ress.To_Name = new_owners.Select(x => x.Name).FirstOrDefault();
+                ress.To_FatherName = new_owners.Select(x => x.Father_Husband).FirstOrDefault();
+                ress.Postal_Address = new_owners.Select(x => x.Postal_Address).FirstOrDefault();
+                ress.To_CNIC_NICOP = new_owners.Select(x => x.CNIC_NICOP).FirstOrDefault();
+                ress.To_Mobile1 = new_owners.Select(x => x.Mobile_1).FirstOrDefault();
+                ress.Nominee_Name = new_owners.Select(x => x.Nominee_Name).FirstOrDefault();
+                ress.Nominee_CNIC_NICOP = new_owners.Select(x => x.Nominee_CNIC_NICOP).FirstOrDefault();
+                ress.IsCompany = new_owners.Any(x => x.IsCompanyProperty == true);
+                ress.To_Residential_Address = new_owners.Select(x => x.Residential_Address).FirstOrDefault();
+            }
+            else
+            {
+                ress.To_Name = string.Join(",", new_owners.Select(x => x.Name));
+                ress.To_FatherName = string.Join(",", new_owners.Select(x => x.Father_Husband));
+                ress.Postal_Address = string.Join(",", new_owners.Select(x => x.Postal_Address));
+                ress.To_CNIC_NICOP = string.Join(",", new_owners.Select(x => x.CNIC_NICOP));
+                ress.To_Mobile1 = string.Join(",", new_owners.Select(x => x.Mobile_1));
+                ress.Nominee_Name = string.Join(",", new_owners.Select(x => x.Nominee_Name));
+                ress.Nominee_CNIC_NICOP = string.Join(",", new_owners.Select(x => x.Nominee_CNIC_NICOP));
+                ress.Nominee_Name = string.Join(",", new_owners.Select(x => x.Nominee_Name));
+                ress.IsCompany = new_owners.Any(x => x.IsCompanyProperty == true);
+                ress.To_Residential_Address = string.Join(",", new_owners.Select(x => x.Residential_Address));
+
+            }
+            long userid = long.Parse(User.Identity.GetUserId());
+            db.Sp_Add_Activity(userid, "Accessed NDC " + SerialNum, "Read", "Activity_Record", ActivityType.Details_Access.ToString(), ress.Id);
+            return View(ress);
+        }
+        //public ActionResult IssuanceOfNDC()
+        //{
+        //    return View();
+        //}
+
     }
 }

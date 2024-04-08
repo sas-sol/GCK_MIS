@@ -684,6 +684,8 @@
                     alert(data.Msg);
                     window.location.reload();
                     window.open("/Transfer/PlotNDCForm?SerialNum=" + data.Transcation, '_Blank');
+                    window.open("/Transfer/TransferSheet?SerialNum=" + data.Transcation, '_Blank');
+
                 }
                 else {
                     alert(data.Msg);
@@ -830,6 +832,7 @@
     }
 
     $(document).on("click", "#sea-plot-data-trans-req-new", function () {
+        debugger;
         var id = $("#plot-details").val();
         $.ajax({
             type: "POST",

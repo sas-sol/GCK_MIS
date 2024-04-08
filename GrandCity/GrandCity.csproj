@@ -332,7 +332,6 @@
     <Compile Include="Controllers\LandController.cs" />
     <Compile Include="Controllers\LeadsController.cs" />
     <Compile Include="Controllers\LeaveController.cs" />
-    <Compile Include="Controllers\LetterController.cs" />
     <Compile Include="Controllers\LoanController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\MessagesController.cs" />
@@ -767,7 +766,6 @@
     <Compile Include="Models\Leave_HD_Requisitions.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\Letter.cs" />
     <Compile Include="Models\Level.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -7007,11 +7005,15 @@
     <Content Include="Views\Reports\FilesOutstanding.cshtml" />
     <Content Include="Views\Reports\PlotsfilesConsultedReports.cshtml" />
     <Content Include="Views\Reports\PlotsfilesCosolidatedReports.cshtml" />
-<<<<<<< HEAD
-    <Content Include="Views\FileSystem\UpdateFileInformation.cshtml" />
-=======
     <Content Include="Views\FileSystem\Application_Form_GCK.cshtml" />
->>>>>>> usama_n
+    <Content Include="Views\Transfer\TransferIntimation.cshtml" />
+    <Content Include="Views\Transfer\Undertaking_By_Purchaser.cshtml" />
+    <Content Include="Views\Transfer\TransferSheet.cshtml" />
+    <Content Include="Views\Transfer\SellerFeeFormat.cshtml" />
+    <Content Include="Views\Transfer\IssuanceOfNDC.cshtml" />
+    <Content Include="Views\Transfer\FileTransferSheet.cshtml" />
+    <Content Include="Views\Transfer\File_Undertaking_By_Purchaser.cshtml" />
+    <Content Include="Views\Transfer\File_SellerFeeFormat.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -7020,7 +7022,6 @@
     <Folder Include="Views\Deployment\" />
     <Folder Include="Views\Error\" />
     <Folder Include="Views\HumanResource\" />
-    <Folder Include="Views\Letter\" />
     <Folder Include="Views\SAUniverse\" />
   </ItemGroup>
   <ItemGroup>
