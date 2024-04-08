@@ -603,6 +603,7 @@ namespace MeherEstateDevelopers.Models
         public int? Installments { get; set; }
         public DateTime? FirstNotice { get; set; }
         public DateTime? SecNotice { get; set; }
+        public DateTime? Third_Notice { get; set; }
         public DateTime? CancelNotice { get; set; }
         public string Postal_Address { get; set; }
         public string Currency_Note_No { get; set; }

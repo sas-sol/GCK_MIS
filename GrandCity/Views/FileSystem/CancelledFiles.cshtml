@@ -63,9 +63,11 @@
                         }
                         else
                         {
-                            <td>
-                                <a href="/FileSystem/CancellationLetter?Id=@item.Id" target="_blank" class="btn btn-dark" data-id="@item.Id" data-num="@item.FileFormNumber" data-ownid="@item.Owner_Id" style="font-size:13px;padding: 3px;color:white !important">View Cancellation Letter</a>
-                            </td>
+                    <td>
+                        @*<a href="/FileSystem/CancellationLetter?Id=@item.Id" target="_blank" class="btn btn-dark" data-id="@item.Id" data-num="@item.FileFormNumber" data-ownid="@item.Owner_Id" style="font-size:13px;padding: 3px;color:white !important">View Cancellation Letter</a>*@
+                        <a href="/Letter/GenerateLetter?letterType=CancellationLetter&Id=@item.Id&Module=FileManagement" target="_blank" class="btn btn-dark" data-id="@item.Id" data-num="@item.FileFormNumber" data-ownid="@item.Owner_Id" style="font-size:13px;padding: 3px;color:white !important">View Cancellation Letter</a>
+
+                    </td>
                         }
                         @*<td><i data-ownid="@item.Owner_Id" data-num="@item.FileFormNumber" data-let="3" class="fas fa-backward war-step-f"></i></td>*@
                         <td class="col-md-2">
@@ -75,6 +77,7 @@
                                     <option value="Qualify">Qualify</option>
                                     <option value="First">First Warning</option>
                                     <option value="Second">Second Warning</option>
+                                    <option value="Third">3rd Warning</option>
                                 </select>
                             </div>
                         </td>

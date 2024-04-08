@@ -1,50 +1,38 @@
-﻿@{
+﻿@*@{
     if (User.IsInRole("Administrator"))
     {
-        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+        Layout = "null";
     }
     else
     {
-        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+        Layout = "null";
     }
+}*@
+@{
+    var blockValue = ViewBag.Blocks != null ? Uri.EscapeDataString(ViewBag.Blocks.ToString()) : "A";
 }
-
 <div class="row">
     <div class="col-md-12">
         <div class="bgc-white bd bdrs-3 p-20 mB-20">
-            <div class="row">
-                <div class="row col-md-12">
-                    <div class="col-md-5">
-                        <label style="width:100%">BLock</label>
-                        @Html.DropDownList("Block", null, "Select Block..", new { Name = "Id", @class = "form-control select2" })
-                    </div>
-                    <div class="col-md-2" style="margin-top:2%">
-                        <button class="btn btn-primary sea-do-ovrdue-rprt">Search</button>
-                    </div>
-                </div>
-                <div class="tab-content col-md-12">
-                    <div role="tabpanel" id="ndcwdctba" class="tab-pane active p-20 table-responsive">
-
-                    </div>
-                </div>
-            </div>
-            <h4 class="c-grey-900 mB-20" style="text-align:center">Overdue Files</h4>
+            <h4 class="c-grey-900 mB-20" style="text-align:center">@ViewBag.Blocks Overdue Report</h4>
             <div id="overdue-rep">
             </div>
             <ul class="nav nav-tabs" id="myTabs">
                 @{ string activeclass = "active";}
-                <li class="nav-item"><a class="nav-link @activeclass" data-toggle="tab" role="tab" data-link="/FileSystem/QualifyingFiles" href="#over">Qualifying Files</a></li>
+                <li class="nav-item"><a class="nav-link @activeclass" data-toggle="tab" role="tab" data-link="/FileSystem/QualifyingFiles/?Block=@blockValue" href="#over">Qualifying Files </a></li>
                 @{ activeclass = ""; }
-                <li class="nav-item"><a class="nav-link @activeclass" data-toggle="tab" role="tab" data-link="/FileSystem/FirstWarning" href="#over">1st Warning</a></li>
+                <li class="nav-item"><a class="nav-link @activeclass" data-toggle="tab" role="tab" data-link="/FileSystem/FirstWarning/?Block=@blockValue" href="#over">1st Warning</a></li>
                 @{ activeclass = ""; }
-                <li class="nav-item"><a class="nav-link @activeclass" data-toggle="tab" role="tab" data-link="/FileSystem/SecWarning" href="#over">2nd Warning</a></li>
+                <li class="nav-item"><a class="nav-link @activeclass" data-toggle="tab" role="tab" data-link="/FileSystem/SecWarning/?Block=@blockValue" href="#over">2nd Warning</a></li>
                 @{ activeclass = ""; }
-                <li class="nav-item"><a class="nav-link @activeclass" data-toggle="tab" role="tab" data-link="/FileSystem/CancelledFiles" href="#over">Cancelled Notice</a></li>
+                <li class="nav-item"><a class="nav-link @activeclass" data-toggle="tab" role="tab" data-link="/FileSystem/ThirdWarning/?Block=@blockValue" href="#over">3rd Warning</a></li>
+                @{ activeclass = ""; }
+                <li class="nav-item"><a class="nav-link @activeclass" data-toggle="tab" role="tab" data-link="/FileSystem/CancelledFiles/?Block=@blockValue" href="#over">Cancelled Notice</a></li>
             </ul>
             <!-- Tab panes -->
             <div class="tab-content">
                 <div id="over" class="tab-pane active bd bdrs-3 p-20">
-                    @*@{ Html.RenderAction("QualifyingFiles", "FileSystem", new MeherEstateDevelopers.Models.Search_OverDue { Installments = null, S_Inst_Range = null, E_Inst_Range = null, Plot_Size = null, Dealer_Id = null, Range = null, S_Range = null, E_Range = null, G_Amt = null, L_Amt = null });}*@
+                    @*@{ Html.RenderAction("QualifyingFiles", "FileSystem", new Management_Information_System.Models.Search_OverDue { Installments = null, S_Inst_Range = null, E_Inst_Range = null, Plot_Size = null, Dealer_Id = null, Range = null, S_Range = null, E_Range = null, G_Amt = null, L_Amt = null });}*@
                 </div>
             </div>
         </div>
@@ -57,24 +45,12 @@
     }
 </style>
 <script>
-    $(function () {
-        $('#over').load('/FileSystem/QualifyingFiles/')
-    });
-    $(document).ready(function () {
-        var blockValue = "A";
-        $("#over1").load("/FileSystem/OverDueFiles/", { Block: blockValue }, function () {
-            SASUnLoad($("#over1"));
-        });
-    });
+   $(function () {
+    debugger;
+    var Block = '@ViewBag.Blocks'; // Make sure to enclose the value in quotes
+    $('#over').load("/FileSystem/QualifyingFiles/", { Block: Block });
+});
 
-    $('.sea-do-ovrdue-rprt').click(function () {
-        SASLoad($("#over1"));
-        var block = $("#Block").val();
-        debugger
-        $("#over1").load("/FileSystem/OverDueFiles/", { Block: block }, function () {
-            SASUnLoad($("#over1"));
-        });
-    });
 
     // Second warning to File owner
     $(document).on("change", ".Qualify-war-com-File", function () {
@@ -86,36 +62,21 @@
             alert('Select type');
             return false;
         }
-        //var con = confirm("Are you sure you want to Move this Letter");
-        //if (con) {
-        Swal.fire({
-            text: 'Are you sure you want to transition this letter to another status?',
-            icon: 'question',
-            showCancelButton: true,
-            confirmButtonText: 'Yes',
-            cancelButtonText: 'No'
-        }).then((result) => {
-            if (result.isConfirmed) {
-
-                $.ajax({
-                    type: "POST",
-                    url: '/FileSystem/WarningIssuesFileMove/',
-                    data: { Id: id, OwnerId: ownid, Type: type },
-                    success: function (data) {
-                        $('#over').load('/FileSystem/QualifyingFiles/');
-                        return false;
-                    },
-                    error: function () {
-                        //alert("Error Occured");
-                        Swal.fire({
-                            icon: 'error',
-                            text: 'Something went wrong'
-                        });
-
-                    }
-                });
-            }
-        });
+        var con = confirm("Are you sure you want to Move this Letter");
+        if (con) {
+            $.ajax({
+                type: "POST",
+                url: '/FileSystem/WarningIssuesFileMove/',
+                data: { Id: id, OwnerId: ownid, Type: type },
+                success: function (data) {
+                    $('#over').load('/FileSystem/QualifyingFiles/');
+                    return false;
+                },
+                error: function () {
+                    alert("Error Occured");
+                }
+            });
+        }
     });
 
 
@@ -131,36 +92,21 @@
             alert('Select type');
             return false;
         }
-        //var con = confirm("Are you sure you want to Move this Letter");
-        //if (con) {
-        Swal.fire({
-            text: 'Are you sure you want to transition this letter to another status?',
-            icon: 'question',
-            showCancelButton: true,
-            confirmButtonText: 'Yes',
-            cancelButtonText: 'No'
-        }).then((result) => {
-            if (result.isConfirmed) {
-
-                $.ajax({
-                    type: "POST",
-                    url: '/FileSystem/WarningIssuesFileMove/',
-                    data: { Id: id, OwnerId: ownid, Type: type },
-                    success: function (data) {
-                        $('#over').load('/FileSystem/FirstWarning/');
-                        return false;
-                    },
-                    error: function () {
-                        //alert("Error Occured");
-                        Swal.fire({
-                            icon: 'error',
-                            text: 'Something went wrong'
-                        });
-
-                    }
-                });
-            }
-        });
+        var con = confirm("Are you sure you want to Move this Letter");
+        if (con) {
+            $.ajax({
+                type: "POST",
+                url: '/FileSystem/WarningIssuesFileMove/',
+                data: { Id: id, OwnerId: ownid, Type: type },
+                success: function (data) {
+                    $('#over').load('/FileSystem/FirstWarning/');
+                    return false;
+                },
+                error: function () {
+                    alert("Error Occured");
+                }
+            });
+        }
     });
 
 
@@ -175,36 +121,21 @@
             alert('Select type');
             return false;
         }
-        //var con = confirm("Are you sure you want to Move this Letter");
-        //if (con) {
-        Swal.fire({
-            text: 'Are you sure you want to transition this letter to another status?',
-            icon: 'question',
-            showCancelButton: true,
-            confirmButtonText: 'Yes',
-            cancelButtonText: 'No'
-        }).then((result) => {
-            if (result.isConfirmed) {
-
-                $.ajax({
-                    type: "POST",
-                    url: '/FileSystem/WarningIssuesFileMove/',
-                    data: { Id: id, OwnerId: ownid, Type: type },
-                    success: function (data) {
-                        $('#over').load('/FileSystem/SecWarning/');
-                        return false;
-                    },
-                    error: function () {
-                        //alert("Error Occured");
-                        Swal.fire({
-                            icon: 'error',
-                            text: 'Something went wrong'
-                        });
-
-                    }
-                });
-            }
-        });
+        var con = confirm("Are you sure you want to Move this Letter");
+        if (con) {
+            $.ajax({
+                type: "POST",
+                url: '/FileSystem/WarningIssuesFileMove/',
+                data: { Id: id, OwnerId: ownid, Type: type },
+                success: function (data) {
+                    $('#over').load('/FileSystem/SecWarning/');
+                    return false;
+                },
+                error: function () {
+                    alert("Error Occured");
+                }
+            });
+        }
     });
 
 
@@ -217,42 +148,235 @@
             alert('Select type');
             return false;
         }
-        //var con = confirm("Are you sure you want to Move this Letter");
-        //if (con) {
-        Swal.fire({
-            text: 'Are you sure you want to transition this letter to another status?',
-            icon: 'question',
-            showCancelButton: true,
-            confirmButtonText: 'Yes',
-            cancelButtonText: 'No'
-        }).then((result) => {
-            if (result.isConfirmed) {
-
-                $.ajax({
-                    type: "POST",
-                    url: '/FileSystem/WarningIssuesFileMove/',
-                    data: { Id: id, OwnerId: ownid, Type: type },
-                    success: function (data) {
-                        $('#over').load('/FileSystem/CancelledFiles/');
-                        return false;
-                    },
-                    error: function () {
-                        //alert("Error Occured");
-                        Swal.fire({
-                            icon: 'error',
-                            text: 'Something went wrong'
-                        });
-
-                    }
-                });
-            }
-        });
+        var con = confirm("Are you sure you want to Move this Letter");
+        if (con) {
+            $.ajax({
+                type: "POST",
+                url: '/FileSystem/WarningIssuesFileMove/',
+                data: { Id: id, OwnerId: ownid, Type: type },
+                success: function (data) {
+                    $('#over').load('/FileSystem/CancelledFiles/');
+                    return false;
+                },
+                error: function () {
+                    alert("Error Occured");
+                }
+            });
+        }
     });
 
 </script>
 @if (User.IsInRole("Files Overdue Report") || User.IsInRole("Administrator"))
 {
     <script>
-        $('#overdue-rep').load('/FileSystem/OverDueFilesReport/')
+        debugger
+        var Block = '@ViewBag.Blocks';
+        $('#overdue-rep').load('/FileSystem/OverDueFilesReport/', { Block: Block });
     </script>
 }
+
+
+
+
+
+
+@*<script>
+        $(function () {
+            $('#over').load('/FileSystem/QualifyingFiles/')
+        });
+        $(document).ready(function () {
+            var blockValue = "A";
+            $("#over1").load("/FileSystem/OverDueFiles/", { Block: blockValue }, function () {
+                SASUnLoad($("#over1"));
+            });
+        });
+
+        $('.sea-do-ovrdue-rprt').click(function () {
+            SASLoad($("#over1"));
+            var block = $("#Block").val();
+            debugger
+            $("#over1").load("/FileSystem/OverDueFiles/", { Block: block }, function () {
+                SASUnLoad($("#over1"));
+            });
+        });
+
+        // Second warning to File owner
+        $(document).on("change", ".Qualify-war-com-File", function () {
+            debugger
+            var id = $(this).data("id");
+            var ownid = $(this).data("ownid");
+            var type = $(this).val();
+            if (type == null || type == '') {
+                alert('Select type');
+                return false;
+            }
+            //var con = confirm("Are you sure you want to Move this Letter");
+            //if (con) {
+            Swal.fire({
+                text: 'Are you sure you want to transition this letter to another status?',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'Yes',
+                cancelButtonText: 'No'
+            }).then((result) => {
+                if (result.isConfirmed) {
+
+                    $.ajax({
+                        type: "POST",
+                        url: '/FileSystem/WarningIssuesFileMove/',
+                        data: { Id: id, OwnerId: ownid, Type: type },
+                        success: function (data) {
+                            $('#over').load('/FileSystem/QualifyingFiles/');
+                            return false;
+                        },
+                        error: function () {
+                            //alert("Error Occured");
+                            Swal.fire({
+                                icon: 'error',
+                                text: 'Something went wrong'
+                            });
+
+                        }
+                    });
+                }
+            });
+        });
+
+
+
+
+        // Second warning to File owner
+        $(document).on("change", ".first-war-com-file", function () {
+            debugger
+            var id = $(this).data("id");
+            var ownid = $(this).data("ownid");
+            var type = $(this).val();
+            if (type == null || type == '') {
+                alert('Select type');
+                return false;
+            }
+            //var con = confirm("Are you sure you want to Move this Letter");
+            //if (con) {
+            Swal.fire({
+                text: 'Are you sure you want to transition this letter to another status?',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'Yes',
+                cancelButtonText: 'No'
+            }).then((result) => {
+                if (result.isConfirmed) {
+
+                    $.ajax({
+                        type: "POST",
+                        url: '/FileSystem/WarningIssuesFileMove/',
+                        data: { Id: id, OwnerId: ownid, Type: type },
+                        success: function (data) {
+                            $('#over').load('/FileSystem/FirstWarning/');
+                            return false;
+                        },
+                        error: function () {
+                            //alert("Error Occured");
+                            Swal.fire({
+                                icon: 'error',
+                                text: 'Something went wrong'
+                            });
+
+                        }
+                    });
+                }
+            });
+        });
+
+
+
+        // Second warning to File owner
+        $(document).on("change", ".sec-war-com-file", function () {
+            debugger
+            var id = $(this).data("id");
+            var ownid = $(this).data("ownid");
+            var type = $(this).val();
+            if (type == null || type == '') {
+                alert('Select type');
+                return false;
+            }
+            //var con = confirm("Are you sure you want to Move this Letter");
+            //if (con) {
+            Swal.fire({
+                text: 'Are you sure you want to transition this letter to another status?',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'Yes',
+                cancelButtonText: 'No'
+            }).then((result) => {
+                if (result.isConfirmed) {
+
+                    $.ajax({
+                        type: "POST",
+                        url: '/FileSystem/WarningIssuesFileMove/',
+                        data: { Id: id, OwnerId: ownid, Type: type },
+                        success: function (data) {
+                            $('#over').load('/FileSystem/SecWarning/');
+                            return false;
+                        },
+                        error: function () {
+                            //alert("Error Occured");
+                            Swal.fire({
+                                icon: 'error',
+                                text: 'Something went wrong'
+                            });
+
+                        }
+                    });
+                }
+            });
+        });
+
+
+        $(document).on("change", ".cancel-war-com-file", function () {
+            debugger
+            var id = $(this).data("id");
+            var ownid = $(this).data("ownid");
+            var type = $(this).val();
+            if (type == null || type == '') {
+                alert('Select type');
+                return false;
+            }
+            //var con = confirm("Are you sure you want to Move this Letter");
+            //if (con) {
+            Swal.fire({
+                text: 'Are you sure you want to transition this letter to another status?',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'Yes',
+                cancelButtonText: 'No'
+            }).then((result) => {
+                if (result.isConfirmed) {
+
+                    $.ajax({
+                        type: "POST",
+                        url: '/FileSystem/WarningIssuesFileMove/',
+                        data: { Id: id, OwnerId: ownid, Type: type },
+                        success: function (data) {
+                            $('#over').load('/FileSystem/CancelledFiles/');
+                            return false;
+                        },
+                        error: function () {
+                            //alert("Error Occured");
+                            Swal.fire({
+                                icon: 'error',
+                                text: 'Something went wrong'
+                            });
+
+                        }
+                    });
+                }
+            });
+        });
+
+    </script>
+    @if (User.IsInRole("Files Overdue Report") || User.IsInRole("Administrator"))
+    {
+        <script>
+            $('#overdue-rep').load('/FileSystem/OverDueFilesReport/')
+        </script>
+    }*@

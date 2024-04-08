@@ -653,7 +653,7 @@ namespace MeherEstateDevelopers.Controllers
             ViewBag.TransactionId = h.RandomNumber();
             return View();
         }
-        public JsonResult RegisterDealerPlot(long? Plot_Id, List<Plot_Ownership> Owners, long TransactionId, bool? isPayment, int? DealersId, BookingReceiptData brdd)
+        public JsonResult RegisterDealerPlot(long? Plot_Id, List<Plot_Ownership> Owners, long TransactionId, bool? isPayment, int? DealersId, BookingReceiptData brdd, long? recamt)
         {
             long userid = long.Parse(User.Identity.GetUserId());
             AccountHandlerController ah = new AccountHandlerController();
@@ -939,19 +939,19 @@ namespace MeherEstateDevelopers.Controllers
 
                     var voucher_amt = Math.Round(Convert.ToDecimal((res2.GrandTotal * res2.Percentage_Adj) / 100), 2);
 
-                    //string desc = "Adjustment Voucher Against the Booking of Plot " + plot.Plot_No + "-" + plot.Type + " Block No: " + plot.Block_Name;
-                    //var res5 = db.Sp_Add_Voucher(dealers.Select(x => x.Address).FirstOrDefault(), voucher_amt, GeneralMethods.NumberToWords((int)voucher_amt), "", "", null, "", string.Join("-", dealers.Select(x => x.Mobile_1)), desc,
-                    //    string.Join("-", dealers.Select(x => x.Name)), dealership.Id, Modules.Dealers.ToString(), dealership.Dealership_Name, "Cash", "SA Gardens",
-                    //"", userid, Payments.Adjustment.ToString(), userid, null, comp.Id).FirstOrDefault();
-                    //var a = db.Sp_Add_VoucherDetails(voucher_amt, desc, null, null, null, res5.Receipt_Id).FirstOrDefault();
-
+                    string desc = "Adjustment Voucher Against the Booking of Plot " + plot.Plot_No + "-" + plot.Type + " Block No: " + plot.Block_Name;
+                    var res5 = db.Sp_Add_Voucher(dealers.Select(x => x.Address).FirstOrDefault(), voucher_amt, GeneralMethods.NumberToWords((int)voucher_amt), "", "", null, "", string.Join("-", dealers.Select(x => x.Mobile_1)), desc,
+                        string.Join("-", dealers.Select(x => x.Name)), dealership.Id, Modules.Dealers.ToString(), dealership.Dealership_Name, "Cash", "",
+                    "", userid, Payments.Adjustment.ToString(), userid, null, comp.Id).FirstOrDefault();
+                    var a = db.Sp_Add_VoucherDetails(voucher_amt, desc, null, null, null, res5.Receipt_Id).FirstOrDefault();
+                   long Payment_No = Convert.ToInt64(res5.Receipt_Id);
                     var receiptno = db.Sp_Get_ReceiptNo("Normal").FirstOrDefault();
 
                     if (brdd.PaymentType == "Cash")
                     {
-                        if (brdd.Amount > 0)
+                        if (recamt > 0 || brdd.Amount > 0)
                         {
-                            var res3 = db.Sp_Add_Receipt(brdd.Amount, GeneralMethods.NumberToWords((int)brdd.Amount), "", "", null, "", string.Join("-", Owners.Select(x => x.Mobile_1))
+                            var res3 = db.Sp_Add_Receipt(recamt, GeneralMethods.NumberToWords((int)recamt), "", "", null, "", string.Join("-", Owners.Select(x => x.Mobile_1))
                         , string.Join("-", Owners.Select(x => x.Father_Husband)), Plot_Id, string.Join("-", Owners.Select(x => x.Name)), "Cash", Plot_Total_Price,
                         "MED", Rate_Per_Marla, null, plot.Plot_Size, ReceiptTypes.Booking.ToString(), userid, userid, "", null, Modules.PlotManagement.ToString(), "", plot.Plot_No, plot.Block_Name, plot.Type, GroupTag, TransactionId, res2.DealerName, receiptno, comp.Id).FirstOrDefault();
 
@@ -1064,7 +1064,7 @@ namespace MeherEstateDevelopers.Controllers
                     }
                     Transaction.Commit();
                     this.updatebalance(plot.Id);
-                    return Json(new { Status = true, ReceiptId = Receipt_No, Token = userid });
+                    return Json(new { Status = true, ReceiptId = Receipt_No, PaymentNo = Payment_No, Token = userid });
                 }
                 catch (Exception ex)
                 {
@@ -3801,6 +3801,34 @@ namespace MeherEstateDevelopers.Controllers
             }).ToList();
             return PartialView(res);
         }
+        public ActionResult ThirdWarning(Search_OverDue s)
+        {
+            long userid = long.Parse(User.Identity.GetUserId());
+            db.Sp_Add_Activity(userid, "Accessed Second Warning Plots List Page ", "Read", "Activity_Record", ActivityType.Details_Access.ToString(), userid);
+            var res = db.Sp_Get_3rdWarning_Plot().Select(x => new OverdueQualifying_Plots
+            {
+                Block_Name = x.Block_Name,
+                Id = x.Id,
+                Name = x.Name,
+                OverDueAmount = x.Balance_Amount,
+                Plot_Location = x.Plot_Location,
+                Plot_No = x.Plot_No,
+                Plot_Size = x.Plot_Size,
+                Road_Type = x.Road_Type,
+                Status = x.STATUS,
+                Type = x.Type,
+                Verified = x.Verified,
+                Mobile_1 = x.Mobile_1,
+                Owner_Id = x.Owner_Id,
+                Verification_Req = x.Verification_Req,
+                Installments = x.Installments,
+                FirstNotice = x.First_Notice,
+                SecNotice = x.Sec_Notice,
+                Third_Notice = x.Third_Notice,
+                Postal_Address = x.Postal_Address
+            }).ToList();
+            return PartialView(res);
+        }
         public ActionResult CancelledPlotsLetter(Search_OverDue s)
         {
             long userid = long.Parse(User.Identity.GetUserId());
@@ -3885,6 +3913,19 @@ namespace MeherEstateDevelopers.Controllers
                 var text =
               "Respected Customer,\n\r" +
               "This is to inform you that your installment is still pending against your plot no:" + res.Plot_No + "-" + res.Type + " - " + res.Block_Name + ". A reminder message was also sent to you on (" + string.Format("{0:dd-MMM-yyyy}", res.FirstNotice) + ") along with a letter. You are requested to submit due instalments within next 7 days, otherwise your plot will be cancelled.\n\r" +
+              "Best Regards,\n\r" +
+              "Grand City.\n\r" +
+              "042 – 111 724 786\n\r";
+                SmsService s = new SmsService();
+                s.SendMsg(text, res.Mobile_1);
+            }
+            else if (Type == "Third")
+            {
+                db.Sp_Add_Activity(userid, "Issued Third Warning Letter <a class='plt-data' data-id=' " + Id + "'>" + Id + "</a>", "Create", Modules.PlotManagement.ToString(), ActivityType.Warning_Letter.ToString(), Id);
+                db.Sp_Add_PlotComments(Id, "Issued Third Warning Letter", userid, ActivityType.Warning_Letter.ToString());
+                var text =
+              "Respected Customer,\n\r" +
+              "This is to inform you that your installment is still pending against your plot no:" + res.Plot_No + "-" + res.Type + " - " + res.Block_Name + ". A reminder message was also sent to you on (" + string.Format("{0:dd-MMM-yyyy}", res.SecNotice) + ") along with a letter. You are requested to submit due instalments within next 7 days, otherwise your plot will be cancelled.\n\r" +
               "Best Regards,\n\r" +
               "Grand City.\n\r" +
               "042 – 111 724 786\n\r";

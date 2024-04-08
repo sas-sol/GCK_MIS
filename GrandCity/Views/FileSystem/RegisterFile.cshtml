@@ -26,7 +26,7 @@
             {
                 <h6 class="c-grey-900">Application File Form</h6>
                 <div class="mT-30">
-                    <div class="form-row row">F
+                    <div class="form-row row">
                         <div class="col-md-9">
                             <div class="form-row">
                                 <div class="form-group col-md-3">
@@ -199,9 +199,6 @@
                     </div>
                 </div>
 
-
-
-
                 <input type="hidden" id="adv" />
                 <input type="hidden" id="total" />
                 <div class="form-row">
@@ -221,7 +218,13 @@
                         <h6 style="width: auto;float: left;margin: 7px;">Full Paid</h6>
                         <label class="switch"><input type="checkbox" id="full-paid"><span class="slider round"></span></label>
                     </div>
-
+                    <div class="col-md-3">
+                        <select class="form-control pay-check">
+                            <option value="Payment">Payment</option>
+                            <option value="DealerAdjustment">Dealership Adjustment</option>
+                        </select>
+                    </div>
+                    <div class="load-div"></div>
                 </div>
                 <div class="mT-30">
                     <div class="mT-30" id="pay-list">
@@ -319,7 +322,7 @@
 }
 
 
-@*<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>*@
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 
 <script>
 
@@ -615,7 +618,9 @@
                 FileFormNumber: $("#app-num").val(),
                 Receiptdata: allrecepts,
                 FullPaid: fulpaid,
-                DelerId: delerId
+                DelerId: delerId,
+                recamt: recamt,
+                payType: payType
             };
             var con = confirm("Are you sure you want to Register File");
             if (con) {
@@ -653,9 +658,9 @@
                                 $(data.Receiptid).each(function (i) {
                                     window.open("/Banking/Receipt?Id=" + data.Receiptid[i] + "&Token=" + data.Token, '_blank');
                                 });
-                                //if (data.PaymentNo != '0') {
-                                //    window.open("/Vouchers/SAGVouchers_Vendor?Id=" + data.PaymentNo + "&Token=" + data.TokenV, '_blank');
-                                //}
+                                if (data.PaymentNo != '0') {
+                                    window.open("/Vouchers/SAGVouchers_Vendor?Id=" + data.PaymentNo + "&Token=" + data.TokenV, '_blank');
+                                }
                                 //window.location.reload();
                             }
                         }
@@ -696,7 +701,43 @@
                 }
             });
         });
-
+    $('.pay-check').change(function () {
+        var val = $(this).val();
+        if (val == "Payment") {
+            $('.pay-div').show();
+            $('.del-bal-div').hide();
+        }
+        else if (val == "DealerAdjustment") {
+            debugger
+            $('.del-bal-div').show();
+            $('.pay-div').hide();
+            $('.pay-list').hide();
+            var id = $('#Dealership').val();
+            //var id = $('#dealer-id').val();
+            $.ajax({
+                type: "POST",
+                url: '/Dealership/DealerBalance/',
+                data: { DealerId: id, Led_Nature: "Advance" },
+                beforeSend: function () {
+                    SASLoad($('.load-div'))
+                },
+                complete: function () {
+                    SASUnLoad($('.load-div'))
+                },
+                success: function (data) {
+                    $('#deal-nam').text($('#dealership').text());
+                    $('#avl-bal').text(Number(data.Balance).toLocaleString());
+                }
+                , error: function (xmlhttprequest, textstatus, message) {
+                    if (textstatus === "timeout") {
+                        alert("got timeout");
+                    } else {
+                        alert(textstatus);
+                    }
+                }
+            });
+        }
+    });
 
 
 </script>

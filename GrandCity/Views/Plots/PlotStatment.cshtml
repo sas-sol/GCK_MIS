@@ -105,7 +105,14 @@
         <td width="150" class="dis-amt-sec" style="display:none"><b>Discount Amount</b></td>
         <td width="150" class="dis-amt-sec" style="display:none" id="dis-amt"></td>
         <td width="150"><b>Booking Date</b></td>
-        <td width="150" id="booking-date"></td>
+        @*<td width="150" id="booking-date"></td>*@
+        <td width="150"><b>Booking Date</b></td>
+        @{
+            var formattedDates = Model.OwnerData.Select(x => x.Ownership_DateTime?.ToString("MMM dd yyyy"));
+            var concatenatedDates = string.Join(",", formattedDates);
+            @*@concatenatedDates*@
+        }
+        <td width="150">@string.Format("{0:n0}", concatenatedDates)</td>
         @if (Model.Refunded_Repurchased != null)
         {
             if (Model.PlotData.Status == "Repurchased")
@@ -145,7 +152,7 @@
             decimal? Per = 0;
 
         }
-        @foreach (var item in Model.Report.Where(z => z.Date <= DateTime.Now).OrderBy(x => x.Date))
+        @foreach (var item in Model.Report.Where(z => z.Date <= DateTime.Now && z.Type != "10").OrderBy(x => x.Date))
         {
             if (item.Description != null && (item.Description.Contains("Advance") || item.Description.Contains("Book")))
             {

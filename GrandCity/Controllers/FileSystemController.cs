@@ -148,10 +148,11 @@ namespace MeherEstateDevelopers.Controllers
             return Json(true, JsonRequestBehavior.AllowGet);
         }
         [HttpPost]
-        public JsonResult RegisterFile(List<Files_Transfer> filedatas, bool? Flag, string DevCharStatus, string FileFormNumber, List<ReceiptData> Receiptdata, bool? FullPaid, long? DelerId)
+        public JsonResult RegisterFile(List<Files_Transfer> filedatas, bool? Flag, string DevCharStatus, string FileFormNumber, List<ReceiptData> Receiptdata, bool? FullPaid, long? DelerId, long? recamt, string payType)
         {
             long userid = long.Parse(User.Identity.GetUserId());
             AccountHandlerController ah = new AccountHandlerController();
+            long Payment_No = 0;
             var comp = ah.Company_Attr(userid);
             List<Sp_Get_InstallmentStructure_Current_Result> installmentstructure = db.Sp_Get_InstallmentStructure_Current(filedatas.Select(x => x.File_Form_Id).FirstOrDefault()).ToList();
             string Devchar = "";
@@ -219,9 +220,38 @@ namespace MeherEstateDevelopers.Controllers
                         db.Sp_Update_FileRate(filedatas.Select(x => x.File_Form_Id).FirstOrDefault(), file_Installments.Rate, file_Installments.Total, file_Installments.Grand_Total);
                         List<string> ids = new List<string>();
                         SmsService smsService = new SmsService();
+                        var fileno = db.File_Form.Where(x => x.FileFormNumber == FileFormNumber).FirstOrDefault();
+                        if (payType == "DealerAdjustment")
+                        {
+                            var receiptno = db.Sp_Get_ReceiptNo("Normal").FirstOrDefault();
+                            var res = db.Sp_Add_Receipt(recamt, GeneralMethods.NumberToWords((int)recamt), Receiptdata.Select(x => x.Bank).FirstOrDefault(), Receiptdata.Select(x => x.PayChqNo).FirstOrDefault(), Receiptdata.Select(x => x.Ch_bk_Pay_Date).FirstOrDefault(), Receiptdata.Select(x => x.Branch).FirstOrDefault(), string.Join(",", filedatas.Select(x => x.Mobile_1))
+                                                , string.Join(",", filedatas.Select(x => x.Father_Husband)), fileno.Id, string.Join(",", filedatas.Select(x => x.Name)), Receiptdata.Select(x => x.PaymentType).FirstOrDefault(), file_Installments.Total,
+                                                Receiptdata.Select(x => x.Project_Name).FirstOrDefault(), file_Installments.Rate, null, filedatas.Select(x => x.Plot_Size).FirstOrDefault(), ReceiptTypes.Booking.ToString(), filedatas.Select(x => x.File_Form_Id).FirstOrDefault(), userid, "File Booking", null, Modules.FileManagement.ToString(), Devchar, FileFormNumber, appdetail.File.Block, appdetail.File.Type, filedatas.Select(x => x.Group_Tag).FirstOrDefault(), H.RandomNumber(), appdetail.Dealership.Dealership_Name, receiptno, comp.Id).FirstOrDefault();
+                            ids.Add(res.Receipt_No);
+
+                            var dealership = db.Dealerships.Where(x => x.Id == DelerId).FirstOrDefault();
+                            var dealers = db.Dealers.Where(x => x.Dealership_Id == dealership.Id).ToList();
+                            string desc = "Adjustment Voucher Against the Booking of Plot " + fileno.FileFormNumber + "-" + fileno.Type + " Block No: " + fileno.Block;
+                            var res5 = db.Sp_Add_Voucher(dealers.Select(x => x.Address).FirstOrDefault(), recamt, GeneralMethods.NumberToWords((int)recamt), "", "", null, "", string.Join("-", dealers.Select(x => x.Mobile_1).FirstOrDefault()), desc,
+                                string.Join("-", dealers.Select(x => x.Name)), dealership.Id, Modules.Dealers.ToString(), dealership.Dealership_Name, "Cash", "",
+                            "", userid, Payments.Adjustment.ToString(), userid, null, comp.Id).FirstOrDefault();
+                           Payment_No = Convert.ToInt64(res5.Receipt_Id);
+                            var a = db.Sp_Add_VoucherDetails(recamt, desc, null, null, null, res5.Receipt_Id).FirstOrDefault();
+
+                            string text = "Dear " + string.Join(",", filedatas.Select(x => x.Name)) + ",\n\r" +
+                         "A Payment of Rs " + string.Format("{0:n0}", recamt) + " has been received in cash for File number# " + FileFormNumber + " on " + string.Format("{0:dd MMM yyyy}", DateTime.Now) + ". Thank you for your payment.";
+
+                            try
+                            {
+                                //smsService.SendMsg(text, Receiptdata.Select(x => x.Mobile_1).FirstOrDefault(), Modules.FileManagement.ToString(), fileno.Id, userid);
+                            }
+                            catch (Exception)
+                            {
+                            }
+                        }
+                        else { 
                         foreach (var rd in Receiptdata)
                         {
-                            var fileno = db.File_Form.Where(x => x.FileFormNumber == FileFormNumber).FirstOrDefault();
                             var receiptno = db.Sp_Get_ReceiptNo("Normal").FirstOrDefault();
                             var res = db.Sp_Add_Receipt(rd.Amount, rd.AmountInWords, rd.Bank, rd.PayChqNo, rd.Ch_bk_Pay_Date, rd.Branch, string.Join(",", filedatas.Select(x => x.Mobile_1))
                                                 , string.Join(",", filedatas.Select(x => x.Father_Husband)), fileno.Id, string.Join(",", filedatas.Select(x => x.Name)), rd.PaymentType, file_Installments.Total,
@@ -262,8 +292,9 @@ namespace MeherEstateDevelopers.Controllers
                             {
                             }
                         }
+                        }
                         Transaction.Commit();
-                        var data = new { Status = true, Msg = "File has been Registered", Receiptid = ids, Token = filedatas.Select(x => x.File_Form_Id).FirstOrDefault() };
+                        var data = new { Status = true, Msg = "File has been Registered", Receiptid = ids, PaymentNo = Payment_No, Token = filedatas.Select(x => x.File_Form_Id).FirstOrDefault() };
                         return Json(data);
                     }
                     else
@@ -488,7 +519,6 @@ namespace MeherEstateDevelopers.Controllers
             var res5surcharge = db.Plot_Installments_Surcharge.Where(x => x.Plot_Id == res1.Id && x.Cancelled == null && x.Waveoff == null).OrderBy(x => x.DueDate).ToList();
             var res6surcharge = db.Sp_Get_ReceivedAmounts_Surcharge(res1.Id, Modules.FileManagement.ToString()).ToList();
             UpdatePlotInstallmentStatusSurcharge(res5surcharge, res6surcharge, res1.Id);
-
             var res = new FileDetailData { FileData = res1, FilesOwners = res2, FileInstallments = res3, FileReceipts = res4, Discounts = res5, PlotInstallmentsSurcharge = res7 };
             db.Sp_Add_Activity(userid, "Get full Details of File  <a class='file-data' data-id=' " + FileId + "'>" + FileId + "</a>  ", "Read", Modules.FileManagement.ToString(), ActivityType.Details_Access.ToString(), res11.Id);
 
@@ -1945,10 +1975,10 @@ namespace MeherEstateDevelopers.Controllers
             ViewBag.Blocks = new SelectList(blocks, "Name", "Name");
             return View();
         }
-        public ActionResult OverDueFiles()
+        public ActionResult OverDueFiles(string Block)
         {
             long userid = long.Parse(User.Identity.GetUserId());
-            ViewBag.Block = new SelectList(db.RealEstate_Blocks.Where(x => x.Block_Name != null), "Id", "Block_Name").ToList();
+            ViewBag.Blocks = Block;
             db.Sp_Add_Activity(userid, "Accessed  Overdue Files Page ", "Read", "Activity_Record", ActivityType.Details_Access.ToString(), userid);
             return View();
         }
@@ -1977,6 +2007,10 @@ namespace MeherEstateDevelopers.Controllers
         public ActionResult QualifyingFiles(Search_OverDue s, string Block)
         {
             var res = db.Sp_Get_OverDueAmount_Search(s.Installments, s.S_Inst_Range, s.E_Inst_Range, s.Plot_Size, s.Dealer_Id, s.S_Range, s.E_Range, s.G_Amt, s.L_Amt, Block).ToList();
+            int count = res.Count;
+
+            // Pass the count to the ViewBag
+            ViewBag.QualifyingFilesCount = count;
             long userid = long.Parse(User.Identity.GetUserId());
             db.Sp_Add_Activity(userid, "Accessed Qualifying Files Page ", "Read", "Activity_Record", ActivityType.Details_Access.ToString(), userid);
             return PartialView(res);
@@ -1988,14 +2022,21 @@ namespace MeherEstateDevelopers.Controllers
             db.Sp_Add_Activity(userid, "Accessed  First Warning Files Page ", "Read", "Activity_Record", ActivityType.Details_Access.ToString(), userid);
             return PartialView(res);
         }
-        public ActionResult SecWarning(Search_OverDue s, string Block)
+        public ActionResult FirstWarning(Search_OverDue s)
         {
-            var res = db.Sp_Get_SecWarning_File(s.Installments, s.S_Inst_Range, s.E_Inst_Range, s.Plot_Size, s.Dealer_Id, s.S_Range, s.E_Range, s.G_Amt, s.L_Amt, Block).ToList();
+            var res = db.Sp_Get_FirstWarning_File(s.Installments, s.S_Inst_Range, s.E_Inst_Range, s.Plot_Size, s.Dealer_Id, s.S_Range, s.E_Range, s.G_Amt, s.L_Amt).ToList();
             long userid = long.Parse(User.Identity.GetUserId());
             db.Sp_Add_Activity(userid, "Accessed  Second Warning Files Page ", "Read", "Activity_Record", ActivityType.Details_Access.ToString(), userid);
             return PartialView(res);
         }
-        public ActionResult CancelledFiles(Search_OverDue s , string Block)
+        public ActionResult SecWarning(Search_OverDue s)
+        {
+            var res = db.Sp_Get_SecWarning_File(s.Installments, s.S_Inst_Range, s.E_Inst_Range, s.Plot_Size, s.Dealer_Id, s.S_Range, s.E_Range, s.G_Amt, s.L_Amt).ToList();
+            long userid = long.Parse(User.Identity.GetUserId());
+            db.Sp_Add_Activity(userid, "Accessed  Second Warning Files Page ", "Read", "Activity_Record", ActivityType.Details_Access.ToString(), userid);
+            return PartialView(res);
+        }
+        public ActionResult CancelledFiles(Search_OverDue s)
         {
             var res = db.Sp_Get_TempCancel_File(s.Installments, s.S_Inst_Range, s.E_Inst_Range, s.Plot_Size, s.Dealer_Id, s.S_Range, s.E_Range, s.G_Amt, s.L_Amt, Block).ToList();
             long userid = long.Parse(User.Identity.GetUserId());
@@ -2059,6 +2100,27 @@ namespace MeherEstateDevelopers.Controllers
                 var msgtext =
                "Respected Customer,\n\r" +
                "This is to inform you that your installment is still pending against your plot no:" + res1.FileFormNumber + "-" + res1.Type + " - " + res1.Block + ". A reminder message was also sent to you on (" + string.Format("{0:dd-MMM-yyyy}", res.First_Notice) + ") along with a letter. You are requested to submit due instalments, otherwise your plot will be cancelled.\n\r" +
+               "Best Regards,\n\r" +
+               "Grand City.\n\r" +
+               "042 – 111 724 786\n\r";
+                try
+                {
+                    SmsService smsService = new SmsService();
+                    smsService.SendMsg(msgtext, res.Mobile_1);
+                }
+                catch (Exception ee)
+                {
+                    EmailService e = new EmailService();
+                    e.SendEmail(msgtext + " --- " + res.FileFormNumber.ToString(), "taimoor@sasystems.solutions", "Msg Not Sent");
+                }
+            }
+            else if (Type == "Third")
+            {
+                db.Sp_Add_Activity(userid, "Issued Third Warning Letter <a class='plt-data' data-id=' " + Id + "'>" + Id + "</a>", "Create", Modules.FileManagement.ToString(), ActivityType.Warning_Letter.ToString(), Id);
+                db.Sp_Add_FileComments(Id, "Issued Third Warning Letter", userid, ActivityType.Warning_Letter.ToString());
+                var msgtext =
+               "Respected Customer,\n\r" +
+               "This is to inform you that your installment is still pending against your plot no:" + res1.FileFormNumber + "-" + res1.Type + " - " + res1.Block + ". A reminder message was also sent to you on (" + string.Format("{0:dd-MMM-yyyy}", res.Sec_Notice) + ") along with a letter. You are requested to submit due instalments, otherwise your plot will be cancelled.\n\r" +
                "Best Regards,\n\r" +
                "Grand City.\n\r" +
                "042 – 111 724 786\n\r";

@@ -11191,15 +11191,6 @@ namespace MeherEstateDevelopers.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Sp_Get_CA_OpeningClosing_Balance_Result>("Sp_Get_CA_OpeningClosing_Balance", fromParameter, toParameter, typeParameter, levelParameter, compIdParameter);
         }
     
-        public virtual ObjectResult<Sp_Get_CancelFilesReport_Result> Sp_Get_CancelFilesReport(string block)
-        {
-            var blockParameter = block != null ?
-                new ObjectParameter("block", block) :
-                new ObjectParameter("block", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Sp_Get_CancelFilesReport_Result>("Sp_Get_CancelFilesReport", blockParameter);
-        }
-    
         public virtual ObjectResult<Sp_Get_Cancellation_Plot_Result> Sp_Get_Cancellation_Plot()
         {
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Sp_Get_Cancellation_Plot_Result>("Sp_Get_Cancellation_Plot");
@@ -11213,11 +11204,6 @@ namespace MeherEstateDevelopers.Models
         public virtual ObjectResult<SP_Get_CancelledFiles_Result> SP_Get_CancelledFiles()
         {
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_Get_CancelledFiles_Result>("SP_Get_CancelledFiles");
-        }
-    
-        public virtual ObjectResult<Sp_Get_CancelPlotsReport_Result> Sp_Get_CancelPlotsReport()
-        {
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Sp_Get_CancelPlotsReport_Result>("Sp_Get_CancelPlotsReport");
         }
     
         public virtual ObjectResult<Sp_Get_CancelReq_Result> Sp_Get_CancelReq(Nullable<System.DateTime> fromdate, Nullable<System.DateTime> todate, string userid)
@@ -13190,7 +13176,7 @@ namespace MeherEstateDevelopers.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Sp_Get_Final_Salaries_Result>("Sp_Get_Final_Salaries");
         }
     
-        public virtual ObjectResult<Sp_Get_FirstWarning_File_Result> Sp_Get_FirstWarning_File(Nullable<int> installments, Nullable<int> s_Inst_Range, Nullable<int> e_Inst_Range, string plot_Size, Nullable<long> dealer_Id, Nullable<decimal> s_Range, Nullable<decimal> e_Range, Nullable<decimal> g_Amt, Nullable<decimal> l_Amt, string block)
+        public virtual ObjectResult<Sp_Get_FirstWarning_File_Result> Sp_Get_FirstWarning_File(Nullable<int> installments, Nullable<int> s_Inst_Range, Nullable<int> e_Inst_Range, string plot_Size, Nullable<long> dealer_Id, Nullable<decimal> s_Range, Nullable<decimal> e_Range, Nullable<decimal> g_Amt, Nullable<decimal> l_Amt)
         {
             var installmentsParameter = installments.HasValue ?
                 new ObjectParameter("Installments", installments) :
@@ -13228,11 +13214,7 @@ namespace MeherEstateDevelopers.Models
                 new ObjectParameter("L_Amt", l_Amt) :
                 new ObjectParameter("L_Amt", typeof(decimal));
     
-            var blockParameter = block != null ?
-                new ObjectParameter("Block", block) :
-                new ObjectParameter("Block", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Sp_Get_FirstWarning_File_Result>("Sp_Get_FirstWarning_File", installmentsParameter, s_Inst_RangeParameter, e_Inst_RangeParameter, plot_SizeParameter, dealer_IdParameter, s_RangeParameter, e_RangeParameter, g_AmtParameter, l_AmtParameter, blockParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Sp_Get_FirstWarning_File_Result>("Sp_Get_FirstWarning_File", installmentsParameter, s_Inst_RangeParameter, e_Inst_RangeParameter, plot_SizeParameter, dealer_IdParameter, s_RangeParameter, e_RangeParameter, g_AmtParameter, l_AmtParameter);
         }
     
         public virtual ObjectResult<Sp_Get_FirstWarning_Plot_Result> Sp_Get_FirstWarning_Plot()
@@ -14661,7 +14643,7 @@ namespace MeherEstateDevelopers.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Sp_Get_OtherInstallments_Result>("Sp_Get_OtherInstallments", fileIdParameter, cnicParameter);
         }
     
-        public virtual ObjectResult<Sp_Get_OverDueAmount_Search_Result> Sp_Get_OverDueAmount_Search(Nullable<int> installments, Nullable<int> s_Inst_Range, Nullable<int> e_Inst_Range, string plot_Size, Nullable<long> dealer_Id, Nullable<decimal> s_Range, Nullable<decimal> e_Range, Nullable<decimal> g_Amt, Nullable<decimal> l_Amt, string block)
+        public virtual ObjectResult<Sp_Get_OverDueAmount_Search_Result> Sp_Get_OverDueAmount_Search(Nullable<int> installments, Nullable<int> s_Inst_Range, Nullable<int> e_Inst_Range, string plot_Size, Nullable<long> dealer_Id, Nullable<decimal> s_Range, Nullable<decimal> e_Range, Nullable<decimal> g_Amt, Nullable<decimal> l_Amt)
         {
             var installmentsParameter = installments.HasValue ?
                 new ObjectParameter("Installments", installments) :
@@ -14699,11 +14681,7 @@ namespace MeherEstateDevelopers.Models
                 new ObjectParameter("L_Amt", l_Amt) :
                 new ObjectParameter("L_Amt", typeof(decimal));
     
-            var blockParameter = block != null ?
-                new ObjectParameter("Block", block) :
-                new ObjectParameter("Block", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Sp_Get_OverDueAmount_Search_Result>("Sp_Get_OverDueAmount_Search", installmentsParameter, s_Inst_RangeParameter, e_Inst_RangeParameter, plot_SizeParameter, dealer_IdParameter, s_RangeParameter, e_RangeParameter, g_AmtParameter, l_AmtParameter, blockParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Sp_Get_OverDueAmount_Search_Result>("Sp_Get_OverDueAmount_Search", installmentsParameter, s_Inst_RangeParameter, e_Inst_RangeParameter, plot_SizeParameter, dealer_IdParameter, s_RangeParameter, e_RangeParameter, g_AmtParameter, l_AmtParameter);
         }
     
         public virtual ObjectResult<Sp_Get_OverDueFilesReport_Result> Sp_Get_OverDueFilesReport()
@@ -16197,13 +16175,9 @@ namespace MeherEstateDevelopers.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Sp_Get_Report_MonthRecoveryReport_Result>("Sp_Get_Report_MonthRecoveryReport", monthParameter);
         }
     
-        public virtual ObjectResult<Sp_Get_Report_OverDue_Result> Sp_Get_Report_OverDue(string block)
+        public virtual ObjectResult<Sp_Get_Report_OverDue_Result> Sp_Get_Report_OverDue()
         {
-            var blockParameter = block != null ?
-                new ObjectParameter("block", block) :
-                new ObjectParameter("block", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Sp_Get_Report_OverDue_Result>("Sp_Get_Report_OverDue", blockParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Sp_Get_Report_OverDue_Result>("Sp_Get_Report_OverDue");
         }
     
         public virtual ObjectResult<Sp_Get_Report_OverDue_Plots_Result> Sp_Get_Report_OverDue_Plots()
@@ -16563,7 +16537,7 @@ namespace MeherEstateDevelopers.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Sp_Get_SearchRecovery_Report_Result>("Sp_Get_SearchRecovery_Report", fromParameter, toParameter, dateParameter, statusParameter, recoveryTypeParameter, usersParameter);
         }
     
-        public virtual ObjectResult<Sp_Get_SecWarning_File_Result> Sp_Get_SecWarning_File(Nullable<int> installments, Nullable<int> s_Inst_Range, Nullable<int> e_Inst_Range, string plot_Size, Nullable<long> dealer_Id, Nullable<decimal> s_Range, Nullable<decimal> e_Range, Nullable<decimal> g_Amt, Nullable<decimal> l_Amt, string block)
+        public virtual ObjectResult<Sp_Get_SecWarning_File_Result> Sp_Get_SecWarning_File(Nullable<int> installments, Nullable<int> s_Inst_Range, Nullable<int> e_Inst_Range, string plot_Size, Nullable<long> dealer_Id, Nullable<decimal> s_Range, Nullable<decimal> e_Range, Nullable<decimal> g_Amt, Nullable<decimal> l_Amt)
         {
             var installmentsParameter = installments.HasValue ?
                 new ObjectParameter("Installments", installments) :
@@ -16601,11 +16575,7 @@ namespace MeherEstateDevelopers.Models
                 new ObjectParameter("L_Amt", l_Amt) :
                 new ObjectParameter("L_Amt", typeof(decimal));
     
-            var blockParameter = block != null ?
-                new ObjectParameter("Block", block) :
-                new ObjectParameter("Block", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Sp_Get_SecWarning_File_Result>("Sp_Get_SecWarning_File", installmentsParameter, s_Inst_RangeParameter, e_Inst_RangeParameter, plot_SizeParameter, dealer_IdParameter, s_RangeParameter, e_RangeParameter, g_AmtParameter, l_AmtParameter, blockParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Sp_Get_SecWarning_File_Result>("Sp_Get_SecWarning_File", installmentsParameter, s_Inst_RangeParameter, e_Inst_RangeParameter, plot_SizeParameter, dealer_IdParameter, s_RangeParameter, e_RangeParameter, g_AmtParameter, l_AmtParameter);
         }
     
         public virtual ObjectResult<Sp_Get_SecWarning_Plot_Result> Sp_Get_SecWarning_Plot()
@@ -16983,7 +16953,7 @@ namespace MeherEstateDevelopers.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Sp_Get_TempAccount_Result>("Sp_Get_TempAccount", codeParameter);
         }
     
-        public virtual ObjectResult<Sp_Get_TempCancel_File_Result> Sp_Get_TempCancel_File(Nullable<int> installments, Nullable<int> s_Inst_Range, Nullable<int> e_Inst_Range, string plot_Size, Nullable<long> dealer_Id, Nullable<decimal> s_Range, Nullable<decimal> e_Range, Nullable<decimal> g_Amt, Nullable<decimal> l_Amt, string block)
+        public virtual ObjectResult<Sp_Get_TempCancel_File_Result> Sp_Get_TempCancel_File(Nullable<int> installments, Nullable<int> s_Inst_Range, Nullable<int> e_Inst_Range, string plot_Size, Nullable<long> dealer_Id, Nullable<decimal> s_Range, Nullable<decimal> e_Range, Nullable<decimal> g_Amt, Nullable<decimal> l_Amt)
         {
             var installmentsParameter = installments.HasValue ?
                 new ObjectParameter("Installments", installments) :
@@ -17021,11 +16991,7 @@ namespace MeherEstateDevelopers.Models
                 new ObjectParameter("L_Amt", l_Amt) :
                 new ObjectParameter("L_Amt", typeof(decimal));
     
-            var blockParameter = block != null ?
-                new ObjectParameter("Block", block) :
-                new ObjectParameter("Block", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Sp_Get_TempCancel_File_Result>("Sp_Get_TempCancel_File", installmentsParameter, s_Inst_RangeParameter, e_Inst_RangeParameter, plot_SizeParameter, dealer_IdParameter, s_RangeParameter, e_RangeParameter, g_AmtParameter, l_AmtParameter, blockParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Sp_Get_TempCancel_File_Result>("Sp_Get_TempCancel_File", installmentsParameter, s_Inst_RangeParameter, e_Inst_RangeParameter, plot_SizeParameter, dealer_IdParameter, s_RangeParameter, e_RangeParameter, g_AmtParameter, l_AmtParameter);
         }
     
         public virtual ObjectResult<Sp_Get_Ticket_Comments_Result> Sp_Get_Ticket_Comments(Nullable<long> ticket_Id)
@@ -23985,74 +23951,6 @@ namespace MeherEstateDevelopers.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("Sp_Update_WarningLetter_Steps", idParameter, modParameter, letParameter);
         }
     
-        public virtual int Sp_Update_WarningLetterStatus_File(Nullable<long> fileid, Nullable<long> owenerid, string type)
-        {
-            var fileidParameter = fileid.HasValue ?
-                new ObjectParameter("Fileid", fileid) :
-                new ObjectParameter("Fileid", typeof(long));
-    
-            var oweneridParameter = owenerid.HasValue ?
-                new ObjectParameter("owenerid", owenerid) :
-                new ObjectParameter("owenerid", typeof(long));
-    
-            var typeParameter = type != null ?
-                new ObjectParameter("type", type) :
-                new ObjectParameter("type", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("Sp_Update_WarningLetterStatus_File", fileidParameter, oweneridParameter, typeParameter);
-        }
-    
-        public virtual int Sp_Update_WarningLetterStatus_FileMove(Nullable<long> comid, Nullable<long> owenerid, string type)
-        {
-            var comidParameter = comid.HasValue ?
-                new ObjectParameter("Comid", comid) :
-                new ObjectParameter("Comid", typeof(long));
-    
-            var oweneridParameter = owenerid.HasValue ?
-                new ObjectParameter("owenerid", owenerid) :
-                new ObjectParameter("owenerid", typeof(long));
-    
-            var typeParameter = type != null ?
-                new ObjectParameter("type", type) :
-                new ObjectParameter("type", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("Sp_Update_WarningLetterStatus_FileMove", comidParameter, oweneridParameter, typeParameter);
-        }
-    
-        public virtual int Sp_Update_WarningLetterStatus_Plot(Nullable<long> plotid, Nullable<long> owenerid, string type)
-        {
-            var plotidParameter = plotid.HasValue ?
-                new ObjectParameter("Plotid", plotid) :
-                new ObjectParameter("Plotid", typeof(long));
-    
-            var oweneridParameter = owenerid.HasValue ?
-                new ObjectParameter("owenerid", owenerid) :
-                new ObjectParameter("owenerid", typeof(long));
-    
-            var typeParameter = type != null ?
-                new ObjectParameter("type", type) :
-                new ObjectParameter("type", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("Sp_Update_WarningLetterStatus_Plot", plotidParameter, oweneridParameter, typeParameter);
-        }
-    
-        public virtual int Sp_Update_WarningLetterStatus_PlotMove(Nullable<long> comid, Nullable<long> owenerid, string type)
-        {
-            var comidParameter = comid.HasValue ?
-                new ObjectParameter("Comid", comid) :
-                new ObjectParameter("Comid", typeof(long));
-    
-            var oweneridParameter = owenerid.HasValue ?
-                new ObjectParameter("owenerid", owenerid) :
-                new ObjectParameter("owenerid", typeof(long));
-    
-            var typeParameter = type != null ?
-                new ObjectParameter("type", type) :
-                new ObjectParameter("type", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("Sp_Update_WarningLetterStatus_PlotMove", comidParameter, oweneridParameter, typeParameter);
-        }
-    
         public virtual int Sp_Update_WarningLetterStatus_Shop(Nullable<long> comid, Nullable<long> owenerid, string type)
         {
             var comidParameter = comid.HasValue ?
@@ -24525,24 +24423,6 @@ namespace MeherEstateDevelopers.Models
                 new ObjectParameter("InstallmentData", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("Sp_InsertUpdate_Installment_File_Plot_Comm", comidParameter, modParameter, installmentDataParameter);
-        }
-    
-        public virtual ObjectResult<Sp_Get_NDCFormDetails_Plot_Result> Sp_Get_NDCFormDetails_Plot(Nullable<long> plt)
-        {
-            var pltParameter = plt.HasValue ?
-                new ObjectParameter("plt", plt) :
-                new ObjectParameter("plt", typeof(long));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Sp_Get_NDCFormDetails_Plot_Result>("Sp_Get_NDCFormDetails_Plot", pltParameter);
-        }
-    
-        public virtual ObjectResult<Sp_Get_NDCFormDetails_Result> Sp_Get_NDCFormDetails(Nullable<long> serialnum)
-        {
-            var serialnumParameter = serialnum.HasValue ?
-                new ObjectParameter("serialnum", serialnum) :
-                new ObjectParameter("serialnum", typeof(long));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Sp_Get_NDCFormDetails_Result>("Sp_Get_NDCFormDetails", serialnumParameter);
         }
     }
 }

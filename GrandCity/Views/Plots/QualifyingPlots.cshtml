@@ -44,7 +44,7 @@
                                                     <td class="file-num">@item.Plot_No <i style="float:right; z-index:1111111" class="ti-info-alt cust-plt-info" data-toggle="modal" data-target="#Modal"></i></td>
 
                                                     <td>@item.Type</td>
-                                                    <td>@item.PostalAddress</td>
+                                                    <td>@item.Postal_Address</td>
                                                     <td>@item.Plot_Size</td>
                                                     <td>@item.Block_Name</td>
                                                     <td>@string.Format("{0:n0}", Math.Round(Convert.ToDecimal(item.OverDueAmount)))</td>
@@ -59,6 +59,7 @@
                                                                 <option value="">Select One</option>
                                                                 <option value="First">First Warning</option>
                                                                 <option value="Second">Second Warning</option>
+                                                                <option value="Third">3rd Warning</option>
                                                                 <option value="Last">Cancelled</option>
                                                             </select>
                                                         </div>

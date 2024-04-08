@@ -33,14 +33,16 @@
 
                             <div class="form-group col-md-2">
                                 <label>Plot No</label>
-                                <select class="form-control" id="plt-lst">
+                                <select class="form-control bid-plt-lst" id="plt-lst">
                                     <option>Select Block</option>
                                 </select>
                             </div>
                             <div class="col-md-2">
-                                <button class="btn btn-info sec-plt-lst" style="margin-top:29px">Search</button>
+                                @*<button class="btn btn-info sec-plt-lst" style="margin-top:29px">Search</button>*@
+                                <button class="btn btn-info sear-del-plt" style="margin-top:29px">Search</button>
                             </div>
-                            <div class="col-md-2"><div id="file-trans-alert"></div></div>
+                            @*<div class="col-md-2"><div id="file-trans-alert"></div></div>*@
+                            <div class="col-md-3"><div id="plt-det-deal"></div></div>
                         </div>
                         <hr />
                         <div class="form-row">
@@ -82,6 +84,10 @@
                                 <label>Dealership</label>
                                 <h5 id="dealership"></h5>
                                 <input type="hidden" id="dealer-id" />
+                            </div>
+                            <div class="col-md-3">
+                                <label>Select Dealer</label>
+                                <select class="dealerselected form-control"> </select>
                             </div>
                             <div class="form-group col-md-2" id="dealerships">
                                 <label>Dealership Submission</label>
@@ -165,7 +171,7 @@
                                     </div>
                                     <div class="form-group col-md-3">
                                         <label>Ownership Date</label>
-                                        <input type="text" class="form-control" data-provide="datepicker" name="Ownership_DateTime">
+                                        <input type="text" class="form-control" placeholder="mm/dd/yyyy" data-provide="datepicker" name="Ownership_DateTime">
                                     </div>
                                 </div>
                             </div>
@@ -198,11 +204,30 @@
             <h4 class="c-grey-900" style="text-align:center;margin:2% 0">Plot Payments</h4>
 
             @*<div class="form-row">
+                    <div class="col-md-3">
+                        <h6>Plot Price</h6>
+                        <h5 id="plt-pric"></h5>
+                    </div>
+                </div>*@
+            <div class="form-row">
                 <div class="col-md-3">
-                    <h6>Plot Price</h6>
+                    <h6>Total Price</h6>
+                    <h5 id="plt-Totalpric"></h5>
+
+                </div> <div class="col-md-3">
+                    <h6>Advance</h6>
                     <h5 id="plt-pric"></h5>
                 </div>
-            </div>*@
+
+                <div class="col-md-3">
+                    <select class="form-control pay-check">
+                        <option value="Payment">Payment</option>
+                        <option value="DealerAdjustment">Dealership Adjustment</option>
+                    </select>
+
+                </div>
+                <div class="load-div"></div>
+            </div>
             <div class="mT-30 pay-div">
                 <div class="col-md-3">
                     <button type="button" id="add-pay-typ" class="btn btn-info"><i class="ti-plus"></i>&nbsp; Add Payment</button>
@@ -220,7 +245,7 @@
                                 <option value="Online_Cheque">Online - Cheque</option>
                                 <option value="Online_Payorder">Online - PayOrder</option>
                                 <option value="Online_Bankdraft">Online - BankDraft</option>
-                                <option value="Adjustment">Dealership - Adjustment</option>
+                                @*<option value="Adjustment">Dealership - Adjustment</option>*@
                             </select>
                         </div>
                         <div class="form-group col-md-1">
@@ -256,18 +281,38 @@
                     </div>
                 </div>
             </div>
-            <div class="mT-30">
-                <div class="form-row" style="justify-content:center">
-                    <button @*id="reg-btn"*@ style="width:25%; height:50px; font-size:24px" class="btn btn-primary register-plot">Register Plot</button>
-
+            <div class="mT-30 del-bal-div" style="display:none">
+                <div class="form-row">
+                    <div class="form-group col-md-2">
+                        <label>Dealership:</label>
+                        <h6 id="del-nam"></h6>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label>Available Balance:</label>
+                        <h6 id="avl-bal"></h6>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label>Amount</label>
+                        <input class="form-control coma" id="Amount" placeholder="250,000" required>
+                        <input type="hidden" id="rec-amt" required>
+                        @*<input value="" class="form-control coma" id="rec-amt" />*@
+                    </div>
                 </div>
             </div>
+            <div class="mT-30">
+                    <div class="form-row" style="justify-content:center">
+                        <button id="register-plot" style="width:25%; height:50px; font-size:24px" class="btn btn-primary register-plot">Register Plot</button>
+
+                    </div>
+            </div>
+          
         </div>
     </div>
 </div>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+@*<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>*@
 
 <script>
+   
     function UpFileee() {
         if (window.FormData !== undefined) {
 
@@ -303,7 +348,7 @@
             alert("FormData is not supported.");
         }
     }
-
+   
 
     //$(document).on("click", "#reg-btn", function () {
     //    debugger;
@@ -322,7 +367,7 @@
     //                });
     //        return false;
     //    }
-    //    var own = []; 
+    //    var own = [];
     //    $('.Tran-own').each(function () {
     //        var plotowndata = {
     //            Id: 0,
@@ -510,6 +555,69 @@
                             </div>`;
             $('.Tran-own').append(strct);
         });
+        $('.comp-prop-check').unbind().change(function () {
+            //lets hook up the event listener here
+            if ($(this).is(':checked')) {
+                $('.comp-prop-fld').show();
+                $('.deflt-fld').hide();
+                $('.nomin-heading').text('Board Resolution');
+            }
+            else {
+                $('.comp-prop-fld').hide();
+                $('.deflt-fld').show();
+                $('.nomin-heading').text('Nominee');
+            }
+        });
+    });
+    $(document).on("change", ".dealerselected", function () {
+        $.ajax({
+            traditional: true,
+            type: "POST",
+            data: { id: $('.dealerselected :selected').val() },
+            url: "/Dealership/GetDealerResult/",
+            success: function (data) {
+                $('.ownname').val(data.Name);
+                $('.ownfather').val(data.Father_Name);
+                $('.owncnic').val(data.CNIC_NICOP);
+                $('.datebirth').val(moment(data.Date_Birth).format("MM/DD/YYYY"));
+                $('.pstladdrs').val(data.Address);
+                $('.resaddrs').val(data.Address);
+                $('.nasnal').val("Pakistani");
+                $('.mobpho').val(data.Mobile_1);
+                $('.mob2pho').val(data.Mobile_2);
+                $('.nomnam').val(data.Father_Name);
+                $('.nomcnic').val(data.CNIC_NICOP);
+                $('.nomrel').val("Father");
+                $('.nomadd').val(data.Address);
+            },
+            error: function () {
+            }
+        });
+    });
+    $(document).on("change", ".com-typ", function () {
+        var id = $('.com-typ').val();
+        if (id == "Percentage") {
+            $('.com-amt').attr("readonly", true);
+            $('.com-per-div').show()
+            $('.com-amt').val('');
+        }
+        else {
+            $('.com-per-div').hide()
+            $('.com-amt').removeAttr("readonly", true);
+            $('.com-amt').val('');
+        }
+    });
+    $(document).on('keyup', '.per-val', function () {
+        var p = $(this).val();
+        var gr = RemoveComma($('#grnd-total').val());
+        if (gr <= 0 || gr == "") {
+            alert('Please Enter Plan first');
+            $(this).val('');
+            return false;
+        }
+        else {
+            $('.com-amt').val(Number((p * gr) / 100).toLocaleString());
+        }
     });
 </script>
 <style>

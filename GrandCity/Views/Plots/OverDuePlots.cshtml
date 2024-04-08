@@ -18,6 +18,7 @@
                 <li class="nav-item"><a class="nav-link" data-toggle="tab" role="tab" data-link="/Plots/QualifyingPlots" id="qsplot" href="#over">Qualifying Plots</a></li>
                 <li class="nav-item"><a class="nav-link" data-toggle="tab" role="tab" data-link="/Plots/FirstWarning" id="Fwplot" href="#over">1st Warning</a></li>
                 <li class="nav-item"><a class="nav-link" data-toggle="tab" role="tab" data-link="/Plots/SecWarning" id="swplt" href="#over">2nd Warning</a></li>
+                <li class="nav-item"><a class="nav-link" data-toggle="tab" role="tab" data-link="/Plots/ThirdWarning" id="thplt" href="#over">3rd Warning</a></li>
                 <li class="nav-item"><a class="nav-link" data-toggle="tab" role="tab" data-link="/Plots/CancelledPlotsLetter" id="clplot" href="#over">Cancelled</a></li>
             </ul>
             <!-- Tab panes -->
@@ -173,7 +174,47 @@
         });
     });
 
-
+    // 3rd warning to File owner
+    $(document).on("change", ".third-war-com-plot", function () {
+        debugger
+        var id = $(this).data("id");
+        var ownid = $(this).data("ownid");
+        var type = $(this).val();
+        if (type == null || type == '') {
+            //alert('Select type');
+            Swal.fire({
+                icon: 'info',
+                text: 'Select a plot to proceed'
+            });
+            return false;
+        }
+        Swal.fire({
+            text: 'Are you sure you want to transition this letter to another status?',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Yes',
+            cancelButtonText: 'No'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    type: "POST",
+                    url: '/Plots/WarningIssuesPlotsMove/',
+                    data: { Id: id, OwnerId: ownid, Type: type },
+                    success: function (data) {
+                        $('#over').load('/Plots/ThirdWarning/');
+                        return false;
+                    },
+                    error: function () {
+                        //alert("Error Occured");
+                        Swal.fire({
+                            icon: 'error',
+                            text: 'Something went wrong'
+                        });
+                    }
+                });
+            }
+        });
+    });
 
     // Second warning to File owner
     $(document).on("change", ".cancel-war-com-plot", function () {

@@ -1,8 +1,11 @@
 ﻿@model IEnumerable<MeherEstateDevelopers.Models.Sp_Get_OverDueAmount_Search_Result>
-<!-- SweetAlert2 CSS -->
+ @*SweetAlert2 CSS*@ 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
-<!-- SweetAlert2 JS -->
+ @*SweetAlert2 JS*@ 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+@{ 
+    Layout = null;
+}
 <table class="table table-striped table-bordered" id="ovde" cellspacing="0" width="100%">
     <thead>
         <tr>
@@ -77,6 +80,7 @@
                                     <option value="">Select One</option>
                                     <option value="First">First Warning</option>
                                     <option value="Second">Second Warning</option>
+                                    <option value="Third">3rd Warning</option>
                                     <option value="Last">Cancelled</option>
                                 </select>
                             </div>

@@ -19,7 +19,7 @@
                 <div class="col-md-12">
                     <div class="form-row" style="justify-content:flex-end">
                         <div class="col-md-2">
-                            <button class="btn btn-outline-info" data-toggle="modal" data-target="#Modal" onclick="ReminderForModule(@Html.Raw(Json.Encode(Model.FileData.Id)),'File','@(Model.FileData.FileFormNumber+"Reminder")')"><i class="ti-alarm-clock"></i>&nbsp;Add Reminder</button>
+                            <button class="btn btn-outline-info" data-toggle="modal" data-target="#Modal" onclick="ReminderForModule(@Html.Raw(Json.Encode(Model.FileData.Id)),'File','@(Model.FileData.FileFormNumber + "Reminder")')"><i class="ti-alarm-clock"></i>&nbsp;Add Reminder</button>
                         </div>
                     </div>
                     <div class="form-row">
@@ -140,7 +140,7 @@
                         {
                             show = "show";
                             <script>
-                                var pref = "@own.Select(x=>x.Plot_Prefrence).FirstOrDefault()";
+                                var pref = "@own.Select(x => x.Plot_Prefrence).FirstOrDefault()";
                                 $('#plt-pref').text(pref);
                             </script>
                         }
@@ -358,7 +358,9 @@
                         <li class="nav-item">
                             <a class="nav-link sideLink pointer sideLink SurChargefile" data-typ="SurChargefile">SurCharge Schedule</a>
                         </li>
-
+                        <li class="nav-item">
+                            <a class="nav-link sideLink pointer sideLink Not_Included" data-typ="Not_Included">Not_Included</a>
+                        </li>
                     </ul>
                 </div>
                 <div class="row" style="height:500px;overflow-y:scroll;margin-right:5px;">
@@ -372,28 +374,32 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @{
-                                decimal overduetotal = 0;
-                                foreach (var item in Model.FileInstallments)
-                                {
-                                    var statuscolor = "";
-                                    if (item.Status == "NotPaid")
-                                    {
-                                        statuscolor = "bgc-red-50";
-                                        overduetotal = overduetotal + item.Amount;
-                                    }
-                                    else if (item.Status == "Paid")
-                                    {
-                                        statuscolor = "bgc-green-50";
-                                    }
-                                    <tr class="@statuscolor">
-                                        <td>@item.Installment_Name</td>
-                                        <td>@string.Format("{0:0,0.##}", item.Amount)</td>
-                                        <td>@string.Format("{0:dd-MMM-yyyy}", item.Due_Date)</td>
-                                        <td>@item.Status</td>
-                                    </tr>
-                                }
-                            }
+                              @{
+                                  decimal overduetotal = 0;
+                                  foreach (var item in Model.FileInstallments)
+                                  {
+                                      if (item.Installment_Type != "10")
+                                      {
+                                          var statuscolor = "";
+                                          if (item.Status == "NotPaid")
+                                          {
+                                              statuscolor = "bgc-red-50";
+                                              overduetotal = overduetotal + item.Amount;
+                                          }
+                                          else if (item.Status == "Paid")
+                                          {
+                                              statuscolor = "bgc-green-50";
+                                          }
+                                            <tr class="@statuscolor">
+                                                <td>@item.Installment_Name</td>
+                                                <td>@string.Format("{0:0,0.##}", item.Amount)</td>
+                                                <td>@string.Format("{0:dd-MMM-yyyy}", item.Due_Date)</td>
+                                                <td>@item.Status</td>
+                                            </tr>
+
+                                          }
+                                      }
+                             }
                         </tbody>
                     </table>
                     @if (Model.FileInstallments.Any())
@@ -473,6 +479,44 @@
                         </table>
 
                     }
+                    <table class="table table-striped table-bordered installPlanNotIncluded" cellspacing="0" width="100%" style="margin-bottom:0px">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th>Installment</th>
+                                <th>Amount</th>
+                                <th>Due Date</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                 overduetotal = 0;
+                                foreach (var item in Model.FileInstallments)
+                                {
+                                    if (item.Installment_Type == "10")
+                                    {
+                                        var statuscolor = "";
+                                        if (item.Status == "NotPaid")
+                                        {
+                                            statuscolor = "bgc-red-50";
+                                            overduetotal = overduetotal + item.Amount;
+                                        }
+                                        else if (item.Status == "Paid")
+                                        {
+                                            statuscolor = "bgc-green-50";
+                                        }
+                                        <tr class="@statuscolor">
+                                            <td>@item.Installment_Name</td>
+                                            <td>@string.Format("{0:0,0.##}", item.Amount)</td>
+                                            <td>@string.Format("{0:dd-MMM-yyyy}", item.Due_Date)</td>
+                                            <td>@item.Status</td>
+                                        </tr>
+                                    }
+                                }
+                            }
+                        </tbody>
+                    </table>
+
                 </div>
             </div>
             <div class="col-md-5">
@@ -480,6 +524,9 @@
                     <ul class="nav nav-tabs">
                         <li class="nav-item">
                             <a class="nav-link active pointer sideLink instrecfile" data-typ="instrecfile">Booking & Installment</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link sideLink pointer sideLink Surchargerecfile" data-typ="Surchargerecfile">Surcharge </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link sideLink pointer sideLink otherrecfile" data-typ="otherrecfile">Other</a>
@@ -563,14 +610,14 @@
                                 }
                                 <tr>
                                     <td colspan="4">
-                                        <a class="btn btn-primary" style="color:white" href="/Reports/FileStatmentAcc?Token=@Model.FileData.FileFormNumber">File Statement</a>
+                                        <a class="btn btn-primary" style="color:white" href="/Reports/FileStatmentAcc?Token=@Model.FileData.FileFormNumber" target="_blank">File Statement</a>
                                     </td>
                                     <td colspan="4">Received Amount : <b>@string.Format("{0:n0}", Model.FileReceipts.Where(x => (x.Status is null || x.Status == "Approved") && Types.Contains(x.Type)).Sum(x => x.Amount))</b> </td>
                                 </tr>
                             }
                         </tbody>
                     </table>
-                    <table class="table table-striped table-bordered otherrecviewfile" cellspacing="0" width="100%" style="margin-bottom:0px;display:none;">
+                    <table class="table table-striped table-bordered SurChargerecviewfile" cellspacing="0" width="100%" style="margin-bottom:0px;display:none;">
                         <thead class="thead-dark">
                             <tr>
                                 <th>Sr.</th>
@@ -645,7 +692,89 @@
                                 }
                                 <tr>
                                     <td colspan="4">
-                                        <a class="btn btn-primary" style="color:white" href="/Reports/FileStatmentAcc?Token=@Model.FileData.FileFormNumber">File Statement</a>
+                                        <a class="btn btn-primary" style="color:white" href="/Reports/FileStatmentAcc?Token=@Model.FileData.FileFormNumber" target="_blank">File Statement</a>
+                                    </td>
+                                    <td colspan="4">Received Amount : <b>@string.Format("{0:n0}", Model.FileReceipts.Where(x => (x.Status is null || x.Status == "Approved") && Types.Contains(x.Type)).Sum(x => x.Amount))</b> </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                    <table class="table table-striped table-bordered otherrecviewfile" cellspacing="0" width="100%" style="margin-bottom:0px;display:none;">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th>Sr.</th>
+                                <th>Receipt No.</th>
+                                <th>Inst No.</th>
+                                <th>Type</th>
+                                <th>Status</th>
+                                <th>Amount</th>
+                                <th>Date</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{ srcount = 1;
+
+                                foreach (var g in Model.FileReceipts.Where(x => x.Type != "Booking" && x.Type != "Installment" && x.Type != "Adjusted" && x.Type != "Surcharge").GroupBy(x => x.Type))
+                                {
+                                    <tr><td colspan="8" style="text-align:center;font-size:15px"><b>@g.Key</b></td></tr>
+                                    foreach (var item in g)
+                                    {
+                                        string stat = "";
+                                        if (item.Status == "Pending")
+                                        {
+                                            stat = "bgc-yellow-50";
+                                        }
+                                        else if (item.Status == "Dishonored")
+                                        {
+                                            stat = "bgc-red-50";
+                                        }
+                                        else if (item.Status == "Approved")
+                                        {
+                                            stat = "bgc-green-50";
+                                        }
+                                        else if (item.Status == "Deposited")
+                                        {
+                                            stat = "bgc-orange-50";
+                                        }
+                                        else
+                                        {
+                                            stat = "";
+                                        }
+                                        <tr class="@stat" id="@item.Id">
+                                            <td>@srcount</td>
+                                            @if (((item.ReceiptNo.Contains("-DIB") || item.ReceiptNo.Contains("-HBL")) && item.Userid != 0))
+                                            {
+                                                <td>
+                                                    @item.ReceiptNo
+                                                    <br>
+                                                    Manual
+                                                </td>
+                                            }
+                                            else
+                                            {
+                                                <td>@item.ReceiptNo</td>
+                                            }
+                                            <td>@string.Format("{0:0,0.##}", item.Ch_Pay_Draft_No)</td>
+                                            <td>@item.PaymentType</td>
+                                            <td>@item.Status</td>
+                                            <td>@string.Format("{0:0,0.##}", item.Amount)</td>
+                                            <td>@string.Format("{0:dd-MMM-yyyy}", item.DateTime)</td>
+                                            <td>
+                                                @{
+                                                    if (item.Verified == true)
+                                                    {
+                                                        <i class="ti-check" style="color:green"></i>
+                                                    }
+                                                }
+                                            </td>
+                                        </tr>
+                                        srcount++;
+                                    }
+                                }
+                                <tr>
+                                    <td colspan="4">
+                                        <a class="btn btn-primary" style="color:white" href="/Reports/FileStatmentAcc?Token=@Model.FileData.FileFormNumber" target="_blank">File Statement</a>
                                     </td>
                                     <td colspan="4">Received Amount : <b>@string.Format("{0:n0}", Model.FileReceipts.Where(x => (x.Status is null || x.Status == "Approved") && Types.Contains(x.Type)).Sum(x => x.Amount))</b> </td>
                                 </tr>
@@ -704,22 +833,45 @@
                 if (typeOfLink == 'installPlan') {
                     $('.installPlanView').show();
                     $('.SurChargefileView').hide();
-                    $('.SurChargefile').removeClass('active');;
+                    $('.SurChargefile').removeClass('active');
+                    $('.installPlanNotIncluded').hide();
+                    $('.Not_Included').removeClass('active');
                 }
                 else if (typeOfLink == 'SurChargefile'){
                     $('.installPlanView').hide();
                     $('.installPlan').removeClass('active');
+                    $('.installPlanNotIncluded').hide();
+                    $('.Not_Included').removeClass('active');
                     $('.SurChargefileView').show();
+                }
+                else if (typeOfLink == 'Not_Included') {
+                    $('.installPlanView').hide();
+                    $('.installPlan').removeClass('active');
+                    $('.SurChargefileView').hide();
+                    $('.SurChargefile').removeClass('active');;
+                    $('.installPlanNotIncluded').show();
                 }
                 if (typeOfLink == 'instrecfile') {
                     $('.instrecviewfile').show();
                     $('.otherrecviewfile').hide();
-                    $('.otherrecfile').removeClass('active');;
+                    $('.otherrecfile').removeClass('active');
+                    $('.SurChargerecviewfile').hide();
+                    $('.Surchargerecfile').removeClass('active');
                 }
                 else if (typeOfLink == 'otherrecfile'){
                     $('.instrecviewfile').hide();
                     $('.instrecfile').removeClass('active');
+                    $('.SurChargerecviewfile').hide();
+                    $('.Surchargerecfile').removeClass('active');
                     $('.otherrecviewfile').show();
+
+                }
+                else if (typeOfLink == 'Surchargerecfile') {
+                    $('.instrecviewfile').hide();
+                    $('.instrecfile').removeClass('active');
+                    $('.otherrecviewfile').hide();
+                    $('.otherrecfile').removeClass('active');
+                    $('.SurChargerecviewfile').show();
                 }
 
             }

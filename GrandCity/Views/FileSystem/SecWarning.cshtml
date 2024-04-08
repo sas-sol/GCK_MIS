@@ -65,24 +65,26 @@
                         <td>@item.Mobile_1</td>
                         <td>@item.Mobile_2</td>
                         <td>
-                            <a href="/FileSystem/SecondWarningLetter?Id=@item.Id" target="_blank" class="btn btn-dark" data-id="@item.Id" data-num="@item.FileFormNumber" data-ownid="@item.Owner_Id" style="font-size:13px;padding: 3px;color:white !important">View Second Letter</a>
+                            @*<a href="/FileSystem/SecondWarningLetter?Id=@item.Id" target="_blank" class="btn btn-dark" data-id="@item.Id" data-num="@item.FileFormNumber" data-ownid="@item.Owner_Id" style="font-size:13px;padding: 3px;color:white !important">View Second Letter</a>*@
+                            <a href="/Letter/GenerateLetter?letterType=SecondWarningLetter&Id=@item.Id&Module=FileManagement" target="_blank" class="btn btn-dark" data-id="@item.Id" data-num="@item.FileFormNumber" data-ownid="@item.Owner_Id" style="font-size:13px;padding: 3px;color:white !important">View Second Letter</a>
+
                             @*@{
-                            if (item.Verified == true)
-                            {*@
-                            <button class="btn btn-primary can-let-f" data-id="@item.Id" data-num="@item.FileFormNumber" data-ownid="@item.Owner_Id" style="font-size:13px;padding: 3px;">Cancellation Letter</button>
+        if (item.Verified == true)
+        {*@
+                            <button class="btn btn-primary third-war-f" data-id="@item.Id" data-num="@item.FileFormNumber" data-ownid="@item.Owner_Id" style="font-size:13px;padding: 3px;">Third Warning</button>
                             @*}
-                                else
-                                {
-                                    if (item.Verification_Req == true)
-                                    {
-                                        <label class="switch" style="height:20px;width:46px;margin:0px"><input type="checkbox" data-id="@item.Id" id="veri-req-f-id" checked><span class="slider round"></span></label>
-                                    }
-                                    else
-                                    {
-                                        <label class="switch" style="height:20px;width:46px;margin:0px"><input type="checkbox" data-id="@item.Id" id="veri-req-f-id"><span class="slider round"></span></label>
-                                    }
-                                }
-                            }*@
+            else
+            {
+                if (item.Verification_Req == true)
+                {
+                    <label class="switch" style="height:20px;width:46px;margin:0px"><input type="checkbox" data-id="@item.Id" id="veri-req-f-id" checked><span class="slider round"></span></label>
+                }
+                else
+                {
+                    <label class="switch" style="height:20px;width:46px;margin:0px"><input type="checkbox" data-id="@item.Id" id="veri-req-f-id"><span class="slider round"></span></label>
+                }
+            }
+        }*@
 
                         </td>
                         @*<td><i data-ownid="@item.Owner_Id" data-num="@item.FileFormNumber" data-let="2"  class="fas fa-backward war-step-f"></i></td>*@
@@ -92,6 +94,7 @@
                                     <option value="">Select One</option>
                                     <option value="Qualify">Qualify</option>
                                     <option value="First">First Warning</option>
+                                    <option value="Third">3rd Warning</option>
                                     <option value="Last">Cancelled</option>
                                 </select>
                             </div>
