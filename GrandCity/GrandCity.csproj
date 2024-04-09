@@ -7011,7 +7011,6 @@
     <Content Include="Views\Reports\FilesOutstanding.cshtml" />
     <Content Include="Views\Reports\PlotsfilesConsultedReports.cshtml" />
     <Content Include="Views\Reports\PlotsfilesCosolidatedReports.cshtml" />
-    <Content Include="Views\FileSystem\UpdateFileInformation.cshtml" />
     <Content Include="Views\FileSystem\ThirdWarning.cshtml" />
     <Content Include="Views\Plots\ThirdWarning.cshtml" />
   </ItemGroup>
