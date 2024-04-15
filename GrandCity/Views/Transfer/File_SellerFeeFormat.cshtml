@@ -1,0 +1,476 @@
+﻿@model MeherEstateDevelopers.Models.TransferRequestDetails
+
+@{
+    Layout = null;
+}
+<style>
+    body {
+        font-family: Roboto,-apple-system,system-ui,BlinkMacSystemFont,Segoe UI,Oxygen,Ubuntu,Cantarell,Fira Sans,Droid Sans,Helvetica Neue,Arial,sans-serif;
+    }
+
+    .bg {
+        height: 1400px;
+        width: 1100px;
+        /*        background-image: url('../../Repository/New_App_Form_Bg_Image.png');
+    */ /*background-size: 1100px 1400px;*/
+        background-repeat: no-repeat;
+    }
+
+    .row {
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    .column {
+        flex: 1;
+        padding: 5px;
+    }
+
+    .logo {
+        width: 200px; /* Adjust width as needed */
+        height: 200px; /* Adjust height as needed */
+        /* Other styling properties */
+    }
+</style>
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>SellerFeeFormat</title>
+</head>
+<body>
+    <div class="bg" style="padding: 0; margin: 0">
+        <div class="row" style="">
+            <div class="column" style="margin-left:0px; text-align:center">
+                <b style="border-bottom: 1px solid black; font-size:25px">FORWARDING LETTER</b>
+            </div>
+        </div>
+        <div class="row" style="margin-left:40px; margin-top:20px;">
+            <div class="column">
+                <b>From:</b>
+            </div>
+            <div class="column">
+            </div>
+            <div class="column">
+            </div>
+            <div class="column">
+                Date: 11-12-2023
+            </div>
+        </div>
+        <div class="row" style="margin-left:40px">
+            <div class="column" style="margin-left:0px; text-align:left">
+                Name: @Model.File.Name
+            </div>
+        </div>
+        <div class="row" style="margin-left:40px">
+            <div class="column" style="margin-left:0px; text-align:left">
+                CNIC: @Model.File.CNIC_NICOP
+            </div>
+        </div>
+        <div class="row" style="margin-left:40px">
+            <div class="column" style="margin-left:0px; text-align:left">
+                Contact No: @Model.File.Mobile_1
+            </div>
+        </div>
+        <div class="row" style="margin-left:40px">
+            <div class="column" style="margin-left:0px; text-align:left">
+                <b>To, </b>
+            </div>
+        </div>
+        <div class="row" style="margin-left:40px">
+            <div class="column" style="margin-left:0px; text-align:left">
+                The Customer Service Department,
+            </div>
+        </div>
+        <div class="row" style="margin-left:40px">
+            <div class="column" style="margin-left:0px; text-align:left">
+                Grand City Kharian, Sarai Alamgir,
+            </div>
+        </div>
+        <div class="row">
+            <div class="column" style="margin-left:40px; text-align:left">
+                <span style="display: inline-block; width: 100px;"><b>Subject:   </b>  </span>
+                <b style="border-bottom: 1px solid black;">Transfer of Plot No. @Model.File.File_Form_Number, Block @Model.File.Block_Name, Grand City Kharian, Sarai Alamgir.</b>
+            </div>
+        </div>
+        <div class="row" style="margin-left:40px">
+            <div class="column" style="margin-left:0px; text-align:left">
+                I have sold / gifted my Plot No. @Model.File.File_Form_Number, Block - @Model.File.Block_Name  @Model.File.Type, measuring @Model.File.Plot_Size, to
+            </div>
+        </div>
+        <table cellspacing="0" border="0" style="width: 1030px; font-size: 16px; margin-top: 0px; margin-left: 40px;">
+            <tr>
+                <td align="left" valign=bottom style="line-height: 30px;">
+                    <p>
+                        <u style="width: 350px; text-align: center; display: inline-block; border-bottom: 1px solid black; text-decoration: none; ">@string.Join(",", Model.TransferTo.Select(x => x.Name))</u>
+                        <b>S/O</b><u style="width: 320px; text-align: center; display: inline-block; border-bottom: 1px solid black; text-decoration: none; ">@string.Join(",", Model.TransferTo.Select(x => x.Father_Husband))</u>
+                        <b>CNIC: </b><u style="width: 250px; text-align: center; display: inline-block; border-bottom: 1px solid black; text-decoration: none; ">@string.Join(",", Model.TransferTo.Select(x => x.CNIC_NICOP))</u>
+                    </p>
+                </td>
+            </tr>
+        </table>
+        <table cellspacing="0" border="0" style="width: 1030px; font-size: 16px; margin-top: 0px; margin-left: 40px;">
+            <tr>
+                <td align="left" valign=bottom style="line-height: 30px;">
+                    <p>
+                        resident of <u style="width: 612px; text-align: center; display: inline-block; border-bottom: 1px solid black; text-decoration: none; ">@string.Join(",", Model.TransferTo.Select(x => x.Residential_Address)) </u>
+                    </p>
+                </td>
+            </tr>
+        </table>
+        <div class="row" style="margin-left:40px">
+            <div class="column" style="margin-left:0px; text-align:left">
+                1. I have executed necessary transfer papers, which are appended herewith for your necessary action and record please.
+            </div>
+        </div>
+        <div class="row" style="margin-left:40px">
+            <div class="column" style="margin-left:0px; text-align:left">
+                Following documents are attached.
+            </div>
+        </div>
+        <div class="row" style="margin-left:90px">
+            <div class="column" style="margin-left:0px; text-align:left">
+                a.	Original Application Form, Allocation Letter, Allotment Letter.
+            </div>
+        </div>
+        <div class="row" style="margin-left:90px">
+            <div class="column" style="margin-left:0px; text-align:left">
+                b.	Affidavit of Seller
+            </div>
+        </div>
+        <div class="row" style="margin-left:90px">
+            <div class="column" style="margin-left:0px; text-align:left">
+                c.	Undertaking by the Purchaser
+            </div>
+        </div>
+        <div class="row" style="margin-left:90px">
+            <div class="column" style="margin-left:0px; text-align:left">
+                d.	No Demand Certificate (NDC)
+            </div>
+        </div>
+        <div class="row" style="margin-left:90px">
+            <div class="column" style="margin-left:0px; text-align:left">
+                e.	2 x Passport size pictures of Purchaser
+            </div>
+        </div>
+        <div class="row" style="margin-left:90px">
+            <div class="column" style="margin-left:0px; text-align:left">
+                f.	1 x Photocopy of the CNIC of both (Seller and Purchaser)
+            </div>
+        </div>
+        <div class="row" style="margin-left:40px; margin-top:20px;">
+            <div class="column" style="margin-left:0px; text-align:left">
+                Kindly transfer the above said plot/ House in favor of the above said Purchaser.
+            </div>
+        </div>
+        <div class="row" style="margin-left:40px; margin-top:30px;">
+            <div class="column" style="margin-left:0px; text-align:left">
+                Yours Sincerely,
+            </div>
+        </div>
+        <table cellspacing="0" border="0" style="width: 1030px; font-size: 22px; margin-top: 100px; margin-left: 40px;">
+            <tr>
+                <td width="300px" align="left" valign=bottom style=" text-align:center; border-top:1px solid"><b>Signature</b></td>
+                <td width="200px" align="left" valign=bottom></td>
+                <td width="300px" align="left" valign=bottom style=" text-align:center; border-top:1px solid"><b>Signature</b></td>
+                <td width="200px" align="left" valign=bottom></td>
+                <td width="300px" align="left" valign=bottom style="text-align:center; border-top:1px solid"><b>Signature</b></td>
+            </tr>
+        </table>
+    </div>
+    <div class="bg" style="padding: 0; margin: 0">
+        <div class="row" style="">
+            <div class="column" style="margin-left:0px; text-align:center">
+                <b style="border-bottom: 1px solid black; font-size:25px">AFFIDAVIT OF SELLER</b>
+            </div>
+        </div>
+        <table cellspacing="0" border="0" style="width: 1000px; font-size: 16px; margin-top: 40px; margin-left: 40px;">
+            <tr>
+                <td align="left" valign=bottom style="line-height: 30px;">
+                    <p>
+                        I, @Model.File.Name &nbsp; <b> S/O,W/o @Model.File.Father_Husband </b> &nbsp; bearing  &nbsp; <b>@Model.File.CNIC_NICOP,</b>  &nbsp;  Resident of  &nbsp; <b>@Model.File.Residential_Address. </b> &nbsp;
+                        in possession of my full faculties and senses and of my free will and without any coercion or duress, do herby solemnly affirm and declare as under: -
+                    </p>
+                </td>
+            </tr>
+        </table>
+        <table cellspacing="0" border="0" style="width: 1000px; font-size: 16px; margin-top: 10px; margin-left: 80px; ">
+            <tr>
+                <td align="left" valign=bottom style="line-height: 30px; ">
+                    <p>
+                        1.	That I am Bonafede member of  &nbsp; <b> The Grand City Kharian/Sarai Alamgir, </b> &nbsp; and I had purchased a  &nbsp; <b> Plot No. @Model.File.File_Form_Number, Block-@Model.File.Block_Name, </b>  &nbsp;  measuring  &nbsp; <b>@Model.File.Plot_Size, </b> &nbsp;
+                        situated in The Grand City Kharian District Gujrat.
+                    </p>
+                </td>
+            </tr>
+        </table>
+        <table cellspacing="0" border="0" style="width: 1000px; font-size: 16px; margin-top: 10px; margin-left: 80px; ">
+            <tr>
+                <td align="left" valign=bottom style="line-height: 30px; ">
+                    <p>
+                        2.	That I hereby return the original Application file for cancellation which has been sold    &nbsp; <u> @Model.File.Name </u> &nbsp; <b>S/O</b>  &nbsp; <u> @Model.File.Father_Husband  </u>  &nbsp;  bearing <b> CNIC NO. </b>  &nbsp; <u> @Model.File.CNIC_NICOP </u> &nbsp;
+                        resident of, &nbsp; <u> @Model.File.Residential_Address.</u>
+                    </p>
+                </td>
+            </tr>
+        </table>
+        <table cellspacing="0" border="0" style="width: 1000px; font-size: 16px; margin-top: 10px; margin-left: 80px; ">
+            <tr>
+                <td align="left" valign=bottom style="line-height: 30px; ">
+                    <p>
+                        3.	That having surrendered the said plot to the Grand City for further allotment to,    &nbsp; <u> @string.Join(",", Model.TransferTo.Select(x => x.Name)) </u> &nbsp; <b>S/O</b>  &nbsp; <u>  @string.Join(",", Model.TransferTo.Select(x => x.Father_Husband))  </u>  &nbsp;  bearing <b> CNIC NO. </b>  &nbsp; <u> @string.Join(",", Model.TransferTo.Select(x => x.CNIC_NICOP)) </u> &nbsp;
+                        . provisional booking of the plot be to done in favor of purchaser.
+                    </p>
+                </td>
+            </tr>
+        </table>
+        <table cellspacing="0" border="0" style="width: 1000px; font-size: 16px; margin-top: 10px; margin-left: 80px; ">
+            <tr>
+                <td align="left" valign=bottom style="line-height: 30px; ">
+                    <p>
+                        4.	That I affirm and declare that the name of new buyer should be entered in the records of The Grand City, as the owner of the aforesaid property.
+                    </p>
+                </td>
+            </tr>
+        </table>
+        <table cellspacing="0" border="0" style="width: 1000px; font-size: 16px; margin-top: 10px; margin-left: 80px; ">
+            <tr>
+                <td align="left" valign=bottom style="line-height: 30px; ">
+                    <p>
+                        5.	That I solemnly declare that I have no right, title or interest in the said property and the new buyer is exclusive owner of the same from now
+
+                    </p>
+                </td>
+            </tr>
+        </table>
+
+        <table cellspacing="0" border="0" style="width: 1000px; font-size: 16px; margin-top: 10px; margin-left: 80px; ">
+            <tr>
+                <td align="left" valign=bottom style="line-height: 30px;">
+                    <p>
+                        6.	That I further affirm and declare that neither I have entered into an agreement for the sale of plot in question with any other person except the above said purchaser nor any suit is presently pending in any court of competent jurisdiction and no stay order is operative against the said plot furthermore said plot is free from all encumbrances. In the event the above statement is found to be false, incorrect or untrue, the deponent shall pay the entire sale consideration with profit etc. to the purchaser.
+                    </p>
+                </td>
+            </tr>
+        </table>
+        <table cellspacing="0" border="0" style="width: 1000px; font-size: 16px; margin-top: 10px; margin-left: 80px; ">
+            <tr>
+                <td align="left" valign=bottom style="line-height: 30px;">
+                    <p>
+                        7.	That whatever is stated above is true to the best of my own knowledge and belief.
+                    </p>
+                </td>
+            </tr>
+        </table>
+        <div class="row" style="margin-left: 40px; margin-top: 20px;">
+            <div class="column">
+            </div>
+            <div class="column">
+                @*@string.Join(",", Model.FilesOwners.Select(x => x.Name))*@
+            </div>
+            <div class="column">
+            </div>
+            <div class="column">
+                <b style="font-size:20px;">DEPONENT</b>
+            </div>
+        </div>
+        <div class="row" style="margin-left:40px; margin-top:20px;">
+            <div class="column">
+                <b style="border-bottom: 1px solid black;">Verification</b>
+            </div>
+            <div class="column">
+                @*@string.Join(",", Model.FilesOwners.Select(x => x.Name))*@
+            </div>
+            <div class="column">
+            </div>
+            <div class="column">
+            </div>
+        </div>
+        <div class="row" style="margin-left:40px;">
+            <div class="column">
+                Verified on Oath at Kharian, this 11th day of December, 2023 that the contents of above affidavit are true and correct to the best of my knowledge, information and belief, and that nothing has been concealed therein.
+            </div>
+
+        </div>
+        <div class="row" style="margin-left: 40px; margin-top: 30px;">
+            <div class="column">
+            </div>
+            <div class="column">
+                @*@string.Join(",", Model.FilesOwners.Select(x => x.Name))*@
+            </div>
+            <div class="column">
+            </div>
+            <div class="column">
+                <b style="font-size:20px;">DEPONENT</b>
+            </div>
+        </div>
+    </div>
+    <div class="bg" style="padding: 0; margin: 0">
+        <div class="row" style="">
+            <div class="column" style="margin-left:0px; text-align:center">
+                <b style="border-bottom: 1px solid black; font-size:25px">UNDERTAKING BY THE PURCHASER</b>
+            </div>
+        </div>
+        <table cellspacing="0" border="0" style="width: 1000px; font-size: 16px; margin-top: 40px; margin-left: 40px;">
+            <tr>
+                <td align="left" valign=bottom style="line-height: 30px;">
+                    <p>
+                        1.	Certified that I agree to pay the Variation in Development charges and plot size on demand.
+                    </p>
+                </td>
+            </tr>
+        </table>
+        <table cellspacing="0" border="0" style="width: 1000px; font-size: 16px; margin-top: 10px; margin-left: 80px; ">
+            <tr>
+                <td align="left" valign=bottom style="line-height: 30px; ">
+                    <p>
+                        2.	I will not make any addition / alteration in the plot/building so purchased without prior approval from management of the Grand City. In case any change / shifting of Electric Poles, Telephone Poles and Manhole etc.
+                        are necessitated as per my requirement, it will be done at my risk and cost if feasible.
+                    </p>
+                </td>
+            </tr>
+        </table>
+        <table cellspacing="0" border="0" style="width: 1000px; font-size: 16px; margin-top: 10px; margin-left: 80px; ">
+            <tr>
+                <td align="left" valign=bottom style="line-height: 30px; ">
+                    <p>
+                        3.	I shall not convert the property to different use(s) or purposes(s) other than that provided or permitted under the regulations.
+                    </p>
+                </td>
+            </tr>
+        </table>
+        <table cellspacing="0" border="0" style="width: 1000px; font-size: 16px; margin-top: 10px; margin-left: 80px; ">
+            <tr>
+                <td align="left" valign=bottom style="line-height: 30px; ">
+                    <p>
+                        4.	I will ensure that Plot /House Charges/Other dues shall pay accordingly. I shall not default or fail in payment of taxes and other duties of Central / Provincial / Local Governments.
+                    </p>
+                </td>
+            </tr>
+        </table>
+        <table cellspacing="0" border="0" style="width: 1000px; font-size: 16px; margin-top: 10px; margin-left: 80px; ">
+            <tr>
+                <td align="left" valign=bottom style="line-height: 30px; ">
+                    <p>
+                        5.	I undertake to pay any Variation in plot area.
+                    </p>
+                </td>
+            </tr>
+        </table>
+        <table cellspacing="0" border="0" style="width: 1000px; font-size: 16px; margin-top: 10px; margin-left: 80px; ">
+            <tr>
+                <td align="left" valign=bottom style="line-height: 30px; ">
+                    <p>
+                        6.	I hereby undertake to abide by all rules, regulations / bye laws of the Grand City.
+                    </p>
+                </td>
+            </tr>
+        </table>
+
+        <table cellspacing="0" border="0" style="width: 1000px; font-size: 16px; margin-top: 10px; margin-left: 80px; ">
+            <tr>
+                <td align="left" valign=bottom style="line-height: 30px;">
+                    <p>
+                        7.	I shall not damage the interest of the Grand City and my act or omission shall not be detrimental to the aims and objectives as well as the reputation of the Grand City.
+                    </p>
+                </td>
+            </tr>
+        </table>
+        <table cellspacing="0" border="0" style="width: 1000px; font-size: 16px; margin-top: 10px; margin-left: 80px; ">
+            <tr>
+                <td align="left" valign=bottom style="line-height: 30px;">
+                    <p>
+                        8.	I shall obey the decision made or instruction issued by the Grand City.
+                    </p>
+                </td>
+            </tr>
+        </table>
+        <table cellspacing="0" border="0" style="width: 1000px; font-size: 16px; margin-top: 10px; margin-left: 80px; ">
+            <tr>
+                <td align="left" valign=bottom style="line-height: 30px;">
+                    <p>
+                        9.	I shall not involve in violation of the Grand City Rules or Regulations.
+                    </p>
+                </td>
+            </tr>
+        </table>
+        <table cellspacing="0" border="0" style="width: 1000px; font-size: 16px; margin-top: 10px; margin-left: 80px; ">
+            <tr>
+                <td align="left" valign=bottom style="line-height: 30px;">
+                    <p>
+                        10.	I shall not involve in frivolous litigations with the Grand City.
+                    </p>
+                </td>
+            </tr>
+        </table>
+        <table cellspacing="0" border="0" style="width: 1000px; font-size: 16px; margin-top: 10px; margin-left: 80px; ">
+            <tr>
+                <td align="left" valign=bottom style="line-height: 30px;">
+                    <p>
+                        11.	I shall not misuse the dwelling or habitually act in an ungrateful manner or the manner which may cause serious nuisance to my neighbors.
+                    </p>
+                </td>
+            </tr>
+        </table>
+        <table cellspacing="0" border="0" style="width: 1000px; font-size: 16px; margin-top: 10px; margin-left: 80px; ">
+            <tr>
+                <td align="left" valign=bottom style="line-height: 30px;">
+                    <p>
+                        12.	In case of possession of Plot, I shall construct the building as per the Grand City Construction Byelaws/Policy, failing which I will pay non construction penalty, as applicable.
+                    </p>
+                </td>
+            </tr>
+        </table>
+        <table cellspacing="0" border="0" style="width: 1000px; font-size: 16px; margin-top: 10px; margin-left: 80px; ">
+            <tr>
+                <td align="left" valign=bottom style="line-height: 30px;">
+                    <p>
+                        13.	My 3-specimen signature are as under: -
+                    </p>
+                </td>
+            </tr>
+        </table>
+        <table cellspacing="0" border="0" style="width: 1030px; font-size: 22px; margin-top: 100px; margin-left: 40px;">
+            <tr>
+                <td width="200px" align="left" valign=bottom>Signatures:</td>
+                <td width="300px" align="left" valign=bottom style=" text-align:center; border-bottom:1px solid"><b></b></td>
+                <td width="200px" align="left" valign=bottom></td>
+                <td width="300px" align="left" valign=bottom style=" text-align: center; border-bottom: 1px solid"><b></b></td>
+                <td width="200px" align="left" valign=bottom></td>
+                <td width="300px" align="left" valign=bottom style="text-align: center; border-bottom: 1px solid"><b></b></td>
+            </tr>
+        </table>
+        <div class="row" style="margin-left:40px; margin-top:20px;">
+            <div class="column" style="margin-left:0px; text-align:left">
+                <b>Yours Sincerely </b>
+            </div>
+        </div>
+        <div class="row" style="margin-left:40px">
+            <div class="column" style="margin-left: 0px; text-align: left; margin-top: 20px;">
+                <b>@string.Join(",", Model.TransferTo.Select(x => x.Name)) </b>
+            </div>
+        </div>
+        <div class="row" style="margin-left:40px">
+            <div class="column" style="margin-left:0px; text-align:left">
+                <b>CNIC No. @string.Join(",", Model.TransferTo.Select(x => x.CNIC_NICOP)), </b>
+            </div>
+        </div>
+        <div class="row" style="margin-left:40px">
+            <div class="column" style="margin-left:0px; text-align:left">
+                <b>Plot No.@Model.File.File_Form_Number, Block-@Model.File.Block_Name, @Model.File.Type,    </b>
+            </div>
+        </div>
+        <div class="row" style="margin-left:40px">
+            <div class="column" style="margin-left:0px; text-align:left">
+                <b>Size @Model.File.Plot_Size  </b>
+            </div>
+        </div>
+        <div class="row" style="margin-left:40px">
+            <div class="column" style="margin-left:0px; text-align:left">
+                <b>Dated @DateTime.Now.ToString("dd-MM-yyyy") </b>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -23,21 +23,19 @@
     }
 </style>
 <div class="sidebar">
-    <div class="sidebar-inner" style="background-color: #C4A484;  box-shadow: 20px 0px 5px rgba(0, 0, 0, 0.5); ">
+    <div class="sidebar-inner" style="background-color: #1f1f1f; box-shadow: 20px 0px 5px rgba(0, 0, 0, 0.5); ">
         <div class="sidebar-logo">
             <div class="peers ai-c fxw-nw">
                 <div class="peer peer-greed">
                     <a class="sidebar-link td-n" href="/Home/Index">
                         <div class="peers ai-c fxw-nw">
-                            <div class="background">
                                 <div class="peer">
                                     <div class="logo" style="padding:20px 10px 10px 10px">
                                         <img style="width: 100%; height: 50px" src="~/assets/static/images/logo2_black.JPG" alt="">
                                     </div>
                                 </div>
-                            </div>
                             <div class="peer peer-greed">
-                                <h5 class="lh-1 mB-0 logo-text">Meher Estate</h5>
+                                <h5 class="lh-1 mB-0 logo-text">Grand City</h5>
                             </div>
                         </div>
                     </a>
@@ -53,7 +51,7 @@
 
             <li class="nav-item mT-30 active">
                 <a class="dropdown-toggle staff-dash-tile" href="javascript:void(0);" data-dash="home">
-                    <span class="icon-holder"><i class="c-blue-500 ti-home"></i> </span><span class="title">Dashboard</span>
+                    <span class="icon-holder"><i class="c-blue-500 ti-home"></i> </span><span class="title" style="color: #f1c07b;">Dashboard</span>
                 </a>
             </li>
 
@@ -65,20 +63,20 @@
                         <span class="icon-holder">
                             <i class="c-red-500 ti-agenda"></i>
                         </span>
-                        <span class="title">Roles & Responsibilities </span>
+                        <span class="title" style="color: #f1c07b;">Roles & Responsibilities </span>
                         <span class="arrow">
                             <i class="ti-angle-right"></i>
                         </span>
                     </a>
                     <ul class="dropdown-menu">
                         <li>
-                            <a class='sidebar-link get-link' data-link="/RolesAndResponsibilities/CreateRoles/" href="javascript:void(0);">Roles</a>
+                            <a class='sidebar-link get-link' data-link="/RolesAndResponsibilities/CreateRoles/" href="javascript:void(0);" style="color: #f1c07b;">Roles</a>
                         </li>
                         <li>
-                            <a class='sidebar-link get-link' data-link="/RolesAndResponsibilities/AssignRoles/" href="javascript:void(0);">Responsibilities</a>
+                            <a class='sidebar-link get-link' data-link="/RolesAndResponsibilities/AssignRoles/" href="javascript:void(0);" style="color: #f1c07b;">Responsibilities</a>
                         </li>
                         <li>
-                            <a class='sidebar-link get-link' data-link="/RolesAndResponsibilities/RolesResponsibilitiesCreation/" href="javascript:void(0);">Roles Assignment</a>
+                            <a class='sidebar-link get-link' data-link="/RolesAndResponsibilities/RolesResponsibilitiesCreation/" href="javascript:void(0);" style="color: #f1c07b;">Roles Assignment</a>
                         </li>
                     </ul>
                 </li>
@@ -92,7 +90,7 @@
                         <span class="icon-holder">
                             <i class="c-red-500 ti-home"></i>
                         </span>
-                        <span class="title">Real Estate Configuration  </span>
+                        <span class="title" style="color: #f1c07b;">Real Estate Configuration  </span>
                         <span class="arrow">
                             <i class="ti-angle-right"></i>
                         </span>
@@ -101,13 +99,13 @@
                         @if (User.IsInRole("Real Estate Project"))
                         {
                             <li>
-                                <a class='sidebar-link get-link' data-link="/RealEstateProjects/ProjectConfiguration/" href="javascript:void(0);">Projects Configuration </a>
+                                <a class='sidebar-link get-link' data-link="/RealEstateProjects/ProjectConfiguration/" href="javascript:void(0);" style="color: #f1c07b;">Projects Configuration </a>
                             </li>
                         }
                         @if (User.IsInRole("Transfer"))
                         {
                             <li>
-                                <a class='sidebar-link get-link' data-link="/Plots/PlotsModuleConfiguration/" href="javascript:void(0);">Transfer</a>
+                                <a class='sidebar-link get-link' data-link="/Plots/PlotsModuleConfiguration/" href="javascript:void(0);" style="color: #f1c07b;">Transfer</a>
                             </li>
                         }
                     </ul>
@@ -121,14 +119,14 @@
                         <span class="icon-holder">
                             <i class="c-red-500 ti-id-badge"></i>
                         </span>
-                        <span class="title">Dealership Management  </span>
+                        <span class="title" style="color: #f1c07b;">Dealership Management  </span>
                         <span class="arrow">
                             <i class="ti-angle-right"></i>
                         </span>
                     </a>
                     <ul class="dropdown-menu">
                         <li>
-                            <a class='sidebar-link get-link' data-link="/Dealership/DealershipRegisteration/" href="javascript:void(0);">Registeration</a>
+                            <a class='sidebar-link get-link' data-link="/Dealership/DealershipRegisteration/" href="javascript:void(0);" style="color: #f1c07b;">Registeration</a>
                         </li>
                         @*<li>
                                 <a class='sidebar-link get-link' data-link="/Dealership/DealershipSecurity/" href="javascript:void(0);">Advance Collection</a>
@@ -147,7 +145,7 @@
                         <span class="icon-holder">
                             <i class="c-blue-500 ti-user"></i>
                         </span>
-                        <span class="title">Cash Counter</span>
+                        <span class="title" style="color: #f1c07b;">Cash Counter</span>
                     </a>
                 </li>
             }
@@ -159,7 +157,7 @@
                         <span class="icon-holder">
                             <i class="c-blue-500 ti-file"></i>
                         </span>
-                        <span class="title">Files & Plots</span>
+                        <span class="title" style="color: #f1c07b;">Files & Plots</span>
                     </a>
                 </li>
             }
@@ -170,7 +168,7 @@
                         <span class="icon-holder">
                             <i class="c-blue-500 ti-file"></i>
                         </span>
-                        <span class="title">Balloting</span>
+                        <span class="title" style="color: #f1c07b;">Balloting</span>
                     </a>
                 </li>
             }
@@ -182,7 +180,7 @@
                         <span class="icon-holder">
                             <i class="c-blue-500 ti-layout-menu-v"></i>
                         </span>
-                        <span class="title">Building Management</span>
+                        <span class="title" style="color: #f1c07b;">Building Management</span>
                     </a>
                 </li>
             }
@@ -193,7 +191,7 @@
                         <span class="icon-holder">
                             <i class="c-blue-500 ti-map"></i>
                         </span>
-                        <span class="title">Land Management</span>
+                        <span class="title" style="color: #f1c07b;">Land Management</span>
                     </a>
                 </li>
             }
@@ -205,7 +203,7 @@
                         <span class="icon-holder">
                             <i class="c-teal-500 ti-view-list-alt"></i>
                         </span>
-                        <span class="title">Accounts</span>
+                        <span class="title" style="color: #f1c07b;">Accounts</span>
                         <span class="arrow">
                             <i class="ti-angle-right"></i>
                         </span>
@@ -216,7 +214,7 @@
                         {
                             <li class="nav-item dropdown">
                                 <a href="/AccountHeads/AccountHeadList">
-                                    <span>Chart of Accounts</span>
+                                    <span style="color: #f1c07b;">Chart of Accounts</span>
                                 </a>
                             </li>
                         }
@@ -224,7 +222,7 @@
                         {
                             <li class="nav-item dropdown">
                                 <a href="javascript:void(0);">
-                                    <span>Payables</span>
+                                    <span style="color: #f1c07b;">Payables</span>
                                     <span class="arrow">
                                         <i class="ti-angle-right"></i>
                                     </span>
@@ -233,26 +231,26 @@
                                     @if (User.IsInRole("Record Payables"))
                                     {
                                         <li>
-                                            <a href="/Procurement/GenerateBill">Record Payables</a>
+                                            <a href="/Procurement/GenerateBill" style="color: #f1c07b;">Record Payables</a>
                                         </li>
                                         <li>
-                                            <a href="/GeneralEntry/BillsNeededUpdation">Payables Needs Updation</a>
+                                            <a href="/GeneralEntry/BillsNeededUpdation"style="color: #f1c07b;">Payables Needs Updation</a>
                                         </li>
                                     }
                                     @if (User.IsInRole("Pay Advance Payable"))
                                     {
                                         <li>
-                                            <a href="/Procurement/PurchaseOrders">Vendor Advances</a>
+                                            <a href="/Procurement/PurchaseOrders" style="color: #f1c07b;">Vendor Advances</a>
                                         </li>
                                         <li>
-                                            <a href="/GeneralEntry/BillsNeededUpdation">General Advance</a>
+                                            <a href="/GeneralEntry/BillsNeededUpdation" style="color: #f1c07b;">General Advance</a>
                                         </li>
                                     }
 
                                     @if (User.IsInRole("Payables Make Payment"))
                                     {
                                         <li>
-                                            <a class="staff-dash-tile" href="javascript:void(0);" data-dash="makepayment">Make Payment</a>
+                                            <a class="staff-dash-tile" href="javascript:void(0);" data-dash="makepayment" style="color: #f1c07b;">Make Payment</a>
                                         </li>
                                     }
                                 </ul>
@@ -262,7 +260,7 @@
                         {
                             <li class="nav-item dropdown">
                                 <a href="javascript:void(0);">
-                                    <span>Receivables</span>
+                                    <span style="color: #f1c07b;">Receivables</span>
                                     <span class="arrow">
                                         <i class="ti-angle-right"></i>
                                     </span>
@@ -271,17 +269,17 @@
                                     @if (User.IsInRole("Record Receivables"))
                                     {
                                         <li>
-                                            <a href="/Procurement/RecordInvoice">Record Invoices</a>
+                                            <a href="/Procurement/RecordInvoice" style="color: #f1c07b;">Record Invoices</a>
                                         </li>
                                     }
 
                                     @if (User.IsInRole("Receive Payments"))
                                     {
                                         <li>
-                                            <a href="/Procurement/InvoiceList">Receive Payments</a>
+                                            <a href="/Procurement/InvoiceList" style="color: #f1c07b;">Receive Payments</a>
                                         </li>
                                         <li>
-                                            <a href="/Procurement/ReceiveOpenPayment/">Receive Receipt Voucher</a>
+                                            <a href="/Procurement/ReceiveOpenPayment/" style="color: #f1c07b;">Receive Receipt Voucher</a>
                                         </li>
                                     }
                                 </ul>
@@ -298,10 +296,10 @@
                                 </a>
                                 <ul class="dropdown-menu">
                                     <li>
-                                        <a href="/Procurement/ReceiveOpenPayment">Cash Receipt Vouchers</a>
+                                        <a href="/Procurement/ReceiveOpenPayment" style="color: #f1c07b;">Cash Receipt Vouchers</a>
                                     </li>
                                     <li>
-                                        <a href="/Procurement/ReceiveOpenPayment">Bank Receipt Vouchers</a>
+                                        <a href="/Procurement/ReceiveOpenPayment" style="color: #f1c07b;">Bank Receipt Vouchers</a>
                                     </li>
                                 </ul>
                             </li>
@@ -310,7 +308,7 @@
                         {
                             <li class="nav-item dropdown">
                                 <a href="javascript:void(0);">
-                                    <span>Posting Accounts</span>
+                                    <span style="color: #f1c07b;">Posting Accounts</span>
                                     <span class="arrow">
                                         <i class="ti-angle-right"></i>
                                     </span>
@@ -319,19 +317,19 @@
                                     @if (User.IsInRole("Direct Payments"))
                                     {
                                         <li>
-                                            <a href="/GeneralEntry/DirectTempVoucher">Direct Payments</a>
+                                            <a href="/GeneralEntry/DirectTempVoucher" style="color: #f1c07b;">Direct Payments</a>
                                         </li>
                                     }
                                     @if (User.IsInRole("Record JV Entry"))
                                     {
                                         <li>
-                                            <a href="/GeneralEntry/TempAccount">Record JV Entry</a>
+                                            <a href="/GeneralEntry/TempAccount" style="color: #f1c07b;">Record JV Entry</a>
                                         </li>
                                     }
                                     @if (User.IsInRole("Record Contra Entry"))
                                     {
                                         <li>
-                                            <a href="/GeneralEntry/ContraEntry">Record Contra Entry</a>
+                                            <a href="/GeneralEntry/ContraEntry" style="color: #f1c07b;">Record Contra Entry</a>
                                         </li>
                                     }
                                 </ul>
@@ -341,7 +339,7 @@
                         {
                             <li class="nav-item dropdown">
                                 <a href="javascript:void(0);">
-                                    <span>Journal Entry</span>
+                                    <span style="color: #f1c07b;">Journal Entry</span>
                                     <span class="arrow">
                                         <i class="ti-angle-right"></i>
                                     </span>
@@ -350,23 +348,23 @@
                                     @if (User.IsInRole("Payables Supervision"))
                                     {
                                         <li>
-                                            <a href="/Procurement/AllBills">Bills Supervision</a>
+                                            <a href="/Procurement/AllBills" style="color: #f1c07b;">Bills Supervision</a>
                                         </li>
                                     }
                                     @if (User.IsInRole("Supervise Receivables"))
                                     {
                                         <li>
-                                            <a href="/Procurement/UnsupervisedInvoices">Invoices Supervision</a>
+                                            <a href="/Procurement/UnsupervisedInvoices" style="color: #f1c07b;">Invoices Supervision</a>
                                         </li>
                                     }
                                     @if (User.IsInRole("General Entry"))
                                     {
-                                        <li><a href="/GeneralEntry/RecordedEntries">My Journal Entry</a></li>
+                                        <li><a href="/GeneralEntry/RecordedEntries" style="color: #f1c07b;">My Journal Entry</a></li>
                                     }
                                     @if (User.IsInRole("Supervision of General Entry"))
                                     {
                                         <li>
-                                            <a href="/GeneralEntry/PendingEntries">Pending Journal Entry</a>
+                                            <a href="/GeneralEntry/PendingEntries" style="color: #f1c07b;">Pending Journal Entry</a>
                                         </li>
                                     }
                                 </ul>
@@ -377,7 +375,7 @@
                         {
                             <li class="nav-item dropdown">
                                 <a href="/GeneralEntry/PayableVouchers">
-                                    <span>Payable Vouchers</span>
+                                    <span style="color: #f1c07b;">Payable Vouchers</span>
                                 </a>
                             </li>
                         }
@@ -387,7 +385,7 @@
                         {
                             <li class="nav-item dropdown">
                                 <a href="javascript:void(0);">
-                                    <span>Daily Recovery</span>
+                                    <span style="color: #f1c07b;">Daily Recovery</span>
                                     <span class="arrow">
                                         <i class="ti-angle-right"></i>
                                     </span>
@@ -396,13 +394,13 @@
                                     @if (User.IsInRole("Daily Cash Recovery"))
                                     {
                                         <li>
-                                            <a href="/GeneralEntry/CashBook">Daily Cash Recovery</a>
+                                            <a href="/GeneralEntry/CashBook" style="color: #f1c07b;">Daily Cash Recovery</a>
                                         </li>
                                     }
                                     @if (User.IsInRole("Daily Bank Recovery"))
                                     {
                                         <li>
-                                            <a href="/GeneralEntry/BankBook">Daily Bank Recovery</a>
+                                            <a href="/GeneralEntry/BankBook" style="color: #f1c07b;">Daily Bank Recovery</a>
                                         </li>
                                     }
                                 </ul>
@@ -413,7 +411,7 @@
                         {
                             <li class="nav-item dropdown">
                                 <a href="/JournalEntry/CashBook">
-                                    <span>Cash Book</span>
+                                    <span style="color: #f1c07b;">Cash Book</span>
                                 </a>
                             </li>
                         }
@@ -421,7 +419,7 @@
                         {
                             <li class="nav-item dropdown">
                                 <a href="/JournalEntry/BankBook">
-                                    <span>Bank Book</span>
+                                    <span style="color: #f1c07b;">Bank Book</span>
                                 </a>
                             </li>
                         }
@@ -429,7 +427,7 @@
                         {
                             <li class="nav-item dropdown">
                                 <a href="/OpeningClosingBalance/Balances">
-                                    <span>Opening Balance</span>
+                                    <span style="color: #f1c07b;">Opening Balance</span>
                                 </a>
                             </li>
                         }
@@ -438,7 +436,7 @@
                         {
                             <li class="nav-item dropdown">
                                 <a href="/AccountHeads/TrailBalance">
-                                    <span>Trial Balance</span>
+                                    <span style="color: #f1c07b;">Trial Balance</span>
                                 </a>
                             </li>
                         }
@@ -446,7 +444,7 @@
                         {
                             <li class="nav-item dropdown">
                                 <a href="/AccountHeads/COA_Mapper">
-                                    <span>COA Mapper</span>
+                                    <span style="color: #f1c07b;">COA Mapper</span>
                                 </a>
                             </li>
                         }
@@ -461,7 +459,7 @@
                         <span class="icon-holder">
                             <i class="c-pink-500 ti-user"></i>
                         </span>
-                        <span class="title">Audit</span>
+                        <span class="title" style="color: #f1c07b;">Audit</span>
                     </a>
                 </li>
             }
@@ -475,7 +473,7 @@
                         <span class="icon-holder">
                             <i class="c-orange-500 ti-write"></i>
                         </span>
-                        <span class="title">Project Management</span>
+                        <span class="title" style="color: #f1c07b;">Project Management</span>
                     </a>
                 </li>
 
@@ -489,7 +487,7 @@
                         <span class="icon-holder">
                             <i class="c-green-500 ti-stack-overflow"></i>
                         </span>
-                        <span class="title">Inventory Management</span>
+                        <span class="title" style="color: #f1c07b;">Inventory Management</span>
                     </a>
                 </li>
             }
@@ -503,7 +501,7 @@
                         <span class="icon-holder">
                             <i class="c-pink-500 ti-shopping-cart-full"></i>
                         </span>
-                        <span class="title">Procurement Management</span>
+                        <span class="title" style="color: #f1c07b;">Procurement Management</span>
                     </a>
                 </li>
             }
@@ -517,7 +515,7 @@
                         <span class="icon-holder">
                             <i class="c-pink-500 ti-user"></i>
                         </span>
-                        <span class="title">Assets Management</span>
+                        <span class="title" style="color: #f1c07b;">Assets Management</span>
                     </a>
                 </li>
             }
@@ -531,7 +529,7 @@
                         <span class="icon-holder">
                             <i class="c-pink-500 ti-user"></i>
                         </span>
-                        <span class="title">Vehical Management</span>
+                        <span class="title" style="color: #f1c07b;">Vehical Management</span>
                     </a>
                 </li>
             }
@@ -545,7 +543,7 @@
                         <span class="icon-holder">
                             <i class="c-pink-500 ti-user"></i>
                         </span>
-                        <span class="title">Human Resource</span>
+                        <span class="title" style="color: #f1c07b;">Human Resource</span>
                     </a>
                 </li>
             }
@@ -559,7 +557,7 @@
                         <span class="icon-holder">
                             <i class="c-pink-500 ti-headphone-alt"></i>
                         </span>
-                        <span class="title">Call Center</span>
+                        <span class="title" style="color: #f1c07b;">Call Center</span>
                     </a>
                 </li>
             }
@@ -571,7 +569,7 @@
                         <span class="icon-holder">
                             <i class="c-pink-500 ti-headphone-alt"></i>
                         </span>
-                        <span class="title">Communication</span>
+                        <span class="title" style="color: #f1c07b;">Communication</span>
                     </a>
                 </li>
             }
@@ -595,7 +593,7 @@
                         <span class="icon-holder">
                             <i class="c-pink-500 ti-user"></i>
                         </span>
-                        <span class="title">SA Marketing</span>
+                        <span class="title" style="color: #f1c07b;">SA Marketing</span>
                     </a>
                 </li>
             }
@@ -607,7 +605,7 @@
                         <span class="icon-holder">
                             <i class="c-blue-500 ti-user"></i>
                         </span>
-                        <span class="title">Reports</span>
+                        <span class="title" style="color: #f1c07b;">Reports</span>
                     </a>
                 </li>
             }
@@ -619,7 +617,7 @@
                         <span class="icon-holder">
                             <i class="c-orange-500 ti-server"></i>
                         </span>
-                        <span class="title">Service Charges</span>
+                        <span class="title" style="color: #f1c07b;">Service Charges</span>
                     </a>
                 </li>
             }
@@ -633,7 +631,7 @@
                         <span class="icon-holder">
                             <i class="c-orange-500 ti-server"></i>
                         </span>
-                        <span class="title">Admin Facilities</span>
+                        <span class="title" style="color: #f1c07b;">Admin Facilities</span>
                     </a>
                 </li>
 
@@ -646,7 +644,7 @@
                         <span class="icon-holder">
                             <i class="c-orange-500 ti-write"></i>
                         </span>
-                        <span class="title">Petty Cash</span>
+                        <span class="title" style="color: #f1c07b;">Petty Cash</span>
                     </a>
                 </li>
             }
@@ -657,7 +655,7 @@
                         <span class="icon-holder">
                             <i class="c-orange-500 ti-write"></i>
                         </span>
-                        <span class="title">House of Heritage</span>
+                        <span class="title" style="color: #f1c07b;">House of Heritage</span>
                     </a>
                 </li>
             }

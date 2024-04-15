@@ -1,0 +1,161 @@
+﻿@model MeherEstateDevelopers.Models.SellerFeeFormatView
+
+@{
+    Layout = null;
+}
+<style>
+    body {
+        font-family: Roboto,-apple-system,system-ui,BlinkMacSystemFont,Segoe UI,Oxygen,Ubuntu,Cantarell,Fira Sans,Droid Sans,Helvetica Neue,Arial,sans-serif;
+    }
+
+    .bg {
+        height: 1300px;
+        width: 1100px;
+        /*        background-image: url('../../Repository/New_App_Form_Bg_Image.png');
+    */ /*background-size: 1100px 1400px;*/
+        background-repeat: no-repeat;
+    }
+
+    .row {
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    .column {
+        flex: 1;
+        padding: 5px;
+    }
+
+    .logo {
+        width: 200px; /* Adjust width as needed */
+        height: 200px; /* Adjust height as needed */
+        /* Other styling properties */
+    }
+</style>
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Undertaking_By_Purchaser</title>
+</head>
+<body>
+
+    <div class="bg" style="padding: 0; margin: 0;">
+        <div class="row">
+            <div class="column" style="margin-left: 0px; margin-top: 100px; font-size: 21px; text-align:center">
+                <b>UNDERTAKING TO PAY REQUISITE TAX</b>
+            </div>
+        </div>
+        <table cellspacing="0" border="0" style="width: 1000px; font-size: 21px; margin-top: 40px; margin-left: 40px;">
+            <tr>
+                <td align="left" valign=bottom style="line-height: 35px;">
+                    <p>
+                        <b>I</b> &nbsp; <u> @string.Join(",", Model.CurrentOwner.Select(x => x.Name)) </u> &nbsp; S/O, W/O &nbsp; <u>@string.Join(",", Model.CurrentOwner.Select(x => x.Father_Husband))</u>  &nbsp;  bearing CNIC-NO &nbsp; <u>@string.Join(",", Model.CurrentOwner.Select(x => x.CNIC_NICOP))</u> &nbsp;
+                        ,Resident of &nbsp; <u>@string.Join(",", Model.CurrentOwner.Select(x => x.Residential_Address))</u> &nbsp; being <b>PURCHASER</b> in possession of my full faculties and senses and of
+                        my free will and without any coercion or duress do hereby solemnly affirm and declare as under
+                    </p>
+                </td>
+            </tr>
+        </table>
+        <table cellspacing="0" border="0" style="width: 1000px; font-size: 21px; margin-top: 25px; margin-left: 40px;">
+            <tr>
+                <td align="left" valign=bottom style="line-height: 35px; ">
+                    <p>
+                        1. That the purchaser has purchased the Plot No. &nbsp; <u> @Model.Plots.Plot_Number </u> &nbsp; measuring &nbsp; <u> @Model.Plots.Plot_Size</u>  &nbsp;  located at Sector/ block &nbsp; <u>@Model.Plots.Block_Name</u> 
+                        &nbsp; Grand City Sara-e-Alamgir District Gujrat
+                        from the seller &nbsp; <u> @string.Join(",", Model.PreviousOwners.Select(x => x.From_Name)) </u> &nbsp; s/o &nbsp; <u> @string.Join(",", Model.PreviousOwners.Select(x => x.From_FatherName)) </u> &nbsp; bearing CNIC No &nbsp; <u> @string.Join(",", Model.PreviousOwners.Select(x => x.From_CNIC_NICOP)) </u>
+                        &nbsp; R/o &nbsp; <u> @string.Join(",", Model.PreviousOwners.Select(x => x.Residential_Address)) </u>
+                    </p>
+                </td>
+            </tr>
+        </table>
+        <table cellspacing="0" border="0" style="width: 1000px; font-size: 21px; margin-top: 25px; margin-left: 40px;">
+            <tr>
+                <td align="left" valign=bottom style="line-height: 35px; ">
+                    <p>
+                        2. I do hereby undertake to pay requisite taxes of Government which are or may
+                        become payable under the enabling provisions of tax laws in respect of cited above
+                        plot.
+
+                    </p>
+                </td>
+            </tr>
+        </table>
+        <table cellspacing="0" border="0" style="width: 1000px; font-size: 21px; margin-top: 25px; margin-left: 40px;">
+            <tr>
+                <td align="left" valign=bottom style="line-height: 35px; ">
+                    <p>
+                        3. I do further undertake that without prejudice to any other remedies open to the
+                        regulatory bodies for recovering any tax which is or may become due and payable,
+                        the regulatory bodies will be entitled to recover the said taxes from me, in
+                        accordance with the provisions of tax law or may modification thereof from time to
+                        time and it shall not be necessary for the Govt. to initiate and/or exhaust any legal
+                        proceedings against me for recovery of any tax as is aforementioned before suing
+                        for the recovery of the same.
+
+                    </p>
+                </td>
+            </tr>
+        </table>
+
+        <table cellspacing="0" border="0" style="width: 1000px; font-size: 21px; margin-top: 25px; margin-left: 40px;">
+            <tr>
+                <td align="left" valign=bottom style="line-height: 35px;">
+                    <p>
+                        4. I do undertake and declare that this undertaking shall not determine or otherwise
+                        affected by any death/dissolution or liquidation but shall remain in full and/or my
+                        legal heirs until such amount of tax as is or may become due and payable hereunder
+                        is paid in full.
+                    </p>
+                </td>
+            </tr>
+        </table>
+        <div class="row" style="margin-left: 40px; margin-top: 20px;">
+            <div class="column">
+            </div>
+            <div class="column">
+                @*@string.Join(",", Model.FilesOwners.Select(x => x.Name))*@
+            </div>
+            <div class="column">
+            </div>
+            <div class="column">
+                Deponent
+            </div>
+        </div>
+        <div class="row" style="margin-left:40px; margin-top:20px;">
+            <div class="column">
+                <b style="border-bottom: 1px solid black;">Verification</b>
+            </div>
+            <div class="column">
+                @*@string.Join(",", Model.FilesOwners.Select(x => x.Name))*@
+            </div>
+            <div class="column">
+            </div>
+            <div class="column">
+            </div>
+        </div>
+        <div class="row" style="margin-left:40px;">
+            <div class="column">
+                Verified on oath at Sara-e-Alamgir District Gujrat on this ______day ______
+                2022, that the contents of the undertaking are true and correct to the best of our
+                knowledge and belief.
+            </div>
+
+        </div>
+        <div class="row" style="margin-left: 40px; margin-top: 30px;">
+            <div class="column">
+            </div>
+            <div class="column">
+                @*@string.Join(",", Model.FilesOwners.Select(x => x.Name))*@
+            </div>
+            <div class="column">
+            </div>
+            <div class="column">
+                Deponent
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
