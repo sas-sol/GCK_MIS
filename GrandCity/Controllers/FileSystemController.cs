@@ -1652,7 +1652,7 @@ namespace MeherEstateDevelopers.Controllers
         {
             try
             {
-                var item = db.Test_FileBalance_para(Fileno).SingleOrDefault();
+                var item = db.Test_FileBalance_para(Fileno).FirstOrDefault();
 
                 //var up = db.Sp_Update_ReceivedAmount(item.Id, Modules.FileManagement.ToString(), item.TotalAmount);
                 if (item == null)
