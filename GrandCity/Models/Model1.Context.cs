@@ -24471,5 +24471,83 @@ namespace MeherEstateDevelopers.Models
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Sp_Get_NDCFormDetails_Result>("Sp_Get_NDCFormDetails", serialnumParameter);
         }
+    
+        public virtual int Sp_Update_WarningLetterStatus_Plot(Nullable<long> plotid, Nullable<long> owenerid, string type)
+        {
+            var plotidParameter = plotid.HasValue ?
+                new ObjectParameter("Plotid", plotid) :
+                new ObjectParameter("Plotid", typeof(long));
+    
+            var oweneridParameter = owenerid.HasValue ?
+                new ObjectParameter("owenerid", owenerid) :
+                new ObjectParameter("owenerid", typeof(long));
+    
+            var typeParameter = type != null ?
+                new ObjectParameter("type", type) :
+                new ObjectParameter("type", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("Sp_Update_WarningLetterStatus_Plot", plotidParameter, oweneridParameter, typeParameter);
+        }
+    
+        public virtual ObjectResult<Sp_Get_3rdWarning_Plot_Result> Sp_Get_3rdWarning_Plot()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Sp_Get_3rdWarning_Plot_Result>("Sp_Get_3rdWarning_Plot");
+        }
+    
+        public virtual ObjectResult<Sp_Get_CancelPlotsReport_Result> Sp_Get_CancelPlotsReport()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Sp_Get_CancelPlotsReport_Result>("Sp_Get_CancelPlotsReport");
+        }
+    
+        public virtual int Sp_Update_WarningLetterStatus_PlotMove(Nullable<long> comid, Nullable<long> owenerid, string type)
+        {
+            var comidParameter = comid.HasValue ?
+                new ObjectParameter("Comid", comid) :
+                new ObjectParameter("Comid", typeof(long));
+    
+            var oweneridParameter = owenerid.HasValue ?
+                new ObjectParameter("owenerid", owenerid) :
+                new ObjectParameter("owenerid", typeof(long));
+    
+            var typeParameter = type != null ?
+                new ObjectParameter("type", type) :
+                new ObjectParameter("type", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("Sp_Update_WarningLetterStatus_PlotMove", comidParameter, oweneridParameter, typeParameter);
+        }
+    
+        public virtual int Sp_Update_WarningLetterStatus_File(Nullable<long> fileid, Nullable<long> owenerid, string type)
+        {
+            var fileidParameter = fileid.HasValue ?
+                new ObjectParameter("Fileid", fileid) :
+                new ObjectParameter("Fileid", typeof(long));
+    
+            var oweneridParameter = owenerid.HasValue ?
+                new ObjectParameter("owenerid", owenerid) :
+                new ObjectParameter("owenerid", typeof(long));
+    
+            var typeParameter = type != null ?
+                new ObjectParameter("type", type) :
+                new ObjectParameter("type", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("Sp_Update_WarningLetterStatus_File", fileidParameter, oweneridParameter, typeParameter);
+        }
+    
+        public virtual int Sp_Update_WarningLetterStatus_FileMove(Nullable<long> comid, Nullable<long> owenerid, string type)
+        {
+            var comidParameter = comid.HasValue ?
+                new ObjectParameter("Comid", comid) :
+                new ObjectParameter("Comid", typeof(long));
+    
+            var oweneridParameter = owenerid.HasValue ?
+                new ObjectParameter("owenerid", owenerid) :
+                new ObjectParameter("owenerid", typeof(long));
+    
+            var typeParameter = type != null ?
+                new ObjectParameter("type", type) :
+                new ObjectParameter("type", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("Sp_Update_WarningLetterStatus_FileMove", comidParameter, oweneridParameter, typeParameter);
+        }
     }
 }
