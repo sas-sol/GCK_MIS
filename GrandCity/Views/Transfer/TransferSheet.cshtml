@@ -1,0 +1,169 @@
+﻿@model MeherEstateDevelopers.Models.NDC_Views
+
+@{
+    Layout = null;
+}
+<style>
+    body {
+        font-family: Roboto,-apple-system,system-ui,BlinkMacSystemFont,Segoe UI,Oxygen,Ubuntu,Cantarell,Fira Sans,Droid Sans,Helvetica Neue,Arial,sans-serif;
+    }
+
+    .bg {
+        height: 1300px;
+        width: 1100px;
+        /*        background-image: url('../../Repository/New_App_Form_Bg_Image.png');
+    */ /*background-size: 1100px 1400px;*/
+        background-repeat: no-repeat;
+    }
+
+    .row {
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    .column {
+        flex: 1;
+        padding: 5px;
+    }
+
+    .logo {
+        width: 200px; /* Adjust width as needed */
+        height: 200px; /* Adjust height as needed */
+        /* Other styling properties */
+    }
+</style>
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>TransferSheet</title>
+</head>
+<body>
+    <div class="bg" style="padding: 0; margin: 0">
+
+        <div class="row" style="">
+            <div class="column" style="margin-left:0px; text-align:center">
+                <b style="border-bottom: 1px solid black; font-size:25px">GRAND CITY</b>
+            </div>
+        </div>
+        <div class="row" style="">
+            <div class="column" style="margin-left:0px; text-align:center">
+                <b style="border-bottom: 1px solid black; font-size:16px">KHARIAN</b>
+            </div>
+        </div>
+        <div class="row" style="">
+            <div class="column" style="margin-left:0px; text-align:center">
+                <b style="border-bottom: 1px solid black; font-size:16px">MEMBERSHIP TRANSFER SHEET</b>
+            </div>
+        </div>
+        <div class="row" style="margin-top: 10px;">
+            <div class="column" style="margin-left:40px;">
+                <b>Block & Plot:</b>
+            </div>
+            <div class="column">
+                @Model.PreviousOwners.Select(x => x.Block_Name).FirstOrDefault() @Model.Plots.Plot_Number
+            </div>
+            <div class="column">
+                <b>Size:</b>
+            </div>
+            <div class="column">
+                @Model.Plots.Plot_Size
+            </div>
+            <div class="column">
+                <b>Phase:</b>
+            </div>
+            <div class="column">
+                @ViewBag.PhaseName 
+            </div>
+            <div class="column">
+                <b>Status:</b>
+            </div>
+            <div class="column">
+                @Model.Plots.Status
+            </div>
+        </div>
+        
+        <hr />
+        <table cellspacing="0" border="0" style="width: 1030px; font-size: 21px; margin-top: 0px; margin-left: 40px;">
+            <tr>
+                <td align="left" valign=bottom style="line-height: 30px;">
+                    <p>
+                        <b>Name of Transferee: </b><u style="width: 385px; text-align: center; display: inline-block; border-bottom: 1px solid black; text-decoration: none; ">@string.Join(",", Model.PreviousOwners.Select(x => x.From_Name))</u>
+                        <b>S/O</b><u style="width: 380px; text-align: center; display: inline-block; border-bottom: 1px solid black; text-decoration: none; ">@string.Join(",", Model.PreviousOwners.Select(x => x.From_FatherName))</u>
+                        <b>R/O: </b><u style="width: 962px; text-align: center; display: inline-block; border-bottom: 1px solid black; text-decoration: none; ">@string.Join(",", Model.PreviousOwners.Select(x => x.Residential_Address))</u>
+                        <b>CNIC: </b><u style="width: 500px; text-align: center; display: inline-block; border-bottom: 1px solid black; text-decoration: none; ">@string.Join(",", Model.PreviousOwners.Select(x => x.From_CNIC_NICOP))</u>
+                        <b>Tel: </b><u style="width: 407px; text-align: center; display: inline-block; border-bottom: 1px solid black; text-decoration: none; ">@string.Join(",", Model.PreviousOwners.Select(x => x.From_Mobile1))</u>
+                        <b>Name of Allotee: </b><u style="width: 388px; text-align: center; display: inline-block; border-bottom: 1px solid black; text-decoration: none; ">@string.Join(",", Model.CurrentTransferRequest.Select(x => x.Name))</u>
+                        <b>S/O</b><u style="width: 410px; text-align: center; display: inline-block; border-bottom: 1px solid black; text-decoration: none; ">@string.Join(",", Model.CurrentTransferRequest.Select(x => x.Father_Husband))</u>
+                        <b>R/O: </b><u style="width: 962px; text-align: center; display: inline-block; border-bottom: 1px solid black; text-decoration: none; ">@string.Join(",", Model.CurrentTransferRequest.Select(x => x.Residential_Address))</u>
+                        <b>CNIC: </b><u style="width: 500px; text-align: center; display: inline-block; border-bottom: 1px solid black; text-decoration: none; ">@string.Join(",", Model.CurrentTransferRequest.Select(x => x.CNIC_NICOP))</u>
+                        <b>Tel: </b><u style="width: 407px; text-align: center; display: inline-block; border-bottom: 1px solid black; text-decoration: none; ">@string.Join(",", Model.CurrentTransferRequest.Select(x => x.Mobile_1))</u>
+                    </p>
+                </td>
+            </tr>
+        </table>
+        <table cellspacing="0" border="1" style="width: 1015px; font-size: 21px; margin-top: 10px; margin-left: 40px;">
+            <tr>
+                <td colspan="2" align="center" valign="bottom">
+                    <b>Documents&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Photographs, Signature & Thumb Impression  </b> <!-- Content for the first row which expands to the whole table width -->
+                </td>
+            </tr>
+            <tr>
+                <td align="left" valign="top" style="height: 250px; width: 400px;">
+                    <p>Application for Transfer by the Allottee</p>
+                    <p>No Demand Certificate</p>
+                    <p>Outstanding Amount Rs (    )</p>
+                    <p>Origional Application Form</p>
+                    <p>Origional Booking Letter</p>
+                    <p>Affidavit</p>
+                    <p>Photo copies of CNIC</p>
+                    <p>Two Passport size Photographs</p>
+                </td>
+                <td align="center" valign="bottom" style="height: 300px; width: 700px; ">
+                    <b> (Allotee)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Signature</b>
+                </td>
+
+            </tr>
+            <tr>
+                <td align="left" valign="top" style="height: 250px; width: 400px; ">
+                    <p>Undertaking</p>
+                    <p>Indemnity Bond</p>
+                    <p>Speciman Signature</p>
+                    <p>Photo Copies of CNIC</p>
+                    <p>Origional Booking Letter</p>
+                    <p>Two Passport size Photographs</p>
+                    <p>Transfer Fee Receipt</p>
+                </td>
+                <td align="center" valign="bottom" style="height: 300px; width: 700px; ">
+                    <b> (Transferee / Attorney)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Signature</b>
+                </td>
+
+            </tr>
+        </table>
+        <table cellspacing="0" border="0" style="width: 1030px; font-size: 21px; margin-top: 10px; margin-left: 40px;">
+            <tr>
+                <td align="left" valign=bottom style="line-height: 30px;">
+                    <p>
+                        All membership documents have been checked and found in order. Database updated in the name of Transferee
+                    </p>
+                </td>
+            </tr>
+        </table>
+        <table cellspacing="0" border="0" style="width: 1030px; font-size: 22px; margin-top: 70px; margin-left: 40px;">
+            <tr>
+                <td width="300px" align="left" valign=bottom style=" text-align:center; border-top:1px solid"><b>GM Membership</b></td>
+                <td width="300px" align="left" valign=bottom></td>
+                <td width="300px" align="left" valign=bottom style="text-align:center; border-top:1px solid"><b>GM Operations</b></td>
+            </tr>
+        </table>
+        <table cellspacing="0" border="0" style="width: 1030px; font-size: 22px; margin-top: 70px; margin-left: 40px; ">
+            <tr>
+                <td width="300px" align="left" valign=bottom style=" text-align:center; border-top:1px solid"><b>Project Director</b></td>
+                <td width="300px" align="left" valign=bottom></td>
+                <td width="300px" align="left" valign=bottom style="text-align:center; border-top:1px solid"><b>GM Record</b></td>
+            </tr>
+        </table>
+    </div>
+</body>
+</html>
