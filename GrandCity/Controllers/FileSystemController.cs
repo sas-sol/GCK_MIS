@@ -2007,19 +2007,15 @@ namespace MeherEstateDevelopers.Controllers
         public ActionResult QualifyingFiles(Search_OverDue s, string Block)
         {
             var res = db.Sp_Get_OverDueAmount_Search(s.Installments, s.S_Inst_Range, s.E_Inst_Range, s.Plot_Size, s.Dealer_Id, s.S_Range, s.E_Range, s.G_Amt, s.L_Amt, Block).ToList();
-            int count = res.Count;
-
-            // Pass the count to the ViewBag
-            ViewBag.QualifyingFilesCount = count;
             long userid = long.Parse(User.Identity.GetUserId());
-            db.Sp_Add_Activity(userid, "Accessed Qualifying Files Page ", "Read", "Activity_Record", ActivityType.Details_Access.ToString(), userid);
+            db.Sp_Add_Activity(userid, "Accessed  First Warning Files Page ", "Read", "Activity_Record", ActivityType.Details_Access.ToString(), userid);
             return PartialView(res);
         }
         public ActionResult FirstWarning(Search_OverDue s, string Block)
         {
             var res = db.Sp_Get_FirstWarning_File(s.Installments, s.S_Inst_Range, s.E_Inst_Range, s.Plot_Size, s.Dealer_Id, s.S_Range, s.E_Range, s.G_Amt, s.L_Amt, Block).ToList();
             long userid = long.Parse(User.Identity.GetUserId());
-            db.Sp_Add_Activity(userid, "Accessed  First Warning Files Page ", "Read", "Activity_Record", ActivityType.Details_Access.ToString(), userid);
+            db.Sp_Add_Activity(userid, "Accessed  Second Warning Files Page ", "Read", "Activity_Record", ActivityType.Details_Access.ToString(), userid);
             return PartialView(res);
         }
         public ActionResult FirstWarning(Search_OverDue s)
@@ -2029,14 +2025,7 @@ namespace MeherEstateDevelopers.Controllers
             db.Sp_Add_Activity(userid, "Accessed  Second Warning Files Page ", "Read", "Activity_Record", ActivityType.Details_Access.ToString(), userid);
             return PartialView(res);
         }
-        public ActionResult SecWarning(Search_OverDue s)
-        {
-            var res = db.Sp_Get_SecWarning_File(s.Installments, s.S_Inst_Range, s.E_Inst_Range, s.Plot_Size, s.Dealer_Id, s.S_Range, s.E_Range, s.G_Amt, s.L_Amt).ToList();
-            long userid = long.Parse(User.Identity.GetUserId());
-            db.Sp_Add_Activity(userid, "Accessed  Second Warning Files Page ", "Read", "Activity_Record", ActivityType.Details_Access.ToString(), userid);
-            return PartialView(res);
-        }
-        public ActionResult CancelledFiles(Search_OverDue s)
+        public ActionResult CancelledFiles(Search_OverDue s , string Block)
         {
             var res = db.Sp_Get_TempCancel_File(s.Installments, s.S_Inst_Range, s.E_Inst_Range, s.Plot_Size, s.Dealer_Id, s.S_Range, s.E_Range, s.G_Amt, s.L_Amt, Block).ToList();
             long userid = long.Parse(User.Identity.GetUserId());

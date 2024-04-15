@@ -11191,6 +11191,15 @@ namespace MeherEstateDevelopers.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Sp_Get_CA_OpeningClosing_Balance_Result>("Sp_Get_CA_OpeningClosing_Balance", fromParameter, toParameter, typeParameter, levelParameter, compIdParameter);
         }
     
+        public virtual ObjectResult<Sp_Get_CancelFilesReport_Result> Sp_Get_CancelFilesReport(string block)
+        {
+            var blockParameter = block != null ?
+                new ObjectParameter("block", block) :
+                new ObjectParameter("block", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Sp_Get_CancelFilesReport_Result>("Sp_Get_CancelFilesReport", blockParameter);
+        }
+    
         public virtual ObjectResult<Sp_Get_Cancellation_Plot_Result> Sp_Get_Cancellation_Plot()
         {
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Sp_Get_Cancellation_Plot_Result>("Sp_Get_Cancellation_Plot");
@@ -13176,7 +13185,9 @@ namespace MeherEstateDevelopers.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Sp_Get_Final_Salaries_Result>("Sp_Get_Final_Salaries");
         }
     
-        public virtual ObjectResult<Sp_Get_FirstWarning_File_Result> Sp_Get_FirstWarning_File(Nullable<int> installments, Nullable<int> s_Inst_Range, Nullable<int> e_Inst_Range, string plot_Size, Nullable<long> dealer_Id, Nullable<decimal> s_Range, Nullable<decimal> e_Range, Nullable<decimal> g_Amt, Nullable<decimal> l_Amt)
+<<<<<<<<< Temporary merge branch 1
+=========
+        public virtual ObjectResult<Sp_Get_FirstWarning_File_Result> Sp_Get_FirstWarning_File(Nullable<int> installments, Nullable<int> s_Inst_Range, Nullable<int> e_Inst_Range, string plot_Size, Nullable<long> dealer_Id, Nullable<decimal> s_Range, Nullable<decimal> e_Range, Nullable<decimal> g_Amt, Nullable<decimal> l_Amt, string block)
         {
             var installmentsParameter = installments.HasValue ?
                 new ObjectParameter("Installments", installments) :
@@ -14643,7 +14654,9 @@ namespace MeherEstateDevelopers.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Sp_Get_OtherInstallments_Result>("Sp_Get_OtherInstallments", fileIdParameter, cnicParameter);
         }
     
-        public virtual ObjectResult<Sp_Get_OverDueAmount_Search_Result> Sp_Get_OverDueAmount_Search(Nullable<int> installments, Nullable<int> s_Inst_Range, Nullable<int> e_Inst_Range, string plot_Size, Nullable<long> dealer_Id, Nullable<decimal> s_Range, Nullable<decimal> e_Range, Nullable<decimal> g_Amt, Nullable<decimal> l_Amt)
+<<<<<<<<< Temporary merge branch 1
+=========
+        public virtual ObjectResult<Sp_Get_OverDueAmount_Search_Result> Sp_Get_OverDueAmount_Search(Nullable<int> installments, Nullable<int> s_Inst_Range, Nullable<int> e_Inst_Range, string plot_Size, Nullable<long> dealer_Id, Nullable<decimal> s_Range, Nullable<decimal> e_Range, Nullable<decimal> g_Amt, Nullable<decimal> l_Amt, string block)
         {
             var installmentsParameter = installments.HasValue ?
                 new ObjectParameter("Installments", installments) :
@@ -16175,7 +16188,9 @@ namespace MeherEstateDevelopers.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Sp_Get_Report_MonthRecoveryReport_Result>("Sp_Get_Report_MonthRecoveryReport", monthParameter);
         }
     
-        public virtual ObjectResult<Sp_Get_Report_OverDue_Result> Sp_Get_Report_OverDue()
+<<<<<<<<< Temporary merge branch 1
+=========
+        public virtual ObjectResult<Sp_Get_Report_OverDue_Result> Sp_Get_Report_OverDue(string block)
         {
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Sp_Get_Report_OverDue_Result>("Sp_Get_Report_OverDue");
         }
@@ -16537,7 +16552,9 @@ namespace MeherEstateDevelopers.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Sp_Get_SearchRecovery_Report_Result>("Sp_Get_SearchRecovery_Report", fromParameter, toParameter, dateParameter, statusParameter, recoveryTypeParameter, usersParameter);
         }
     
-        public virtual ObjectResult<Sp_Get_SecWarning_File_Result> Sp_Get_SecWarning_File(Nullable<int> installments, Nullable<int> s_Inst_Range, Nullable<int> e_Inst_Range, string plot_Size, Nullable<long> dealer_Id, Nullable<decimal> s_Range, Nullable<decimal> e_Range, Nullable<decimal> g_Amt, Nullable<decimal> l_Amt)
+<<<<<<<<< Temporary merge branch 1
+=========
+        public virtual ObjectResult<Sp_Get_SecWarning_File_Result> Sp_Get_SecWarning_File(Nullable<int> installments, Nullable<int> s_Inst_Range, Nullable<int> e_Inst_Range, string plot_Size, Nullable<long> dealer_Id, Nullable<decimal> s_Range, Nullable<decimal> e_Range, Nullable<decimal> g_Amt, Nullable<decimal> l_Amt, string block)
         {
             var installmentsParameter = installments.HasValue ?
                 new ObjectParameter("Installments", installments) :
@@ -16953,7 +16970,9 @@ namespace MeherEstateDevelopers.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Sp_Get_TempAccount_Result>("Sp_Get_TempAccount", codeParameter);
         }
     
-        public virtual ObjectResult<Sp_Get_TempCancel_File_Result> Sp_Get_TempCancel_File(Nullable<int> installments, Nullable<int> s_Inst_Range, Nullable<int> e_Inst_Range, string plot_Size, Nullable<long> dealer_Id, Nullable<decimal> s_Range, Nullable<decimal> e_Range, Nullable<decimal> g_Amt, Nullable<decimal> l_Amt)
+<<<<<<<<< Temporary merge branch 1
+=========
+        public virtual ObjectResult<Sp_Get_TempCancel_File_Result> Sp_Get_TempCancel_File(Nullable<int> installments, Nullable<int> s_Inst_Range, Nullable<int> e_Inst_Range, string plot_Size, Nullable<long> dealer_Id, Nullable<decimal> s_Range, Nullable<decimal> e_Range, Nullable<decimal> g_Amt, Nullable<decimal> l_Amt, string block)
         {
             var installmentsParameter = installments.HasValue ?
                 new ObjectParameter("Installments", installments) :
@@ -24423,6 +24442,351 @@ namespace MeherEstateDevelopers.Models
                 new ObjectParameter("InstallmentData", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("Sp_InsertUpdate_Installment_File_Plot_Comm", comidParameter, modParameter, installmentDataParameter);
+        }
+    
+<<<<<<<<< Temporary merge branch 1
+        public virtual ObjectResult<Sp_Get_CancelPlotsReport_Result> Sp_Get_CancelPlotsReport()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Sp_Get_CancelPlotsReport_Result>("Sp_Get_CancelPlotsReport");
+        }
+    
+        public virtual ObjectResult<Sp_Get_CancelFilesReport_Result> Sp_Get_CancelFilesReport(string block)
+        {
+            var blockParameter = block != null ?
+                new ObjectParameter("block", block) :
+                new ObjectParameter("block", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Sp_Get_CancelFilesReport_Result>("Sp_Get_CancelFilesReport", blockParameter);
+        }
+    
+        public virtual ObjectResult<Sp_Get_OverDueAmount_Search_Result> Sp_Get_OverDueAmount_Search(Nullable<int> installments, Nullable<int> s_Inst_Range, Nullable<int> e_Inst_Range, string plot_Size, Nullable<long> dealer_Id, Nullable<decimal> s_Range, Nullable<decimal> e_Range, Nullable<decimal> g_Amt, Nullable<decimal> l_Amt, string block)
+        {
+            var installmentsParameter = installments.HasValue ?
+                new ObjectParameter("Installments", installments) :
+                new ObjectParameter("Installments", typeof(int));
+    
+            var s_Inst_RangeParameter = s_Inst_Range.HasValue ?
+                new ObjectParameter("S_Inst_Range", s_Inst_Range) :
+                new ObjectParameter("S_Inst_Range", typeof(int));
+    
+            var e_Inst_RangeParameter = e_Inst_Range.HasValue ?
+                new ObjectParameter("E_Inst_Range", e_Inst_Range) :
+                new ObjectParameter("E_Inst_Range", typeof(int));
+    
+            var plot_SizeParameter = plot_Size != null ?
+                new ObjectParameter("Plot_Size", plot_Size) :
+                new ObjectParameter("Plot_Size", typeof(string));
+    
+            var dealer_IdParameter = dealer_Id.HasValue ?
+                new ObjectParameter("Dealer_Id", dealer_Id) :
+                new ObjectParameter("Dealer_Id", typeof(long));
+    
+            var s_RangeParameter = s_Range.HasValue ?
+                new ObjectParameter("S_Range", s_Range) :
+                new ObjectParameter("S_Range", typeof(decimal));
+    
+            var e_RangeParameter = e_Range.HasValue ?
+                new ObjectParameter("E_Range", e_Range) :
+                new ObjectParameter("E_Range", typeof(decimal));
+    
+            var g_AmtParameter = g_Amt.HasValue ?
+                new ObjectParameter("G_Amt", g_Amt) :
+                new ObjectParameter("G_Amt", typeof(decimal));
+    
+            var l_AmtParameter = l_Amt.HasValue ?
+                new ObjectParameter("L_Amt", l_Amt) :
+                new ObjectParameter("L_Amt", typeof(decimal));
+    
+            var blockParameter = block != null ?
+                new ObjectParameter("Block", block) :
+                new ObjectParameter("Block", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Sp_Get_OverDueAmount_Search_Result>("Sp_Get_OverDueAmount_Search", installmentsParameter, s_Inst_RangeParameter, e_Inst_RangeParameter, plot_SizeParameter, dealer_IdParameter, s_RangeParameter, e_RangeParameter, g_AmtParameter, l_AmtParameter, blockParameter);
+        }
+    
+        public virtual ObjectResult<Sp_Get_Report_OverDue_Result> Sp_Get_Report_OverDue(string block)
+        {
+            var blockParameter = block != null ?
+                new ObjectParameter("block", block) :
+                new ObjectParameter("block", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Sp_Get_Report_OverDue_Result>("Sp_Get_Report_OverDue", blockParameter);
+        }
+    
+        public virtual ObjectResult<Sp_Get_Report_OverDue_Plots_Result> Sp_Get_Report_OverDue_Plots()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Sp_Get_Report_OverDue_Plots_Result>("Sp_Get_Report_OverDue_Plots");
+        }
+    
+        public virtual ObjectResult<Sp_Get_FirstWarning_File_Result> Sp_Get_FirstWarning_File(Nullable<int> installments, Nullable<int> s_Inst_Range, Nullable<int> e_Inst_Range, string plot_Size, Nullable<long> dealer_Id, Nullable<decimal> s_Range, Nullable<decimal> e_Range, Nullable<decimal> g_Amt, Nullable<decimal> l_Amt, string block)
+        {
+            var installmentsParameter = installments.HasValue ?
+                new ObjectParameter("Installments", installments) :
+                new ObjectParameter("Installments", typeof(int));
+    
+            var s_Inst_RangeParameter = s_Inst_Range.HasValue ?
+                new ObjectParameter("S_Inst_Range", s_Inst_Range) :
+                new ObjectParameter("S_Inst_Range", typeof(int));
+    
+            var e_Inst_RangeParameter = e_Inst_Range.HasValue ?
+                new ObjectParameter("E_Inst_Range", e_Inst_Range) :
+                new ObjectParameter("E_Inst_Range", typeof(int));
+    
+            var plot_SizeParameter = plot_Size != null ?
+                new ObjectParameter("Plot_Size", plot_Size) :
+                new ObjectParameter("Plot_Size", typeof(string));
+    
+            var dealer_IdParameter = dealer_Id.HasValue ?
+                new ObjectParameter("Dealer_Id", dealer_Id) :
+                new ObjectParameter("Dealer_Id", typeof(long));
+    
+            var s_RangeParameter = s_Range.HasValue ?
+                new ObjectParameter("S_Range", s_Range) :
+                new ObjectParameter("S_Range", typeof(decimal));
+    
+            var e_RangeParameter = e_Range.HasValue ?
+                new ObjectParameter("E_Range", e_Range) :
+                new ObjectParameter("E_Range", typeof(decimal));
+    
+            var g_AmtParameter = g_Amt.HasValue ?
+                new ObjectParameter("G_Amt", g_Amt) :
+                new ObjectParameter("G_Amt", typeof(decimal));
+    
+            var l_AmtParameter = l_Amt.HasValue ?
+                new ObjectParameter("L_Amt", l_Amt) :
+                new ObjectParameter("L_Amt", typeof(decimal));
+    
+            var blockParameter = block != null ?
+                new ObjectParameter("Block", block) :
+                new ObjectParameter("Block", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Sp_Get_FirstWarning_File_Result>("Sp_Get_FirstWarning_File", installmentsParameter, s_Inst_RangeParameter, e_Inst_RangeParameter, plot_SizeParameter, dealer_IdParameter, s_RangeParameter, e_RangeParameter, g_AmtParameter, l_AmtParameter, blockParameter);
+        }
+    
+        public virtual ObjectResult<Sp_Get_SecWarning_File_Result> Sp_Get_SecWarning_File(Nullable<int> installments, Nullable<int> s_Inst_Range, Nullable<int> e_Inst_Range, string plot_Size, Nullable<long> dealer_Id, Nullable<decimal> s_Range, Nullable<decimal> e_Range, Nullable<decimal> g_Amt, Nullable<decimal> l_Amt, string block)
+        {
+            var installmentsParameter = installments.HasValue ?
+                new ObjectParameter("Installments", installments) :
+                new ObjectParameter("Installments", typeof(int));
+    
+            var s_Inst_RangeParameter = s_Inst_Range.HasValue ?
+                new ObjectParameter("S_Inst_Range", s_Inst_Range) :
+                new ObjectParameter("S_Inst_Range", typeof(int));
+    
+            var e_Inst_RangeParameter = e_Inst_Range.HasValue ?
+                new ObjectParameter("E_Inst_Range", e_Inst_Range) :
+                new ObjectParameter("E_Inst_Range", typeof(int));
+    
+            var plot_SizeParameter = plot_Size != null ?
+                new ObjectParameter("Plot_Size", plot_Size) :
+                new ObjectParameter("Plot_Size", typeof(string));
+    
+            var dealer_IdParameter = dealer_Id.HasValue ?
+                new ObjectParameter("Dealer_Id", dealer_Id) :
+                new ObjectParameter("Dealer_Id", typeof(long));
+    
+            var s_RangeParameter = s_Range.HasValue ?
+                new ObjectParameter("S_Range", s_Range) :
+                new ObjectParameter("S_Range", typeof(decimal));
+    
+            var e_RangeParameter = e_Range.HasValue ?
+                new ObjectParameter("E_Range", e_Range) :
+                new ObjectParameter("E_Range", typeof(decimal));
+    
+            var g_AmtParameter = g_Amt.HasValue ?
+                new ObjectParameter("G_Amt", g_Amt) :
+                new ObjectParameter("G_Amt", typeof(decimal));
+    
+            var l_AmtParameter = l_Amt.HasValue ?
+                new ObjectParameter("L_Amt", l_Amt) :
+                new ObjectParameter("L_Amt", typeof(decimal));
+    
+            var blockParameter = block != null ?
+                new ObjectParameter("Block", block) :
+                new ObjectParameter("Block", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Sp_Get_SecWarning_File_Result>("Sp_Get_SecWarning_File", installmentsParameter, s_Inst_RangeParameter, e_Inst_RangeParameter, plot_SizeParameter, dealer_IdParameter, s_RangeParameter, e_RangeParameter, g_AmtParameter, l_AmtParameter, blockParameter);
+        }
+    
+        public virtual ObjectResult<Sp_Get_TempCancel_File_Result> Sp_Get_TempCancel_File(Nullable<int> installments, Nullable<int> s_Inst_Range, Nullable<int> e_Inst_Range, string plot_Size, Nullable<long> dealer_Id, Nullable<decimal> s_Range, Nullable<decimal> e_Range, Nullable<decimal> g_Amt, Nullable<decimal> l_Amt, string block)
+        {
+            var installmentsParameter = installments.HasValue ?
+                new ObjectParameter("Installments", installments) :
+                new ObjectParameter("Installments", typeof(int));
+    
+            var s_Inst_RangeParameter = s_Inst_Range.HasValue ?
+                new ObjectParameter("S_Inst_Range", s_Inst_Range) :
+                new ObjectParameter("S_Inst_Range", typeof(int));
+    
+            var e_Inst_RangeParameter = e_Inst_Range.HasValue ?
+                new ObjectParameter("E_Inst_Range", e_Inst_Range) :
+                new ObjectParameter("E_Inst_Range", typeof(int));
+    
+            var plot_SizeParameter = plot_Size != null ?
+                new ObjectParameter("Plot_Size", plot_Size) :
+                new ObjectParameter("Plot_Size", typeof(string));
+    
+            var dealer_IdParameter = dealer_Id.HasValue ?
+                new ObjectParameter("Dealer_Id", dealer_Id) :
+                new ObjectParameter("Dealer_Id", typeof(long));
+    
+            var s_RangeParameter = s_Range.HasValue ?
+                new ObjectParameter("S_Range", s_Range) :
+                new ObjectParameter("S_Range", typeof(decimal));
+    
+            var e_RangeParameter = e_Range.HasValue ?
+                new ObjectParameter("E_Range", e_Range) :
+                new ObjectParameter("E_Range", typeof(decimal));
+    
+            var g_AmtParameter = g_Amt.HasValue ?
+                new ObjectParameter("G_Amt", g_Amt) :
+                new ObjectParameter("G_Amt", typeof(decimal));
+    
+            var l_AmtParameter = l_Amt.HasValue ?
+                new ObjectParameter("L_Amt", l_Amt) :
+                new ObjectParameter("L_Amt", typeof(decimal));
+    
+            var blockParameter = block != null ?
+                new ObjectParameter("Block", block) :
+                new ObjectParameter("Block", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Sp_Get_TempCancel_File_Result>("Sp_Get_TempCancel_File", installmentsParameter, s_Inst_RangeParameter, e_Inst_RangeParameter, plot_SizeParameter, dealer_IdParameter, s_RangeParameter, e_RangeParameter, g_AmtParameter, l_AmtParameter, blockParameter);
+        }
+    
+        public virtual ObjectResult<Sp_Get_3rdWarning_Plot_Result> Sp_Get_3rdWarning_Plot()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Sp_Get_3rdWarning_Plot_Result>("Sp_Get_3rdWarning_Plot");
+        }
+    
+        public virtual int Sp_Update_WarningLetterStatus_File(Nullable<long> fileid, Nullable<long> owenerid, string type)
+        {
+            var fileidParameter = fileid.HasValue ?
+                new ObjectParameter("Fileid", fileid) :
+                new ObjectParameter("Fileid", typeof(long));
+    
+            var oweneridParameter = owenerid.HasValue ?
+                new ObjectParameter("owenerid", owenerid) :
+                new ObjectParameter("owenerid", typeof(long));
+    
+            var typeParameter = type != null ?
+                new ObjectParameter("type", type) :
+                new ObjectParameter("type", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("Sp_Update_WarningLetterStatus_File", fileidParameter, oweneridParameter, typeParameter);
+        }
+    
+        public virtual int Sp_Update_WarningLetterStatus_FileMove(Nullable<long> comid, Nullable<long> owenerid, string type)
+        {
+            var comidParameter = comid.HasValue ?
+                new ObjectParameter("Comid", comid) :
+                new ObjectParameter("Comid", typeof(long));
+    
+            var oweneridParameter = owenerid.HasValue ?
+                new ObjectParameter("owenerid", owenerid) :
+                new ObjectParameter("owenerid", typeof(long));
+    
+            var typeParameter = type != null ?
+                new ObjectParameter("type", type) :
+                new ObjectParameter("type", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("Sp_Update_WarningLetterStatus_FileMove", comidParameter, oweneridParameter, typeParameter);
+        }
+    
+        public virtual int Sp_Update_WarningLetterStatus_Plot(Nullable<long> plotid, Nullable<long> owenerid, string type)
+        {
+            var plotidParameter = plotid.HasValue ?
+                new ObjectParameter("Plotid", plotid) :
+                new ObjectParameter("Plotid", typeof(long));
+    
+            var oweneridParameter = owenerid.HasValue ?
+                new ObjectParameter("owenerid", owenerid) :
+                new ObjectParameter("owenerid", typeof(long));
+    
+            var typeParameter = type != null ?
+                new ObjectParameter("type", type) :
+                new ObjectParameter("type", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("Sp_Update_WarningLetterStatus_Plot", plotidParameter, oweneridParameter, typeParameter);
+        }
+    
+        public virtual int Sp_Update_WarningLetterStatus_PlotMove(Nullable<long> comid, Nullable<long> owenerid, string type)
+        {
+            var comidParameter = comid.HasValue ?
+                new ObjectParameter("Comid", comid) :
+                new ObjectParameter("Comid", typeof(long));
+    
+            var oweneridParameter = owenerid.HasValue ?
+                new ObjectParameter("owenerid", owenerid) :
+                new ObjectParameter("owenerid", typeof(long));
+    
+            var typeParameter = type != null ?
+                new ObjectParameter("type", type) :
+                new ObjectParameter("type", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("Sp_Update_WarningLetterStatus_PlotMove", comidParameter, oweneridParameter, typeParameter);
+        }
+    
+        public virtual ObjectResult<Sp_Get_ThirdWarning_File_Result> Sp_Get_ThirdWarning_File(Nullable<int> installments, Nullable<int> s_Inst_Range, Nullable<int> e_Inst_Range, string plot_Size, Nullable<long> dealer_Id, Nullable<decimal> s_Range, Nullable<decimal> e_Range, Nullable<decimal> g_Amt, Nullable<decimal> l_Amt, string block)
+        {
+            var installmentsParameter = installments.HasValue ?
+                new ObjectParameter("Installments", installments) :
+                new ObjectParameter("Installments", typeof(int));
+    
+            var s_Inst_RangeParameter = s_Inst_Range.HasValue ?
+                new ObjectParameter("S_Inst_Range", s_Inst_Range) :
+                new ObjectParameter("S_Inst_Range", typeof(int));
+    
+            var e_Inst_RangeParameter = e_Inst_Range.HasValue ?
+                new ObjectParameter("E_Inst_Range", e_Inst_Range) :
+                new ObjectParameter("E_Inst_Range", typeof(int));
+    
+            var plot_SizeParameter = plot_Size != null ?
+                new ObjectParameter("Plot_Size", plot_Size) :
+                new ObjectParameter("Plot_Size", typeof(string));
+    
+            var dealer_IdParameter = dealer_Id.HasValue ?
+                new ObjectParameter("Dealer_Id", dealer_Id) :
+                new ObjectParameter("Dealer_Id", typeof(long));
+    
+            var s_RangeParameter = s_Range.HasValue ?
+                new ObjectParameter("S_Range", s_Range) :
+                new ObjectParameter("S_Range", typeof(decimal));
+    
+            var e_RangeParameter = e_Range.HasValue ?
+                new ObjectParameter("E_Range", e_Range) :
+                new ObjectParameter("E_Range", typeof(decimal));
+    
+            var g_AmtParameter = g_Amt.HasValue ?
+                new ObjectParameter("G_Amt", g_Amt) :
+                new ObjectParameter("G_Amt", typeof(decimal));
+    
+            var l_AmtParameter = l_Amt.HasValue ?
+                new ObjectParameter("L_Amt", l_Amt) :
+                new ObjectParameter("L_Amt", typeof(decimal));
+    
+            var blockParameter = block != null ?
+                new ObjectParameter("Block", block) :
+                new ObjectParameter("Block", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Sp_Get_ThirdWarning_File_Result>("Sp_Get_ThirdWarning_File", installmentsParameter, s_Inst_RangeParameter, e_Inst_RangeParameter, plot_SizeParameter, dealer_IdParameter, s_RangeParameter, e_RangeParameter, g_AmtParameter, l_AmtParameter, blockParameter);
+=========
+        public virtual ObjectResult<Sp_Get_NDCFormDetails_Plot_Result> Sp_Get_NDCFormDetails_Plot(Nullable<long> plt)
+        {
+            var pltParameter = plt.HasValue ?
+                new ObjectParameter("plt", plt) :
+                new ObjectParameter("plt", typeof(long));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Sp_Get_NDCFormDetails_Plot_Result>("Sp_Get_NDCFormDetails_Plot", pltParameter);
+        }
+    
+        public virtual ObjectResult<Sp_Get_NDCFormDetails_Result> Sp_Get_NDCFormDetails(Nullable<long> serialnum)
+        {
+            var serialnumParameter = serialnum.HasValue ?
+                new ObjectParameter("serialnum", serialnum) :
+                new ObjectParameter("serialnum", typeof(long));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Sp_Get_NDCFormDetails_Result>("Sp_Get_NDCFormDetails", serialnumParameter);
+>>>>>>>>> Temporary merge branch 2
         }
     }
 }
