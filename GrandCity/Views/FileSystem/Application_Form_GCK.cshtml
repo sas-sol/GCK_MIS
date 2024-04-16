@@ -1,0 +1,328 @@
+﻿
+@*@model MeherEstateDevelopers.Models.NDC_View*@
+@{
+    Layout = null;
+    //int count = 1;
+}
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <link rel="stylesheet" href="~/assets/styles/pagebreak.css">
+
+
+    <style>
+        body {
+            font-family: Roboto,-apple-system,system-ui,BlinkMacSystemFont,Segoe UI,Oxygen,Ubuntu,Cantarell,Fira Sans,Droid Sans,Helvetica Neue,Arial,sans-serif;
+            
+        }
+        .bg {
+            height: 1700px;
+            width: 1100px;
+            background-image: url('../../Repository/a2 application from.png');
+            background-size: 1100px 1750px;
+            background-repeat: no-repeat;
+        }
+
+        .row {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .column {
+            flex: 1;
+            padding: 5px;
+        }
+    </style>
+
+</head>
+<body>
+    <div class="bg" style="padding: 0;margin: 0">
+
+
+        <table cellspacing="0" border="0" style="width:1100px; margin-top: 0px;">
+            <tr>
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <td width="200px" align="center" valign=bottom style="font-weight:bold"><b>Serial No.</b> @*@Model.CurrentTransferRequest.Select(x => x.TransferRequestNo).FirstOrDefault()*@</td>
+                <td width="500px" align="center" valign=bottom><b>&nbsp;</b></td>
+                <td width="300px" align="center" valign=bottom><b>Date</b> <u>@string.Format("{0:ddd, MMMM dd yyyy}", DateTime.Now)</u></td>
+
+            </tr>
+        </table>
+        <table cellspacing="0" border="0" style="width:1100px">
+            <tr>
+                <td width="200px" align="center" valign="bottom"></td>
+                <td width="200px" align="center" valign="bottom"></td>
+            </tr>
+        </table>
+        <table cellspacing="0" border="0" style="width:1100px;font-size: 21px;margin-top: 0px; margin-left:40px;">
+            <tr>
+                <td align="left" valign=bottom style="line-height: 45px;">
+                    <p>
+
+                        <b >FILE/PLOT NO </b><u style="text-align:center">A3222-09 Residential</u> <br />
+                        <b>FILE/PLOT Size </b> <u style="text-align:center">5 MArla</u> <br />
+                        <b>PLOT PREFERENCE</b><u style="text-align:center">Normal</u>
+                    </p>
+                </td>
+            </tr>
+        </table>
+        <h4 style="text-align: center; background-color: black; color: antiquewhite; font-size: 21px; margin-left: 20px; margin-right: 20px; width: 1060px; margin-top: 250px;">PERSONAL INFORMATION</h4>
+        <div class="row">
+            <div class="column" style="margin-left:40px;">
+                <b>APPLICANT NAME</b>
+            </div>
+            <div class="column">
+                Usama Iqbal
+            </div>
+            <div class="column">
+                <b>FATHER/HUSBAND NAME</b>
+            </div>
+            <div class="column">
+                Muhammad Iqbal
+            </div>
+        </div>
+        <div class="row">
+            <div class="column" style="margin-left:40px;">
+                <b>CNIC#</b><br>
+            </div>
+            <div class="column">
+                12345-1234567-9
+
+            </div>
+            <div class="column">
+                <b>EMAIL</b>
+
+            </div>
+            <div class="column">
+                usama@gmail.com
+            </div>
+        </div>
+        <div class="row">
+            <div class="column" style="margin-left:40px;">
+                <b>PHONE</b><br>
+            </div>
+            <div class="column">
+                0309-2222222
+            </div>
+            <div class="column">
+                <b>MOBILE#</b><br>
+            </div>
+            <div class="column">
+                0309-2222222
+            </div>
+        </div>
+        <div class="row">
+            <div class="column" style="margin-left:40px;">
+                <b>RES. ADDRESS</b>
+            </div>
+            <div class="column">
+                house not f/123, block# A, Phase 1 DHA ALhore
+            </div>
+        </div>
+        <h4 style="text-align: center; background-color: black; color: antiquewhite; font-size: 21px; margin-left: 20px; margin-right: 20px; width: 1060px;">NOMINEE DETAILS</h4>
+        <div class="row">
+            <div class="column" style="margin-left:40px;">
+                <b>Nominee Name</b>
+            </div>
+            <div class="column">
+                Usama Iqbal
+            </div>
+            <div class="column">
+                <b>FATHER/HUSBAND NAME</b>
+            </div>
+            <div class="column">
+                Muhammad Iqbal
+            </div>
+        </div>
+        <div class="row">
+            <div class="column" style="margin-left:40px;">
+                <b>MAILING ADDRESS</b><br>
+            </div>
+            <div class="column">
+                house not f/123, block# A, Phase 1 DHA ALhore
+
+            </div>
+            <div class="column">
+                <b>NOMINEE CNIC #</b>
+
+            </div>
+            <div class="column">
+                11111-1111111-1
+            </div>
+        </div>
+        <div class="row">
+            <div class="column" style="margin-left:40px;">
+                <b>PHONE</b><br>
+            </div>
+            <div class="column">
+                0309-2222222
+            </div>
+            <div class="column">
+                <b>RELATIONSHIP WITH APPLICANT</b><br>
+            </div>
+            <div class="column">
+                Brother
+            </div>
+        </div>
+        <h4 style="text-align: center; background-color: black; color: antiquewhite; font-size: 21px; margin-left: 20px; margin-right: 20px; width: 1060px;">PAYMENT DETAILS</h4>
+        <div class="row">
+            <div class="column" style="margin-left:40px;">
+                <b>FILE/PLOT PRICE</b>
+            </div>
+            <div class="column">
+                9000000
+            </div>
+            <div class="column">
+                <b>NET PRICE</b>
+            </div>
+            <div class="column">
+                9000000
+            </div>
+        </div>
+        <div class="row">
+            <div class="column" style="margin-left:40px;">
+                <b>PAYMENT RECEIVED</b><br>
+            </div>
+            <div class="column">
+                30000
+            </div>
+            <div class="column">
+                <b>PERCENTAGE RECEIVED</b>
+            </div>
+            <div class="column">
+                5%
+            </div>
+        </div>
+        <div class="row">
+            <div class="column" style="margin-left:40px;">
+                <b>BALANCE</b><br>
+            </div>
+            <div class="column">
+                0309-2222222
+            </div>
+            <div class="column">
+                <b>DISCOUNT/PREMIUN</b><br>
+            </div>
+            <div class="column">
+                0309-2222222
+            </div>
+        </div>
+
+        <table cellspacing="0" border="0" style="width: 1070px; font-size: 22px; margin-top: 350px;">
+            <tr>
+                <td width="400px" align="left" valign=bottom style="font-weight:bold; text-align:center; border-top:1px solid">BOOKING OFFICER & DATE</td>
+                <td width="30px" align="left" valign=bottom></td>
+                <td width="400px" align="left" valign=bottom style="font-weight:bold; text-align:center; border-top:1px solid">MANAGER</td>
+                <td width="30px" align="left" valign=bottom></td>
+                <td width="400px" align="left" valign=bottom style="font-weight:bold; text-align:center; border-top:1px solid">Applicant Signature</td>
+
+                @*<td width="200px" align="right" valign=bottom style="font-weight:bold">Date</td>
+                <td width="200px" align="center" valign=bottom style="border-bottom:1px solid;font-size: 17px;">@string.Format("{0:ddd, MMMM dd yyyy}", DateTime.Now)</td>*@
+            </tr>
+        </table>
+
+
+        @*<div class="page-break">
+            <table cellspacing="0" border="0" style="width:600px;font-size: 22px;margin-top: 35px;">
+                <tr>
+                    <td width="600px" align="left" valign=bottom><b>DOCUMENTS REQUIRED</b></td>
+                </tr>
+            </table>
+            <table cellspacing="0" border="0" style="width: 600px; font-size: 18px; margin-top: 10px;">
+                <tr>
+                    <td width="600px" align="left" valign=bottom>- Original Documents</td>
+                </tr>
+            </table>
+            <table cellspacing="0" border="0" style="width: 600px; font-size: 18px; margin-top: 10px; ">
+                <tr>
+                    <td width="600px" align="left" valign=bottom>- Plot Transfer Payment Receipts</td>
+                </tr>
+            </table>
+            <table cellspacing="0" border="0" style="width: 600px; font-size: 18px; margin-top: 10px;">
+                <tr>
+                    <td width="600px" align="left" valign=bottom>- Plot Transfer Tax Challan</td>
+                </tr>
+            </table>
+            <table cellspacing="0" border="0" style="width: 600px; font-size: 18px; margin-top: 10px;">
+                <tr>
+                    <td width="600px" align="left" valign=bottom>- CNIC copy of buyer & Seller & 2 Pictures of Buyer</td>
+                </tr>
+            </table>
+            <table cellspacing="0" border="0" style="width: 600px; font-size: 18px; margin-top: 10px;">
+                <tr>
+                    <td width="600px" align="left" valign=bottom>- Copy of file application form with aggreement on Rs. 100/- stamp paper</td>
+                </tr>
+            </table>
+            <table cellspacing="0" border="0" style="width: 600px; font-size: 18px; margin-top: 10px;">
+                <tr>
+                    <td width="600px" align="left" valign=bottom>- Copy of last payment Receipt</td>
+                </tr>
+            </table>
+        </div>*@
+
+
+        @*<div class="page-break">
+            <table cellspacing="0" border="0" style="width: 1070px;">
+                @if (count == 1)
+                {
+                    if (Model.seller.Any())
+                    {
+                        <tr>
+                            @foreach (var item in Model.seller)
+                            {
+                                <td align="center"><img src="@item.Owner_Img" width="200" height="200"><br><p>@item.Name</p></td>
+                            }
+                        </tr>
+                        <tr>
+                            @foreach (var item in Model.CurrentTransferRequest)
+                            {
+                                <td align="center"><img src="@item.Buyer_Image" width="200" height="200"><br><p>@item.Name</p></td>
+                            }
+                        </tr>
+                    }
+                    else
+                    {
+                        <tr>
+                            @foreach (var item in Model.PreviousOwners)
+                            {
+                                <td align="center"><img src="@item.Owner_Img" width="200" height="200"><br><p>@item.From_Name</p></td>
+                            }
+                        </tr>
+                        <tr>
+                            @foreach (var item in Model.CurrentTransferRequest)
+                            {
+                                <td align="center"><img src="@item.Buyer_Image" width="200" height="200"><br><p>@item.Name</p></td>
+                            }
+                        </tr>
+                    }
+
+                }
+
+            </table>
+        </div>*@
+    </div>
+        <script>
+                            // Get the <u> tag element
+                            //const uTag = document.getElementById('address');
+
+                            // Get the width of the content inside the <u> tag
+                            //const contentWidth = uTag.scrollWidth;
+
+                            // Get the style element for .fixed-width-15
+                            //const styleElement = document.createElement('style');
+                            //styleElement.textContent = `.fixed-width-14 { width: ${contentWidth}px; }`;
+
+                            // Append the style element to the head
+                            //document.head.appendChild(styleElement);
+
+        </script>
+</body>
+
+</html>

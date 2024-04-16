@@ -807,6 +807,8 @@
                 if (data != null) {
                     window.location.reload();
                     window.open("/FileSystem/NDCForm?SerialNum=" + data, "_blank");
+                    window.open("/Transfer/FileTransferSheet?SerialNum=" + data, "_blank");
+
                 }
                 else {
                     alert(data.Msg);
