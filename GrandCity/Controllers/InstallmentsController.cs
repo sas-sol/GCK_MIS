@@ -943,8 +943,8 @@ namespace MeherEstateDevelopers.Controllers
                             Directory.CreateDirectory(Server.MapPath("~/Repository/Cheques/"));
                         }
                         string dt = string.Format("{0:d/M/yyyy}", rd.Ch_bk_Pay_Date);
-                        var pathMain = Path.Combine(Server.MapPath("~/Repository/Cheques/" + "/"), rd.PayChqNo + "_" + rd.Bank + "_" + dt.Replace("/", "_") + ".jpg");
-                        var Images = H.SaveBase64Image(rd.FileImage, pathMain, res3.ToString());
+                        //var pathMain = Path.Combine(Server.MapPath("~/Repository/Cheques/" + "/"), rd.PayChqNo + "_" + rd.Bank + "_" + dt.Replace("/", "_") + ".jpg");
+                       // var Images = H.SaveBase64Image(rd.FileImage, pathMain, res3.ToString());
 
                         text = "Dear " + rd.Name + ",\n\r" +
                                                 "A Payment of Rs " + string.Format("{0:n0}", rd.Amount) + " has been received against " + rd.PaymentType + " No: " + rd.PayChqNo + " Bank: " + rd.Bank + " for File number " + rd.FilePlotNumber + " on " + string.Format("{0:dd MMM yyyy}", DateTime.Now) + " and has sent for clearing";

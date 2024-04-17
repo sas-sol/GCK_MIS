@@ -9,59 +9,65 @@
     }
 }
 <div class="col-md-12 bgc-white pt-md-3">
-    <div class="c-grey-900">
-        <h5>Inventory Summary</h5>
+    <div class="panel-heading central-text-align">
+        <h4>Balloting</h4>
+        <button class="btn btn-outline-dark plts-inv-up-btn" data-toggle="modal" data-target="#Modal"><i class="fa fa-file-excel"></i> &nbsp; Upload Plots Inventory</button>
+
     </div>
+   
+    @*<div class="c-grey-900">
+            <h5>Inventory Summary</h5>
+        </div>*@
     <div class="col-md-12 custom-report-viewport">
-        <div class="row mt-md-2">
-            <div class="col-md-1">
-                <label><b>Range Start</b></label>
-            </div>
-            <div class="col-md-1">
-                <input type="number" class="form-control st-rng" />
-            </div>
-            <div class="col-md-1">
-                <label><b>Range End</b></label>
-            </div>
-            <div class="col-md-1">
-                <input type="number" class="form-control en-rng" />
-            </div>
-            <div class="col-md-2">
-                <select class="form-control st-typ">
-                    <option value="All">Select Status</option>
-                    @foreach (var stat in Model.Select(x => x.Status).Distinct())
-                    {
-                        <option value="@stat">@stat</option>
-                    }
-                </select>
-            </div>
-            <div class="col-md-2">
-                <select class="form-control loc-typ">
-                    <option value="All">Select Location</option>
-                    @foreach (var pref in Model.Select(x => x.PlotType).Distinct())
-                    {
-                        <option value="@pref">@pref</option>
-                    }
-                    <option value="All Special">All Special</option>
-                </select>
-            </div>
-            <div class="col-md-2">
-                <select class="form-control sect-typ">
-                    <option value="All">Select Sector</option>
-                    @foreach (var pref in Model.Select(x => x.Sector).Distinct())
-                    {
-                        <option value="@pref">@pref</option>
-                    }
-                    <option value="All Special">All Sectors</option>
-                </select>
-            </div>
-            <div class="col-md-2">
-                <input type="text" class="form-control count-ttl" placeholder="Title" />
-            </div>
-            <div class="col-md-1">
-                <button class="btn btn-primary pin-btn"><i class="fa fa-map-pin"></i>&nbsp; Pin</button>
-            </div>
-        </div>
+        @*<div class="row mt-md-2">
+                <div class="col-md-1">
+                    <label><b>Range Start</b></label>
+                </div>
+                <div class="col-md-1">
+                    <input type="number" class="form-control st-rng" />
+                </div>
+                <div class="col-md-1">
+                    <label><b>Range End</b></label>
+                </div>
+                <div class="col-md-1">
+                    <input type="number" class="form-control en-rng" />
+                </div>
+                <div class="col-md-2">
+                    <select class="form-control st-typ">
+                        <option value="All">Select Status</option>
+                        @foreach (var stat in Model.Select(x => x.Status).Distinct())
+                        {
+                            <option value="@stat">@stat</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <select class="form-control loc-typ">
+                        <option value="All">Select Location</option>
+                        @foreach (var pref in Model.Select(x => x.PlotType).Distinct())
+                        {
+                            <option value="@pref">@pref</option>
+                        }
+                        <option value="All Special">All Special</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <select class="form-control sect-typ">
+                        <option value="All">Select Sector</option>
+                        @foreach (var pref in Model.Select(x => x.Sector).Distinct())
+                        {
+                            <option value="@pref">@pref</option>
+                        }
+                        <option value="All Special">All Sectors</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <input type="text" class="form-control count-ttl" placeholder="Title" />
+                </div>
+                <div class="col-md-1">
+                    <button class="btn btn-primary pin-btn"><i class="fa fa-map-pin"></i>&nbsp; Pin</button>
+                </div>
+            </div>*@
         <div class="row mt-md-2 hdr-custom-rep-row" style="display:none;">
             <div class="col-md-2">
                 <label><b>Type</b></label>
@@ -173,9 +179,9 @@
         <div class="col-md-8">
             <h3>Total Letter Issued: @Model.Where(x => x.LetterA == true).Count()</h3>
         </div>
-        <div class="col-md-4">
+        @*<div class="col-md-4">
             <button class="btn btn-primary new-plt-btn" data-toggle="modal" data-target="#Modal">New Allocation</button>
-        </div>
+        </div>*@
     </div>
     @foreach (var statuses in Model.GroupBy(x => x.Status))
     {
@@ -194,7 +200,7 @@
                         <th>File Balloted</th>
                         <th>Owner Name</th>
                         <th>Letter</th>
-                        <th></th>
+                        <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -238,12 +244,12 @@
                                 @if (statuses.Key == "Balloted")
                                 {
                                     <td>
-                                        <i class="fa fa-pencil up-plt" data-toggle="modal" data-target="#Modal"></i>   <i class="fa fa-refresh mig-data"></i>
+                                        @*<i class="fa fa-pencil up-plt" data-toggle="modal" data-target="#Modal"></i>*@   <i class="fa fa-refresh mig-data"></i>
                                     </td>
                                 }
                                 else if (statuses.Key == "Available")
                                 {
-                                    <td><i class="fa fa-trash del-bal-inv"></i>  ||  <i class="fa fa-arrows-v hol-inv" data-Status="Hold"></i></td>
+                                    <td>@*<i class="fa fa-trash del-bal-inv"></i>  ||*@  <i class="fa fa-arrows-v hol-inv" data-Status="Hold"></i></td>
                                 }
                                 else if (statuses.Key == "Hold")
                                 {
@@ -264,7 +270,14 @@
     }
 </div>
 <script>
+    $('.plts-inv-up-btn').unbind().click(function () {
+        debugger;
+        EmptyModel();
+        $('#ModalLabel').text("Upload Ballot Plots Inventory");
+        $('#modalbody').load('/Balloting/UploadPlotsInventory/');
+    });
     $(document).on("click", ".up-plt", function () {
+        debugger;
         EmptyModel();
         $('#ModalLabel').text("Plot Movement");
         $('#modalbody').load('/Balloting/BallotSearch/', { Id: id });

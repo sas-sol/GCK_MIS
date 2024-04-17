@@ -1805,6 +1805,11 @@ namespace MeherEstateDevelopers.Controllers
         {
             long uid = User.Identity.GetUserId<long>();
             var res = db.Sp_Get_BallotIntimationLetter(id, uid).FirstOrDefault();
+            var res1 = db.Sp_Get_FileAppFormData(res.BallotFile).SingleOrDefault();
+
+            // Now you can use the fileFormIds to filter Files_Transfer
+            var filedata = db.Files_Transfer.SingleOrDefault(x => x.File_Form_Id == res1.Id);
+            ViewBag.Mobile = filedata.Mobile_1;
             res.Owner_Name = res.Name;
             return View(res);
         }
@@ -2460,9 +2465,14 @@ namespace MeherEstateDevelopers.Controllers
                 var retDat = db.Sp_Update_SpecialPrefCharge(v.Id, 0);
             }
         }
-        public ActionResult BallotSearch(long? Id)
+        //public ActionResult BallotSearch(long? Id)
+        //{
+        //    var res = db.BallotPlots.Where(x => x.Id == Id).FirstOrDefault();
+        //    return PartialView(res);
+        //}
+        public ActionResult BallotSearch(string plotno)
         {
-            var res = db.BallotPlots.Where(x => x.Id == Id).FirstOrDefault();
+            var res = db.BallotPlots.Where(x => x.PlotNo == plotno).FirstOrDefault();
             return PartialView(res);
         }
         public ActionResult NewPlot_Ballot()
