@@ -19,12 +19,12 @@
     <div class="form-row col-md-12 ">
         <div class="col-md-12" style="text-align: center;">
             <div class="form-row" style="display: inline-block;">
-                <h4 style="color: White">Plots</h4>
+                <h4 style="color: navajowhite">Plots</h4>
             </div>
         </div>       
         <div class="col-md-12">
             <div class="form-row">
-                <div class="col-md-2"></div>
+                @*<div class="col-md-2"></div>*@
                 @*<div class='col-md-2' style="box-shadow: 3px 0px 15px rgba(0, 0, 0, 0.3); margin-top: 10px;">
             <div class="layers bd bgc-white p-10 mt-2">
                 <div class="layer w-100">
@@ -42,7 +42,7 @@
                 </div>
             </div>
         </div>*@
-            <div class="col-md-8" style="align-items: center; justify-content: center; display: flex; flex-direction: row;">
+            <div class="col-md-12" style="align-items: center; justify-content: center; display: flex; flex-direction: row;">
                 <div class="hexy">
                     <div class="hexy-overlay row">
                         <button class="btn btn-outline-primary dets-btn-hexy" data-lnk="/Plots/PlotsDataDetailView/">Details &nbsp;<i class="fas fa-arrow-right view-dets-anim"></i>&nbsp;&nbsp;&nbsp;</button>
@@ -116,7 +116,7 @@
                     </div>
                 </div>
             </div>
-                <div class="col-md-2"></div>
+                @*<div class="col-md-2"></div>*@
             </div>
         </div>
     </div>
@@ -127,7 +127,7 @@
         <div class="form-row col-md-12">
                 <div class="col-md-12"style="text-align: center;">
                     <div class="form-row" style="display: inline-block;">
-                                <h4 style="color: White; margin-top: 50px;">Files Summary</h4>
+                                <h4 style="color: navajowhite; margin-top: 50px;">Files Summary</h4>
                      </div>
                 </div>
                     <div class="col-md-12">
@@ -179,7 +179,7 @@
         <div class="form-row col-md-12">
             <div class="col-md-12" style="text-align: center;">
                 <div class="form-row" style="display: inline-block;">
-                    <h4 style="color: White; margin-top: 50px;">Overdue Files Report</h4>
+                    <h4 style="color: navajowhite; margin-top: 50px;">Overdue Files Report</h4>
                 </div>
             </div>
             <div class="col-md-12">
@@ -345,19 +345,20 @@
     .hexy {
         position: relative;
         margin: 5px 5px;
-        background: transparent linear-gradient( 151deg, #8b6d48 4%, #b38961 24%, #d5a07a 45%, #eac194 61%, #f1c07b 70%) 0% 0% no-repeat padding-box;
-        /* height: 113.2050807569px;
+        background: transparent linear-gradient( 151deg, #082044 4%, #36132C 24%, #5E0918 45%, #76020C 61%, #800008 70%) 0% 0% no-repeat padding-box;
+        /*        background: transparent linear-gradient( 151deg, #082044 4%, #36132C 24%, #5E0918 45%, #76020C 61%, #800008 70%) 0% 0% no-repeat padding-box;
+*/ /* height: 113.2050807569px;
         width: 65px;*/
-        height: 150px;  Adjust height if necessary 
-        width: 130px;  Adjust width if necessary 
-        /*height: 113.2050807569px;
+        height: 150px; /*Adjust height if necessary */
+        width: 130px; /*Adjust width if necessary */
+        /*height: 113.2050807569px; 
         width: 65px;*/
         /*outline: 1px solid red;*/
         display: inline-block;
         margin-left: 60px; /* Half the height of the hexagon */
     }
 
-    .hexy,
+    /*.hexy,
     .hexy:before,
     .hexy:after {
         height: 113.2050807569px;
@@ -367,28 +368,57 @@
     .hexy:hover,
     .hexy:before:hover,
     .hexy:after:hover {
-        background: transparent linear-gradient( 151deg, #8b6d48 4%, #b38961 24%, #d5a07a 45%, #eac194 61%, #f1c07b 70%) 0% 0% no-repeat padding-box;
+        background: transparent linear-gradient( 151deg, #8b6d48 4%, #b38961 24%, #d5a07a 45%, #eac194 61%, #f1c07b 70%) 0% 0% no-repeat padding-box;*/
         /* background: transparent linear-gradient( 151deg, black 4%, #1f1f1f 24%, #f1c07b 45%, #8b6d48 61%, #f1c07b 70%) 0% 0% no-repeat padding-box;*/
-        cursor: pointer;
+        /*cursor: pointer;
     }
 
     .hexy:before {
         position: absolute;
         content: "";
-        background: transparent linear-gradient( 151deg, #8b6d48 4%, #b38961 24%, #d5a07a 45%, #eac194 61%, #f1c07b 70%) 0% 0% no-repeat padding-box;
+        background: transparent linear-gradient( 151deg, #8b6d48 4%, #b38961 24%, #d5a07a 45%, #eac194 61%, #f1c07b 70%) 0% 0% no-repeat padding-box;*/
         /*                background: transparent linear-gradient( 151deg, black 4%, #1f1f1f 24%, #f1c07b 45%, #f1c07b 61%, #8b6d48 70%) 0% 0% no-repeat padding-box;
-        */ transform: rotate(60deg);
+        */ /*transform: rotate(60deg);
         overflow: hidden;
     }
 
     .hexy:after {
         position: absolute;
         content: "";
-        background: transparent linear-gradient( 151deg, #8b6d48 4%, #b38961 24%, #d5a07a 45%, #eac194 61%, #f1c07b 70%) 0% 0% no-repeat padding-box;
+        background: transparent linear-gradient( 151deg, #8b6d48 4%, #b38961 24%, #d5a07a 45%, #eac194 61%, #f1c07b 70%) 0% 0% no-repeat padding-box;*/
         /*                background: transparent linear-gradient( 151deg, black 4%, #1f1f1f 24%, #f1c07b 45%, #f1c07b 61%, #8b6d48 70%) 0% 0% no-repeat padding-box;
-        */ transform: rotate(-60deg);
+        */ /*transform: rotate(-60deg);*/
         /*overflow: hidden;*/
-    }
+    /*}*/
+        .hexy,
+        .hexy:before,
+        .hexy:after {
+            height: 113.2050807569px;
+            width: 65px;
+        }
+
+            .hexy:hover,
+            .hexy:before:hover,
+            .hexy:after:hover {
+                background: transparent linear-gradient( 151deg, #082044 4%, #36132C 24%, #5E0918 45%, #76020C 61%, #800008 70%) 0% 0% no-repeat padding-box;
+                cursor: pointer;
+            }
+
+            .hexy:before {
+                position: absolute;
+                content: "";
+                background: transparent linear-gradient( 151deg, #082044 4%, #36132C 24%, #5E0918 45%, #76020C 61%, #800008 70%) 0% 0% no-repeat padding-box;
+                transform: rotate(60deg);
+                overflow: hidden;
+            }
+
+            .hexy:after {
+                position: absolute;
+                content: "";
+                background: transparent linear-gradient( 151deg, #082044 4%, #36132C 24%, #5E0918 45%, #76020C 61%, #800008 70%) 0% 0% no-repeat padding-box;
+                transform: rotate(-60deg);
+                /*overflow: hidden;*/
+            }
 
     /*.hexy:hover {
     background-color: #E48B34;
@@ -420,7 +450,7 @@
         font-size: 1rem;
         text-align: center;
         z-index: 4;
-        color: black;
+        color: navajowhite /*white*/;
     }
 
             /*.hex-img {
@@ -443,17 +473,17 @@
         font-size: 0;
     }
 
-    .hexyinner {
-        position: absolute;
+    /*.hexyinner {
+        position: absolute;*/
         /*margin: 1px $hex-margin;*/
-        background-color: black;
+        /*background-color: black;
         opacity: 0.5;
         height: 113.8845726812px;
         width: 65px;
         top: 0px;
-        left: 0px;
+        left: 0px;*/
         /*outline: 1px solid red;*/
-        display: inline-block;
+        /*display: inline-block;
     }
 
     .hexyinner,
@@ -478,7 +508,43 @@
         background-color: inherit;
         transform: rotate(-60deg);
         overflow: hidden;
+    }*/
+    .hexyinner {
+        position: absolute;
+        /*margin: 1px $hex-margin;*/
+        background-color: black;
+        opacity: 0.5;
+        height: 113.8845726812px;
+        width: 65px;
+        top: 0px;
+        left: 0px;
+        /*outline: 1px solid red;*/
+        display: inline-block;
     }
+
+        .hexyinner,
+        .hexyinner:before,
+        .hexyinner:after {
+            height: 113.8845726812px;
+            width: 65px;
+            z-index: 20;
+        }
+
+            .hexyinner:before {
+                position: absolute;
+                content: "";
+                background-color: inherit;
+                transform: rotate(60deg);
+                overflow: hidden;
+            }
+
+            .hexyinner:after {
+                position: absolute;
+                content: "";
+                background-color: inherit;
+                transform: rotate(-60deg);
+                overflow: hidden;
+            }
 
     .hexy-overlay {
         width: 130px;

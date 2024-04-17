@@ -22,6 +22,7 @@
                     <td>Father Name</td>
                     <td>Transfer Date</td>
                     <td></td>
+                    <td></td>
                 </tr>
             </thead>
             <tbody>
@@ -31,18 +32,18 @@
                         int srcounter = 1;
                         foreach (var item in Model)
                         {
-                            <tr class="pointer" id="@item.Id">
-                                <td>@srcounter</td>
-                                <td>@item.Plot_No</td>
-                                <td>@item.Plot_Size</td>
-                                <td>@item.Name</td>
-                                <td>@item.Father_Husband</td>
-                                <td>@string.Format("{0:dd-MMM-yyyy}", item.Ownership_DateTime)</td>
-                                @if (item.Transfer_Slip == false)
-                                {
-                                    <td><button class="btn btn-primary p-tran-paper" id="@item.Owner_Id">Generate Transfer Paper</button></td>
-                                }
-                            </tr>
+                                <tr class="pointer" id="@item.Id">
+                                    <td>@srcounter</td>
+                                    <td>@item.Plot_No</td>
+                                    <td>@item.Plot_Size</td>
+                                    <td>@item.Name</td>
+                                    <td>@item.Father_Husband</td>
+                                    <td>@string.Format("{0:dd-MMM-yyyy}", item.Ownership_DateTime)</td>
+                                    @if (item.Transfer_Slip == false)
+                                    {
+                                        <td style="text-align:center"><button class="btn btn-primary p-tran-paper" id="@item.Owner_Id">Generate Transfer Paper</button></td>
+                                    }
+                                </tr>
                             srcounter++;
                         }
                     }

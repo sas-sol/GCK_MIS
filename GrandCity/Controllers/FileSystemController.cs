@@ -40,6 +40,14 @@ namespace MeherEstateDevelopers.Controllers
             db.Sp_Add_Activity(userid, "Accessed  File Short Details Page For  " + FileNumber, "Read", "Activity_Record", ActivityType.Details_Access.ToString(), userid);
             return PartialView(res);
         }
+        public ActionResult Application_Form_GCK()
+        {
+            return View();
+        }
+        public ActionResult New_Application_Form_GCK()
+        {
+            return View();
+        }
         public ActionResult AddSecurity()
         {
             ViewBag.Projects = new SelectList(db.Sp_Get_RealEstateProjects(), "Id", "Project_Name");
@@ -577,6 +585,10 @@ namespace MeherEstateDevelopers.Controllers
                 return RedirectToAction("GenerateCustomerFile_Com", new { Id = Id });
             }
             var res1 = db.Sp_Get_FileAppFormData(FileId.FileFormNumber).SingleOrDefault();
+            if (res1 != null && !string.IsNullOrEmpty(res1.Block_Name))
+            {
+                res1.Block_Name = res1.Block_Name.Trim();
+            }
             long[] size = { 1, 6 };
             if (size.Contains(res1.Status))
             {
@@ -744,7 +756,7 @@ namespace MeherEstateDevelopers.Controllers
             if (res.Nominee_CNIC_NICOP != od.Nominee_CNIC_NICOP && res.Nominee_CNIC_NICOP != null) { db.Sp_Add_FileComments(od.FileId, "Update Nominee CNIC: " + res.Nominee_CNIC_NICOP + " To: " + od.Nominee_CNIC_NICOP, userid, ActivityType.Record_Upatation.ToString()); }
             return Json(true);
         }
-        public JsonResult DeliverFile(long id)
+        public JsonResult DeliverFile(long? id)
         {
             long userid = long.Parse(User.Identity.GetUserId());
             var res1 = db.Files_Transfer.Where(x => x.Group_Tag == id).ToList();
@@ -1432,11 +1444,12 @@ namespace MeherEstateDevelopers.Controllers
             return View(res);
         }
         [HttpGet]
-        public ActionResult FileTransferRequestDetails(long Id)
+        public ActionResult FileTransferRequestDetails(string Id)
         {
-            Sp_Get_FileFormData_Result res = db.Sp_Get_FileFormData(Id).FirstOrDefault();
+            var fileform = db.File_Form.Where( f => f.FileFormNumber == Id).FirstOrDefault();
+            Sp_Get_FileFormData_Result res = db.Sp_Get_FileFormData(fileform.Id).FirstOrDefault();
             long userid = long.Parse(User.Identity.GetUserId());
-            db.Sp_Add_Activity(userid, "Accessed Details For File Transfer Request ", "Read", "Activity_Record", ActivityType.Details_Access.ToString(), Id);
+            db.Sp_Add_Activity(userid, "Accessed Details For File Transfer Request ", "Read", "Activity_Record", ActivityType.Details_Access.ToString(), fileform.Id);
             if (res == null) { return Json(false); }
             List<Sp_Get_FileInstallments_Result> Allinstallments = db.Sp_Get_FileInstallments(res.Id).ToList();
             var installments = Allinstallments.Where(x => x.Installment_Type == "1").ToList();
@@ -1994,36 +2007,25 @@ namespace MeherEstateDevelopers.Controllers
         public ActionResult QualifyingFiles(Search_OverDue s, string Block)
         {
             var res = db.Sp_Get_OverDueAmount_Search(s.Installments, s.S_Inst_Range, s.E_Inst_Range, s.Plot_Size, s.Dealer_Id, s.S_Range, s.E_Range, s.G_Amt, s.L_Amt, Block).ToList();
-            int count = res.Count;
-
-            // Pass the count to the ViewBag
-            ViewBag.QualifyingFilesCount = count;
             long userid = long.Parse(User.Identity.GetUserId());
-            db.Sp_Add_Activity(userid, "Accessed Qualifying Files Page ", "Read", "Activity_Record", ActivityType.Details_Access.ToString(), userid);
+            db.Sp_Add_Activity(userid, "Accessed  First Warning Files Page ", "Read", "Activity_Record", ActivityType.Details_Access.ToString(), userid);
             return PartialView(res);
         }
         public ActionResult FirstWarning(Search_OverDue s, string Block)
         {
             var res = db.Sp_Get_FirstWarning_File(s.Installments, s.S_Inst_Range, s.E_Inst_Range, s.Plot_Size, s.Dealer_Id, s.S_Range, s.E_Range, s.G_Amt, s.L_Amt, Block).ToList();
             long userid = long.Parse(User.Identity.GetUserId());
-            db.Sp_Add_Activity(userid, "Accessed  First Warning Files Page ", "Read", "Activity_Record", ActivityType.Details_Access.ToString(), userid);
+            db.Sp_Add_Activity(userid, "Accessed  Second Warning Files Page ", "Read", "Activity_Record", ActivityType.Details_Access.ToString(), userid);
             return PartialView(res);
         }
-        public ActionResult SecWarning(Search_OverDue s, string Block)
+        public ActionResult FirstWarning(Search_OverDue s)
         {
-            var res = db.Sp_Get_SecWarning_File(s.Installments, s.S_Inst_Range, s.E_Inst_Range, s.Plot_Size, s.Dealer_Id, s.S_Range, s.E_Range, s.G_Amt, s.L_Amt, Block).ToList();
+            var res = db.Sp_Get_FirstWarning_File(s.Installments, s.S_Inst_Range, s.E_Inst_Range, s.Plot_Size, s.Dealer_Id, s.S_Range, s.E_Range, s.G_Amt, s.L_Amt).ToList();
             long userid = long.Parse(User.Identity.GetUserId());
             db.Sp_Add_Activity(userid, "Accessed  Second Warning Files Page ", "Read", "Activity_Record", ActivityType.Details_Access.ToString(), userid);
             return PartialView(res);
         }
-        public ActionResult ThirdWarning(Search_OverDue s, string Block)
-        {
-            var res = db.Sp_Get_ThirdWarning_File(s.Installments, s.S_Inst_Range, s.E_Inst_Range, s.Plot_Size, s.Dealer_Id, s.S_Range, s.E_Range, s.G_Amt, s.L_Amt, Block).ToList();
-            long userid = long.Parse(User.Identity.GetUserId());
-            db.Sp_Add_Activity(userid, "Accessed  Second Warning Files Page ", "Read", "Activity_Record", ActivityType.Details_Access.ToString(), userid);
-            return PartialView(res);
-        }
-        public ActionResult CancelledFiles(Search_OverDue s, string Block)
+        public ActionResult CancelledFiles(Search_OverDue s , string Block)
         {
             var res = db.Sp_Get_TempCancel_File(s.Installments, s.S_Inst_Range, s.E_Inst_Range, s.Plot_Size, s.Dealer_Id, s.S_Range, s.E_Range, s.G_Amt, s.L_Amt, Block).ToList();
             long userid = long.Parse(User.Identity.GetUserId());

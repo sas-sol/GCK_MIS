@@ -6,7 +6,7 @@
         border-radius: 50%;
         background: #FF5733;
         font-size: 24px;
-        color: #fff;
+        color: navajowhite;
         text-align: center;
         line-height: 30px;
         margin: 5px -8px 10px -6px;
@@ -75,7 +75,7 @@
 
     </script>*@
 <div class="header navbar no-print" style="width: 100% !important;">
-    <div class="header-container gradient" style="background: linear-gradient(to right, #1f1f1f, #8b6d48); box-shadow: 5px 5px 10px;">
+    <div class="header-container gradient" style="background: linear-gradient(to right, #1f1f1f, #800008); box-shadow: 5px 5px 10px; height: 65px; ">
         <ul class="nav-left">
             <li>
                 <div class="sidebar-logo" style="border: none;">
@@ -83,11 +83,11 @@
                         <div class="peer peer-greed">
                             <a class="sidebar-link td-n" href="@Url.Action("Index","Home")">
                                 <div class="peers ai-c fxw-nw">
-                                        <div class="peer">
-                                            <div class="logo" style="padding:20px 10px 10px 10px">
-                                                <img style="width: 100%; height: 50px; margin-left: -15px; margin-top:-5px;" src="~/assets/static/images/logo2_black.JPG" alt="">
-                                            </div>
+                                    <div class="peer">
+                                        <div class="logo" style="padding:20px 10px 10px 10px">
+                                            <img style="width: 100%; height: 50px; margin-left: -15px; margin-top:-5px;" src="~/assets/static/images/logo2_black.JPG" alt="">
                                         </div>
+                                    </div>
                                     <div class="peer peer-greed">
                                         <h5 class="lh-1 mB-0 logo-text s-logo" title="Management Information System" style="padding-left: 10px; margin-left: 10px; color: #f1c07b; margin-top: 7px;">@ViewBag.Company</h5>
                                     </div>
@@ -224,8 +224,8 @@
                     {
                         <li><a href="/Finance/Receipts/" target="_blank" class="d-b td-n pY-5 bgcH-grey-100 c-grey-700"><i class="ti-user mR-10"></i> <span>Receipts</span></a></li>
                         @*<li><a href="/Finance/MarketingReceipts/" target="_blank" class="d-b td-n pY-5 bgcH-grey-100 c-grey-700"><i class="ti-user mR-10"></i> <span>Marketing Receipts</span></a></li>
-                        <li><a href="/Banking/DishonredCheqList/" target="_blank" class="d-b td-n pY-5 bgcH-grey-100 c-grey-700"><i class="ti-user mR-10"></i> <span>Dishoner Cheques List</span></a></li>
-                        <li><a href="/Banking/LeadsDishonoredCheqs/" target="_blank" class="d-b td-n pY-5 bgcH-grey-100 c-grey-700"><i class="ti-user mR-10"></i> <span>Leads Dishoner Cheques List</span></a></li>*@
+                            <li><a href="/Banking/DishonredCheqList/" target="_blank" class="d-b td-n pY-5 bgcH-grey-100 c-grey-700"><i class="ti-user mR-10"></i> <span>Dishoner Cheques List</span></a></li>
+                            <li><a href="/Banking/LeadsDishonoredCheqs/" target="_blank" class="d-b td-n pY-5 bgcH-grey-100 c-grey-700"><i class="ti-user mR-10"></i> <span>Leads Dishoner Cheques List</span></a></li>*@
                         <li><a href="/Banking/DailyCashReport/" target="_blank" class="d-b td-n pY-5 bgcH-grey-100 c-grey-700"><i class="ti-user mR-10"></i> <span>Daily Report</span></a></li>
                         if (User.IsInRole("SAM Cashier"))
                         {
