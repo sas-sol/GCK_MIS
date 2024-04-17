@@ -504,7 +504,7 @@ namespace MeherEstateDevelopers.Controllers
                     }
                 }
 
-             
+
 
                 ballotResult.ForEach(x => x.BookingDate = x.Due_Date.ToShortDateString());
                 //foreach(var v in ballotResult)
@@ -622,7 +622,7 @@ namespace MeherEstateDevelopers.Controllers
                         {
                             prty = 6;
                         }
-                        
+
                         filteredPlots.Add(new PreferenceFilteredPlots
                         {
                             Prefrence = v.Key,
@@ -680,8 +680,8 @@ namespace MeherEstateDevelopers.Controllers
                         Priority = 6,
                         PlotSize = pltsz_temp
                     });
-                    
-                    
+
+
                 }
 
                 //Filtering out Hold Plots
@@ -1226,7 +1226,7 @@ namespace MeherEstateDevelopers.Controllers
                 {
                     int pltsz_temp = int.Parse(v.Key.Split(' ')[0]);
                     int prty = 0;
-                    
+
                     rem_filteredFiles.Add(new PreferenceFilteredFiles
                     {
                         Prefrence = nextbal.FirstOrDefault().Plot_Prefrence,
@@ -1454,7 +1454,7 @@ namespace MeherEstateDevelopers.Controllers
                     db.SaveChanges();
 
                     long userid = long.Parse(User.Identity.GetUserId());
-                    db.Sp_Add_Activity(userid, "Assigned Plot Number "+ item.PlotNo + item.Block + item.Sector + " to " + item.FileId, "Create", "Activity_Record", ActivityType.Balloting.ToString(), userid);
+                    db.Sp_Add_Activity(userid, "Assigned Plot Number " + item.PlotNo + item.Block + item.Sector + " to " + item.FileId, "Create", "Activity_Record", ActivityType.Balloting.ToString(), userid);
                     counter++;
                 }
             }
@@ -1522,7 +1522,7 @@ namespace MeherEstateDevelopers.Controllers
                             FileId = File.Id,
                             BallotedOn = DateTime.Now,
                             Owner_Id = ownerlist.FirstOrDefault().Group_Tag,
-                            Owner_Name = String.Join(",", ownerlist.Select(x=> x.Name)),
+                            Owner_Name = String.Join(",", ownerlist.Select(x => x.Name)),
                             Actual_Size = v.SIZE
                         };
                         __processed_bp__.Add(__temp__bp__);
@@ -1805,6 +1805,11 @@ namespace MeherEstateDevelopers.Controllers
         {
             long uid = User.Identity.GetUserId<long>();
             var res = db.Sp_Get_BallotIntimationLetter(id, uid).FirstOrDefault();
+            var res1 = db.Sp_Get_FileAppFormData(res.BallotFile).SingleOrDefault();
+
+            // Now you can use the fileFormIds to filter Files_Transfer
+            var filedata = db.Files_Transfer.SingleOrDefault(x => x.File_Form_Id == res1.Id);
+            ViewBag.Mobile = filedata.Mobile_1;
             res.Owner_Name = res.Name;
             return View(res);
         }
@@ -2021,7 +2026,7 @@ namespace MeherEstateDevelopers.Controllers
 
             foreach (var ballotedPlot in plts)
             {
-                if(db.Plots.Any(x=>x.Application_FileNo == ballotedPlot.BallotFile))
+                if (db.Plots.Any(x => x.Application_FileNo == ballotedPlot.BallotFile))
                 {
                     continue;
                 }
@@ -2221,7 +2226,7 @@ namespace MeherEstateDevelopers.Controllers
                 MigrateFileRecordToPlotRecord(v.Id);
             }
         }
-        public JsonResult MigrateFileRecordToPlotRecord(long? bp )
+        public JsonResult MigrateFileRecordToPlotRecord(long? bp)
         {
             var ballotedPlot = db.BallotPlots.Where(x => x.Id == bp).FirstOrDefault();
             if (ballotedPlot is null /*|| ballotedPlot.LetterA == null*/)
@@ -2460,14 +2465,19 @@ namespace MeherEstateDevelopers.Controllers
                 var retDat = db.Sp_Update_SpecialPrefCharge(v.Id, 0);
             }
         }
-        public ActionResult BallotSearch(long? Id)
+        //public ActionResult BallotSearch(long? Id)
+        //{
+        //    var res = db.BallotPlots.Where(x => x.Id == Id).FirstOrDefault();
+        //    return PartialView(res);
+        //}
+        public ActionResult BallotSearch(string plotno)
         {
-            var res = db.BallotPlots.Where(x => x.Id == Id).FirstOrDefault();
+            var res = db.BallotPlots.Where(x => x.PlotNo == plotno).FirstOrDefault();
             return PartialView(res);
         }
         public ActionResult NewPlot_Ballot()
         {
-            ViewBag.Blocks = new SelectList(db.Sp_Get_Block(), "Block_Name", "Block_Name","Project_Name");
+            ViewBag.Blocks = new SelectList(db.Sp_Get_Block(), "Block_Name", "Block_Name", "Project_Name");
             return PartialView();
         }
         public JsonResult BlockPlots(string Block)
@@ -2517,21 +2527,21 @@ namespace MeherEstateDevelopers.Controllers
         }
         public ActionResult BallotScreen()
         {
-            var res = db.BallotPlots.OrderByDescending(x=> x.BallotedOn).Take(500).ToList();
+            var res = db.BallotPlots.OrderByDescending(x => x.BallotedOn).Take(500).ToList();
             return PartialView(res);
         }
 
         public void ExtraArea()
         {
             var date = new DateTime(2018, 10, 29);
-            var res = db.BallotPlots.Where(x => (x.Status == "Balloted") && x.BallotedOn == date &&  x.Actual_Size != x.PlotArea.ToString()).ToList();
+            var res = db.BallotPlots.Where(x => (x.Status == "Balloted") && x.BallotedOn == date && x.Actual_Size != x.PlotArea.ToString()).ToList();
 
             foreach (var item in res)
             {
                 var baserate = 200000;
                 var actsize = double.Parse(item.Actual_Size);
-                var rem = actsize - Convert.ToDouble( item.PlotArea);
-                var extracharges = Math.Round( rem * baserate, 0);
+                var rem = actsize - Convert.ToDouble(item.PlotArea);
+                var extracharges = Math.Round(rem * baserate, 0);
 
                 File_Installments fi = new File_Installments()
                 {
