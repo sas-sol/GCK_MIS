@@ -2201,58 +2201,30 @@ $(document).on("click", "#ch-ins", function (e) {
     });
 });
 // Add Genrate Invoice
-//$(document).on("click", "#gen-rec", function (e) {
-//    e.preventDefault();
-//    debugger;
-//    $('#gen-rec').attr("disabled", true);
-//    $("#amt-in-wrds").val(InWords($("#amt").val()));
-//    //var img = $("#Imge").attr('src');
-//    //$("#Imge").val(img);
-//    var img = $("#Img").val();
-//    var con = confirm("Are you sure you want to Generate Receipt");
-//    if (con) {
-//        $.ajax({
-//            type: "POST",
-//            url: $("#re-ins").attr('action'),
-//            data: $("#re-ins").serialize(),
-//            success: function (data) {
-//                window.open("/Banking/InstallmentReceipt?Id=" + data.Receiptid + "&Token=" + data.Token, '_blank');
-//            },
-//            error: function () {
-//                alert("Error Occured");
-//                $('#gen-rec').attr("disabled", false);
-//            }
-//        });
-//    }
-//});
 $(document).on("click", "#gen-rec", function (e) {
     e.preventDefault();
     debugger;
     $('#gen-rec').attr("disabled", true);
     $("#amt-in-wrds").val(InWords($("#amt").val()));
-    var img = $("#Img")[0].files[0]; // Get the file object from the input
+    //var img = $("#Imge").attr('src');
+    //$("#Imge").val(img);
+    var img = $("#Img").val();
     var con = confirm("Are you sure you want to Generate Receipt");
     if (con) {
-        var formData = new FormData($("#re-ins")[0]); // Create FormData object
-        formData.append("FileImage", img); // Append the image file to FormData
         $.ajax({
             type: "POST",
             url: $("#re-ins").attr('action'),
-            data: formData, // Use FormData instead of serialized data
-            processData: false, // Prevent jQuery from processing data
-            contentType: false, // Prevent jQuery from setting contentType
+            data: $("#re-ins").serialize(),
             success: function (data) {
                 window.open("/Banking/InstallmentReceipt?Id=" + data.Receiptid + "&Token=" + data.Token, '_blank');
             },
             error: function () {
-                alert("Error Occurred");
+                alert("Error Occured");
                 $('#gen-rec').attr("disabled", false);
             }
         });
     }
 });
-
-
 
 // Load data in tab container
 $(document).on("click", "[data-toggle='tab']", function (e) {
