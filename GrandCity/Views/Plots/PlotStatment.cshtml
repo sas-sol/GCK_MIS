@@ -17,10 +17,10 @@
         text-align: center;
         vertical-align: baseline !important;
     }
-        
+
         .trnsctnCol td hr {
             margin: 2px !important;
-        
+
         }
 
     .trnsctnCol {
@@ -104,7 +104,6 @@
         <td width="150" id="plot-price"></td>
         <td width="150" class="dis-amt-sec" style="display:none"><b>Discount Amount</b></td>
         <td width="150" class="dis-amt-sec" style="display:none" id="dis-amt"></td>
-        <td width="150"><b>Booking Date</b></td>
         @*<td width="150" id="booking-date"></td>*@
         <td width="150"><b>Booking Date</b></td>
         @{
@@ -152,7 +151,7 @@
             decimal? Per = 0;
 
         }
-        @foreach (var item in Model.Report.Where(z => z.Date <= DateTime.Now && z.Type != "10").OrderBy(x => x.Date))
+        @foreach (var item in Model.Report.Where(z => z.Date <= DateTime.Now && z.Type == "Booking" || z.Type == "Installment").OrderBy(x => x.Date))
         {
             if (item.Description != null && (item.Description.Contains("Advance") || item.Description.Contains("Book")))
             {
@@ -248,7 +247,8 @@
                 </tr>
 
             }
-        }
+     
+            }
         @{ OutStand_amt = Convert.ToDecimal(Model.Report.Sum(x => x.Debit)) - Rec_amt;}
     </tbody>
 </table>
@@ -256,9 +256,25 @@
     <tbody>
         <tr>
             <td><b>Total Amount</b></td>
-            <script>
-                @*var pltprice = "@Model.OwnerData.Where(x=> x.Ownership_Status != "Cancelled").OrderBy(x=> x.Ownership_DateTime).Select(x=>x.Total_Price).FirstOrDefault()";*@
-                var pltprice = "@Model.Balance.Total_Amount";
+            <td>@string.Format("{0:n0}", Math.Round(Convert.ToDecimal(Model.Balance.Total_Amount)))</td>
+            @*<td>@string.Format("{0:n0}", Math.Round(Convert.ToDecimal(ViewBag.TotalPric)))</td>*@
+            <td><b>Received Amount</b></td>
+            <td>@string.Format("{0:n0}", Math.Round(Convert.ToDecimal(Model.Balance.Received_Amount)))</td>
+            <td><b>Refund Amount</b></td>
+            <td>@string.Format("{0:n0}", Math.Round(Convert.ToDecimal(Model.Balance.Payment_Amount)))</td>
+            <td><b>Outstanding Amount</b></td>
+            <td>@string.Format("{0:n0}", Math.Round(Convert.ToDecimal(Model.Balance.Outstanding_Amount)))</td>
+            <td colspan="2"></td>
+        </tr>
+    </tbody>
+</table>
+<!--<table class="table" width="1000">
+    <tbody>
+        <tr>
+            <td><b>Total Amount</b></td>
+            <script>-->
+@*var pltprice = "@Model.OwnerData.Where(x=> x.Ownership_Status != "Cancelled").OrderBy(x=> x.Ownership_DateTime).Select(x=>x.Total_Price).FirstOrDefault()";*@
+<!--var pltprice = "@Model.Balance.Total_Amount";
 
                 if (pltprice > 0) {
                     $("#plot-price").text(Number(parseFloat(pltprice).toFixed(0)).toLocaleString());
@@ -283,7 +299,7 @@
             <td colspan="4"></td>
         </tr>
     </tbody>
-</table>
+</table>-->
 @{
     if (Model.Discount != null)
     {

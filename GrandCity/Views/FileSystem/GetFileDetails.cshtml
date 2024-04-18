@@ -384,7 +384,7 @@
                                   decimal overduetotal = 0;
                                   foreach (var item in Model.FileInstallments)
                                   {
-                                      if (item.Installment_Type != "10")
+                                      if (item.Installment_Type == "3" || item.Installment_Type == "1")
                                       {
                                           var statuscolor = "";
                                           if (item.Status == "NotPaid")
@@ -425,7 +425,6 @@
                             </thead>
                             <tbody>
                                 @{
-
                                     foreach (var item in Model.PlotInstallmentsSurcharge.OrderBy(x => x.DueDate))
                                     {
                                         decimal overduetotalAmount = 0;

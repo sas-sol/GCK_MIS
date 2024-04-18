@@ -1635,7 +1635,7 @@ namespace MeherEstateDevelopers.Controllers
             {
                 cr = db.Cancellation_Receipts.Where(x => x.File_Plot_No == Plotid && x.Module == Modules.PlotManagement.ToString()).OrderByDescending(x => x.Id).FirstOrDefault();
             }
-            var balance = db.File_Plot_Balance.Where(x => x.File_Plot_Id == Plotid).FirstOrDefault();
+            var balance = db.File_Plot_Balance.Where(x => x.File_Plot_Id == Plotid && x.Module == Modules.PlotManagement.ToString()).FirstOrDefault();
             var res = new NewPlotLedger { OwnerData = res2, PlotData = res1, Report = Rm, Discount = discount, Balance = balance, Refunded_Repurchased = cr };
             return View(res);
         }
@@ -1982,7 +1982,7 @@ namespace MeherEstateDevelopers.Controllers
         {
             db.Test_UpdatePendingPlotinstallment(Plotid);
             decimal? TotalAmt = 0, AmttoPaid = 0, remamt = 0, TotalAmount = 0;
-            string[] Type = { "Advance", "Booking", "Installment" };
+            string[] Type = { "Booking", "Installment" };
             TotalAmount = Receipts.Where(x => Type.Contains(x.Type) && (x.Status == null || x.Status == "Approved")).Sum(x => x.Amount);
             var ReceivedAmount = TotalAmount;
             if (Dis.Any())
