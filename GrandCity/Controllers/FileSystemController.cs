@@ -502,13 +502,13 @@ namespace MeherEstateDevelopers.Controllers
         public ActionResult GetFileDetails(string FileId)
         {
             long userid = long.Parse(User.Identity.GetUserId());
-            var res11 = db.Sp_Get_FileAppFormData(FileId).SingleOrDefault();
-            long[] size = { 1, 6 };
-            if (size.Contains(res11.Status))
-            {
-                var res44 = TestAdjustIntallments(res11.Id);
-            }
             var res1 = db.Sp_Get_FileAppFormData(FileId).SingleOrDefault();
+           
+            long[] size = { 1, 6 };
+            if (size.Contains(res1.Status))
+            {
+                var res44 = TestAdjustIntallments(res1.Id);
+            }
             var res2 = db.Sp_Get_FileOwnerList(res1.Id).ToList();
             var res3 = db.Sp_Get_FileInstallments(res1.Id).ToList();
             var res4 = db.Sp_Get_ReceivedAmounts(res1.Id, Modules.FileManagement.ToString()).ToList();
@@ -520,7 +520,7 @@ namespace MeherEstateDevelopers.Controllers
             var res6surcharge = db.Sp_Get_ReceivedAmounts_Surcharge(res1.Id, Modules.FileManagement.ToString()).ToList();
             UpdatePlotInstallmentStatusSurcharge(res5surcharge, res6surcharge, res1.Id);
             var res = new FileDetailData { FileData = res1, FilesOwners = res2, FileInstallments = res3, FileReceipts = res4, Discounts = res5, PlotInstallmentsSurcharge = res7 };
-            db.Sp_Add_Activity(userid, "Get full Details of File  <a class='file-data' data-id=' " + FileId + "'>" + FileId + "</a>  ", "Read", Modules.FileManagement.ToString(), ActivityType.Details_Access.ToString(), res11.Id);
+            db.Sp_Add_Activity(userid, "Get full Details of File  <a class='file-data' data-id=' " + FileId + "'>" + FileId + "</a>  ", "Read", Modules.FileManagement.ToString(), ActivityType.Details_Access.ToString(), res1.Id);
 
             return PartialView(res);
         }
@@ -1665,28 +1665,31 @@ namespace MeherEstateDevelopers.Controllers
         {
             try
             {
-                var item = db.Test_FileBalance_para(Fileno).FirstOrDefault();
-
+                //var item = db.Test_FileBalance_para(Fileno).SingleOrDefault();
+                decimal? TotalAmount = 0;
+                var Receipts = db.Sp_Get_ReceivedAmounts(Fileno, Modules.FileManagement.ToString()).ToList();
+                string[] Type = { "Advance", "Booking", "Installment" };
+                TotalAmount = Receipts.Where(x => Type.Contains(x.Type) && (x.Status == null || x.Status == "Approved")).Sum(x => x.Amount);
                 //var up = db.Sp_Update_ReceivedAmount(item.Id, Modules.FileManagement.ToString(), item.TotalAmount);
-                if (item == null)
+                if (TotalAmount == null)
                 {
                     return 0;
                 }
-                var dis = db.Discounts.Where(x => x.Module_Id == item.Id && x.Module == Modules.FileManagement.ToString()).ToList();
-                var vouch = db.Vouchers.Where(x => x.File_Plot_Id == item.Id && x.Module == Modules.FileManagement.ToString() && x.Cancel == null).ToList();
-                item.TotalAmount -= vouch.Sum(x => x.Amount);
-                var ReceivedAmount = item.TotalAmount;
+                var dis = db.Discounts.Where(x => x.Module_Id == Fileno && x.Module == Modules.FileManagement.ToString()).ToList();
+                var vouch = db.Vouchers.Where(x => x.File_Plot_Id == Fileno && x.Module == Modules.FileManagement.ToString() && x.Cancel == null).ToList();
+                TotalAmount -= vouch.Sum(x => x.Amount);
+                var ReceivedAmount = TotalAmount;
                 if (dis.Any())
                 {
-                    item.TotalAmount += dis.Sum(x => x.Discount_Amount);
+                    TotalAmount += dis.Sum(x => x.Discount_Amount);
                 }
-                db.Test_PendingInst(item.Id);
-                var res1 = db.File_Installments.Where(x => x.File_Id == item.Id).ToList();
-              /*  var inst = res1.Where(x => x.Installment_Type != "3").OrderBy(x => x.Due_Date).ToList();*/  //remove this check
+                db.Test_PendingInst(Fileno);
+                var res1 = db.File_Installments.Where(x => x.File_Id == Fileno).ToList();
+                /*  var inst = res1.Where(x => x.Installment_Type != "3").OrderBy(x => x.Due_Date).ToList();*/  //remove this check
                 var inst = res1.Where(x => x.Installment_Type != "-1").OrderBy(x => x.Due_Date).ToList();
                 var advinst = res1.Where(x => x.Installment_Type == "3").OrderBy(x => x.Due_Date).FirstOrDefault();
                 List<AmountToPaidInfo> latpi = new List<AmountToPaidInfo>();
-                decimal? Actamt = item.TotalAmount;
+                decimal? Actamt = TotalAmount;
                 decimal? TotalAmt = 0, AmttoPaid = 0;
                 //if(advinst!= null)   //  comment this 
                 //Actamt = Actamt - advinst.Amount; 
@@ -1720,7 +1723,7 @@ namespace MeherEstateDevelopers.Controllers
                 var allids = new XElement("IS", latpi.Select(x => new XElement("ISS", new XAttribute("Id", x.Id)))).ToString();
                 db.Test_updateinstallment(allids);
                 var curdate = DateTime.Now;
-                var res3 = db.Test_FileInstallments(item.Id).ToList();
+                var res3 = db.Test_FileInstallments(Fileno).ToList();
                 /*   var inst1 = res3.Where(x => x.Installment_Type != "3").ToList();*/  // also
                 var inst1 = res3.Where(x => x.Installment_Type != "-1").ToList();
                 var id = inst1.Where(x => x.Due_Date <= curdate && x.Status != "Paid").ToList();
@@ -1728,13 +1731,14 @@ namespace MeherEstateDevelopers.Controllers
                 db.Test_updateNotPaidinstallment(nopaidis);
                 var pendinginst = inst1.Where(x => x.Due_Date <= curdate).Sum(x => x.Amount);
                 var bal = -(pendinginst - Actamt);
-                db.Test_updatebalance(bal, res1.Where(x => x.Installment_Type != "10").Sum(x => x.Amount), ReceivedAmount, dis.Sum(x => x.Discount_Amount), item.Id, Modules.FileManagement.ToString(), id.Count(), advinst.Due_Date, vouch.Sum(x => x.Amount));
+                db.Test_updatebalance(bal, res1.Where(x => x.Installment_Type != "10").Sum(x => x.Amount), ReceivedAmount, dis.Sum(x => x.Discount_Amount), Fileno, Modules.FileManagement.ToString(), id.Count(), advinst.Due_Date, vouch.Sum(x => x.Amount));
             }
             catch (Exception e)
             {
             }
             return 1;
         }
+      
         [HttpPost]
         [ValidateAntiForgeryToken]
         public JsonResult SearchResult(string Text, int SearchOption)

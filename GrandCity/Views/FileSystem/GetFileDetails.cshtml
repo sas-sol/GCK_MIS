@@ -2,7 +2,7 @@
 @{
     var TotalPric = Model.FileInstallments.Where(x => x.Installment_Type != "10").Sum(x => x.Amount);
     var receAmt = Model.FileReceipts.Sum(x => x.Amount);
-    var bookdate = Model.FileReceipts.Where(x => x.Type == "Booking").OrderByDescending(x => x.DateTime).Select(x => x.DateTime).FirstOrDefault();
+    //var bookdate = Model.FileReceipts.Where(x => x.Type == "Booking").OrderByDescending(x => x.DateTime).Select(x => x.DateTime).FirstOrDefault();
 
 }
 <style>
@@ -116,7 +116,13 @@
                         </div>
                         <div class="form-group col-md-3">
                             <label>Booking Date</label>
-                            <h5 id="booking-date">@string.Format("{0: dd-MMMM-yyyy}", bookdate)</h5>
+                            @{
+                                var formattedDates = Model.FilesOwners.Select(x => x.DateTime?.ToString("MMM dd yyyy"));
+                                var concatenatedDates = string.Join(",", formattedDates);
+                                @*@concatenatedDates*@
+                            }
+                            <h5 width="150">@string.Format("{0:n0}", concatenatedDates)</h5>
+                            @*<h5 id="booking-date">@string.Format("{0: dd-MMMM-yyyy}", bookdate)</h5>*@
                         </div>
                         <div class="form-group col-md-3">
                             <label>Dealership</label>
@@ -632,8 +638,8 @@
                         </thead>
                         <tbody>
                             @{ srcount = 1;
-
-                                foreach (var g in Model.FileReceipts.Where(x => x.Type != "Booking" && x.Type != "Installment" && x.Type != "Adjusted").GroupBy(x => x.Type))
+                                string[] Type = { "SurCharge" };
+                                foreach (var g in Model.FileReceipts.Where(x => x.Type == "SurCharge").GroupBy(x => x.Type))
                                 {
                                     <tr><td colspan="8" style="text-align:center;font-size:15px"><b>@g.Key</b></td></tr>
                                     foreach (var item in g)
@@ -694,7 +700,7 @@
                                     <td colspan="4">
                                         <a class="btn btn-primary" style="color:white" href="/Reports/FileStatmentAcc?Token=@Model.FileData.FileFormNumber" target="_blank">File Statement</a>
                                     </td>
-                                    <td colspan="4">Received Amount : <b>@string.Format("{0:n0}", Model.FileReceipts.Where(x => (x.Status is null || x.Status == "Approved") && Types.Contains(x.Type)).Sum(x => x.Amount))</b> </td>
+                                    <td colspan="4">Received Amount : <b>@string.Format("{0:n0}", Model.FileReceipts.Where(x => (x.Status is null || x.Status == "Approved") && Type.Contains(x.Type)).Sum(x => x.Amount))</b> </td>
                                 </tr>
                             }
                         </tbody>
@@ -714,7 +720,7 @@
                         </thead>
                         <tbody>
                             @{ srcount = 1;
-
+                                string[] excludedTypes = { "Booking", "Installment", "Adjusted" , "SurCharge" };
                                 foreach (var g in Model.FileReceipts.Where(x => x.Type != "Booking" && x.Type != "Installment" && x.Type != "Adjusted" && x.Type != "Surcharge").GroupBy(x => x.Type))
                                 {
                                     <tr><td colspan="8" style="text-align:center;font-size:15px"><b>@g.Key</b></td></tr>
@@ -776,7 +782,7 @@
                                     <td colspan="4">
                                         <a class="btn btn-primary" style="color:white" href="/Reports/FileStatmentAcc?Token=@Model.FileData.FileFormNumber" target="_blank">File Statement</a>
                                     </td>
-                                    <td colspan="4">Received Amount : <b>@string.Format("{0:n0}", Model.FileReceipts.Where(x => (x.Status is null || x.Status == "Approved") && Types.Contains(x.Type)).Sum(x => x.Amount))</b> </td>
+                                    <td colspan="4">Received Amount : <b>@string.Format("{0:n0}", Model.FileReceipts.Where(x => (x.Status is null || x.Status == "Approved") && !excludedTypes.Contains(x.Type)).Sum(x => x.Amount))</b> </td>
                                 </tr>
                             }
                         </tbody>
