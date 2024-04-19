@@ -151,75 +151,77 @@
             decimal? Per = 0;
 
         }
-        @foreach (var item in Model.Report.Where(z => z.Date <= DateTime.Now && z.Type == "Booking" || z.Type == "Installment").OrderBy(x => x.Date))
+        @foreach (var item in Model.Report.Where(z => z.Date <= DateTime.Now && z.Type != "10").OrderBy(x => x.Date))
         {
-            if (item.Description != null && (item.Description.Contains("Advance") || item.Description.Contains("Book")))
-            {
-                <script>
-                    var res = "@string.Format("{0:MMM dd yyyy}", item.Date)"
-                    $("#booking-date").text(res);
-                </script>
-            }
-            if ((item.Inst_Status == "Approved" || string.IsNullOrEmpty(item.Inst_Status) || string.IsNullOrWhiteSpace(item.Inst_Status)) && (item.Mode != "Cash" || string.IsNullOrEmpty(item.Mode) || string.IsNullOrWhiteSpace(item.Mode)))
-            {
-                Total_Amt += (item.Debit == null) ? 0 : item.Debit;
-                Rec_amt += (item.Credit == null) ? 0 : item.Credit;
-                bal += (item.Debit == null) ? 0 : -(item.Debit);
-                bal += (item.Credit == null) ? 0 : item.Credit;
-            }
-            if (item.Mode == "Cash")
-            {
-                Total_Amt += (item.Debit == null) ? 0 : item.Debit;
-                Rec_amt += (item.Credit == null) ? 0 : item.Credit;
-                bal += (item.Debit == null) ? 0 : -(item.Debit);
-                bal += (item.Credit == null) ? 0 : item.Credit;
-            }
-            <tr class="trnsctnCol">
-                <td>@string.Format("{0:dd-MMM-yyyy}", item.Date)</td>
-                <td>@item.Description</td>
-                <td>@item.Receipt_Voucher_No</td>
-                @if (item.Mode == "Cheque" || item.Mode == "PayOrder" || item.Mode == "BankDraft")
+            
+                if (item.Description != null && (item.Description.Contains("Advance") || item.Description.Contains("Book")))
                 {
-                    <td>@item.Mode @*(@item.Inst_Status)*@</td>
+                    <script>
+                        var res = "@string.Format("{0:MMM dd yyyy}", item.Date)"
+                        $("#booking-date").text(res);
+                    </script>
                 }
-                else
+                if ((item.Inst_Status == "Approved" || string.IsNullOrEmpty(item.Inst_Status) || string.IsNullOrWhiteSpace(item.Inst_Status)) && (item.Mode != "Cash" || string.IsNullOrEmpty(item.Mode) || string.IsNullOrWhiteSpace(item.Mode)))
                 {
-                    <td>@item.Mode</td>
+                    Total_Amt += (item.Debit == null) ? 0 : item.Debit;
+                    Rec_amt += (item.Credit == null) ? 0 : item.Credit;
+                    bal += (item.Debit == null) ? 0 : -(item.Debit);
+                    bal += (item.Credit == null) ? 0 : item.Credit;
                 }
-                @if (!string.IsNullOrEmpty(item.Bank))
+                if (item.Mode == "Cash")
                 {
-                    <td>@string.Concat(item.Chq_No, "  (" + item.Bank + ")")</td>
+                    Total_Amt += (item.Debit == null) ? 0 : item.Debit;
+                    Rec_amt += (item.Credit == null) ? 0 : item.Credit;
+                    bal += (item.Debit == null) ? 0 : -(item.Debit);
+                    bal += (item.Credit == null) ? 0 : item.Credit;
                 }
-                else
-                {
-                    <td>@string.Concat(item.Chq_No, item.Bank)</td>
-                }
-                @if (item.Debit == null || item.Debit == 0)
-                {
-                    <td style="text-align:center; font-size:15px">-</td>
-                }
-                else
-                {
-                    <td style="text-align:center">@string.Format("{0:n0}", item.Debit)</td>
-                }
-                @if (item.Credit == null || item.Credit == 0)
-                {
-                    <td style="text-align:center; font-size:15px">-</td>
-                }
-                else
-                {
-                    <td style="text-align:center">@string.Format("{0:n0}", item.Credit)</td>
-                }
-                @if (item.Inst_Status == "Dishonored")
-                {
-                    <td>@string.Format("{0:n0}", bal + item.Credit)</td>
-                }
-                else
-                {
-                    <td>@string.Format("{0:n0}", bal)</td>
-                }
-            </tr>
-            if (item.Inst_Status == "Dishonored")
+                <tr class="trnsctnCol">
+                    <td>@string.Format("{0:dd-MMM-yyyy}", item.Date)</td>
+                    <td>@item.Description</td>
+                    <td>@item.Receipt_Voucher_No</td>
+                    @if (item.Mode == "Cheque" || item.Mode == "PayOrder" || item.Mode == "BankDraft")
+                    {
+                        <td>@item.Mode @*(@item.Inst_Status)*@</td>
+                    }
+                    else
+                    {
+                        <td>@item.Mode</td>
+                    }
+                    @if (!string.IsNullOrEmpty(item.Bank))
+                    {
+                        <td>@string.Concat(item.Chq_No, "  (" + item.Bank + ")")</td>
+                    }
+                    else
+                    {
+                        <td>@string.Concat(item.Chq_No, item.Bank)</td>
+                    }
+                    @if (item.Debit == null || item.Debit == 0)
+                    {
+                        <td style="text-align:center; font-size:15px">-</td>
+                    }
+                    else
+                    {
+                        <td style="text-align:center">@string.Format("{0:n0}", item.Debit)</td>
+                    }
+                    @if (item.Credit == null || item.Credit == 0)
+                    {
+                        <td style="text-align:center; font-size:15px">-</td>
+                    }
+                    else
+                    {
+                        <td style="text-align:center">@string.Format("{0:n0}", item.Credit)</td>
+                    }
+                    @if (item.Inst_Status == "Dishonored")
+                    {
+                        <td>@string.Format("{0:n0}", bal + item.Credit)</td>
+                    }
+                    else
+                    {
+                        <td>@string.Format("{0:n0}", bal)</td>
+                    }
+                </tr>
+           
+            if (item.Inst_Status == "Dishonored" && item.Type != "10")
             {
                 <tr class="trnsctnCol">
                     <td>@string.Format("{0:dd-MMM-yyyy}", item.Date)</td>

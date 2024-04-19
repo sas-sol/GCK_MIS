@@ -31,7 +31,7 @@
                 decimal? OutStand_amt = 0;
                 decimal? Per = 0;
 
-                foreach (var item in Model.Report.Where(z => z.Date <= DateTime.Now && z.Type == "Booking" || z.Type == "Installment").OrderBy(x => x.Date))
+                foreach (var item in Model.Report.Where(z => z.Date <= DateTime.Now && z.Type != "10").OrderBy(x => x.Date))
                 {
                     if (item.Description == "Advance")
                     {
@@ -99,7 +99,7 @@
                             <td>@string.Format("{0:n0}", bal)</td>
                         }
                     </tr>
-                    if (item.Inst_Status == "Dishonored")
+                    if (item.Inst_Status == "Dishonored" && item.Type != "10")
                     {
                         <tr class="trnsctnCol">
                             <td>@string.Format("{0:dd-MMM-yyyy}", item.Date)</td>

@@ -1324,6 +1324,7 @@ namespace MeherEstateDevelopers.Controllers
                     Date = x.DueDate,
                     Debit = x.Amount,
                     Credit = 0,
+                    Type = x.Installment_Type
                 }).ToList();
                 string[] Type = { "Booking", "Installment" };
                 var rece = db.Sp_Get_ReceivedAmounts(Plotid, Modules.PlotManagement.ToString()).Where(x => Type.Contains(x.Type)).Select(x => new PlotStatment
@@ -1603,6 +1604,7 @@ namespace MeherEstateDevelopers.Controllers
                 Date = x.DueDate,
                 Debit = x.Amount,
                 Credit = 0,
+                Type= x.Installment_Type
             }).ToList();
             string[] Type = { "Advance", "Booking", "Installment" };
             var rece = db.Sp_Get_ReceivedAmounts(Plotid, Modules.PlotManagement.ToString()).Where(x => Type.Contains(x.Type)).Select(x => new PlotStatment
