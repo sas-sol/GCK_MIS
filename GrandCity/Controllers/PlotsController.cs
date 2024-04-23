@@ -1217,7 +1217,6 @@ namespace MeherEstateDevelopers.Controllers
             var discount = db.Discounts.Where(x => x.Module_Id == Plotid && x.Module == Modules.PlotManagement.ToString() && x.Plot_Is_Cancelled == null).ToList();
             UpdatePlotInstallmentStatus(res3, res4, discount, Plotid);
             var fpb = db.File_Plot_Balance.Where(x => x.File_Plot_Id == Plotid && x.Module == "PlotManagement").FirstOrDefault();
-            var res5 = db.Sp_Get_PlotInstallments(Plotid).ToList();
             var res6 = db.Discounts.Where(x => x.Module_Id == Plotid && x.Module == Modules.PlotManagement.ToString() && x.Plot_Is_Cancelled == null).ToList();
             //surcharge 
             var res7 = db.Sp_Get_ReceivedAmounts(Plotid, Modules.PlotManagement.ToString()).ToList();
@@ -1226,12 +1225,15 @@ namespace MeherEstateDevelopers.Controllers
             var res5surcharge = db.Plot_Installments_Surcharge.Where(x => x.Plot_Id == Plotid && x.Cancelled == null && x.Waveoff == null).OrderBy(x => x.DueDate).ToList();
             var res6surcharge = db.Sp_Get_ReceivedAmounts_Surcharge(Plotid, Modules.PlotManagement.ToString()).ToList();
             UpdatePlotInstallmentStatusSurcharge(res5surcharge, res6surcharge, Plotid);
+            //Not_Included
+            var res12 = db.Sp_Get_ReceivedAmounts_NotIncluded(Plotid, Modules.PlotManagement.ToString()).ToList();
+            UpdatePlotInstallmentStatusNotIncluded(res3, res12, Plotid);
             Cancellation_Receipts cr = null;
             if (res1.Status == PlotsStatus.Repurchased.ToString() || (res1.Status == PlotsStatus.Hold.ToString() && res2.Select(x => x.Ownership_Status).FirstOrDefault() == Ownership_Status.Refunded.ToString()))
             {
                 cr = db.Cancellation_Receipts.Where(x => x.File_Plot_No == Plotid && x.Module == Modules.PlotManagement.ToString()).OrderByDescending(x => x.Id).FirstOrDefault();
             }
-            var res = new PlotDetailData { PlotData = res1, PlotOwners = res2, PlotInstallments = res5, PlotReceipts = res4, Discounts = res6, PlotBalDets = fpb, Refunded_Repurchased = cr , PlotInstallmentsSurcharge = res10, PlotInstallmentsWHT = res8};
+            var res = new PlotDetailData { PlotData = res1, PlotOwners = res2, PlotInstallments = res3, PlotReceipts = res4, Discounts = res6, PlotBalDets = fpb, Refunded_Repurchased = cr, PlotInstallmentsSurcharge = res10, PlotInstallmentsWHT = res8 , PlotInstallmentsNotIncluded = res12};
             return PartialView(res);
         }
 
@@ -1252,7 +1254,6 @@ namespace MeherEstateDevelopers.Controllers
 
             return Json(new { success = false }, JsonRequestBehavior.AllowGet);
         }
-
         public void UpdatePlotInstallmentStatusSurcharge(List<Plot_Installments_Surcharge> inst, List<Sp_Get_ReceivedAmounts_Surcharge_Result> Receipts, long? Plotid)
         {
             // db.Test_UpdatePendingPlotinstallmentWht(Plotid);
@@ -1261,7 +1262,7 @@ namespace MeherEstateDevelopers.Controllers
 
             string[] Type = { "SurCharge" };
 
-            TotalAmount = Receipts.Where(x => Type.Contains(x.Type) /*&& (x.Status == null || x.Status == "Approved")*/).Sum(x => x.Amount);
+            TotalAmount = Receipts.Where(x => Type.Contains(x.Type) && (x.Status == null || x.Status == "Approved")).Sum(x => x.Amount);
             //if (Dis.Any())
             //{
             //    TotalAmount += Dis.Sum(x => x.Discount_Amount);
@@ -1301,6 +1302,52 @@ namespace MeherEstateDevelopers.Controllers
             //  db.Test_updatebalanceWht(remamt, inst.Sum(x => x.Amount), TotalAmount, Plotid, Modules.PlotManagement.ToString(), id.Count(), 0, 0, 0, 0, 0, 0);
 
         }
+        public void UpdatePlotInstallmentStatusNotIncluded(List<Sp_Get_PlotInstallments_Result> inst, List<Sp_Get_ReceivedAmounts_NotIncluded_Result> Receipts, long? Plotid)
+        {
+            db.Test_UpdatePendingNotIncludedinstallment(Plotid);
+            decimal? TotalAmt = 0, AmttoPaid = 0, remamt = 0, TotalAmount = 0;
+
+            string[] ExcludedType = { "SurCharge", "Booking", "Installment" };
+
+            TotalAmount = Receipts.Where(x => !ExcludedType.Contains(x.Type) && (x.Status == null || x.Status == "Approved")).Sum(x => x.Amount);
+            //if (Dis.Any())
+            //{
+            //    TotalAmount += Dis.Sum(x => x.Discount_Amount);
+            //}
+            var Actamt = TotalAmount;
+
+            List<AmountToPaidInfo> latpi = new List<AmountToPaidInfo>();
+
+            foreach (var item1 in inst.Where(x => x.Installment_Type=="10"))
+            {
+                AmountToPaidInfo atpi = new AmountToPaidInfo();
+                TotalAmt += item1.Amount;
+                if (Math.Round(Convert.ToDecimal(TotalAmt)) <= Math.Round(Convert.ToDecimal(Actamt)))
+                {
+                    AmttoPaid += item1.Amount;
+                    atpi.Id = item1.Id;
+                    latpi.Add(atpi);
+                }
+                else
+                {
+                    break;
+                }
+            }
+
+            var allids = new XElement("IS", latpi.Select(x => new XElement("ISS", new XAttribute("Id", x.Id)))).ToString();
+
+            remamt = Actamt - AmttoPaid;
+            db.Test_UpdatePlotinstallment(allids);
+            var curdate = DateTime.Now;
+            //var res3 = db.Sp_Get_PlotInstallments(Plotid).ToList();
+            var res3 =  db.Plot_Installments.Where(x => x.Installment_Type == "10" && x.Cancelled == null && x.Plot_Id == Plotid).ToList();
+            var id = res3.Where(x => x.DueDate <= curdate && x.Status != "Paid").ToList();
+            var nopaidis = new XElement("IS", id.Select(x => new XElement("ISS", new XAttribute("Id", x.Id)))).ToString();
+            remamt = remamt - id.Sum(x => x.Amount);
+            db.Test_UpdatePlotsNotPaidinstallment(nopaidis);
+
+        }
+
 
         public ActionResult PlotReceipts(long PlotId)
         {
@@ -2000,7 +2047,7 @@ namespace MeherEstateDevelopers.Controllers
             var Actamt = TotalAmount;
 
             List<AmountToPaidInfo> latpi = new List<AmountToPaidInfo>();
-            foreach (var item1 in inst)
+            foreach (var item1 in inst.Where(x => x.Installment_Type!="10"))
             {
                 AmountToPaidInfo atpi = new AmountToPaidInfo();
                 TotalAmt += item1.Amount;
@@ -2019,7 +2066,8 @@ namespace MeherEstateDevelopers.Controllers
             remamt = Actamt - AmttoPaid;
             db.Test_UpdatePlotinstallment(allids);
             var curdate = DateTime.Now;
-            var res3 = db.Sp_Get_PlotInstallments(Plotid).ToList();
+            //var res3 = db.Sp_Get_PlotInstallments(Plotid).ToList();
+            var res3 = db.Plot_Installments.Where(x => x.Installment_Type != "10" && x.Cancelled == null && x.Plot_Id == Plotid).ToList();
             var id = res3.Where(x => x.DueDate <= curdate && x.Status != "Paid").ToList();
             var nopaidis = new XElement("IS", id.Select(x => new XElement("ISS", new XAttribute("Id", x.Id)))).ToString();
             remamt = remamt - id.Sum(x => x.Amount);

@@ -24549,5 +24549,27 @@ namespace MeherEstateDevelopers.Models
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("Sp_Update_WarningLetterStatus_FileMove", comidParameter, oweneridParameter, typeParameter);
         }
+    
+        public virtual ObjectResult<Sp_Get_ReceivedAmounts_NotIncluded_Result> Sp_Get_ReceivedAmounts_NotIncluded(Nullable<long> fileid, string mod)
+        {
+            var fileidParameter = fileid.HasValue ?
+                new ObjectParameter("fileid", fileid) :
+                new ObjectParameter("fileid", typeof(long));
+    
+            var modParameter = mod != null ?
+                new ObjectParameter("mod", mod) :
+                new ObjectParameter("mod", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Sp_Get_ReceivedAmounts_NotIncluded_Result>("Sp_Get_ReceivedAmounts_NotIncluded", fileidParameter, modParameter);
+        }
+    
+        public virtual int Test_UpdatePendingNotIncludedinstallment(Nullable<long> plotid)
+        {
+            var plotidParameter = plotid.HasValue ?
+                new ObjectParameter("plotid", plotid) :
+                new ObjectParameter("plotid", typeof(long));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("Test_UpdatePendingNotIncludedinstallment", plotidParameter);
+        }
     }
 }

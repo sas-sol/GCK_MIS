@@ -519,6 +519,11 @@ namespace MeherEstateDevelopers.Controllers
             var res5surcharge = db.Plot_Installments_Surcharge.Where(x => x.Plot_Id == res1.Id && x.Cancelled == null && x.Waveoff == null).OrderBy(x => x.DueDate).ToList();
             var res6surcharge = db.Sp_Get_ReceivedAmounts_Surcharge(res1.Id, Modules.FileManagement.ToString()).ToList();
             UpdatePlotInstallmentStatusSurcharge(res5surcharge, res6surcharge, res1.Id);
+            //Not_Included
+           // var res11 = db.Sp_Get_FileInstallments(res1.Id).ToList();
+           // var res12 = db.Sp_Get_ReceivedAmounts_NotIncluded(res1.Id, Modules.FileManagement.ToString()).ToList();
+           // UpdatePlotInstallmentStatusNotIncluded(res11, res12, res1.Id);
+
             var res = new FileDetailData { FileData = res1, FilesOwners = res2, FileInstallments = res3, FileReceipts = res4, Discounts = res5, PlotInstallmentsSurcharge = res7 };
             db.Sp_Add_Activity(userid, "Get full Details of File  <a class='file-data' data-id=' " + FileId + "'>" + FileId + "</a>  ", "Read", Modules.FileManagement.ToString(), ActivityType.Details_Access.ToString(), res1.Id);
 
@@ -572,6 +577,50 @@ namespace MeherEstateDevelopers.Controllers
             //  db.Test_updatebalanceWht(remamt, inst.Sum(x => x.Amount), TotalAmount, Plotid, Modules.PlotManagement.ToString(), id.Count(), 0, 0, 0, 0, 0, 0);
 
         }
+        //public void UpdatePlotInstallmentStatusNotIncluded(List<Sp_Get_FileInstallments_Result> inst, List<Sp_Get_ReceivedAmounts_NotIncluded_Result> Receipts, long? Plotid)
+        //{
+        //    db.Test_UpdatePendingPlotinstallment(Plotid);
+        //    decimal? TotalAmt = 0, AmttoPaid = 0, remamt = 0, TotalAmount = 0;
+
+        //    string[] ExcludedType = { "SurCharge", "Booking", "Installment" };
+
+        //    TotalAmount = Receipts.Where(x => !ExcludedType.Contains(x.Type) && (x.Status == null || x.Status == "Approved")).Sum(x => x.Amount);
+        //    //if (Dis.Any())
+        //    //{
+        //    //    TotalAmount += Dis.Sum(x => x.Discount_Amount);
+        //    //}
+        //    var Actamt = TotalAmount;
+
+        //    List<AmountToPaidInfo> latpi = new List<AmountToPaidInfo>();
+
+        //    foreach (var item1 in inst)
+        //    {
+        //        AmountToPaidInfo atpi = new AmountToPaidInfo();
+        //        TotalAmt += item1.Amount;
+        //        if (Math.Round(Convert.ToDecimal(TotalAmt)) <= Math.Round(Convert.ToDecimal(Actamt)))
+        //        {
+        //            AmttoPaid += item1.Amount;
+        //            atpi.Id = item1.Id;
+        //            latpi.Add(atpi);
+        //        }
+        //        else
+        //        {
+        //            break;
+        //        }
+        //    }
+
+        //    var allids = new XElement("IS", latpi.Select(x => new XElement("ISS", new XAttribute("Id", x.Id)))).ToString();
+
+        //    remamt = Actamt - AmttoPaid;
+        //    db.Test_UpdatePlotinstallment(allids);
+        //    var curdate = DateTime.Now;
+        //    var res3 = db.Sp_Get_FileInstallments(Plotid).ToList();
+        //    var id = res3.Where(x => x.DueDate <= curdate && x.Status != "Paid").ToList();
+        //    var nopaidis = new XElement("IS", id.Select(x => new XElement("ISS", new XAttribute("Id", x.Id)))).ToString();
+        //    remamt = remamt - id.Sum(x => x.Amount);
+        //    db.Test_UpdatePlotsNotPaidinstallment(nopaidis);
+
+        //}
 
         public ActionResult GenerateCustomerFile(long Id)
         {

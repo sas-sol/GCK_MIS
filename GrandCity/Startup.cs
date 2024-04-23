@@ -378,8 +378,8 @@ namespace MeherEstateDevelopers
                         var res5surcharge = db.Plot_Installments.Where(x => x.Plot_Id == v.Id && x.Cancelled == null).OrderBy(x => x.DueDate).ToList();
                         var res6surcharge = db.Sp_Get_ReceivedAmounts(v.Id, "PlotManagement").ToList();
                         string[] Type = { "Advance", "Booking", "Installment", "Possession" };
-                        //TotalAmount = res6surcharge.Where(x => Type.Contains(x.Type) /*&& (x.Status == null || x.Status == "Approved")*/).Sum(x => x.Amount);
-                        TotalAmount = res6surcharge.Sum(x => x.Amount);
+                        TotalAmount = res6surcharge.Where(x => Type.Contains(x.Type) && (x.Status == null || x.Status == "Approved")).Sum(x => x.Amount);
+                       // TotalAmount = res6surcharge.Sum(x => x.Amount);
                         List<AmountToPaidInfo> latpi = new List<AmountToPaidInfo>();
                         foreach (var item1 in res5surcharge)
                         {

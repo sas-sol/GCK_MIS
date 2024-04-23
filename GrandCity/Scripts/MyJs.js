@@ -2826,6 +2826,7 @@ function InitBanks(i) {
 }
 // add a payment
 $(document).on("click", "#add-pay-typ", function () {
+    debugger;
     Swal.fire({
         //title: 'Are you sure you want to Add New Owner?',
         text: 'Are you sure you want to Add another Payment?',
