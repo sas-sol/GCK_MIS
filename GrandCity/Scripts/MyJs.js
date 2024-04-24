@@ -8287,6 +8287,7 @@ $(document).on("click", ".dup-rece-mar", function (e) {
 //
 $(document).on("click", "#gen-plot-rec", function (e) {
     //alert("Clicked.");
+    debugger;
     e.preventDefault();
     $("#amt-in-wrds").val(InWords($("#amt").val()));
     var img = $("#scanned").attr('src');

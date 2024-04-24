@@ -250,10 +250,10 @@
             {
                 <button class="btn btn-danger send-bk-req" data-reqId="@Model.TransferTo.Select(x => x.Id).FirstOrDefault()" data-mod="FileManagement">Send Back to Plots Manager</button>
             }
-            <div class="form-row">
-                @if (Model.TransferTo.Any(x => x.Blood_Realation == true))
-                {
-                    <script>
+        <div class="form-row">
+            @if (Model.TransferTo.Any(x => x.Blood_Realation == true))
+            {
+                <script>
                     var pltsize = "@Model.File.Plot_Size";
                     var fee = 0;
                             var pltsize = pltsize.split(" ");
@@ -261,12 +261,12 @@
                         $("#transfer-fees").val(fees);
                         $("#tras-fee").html(Number(fees).toLocaleString());
                             $("#amt-in-words").val(InWords(fees) + " --  Due To Blood Relation");
-                    </script>
+                </script>
 
-                }
-                else if (Model.TransferTo.Any(x => x.Wave_Off == true))
-                {
-                    <script>
+            }
+            else if (Model.TransferTo.Any(x => x.Wave_Off == true))
+            {
+                <script>
                     var pltsize = "@Model.File.Plot_Size";
                     var rema = "@Model.TransferTo.Select(x => x.Remarks).FirstOrDefault()";
 
@@ -276,13 +276,13 @@
                             $("#transfer-fees").val(fees);
                         $("#tras-fee").html(fees + "-" + rema );
                         $("#amt-in-words").val(InWords(fees) + "-" + rema );
-                    </script>
+                </script>
 
-                }
+            }
 
-                else if (Model.TransferTo.Any(x => x.Dealer_Req == true))
-                {
-                    <script>
+            else if (Model.TransferTo.Any(x => x.Dealer_Req == true))
+            {
+                <script>
                     var pltsize = "@Model.File.Plot_Size";
                     var fee = @ViewBag.TransferRate;
                         var pltsize = pltsize.split(" ");
@@ -290,12 +290,12 @@
                             $("#transfer-fees").val(fees);
                         $("#tras-fee").html(Number(fees).toLocaleString());
                             $("#amt-in-words").val(InWords(fees));
-                    </script>
+                </script>
 
-                }
-                else if (Model.TransferTo.Any(x => x.Other_Transfer_Charges == true))
-                {
-                    <script>
+            }
+            else if (Model.TransferTo.Any(x => x.Other_Transfer_Charges == true))
+            {
+                <script>
                     var pltsize = "@Model.File.Plot_Size";
                         var fee = @Model.TransferTo.Select(x => x.Amount).FirstOrDefault();
                             var pltsize = pltsize.split(" ");
@@ -303,12 +303,12 @@
                             $("#transfer-fees").val(fees);
                         $("#tras-fee").html(Number(fees).toLocaleString());
                             $("#amt-in-words").val(InWords(fees));
-                    </script>
+                </script>
 
-                }
-                else if (Model.TransferTo.Any(x => x.Employee_Req == true))
-                {
-                    <script>
+            }
+            else if (Model.TransferTo.Any(x => x.Employee_Req == true))
+            {
+                <script>
                     var pltsize = "@Model.File.Plot_Size";
                     var fee = 1000;
                         var pltsize = pltsize.split(" ");
@@ -316,44 +316,45 @@
                             $("#transfer-fees").val(fees);
                         $("#tras-fee").html(Number(fees).toLocaleString());
                             $("#amt-in-words").val(InWords(fees));
-                    </script>
+                </script>
 
-                }
-                else
-                {
-                    <script>
+            }
+            else
+            {
+                <script>
                             var pltsize = "@Model.File.Plot_Size";
                             var pltsize = pltsize.split(" ");
                             var fees = pltsize[0] * @ViewBag.TransferRate;
                             $("#transfer-fees").val(fees);
                         $("#tras-fee").html(Number(fees).toLocaleString());
                             $("#amt-in-words").val(InWords(fees));
-                    </script>
-                }
+                </script>
+            }
 
-                <input type="hidden" id="trans-id" name="TransactionId" value="@ViewBag.TransactionId" />
-                <h5 style="width:100%">NDC Serial No: @Model.TransferTo.Select(x => x.TransferReqNo).FirstOrDefault()</h5>
-                <h5>Transfer Fees: <span id="tras-fee"></span></h5>
+            <input type="hidden" id="trans-id" name="TransactionId" value="@ViewBag.TransactionId" />
+            <h5 style="width:100%">NDC Serial No: @Model.TransferTo.Select(x => x.TransferReqNo).FirstOrDefault()</h5>
+            @*<h5>Transfer Fees: <span id="tras-fee"></span></h5>*@
+            <h5>Transfer Fees: <input type="text" id="ftr_fees" /></h5>
 
-                <input type="hidden" id="transfer-fees" name="Amount">
-                <input type="hidden" id="req-id" value="@Model.TransferTo.Select(x => x.Id).FirstOrDefault()" name="Req_Id">
-                <input type="hidden" id="file-id" value="@Model.File.Id" name="File_Form_Id">
-                <input type="hidden" id="file-rate" value="@Model.File.Rate" name="Rate">
-                <input type="hidden" id="ttl-amt" value="@Model.File.TotalPlotVal" name="Total">
-                <input type="hidden" id="grd-ttl" value="@Model.File.GrandTotal" name="GrandTotal">
-                <input type="hidden" id="blk-id" value="@Model.File.Block_Id" name="Block_Id">
-                <input type="hidden" id="ph-id" value="@Model.File.Phase_Id" name="Phase_Id">
-                <input type="hidden" id="plt-size" value="@Model.File.Plot_Size" name="Plot_Size">
-                <input type="hidden" id="plt-pref" value="@Model.File.Plot_Prefrence" name="Plot_Prefrence">
-                <input type="hidden" id="qr_Id" value="@Model.File.QR_Id" name="QR_Code">
-                <input type="hidden" id="amt-in-words" name="AmountInWords">
-                <input type="hidden" id="fp-num" value="@Model.File.File_Form_Number" name="File_Plot_Number">
-                <input type="hidden" id="prj-nam" value="@Model.File.Project_Name" name="Project_Name">
-                <input type="hidden" id="devchar" value="@Model.File.Development_Charges" name="DevCharges">
-                <input type="hidden" id="grpTagnew" value="@Model.TransferTo.Select(x=>x.Group_Tag).FirstOrDefault()" name="">
-                <input type="hidden" id="transReqNumNew" value="@Model.TransferTo.Select(x=>x.TransferReqNo).FirstOrDefault()" name="">
-                <input type="hidden" value="Cash" name="PaymentType">
-            </div>
+            <input type="hidden" id="transfer-fees" name="Amount">
+            <input type="hidden" id="req-id" value="@Model.TransferTo.Select(x => x.Id).FirstOrDefault()" name="Req_Id">
+            <input type="hidden" id="file-id" value="@Model.File.Id" name="File_Form_Id">
+            <input type="hidden" id="file-rate" value="@Model.File.Rate" name="Rate">
+            <input type="hidden" id="ttl-amt" value="@Model.File.TotalPlotVal" name="Total">
+            <input type="hidden" id="grd-ttl" value="@Model.File.GrandTotal" name="GrandTotal">
+            <input type="hidden" id="blk-id" value="@Model.File.Block_Id" name="Block_Id">
+            <input type="hidden" id="ph-id" value="@Model.File.Phase_Id" name="Phase_Id">
+            <input type="hidden" id="plt-size" value="@Model.File.Plot_Size" name="Plot_Size">
+            <input type="hidden" id="plt-pref" value="@Model.File.Plot_Prefrence" name="Plot_Prefrence">
+            <input type="hidden" id="qr_Id" value="@Model.File.QR_Id" name="QR_Code">
+            <input type="hidden" id="amt-in-words" name="AmountInWords">
+            <input type="hidden" id="fp-num" value="@Model.File.File_Form_Number" name="File_Plot_Number">
+            <input type="hidden" id="prj-nam" value="@Model.File.Project_Name" name="Project_Name">
+            <input type="hidden" id="devchar" value="@Model.File.Development_Charges" name="DevCharges">
+            <input type="hidden" id="grpTagnew" value="@Model.TransferTo.Select(x=>x.Group_Tag).FirstOrDefault()" name="">
+            <input type="hidden" id="transReqNumNew" value="@Model.TransferTo.Select(x=>x.TransferReqNo).FirstOrDefault()" name="">
+            <input type="hidden" value="Cash" name="PaymentType">
+        </div>
             @{int cnt = 1;}
             @foreach (var item in Model.TransferTo)
             {
@@ -570,7 +571,9 @@
             if (!confi) {
                 return;
             }
-
+            debugger;
+            let transferFeesInput = $('#ftr_fees').val();
+            let amountInWords = InWords(transferFeesInput); // Convert the value to words
             let ownsData = [];
             let transReqNum = $("#transReqNumNew").val();
             let transaction = $('#trans-id').val();
@@ -612,8 +615,8 @@
             });
 
             let receiptData = {
-                AmountInWords: $('#amt-in-words').val(),
-                Amount: $('#transfer-fees').val(),
+                AmountInWords: amountInWords,
+                Amount: transferFeesInput,
                 File_Plot_Number: $('#fp-num').val(),
                 Plot_Size: $('#plt-size').val(),
                 FilePlotNumber: $('#file-id').val(),

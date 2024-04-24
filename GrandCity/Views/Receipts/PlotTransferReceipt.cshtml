@@ -40,7 +40,7 @@
             <td width="250px"></td>
             <td width="90px" valign=bottom style="font-weight:bold">Receipt No.</td>
             <td width="125px" align="center" valign=bottom style="border-bottom:1px solid">@Model.ReceiptNo</td>
-            <td width="246x" valign=bottom></td>
+            <td width="246px" valign=bottom></td>
         </tr>
     </table>
     <table cellspacing="0" border="0" style="width:1000px">
@@ -110,10 +110,9 @@
             <td width="35px" align="left" valign=bottom style="font-weight:bold"><font size="6">Rs.</font></td>
             <td width="170px" align="center" valign=bottom style="border-bottom:1px solid"><font size="6"> @string.Format("{0:n0}", Model.Amount)</font></td>
             <td width="60px" align="left" valign=bottom><font size="4"></font></td>
-            <td width="220px" align="left" valign=bottom style="font-weight:bold"><font size="6">For Meher Estate Developers</font></td>
+            <td width="220px" align="left" valign=bottom style="font-weight:bold"><font size="6"></font></td>
             <td width="180px" align="center" valign=bottom style="border-bottom:1px solid"><font size="6"></font></td>
             <td width="180px" align="left" valign=bottom><font size="4"></font></td>
-            <td width="130px" align="left" style="vertical-align:top"><img src="~/assets/static/images/meherestate-simple.png" width=130 height=29></td>
         </tr>
     </table>
 
@@ -134,7 +133,7 @@
         </tr>
     </table>
 
-    <table bgcolor="#F7DCF7" cellspacing="0" border="0" style="width:1000px">
+    <table  cellspacing="0" border="0" style="width:1000px">
         <tr>
             <td width="800px" align="right" valign=bottom style="padding-right: 95px;">
                 <img src="~/assets/static/images/TransferReceipt/accounts.png" width=450 height=125>
@@ -144,7 +143,7 @@
             </td>
         </tr>
     </table>
-    <table bgcolor="#F7DCF7" cellspacing="0" border="0" style="width:1000px">
+    <table  cellspacing="0" border="0" style="width:1000px">
         <tr>
             <td width="250px"></td>
             <td width="90px" valign=bottom style="font-weight:bold">Receipt No.</td>
@@ -152,19 +151,19 @@
             <td width="246x" valign=bottom></td>
         </tr>
     </table>
-    <table bgcolor="#F7DCF7" cellspacing="0" border="0" style="width:1000px">
+    <table  cellspacing="0" border="0" style="width:1000px">
         <tr>
             <td width="125px" align="left" valign=bottom style="font-weight:bold">For Payment of</td>
             <td width="850px" align="center" valign=bottom style="border-bottom:1px solid">@Model.Text</td>
         </tr>
     </table>
-    <table bgcolor="#F7DCF7" cellspacing="0" border="0" style="width:1000px">
+    <table  cellspacing="0" border="0" style="width:1000px">
         <tr>
             <td width="340px" align="left" valign=bottom style="font-weight:bold">Received with Thanks from Mr./Mrs./Miss:</td>
             <td width="660px" align="center" valign=bottom style="border-bottom:1px solid">@Model.Name</td>
         </tr>
     </table>
-    <table bgcolor="#F7DCF7" cellspacing="0" border="0" style="width:1000px">
+    <table  cellspacing="0" border="0" style="width:1000px">
         <tr>
             <td width="105px" align="left" valign=bottom style="font-weight:bold">S/O,D/O,W/O</td>
             <td width="535px" align="center" valign=bottom style="border-bottom:1px solid">@Model.Father_Name</td>
@@ -172,13 +171,13 @@
             <td width="260px" align="center" valign=bottom style="border-bottom:1px solid">@Model.Contact</td>
         </tr>
     </table>
-    <table bgcolor="#F7DCF7" cellspacing="0" border="0" style="width:1000px">
+    <table  cellspacing="0" border="0" style="width:1000px">
         <tr>
             <td width="140px" align="left" valign=bottom style="font-weight:bold">A Sum of Rupees</td>
             <td width="860px" align="center" valign=bottom style="border-bottom:1px solid">@Model.AmountinWords</td>
         </tr>
     </table>
-    <table bgcolor="#F7DCF7" cellspacing="0" border="0" style="width:1000px">
+    <table  cellspacing="0" border="0" style="width:1000px">
         <tr>
             <td width="340px" align="left" valign=bottom style="font-weight:bold">In Cash / Cheque / Pay Order / Bank Draft</td>
             <td width="360px" align="center" valign=bottom style="border-bottom:1px solid">@Model.PaymentType</td>
@@ -188,7 +187,7 @@
     </table>
     @if (Model.PaymentType != "Cash")
     {
-        <table bgcolor="#F7DCF7" class="bank" cellspacing="0" border="0" style="width:1000px">
+        <table  class="bank" cellspacing="0" border="0" style="width:1000px">
             <tr>
                 <td width="100px" align="left" valign=bottom style="font-weight:bold">Drawn Bank </td>
                 <td width="240px" align="center" valign=bottom style="border-bottom:1px solid">@Model.Bank</td>
@@ -199,7 +198,7 @@
             </tr>
         </table>
     }
-    <table bgcolor="#F7DCF7" cellspacing="0" border="0" style="width:1000px">
+    <table  cellspacing="0" border="0" style="width:1000px">
         <tr>
             <td width="60px" align="left" valign=bottom style="font-weight:bold">Plot No </td>
             <td width="300px" align="center" valign=bottom style="border-bottom:1px solid">@Model.File_Plot_Number</td>
@@ -209,20 +208,19 @@
             <td width="235px" align="center" valign=bottom style="border-bottom:1px solid">@Model.Size</td>
         </tr>
     </table>
-    <table bgcolor="#F7DCF7" cellspacing="0" border="0" style="width:1000px">
+    <table  cellspacing="0" border="0" style="width:1000px">
         <tr>
             <td align="right" valign=bottom><font size="4">A Project of</font></td>
         </tr>
     </table>
-    <table bgcolor="#F7DCF7" cellspacing="0" border="0" style="width:1000px">
+    <table  cellspacing="0" border="0" style="width:1000px">
         <tr>
             <td width="35px" align="left" valign=bottom style="font-weight:bold"><font size="6">Rs.</font></td>
             <td width="170px" align="center" valign=bottom style="border-bottom:1px solid"><font size="6"> @string.Format("{0:n0}", Model.Amount)</font></td>
             <td width="60px" align="left" valign=bottom><font size="4"></font></td>
-            <td width="220px" align="left" valign=bottom style="font-weight:bold"><font size="6">For Meher Estate Developers</font></td>
+            <td width="220px" align="left" valign=bottom style="font-weight:bold"><font size="6"></font></td>
             <td width="180px" align="center" valign=bottom style="border-bottom:1px solid"><font size="6"></font></td>
             <td width="180px" align="left" valign=bottom><font size="4"></font></td>
-            <td width="130px" align="left" style="vertical-align:top"><img src="~/assets/static/images/meherestate-simple.png" width=130 height=29></td>
         </tr>
     </table>
 
@@ -245,7 +243,7 @@
     </table>
 
 
-    <table bgcolor="#FAFAC6" cellspacing="0" border="0" style="width:1000px">
+    <table  cellspacing="0" border="0" style="width:1000px">
         <tr>
             <td width="800px" align="right" valign=bottom style="padding-right: 95px;">
                 <img src="~/assets/static/images/TransferReceipt/file.png" width=450 height=125>
@@ -255,7 +253,7 @@
             </td>
         </tr>
     </table>
-    <table bgcolor="#FAFAC6" cellspacing="0" border="0" style="width:1000px">
+    <table  cellspacing="0" border="0" style="width:1000px">
         <tr>
             <td width="250px"></td>
             <td width="90px" valign=bottom style="font-weight:bold">Receipt No.</td>
@@ -263,19 +261,19 @@
             <td width="246x" valign=bottom></td>
         </tr>
     </table>
-    <table bgcolor="#FAFAC6" cellspacing="0" border="0" style="width:1000px">
+    <table  cellspacing="0" border="0" style="width:1000px">
         <tr>
             <td width="125px" align="left" valign=bottom style="font-weight:bold">For Payment of</td>
             <td width="850px" align="center" valign=bottom style="border-bottom:1px solid">@Model.Text</td>
         </tr>
     </table>
-    <table bgcolor="#FAFAC6" cellspacing="0" border="0" style="width:1000px">
+    <table  cellspacing="0" border="0" style="width:1000px">
         <tr>
             <td width="340px" align="left" valign=bottom style="font-weight:bold">Received with Thanks from Mr./Mrs./Miss:</td>
             <td width="660px" align="center" valign=bottom style="border-bottom:1px solid">@Model.Name</td>
         </tr>
     </table>
-    <table bgcolor="#FAFAC6" cellspacing="0" border="0" style="width:1000px">
+    <table  cellspacing="0" border="0" style="width:1000px">
         <tr>
             <td width="105px" align="left" valign=bottom style="font-weight:bold">S/O,D/O,W/O</td>
             <td width="535px" align="center" valign=bottom style="border-bottom:1px solid">@Model.Father_Name</td>
@@ -283,13 +281,13 @@
             <td width="260px" align="center" valign=bottom style="border-bottom:1px solid">@Model.Contact</td>
         </tr>
     </table>
-    <table bgcolor="#FAFAC6" cellspacing="0" border="0" style="width:1000px">
+    <table  cellspacing="0" border="0" style="width:1000px">
         <tr>
             <td width="140px" align="left" valign=bottom style="font-weight:bold">A Sum of Rupees</td>
             <td width="860px" align="center" valign=bottom style="border-bottom:1px solid">@Model.AmountinWords</td>
         </tr>
     </table>
-    <table bgcolor="#FAFAC6" cellspacing="0" border="0" style="width:1000px">
+    <table  cellspacing="0" border="0" style="width:1000px">
         <tr>
             <td width="340px" align="left" valign=bottom style="font-weight:bold">In Cash / Cheque / Pay Order / Bank Draft</td>
             <td width="360px" align="center" valign=bottom style="border-bottom:1px solid">@Model.PaymentType</td>
@@ -299,7 +297,7 @@
     </table>
     @if (Model.PaymentType != "Cash")
     {
-        <table bgcolor="#FAFAC6" class="bank" cellspacing="0" border="0" style="width:1000px">
+        <table  class="bank" cellspacing="0" border="0" style="width:1000px">
             <tr>
                 <td width="100px" align="left" valign=bottom style="font-weight:bold">Drawn Bank </td>
                 <td width="240px" align="center" valign=bottom style="border-bottom:1px solid">@Model.Bank</td>
@@ -310,7 +308,7 @@
             </tr>
         </table>
     }
-    <table bgcolor="#FAFAC6" cellspacing="0" border="0" style="width:1000px">
+    <table  cellspacing="0" border="0" style="width:1000px">
         <tr>
             <td width="60px" align="left" valign=bottom style="font-weight:bold">Plot No </td>
             <td width="300px" align="center" valign=bottom style="border-bottom:1px solid">@Model.File_Plot_Number</td>
@@ -320,20 +318,19 @@
             <td width="235px" align="center" valign=bottom style="border-bottom:1px solid">@Model.Size</td>
         </tr>
     </table>
-    <table bgcolor="#FAFAC6" cellspacing="0" border="0" style="width:1000px">
+    <table  cellspacing="0" border="0" style="width:1000px">
         <tr>
             <td align="right" valign=bottom><font size="4">A Project of</font></td>
         </tr>
     </table>
-    <table bgcolor="#FAFAC6" cellspacing="0" border="0" style="width:1000px">
+    <table  cellspacing="0" border="0" style="width:1000px">
         <tr>
             <td width="35px" align="left" valign=bottom style="font-weight:bold"><font size="6">Rs.</font></td>
             <td width="170px" align="center" valign=bottom style="border-bottom:1px solid"><font size="6"> @string.Format("{0:n0}", Model.Amount)</font></td>
             <td width="60px" align="left" valign=bottom><font size="4"></font></td>
-            <td width="220px" align="left" valign=bottom style="font-weight:bold"><font size="6">For Meher Estate Developers</font></td>
+            <td width="220px" align="left" valign=bottom style="font-weight:bold"><font size="6"></font></td>
             <td width="180px" align="center" valign=bottom style="border-bottom:1px solid"><font size="6"></font></td>
             <td width="180px" align="left" valign=bottom><font size="4"></font></td>
-            <td width="130px" align="left" style="vertical-align:top"><img src="~/assets/static/images/meherestate-simple.png" width=130 height=29></td>
         </tr>
     </table>
 </body>

@@ -253,8 +253,8 @@ namespace MeherEstateDevelopers.Controllers
                         {
                             try
                             {
-                                var debit = db.Sp_Add_Journal_Entry(Amount, 0, Payment.PaymentData.Text_ChartCode + " - " + Payment.PaymentData.Head, Payment.PaymentData.Id, Payment.PaymentData.Text_ChartCode, Payment.PaymentData.Head, "Amount Against Plot Number :" + Plot_No + " - " + Type + " Block: " + Block, TransactionId, line, userid, userid, null, Inst_Bank, Inst_No, Payment.PaymentStatus, Inst_Date, null, "", null, VoucherNo, Payment.VoucherType, comp.Id).FirstOrDefault();
-                                var credit = db.Sp_Add_Journal_Entry(0, Amount, File_COA.Text_ChartCode + " - " + File_COA.Head, File_COA.Id, File_COA.Text_ChartCode, File_COA.Head, "Amount Against Plot Number :" + Plot_No + " - " + Type + " Block: " + Block, TransactionId, line, userid, userid, null, Inst_Bank, Inst_No, Payment.PaymentStatus, Inst_Date, null, "", null, VoucherNo, Payment.VoucherType, comp.Id).FirstOrDefault();
+                                //var debit = db.Sp_Add_Journal_Entry(Amount, 0, Payment.PaymentData.Text_ChartCode + " - " + Payment.PaymentData.Head, Payment.PaymentData.Id, Payment.PaymentData.Text_ChartCode, Payment.PaymentData.Head, "Amount Against Plot Number :" + Plot_No + " - " + Type + " Block: " + Block, TransactionId, line, userid, userid, null, Inst_Bank, Inst_No, Payment.PaymentStatus, Inst_Date, null, "", null, VoucherNo, Payment.VoucherType, comp.Id).FirstOrDefault();
+                                //var credit = db.Sp_Add_Journal_Entry(0, Amount, File_COA.Text_ChartCode + " - " + File_COA.Head, File_COA.Id, File_COA.Text_ChartCode, File_COA.Head, "Amount Against Plot Number :" + Plot_No + " - " + Type + " Block: " + Block, TransactionId, line, userid, userid, null, Inst_Bank, Inst_No, Payment.PaymentStatus, Inst_Date, null, "", null, VoucherNo, Payment.VoucherType, comp.Id).FirstOrDefault();
                                 Transaction.Commit();
                                 return Json(new Return { Status = true, Msg = "Saved" });
                             }

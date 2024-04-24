@@ -306,7 +306,7 @@
                             $("#amt-in-words").val(InWords(fees));
                     </script>
 
-                }                                                                                                      
+                }
                 else if (Model.TransferTo.Any(x => x.Employee_Req == true))
                 {
                     <script>
@@ -346,9 +346,11 @@
                         $("#tras-fee").html(Number(fees).toLocaleString());
                             $("#amt-in-words").val(InWords(fees));
                     </script>
-                }
+                }                
+
                 <h5 style="width:100%">NDC Serial No: @Model.TransferTo.Select(x => x.TransferRequestNo).FirstOrDefault()</h5>
-                <h5>Transfer Fees: <span id="tras-fee"></span></h5>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                @*<h5>Transfer Fees: <span id="tras-fee"></span></h5>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*@
+                <h5>Transfer Fees: <input type="text" id="tr_fees" /></h5>
                 <h5>Plot Price: <span id="plt-price-fee">@string.Format("{0:n0}", Model.TransferTo.Select(x => x.Plot_Price).FirstOrDefault())</span></h5>
                 @if (Model.TransferTo.Any(x => x.Dealer_Req == true))
                 {
@@ -735,12 +737,16 @@
 
 <script>
     $('.trans-frm-khfjsda').unbind().click(function () {
+        debugger;
         let confi = confirm('Are you sure you want to finalize transfer?');
         if (!confi) {
             return;
         }
+        debugger;
         $('.trans-frm-khfjsda').prop('disabled', true);
-
+        
+        let transferFeesInput = $('#tr_fees').val();
+        let amountInWords = InWords(transferFeesInput); // Convert the value to words
         let ownsData = [];
         let transReqNum = $('#TransferRequestId').val();
         let transaction = $('#TransactionId').val();
@@ -748,7 +754,7 @@
         $('.new-own-data-afkhsjd').each(function () {
             var prnt = $(this);
             var plotowndata = {
-                Plot_Size: $(prnt).find(".pl-size").val(),
+                Plot_Size: $(prnt).find(".pl-size").val(), 
                 Name: $(prnt).find(".Name").val(),
                 Father_Husband: $(prnt).find(".Father_Husband").val(),
                 Postal_Address: $(prnt).find(".Postal_Address").val(),
@@ -779,8 +785,8 @@
         });
 
         let receiptData = {
-            AmountInWords: $('#amt-in-words').val(),
-            Amount: $('#transfer-fees').val(),
+            AmountInWords: amountInWords,
+            Amount: transferFeesInput,
             File_Plot_Number: $('#File_Plot_Number').val(),
             Plot_Size: $('#plt-size').val(),
             FilePlotNumber: $('.FilePlotNumber').val(),
