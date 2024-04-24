@@ -1679,14 +1679,14 @@ namespace MeherEstateDevelopers.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public JsonResult PayFineCharges(long PlotId,  string Remarks,ReceiptData rd, string Module, long TransactionId)
+        public JsonResult PayFineCharges(long PlotId, string Remarks, ReceiptData rd, string Module, long TransactionId)
         {
             long userid = long.Parse(User.Identity.GetUserId());
             AccountHandlerController ah = new AccountHandlerController();
             var comp = ah.Company_Attr(userid);
             if (Module == Modules.FileManagement.ToString())
             {
-               // var fileNo = PlotId;
+                // var fileNo = PlotId;
                 //var Fileid = db.File_Form.Where(x => x.FileFormNumber == fileno).Select(x => x.Id).FirstOrDefault();
                 var fileno = db.File_Form.Where(x => x.FileFormNumber == PlotId.ToString()).FirstOrDefault(); // Add fileformNumber
                 List<Sp_Get_FileFormData_Result> res = db.Sp_Get_FileFormData(fileno.Id).ToList();
@@ -1699,14 +1699,15 @@ namespace MeherEstateDevelopers.Controllers
                 var res4 = db.Sp_Add_Receipt(rd.Amount, GeneralMethods.NumberToWords(Convert.ToInt32(rd.Amount)), null, null, null, null, string.Join(",", res.Select(x => x.Mobile_1))
                        , string.Join(",", res.Select(x => x.Father_Husband)), fileno.Id, string.Join(",", res.Select(x => x.Name)), rd.PaymentType, 0, "SA Gardens", 0, null, res.FirstOrDefault().Plot_Size, rd.Type, userid, userid, Remarks, null, Modules.FileManagement.ToString(), "", res.FirstOrDefault().FileFormNumber.ToString(), res.FirstOrDefault().Block, res.FirstOrDefault().Plot_Type, 0, TransactionId, "", receiptno, comp.Id).FirstOrDefault();
 
-                if (rd.PaymentType != "Cash") { 
-                   var res3 = Convert.ToInt64(db.Sp_Add_Cheque_BankDraft_PayOrder(rd.Amount, rd.Bank, rd.Branch, rd.PaymentType, null, null, PaymentMethodStatuses.Pending.ToString(),
-                                      Modules.FileManagement.ToString(), Types.Installment.ToString(), userid, rd.PayChqNo, PlotId, rd.Ch_bk_Pay_Date, rd.FilePlotNumber.ToString(), res4.Receipt_Id, comp.Id, Voucher_Type.BRV.ToString()).FirstOrDefault());
+                if (rd.PaymentType != "Cash")
+                {
+                    var res3 = Convert.ToInt64(db.Sp_Add_Cheque_BankDraft_PayOrder(rd.Amount, rd.Bank, rd.Branch, rd.PaymentType, null, null, PaymentMethodStatuses.Pending.ToString(),
+                                       Modules.FileManagement.ToString(), Types.Installment.ToString(), userid, rd.PayChqNo, PlotId, rd.Ch_bk_Pay_Date, rd.FilePlotNumber.ToString(), res4.Receipt_Id, comp.Id, Voucher_Type.BRV.ToString()).FirstOrDefault());
                 }
                 var res1 = new { Status = true, Receiptid = res4.Receipt_No, ReceiptType = rd.Type, Token = userid };
                 return Json(res1);
                 db.Sp_Add_Activity(userid, "Pay Fine Charges" + rd.Amount + " Remarks: " + Remarks, "Update", "Activity_Record", ActivityType.Services.ToString(), TransactionId);
-                
+
             }
             else if (Module == Modules.PlotManagement.ToString())
             {
@@ -1751,11 +1752,11 @@ namespace MeherEstateDevelopers.Controllers
                 var receiptno = db.Sp_Get_ReceiptNo("Normal").FirstOrDefault();
                 var Narration = "Cash Amount Received against Plot no:" + res1.Plot_No + " Block: " + res1.Block_Name + " Plot Type : " + res1.Type;
                 var res4 = db.Sp_Add_Receipt(rd.Amount, GeneralMethods.NumberToWords(Convert.ToInt32(rd.Amount)), null, null, null, null, res2.Mobile_1
-                       , res2.Father_Husband, PlotId, res2.Name, rd.PaymentType, 0, "SA Gardens", 0, null, res1.Plot_Size, rd.Type, userid, userid, "", null, Modules.PlotManagement.ToString(), "", res1.Plot_No, res1.Block_Name, res1.Type, 0, TransactionId, "", receiptno, comp.Id).FirstOrDefault();
+                       , res2.Father_Husband, PlotId, res2.Name, rd.PaymentType, 0, "Grand City Kharian", 0, null, res1.Plot_Size, rd.Type, userid, userid, "", null, Modules.PlotManagement.ToString(), "", res1.Plot_No, res1.Block_Name, res1.Type, 0, TransactionId, "", receiptno, comp.Id).FirstOrDefault();
                 if (rd.PaymentType != "Cash")
                 {
                     var res3 = Convert.ToInt64(db.Sp_Add_Cheque_BankDraft_PayOrder(rd.Amount, rd.Bank, rd.Branch, rd.PaymentType, null, null, PaymentMethodStatuses.Pending.ToString(),
-                                       Modules.PlotManagement.ToString(), Types.Installment.ToString(), userid, rd.PayChqNo, PlotId, rd.Ch_bk_Pay_Date, rd.FilePlotNumber.ToString(), res4.Receipt_Id, comp.Id, Voucher_Type.BRV.ToString()).FirstOrDefault());
+                                       Modules.PlotManagement.ToString(), Types.Installment.ToString(), userid, rd.PayChqNo, PlotId, rd.Ch_bk_Pay_Date, res1.Plot_No.ToString(), res4.Receipt_Id, comp.Id, Voucher_Type.BRV.ToString()).FirstOrDefault());
                 }
                 //bool headcashier = false;
                 //if (User.IsInRole("Head Cashier"))
@@ -1771,7 +1772,7 @@ namespace MeherEstateDevelopers.Controllers
                 //{
                 //    db.Sp_Add_ErrorLog(ex.Message + ex.InnerException.ToString() + ex.StackTrace, "", "", this.ControllerContext.RouteData.Values["controller"].ToString(), this.ControllerContext.RouteData.Values["action"].ToString());
                 //}
-                var res = new { Status = true, Receiptid = res4.Receipt_No, ReceiptType =rd.Type, Token = userid };
+                var res = new { Status = true, Receiptid = res4.Receipt_No, ReceiptType = rd.Type, Token = userid };
                 return Json(res);
             }
             else
@@ -1779,6 +1780,7 @@ namespace MeherEstateDevelopers.Controllers
                 return Json(false);
             }
         }
+
         //}
         //public ActionResult 
         public JsonResult AddMeter(string MeterNo, long PlotId)
