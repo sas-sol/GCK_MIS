@@ -1227,6 +1227,6 @@ namespace MeherEstateDevelopers.Models
         Balloting = 8, // add new 
         Half_Yearly = 9 ,   // add new 
         Not_Included = 10 ,  // add new 
-        SurCharge=11
+        SurCharge= 11 // add new
     }
 }

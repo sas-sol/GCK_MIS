@@ -365,7 +365,6 @@ namespace MeherEstateDevelopers
                 //var res = db.Plots.Where(x => x.Status == "Registered").Where(x => x.Id == 250).ToList();  // For testing 
 
                 var res = db.Plots.Where(x => x.Status == "Registered").ToList();
-                //var res = db.Plots.Where(x => x.Id ==6 ).ToList();
                 foreach (var v in res)
                 {
                     int b = 0;

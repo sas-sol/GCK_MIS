@@ -518,20 +518,22 @@ namespace MeherEstateDevelopers.Controllers
             var res7= db.Plot_Installments_Surcharge.Where(x => x.Plot_Id == res1.Id && x.Modules == Modules.FileManagement.ToString()).ToList();
             var res5surcharge = db.Plot_Installments_Surcharge.Where(x => x.Plot_Id == res1.Id && x.Cancelled == null && x.Waveoff == null).OrderBy(x => x.DueDate).ToList();
             var res6surcharge = db.Sp_Get_ReceivedAmounts_Surcharge(res1.Id, Modules.FileManagement.ToString()).ToList();
-            UpdatePlotInstallmentStatusSurcharge(res5surcharge, res6surcharge, res1.Id);
+            UpdateFileInstallmentStatusSurcharge(res5surcharge, res6surcharge, res1.Id);
+            var UpdateSurChargeInstallments = db.Plot_Installments_Surcharge.Where(x => x.Plot_Id == res1.Id && x.Cancelled == null && x.Waveoff == null && x.Modules == "FileManagement").OrderBy(x => x.DueDate).ToList();
             //Not_Included
-           // var res11 = db.Sp_Get_FileInstallments(res1.Id).ToList();
-           // var res12 = db.Sp_Get_ReceivedAmounts_NotIncluded(res1.Id, Modules.FileManagement.ToString()).ToList();
-           // UpdatePlotInstallmentStatusNotIncluded(res11, res12, res1.Id);
+            var res12 = db.Sp_Get_ReceivedAmounts_NotIncluded(res1.Id, Modules.FileManagement.ToString()).ToList();
+            UpdatePlotInstallmentStatusNotIncluded(res3, res12, res1.Id);
+            var UpdatePlotInstallments = db.Sp_Get_FileInstallments(res1.Id).ToList();
 
-            var res = new FileDetailData { FileData = res1, FilesOwners = res2, FileInstallments = res3, FileReceipts = res4, Discounts = res5, PlotInstallmentsSurcharge = res7 };
+            var res = new FileDetailData { FileData = res1, FilesOwners = res2, FileInstallments = UpdatePlotInstallments, FileReceipts = res4, Discounts = res5, PlotInstallmentsSurcharge = UpdateSurChargeInstallments };
             db.Sp_Add_Activity(userid, "Get full Details of File  <a class='file-data' data-id=' " + FileId + "'>" + FileId + "</a>  ", "Read", Modules.FileManagement.ToString(), ActivityType.Details_Access.ToString(), res1.Id);
 
             return PartialView(res);
         }
-        public void UpdatePlotInstallmentStatusSurcharge(List<Plot_Installments_Surcharge> inst, List<Sp_Get_ReceivedAmounts_Surcharge_Result> Receipts, long? Plotid)
+        public void UpdateFileInstallmentStatusSurcharge(List<Plot_Installments_Surcharge> inst, List<Sp_Get_ReceivedAmounts_Surcharge_Result> Receipts, long? FileId)
         {
             // db.Test_UpdatePendingPlotinstallmentWht(Plotid);
+            db.Test_UpdatePendingSurChargeInstallment(FileId, "FileManagement");
 
             decimal? TotalAmt = 0, AmttoPaid = 0, remamt = 0, TotalAmount = 0;
 
@@ -564,63 +566,64 @@ namespace MeherEstateDevelopers.Controllers
 
             var allids = new XElement("IS", latpi.Select(x => new XElement("ISS", new XAttribute("Id", x.Id)))).ToString();
             remamt = Actamt - AmttoPaid;
-            db.Test_UpdatePlotinstallment_Surcharge(allids);
+            db.Test_UpdatePlotinstallment_Surcharge(allids, "FileManagement");
 
             var curdate = DateTime.Now;
-            var res3 = db.Sp_Get_PlotInstallments_Surcharge(Plotid).ToList();
+            var res3 = db.Sp_Get_PlotInstallments_Surcharge(FileId).ToList();
             var id = res3.Where(x => x.DueDate <= curdate && x.Status != "Paid").ToList();
             var nopaidis = new XElement("IS", id.Select(x => new XElement("ISS", new XAttribute("Id", x.Id)))).ToString();
 
             remamt = remamt - id.Sum(x => x.Amount);
 
-            db.Test_UpdatePlotsNotPaidinstallment_Surcharge(nopaidis);
+            db.Test_UpdatePlotsNotPaidinstallment_Surcharge(nopaidis, "FileManagement");
             //  db.Test_updatebalanceWht(remamt, inst.Sum(x => x.Amount), TotalAmount, Plotid, Modules.PlotManagement.ToString(), id.Count(), 0, 0, 0, 0, 0, 0);
 
         }
-        //public void UpdatePlotInstallmentStatusNotIncluded(List<Sp_Get_FileInstallments_Result> inst, List<Sp_Get_ReceivedAmounts_NotIncluded_Result> Receipts, long? Plotid)
-        //{
-        //    db.Test_UpdatePendingPlotinstallment(Plotid);
-        //    decimal? TotalAmt = 0, AmttoPaid = 0, remamt = 0, TotalAmount = 0;
+        public void UpdatePlotInstallmentStatusNotIncluded(List<Sp_Get_FileInstallments_Result> inst, List<Sp_Get_ReceivedAmounts_NotIncluded_Result> Receipts, long? Fileid)
+        {
+            db.Test_UpdatePendingNotIncludedFileinstallment(Fileid);
+            decimal? TotalAmt = 0, AmttoPaid = 0, remamt = 0, TotalAmount = 0;
 
-        //    string[] ExcludedType = { "SurCharge", "Booking", "Installment" };
+            string[] ExcludedType = { "SurCharge", "Booking", "Installment" };
 
-        //    TotalAmount = Receipts.Where(x => !ExcludedType.Contains(x.Type) && (x.Status == null || x.Status == "Approved")).Sum(x => x.Amount);
-        //    //if (Dis.Any())
-        //    //{
-        //    //    TotalAmount += Dis.Sum(x => x.Discount_Amount);
-        //    //}
-        //    var Actamt = TotalAmount;
+            TotalAmount = Receipts.Where(x => !ExcludedType.Contains(x.Type) && (x.Status == null || x.Status == "Approved")).Sum(x => x.Amount);
+            //if (Dis.Any())
+            //{
+            //    TotalAmount += Dis.Sum(x => x.Discount_Amount);
+            //}
+            var Actamt = TotalAmount;
 
-        //    List<AmountToPaidInfo> latpi = new List<AmountToPaidInfo>();
+            List<AmountToPaidInfo> latpi = new List<AmountToPaidInfo>();
 
-        //    foreach (var item1 in inst)
-        //    {
-        //        AmountToPaidInfo atpi = new AmountToPaidInfo();
-        //        TotalAmt += item1.Amount;
-        //        if (Math.Round(Convert.ToDecimal(TotalAmt)) <= Math.Round(Convert.ToDecimal(Actamt)))
-        //        {
-        //            AmttoPaid += item1.Amount;
-        //            atpi.Id = item1.Id;
-        //            latpi.Add(atpi);
-        //        }
-        //        else
-        //        {
-        //            break;
-        //        }
-        //    }
+            foreach (var item1 in inst.Where(x => x.Installment_Type == "10"))
+            {
+                AmountToPaidInfo atpi = new AmountToPaidInfo();
+                TotalAmt += item1.Amount;
+                if (Math.Round(Convert.ToDecimal(TotalAmt)) <= Math.Round(Convert.ToDecimal(Actamt)))
+                {
+                    AmttoPaid += item1.Amount;
+                    atpi.Id = item1.Id;
+                    latpi.Add(atpi);
+                }
+                else
+                {
+                    break;
+                }
+            }
 
-        //    var allids = new XElement("IS", latpi.Select(x => new XElement("ISS", new XAttribute("Id", x.Id)))).ToString();
+            var allids = new XElement("IS", latpi.Select(x => new XElement("ISS", new XAttribute("Id", x.Id)))).ToString();
 
-        //    remamt = Actamt - AmttoPaid;
-        //    db.Test_UpdatePlotinstallment(allids);
-        //    var curdate = DateTime.Now;
-        //    var res3 = db.Sp_Get_FileInstallments(Plotid).ToList();
-        //    var id = res3.Where(x => x.DueDate <= curdate && x.Status != "Paid").ToList();
-        //    var nopaidis = new XElement("IS", id.Select(x => new XElement("ISS", new XAttribute("Id", x.Id)))).ToString();
-        //    remamt = remamt - id.Sum(x => x.Amount);
-        //    db.Test_UpdatePlotsNotPaidinstallment(nopaidis);
+            remamt = Actamt - AmttoPaid;
+            db.Test_UpdateFileinstallmentforNotIncluded(allids);
+            var curdate = DateTime.Now;
+            var res3 = db.Sp_Get_FileInstallments(Fileid).Where(x => x.Installment_Type == "10" && x.Cancelled == null).ToList();
+            //var res3 =  db.Plot_Installments.Where(x => x.Installment_Type == "10" && x.Cancelled == null && x.Plot_Id == Plotid).ToList();
+            var id = res3.Where(x => x.Due_Date <= curdate && x.Status != "Paid").ToList();
+            var nopaidis = new XElement("IS", id.Select(x => new XElement("ISS", new XAttribute("Id", x.Id)))).ToString();
+            remamt = remamt - id.Sum(x => x.Amount);
+            db.Test_UpdateFilesNotPaidinstallmentForNotIncluded(nopaidis);
 
-        //}
+        }
 
         public ActionResult GenerateCustomerFile(long Id)
         {
@@ -1710,6 +1713,71 @@ namespace MeherEstateDevelopers.Controllers
             var newres = new TransferRequestDetails { File = fa, TransferTo = tranres, Installments = installments, OtherInstallments = otherinstallments, ReceivedAmounts = Receivedamts };
             return PartialView(newres);
         }
+        //public int TestAdjustIntallments(long? Fileno)
+        //{
+        //    try
+        //    {
+        //        //var item = db.Test_FileBalance_para(Fileno).SingleOrDefault();
+        //        decimal? TotalAmount = 0;
+        //        var Receipts = db.Sp_Get_ReceivedAmounts(Fileno, Modules.FileManagement.ToString()).ToList();
+        //        string[] Type = { "Advance", "Booking", "Installment" };
+        //        TotalAmount = Receipts.Where(x => Type.Contains(x.Type) && (x.Status == null || x.Status == "Approved")).Sum(x => x.Amount);
+        //        //var up = db.Sp_Update_ReceivedAmount(item.Id, Modules.FileManagement.ToString(), item.TotalAmount);
+        //        if (TotalAmount == null)
+        //        {
+        //            return 0;
+        //        }
+        //        var dis = db.Discounts.Where(x => x.Module_Id == Fileno && x.Module == Modules.FileManagement.ToString()).ToList();
+        //        var vouch = db.Vouchers.Where(x => x.File_Plot_Id == Fileno && x.Module == Modules.FileManagement.ToString() && x.Cancel == null).ToList();
+        //        TotalAmount -= vouch.Sum(x => x.Amount);
+        //        var ReceivedAmount = TotalAmount;
+        //        if (dis.Any())
+        //        {
+        //            TotalAmount += dis.Sum(x => x.Discount_Amount);
+        //        }
+        //        db.Test_PendingInst(Fileno);
+        //        var res1 = db.File_Installments.Where(x => x.File_Id == Fileno).ToList();
+        //        /*  var inst = res1.Where(x => x.Installment_Type != "3").OrderBy(x => x.Due_Date).ToList();*/  //remove this check
+        //        var inst = res1.Where(x => x.Installment_Type != "10").OrderBy(x => x.Due_Date).ToList();
+        //        var advinst = res1.Where(x => x.Installment_Type == "3").OrderBy(x => x.Due_Date).FirstOrDefault();
+        //        List<AmountToPaidInfo> latpi = new List<AmountToPaidInfo>();
+        //        decimal? Actamt = TotalAmount;
+        //        decimal? TotalAmt = 0, AmttoPaid = 0;
+        //        foreach (var item1 in inst.Where(x => x.Installment_Type != "10"))
+        //        {
+        //            AmountToPaidInfo atpi = new AmountToPaidInfo();
+        //            TotalAmt += item1.Amount;
+        //            if (Math.Round(Convert.ToDecimal(TotalAmt)) <= Math.Round(Convert.ToDecimal(Actamt)))
+        //            {
+        //                AmttoPaid += item1.Amount;
+        //                atpi.Id = item1.Id;
+        //                latpi.Add(atpi);
+        //            }
+        //            else
+        //            {
+        //                break;
+        //            }
+        //        }
+        //        var allids = new XElement("IS", latpi.Select(x => new XElement("ISS", new XAttribute("Id", x.Id)))).ToString();
+        //        db.Test_updateinstallment(allids);
+        //        var curdate = DateTime.Now;
+        //        //var res3 = db.Test_FileInstallments(Fileno).ToList();
+
+        //        var res3 = db.File_Installments.Where(x => x.Installment_Type != "10" && x.Cancelled == null && x.File_Id == Fileno).ToList();
+        //       /*   var inst1 = res3.Where(x => x.Installment_Type != "3").ToList();*/  // also
+        //        //var inst1 = res3.Where(x => x.Installment_Type != "10" && x.Cancelled == null && x.File_Id == Fileno).ToList();
+        //        var id = res3.Where(x => x.Due_Date <= curdate && x.Status != "Paid").ToList();
+        //        var nopaidis = new XElement("IS", id.Select(x => new XElement("ISS", new XAttribute("Id", x.Id)))).ToString();
+        //        db.Test_updateNotPaidinstallment(nopaidis);
+        //        var pendinginst = res3.Where(x => x.Due_Date <= curdate).Sum(x => x.Amount);
+        //        var bal = -(pendinginst - Actamt);
+        //        db.Test_updatebalance(bal, res1.Where(x => x.Installment_Type != "10").Sum(x => x.Amount), ReceivedAmount, dis.Sum(x => x.Discount_Amount), Fileno, Modules.FileManagement.ToString(), id.Count(), advinst.Due_Date, vouch.Sum(x => x.Amount));
+        //    }
+        //    catch (Exception e)
+        //    {
+        //    }
+        //    return 1;
+        //}
         public int TestAdjustIntallments(long? Fileno)
         {
             try
@@ -1735,13 +1803,12 @@ namespace MeherEstateDevelopers.Controllers
                 db.Test_PendingInst(Fileno);
                 var res1 = db.File_Installments.Where(x => x.File_Id == Fileno).ToList();
                 /*  var inst = res1.Where(x => x.Installment_Type != "3").OrderBy(x => x.Due_Date).ToList();*/  //remove this check
-                var inst = res1.Where(x => x.Installment_Type != "-1").OrderBy(x => x.Due_Date).ToList();
+                var inst = res1.Where(x => x.Installment_Type != "10").OrderBy(x => x.Due_Date).ToList();
                 var advinst = res1.Where(x => x.Installment_Type == "3").OrderBy(x => x.Due_Date).FirstOrDefault();
                 List<AmountToPaidInfo> latpi = new List<AmountToPaidInfo>();
                 decimal? Actamt = TotalAmount;
                 decimal? TotalAmt = 0, AmttoPaid = 0;
-                //if(advinst!= null)   //  comment this 
-                //Actamt = Actamt - advinst.Amount; 
+               // Actamt = Actamt - advinst.Amount;
                 //if (Actamt >= 0)
                 //{
                 //    AmountToPaidInfo atpi = new AmountToPaidInfo()
@@ -1752,7 +1819,7 @@ namespace MeherEstateDevelopers.Controllers
                 //}
                 //else
                 //{
-                //    Actamt = item.TotalAmount;
+                //    Actamt = TotalAmount;
                 //}
                 foreach (var item1 in inst)
                 {
@@ -1772,9 +1839,11 @@ namespace MeherEstateDevelopers.Controllers
                 var allids = new XElement("IS", latpi.Select(x => new XElement("ISS", new XAttribute("Id", x.Id)))).ToString();
                 db.Test_updateinstallment(allids);
                 var curdate = DateTime.Now;
-                var res3 = db.Test_FileInstallments(Fileno).ToList();
-                /*   var inst1 = res3.Where(x => x.Installment_Type != "3").ToList();*/  // also
-                var inst1 = res3.Where(x => x.Installment_Type != "-1").ToList();
+                //var res3 = db.Test_FileInstallments(Fileno).ToList();
+
+                var res3 = db.Test_FileInstallments(Fileno).Where(x => x.Installment_Type != "10" && x.Cancelled == null && x.File_Id == Fileno).ToList();
+                var inst1 = res3.Where(x => x.Installment_Type != "3").ToList();  // also
+               //var inst1 = res3.Where(x => x.Installment_Type != "10" && x.Cancelled == null && x.File_Id == Fileno).ToList();
                 var id = inst1.Where(x => x.Due_Date <= curdate && x.Status != "Paid").ToList();
                 var nopaidis = new XElement("IS", id.Select(x => new XElement("ISS", new XAttribute("Id", x.Id)))).ToString();
                 db.Test_updateNotPaidinstallment(nopaidis);
@@ -1787,7 +1856,7 @@ namespace MeherEstateDevelopers.Controllers
             }
             return 1;
         }
-      
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public JsonResult SearchResult(string Text, int SearchOption)
