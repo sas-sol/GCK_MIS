@@ -1276,6 +1276,7 @@ namespace MeherEstateDevelopers.Models
         public Cancellation_Receipts Refunded_Repurchased { get; set; }
         public List<Plot_Installments_Surcharge> PlotInstallmentsSurcharge { get; set; }
         public List<Sp_Get_PlotInstallments_Wht_Result> PlotInstallmentsWHT { get; set; }
+        public List<Sp_Get_ReceivedAmounts_NotIncluded_Result> PlotInstallmentsNotIncluded { get; set; }
     }
     public class PlotCancelDetailData
     {

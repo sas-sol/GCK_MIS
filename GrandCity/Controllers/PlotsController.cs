@@ -1217,24 +1217,127 @@ namespace MeherEstateDevelopers.Controllers
             var discount = db.Discounts.Where(x => x.Module_Id == Plotid && x.Module == Modules.PlotManagement.ToString() && x.Plot_Is_Cancelled == null).ToList();
             UpdatePlotInstallmentStatus(res3, res4, discount, Plotid);
             var fpb = db.File_Plot_Balance.Where(x => x.File_Plot_Id == Plotid && x.Module == "PlotManagement").FirstOrDefault();
-            var res5 = db.Sp_Get_PlotInstallments(Plotid).ToList();
             var res6 = db.Discounts.Where(x => x.Module_Id == Plotid && x.Module == Modules.PlotManagement.ToString() && x.Plot_Is_Cancelled == null).ToList();
             //surcharge 
-            var res7 = db.Sp_Get_ReceivedAmounts(Plotid, Modules.PlotManagement.ToString()).ToList();
             var res8 = db.Sp_Get_PlotInstallments_Wht(Plotid).ToList();
-            var res10 = db.Plot_Installments_Surcharge.Where(x => x.Plot_Id == Plotid && x.Modules == "PlotManagement").ToList();
-            var res5surcharge = db.Plot_Installments_Surcharge.Where(x => x.Plot_Id == Plotid && x.Cancelled == null && x.Waveoff == null).OrderBy(x => x.DueDate).ToList();
+            var res5surcharge = db.Plot_Installments_Surcharge.Where(x => x.Plot_Id == Plotid && x.Cancelled == null && x.Waveoff == null && x.Modules == "PlotManagement").OrderBy(x => x.DueDate).ToList();
             var res6surcharge = db.Sp_Get_ReceivedAmounts_Surcharge(Plotid, Modules.PlotManagement.ToString()).ToList();
             UpdatePlotInstallmentStatusSurcharge(res5surcharge, res6surcharge, Plotid);
+            var UpdateSurChargeInstallments = db.Plot_Installments_Surcharge.Where(x => x.Plot_Id == Plotid && x.Cancelled == null && x.Waveoff == null && x.Modules == "PlotManagement").OrderBy(x => x.DueDate).ToList();
+            //Not_Included
+            var res12 = db.Sp_Get_ReceivedAmounts_NotIncluded(Plotid, Modules.PlotManagement.ToString()).ToList();
+            UpdatePlotInstallmentStatusNotIncluded(res3, res12, Plotid);
+            var UpdatePlotInstallments = db.Sp_Get_PlotInstallments(Plotid).ToList();
             Cancellation_Receipts cr = null;
             if (res1.Status == PlotsStatus.Repurchased.ToString() || (res1.Status == PlotsStatus.Hold.ToString() && res2.Select(x => x.Ownership_Status).FirstOrDefault() == Ownership_Status.Refunded.ToString()))
             {
                 cr = db.Cancellation_Receipts.Where(x => x.File_Plot_No == Plotid && x.Module == Modules.PlotManagement.ToString()).OrderByDescending(x => x.Id).FirstOrDefault();
             }
-            var res = new PlotDetailData { PlotData = res1, PlotOwners = res2, PlotInstallments = res5, PlotReceipts = res4, Discounts = res6, PlotBalDets = fpb, Refunded_Repurchased = cr , PlotInstallmentsSurcharge = res10, PlotInstallmentsWHT = res8};
+            var res = new PlotDetailData { PlotData = res1, PlotOwners = res2, PlotInstallments = UpdatePlotInstallments, PlotReceipts = res4, Discounts = res6, PlotBalDets = fpb, Refunded_Repurchased = cr, PlotInstallmentsSurcharge = UpdateSurChargeInstallments, PlotInstallmentsWHT = res8 , PlotInstallmentsNotIncluded = res12};
             return PartialView(res);
         }
+        public void SurchargePlot()
+        {
+            using (Grand_CityEntities db = new Grand_CityEntities())
+            {
+                var res = db.Plots.Where(x => x.Status == "Registered").Where(x => x.Id == 2727).ToList();  // For testing 
 
+                //var res = db.Plots.Where(x => x.Status == "Registered").ToList();
+                foreach (var v in res)
+                {
+                    int b = 0;
+                    double fineamount = 0;
+                    double fine = 0;
+                    decimal? TotalAmt = 0, AmttoPaid = 0, TotalAmount = 0; decimal? balance = 0;
+                    var ins = db.Plot_Installments.Where(x => x.Status == "NotPaid" && x.Cancelled == null && x.Plot_Id == v.Id).ToList();
+                    if (ins.Any())
+                    {
+                        var res5surcharge = db.Plot_Installments.Where(x => x.Plot_Id == v.Id && x.Cancelled == null).OrderBy(x => x.DueDate).ToList();
+                        var res6surcharge = db.Sp_Get_ReceivedAmounts(v.Id, "PlotManagement").ToList();
+                        string[] Type = { "Advance", "Booking", "Installment", "Possession" };
+                        TotalAmount = res6surcharge.Where(x => Type.Contains(x.Type) && (x.Status == null || x.Status == "Approved")).Sum(x => x.Amount);
+                        // TotalAmount = res6surcharge.Sum(x => x.Amount);
+                        List<AmountToPaidInfo> latpi = new List<AmountToPaidInfo>();
+                        foreach (var item1 in res5surcharge)
+                        {
+                            AmountToPaidInfo atpi = new AmountToPaidInfo();
+                            TotalAmt += item1.Amount;
+                            if (Math.Round(Convert.ToDecimal(TotalAmt)) <= Math.Round(Convert.ToDecimal(TotalAmount)))
+                            {
+                                AmttoPaid += item1.Amount;
+                                atpi.Id = item1.Id;
+                                latpi.Add(atpi);
+                            }
+                            else
+                            {
+                                balance = TotalAmt - TotalAmount;
+                                var PrimaryId = item1.Id;
+                                break;
+                            }
+                        }
+                    }
+                    foreach (var a in ins)
+                    {
+                        DateTime today = DateTime.Now;
+                        DateTime AddDays = a.DueDate.Date.AddDays(0);
+                        TimeSpan t = today - AddDays;
+                        int NrOfDays = (int)t.TotalDays;
+                        if (NrOfDays >= 1)
+                        {
+                            if (b == 0)
+                            {
+                                //fine = Convert.ToDouble(balance) * 013.34;
+                                fine = Convert.ToDouble(balance) * (0.05 / 30);
+                                fineamount = fine * (NrOfDays);
+                            }
+                            else
+                            {
+                                //fine = Convert.ToDouble(a.Amount) * 013.34;
+                                fine = Convert.ToDouble(a.Amount) * (0.05 / 30);
+                                fineamount = fine * (NrOfDays);
+                            }
+                            b = 1;
+                            var checksurcharge = db.Plot_Installments_Surcharge.Where(x => x.Plot_Id == a.Plot_Id && x.Plot_install_id == a.Id && x.Status == "NotPaid" && x.Modules == "PlotManagement").FirstOrDefault();
+                            if (checksurcharge != null)
+                            {
+                                checksurcharge.Surchargefine = Convert.ToDecimal(fine);
+                                checksurcharge.SurchargeAmount = Convert.ToDecimal(fineamount);
+                                checksurcharge.DueDate_New = DateTime.Now;
+                                checksurcharge.Surchargedays = NrOfDays;
+                                checksurcharge.Installment_Name = "Surcharge against " + a.Installment_Name;
+                                db.Plot_Installments_Surcharge.Add(checksurcharge);
+                                db.SaveChanges();
+                            }
+                            else
+                            {
+                                var checksurchargeagain = db.Plot_Installments_Surcharge.Where(x => x.Plot_Id == a.Plot_Id && x.Plot_install_id == a.Id && x.Status == "Paid" && x.Modules == "PlotManagement").FirstOrDefault();
+                                if (checksurchargeagain == null)
+                                {
+                                    Plot_Installments_Surcharge pi = new Plot_Installments_Surcharge
+                                    {
+                                        Amount = a.Amount,
+                                        SurchargeAmount = Convert.ToDecimal(fineamount),
+                                        DueDate = a.DueDate,
+                                        DueDate_New = DateTime.Now,
+                                        Installment_Name = "Surcharge against " + a.Installment_Name,
+                                        Installment_Type = a.Installment_Type,
+                                        Status = "NotPaid",
+                                        Plot_install_id = a.Id,
+                                        Plot_Id = a.Plot_Id,
+                                        Surchargefine = (decimal?)fine,
+                                        Surchargedays = NrOfDays,
+                                        Modules = "PlotManagement"
+                                    };
+                                    db.Plot_Installments_Surcharge.Add(pi);
+                                    db.SaveChanges();
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+        }
         public ActionResult UpdateWaveOffStatus(int id)
         {
             var plotInstallment = db.Plot_Installments_Surcharge.FirstOrDefault(p => p.Id == id);
@@ -1252,16 +1355,15 @@ namespace MeherEstateDevelopers.Controllers
 
             return Json(new { success = false }, JsonRequestBehavior.AllowGet);
         }
-
         public void UpdatePlotInstallmentStatusSurcharge(List<Plot_Installments_Surcharge> inst, List<Sp_Get_ReceivedAmounts_Surcharge_Result> Receipts, long? Plotid)
         {
-            // db.Test_UpdatePendingPlotinstallmentWht(Plotid);
+             db.Test_UpdatePendingSurChargeInstallment(Plotid, "PlotManagement");
 
             decimal? TotalAmt = 0, AmttoPaid = 0, remamt = 0, TotalAmount = 0;
 
             string[] Type = { "SurCharge" };
 
-            TotalAmount = Receipts.Where(x => Type.Contains(x.Type) /*&& (x.Status == null || x.Status == "Approved")*/).Sum(x => x.Amount);
+            TotalAmount = Receipts.Where(x => Type.Contains(x.Type) && (x.Status == null || x.Status == "Approved")).Sum(x => x.Amount);
             //if (Dis.Any())
             //{
             //    TotalAmount += Dis.Sum(x => x.Discount_Amount);
@@ -1288,7 +1390,7 @@ namespace MeherEstateDevelopers.Controllers
 
             var allids = new XElement("IS", latpi.Select(x => new XElement("ISS", new XAttribute("Id", x.Id)))).ToString();
             remamt = Actamt - AmttoPaid;
-            db.Test_UpdatePlotinstallment_Surcharge(allids);
+            db.Test_UpdatePlotinstallment_Surcharge(allids, "PlotManagement");
 
             var curdate = DateTime.Now;
             var res3 = db.Sp_Get_PlotInstallments_Surcharge(Plotid).ToList();
@@ -1297,8 +1399,53 @@ namespace MeherEstateDevelopers.Controllers
 
             remamt = remamt - id.Sum(x => x.Amount);
 
-            db.Test_UpdatePlotsNotPaidinstallment_Surcharge(nopaidis);
+            db.Test_UpdatePlotsNotPaidinstallment_Surcharge(nopaidis, "PlotManagement");
             //  db.Test_updatebalanceWht(remamt, inst.Sum(x => x.Amount), TotalAmount, Plotid, Modules.PlotManagement.ToString(), id.Count(), 0, 0, 0, 0, 0, 0);
+
+        }
+        public void UpdatePlotInstallmentStatusNotIncluded(List<Sp_Get_PlotInstallments_Result> inst, List<Sp_Get_ReceivedAmounts_NotIncluded_Result> Receipts, long? Plotid)
+        {
+            db.Test_UpdatePendingNotIncludedinstallment(Plotid);
+            decimal? TotalAmt = 0, AmttoPaid = 0, remamt = 0, TotalAmount = 0;
+
+            string[] ExcludedType = { "SurCharge", "Booking", "Installment" };
+
+            TotalAmount = Receipts.Where(x => !ExcludedType.Contains(x.Type) && (x.Status == null || x.Status == "Approved")).Sum(x => x.Amount);
+            //if (Dis.Any())
+            //{
+            //    TotalAmount += Dis.Sum(x => x.Discount_Amount);
+            //}
+            var Actamt = TotalAmount;
+
+            List<AmountToPaidInfo> latpi = new List<AmountToPaidInfo>();
+
+            foreach (var item1 in inst.Where(x => x.Installment_Type=="10"))
+            {
+                AmountToPaidInfo atpi = new AmountToPaidInfo();
+                TotalAmt += item1.Amount;
+                if (Math.Round(Convert.ToDecimal(TotalAmt)) <= Math.Round(Convert.ToDecimal(Actamt)))
+                {
+                    AmttoPaid += item1.Amount;
+                    atpi.Id = item1.Id;
+                    latpi.Add(atpi);
+                }
+                else
+                {
+                    break;
+                }
+            }
+
+            var allids = new XElement("IS", latpi.Select(x => new XElement("ISS", new XAttribute("Id", x.Id)))).ToString();
+
+            remamt = Actamt - AmttoPaid;
+            db.Test_UpdatePlotinstallmentforNotIncluded(allids);
+            var curdate = DateTime.Now;
+            var res3 = db.Sp_Get_PlotInstallments(Plotid).Where(x => x.Installment_Type == "10" && x.Cancelled == null).ToList();
+            //var res3 =  db.Plot_Installments.Where(x => x.Installment_Type == "10" && x.Cancelled == null && x.Plot_Id == Plotid).ToList();
+            var id = res3.Where(x => x.DueDate <= curdate && x.Status != "Paid").ToList();
+            var nopaidis = new XElement("IS", id.Select(x => new XElement("ISS", new XAttribute("Id", x.Id)))).ToString();
+            remamt = remamt - id.Sum(x => x.Amount);
+            db.Test_UpdatePlotsNotPaidinstallmentForNotIncluded(nopaidis);
 
         }
 
@@ -2000,7 +2147,7 @@ namespace MeherEstateDevelopers.Controllers
             var Actamt = TotalAmount;
 
             List<AmountToPaidInfo> latpi = new List<AmountToPaidInfo>();
-            foreach (var item1 in inst)
+            foreach (var item1 in inst.Where(x => x.Installment_Type!="10"))
             {
                 AmountToPaidInfo atpi = new AmountToPaidInfo();
                 TotalAmt += item1.Amount;
@@ -2019,7 +2166,8 @@ namespace MeherEstateDevelopers.Controllers
             remamt = Actamt - AmttoPaid;
             db.Test_UpdatePlotinstallment(allids);
             var curdate = DateTime.Now;
-            var res3 = db.Sp_Get_PlotInstallments(Plotid).ToList();
+            //var res3 = db.Sp_Get_PlotInstallments(Plotid).ToList();
+            var res3 = db.Plot_Installments.Where(x => x.Installment_Type != "10" && x.Cancelled == null && x.Plot_Id == Plotid).ToList();
             var id = res3.Where(x => x.DueDate <= curdate && x.Status != "Paid").ToList();
             var nopaidis = new XElement("IS", id.Select(x => new XElement("ISS", new XAttribute("Id", x.Id)))).ToString();
             remamt = remamt - id.Sum(x => x.Amount);

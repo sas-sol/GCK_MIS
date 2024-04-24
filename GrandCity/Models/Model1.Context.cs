@@ -24383,24 +24383,6 @@ namespace MeherEstateDevelopers.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Sp_Get_ReceivedAmounts_Surcharge_Result>("Sp_Get_ReceivedAmounts_Surcharge", fileidParameter, modParameter);
         }
     
-        public virtual int Test_UpdatePlotinstallment_Surcharge(string ids)
-        {
-            var idsParameter = ids != null ?
-                new ObjectParameter("ids", ids) :
-                new ObjectParameter("ids", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("Test_UpdatePlotinstallment_Surcharge", idsParameter);
-        }
-    
-        public virtual int Test_UpdatePlotsNotPaidinstallment_Surcharge(string ids)
-        {
-            var idsParameter = ids != null ?
-                new ObjectParameter("ids", ids) :
-                new ObjectParameter("ids", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("Test_UpdatePlotsNotPaidinstallment_Surcharge", idsParameter);
-        }
-    
         public virtual ObjectResult<Sp_Get_Reports_FilesOutstandingByBlock_Result> Sp_Get_Reports_FilesOutstandingByBlock(Nullable<long> id)
         {
             var idParameter = id.HasValue ?
@@ -24548,6 +24530,112 @@ namespace MeherEstateDevelopers.Models
                 new ObjectParameter("type", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("Sp_Update_WarningLetterStatus_FileMove", comidParameter, oweneridParameter, typeParameter);
+        }
+    
+        public virtual ObjectResult<Sp_Get_ReceivedAmounts_NotIncluded_Result> Sp_Get_ReceivedAmounts_NotIncluded(Nullable<long> fileid, string mod)
+        {
+            var fileidParameter = fileid.HasValue ?
+                new ObjectParameter("fileid", fileid) :
+                new ObjectParameter("fileid", typeof(long));
+    
+            var modParameter = mod != null ?
+                new ObjectParameter("mod", mod) :
+                new ObjectParameter("mod", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Sp_Get_ReceivedAmounts_NotIncluded_Result>("Sp_Get_ReceivedAmounts_NotIncluded", fileidParameter, modParameter);
+        }
+    
+        public virtual int Test_UpdatePendingNotIncludedinstallment(Nullable<long> plotid)
+        {
+            var plotidParameter = plotid.HasValue ?
+                new ObjectParameter("plotid", plotid) :
+                new ObjectParameter("plotid", typeof(long));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("Test_UpdatePendingNotIncludedinstallment", plotidParameter);
+        }
+    
+        public virtual int Test_UpdatePlotinstallmentforNotIncluded(string ids)
+        {
+            var idsParameter = ids != null ?
+                new ObjectParameter("ids", ids) :
+                new ObjectParameter("ids", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("Test_UpdatePlotinstallmentforNotIncluded", idsParameter);
+        }
+    
+        public virtual int Test_UpdatePlotsNotPaidinstallmentForNotIncluded(string ids)
+        {
+            var idsParameter = ids != null ?
+                new ObjectParameter("ids", ids) :
+                new ObjectParameter("ids", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("Test_UpdatePlotsNotPaidinstallmentForNotIncluded", idsParameter);
+        }
+    
+        public virtual int Test_UpdatePendingSurChargeInstallment(Nullable<long> plotid, string module)
+        {
+            var plotidParameter = plotid.HasValue ?
+                new ObjectParameter("plotid", plotid) :
+                new ObjectParameter("plotid", typeof(long));
+    
+            var moduleParameter = module != null ?
+                new ObjectParameter("Module", module) :
+                new ObjectParameter("Module", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("Test_UpdatePendingSurChargeInstallment", plotidParameter, moduleParameter);
+        }
+    
+        public virtual int Test_UpdateFileinstallmentforNotIncluded(string ids)
+        {
+            var idsParameter = ids != null ?
+                new ObjectParameter("ids", ids) :
+                new ObjectParameter("ids", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("Test_UpdateFileinstallmentforNotIncluded", idsParameter);
+        }
+    
+        public virtual int Test_UpdateFilesNotPaidinstallmentForNotIncluded(string ids)
+        {
+            var idsParameter = ids != null ?
+                new ObjectParameter("ids", ids) :
+                new ObjectParameter("ids", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("Test_UpdateFilesNotPaidinstallmentForNotIncluded", idsParameter);
+        }
+    
+        public virtual int Test_UpdatePendingNotIncludedFileinstallment(Nullable<long> plotid)
+        {
+            var plotidParameter = plotid.HasValue ?
+                new ObjectParameter("plotid", plotid) :
+                new ObjectParameter("plotid", typeof(long));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("Test_UpdatePendingNotIncludedFileinstallment", plotidParameter);
+        }
+    
+        public virtual int Test_UpdatePlotinstallment_Surcharge(string ids, string module)
+        {
+            var idsParameter = ids != null ?
+                new ObjectParameter("ids", ids) :
+                new ObjectParameter("ids", typeof(string));
+    
+            var moduleParameter = module != null ?
+                new ObjectParameter("Module", module) :
+                new ObjectParameter("Module", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("Test_UpdatePlotinstallment_Surcharge", idsParameter, moduleParameter);
+        }
+    
+        public virtual int Test_UpdatePlotsNotPaidinstallment_Surcharge(string ids, string module)
+        {
+            var idsParameter = ids != null ?
+                new ObjectParameter("ids", ids) :
+                new ObjectParameter("ids", typeof(string));
+    
+            var moduleParameter = module != null ?
+                new ObjectParameter("Module", module) :
+                new ObjectParameter("Module", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("Test_UpdatePlotsNotPaidinstallment_Surcharge", idsParameter, moduleParameter);
         }
     }
 }

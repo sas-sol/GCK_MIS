@@ -666,7 +666,7 @@ else
                                 decimal overduetotal = 0;
                                 foreach (var own in Model.PlotInstallments)
                                 {
-                                    if (own.Installment_Type == "3" || own.Installment_Type == "1")
+                                    if (own.Installment_Type !="10")
                                     {
                                         string[] adva = { "Advance", "Booking" };
                                         var statuscolor = "";
@@ -703,7 +703,7 @@ else
                             <tr class="thead-dark">
                                 <th>Particulars</th>
                                 <th>Days</th>
-                                <th>Amount</th>
+                                @*<th>Amount</th>*@
                                 <th>Surcharge Amount</th>
                                 <th>Due Date</th>
                                 <th>Status</th>
@@ -735,7 +735,7 @@ else
                                         <tr class="@statuscolor" style="background-color:white">
                                             <td>@item.Installment_Name</td>
                                             <td>@item.Surchargedays</td>
-                                            <td>@string.Format("{0:00.00}", item.Amount)</td>
+                                            @*<td>@string.Format("{0:00.00}", item.Amount)</td>*@
                                             <td>@string.Format("{0:00.00}", item.SurchargeAmount)</td>
                                             <td>@string.Format("{0:dd-MMM-yyyy}", item.DueDate_New)</td>
                                             @if (item.Waveoff == 1)
