@@ -1737,7 +1737,7 @@ namespace MeherEstateDevelopers.Controllers
                             try
                             {
                                 AccountHandlerController de = new AccountHandlerController();
-                                var df = de.Receive_Plot_Amount(rd.Amount, plot.Plot_No, plot.Type, plot.Block_Name, rd.PaymentType, rd.PayChqNo, rd.Ch_bk_Pay_Date, rd.Bank, TransactionId, userid, res2.Receipt_No, 1, headcashier, AccountingModulePlots, plot.BlockIden);
+                                //var df = de.Receive_Plot_Amount(rd.Amount, plot.Plot_No, plot.Type, plot.Block_Name, rd.PaymentType, rd.PayChqNo, rd.Ch_bk_Pay_Date, rd.Bank, TransactionId, userid, res2.Receipt_No, 1, headcashier, AccountingModulePlots, plot.BlockIden);
                             }
                             catch (Exception ex)
                             {
