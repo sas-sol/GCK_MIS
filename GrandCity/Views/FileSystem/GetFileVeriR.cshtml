@@ -1,6 +1,13 @@
 ﻿@model MeherEstateDevelopers.Models.FileDetailData
 
 @{
+    if (User.IsInRole("Administrator")) 
+    { 
+        Layout = "~/Views/Shared/_AdminLayout.cshtml"; 
+    } else
+    { 
+        Layout = "~/Views/Shared/_StaffLayout.cshtml"; 
+    }
     var TotalPric = Model.FileInstallments.Where(x => x.Installment_Type != "2").Sum(x => x.Amount);
     var receAmt = Model.FileReceipts.Sum(x => x.Amount);
     var bookdate = Model.FileReceipts.Where(x => x.Type == "Booking").OrderByDescending(x => x.DateTime).Select(x => x.DateTime).FirstOrDefault();

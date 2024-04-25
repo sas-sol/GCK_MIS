@@ -1876,8 +1876,9 @@ namespace MeherEstateDevelopers.Controllers
         public ActionResult FileVerification()
         {
             long userid = long.Parse(User.Identity.GetUserId());
+            var fileslist = db.File_Form.Where(f => f.Verification_Req == true & f.Verified == null).ToList(); 
             db.Sp_Add_Activity(userid, "Accessed File Verifications  Page ", "Read", "Activity_Record", ActivityType.Details_Access.ToString(), userid);
-            return View();
+            return View(fileslist);
         }
         public ActionResult GetFileVeriR(string FileId)
         {

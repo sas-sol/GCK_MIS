@@ -8690,6 +8690,12 @@ $(document).on("click", ".plot-det", function () {
     var id = $(this).attr("id");
     window.open("/Plots/PlotsVerification?Plotid=" + id, '_blank');
 });
+// file verfication detail
+$(document).on("click", ".file-ver-det", function () {
+    debugger;
+    var id = $(this).attr("id");
+    window.open("/FileSystem/GetFileVeriR?FileId=" + id, '_blank');
+});
 //
 $(document).on("click", ".all-rec-veri", function () {
     var chkstat = $(this).is(":checked");
