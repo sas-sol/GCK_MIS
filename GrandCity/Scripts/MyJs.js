@@ -1879,11 +1879,13 @@ $(document).on("keyup", ".dis-cal-file", function () {
 //
 // To Generate Other Amounts Receipts
 $(document).on("click", ".ad-fil-dis", function (e) {
+    debugger;
     e.preventDefault();
     var ttl = $("#dis-ttl-amt-val").val();
     var dis = $("#dis-amt-val").val();
     var rem = $("#remrk").val();
-    var id = $("#file-id").val()
+    /*var id = $("#file-id").val()*/
+    var id = $("#app-num").val();
     var disDate = $('#dis-date').val();
     //var con = confirm("Are you sure you want to add Discount");
     //if (con) {
@@ -1927,6 +1929,7 @@ $(document).on("click", ".ad-fil-dis", function (e) {
         }
     });
 });
+
 // Get all File Details
 $(document).on("click", "#sea-file-data", function () {
     var val = $('#app-num').val();
@@ -2513,6 +2516,7 @@ $(document).on("click", "#sea-file-data-deliv", function () {
 //    $(".updt-exstng-owner-rec-dsffskfs").show();
 //});
 $(document).on("click", "#upd-info", function () {
+    debugger;
    // alert("Are you sure you want to save updated owner information?");
     Swal.fire({
         text: 'Are you sure you want to update the owners information?',
@@ -3454,14 +3458,24 @@ $(document).on("click", ".get-f-res", function () {
     debugger
     $.ajax({
         type: "POST",
-        url: '/FileSystem/GetFileResult/',
+        url: '/FileSystem/GetAppFileFormDetails/',
         data: { Filefromid: val },
         success: function (data) {
-            $("#file-details").show();
-            $("#oth-inst tbody").empty();
-            $("#rec-amts tbody").empty();
-            $("#all-instments tbody").empty();
-            $("#dis-amts tbody").empty();
+            debugger;
+            $('#app-fil-id').val(data.Id);
+            $('#deal-nam').val(data.Dealership_Name);
+            $('#pl-size').val(data.Plot_Size);
+            $('#blk_Id').val(data.Block_Id);
+            $('#blk').val(data.Block_Name);
+            var num = $("#app-num").val();
+            $('#prj').val("Grand City Kharian");
+            SASLoad($("#file-details"));
+            $("#file-details").load('/FileSystem/GetUpdateInfoDetails/', { FileId: val }, function () {
+                SASUnLoad($("#file-details"));
+                $('html, body').animate({
+                    scrollTop: $("#file-details").offset().top
+                }, 1000);
+            });
             if (data == false) {
                 //alert("No Result found");
                 Swal.fire({
@@ -3470,173 +3484,7 @@ $(document).on("click", ".get-f-res", function () {
                 });
             }
             else {
-                var dev = "";
-                if (data.File.Development_Charges_Val == true) { dev = "With Development Charges"; } else if (data.File.Development_Charges_Val == false) { dev = "Non Development Charges"; }
-                $('#app-num').val(data.File.File_Form_Number);
-                $("#oth-inst tbody").empty();
-                $("#all-instments tbody").empty();
-                $('#file-id').val(data.File.Id);
-                $('#plt-id').val(data.File.Id);
-                $('.file_id').val(data.File.Id);
-                if (data.File.Image1 != null) {
-                    $('#img1').attr('src', '/Repository/CustomerImages/' + data.File.File_Transfer_Id + '/1.png');
-                }
-                else {
-                    $('#img1').attr('src', '/assets/static/images/def-img.png');
-                }
-                if (data.File.Image2 != null) {
-                    $('#img2').attr('src', '/Repository/CustomerImages/' + data.File.File_Transfer_Id + '/2.png');
-                }
-                else {
-                    $('#img2').attr('src', '/assets/static/images/def-img.png');
-                }
-                if (data.File.Image3 != null) {
-                    $('#img3').attr('src', '/Repository/CustomerImages/' + data.File.File_Transfer_Id + '/3.png');
-                }
-                else {
-                    $('#img3').attr('src', '/assets/static/images/def-img.png');
-                }
-                if (data.File.Image4 != null) {
-                    $('#img4').attr('src', '/Repository/CustomerImages/' + data.File.File_Transfer_Id + '/4.png');
-                }
-                else {
-                    $('#img4').attr('src', '/assets/static/images/def-img.png');
-                }
-                $('#file-trans-id').val(data.File.File_Transfer_Id);
-                $('#file-rate').val(data.File.Rate)
-                $('#ttl-amt').val(data.File.TotalPlotVal)
-                $('#qr_Id').val(data.QR_Code_Id)
-                $('#deal-nam').val(data.File.Dealership_Name);
-                $('#pl-size').val(data.File.Plot_Size);
-                $('#prj').val(data.File.Project_Name);
-                $('#phs').val(data.File.Phase_Name);
-                $('#blk').val(data.File.Block_Name);
-                $('#status').text(data.File.Status);
-                $('#dev-char').text(dev);
-                $('#qr_img').attr("src", '/QR Codes/' + data.File.File_Form_Number + '.png');
-                //$('#Name').val(data.File.Name);
-                //$('#Father_Husband').val(data.File.Father_Husband);
-                //$('#Postal_Address').val(data.File.Postal_Address);
-                //$('#Residential_Address').val(data.File.Residential_Address);
-                //$('#City').val(data.File.City);
-                //$('#Date_Of_Birth').val(data.File.Date_Of_Birth);
-                //$('#CNIC_NICOP').val(data.File.CNIC_NICOP);
-                //$('#Occupation').val(data.File.Occupation);
-                //$('#Nationality').val(data.File.Nationality);
-                //$('#Email').val(data.File.Email);
-                //$('#Phone_Office').val(data.File.Phone_Office);
-                //$('#Residential').val(data.File.Residential);
-                //$('#Mobile_1').val(data.File.Mobile_1);
-                //$('#Mobile_2').val(data.File.Mobile_2);
-                $('#Nominee_Name').val(data.File.Nominee_Name);
-                $('#Nominee_CNIC_NICOP').val(data.File.Nominee_CNIC_NICOP);
-                $('#Nominee_Relation').val(data.File.Nominee_Relation);
-                $('#Nominee_Address').val(data.File.Nominee_Address);
-                $('#bal-amt').text(Number(data.File.Balance_Amount).toLocaleString());
-                $("#Plot_Prefrence").val(data.File.Plot_Prefrence);
-                $("#DateTime").val(moment(data.File.Date_Reg).format("MM-DD-YYYY"))
-                var stat = data.File.Status;
-                if (stat != "Registered") {
-                    $("#rece-btn-man").hide();
-                    $("#on-btn-man").hide();
-                }
-                else {
-                    $("#rece-btn-man").show();
-                    $("#on-btn-man").show();
-                }
-                if (data.File.Verify) {
-                    $("#veri-stat").prop('checked', true);;
-                }
-                else {
-                    $("#veri-stat").prop('checked', false);;
-                }
-                var instserialno = 1, overduetotal = 0;
-                if (data.File.Delivery) {
-                    $("#del-stat").prop('checked', true);;
-                }
-                else {
-                    $("#del-stat").prop('checked', false);;
-                }
-                $.each(data.Installments, function (i) {
-                    var statuscolor = "";
-                    if (data.Installments[i].Status == "NotPaid") {
-                        statuscolor = "bgc-red-50";
-                        overduetotal = parseFloat(overduetotal) + parseFloat(data.Installments[i].Amount);
-                    }
-                    else if (data.Installments[i].Status == "Paid") {
-                        statuscolor = "bgc-green-50";
-                    }
-                    var html = '<tr class="' + statuscolor + ' Ins__rec__upd  pointer" data-toggle="modal" data-target="#Modal"   id="' + data.Installments[i].Id + '" ><td scope="row">' + instserialno + '</td>' +
-                        '<td>' + moment(data.Installments[i].Due_Date).format("MMMM YYYY") + ', ' + data.Installments[i].Installment_Name + '</td>' +
-                        '<td>' + Number(data.Installments[i].Amount).toLocaleString() + '</td>' +
-                        '<td>' + moment(data.Installments[i].Due_Date).format("DD-MMM-YYYY") + '</td>' +
-                        '<td>' + data.Installments[i].Status + '</td></tr>';
-                    $("#all-instments tbody").append(html);
-                    instserialno++;
-                });
-                var otherinstserialno = 1;
-                $.each(data.OtherInstallments, function (i) {
-                    var statuscolor = "";
-                    if (data.OtherInstallments[i].Status == "NotPaid") {
-                        statuscolor = "bgc-red-50";
-                        overduetotal = parseFloat(overduetotal) + parseFloat(data.OtherInstallments[i].Amount);
-                    }
-                    else if (data.OtherInstallments[i].Status == "Paid") {
-                        statuscolor = "bgc-green-50";
-                    }
-                    var html = '<tr class="' + statuscolor + ' Ins__rec__upd  pointer" data-toggle="modal" data-target="#Modal"   id="' + data.OtherInstallments[i].Id + '" ><td scope="row">' + otherinstserialno + '</td>' +
-                        '<td>' + data.OtherInstallments[i].Installment_Name + '</td>' +
-                        '<td>' + Number(data.OtherInstallments[i].Amount).toLocaleString() + '</td>' +
-                        '<td>' + moment(data.OtherInstallments[i].Due_Date).format("DD-MMM-YYYY") + '</td>' +
-                        '<td>' + data.OtherInstallments[i].Status + '</td></tr>';
-                    $("#oth-inst tbody").append(html);
-                    otherinstserialno++;
-                });
-                $("#ov-du-amt").text(overduetotal);
-                var totalamt = 0;
-                $.each(data.ReceivedAmounts, function (i) {
-                    var statuscolor = "";
-                    if (data.ReceivedAmounts[i].Status == "" || data.ReceivedAmounts[i].Status == null || data.ReceivedAmounts[i].Status == "Approved") {
-                        totalamt = totalamt + parseFloat(data.ReceivedAmounts[i].Amount);
-                    }
-                    if (data.ReceivedAmounts[i].Status == 'Approved') {
-                        statuscolor = "bgc-green-50";
-                    }
-                    else if (data.ReceivedAmounts[i].Status == 'Dishonored') {
-                        statuscolor = "bgc-red-50";
-                    }
-                    else if (data.ReceivedAmounts[i].Status == 'Pending') {
-                        statuscolor = "bgc-yellow-50";
-                    }
-                    var html = '<tr class=" ' + statuscolor + '" id="' + data.ReceivedAmounts[i].Id + '" data-token="' + data.ReceivedAmounts[i].TokenParameter + '" >' +
-                        '<td scope="row" class="rece-num">' + data.ReceivedAmounts[i].ReceiptNo + '</td>' +
-                        '<td class="rece-amt">' + Number(data.ReceivedAmounts[i].Amount).toLocaleString() + '</td>' +
-                        '<td>' + data.ReceivedAmounts[i].Bank + '</td>' +
-                        '<td>' + moment(data.ReceivedAmounts[i].DateTime).format("DD-MMM-YYYY") + '</td>' +
-                        '<td class="rece-type">' + data.ReceivedAmounts[i].PaymentType + '</td>' +
-                        '<td><ul style="list-style:none;margin-left:0px;"><li class="dropdown">' +
-                        '<a href="" class="dropdown-toggle no-after peers " data-toggle="dropdown"><i class="ti-more-alt  c-grey-900" style="transform:rotate(90deg);"></i></a>' +
-                        '<ul class="dropdown-menu" style="padding:10px;width:auto !important">' +
-                        '<li><a id="" class="get-rec-data pointer" data-toggle="modal" data-target="#Modal"><span>Update/Delete</span></a></li>' +
-                        '<hr />' +
-                        '<li><a id="" class="rece-refund-pop-file pointer" data-toggle="modal" data-target="#Modal"><span>Refund</span></a></li>' +
-                        '</ul></li></ul ></td>' +
-                        '</tr>';
-                    $("#rec-amts tbody").append(html);
-                });
-                var html1 = '<tr><td>Total</td><td colspan="4">' + Number(totalamt).toLocaleString() + '</td></tr>';
-                $("#rec-amts tbody").append(html1);
-                $.each(data.Discounts, function (i) {
-                    $(".dis").show();
-                    var html = `<tr id="${data.Discounts[i].Id}" ><td> ${Number(data.Discounts[i].Total_Amount).toLocaleString()} </td>
-                                <td> ${Number(data.Discounts[i].Discount_Amount).toLocaleString()} </td>
-                                <td> ${parseFloat(data.Discounts[i].Percentage).toFixed(2)}% </td >
-                                <td> ${data.Discounts[i].Remarks} </td>
-                                <td><i class="fa fa-trash rem-dis"></i></td>
-                                </tr>`;
-                    $("#dis-amts tbody").append(html);
-                });
-                $('.owners-trail-fjhdsf').load('/FileSystem/FileOwnersData/', { fileId: data.File.Id });
+              
             }
         },
         error: function (data) {
@@ -3648,6 +3496,205 @@ $(document).on("click", ".get-f-res", function () {
         }
     });
 });
+//$(document).on("click", ".get-f-res", function () {
+//    var val = $('#app-num').val();
+//    debugger
+//    $.ajax({
+//        type: "POST",
+//        url: '/FileSystem/GetFileResult/',
+//        data: { Filefromid: val },
+//        success: function (data) {
+//            $("#file-details").show();
+//            $("#oth-inst tbody").empty();
+//            $("#rec-amts tbody").empty();
+//            $("#all-instments tbody").empty();
+//            $("#dis-amts tbody").empty();
+//            if (data == false) {
+//                //alert("No Result found");
+//                Swal.fire({
+//                    icon: 'error',
+//                    text: 'No record found'
+//                });
+//            }
+//            else {
+//                var dev = "";
+//                if (data.File.Development_Charges_Val == true) { dev = "With Development Charges"; } else if (data.File.Development_Charges_Val == false) { dev = "Non Development Charges"; }
+//                $('#app-num').val(data.File.File_Form_Number);
+//                $("#oth-inst tbody").empty();
+//                $("#all-instments tbody").empty();
+//                $('#file-id').val(data.File.Id);
+//                $('#plt-id').val(data.File.Id);
+//                $('.file_id').val(data.File.Id);
+//                if (data.File.Image1 != null) {
+//                    $('#img1').attr('src', '/Repository/CustomerImages/' + data.File.File_Transfer_Id + '/1.png');
+//                }
+//                else {
+//                    $('#img1').attr('src', '/assets/static/images/def-img.png');
+//                }
+//                if (data.File.Image2 != null) {
+//                    $('#img2').attr('src', '/Repository/CustomerImages/' + data.File.File_Transfer_Id + '/2.png');
+//                }
+//                else {
+//                    $('#img2').attr('src', '/assets/static/images/def-img.png');
+//                }
+//                if (data.File.Image3 != null) {
+//                    $('#img3').attr('src', '/Repository/CustomerImages/' + data.File.File_Transfer_Id + '/3.png');
+//                }
+//                else {
+//                    $('#img3').attr('src', '/assets/static/images/def-img.png');
+//                }
+//                if (data.File.Image4 != null) {
+//                    $('#img4').attr('src', '/Repository/CustomerImages/' + data.File.File_Transfer_Id + '/4.png');
+//                }
+//                else {
+//                    $('#img4').attr('src', '/assets/static/images/def-img.png');
+//                }
+//                $('#file-trans-id').val(data.File.File_Transfer_Id);
+//                $('#file-rate').val(data.File.Rate)
+//                $('#ttl-amt').val(data.File.TotalPlotVal)
+//                $('#qr_Id').val(data.QR_Code_Id)
+//                $('#deal-nam').val(data.File.Dealership_Name);
+//                $('#pl-size').val(data.File.Plot_Size);
+//                $('#prj').val(data.File.Project_Name);
+//                $('#phs').val(data.File.Phase_Name);
+//                $('#blk').val(data.File.Block_Name);
+//                $('#status').text(data.File.Status);
+//                $('#dev-char').text(dev);
+//                $('#qr_img').attr("src", '/QR Codes/' + data.File.File_Form_Number + '.png');
+//                //$('#Name').val(data.File.Name);
+//                //$('#Father_Husband').val(data.File.Father_Husband);
+//                //$('#Postal_Address').val(data.File.Postal_Address);
+//                //$('#Residential_Address').val(data.File.Residential_Address);
+//                //$('#City').val(data.File.City);
+//                //$('#Date_Of_Birth').val(data.File.Date_Of_Birth);
+//                //$('#CNIC_NICOP').val(data.File.CNIC_NICOP);
+//                //$('#Occupation').val(data.File.Occupation);
+//                //$('#Nationality').val(data.File.Nationality);
+//                //$('#Email').val(data.File.Email);
+//                //$('#Phone_Office').val(data.File.Phone_Office);
+//                //$('#Residential').val(data.File.Residential);
+//                //$('#Mobile_1').val(data.File.Mobile_1);
+//                //$('#Mobile_2').val(data.File.Mobile_2);
+//                $('#Nominee_Name').val(data.File.Nominee_Name);
+//                $('#Nominee_CNIC_NICOP').val(data.File.Nominee_CNIC_NICOP);
+//                $('#Nominee_Relation').val(data.File.Nominee_Relation);
+//                $('#Nominee_Address').val(data.File.Nominee_Address);
+//                $('#bal-amt').text(Number(data.File.Balance_Amount).toLocaleString());
+//                $("#Plot_Prefrence").val(data.File.Plot_Prefrence);
+//                $("#DateTime").val(moment(data.File.Date_Reg).format("MM-DD-YYYY"))
+//                var stat = data.File.Status;
+//                if (stat != "Registered") {
+//                    $("#rece-btn-man").hide();
+//                    $("#on-btn-man").hide();
+//                }
+//                else {
+//                    $("#rece-btn-man").show();
+//                    $("#on-btn-man").show();
+//                }
+//                if (data.File.Verify) {
+//                    $("#veri-stat").prop('checked', true);;
+//                }
+//                else {
+//                    $("#veri-stat").prop('checked', false);;
+//                }
+//                var instserialno = 1, overduetotal = 0;
+//                if (data.File.Delivery) {
+//                    $("#del-stat").prop('checked', true);;
+//                }
+//                else {
+//                    $("#del-stat").prop('checked', false);;
+//                }
+//                $.each(data.Installments, function (i) {
+//                    var statuscolor = "";
+//                    if (data.Installments[i].Status == "NotPaid") {
+//                        statuscolor = "bgc-red-50";
+//                        overduetotal = parseFloat(overduetotal) + parseFloat(data.Installments[i].Amount);
+//                    }
+//                    else if (data.Installments[i].Status == "Paid") {
+//                        statuscolor = "bgc-green-50";
+//                    }
+//                    var html = '<tr class="' + statuscolor + ' Ins__rec__upd  pointer" data-toggle="modal" data-target="#Modal"   id="' + data.Installments[i].Id + '" ><td scope="row">' + instserialno + '</td>' +
+//                        '<td>' + moment(data.Installments[i].Due_Date).format("MMMM YYYY") + ', ' + data.Installments[i].Installment_Name + '</td>' +
+//                        '<td>' + Number(data.Installments[i].Amount).toLocaleString() + '</td>' +
+//                        '<td>' + moment(data.Installments[i].Due_Date).format("DD-MMM-YYYY") + '</td>' +
+//                        '<td>' + data.Installments[i].Status + '</td></tr>';
+//                    $("#all-instments tbody").append(html);
+//                    instserialno++;
+//                });
+//                var otherinstserialno = 1;
+//                $.each(data.OtherInstallments, function (i) {
+//                    var statuscolor = "";
+//                    if (data.OtherInstallments[i].Status == "NotPaid") {
+//                        statuscolor = "bgc-red-50";
+//                        overduetotal = parseFloat(overduetotal) + parseFloat(data.OtherInstallments[i].Amount);
+//                    }
+//                    else if (data.OtherInstallments[i].Status == "Paid") {
+//                        statuscolor = "bgc-green-50";
+//                    }
+//                    var html = '<tr class="' + statuscolor + ' Ins__rec__upd  pointer" data-toggle="modal" data-target="#Modal"   id="' + data.OtherInstallments[i].Id + '" ><td scope="row">' + otherinstserialno + '</td>' +
+//                        '<td>' + data.OtherInstallments[i].Installment_Name + '</td>' +
+//                        '<td>' + Number(data.OtherInstallments[i].Amount).toLocaleString() + '</td>' +
+//                        '<td>' + moment(data.OtherInstallments[i].Due_Date).format("DD-MMM-YYYY") + '</td>' +
+//                        '<td>' + data.OtherInstallments[i].Status + '</td></tr>';
+//                    $("#oth-inst tbody").append(html);
+//                    otherinstserialno++;
+//                });
+//                $("#ov-du-amt").text(overduetotal);
+//                var totalamt = 0;
+//                $.each(data.ReceivedAmounts, function (i) {
+//                    var statuscolor = "";
+//                    if (data.ReceivedAmounts[i].Status == "" || data.ReceivedAmounts[i].Status == null || data.ReceivedAmounts[i].Status == "Approved") {
+//                        totalamt = totalamt + parseFloat(data.ReceivedAmounts[i].Amount);
+//                    }
+//                    if (data.ReceivedAmounts[i].Status == 'Approved') {
+//                        statuscolor = "bgc-green-50";
+//                    }
+//                    else if (data.ReceivedAmounts[i].Status == 'Dishonored') {
+//                        statuscolor = "bgc-red-50";
+//                    }
+//                    else if (data.ReceivedAmounts[i].Status == 'Pending') {
+//                        statuscolor = "bgc-yellow-50";
+//                    }
+//                    var html = '<tr class=" ' + statuscolor + '" id="' + data.ReceivedAmounts[i].Id + '" data-token="' + data.ReceivedAmounts[i].TokenParameter + '" >' +
+//                        '<td scope="row" class="rece-num">' + data.ReceivedAmounts[i].ReceiptNo + '</td>' +
+//                        '<td class="rece-amt">' + Number(data.ReceivedAmounts[i].Amount).toLocaleString() + '</td>' +
+//                        '<td>' + data.ReceivedAmounts[i].Bank + '</td>' +
+//                        '<td>' + moment(data.ReceivedAmounts[i].DateTime).format("DD-MMM-YYYY") + '</td>' +
+//                        '<td class="rece-type">' + data.ReceivedAmounts[i].PaymentType + '</td>' +
+//                        '<td><ul style="list-style:none;margin-left:0px;"><li class="dropdown">' +
+//                        '<a href="" class="dropdown-toggle no-after peers " data-toggle="dropdown"><i class="ti-more-alt  c-grey-900" style="transform:rotate(90deg);"></i></a>' +
+//                        '<ul class="dropdown-menu" style="padding:10px;width:auto !important">' +
+//                        '<li><a id="" class="get-rec-data pointer" data-toggle="modal" data-target="#Modal"><span>Update/Delete</span></a></li>' +
+//                        '<hr />' +
+//                        '<li><a id="" class="rece-refund-pop-file pointer" data-toggle="modal" data-target="#Modal"><span>Refund</span></a></li>' +
+//                        '</ul></li></ul ></td>' +
+//                        '</tr>';
+//                    $("#rec-amts tbody").append(html);
+//                });
+//                var html1 = '<tr><td>Total</td><td colspan="4">' + Number(totalamt).toLocaleString() + '</td></tr>';
+//                $("#rec-amts tbody").append(html1);
+//                $.each(data.Discounts, function (i) {
+//                    $(".dis").show();
+//                    var html = `<tr id="${data.Discounts[i].Id}" ><td> ${Number(data.Discounts[i].Total_Amount).toLocaleString()} </td>
+//                                <td> ${Number(data.Discounts[i].Discount_Amount).toLocaleString()} </td>
+//                                <td> ${parseFloat(data.Discounts[i].Percentage).toFixed(2)}% </td >
+//                                <td> ${data.Discounts[i].Remarks} </td>
+//                                <td><i class="fa fa-trash rem-dis"></i></td>
+//                                </tr>`;
+//                    $("#dis-amts tbody").append(html);
+//                });
+//                $('.owners-trail-fjhdsf').load('/FileSystem/FileOwnersData/', { fileId: data.File.Id });
+//            }
+//        },
+//        error: function (data) {
+//            //alert("Error Occured Try Again")
+//            Swal.fire({
+//                icon: 'error',
+//                text: 'Something went wrong'
+//            });
+//        }
+//    });
+//});
 //
 $(document).on("click", ".Ins__rec__upd", function () {
     var id = $(this).attr("id");
@@ -14119,21 +14166,21 @@ $(document).on("click", ".get-b-res-ver", function () {
     window.open('/Commercial/DetailInformation?Commercial_Id=' + val, '_blank');
 });
 //
-//$(document).on("click", ".up-f-stat", function () {
-//    debugger
-//    var id = $("#app-num").val();
-//    var stat = $("#status").text();
-//    EmptyModel();
-//    $('#modalbody').load('/FileSystem/UpdateFileStatus/', { FileId: id, Status: stat }, function () { });
-//});
 $(document).on("click", ".up-f-stat", function () {
     debugger
-    var id = $("#file-id").val();
-    var stat = $("#status").text();
+    var id = $("#app-num").val();
+    //var stat = $("#status").text();
     EmptyModel();
-    $('#ModalLabel').text("Update Status");
-    $('#modalbody').load('/FileSystem/UpdateFileStatus/', { FileId: id, Status: stat }, function () { });
+    $('#modalbody').load('/FileSystem/UpdateFileStatus/', { FileId: id }, function () { });
 });
+//$(document).on("click", ".up-f-stat", function () {
+//    debugger
+//    var id = $("#file-id").val();
+//    var stat = $("#status").text();
+//    EmptyModel();
+//    $('#ModalLabel').text("Update Status");
+//    $('#modalbody').load('/FileSystem/UpdateFileStatus/', { FileId: id, Status: stat }, function () { });
+//});
 //
 $(document).on("click", "#up-f-stat-btn", function (e) {
     e.preventDefault();
@@ -24467,7 +24514,7 @@ $(document).on('click', '.up_inst_btn_com', function () {
 $(document).on('click', '.up_inst_btn_file', function () {
     EmptyModel();
     debugger;
-    var id = $("#file-id").val();
+    var id = $("#app-num").val();
     $('#ModalLabel').text("File Installments");
     $('#modalbody').load('/FileSystem/UpdateInstallmentInfo/', { id: id }, function () { });
 });

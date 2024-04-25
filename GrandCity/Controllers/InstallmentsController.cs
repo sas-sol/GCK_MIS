@@ -1418,15 +1418,15 @@ namespace MeherEstateDevelopers.Controllers
             {
                 headcashier = true;
             }
-            try
-            {
-                AccountHandlerController de = new AccountHandlerController();
-                de.Receive_Plot_Amount(rd.Amount, Plot.Plot_No, Plot.Type, Plot.Block_Name, rd.PaymentType, rd.PayChqNo, rd.Ch_bk_Pay_Date, rd.Bank, h.RandomNumber(), userid, rd.ReceiptNo, 1, headcashier, AccountingModulePlots, Plot.BlockIden);
-            }
-            catch (Exception ex)
-            {
-                db.Sp_Add_ErrorLog(ex.Message + ex.InnerException.ToString() + ex.StackTrace, "", "", this.ControllerContext.RouteData.Values["controller"].ToString(), this.ControllerContext.RouteData.Values["action"].ToString());
-            }
+            //try
+            //{
+            //    AccountHandlerController de = new AccountHandlerController();
+            //    de.Receive_Plot_Amount(rd.Amount, Plot.Plot_No, Plot.Type, Plot.Block_Name, rd.PaymentType, rd.PayChqNo, rd.Ch_bk_Pay_Date, rd.Bank, h.RandomNumber(), userid, rd.ReceiptNo, 1, headcashier, AccountingModulePlots, Plot.BlockIden);
+            //}
+            //catch (Exception ex)
+            //{
+            //    db.Sp_Add_ErrorLog(ex.Message + ex.InnerException.ToString() + ex.StackTrace, "", "", this.ControllerContext.RouteData.Values["controller"].ToString(), this.ControllerContext.RouteData.Values["action"].ToString());
+            //}
 
             int index = 0;
             foreach (string file in Request.Files)
@@ -1458,7 +1458,7 @@ namespace MeherEstateDevelopers.Controllers
                     Directory.CreateDirectory(Server.MapPath("~/PlotReceipts/Plots/" + rd.File_Plot_Number));
                 }
                 var pathMain = Path.Combine(Server.MapPath("~/PlotReceipts/Plots/" + rd.File_Plot_Number + "/"), res2 + ".png");
-                var Imgres = h.SaveBase64Image(CameraImg, pathMain, res2.ToString());
+                //var Imgres = h.SaveBase64Image(CameraImg, pathMain, res2.ToString());
             }
             var Receivedamts = db.Sp_Get_ReceivedAmounts(rd.File_Plot_Number, Modules.PlotManagement.ToString()).ToList();
             db.SP_Update_PlotVerificationToNull(rd.File_Plot_Number);
@@ -1734,16 +1734,16 @@ namespace MeherEstateDevelopers.Controllers
                             //{
                             //    headcashier = true;
                             //}
-                            try
-                            {
-                                AccountHandlerController de = new AccountHandlerController();
-                                var df = de.Receive_Plot_Amount(rd.Amount, plot.Plot_No, plot.Type, plot.Block_Name, rd.PaymentType, rd.PayChqNo, rd.Ch_bk_Pay_Date, rd.Bank, TransactionId, userid, res2.Receipt_No, 1, headcashier, AccountingModulePlots, plot.BlockIden);
-                            }
-                            catch (Exception ex)
-                            {
-                                Transaction.Rollback();
-                                var dg = db.Sp_Add_ErrorLog(ex.Message + ex.InnerException.ToString() + ex.StackTrace, "", "", this.ControllerContext.RouteData.Values["controller"].ToString(), this.ControllerContext.RouteData.Values["action"].ToString());
-                            }
+                            //try
+                            //{
+                            //    AccountHandlerController de = new AccountHandlerController();
+                            //    var df = de.Receive_Plot_Amount(rd.Amount, plot.Plot_No, plot.Type, plot.Block_Name, rd.PaymentType, rd.PayChqNo, rd.Ch_bk_Pay_Date, rd.Bank, TransactionId, userid, res2.Receipt_No, 1, headcashier, AccountingModulePlots, plot.BlockIden);
+                            //}
+                            //catch (Exception ex)
+                            //{
+                            //    Transaction.Rollback();
+                            //    var dg = db.Sp_Add_ErrorLog(ex.Message + ex.InnerException.ToString() + ex.StackTrace, "", "", this.ControllerContext.RouteData.Values["controller"].ToString(), this.ControllerContext.RouteData.Values["action"].ToString());
+                            //}
                         }
                         if (rd.PaymentType == "Cash")
                         {
@@ -2071,7 +2071,7 @@ namespace MeherEstateDevelopers.Controllers
             return View();
         }
 
-        public ActionResult FetchInstallmentData(string plotno, long Block, string plttype)
+        public ActionResult FetchInstallmentData(string plotno, long ?Block, string plttype)
         {
             if (string.IsNullOrEmpty(plotno) || string.IsNullOrWhiteSpace(plotno))
             {

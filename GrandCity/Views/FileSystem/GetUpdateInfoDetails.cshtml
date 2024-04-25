@@ -1,0 +1,904 @@
+﻿
+@model MeherEstateDevelopers.Models.FileDetailData
+@{
+    int count = 1;
+    var TotalPric = Model.FileInstallments.Where(x => x.Installment_Type != "10").Sum(x => x.Amount);
+    var receAmt = Model.FileReceipts.Sum(x => x.Amount);
+    //var bookdate = Model.FileReceipts.Where(x => x.Type == "Booking").OrderByDescending(x => x.DateTime).Select(x => x.DateTime).FirstOrDefault();
+
+}
+<style>
+    tr td, tr th {
+        font-size: 11px;
+    }
+</style>
+
+<input type="hidden" id="can-req-id" value="@ViewBag.CanId" />
+<input type="hidden" id="rec-amt" value="@receAmt" />
+<input type="hidden" id="file-id" value="@Model.FileData.Id" />
+<input type="hidden" id="status" value="@ViewBag.status" />
+<div class="bgc-white p-20 row">
+    <div class="col-xl-9 col-md-12">
+        <div class="mT-30">
+            <div class="form-row">
+                <div class="col-md-4">
+                    <h5>File Status : &nbsp;<span id="status"></span>@ViewBag.status</h5>
+                </div>
+                @*<div class="col-md-5">
+                <h3>Development_Charges: &nbsp;<span id="dev-char"></span>@Model.FileData.Development_Charges</h3>
+            </div>*@
+                <div class="col-md-4">
+                    <h5>Balance : &nbsp;<span id="bal-amt"></span>@Model.FileData.Balance_Amount</h5>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-12">
+                    <label class="col-md-2 col-form-label">Plot Prefrence</label>
+                    <div class="col-md-3">
+                        <select class="form-control" id="Plot_Prefrence">
+                            <option value="">Select Plot Prefrence</option>
+                            <option value="Normal">Normal</option>
+                            <option value="Corner">Corner</option>
+                            <option value="Facing Park">Facing Park</option>
+                            <option value="Boulevard">Boulevard</option>
+                            <option value="Boulevard Corner">Boulevard Corner</option>
+                            <option value="Central Commercial Park Facing">Central Commercial Park Facing</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="col-md-3">
+                    <h6 class="c-grey-900">Personal Information</h6>
+                </div>
+                <div class="col-md-3">
+                    <button class="btn btn-info" id="upd-info">Update Information</button>
+                </div>
+                <div class="col-md-3">
+                    <button class="btn btn-success" data-toggle="modal" data-target="#Modal" id="new-owner-hkad">Add Another</button>
+                </div>
+            </div>
+            <hr />
+            <div class="col-md-12 central-text-align">
+                <h3>Owners Trail</h3>
+            </div>
+            @foreach (var ownGrp in Model.FilesOwners.OrderByDescending(x => x.DateTime).GroupBy(x => new { x.Group_Tag }))
+            {
+                <div class="panel-heading central-text-align" style="background-color:rgba(255, 0, 0,0.5);color:white;">
+                    <h5>@ownGrp.Select(x => x.Ownership_Status).FirstOrDefault() - @string.Format("{0: dd-MMM-yyyy}", ownGrp.Select(x => x.DateTime).FirstOrDefault())</h5>
+                </div>
+
+                foreach (var v in ownGrp)
+                {
+                    <div class="wrap-sfk" >
+                        <input type="hidden" class="file-trans-id" value="@v.Id" />
+                        <div class="col-md-12">
+                            <h5>@(count++).</h5>
+                        </div>
+                        <div class="form-row file-owner-data-nsdjk">
+                            <input type="hidden" class="file-trans-id" value="@v.Id" />
+                            <div class="form-group col-md-2 up-info">
+                                <label>Name</label>
+                                <input type="text" class="form-control Name" readonly value="@v.Name">
+                            </div>
+                            <div class="form-group col-md-2 up-info">
+                                <label>Father's/Husband's Name</label>
+                                <input type="text" class="form-control Father_Husband" readonly value="@v.Father_Husband">
+                            </div>
+                            <div class="form-group col-md-4 up-info">
+                                <label>Postal Address</label>
+                                <input type="text" class="form-control Postal_Address" readonly value="@v.Postal_Address">
+                            </div>
+                            <div class="form-group col-md-4 up-info">
+                                <label>Residential Address</label>
+                                <input type="text" class="form-control Residential_Address" readonly value="@v.Residential_Address">
+                            </div>
+                            <div class="form-group col-md-2 up-info">
+                                <label>City</label>
+                                <input type="text" class="form-control City" readonly value="@v.City">
+                            </div>
+                            <div class="form-group col-md-2 up-info">
+                                <label>Date Of Birth</label>
+                                <input type="text" class="form-control Date_Of_Birth" readonly value="@v.Date_Of_Birth">
+                            </div>
+                            <div class="form-group col-md-2 up-info">
+                                <label>CNIC / NICOP</label>
+                                <input type="text" class="form-control CNIC_NICOP" readonly value="@v.CNIC_NICOP">
+                            </div>
+                            <div class="form-group col-md-2 up-info">
+                                <label>Occupation</label>
+                                <input type="text" class="form-control Occupation" readonly value="@v.Occupation">
+                            </div>
+                            <div class="form-group col-md-2 up-info">
+                                <label>Nationality</label>
+                                <input type="text" class="form-control Nationality" readonly value="@v.Nationality">
+                            </div>
+                            <div class="form-group col-md-2 up-info">
+                                <label>Email</label>
+                                <input type="text" class="form-control Email" readonly value="@v.Email">
+                            </div>
+                            <div class="form-group col-md-2 up-info">
+                                <label>Phone Office</label>
+                                <input type="text" class="form-control Phone_Office" readonly value="@v.Phone_Office">
+                            </div>
+                            <div class="form-group col-md-2 up-info">
+                                <label>Residential</label>
+                                <input type="text" class="form-control Residential" readonly value="@v.Residential">
+                            </div>
+                            <div class="form-group col-md-2 up-info">
+                                <label>Mobile 1</label>
+                                <input type="text" class="form-control Mobile_1" readonly value="@v.Mobile_1">
+                            </div>
+                            <div class="form-group col-md-2 up-info">
+                                <label>Mobile 2</label>
+                                <input type="text" class="form-control Mobile_2" readonly value="@v.Mobile_2">
+                            </div>
+                            <div class="form-group col-md-2 up-info">
+                                <label>Ownership Date</label>
+                                <input type="text" class="form-control DateTime" data-provide="datepicker" readonly value="@((v.DateTime is null)?"-":v.DateTime.Value.ToString("MM/dd/yyy"))">
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label>Ownership Status</label>
+                                <select class="form-control owner-stat-jfkldgf" disabled>
+                                    @if (v.Ownership_Status == "Owner")
+                                    {
+                                        <option value="Owner" selected>Owner</option>
+                                        <option value="Transfer">Transferred</option>
+                                        <option value="Cancelled">Cancelled</option>
+                                    }
+                                    else if (v.Ownership_Status == "Transfer")
+                                    {
+                                        <option value="Owner">Owner</option>
+                                        <option value="Transfer" selected>Transferred</option>
+                                        <option value="Cancelled">Cancelled</option>
+                                    }
+                                    else if (v.Ownership_Status == "Cancelled")
+                                    {
+                                        <option value="Owner">Owner</option>
+                                        <option value="Transfer">Transferred</option>
+                                        <option value="Cancelled" selected>Cancelled</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="" selected>Choose</option>
+                                        <option value="Owner">Owner</option>
+                                        <option value="Transfer">Transferred</option>
+                                        <option value="Cancelled" selected>Cancelled</option>
+                                    }
+                                </select>
+                            </div>
+
+                            <hr />
+                            <h6 class="c-grey-900">Nominee</h6>
+                            <div class="mT-30 up-info">
+                                <div class="form-row">
+                                    <div class="form-group col-md-2">
+                                        <label>Name</label>
+                                        <input type="text" class="form-control Nominee_Name" readonly value="@v.Nominee_Name">
+                                    </div>
+                                    <div class="form-group col-md-2">
+                                        <label>CNIC / NICOP</label>
+                                        <input type="text" class="form-control Nominee_CNIC_NICOP" readonly value="@v.Nominee_CNIC_NICOP">
+                                    </div>
+                                    <div class="form-group col-md-2">
+                                        <label>Relation</label>
+                                        <input class="form-control Nominee_Relation" readonly value="@v.Nominee_Relation">
+                                    </div>
+                                    <div class="form-group col-md-5">
+                                        <label>Address</label>
+                                        <input type="text" class="form-control Nominee_Address" readonly value="@v.Nominee_Address">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            @using (Html.BeginForm("FiesImageUploader", "FileSystem", FormMethod.Post, new { @id = "file-imge", @class = "", role = "form", enctype = "multipart/form-data" }))
+                            {
+                                <div class="col-md-3" id="1">
+                                    <input type="hidden" name="ImageId" class="Plot_id" />
+                                    <input type="hidden" name="File_Id" class="file_id" value="@v.File_Form_Id" />
+                                    <input type="file" id="file1" name="File"><br>
+                                    <img src="/assets/static/images/def-img.png" id="img1" class="img1" width="200" height="200"><br>
+                                    <button class="btn btn-success btn_gen__poss" style="margin-top:10px" type="submit" name="" value="1">Save Image</button>
+                                </div>
+                            }
+                            @using (Html.BeginForm("FiesImageUploader", "FileSystem", FormMethod.Post, new { @id = "file-imge", @class = "", role = "form", enctype = "multipart/form-data" }))
+                            {
+                                <div class="col-md-3" id="2">
+                                    <input type="hidden" name="ImageId" class="Plot_id" />
+                                    <input type="hidden" name="File_Id" class="file_id" value="@v.File_Form_Id" />
+                                    <input type="file" id="file2" name="File"><br>
+                                    <img src="/assets/static/images/def-img.png" id="img2" class="img1" width="200" height="200"><br>
+                                    <button class="btn btn-success btn_gen__poss" style="margin-top:10px" type="submit" name="" value="2">Save Image</button>
+                                </div>
+                            }
+                            @using (Html.BeginForm("FiesImageUploader", "FileSystem", FormMethod.Post, new { @id = "file-imge", @class = "", role = "form", enctype = "multipart/form-data" }))
+                            {
+                                <div class="col-md-3" id="3">
+                                    <input type="hidden" name="ImageId" class="Plot_id" />
+                                    <input type="hidden" name="File_Id" class="file_id" value="@v.File_Form_Id" />
+                                    <input type="file" id="file3" name="File" value="3"><br>
+                                    <img src="/assets/static/images/def-img.png" id="img3" class="img1" width="200" height="200">
+                                    <button class="btn btn-success btn_gen__poss" style="margin-top:10px" type="submit" name="" value="3">Save Image</button>
+                                </div>
+                            }
+                            @using (Html.BeginForm("FiesImageUploader", "FileSystem", FormMethod.Post, new { @id = "file-imge", @class = "", role = "form", enctype = "multipart/form-data" }))
+                            {
+                                <div class="col-md-3" id="4">
+                                    <input type="hidden" name="ImageId" class="Plot_id" />
+                                    <input type="hidden" name="File_Id" class="file_id" value="@v.File_Form_Id" />
+                                    <input type="file" id="file4" name="File"><br>
+                                    <img src="/assets/static/images/def-img.png" id="img4" class="img1" width="200" height="200">
+                                    <button class="btn btn-success btn_gen__poss" style="margin-top:10px" type="submit" name="" value="4">Save Image</button>
+                                </div>
+                            }
+
+                        </div>
+                        @if (!User.IsInRole("File Customer Image Update"))
+                        {
+                            <div class="col-md-12 central-text-align mt-md-3 mb-md-3">
+                                <button class="btn btn-success updt-exstng-owner-rec-dsffskfs" style="display:none;">Save Record</button>
+                            </div>
+                        }
+
+                        <hr />
+                    </div>
+                }
+
+            }
+
+
+        </div>
+    </div>
+    <hr />
+    <div class="col-xl-3 col-md-12">
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item"><a class="nav-link active" data-lead="1" role="tab" data-toggle="tab" aria-controls="home" aria-selected="true" href="#assigned">History</a></li>
+            <li class="nav-item"><a class="nav-link" role="tab" data-lead="1" data-toggle="tab" aria-controls="home" aria-selected="true" href="#created">Reminders</a></li>
+        </ul>
+        <div class="tab-content">
+            <div id="assigned" class="tab-pane active">
+                @{ Html.RenderAction("FilesComments", "Messages", new { Fileid = Model.FileData.Id });}
+            </div>
+            <div id="created" class="tab-pane">
+                @{ Html.RenderAction("GetUpcomingRemindersByModule", "Reminders", new { module = "File", modId = Model.FileData.Id });}
+            </div>
+        </div>
+    </div>
+    <hr />
+    <hr />
+    <div class="form-row">
+        <div class="col-md-4">
+            <h6 class="c-grey-900">Installments</h6>
+        </div>
+
+        <div class="col-md-4">
+            <button type="button" class="fil-disc btn btn-info" data-toggle="modal" data-target="#Modal">Add Discounts</button>
+        </div>
+
+        <div class="col-md-4">
+            <button class="btn btn-primary up_inst_btn_file" data-toggle="modal" data-target="#Modal">Update Installment</button>
+        </div>
+    </div>
+    <hr />
+    <hr />
+    <div class="col-xl-12 col-md-12">
+        <div class="form-row">
+            <div class="col-md-4">
+                <div class="form-row">
+                    <ul class="nav nav-tabs">
+                        <li class="nav-item">
+                            <a class="nav-link active pointer sideLink installPlan" data-typ="installPlan">Installment Plan</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link sideLink pointer sideLink SurChargefile" data-typ="SurChargefile">SurCharge Schedule</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link sideLink pointer sideLink Not_Included" data-typ="Not_Included">Not_Included</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="row" style="height:500px;overflow-y:scroll;margin-right:5px;">
+                    <table class="table table-striped table-bordered installPlanView" cellspacing="0" width="100%" style="margin-bottom:0px">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th>Installment</th>
+                                <th>Amount</th>
+                                <th>Due Date</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                decimal overduetotal = 0;
+                                foreach (var item in Model.FileInstallments)
+                                {
+                                    if (item.Installment_Type != "10")
+                                    {
+                                        var statuscolor = "";
+                                        if (item.Status == "NotPaid")
+                                        {
+                                            statuscolor = "bgc-red-50";
+                                            overduetotal = overduetotal + item.Amount;
+                                        }
+                                        else if (item.Status == "Paid")
+                                        {
+                                            statuscolor = "bgc-green-50";
+                                        }
+                                        <tr class="@statuscolor">
+                                            <td>@item.Installment_Name</td>
+                                            <td>@string.Format("{0:0,0.##}", item.Amount)</td>
+                                            <td>@string.Format("{0:dd-MMM-yyyy}", item.Due_Date)</td>
+                                            <td>@item.Status</td>
+                                        </tr>
+
+                                    }
+                                }
+                            }
+                        </tbody>
+                    </table>
+                    @if (Model.FileInstallments.Any())
+                    {
+                        <table class="table table-striped table-bordered SurChargefileView" cellspacing="0" width="100%" style="margin-bottom:0px;display:none;">
+                            <thead>
+                                <tr class="thead-dark">
+                                    <th>Particulars</th>
+                                    <th>Days</th>
+                                    <th>Amount</th>
+                                    <th>Surcharge Amount</th>
+                                    <th>Due Date</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                    @* <th><button style="padding:5px;" class="btn btn-primary btn-success btn-outline-success up_inst_btn_plot">Update Plan</button></th>*@
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+                                    foreach (var item in Model.PlotInstallmentsSurcharge.OrderBy(x => x.DueDate))
+                                    {
+                                        decimal overduetotalAmount = 0;
+                                        var statuscolor = "";
+                                        if (item.Status == "NotPaid")
+                                        {
+                                            statuscolor = "bgc-red-50";
+                                            overduetotalAmount = overduetotalAmount + item.Amount;
+                                        }
+                                        else if (item.Status == "Paid")
+                                        {
+                                            statuscolor = "bgc-green-50";
+                                        }
+                                        if (item.Waveoff == 1)
+                                        {
+                                            statuscolor = "bgc-black-50";
+                                        }
+
+                                        <tr class="@statuscolor" style="background-color:white">
+                                            <td>@item.Installment_Name</td>
+                                            <td>@item.Surchargedays</td>
+                                            <td>@string.Format("{0:00.00}", item.Amount)</td>
+                                            <td>@string.Format("{0:00.00}", item.SurchargeAmount)</td>
+                                            <td>@string.Format("{0:dd-MMM-yyyy}", item.DueDate_New)</td>
+                                            @if (item.Waveoff == 1)
+                                            {
+                                                <td> Wave Off  </td>
+                                            }
+                                            else
+                                            {
+                                                <td> @item.Status </td>
+                                            }
+                                            @if (item.Status == "NotPaid" && item.Waveoff == null)
+                                            {
+                                                <td>
+                                                    <ul style="list-style:none;margin-left:0px;">
+                                                        <li class="dropdown">
+                                                            <a href="" class="dropdown-toggle no-after peers " data-toggle="dropdown">
+                                                                <i class="ti-more-alt" style="transform:rotate(90deg);"></i>
+                                                            </a>
+                                                            <ul class="dropdown-menu" style="padding:10px;width:auto !important">
+                                                                @*<li><a id="@item.Id" class="wave-off-surcharge pointer"><span>Wave off Surcharge</span></a></li>*@
+                                                                <li><a href="~/Plots/UpdateWaveOffStatus?id=@item.Id" class="wave-off-surcharge pointer"><span>Wave off Surcharge</span></a></li>
+                                                            </ul>
+                                                        </li>
+                                                    </ul>
+                                                </td>
+                                            }
+                                            else
+                                            {
+                                                <td>  </td>
+                                            }
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+
+                    }
+                    <table class="table table-striped table-bordered installPlanNotIncluded" cellspacing="0" width="100%" style="margin-bottom:0px">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th>Installment</th>
+                                <th>Amount</th>
+                                <th>Due Date</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                overduetotal = 0;
+                                foreach (var item in Model.FileInstallments)
+                                {
+                                    if (item.Installment_Type == "10")
+                                    {
+                                        var statuscolor = "";
+                                        if (item.Status == "NotPaid")
+                                        {
+                                            statuscolor = "bgc-red-50";
+                                            overduetotal = overduetotal + item.Amount;
+                                        }
+                                        else if (item.Status == "Paid")
+                                        {
+                                            statuscolor = "bgc-green-50";
+                                        }
+                                        <tr class="@statuscolor">
+                                            <td>@item.Installment_Name</td>
+                                            <td>@string.Format("{0:0,0.##}", item.Amount)</td>
+                                            <td>@string.Format("{0:dd-MMM-yyyy}", item.Due_Date)</td>
+                                            <td>@item.Status</td>
+                                        </tr>
+                                    }
+                                }
+                            }
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+            <div class="col-md-5">
+                <div class="form-row">
+                    <ul class="nav nav-tabs">
+                        <li class="nav-item">
+                            <a class="nav-link active pointer sideLink instrecfile" data-typ="instrecfile">Booking & Installment</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link sideLink pointer sideLink Surchargerecfile" data-typ="Surchargerecfile">Surcharge </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link sideLink pointer sideLink otherrecfile" data-typ="otherrecfile">Other</a>
+                        </li>
+
+                    </ul>
+                </div>
+                <div class="row" style="height:500px;overflow-y:scroll;margin-right:5px;">
+                    <table class="table table-striped table-bordered instrecviewfile" cellspacing="0" width="100%" style="margin-bottom:0px">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th>Sr.</th>
+                                <th>Receipt No.</th>
+                                <th>Inst No.</th>
+                                <th>Type</th>
+                                <th>Status</th>
+                                <th>Amount</th>
+                                <th>Date</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{ int srcount = 1;
+                                string[] Types = { "Booking", "Installment", "Adjusted" };
+                                foreach (var g in Model.FileReceipts.Where(x => Types.Contains(x.Type)).GroupBy(x => x.Type))
+                                {
+                                    <tr><td colspan="8" style="text-align:center;font-size:15px"><b>@g.Key</b></td></tr>
+                                    foreach (var item in g)
+                                    {
+                                        string stat = "";
+                                        if (item.Status == "Pending")
+                                        {
+                                            stat = "bgc-yellow-50";
+                                        }
+                                        else if (item.Status == "Dishonored")
+                                        {
+                                            stat = "bgc-red-50";
+                                        }
+                                        else if (item.Status == "Approved")
+                                        {
+                                            stat = "bgc-green-50";
+                                        }
+                                        else if (item.Status == "Deposited")
+                                        {
+                                            stat = "bgc-orange-50";
+                                        }
+                                        else
+                                        {
+                                            stat = "";
+                                        }
+                                        <tr class="@stat" id="@item.Id">
+                                            <td>@srcount</td>
+                                            @if (((item.ReceiptNo.Contains("-DIB") || item.ReceiptNo.Contains("-HBL")) && item.Userid != 0))
+                                            {
+                                                <td>
+                                                    @item.ReceiptNo
+                                                    <br>
+                                                    Manual
+                                                </td>
+                                            }
+                                            else
+                                            {
+                                                <td>@item.ReceiptNo</td>
+                                            }
+                                            <td>@string.Format("{0:0,0.##}", item.Ch_Pay_Draft_No)</td>
+                                            <td>@item.PaymentType</td>
+                                            <td>@item.Status</td>
+                                            <td>@string.Format("{0:0,0.##}", item.Amount)</td>
+                                            <td>@string.Format("{0:dd-MMM-yyyy}", item.DateTime)</td>
+                                            <td>
+                                                @{
+                                                    if (item.Verified == true)
+                                                    {
+                                                        <i class="ti-check" style="color:green"></i>
+                                                    }
+                                                }
+                                            </td>
+                                        </tr>
+                                        srcount++;
+                                    }
+                                }
+                                <tr>
+                                    <td colspan="4">
+                                        <a class="btn btn-primary" style="color:white" href="/Reports/FileStatmentAcc?Token=@Model.FileData.FileFormNumber" target="_blank">File Statement</a>
+                                    </td>
+                                    <td colspan="4">Received Amount : <b>@string.Format("{0:n0}", Model.FileReceipts.Where(x => (x.Status is null || x.Status == "Approved") && Types.Contains(x.Type)).Sum(x => x.Amount))</b> </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                    <table class="table table-striped table-bordered SurChargerecviewfile" cellspacing="0" width="100%" style="margin-bottom:0px;display:none;">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th>Sr.</th>
+                                <th>Receipt No.</th>
+                                <th>Inst No.</th>
+                                <th>Type</th>
+                                <th>Status</th>
+                                <th>Amount</th>
+                                <th>Date</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{ srcount = 1;
+                                string[] Type = { "SurCharge" };
+                                foreach (var g in Model.FileReceipts.Where(x => x.Type == "SurCharge").GroupBy(x => x.Type))
+                                {
+                                    <tr><td colspan="8" style="text-align:center;font-size:15px"><b>@g.Key</b></td></tr>
+                                    foreach (var item in g)
+                                    {
+                                        string stat = "";
+                                        if (item.Status == "Pending")
+                                        {
+                                            stat = "bgc-yellow-50";
+                                        }
+                                        else if (item.Status == "Dishonored")
+                                        {
+                                            stat = "bgc-red-50";
+                                        }
+                                        else if (item.Status == "Approved")
+                                        {
+                                            stat = "bgc-green-50";
+                                        }
+                                        else if (item.Status == "Deposited")
+                                        {
+                                            stat = "bgc-orange-50";
+                                        }
+                                        else
+                                        {
+                                            stat = "";
+                                        }
+                                        <tr class="@stat" id="@item.Id">
+                                            <td>@srcount</td>
+                                            @if (((item.ReceiptNo.Contains("-DIB") || item.ReceiptNo.Contains("-HBL")) && item.Userid != 0))
+                                            {
+                                                <td>
+                                                    @item.ReceiptNo
+                                                    <br>
+                                                    Manual
+                                                </td>
+                                            }
+                                            else
+                                            {
+                                                <td>@item.ReceiptNo</td>
+                                            }
+                                            <td>@string.Format("{0:0,0.##}", item.Ch_Pay_Draft_No)</td>
+                                            <td>@item.PaymentType</td>
+                                            <td>@item.Status</td>
+                                            <td>@string.Format("{0:0,0.##}", item.Amount)</td>
+                                            <td>@string.Format("{0:dd-MMM-yyyy}", item.DateTime)</td>
+                                            <td>
+                                                @{
+                                                    if (item.Verified == true)
+                                                    {
+                                                        <i class="ti-check" style="color:green"></i>
+                                                    }
+                                                }
+                                            </td>
+                                        </tr>
+                                        srcount++;
+                                    }
+                                }
+                                <tr>
+                                    <td colspan="4">
+                                        <a class="btn btn-primary" style="color:white" href="/Reports/FileStatmentAcc?Token=@Model.FileData.FileFormNumber" target="_blank">File Statement</a>
+                                    </td>
+                                    <td colspan="4">Received Amount : <b>@string.Format("{0:n0}", Model.FileReceipts.Where(x => (x.Status is null || x.Status == "Approved") && Type.Contains(x.Type)).Sum(x => x.Amount))</b> </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                    <table class="table table-striped table-bordered otherrecviewfile" cellspacing="0" width="100%" style="margin-bottom:0px;display:none;">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th>Sr.</th>
+                                <th>Receipt No.</th>
+                                <th>Inst No.</th>
+                                <th>Type</th>
+                                <th>Status</th>
+                                <th>Amount</th>
+                                <th>Date</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{ srcount = 1;
+                                string[] excludedTypes = { "Booking", "Installment", "Adjusted", "SurCharge" };
+                                foreach (var g in Model.FileReceipts.Where(x => x.Type != "Booking" && x.Type != "Installment" && x.Type != "Adjusted" && x.Type != "Surcharge").GroupBy(x => x.Type))
+                                {
+                                    <tr><td colspan="8" style="text-align:center;font-size:15px"><b>@g.Key</b></td></tr>
+                                    foreach (var item in g)
+                                    {
+                                        string stat = "";
+                                        if (item.Status == "Pending")
+                                        {
+                                            stat = "bgc-yellow-50";
+                                        }
+                                        else if (item.Status == "Dishonored")
+                                        {
+                                            stat = "bgc-red-50";
+                                        }
+                                        else if (item.Status == "Approved")
+                                        {
+                                            stat = "bgc-green-50";
+                                        }
+                                        else if (item.Status == "Deposited")
+                                        {
+                                            stat = "bgc-orange-50";
+                                        }
+                                        else
+                                        {
+                                            stat = "";
+                                        }
+                                        <tr class="@stat" id="@item.Id">
+                                            <td>@srcount</td>
+                                            @if (((item.ReceiptNo.Contains("-DIB") || item.ReceiptNo.Contains("-HBL")) && item.Userid != 0))
+                                            {
+                                                <td>
+                                                    @item.ReceiptNo
+                                                    <br>
+                                                    Manual
+                                                </td>
+                                            }
+                                            else
+                                            {
+                                                <td>@item.ReceiptNo</td>
+                                            }
+                                            <td>@string.Format("{0:0,0.##}", item.Ch_Pay_Draft_No)</td>
+                                            <td>@item.PaymentType</td>
+                                            <td>@item.Status</td>
+                                            <td>@string.Format("{0:0,0.##}", item.Amount)</td>
+                                            <td>@string.Format("{0:dd-MMM-yyyy}", item.DateTime)</td>
+                                            <td>
+                                                @{
+                                                    if (item.Verified == true)
+                                                    {
+                                                        <i class="ti-check" style="color:green"></i>
+                                                    }
+                                                }
+                                            </td>
+                                        </tr>
+                                        srcount++;
+                                    }
+                                }
+                                <tr>
+                                    <td colspan="4">
+                                        <a class="btn btn-primary" style="color:white" href="/Reports/FileStatmentAcc?Token=@Model.FileData.FileFormNumber" target="_blank">File Statement</a>
+                                    </td>
+                                    <td colspan="4">Received Amount : <b>@string.Format("{0:n0}", Model.FileReceipts.Where(x => (x.Status is null || x.Status == "Approved") && !excludedTypes.Contains(x.Type)).Sum(x => x.Amount))</b> </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div style="min-height:0px; max-height:500px;overflow:auto;" class="dis ps--active-y">
+                    <h5>Discounts</h5>
+                    <table class="table table-striped table-bordered" id="dis-amts" cellspacing="0" width="100%">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th>Total Amount</th>
+                                <th>Discount</th>
+                                <th>Percentage</th>
+                                <th>Remarks</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.Discounts)
+                            {
+                                <tr id="@item.Id">
+                                    <td>@string.Format("{0:0,0.##}", item.Total_Amount)</td>
+                                    <td>@string.Format("{0:0,0.##}", item.Discount_Amount)</td>
+                                    <td>@string.Format("{0:0,0.##}", item.Percentage)</td>
+                                    <td>@item.Remarks</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+
+        </div>
+
+    </div>
+    <br />
+    <br />
+    <div class="col-md-12">
+        <div class="form-row">
+            <div class="col-md-12" id="plot-rep" style="margin-top:1%"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+  
+    $('.sideLink').unbind().click(function () {
+        if (!$(this).hasClass('active')) {
+            $(this).addClass('active');
+            let typeOfLink = $(this).attr('data-typ');
+            debugger
+            if (typeOfLink == 'installPlan') {
+                $('.installPlanView').show();
+                $('.SurChargefileView').hide();
+                $('.SurChargefile').removeClass('active');
+                $('.installPlanNotIncluded').hide();
+                $('.Not_Included').removeClass('active');
+            }
+            else if (typeOfLink == 'SurChargefile') {
+                $('.installPlanView').hide();
+                $('.installPlan').removeClass('active');
+                $('.installPlanNotIncluded').hide();
+                $('.Not_Included').removeClass('active');
+                $('.SurChargefileView').show();
+            }
+            else if (typeOfLink == 'Not_Included') {
+                $('.installPlanView').hide();
+                $('.installPlan').removeClass('active');
+                $('.SurChargefileView').hide();
+                $('.SurChargefile').removeClass('active');;
+                $('.installPlanNotIncluded').show();
+            }
+            if (typeOfLink == 'instrecfile') {
+                $('.instrecviewfile').show();
+                $('.otherrecviewfile').hide();
+                $('.otherrecfile').removeClass('active');
+                $('.SurChargerecviewfile').hide();
+                $('.Surchargerecfile').removeClass('active');
+            }
+            else if (typeOfLink == 'otherrecfile') {
+                $('.instrecviewfile').hide();
+                $('.instrecfile').removeClass('active');
+                $('.SurChargerecviewfile').hide();
+                $('.Surchargerecfile').removeClass('active');
+                $('.otherrecviewfile').show();
+
+            }
+            else if (typeOfLink == 'Surchargerecfile') {
+                $('.instrecviewfile').hide();
+                $('.instrecfile').removeClass('active');
+                $('.otherrecviewfile').hide();
+                $('.otherrecfile').removeClass('active');
+                $('.SurChargerecviewfile').show();
+            }
+
+        }
+    });
+       
+        $('#new-owner-hkad').unbind().click(function () {
+            debugger;
+            let flId = $('#app-num').val();
+           EmptyModel();
+           $('#ModalLabel').text("Add Owner");
+           $('.modal-body').load('/FileSystem/NewFileOwner/', {fileId: flId }, function () {
+        });
+        });
+        //
+        $(document).on('click', '.installment-plan-row-del', function () {
+        var id = $(this).attr('data-ins-id');
+        var insname = $(this).attr('data-ins-name');
+        if (insname != "Advance") {
+            var reason = prompt("Reason");
+        if (reason != "" && reason != null) {
+            $.ajax({
+                type: "POST",
+                url: '/Installments/DeletePlotInstallment/',
+                data: { insId: id, comment: reason },
+                success: function (data) {
+                    alert(insname + " deleted successfully.");
+                    window.location.reload();
+                },
+                error: function () {
+                    alert("Error Occured");
+                }
+            });
+            }
+        }
+        else {
+            alert("Advance cannot be deleted.");
+        }
+    });
+    $(document).ready(function () {
+        $('.updt-exstng-owner-rec-dsffskfs').unbind().click(function () {
+            debugger;
+            //collect the data here
+            let actualRow = $(this).closest('.wrap-sfk');
+            var od = {
+                Id: $(actualRow).find('.file-trans-id').val()
+                , Name: $(actualRow).find('.Name').val()
+                , Father_Husband: $(actualRow).find('.Father_Husband').val()
+                , Postal_Address: $(actualRow).find('.Postal_Address').val()
+                , Residential_Address: $(actualRow).find('.Residential_Address').val()
+                , Phone_Office: $(actualRow).find('.Phone_Office').val()
+                , Residential: $(actualRow).find('.Residential').val()
+                , Mobile_1: $(actualRow).find('.Mobile_1').val()
+                , Mobile_2: $(actualRow).find('.Mobile_2').val()
+                , Email: $(actualRow).find('.Email').val()
+                , Occupation: $(actualRow).find('.Occupation').val()
+                , Nationality: $(actualRow).find('.Nationality').val()
+                , Date_Of_Birth: $(actualRow).find('.Date_Of_Birth').val()
+                , CNIC_NICOP: $(actualRow).find('.CNIC_NICOP').val()
+                , Nominee_Name: $(actualRow).find('.Nominee_Name').val()
+                , Nominee_Relation: $(actualRow).find('.Nominee_Relation').val()
+                , Nominee_Address: $(actualRow).find('.Nominee_Address').val()
+                , Nominee_CNIC_NICOP: $(actualRow).find('.Nominee_CNIC_NICOP').val()
+                , DateTime: $(actualRow).find('.DateTime').val()
+                , City: $(actualRow).find('.City').val()
+                , Ownership_Status: $(actualRow).find('.owner-stat-jfkldgf option:selected').val()
+                , FileId: $('#app-num').val()
+            };
+            debugger;
+            $.ajax({
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                url: '/FileSystem/UpdateOwnerResult/',
+                data: JSON.stringify(od),
+                success: function (data) {
+                    debugger;
+                    $("#upd-info").show();
+                    $(".updt-exstng-owner-rec-dsffskfs").hide();
+                    $(".up-info :input").prop("readonly", true);
+                    $(".owner-stat-jfkldgf").prop("disabled", true);
+                    // alert("Owner's information updated successfully");
+                    Swal.fire({
+                        icon: 'success',
+                        text: "Owner's information updated successfully"
+                    });
+                },
+                error: function (data) {
+                    Swal.fire({
+                        icon: 'error',
+                        text: 'Something went wrong'
+                    });
+                }
+            });
+        });
+    });
+</script>
+
