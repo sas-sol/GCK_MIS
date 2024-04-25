@@ -1594,8 +1594,21 @@ namespace MeherEstateDevelopers.Controllers
             }
             var res3 = db.Sp_Get_PlotInstallments(Plotid).ToList();
             var res4 = db.Sp_Get_ReceivedAmounts(Plotid, Modules.PlotManagement.ToString()).ToList();
-            var res5 = db.Plot_Installments_Surcharge.Where(x => x.Plot_Id == Plotid && x.Modules == "PlotManagement").ToList();
-            var res = new PlotDetailData { PlotData = res1, PlotOwners = res2, PlotInstallments = res3, PlotReceipts = res4, PlotInstallmentsSurcharge = res5 };
+            var discount = db.Discounts.Where(x => x.Module_Id == Plotid && x.Module == Modules.PlotManagement.ToString() && x.Plot_Is_Cancelled == null).ToList();
+            UpdatePlotInstallmentStatus(res3, res4, discount, Plotid);
+            var fpb = db.File_Plot_Balance.Where(x => x.File_Plot_Id == Plotid && x.Module == "PlotManagement").FirstOrDefault();
+            var res6 = db.Discounts.Where(x => x.Module_Id == Plotid && x.Module == Modules.PlotManagement.ToString() && x.Plot_Is_Cancelled == null).ToList();
+            //surcharge 
+            var res8 = db.Sp_Get_PlotInstallments_Wht(Plotid).ToList();
+            var res5surcharge = db.Plot_Installments_Surcharge.Where(x => x.Plot_Id == Plotid && x.Cancelled == null && x.Waveoff == null && x.Modules == "PlotManagement").OrderBy(x => x.DueDate).ToList();
+            var res6surcharge = db.Sp_Get_ReceivedAmounts_Surcharge(Plotid, Modules.PlotManagement.ToString()).ToList();
+            UpdatePlotInstallmentStatusSurcharge(res5surcharge, res6surcharge, Plotid);
+            var UpdateSurChargeInstallments = db.Plot_Installments_Surcharge.Where(x => x.Plot_Id == Plotid && x.Cancelled == null && x.Waveoff == null && x.Modules == "PlotManagement").OrderBy(x => x.DueDate).ToList();
+            //Not_Included
+            var res12 = db.Sp_Get_ReceivedAmounts_NotIncluded(Plotid, Modules.PlotManagement.ToString()).ToList();
+            UpdatePlotInstallmentStatusNotIncluded(res3, res12, Plotid);
+            var UpdatePlotInstallments = db.Sp_Get_PlotInstallments(Plotid).ToList();
+            var res = new PlotDetailData { PlotData = res1, PlotOwners = res2, PlotInstallments = UpdatePlotInstallments, PlotReceipts = res4, PlotInstallmentsSurcharge = UpdateSurChargeInstallments };
             return PartialView(res);
         }
         public JsonResult UpdateConstructionStatus(long Id, string DevelopStatus)

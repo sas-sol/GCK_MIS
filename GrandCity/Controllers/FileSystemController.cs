@@ -788,24 +788,25 @@ namespace MeherEstateDevelopers.Controllers
         public JsonResult UpdateOwnerResult(OwnerData od)
         {
             long userid = long.Parse(User.Identity.GetUserId());
-            var res = db.Sp_Get_FileOwnerList(od.FileId).ToList().Where(x => x.Id == od.Id).FirstOrDefault();
+            //var res = db.Sp_Get_FileOwnerList(od.FileId).ToList().Where(x => x.Id == od.Id).FirstOrDefault();
+            var res = db.Files_Transfer.SingleOrDefault(x => x.Id == od.Id);
             db.Sp_Update_FileOwnerData(od.Name, od.Father_Husband, od.Postal_Address, od.Residential_Address, od.City, od.Date_Of_Birth,
                 od.CNIC_NICOP, od.Nationality, od.Email, od.Phone_Office, od.Residential, od.Mobile_1, od.Mobile_2, od.Nominee_Name,
                 od.Nominee_CNIC_NICOP, od.Nominee_Relation, od.Nominee_Address, od.Occupation, od.DateTime, od.FileId, od.Ownership_Status, od.Id);
             //Adding comment
-            if (res.Name != od.Name && res.Name != null) { db.Sp_Add_FileComments(od.FileId, "Update Name: " + res.Name + " To: " + od.Name, userid, ActivityType.Record_Upatation.ToString()); }
-            if (res.Ownership_Status != od.Ownership_Status && res.Ownership_Status != null) { db.Sp_Add_FileComments(od.FileId, "Update Ownership Staus: " + res.Ownership_Status + " To: " + od.Ownership_Status, userid, ActivityType.Record_Upatation.ToString()); }
-            if (res.Father_Husband != od.Father_Husband && res.Father_Husband != null) { db.Sp_Add_FileComments(od.FileId, "Update Father Name: " + res.Father_Husband + " To: " + od.Father_Husband, userid, ActivityType.Record_Upatation.ToString()); }
-            if (res.CNIC_NICOP != od.CNIC_NICOP && res.CNIC_NICOP != null) { db.Sp_Add_FileComments(od.FileId, "Update CNIC: " + res.CNIC_NICOP + " To: " + od.CNIC_NICOP, userid, ActivityType.Record_Upatation.ToString()); }
-            if (res.Mobile_1 != od.Mobile_1 && res.Mobile_1 != null) { db.Sp_Add_FileComments(od.FileId, "Update Mobile Number: " + res.Mobile_1 + " To: " + od.Mobile_1, userid, ActivityType.Record_Upatation.ToString()); }
-            if (res.Postal_Address != od.Postal_Address && res.Postal_Address != null) { db.Sp_Add_FileComments(od.FileId, "Update Postal Address: " + res.Postal_Address + " To: " + od.Postal_Address, userid, ActivityType.Record_Upatation.ToString()); }
-            if (res.City != od.City && res.City != null) { db.Sp_Add_FileComments(od.FileId, "Update City: " + res.City + " To: " + od.City, userid, ActivityType.Record_Upatation.ToString()); }
-            if (res.Nationality != od.Nationality && res.Nationality != null) { db.Sp_Add_FileComments(od.FileId, "Update Nationality: " + res.Nationality + " To: " + od.Nationality, userid, ActivityType.Record_Upatation.ToString()); }
-            if (res.Date_Of_Birth != od.Date_Of_Birth && res.Date_Of_Birth != null) { db.Sp_Add_FileComments(od.FileId, "Update Date of Birth: " + res.Date_Of_Birth + " To: " + od.Date_Of_Birth, userid, ActivityType.Record_Upatation.ToString()); }
-            if (res.Nominee_Name != od.Nominee_Name && res.Nominee_Name != null) { db.Sp_Add_FileComments(od.FileId, "Update Nominee Name: " + res.Nominee_Name + " To: " + od.Nominee_Name, userid, ActivityType.Record_Upatation.ToString()); }
-            if (res.Nominee_Relation != od.Nominee_Relation && res.Nominee_Relation != null) { db.Sp_Add_FileComments(od.FileId, "Update Nominee Relation: " + res.Nominee_Relation + " To: " + od.Nominee_Relation, userid, ActivityType.Record_Upatation.ToString()); }
-            if (res.Nominee_Address != od.Nominee_Address && res.Nominee_Address != null) { db.Sp_Add_FileComments(od.FileId, "Update Nominee Address: " + res.Nominee_Address + " To: " + od.Nominee_Address, userid, ActivityType.Record_Upatation.ToString()); }
-            if (res.Nominee_CNIC_NICOP != od.Nominee_CNIC_NICOP && res.Nominee_CNIC_NICOP != null) { db.Sp_Add_FileComments(od.FileId, "Update Nominee CNIC: " + res.Nominee_CNIC_NICOP + " To: " + od.Nominee_CNIC_NICOP, userid, ActivityType.Record_Upatation.ToString()); }
+            if (res.Name != od.Name && res.Name != null) { db.Sp_Add_FileComments(res.File_Form_Id, "Update Name: " + res.Name + " To: " + od.Name, userid, ActivityType.Record_Upatation.ToString()); }
+            if (res.Ownership_Status != od.Ownership_Status && res.Ownership_Status != null) { db.Sp_Add_FileComments(res.File_Form_Id, "Update Ownership Staus: " + res.Ownership_Status + " To: " + od.Ownership_Status, userid, ActivityType.Record_Upatation.ToString()); }
+            if (res.Father_Husband != od.Father_Husband && res.Father_Husband != null) { db.Sp_Add_FileComments(res.File_Form_Id, "Update Father Name: " + res.Father_Husband + " To: " + od.Father_Husband, userid, ActivityType.Record_Upatation.ToString()); }
+            if (res.CNIC_NICOP != od.CNIC_NICOP && res.CNIC_NICOP != null) { db.Sp_Add_FileComments(res.File_Form_Id, "Update CNIC: " + res.CNIC_NICOP + " To: " + od.CNIC_NICOP, userid, ActivityType.Record_Upatation.ToString()); }
+            if (res.Mobile_1 != od.Mobile_1 && res.Mobile_1 != null) { db.Sp_Add_FileComments(res.File_Form_Id, "Update Mobile Number: " + res.Mobile_1 + " To: " + od.Mobile_1, userid, ActivityType.Record_Upatation.ToString()); }
+            if (res.Postal_Address != od.Postal_Address && res.Postal_Address != null) { db.Sp_Add_FileComments(res.File_Form_Id, "Update Postal Address: " + res.Postal_Address + " To: " + od.Postal_Address, userid, ActivityType.Record_Upatation.ToString()); }
+            if (res.City != od.City && res.City != null) { db.Sp_Add_FileComments(res.File_Form_Id, "Update City: " + res.City + " To: " + od.City, userid, ActivityType.Record_Upatation.ToString()); }
+            if (res.Nationality != od.Nationality && res.Nationality != null) { db.Sp_Add_FileComments(res.File_Form_Id, "Update Nationality: " + res.Nationality + " To: " + od.Nationality, userid, ActivityType.Record_Upatation.ToString()); }
+            if (res.Date_Of_Birth != od.Date_Of_Birth && res.Date_Of_Birth != null) { db.Sp_Add_FileComments(res.File_Form_Id, "Update Date of Birth: " + res.Date_Of_Birth + " To: " + od.Date_Of_Birth, userid, ActivityType.Record_Upatation.ToString()); }
+            if (res.Nominee_Name != od.Nominee_Name && res.Nominee_Name != null) { db.Sp_Add_FileComments(res.File_Form_Id, "Update Nominee Name: " + res.Nominee_Name + " To: " + od.Nominee_Name, userid, ActivityType.Record_Upatation.ToString()); }
+            if (res.Nominee_Relation != od.Nominee_Relation && res.Nominee_Relation != null) { db.Sp_Add_FileComments(res.File_Form_Id, "Update Nominee Relation: " + res.Nominee_Relation + " To: " + od.Nominee_Relation, userid, ActivityType.Record_Upatation.ToString()); }
+            if (res.Nominee_Address != od.Nominee_Address && res.Nominee_Address != null) { db.Sp_Add_FileComments(res.File_Form_Id, "Update Nominee Address: " + res.Nominee_Address + " To: " + od.Nominee_Address, userid, ActivityType.Record_Upatation.ToString()); }
+            if (res.Nominee_CNIC_NICOP != od.Nominee_CNIC_NICOP && res.Nominee_CNIC_NICOP != null) { db.Sp_Add_FileComments(res.File_Form_Id, "Update Nominee CNIC: " + res.Nominee_CNIC_NICOP + " To: " + od.Nominee_CNIC_NICOP, userid, ActivityType.Record_Upatation.ToString()); }
             return Json(true);
         }
         public JsonResult DeliverFile(long? id)
@@ -962,9 +963,10 @@ namespace MeherEstateDevelopers.Controllers
             ViewBag.Plot_Prefrence = new SelectList(db.Sp_Get_Plot_Prefrences(), "Id", "Plot_Prefrence");
             return View();
         }
-        public JsonResult FileDiscount(decimal TotalAmt, decimal DiscountAmt, string Remarks, long Id, DateTime? DiscountDate)
+        public JsonResult FileDiscount(decimal TotalAmt, decimal DiscountAmt, string Remarks, string Id, DateTime? DiscountDate)
         {
-            var res = db.Sp_Add_Discount(TotalAmt, DiscountAmt, Remarks, Id, Modules.FileManagement.ToString(), DiscountDate);
+            var res1 = db.Sp_Get_FileAppFormData(Id).SingleOrDefault();
+            var res = db.Sp_Add_Discount(TotalAmt, DiscountAmt, Remarks, res1.Id, Modules.FileManagement.ToString(), DateTime.Now);
             return Json(true);
         }
         [HttpPost]
@@ -1101,7 +1103,40 @@ namespace MeherEstateDevelopers.Controllers
         {
             return View();
         }
+        public ActionResult GetUpdateInfoDetails(string FileId)
+        {
+            long userid = long.Parse(User.Identity.GetUserId());
+            var res1 = db.Sp_Get_FileAppFormData(FileId).SingleOrDefault();
 
+            long[] size = { 1, 6 };
+            if (size.Contains(res1.Status))
+            {
+                var res44 = TestAdjustIntallments(res1.Id);
+            }
+            FileStatus filestat = (FileStatus)res1.Status;
+            string status = filestat.ToString();
+            ViewBag.status = status;
+            var res2 = db.Sp_Get_FileOwnerList(res1.Id).ToList();
+            var res3 = db.Sp_Get_FileInstallments(res1.Id).ToList();
+            var res4 = db.Sp_Get_ReceivedAmounts(res1.Id, Modules.FileManagement.ToString()).ToList();
+            var res5 = db.Discounts.Where(x => x.Module_Id == res1.Id && x.Module == Modules.FileManagement.ToString()).ToList();
+            var res6 = db.Vouchers.Where(x => x.File_Plot_Id == res1.Id && x.Module == Modules.FileManagement.ToString()).ToList();
+            // surcharge
+            var res7 = db.Plot_Installments_Surcharge.Where(x => x.Plot_Id == res1.Id && x.Modules == Modules.FileManagement.ToString()).ToList();
+            var res5surcharge = db.Plot_Installments_Surcharge.Where(x => x.Plot_Id == res1.Id && x.Cancelled == null && x.Waveoff == null).OrderBy(x => x.DueDate).ToList();
+            var res6surcharge = db.Sp_Get_ReceivedAmounts_Surcharge(res1.Id, Modules.FileManagement.ToString()).ToList();
+            UpdateFileInstallmentStatusSurcharge(res5surcharge, res6surcharge, res1.Id);
+            var UpdateSurChargeInstallments = db.Plot_Installments_Surcharge.Where(x => x.Plot_Id == res1.Id && x.Cancelled == null && x.Waveoff == null && x.Modules == "FileManagement").OrderBy(x => x.DueDate).ToList();
+            //Not_Included
+            var res12 = db.Sp_Get_ReceivedAmounts_NotIncluded(res1.Id, Modules.FileManagement.ToString()).ToList();
+            UpdatePlotInstallmentStatusNotIncluded(res3, res12, res1.Id);
+            var UpdatePlotInstallments = db.Sp_Get_FileInstallments(res1.Id).ToList();
+
+            var res = new FileDetailData { FileData = res1, FilesOwners = res2, FileInstallments = UpdatePlotInstallments, FileReceipts = res4, Discounts = res5, PlotInstallmentsSurcharge = UpdateSurChargeInstallments };
+            db.Sp_Add_Activity(userid, "Get full Details of File  <a class='file-data' data-id=' " + FileId + "'>" + FileId + "</a>  ", "Read", Modules.FileManagement.ToString(), ActivityType.Details_Access.ToString(), res1.Id);
+
+            return View(res);
+        }
         public ActionResult UpdationForInstallments(long FileId)
         {
             ViewBag.FileID = FileId;
@@ -2297,10 +2332,13 @@ namespace MeherEstateDevelopers.Controllers
         //////////////////////
         // Files Cancelation
         ////////////////////
-        public ActionResult UpdateFileStatus(long FileId, string Status)
+        public ActionResult UpdateFileStatus(string FileId)
         {
-            ViewBag.FileId = FileId;
-            ViewBag.C_Status = Status;
+            var res1 = db.Sp_Get_FileAppFormData(FileId).SingleOrDefault();
+            FileStatus filestat = (FileStatus)res1.Status;
+            string status = filestat.ToString();
+            ViewBag.FileId = res1.Id;
+            ViewBag.C_Status = status;
             return PartialView();
         }
         [HttpPost]
@@ -2837,9 +2875,10 @@ namespace MeherEstateDevelopers.Controllers
             var owners = db.Files_Transfer.Where(x => x.File_Form_Id == fileId).ToList();
             return PartialView(owners);
         }
-        public ActionResult NewFileOwner(long fileId)
+        public ActionResult NewFileOwner(string fileId)
         {
-            ViewBag.fileId = fileId;
+            var res1 = db.Sp_Get_FileAppFormData(fileId).SingleOrDefault();
+            ViewBag.fileId = res1.Id;
             return View();
         }
         public JsonResult SaveNewFileOwner(OwnerData od)
@@ -3191,10 +3230,11 @@ namespace MeherEstateDevelopers.Controllers
             var fres = new { VoucherId = res.Receipt_Id, Token = userid };
             return Json(fres);
         }
-        public ActionResult UpdateInstallmentInfo(long id)
+        public ActionResult UpdateInstallmentInfo(string id)
         {
-            ViewBag.id = id;
-            var res = db.File_Installments.Where(x => x.File_Id == id).ToList();
+            var res1 = db.Sp_Get_FileAppFormData(id).SingleOrDefault();
+            ViewBag.id = res1.Id;
+            var res = db.File_Installments.Where(x => x.File_Id == res1.Id).ToList();
             return PartialView(res);
         }
         //public JsonResult UpdateInstallmentInfoFile(long id, List<File_Installments> installmentData)

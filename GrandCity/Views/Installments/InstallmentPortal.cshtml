@@ -19,15 +19,26 @@
             <div class="form-row row">
                 <div class="col-md-12">
                     <div class="form-row">
-                        <div class="form-group col-md-2">
-                            <label>Plot No</label>
+                        <div class="form-group col-md-2 file-plot-sel" style="">
+                            <label>File/Plot</label>
+                            <select id="fil-plot-dd" class="form-control fil-plot-dd">
+                                <option value="Plot">Plot</option>
+                                <option value="File">File</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-2 ">
+                            <label>File/Plot No</label>
                             <input type="text" class="form-control" name="plotno" id="plotno" required placeholder="Plot No." />
                         </div>
-                        <div class="form-group col-md-2">
+                        @*<div class="form-group col-md-2 file-field">
+                            <label>File No</label>
+                            <input type="text" class="form-control" name="fileno" id="fileno" required placeholder="Plot No." />
+                        </div>*@
+                        <div class="form-group col-md-2 plt-field">
                             <label>Block</label>
                             @Html.DropDownList("Block", null, "Choose..", new { @class = "form-control blk-plots", required = "" })
                         </div>
-                        <div class="form-group col-md-2">
+                        <div class="form-group col-md-2 ">
                             <label>Type</label>
                             <select class="form-control" id="plttype" name="plttype">
                                 <option value="Residential">Residential</option>
@@ -63,8 +74,9 @@
             let plt = $('#plotno').val();
             let tp = $('#plttype option:selected').val();
             let blk = $('#Block option:selected').val();
+            let pltfile = $('#fil-plot-dd').val();
 
-            if (plt == '' || plt == undefined) {
+            if (plt == '' && plt == undefined) {
                 //alert('Enter a file number before proceeding.');
                 Swal.fire({
                     icon: 'info',
@@ -72,7 +84,7 @@
                 });
                 return;
             }
-            else if (blk == undefined || blk == '') {
+            else if (blk == undefined || blk == '' && pltfile == 'Plot') {
                 //alert('Please select a block before proceeding.');
                 Swal.fire({
                     icon: 'info',
@@ -94,7 +106,7 @@
                         Swal.fire({
                             icon: 'error',
                             text: "No Record Found"
-                            })
+                        })
                     }
                     HideFullScreenLoader();
                 }
@@ -117,4 +129,16 @@
             });
         });
     });
+    
+        $(document).on('change', '.fil-plot-dd', function () {
+        if ($(this).val() == "File") {
+            $(".file-field").show();
+            $(".plt-field").hide();
+        }
+        else {
+            $(".file-field").hide();
+        $(".plt-field").show();
+        }
+    });
+
 </script>

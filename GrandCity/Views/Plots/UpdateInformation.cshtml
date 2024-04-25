@@ -448,7 +448,9 @@
                             <li class="nav-item">
                                 <a class="nav-link sideLink pointer sideLink SurChargefile" data-typ="SurChargefile">SurCharge Schedule</a>
                             </li>
-
+                            <li class="nav-item">
+                                <a class="nav-link sideLink pointer sideLink Not_Included" data-typ="Not_Included">Not_Included</a>
+                            </li>
                         </ul>
                     </div>
                     @if (Model.PlotInstallments.Any())
@@ -467,31 +469,34 @@
                                     decimal overduetotal = 0;
                                     foreach (var own in Model.PlotInstallments)
                                     {
-                                        string[] adva = { "Advance", "Booking" };
-                                        var statuscolor = "";
-                                        if (own.Status == "NotPaid")
+                                        if (own.Installment_Type != "10")
                                         {
-                                            statuscolor = "bgc-red-50";
-                                            overduetotal = overduetotal + own.Amount;
+                                            string[] adva = { "Advance", "Booking" };
+                                            var statuscolor = "";
+                                            if (own.Status == "NotPaid")
+                                            {
+                                                statuscolor = "bgc-red-50";
+                                                overduetotal = overduetotal + own.Amount;
+                                            }
+                                            else if (own.Status == "Paid")
+                                            {
+                                                statuscolor = "bgc-green-50";
+                                            }
+                                            //if (adva.Contains(own.Installment_Name))
+                                            //{
+
+                                            //        var res = own.DueDate.ToString("MM/dd/yyyy");
+
+                                            //        $("#booking-date").text(res);
+                                            //}
+
+                                            <tr class="@statuscolor">
+                                                <td>@own.Installment_Name</td>
+                                                <td>@string.Format("{0:n0}", own.Amount)</td>
+                                                <td>@string.Format("{0:dd-MMM-yyyy}", own.DueDate)</td>
+                                                <td>@own.Status</td>
+                                            </tr>
                                         }
-                                        else if (own.Status == "Paid")
-                                        {
-                                            statuscolor = "bgc-green-50";
-                                        }
-                                        //if (adva.Contains(own.Installment_Name))
-                                        //{
-
-                                        //        var res = own.DueDate.ToString("MM/dd/yyyy");
-
-                                        //        $("#booking-date").text(res);
-                                        //}
-
-                                        <tr class="@statuscolor">
-                                            <td>@own.Installment_Name</td>
-                                            <td>@string.Format("{0:n0}", own.Amount)</td>
-                                            <td>@string.Format("{0:dd-MMM-yyyy}", own.DueDate)</td>
-                                            <td>@own.Status</td>
-                                        </tr>
                                     }
                                 }
                             </tbody>
@@ -501,7 +506,7 @@
                                 <tr class="thead-dark">
                                     <th>Particulars</th>
                                     <th>Days</th>
-                                    <th>Amount</th>
+                                    @*<th>Amount</th>*@
                                     <th>Surcharge Amount</th>
                                     <th>Due Date</th>
                                     <th>Status</th>
@@ -533,7 +538,7 @@
                                         <tr class="@statuscolor" style="background-color:white">
                                             <td>@item.Installment_Name</td>
                                             <td>@item.Surchargedays</td>
-                                            <td>@string.Format("{0:00.00}", item.Amount)</td>
+                                            @*<td>@string.Format("{0:00.00}", item.Amount)</td>*@
                                             <td>@string.Format("{0:00.00}", item.SurchargeAmount)</td>
                                             <td>@string.Format("{0:dd-MMM-yyyy}", item.DueDate_New)</td>
                                             @if (item.Waveoff == 1)
@@ -565,6 +570,44 @@
                                                 <td>  </td>
                                             }
                                         </tr>
+
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                        <table class="table table-striped table-bordered installPlanNotIncluded" cellspacing="0" width="100%" style="margin-bottom:0px">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th>Installment</th>
+                                    <th>Amount</th>
+                                    <th>Due Date</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+                                    overduetotal = 0;
+                                    foreach (var item in Model.PlotInstallments)
+                                    {
+                                        if (item.Installment_Type == "10")
+                                        {
+                                            var statuscolor = "";
+                                            if (item.Status == "NotPaid")
+                                            {
+                                                statuscolor = "bgc-red-50";
+                                                overduetotal = overduetotal + item.Amount;
+                                            }
+                                            else if (item.Status == "Paid")
+                                            {
+                                                statuscolor = "bgc-green-50";
+                                            }
+                                            <tr class="@statuscolor">
+                                                <td>@item.Installment_Name</td>
+                                                <td>@string.Format("{0:0,0.##}", item.Amount)</td>
+                                                <td>@string.Format("{0:dd-MMM-yyyy}", item.DueDate)</td>
+                                                <td>@item.Status</td>
+                                            </tr>
+                                        }
                                     }
                                 }
                             </tbody>
@@ -623,174 +666,247 @@
                     }*@
                 @if (Model.PlotReceipts.Any())
                 {
-                    <div class="col-md-7" style="max-height:500px;overflow-y:scroll">
-                        <div class="form-row">
-                            <ul class="nav nav-tabs">
-                                <li class="nav-item">
-                                    <a class="nav-link active pointer sideLink instrec" data-typ="instrec">Booking & Installment</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link sideLink pointer sideLink otherrec" data-typ="otherrec">Other</a>
-                                </li>
+            <div class="col-md-7" style="max-height:500px;overflow-y:scroll">
+                <div class="form-row">
+                    <ul class="nav nav-tabs">
+                        <li class="nav-item">
+                            <a class="nav-link active pointer sideLink instrec" data-typ="instrec">Booking & Installment</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link sideLink pointer sideLink SurchargerecPlot" data-typ="SurchargerecPlot">Surcharge </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link sideLink pointer sideLink otherrec" data-typ="otherrec">Other</a>
+                        </li>
 
-                            </ul>
-                        </div>
+                    </ul>
+                </div>
+                <table class="table table-striped table-bordered instrecview" cellspacing="0" width="100%" style="margin-bottom:0px">
+                    <thead class="thead-dark">
+                        @*<tr>
+                    <th colspan="7">@g.Key</th>
+                </tr>*@
+                        <tr>
+                            <th>Sr.</th>
+                            <th>Receipt No.</th>
+                            <th>Inst No.</th>
+                            <th>Type</th>
+                            <th>Status</th>
+                            <th>Amount</th>
+                            <th>Date</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
                         @foreach (var g in Model.PlotReceipts.GroupBy(x => x.Type).Where(x => x.Key == "Booking" || x.Key == "Installment"))
                         {
-                            <table class="table table-striped table-bordered instrecview" cellspacing="0" width="100%" style="margin-bottom:0px">
-                                <thead class="thead-dark">
-                                    <tr>
-                                        <th colspan="10">@g.Key</th>
-                                    </tr>
-                                    <tr>
-                                        <th>Sr.</th>
-                                        <th>Receipt No.</th>
-                                        <th>Inst No.</th>
-                                        <th>Type</th>
-                                        <th>Status</th>
-                                        <th>Amount</th>
-                                        <th>Date</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @{ int srcount = 1;
-                                        foreach (var own in g)
-                                        {
+                            int srcount = 1;
+                            foreach (var own in g)
+                            {
+                                stat = "";
+                                if (own.Status == "Pending")
+                                {
+                                    stat = "bgc-yellow-50";
+                                }
+                                else if (own.Status == "Dishonored")
+                                {
+                                    stat = "bgc-red-50";
+                                }
+                                else if (own.Status == "Approved")
+                                {
+                                    stat = "bgc-green-50";
+                                }
+                                else if (own.Status == "Deposited")
+                                {
+                                    stat = "bgc-orange-50";
+                                }
+                                else
+                                {
+                                    stat = "";
+                                }
+                        <tr class="@stat" id="@own.Id">
+                            <td>@srcount</td>
+                            <td>@own.ReceiptNo</td>
+                            <td>@string.Format("{0:n0}", own.Ch_Pay_Draft_No)</td>
+                            <td>@own.PaymentType</td>
+                            <td>@own.Status</td>
+                            <td>@string.Format("{0:n0}", own.Amount)</td>
+                            <td>@string.Format("{0:dd-MMM-yyyy}", own.DateTime)</td>
+                            <td>
+                                <ul style="list-style:none;margin-left:0px;">
+                                    <li class="dropdown">
+                                        <a href="" class="dropdown-toggle no-after peers " data-toggle="dropdown">
+                                            <i class="ti-more-alt  c-grey-900" style="transform:rotate(90deg);"></i>
+                                        </a>
+                                        <ul class="dropdown-menu" style="padding:10px;width:auto !important">
+                                            @*<li><a id="@item.Id" class="pointer get-rec-data" data-toggle="modal" data-target="#Modal"><span>Update</span></a></li>*@
+                                            <!--<hr />-->
+                                            @*<li><a id="" class="del-rec pointer"><span>Delete</span></a></li>*@
+                                            <!--<hr />-->
+                                            <li><a id="" class="rece-refund-pop pointer" data-toggle="modal" data-target="#Modal"><span>Refund</span></a></li>
+                                        </ul>
+                                    </li>
+                                </ul>
 
-                                            if (own.Status == "Pending")
-                                            {
-                                                stat = "bgc-yellow-50";
-                                            }
-                                            else if (own.Status == "Dishonored")
-                                            {
-                                                stat = "bgc-red-50";
-                                            }
-                                            else if (own.Status == "Approved")
-                                            {
-                                                stat = "bgc-green-50";
-                                            }
-                                            else if (own.Status == "Deposited")
-                                            {
-                                                stat = "bgc-orange-50";
-                                            }
-                                            else
-                                            {
-                                                stat = "";
-                                            }
-                                            <tr class="@stat" id="@own.Id">
-                                                <td>@srcount</td>
-                                                <td>@own.ReceiptNo</td>
-                                                <td>@string.Format("{0:n0}", own.Ch_Pay_Draft_No)</td>
-                                                <td>@own.PaymentType</td>
-                                                <td>@own.Status</td>
-                                                <td>@string.Format("{0:n0}", own.Amount)</td>
-                                                <td>@string.Format("{0:dd-MMM-yyyy}", own.DateTime)</td>
-                                                <td>
-                                                    <ul style="list-style:none;margin-left:0px;">
-                                                        <li class="dropdown">
-                                                            <a href="" class="dropdown-toggle no-after peers " data-toggle="dropdown">
+                            </td>
+                        </tr>
+                                srcount++;
+                            }
+                        }
+
+                    </tbody>
+                </table>
+                <table class="table table-striped table-bordered SurChargerecviewPlot" cellspacing="0" width="100%" style="margin-bottom:0px;display:none;">
+                    <thead class="thead-dark">
+                        @*<tr>
+                    <th colspan="7">@g.Key</th>
+                </tr>*@
+                        <tr>
+                            <th>Sr.</th>
+                            <th>Receipt No.</th>
+                            <th>Inst No.</th>
+                            <th>Type</th>
+                            <th>Status</th>
+                            <th>Amount</th>
+                            <th>Date</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var g in Model.PlotReceipts.GroupBy(x => x.Type).Where(x => x.Key == "SurCharge"))
+                        {
+                            int srcount = 1;
+                            foreach (var own in g)
+                            {
+                                stat = "";
+                                if (own.Status == "Pending")
+                                {
+                                    stat = "bgc-yellow-50";
+                                }
+                                else if (own.Status == "Dishonored")
+                                {
+                                    stat = "bgc-red-50";
+                                }
+                                else if (own.Status == "Approved")
+                                {
+                                    stat = "bgc-green-50";
+                                }
+                                else if (own.Status == "Deposited")
+                                {
+                                    stat = "bgc-orange-50";
+                                }
+                                else
+                                {
+                                    stat = "";
+                                }
+                          <tr class="@stat" id="@own.Id">
+                            <td>@srcount</td>
+                            <td>@own.ReceiptNo</td>
+                            <td>@string.Format("{0:n0}", own.Ch_Pay_Draft_No)</td>
+                            <td>@own.PaymentType</td>
+                            <td>@own.Status</td>
+                            <td>@string.Format("{0:n0}", own.Amount)</td>
+                            <td>@string.Format("{0:dd-MMM-yyyy}", own.DateTime)</td>
+                            <td>
+                                <ul style="list-style:none;margin-left:0px;">
+                                    <li class="dropdown">
+                                        <a href="" class="dropdown-toggle no-after peers " data-toggle="dropdown">
+                                            <i class="ti-more-alt  c-grey-900" style="transform:rotate(90deg);"></i>
+                                        </a>
+                                        <ul class="dropdown-menu" style="padding:10px;width:auto !important">
+                                            @*<li><a id="@item.Id" class="pointer get-rec-data" data-toggle="modal" data-target="#Modal"><span>Update</span></a></li>*@
+                                            <!--<hr />-->
+                                            @*<li><a id="" class="del-rec pointer"><span>Delete</span></a></li>*@
+                                            <!--<hr />-->
+                                            <li><a id="" class="rece-refund-pop pointer" data-toggle="modal" data-target="#Modal"><span>Refund</span></a></li>
+                                        </ul>
+                                    </li>
+                                </ul>
+
+                            </td>
+                        </tr>
+                                srcount++;
+                            }
+                        }
+
+                    </tbody>
+                </table>
+                <table class="table table-striped table-bordered otherrecview" cellspacing="0" width="100%" style="margin-bottom:0px;display:none;">
+                    <thead class="thead-dark">
+                        @*<tr>
+                    <th colspan="7">@g.Key</th>
+                </tr>*@
+                        <tr>
+                            <th>Sr.</th>
+                            <th>Receipt No.</th>
+                            <th>Inst No.</th>
+                            <th>Type</th>
+                            <th>Status</th>
+                            <th>Amount</th>
+                            <th>Date</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{ foreach (var g in Model.PlotReceipts.GroupBy(x => x.Type).Where(x => x.Key != "Booking" && x.Key != "Installment" && x.Key != "Adjusted" && x.Key != "Surcharge"))
+                            {
+                                int srcount = 1;
+                                foreach (var own in g)
+                                {
+                                     stat = "";
+                                    if (own.Status == "Pending")
+                                    {
+                                        stat = "bgc-yellow-50";
+                                    }
+                                    else if (own.Status == "Dishonored")
+                                    {
+                                        stat = "bgc-red-50";
+                                    }
+                                    else if (own.Status == "Approved")
+                                    {
+                                        stat = "bgc-green-50";
+                                    }
+                                    else if (own.Status == "Deposited")
+                                    {
+                                        stat = "bgc-orange-50";
+                                    }
+                                    else
+                                    {
+                                        stat = "";
+                                    }
+                                    <tr class="@stat" id="@own.Id">
+                                        <td>@srcount</td>
+                                        <td>@own.ReceiptNo</td>
+                                        <td>@string.Format("{0:n0}", own.Ch_Pay_Draft_No)</td>
+                                        <td>@own.PaymentType</td>
+                                        <td>@own.Status</td>
+                                        <td>@string.Format("{0:n0}", own.Amount)</td>
+                                        <td>@string.Format("{0:dd-MMM-yyyy}", own.DateTime)</td>
+                                          <td>
+                                               <ul style="list-style:none;margin-left:0px;">
+                                                   <li class="dropdown">
+                                                     <a href="" class="dropdown-toggle no-after peers " data-toggle="dropdown">
                                                                 <i class="ti-more-alt  c-grey-900" style="transform:rotate(90deg);"></i>
-                                                            </a>
-                                                            <ul class="dropdown-menu" style="padding:10px;width:auto !important">
+                                                       </a>
+                                                       <ul class="dropdown-menu" style="padding:10px;width:auto !important">
                                                                 @*<li><a id="@item.Id" class="pointer get-rec-data" data-toggle="modal" data-target="#Modal"><span>Update</span></a></li>*@
                                                                 <!--<hr />-->
                                                                 @*<li><a id="" class="del-rec pointer"><span>Delete</span></a></li>*@
                                                                 <!--<hr />-->
                                                                 <li><a id="" class="rece-refund-pop pointer" data-toggle="modal" data-target="#Modal"><span>Refund</span></a></li>
-                                                            </ul>
-                                                        </li>
-                                                    </ul>
-
-                                                </td>
-
-                                            </tr>
-                                            srcount++;
-                                        }
-                                    }
-                                </tbody>
-                            </table>
-
-                        }
-                        @foreach (var g in Model.PlotReceipts.GroupBy(x => x.Type).Where(x => x.Key != "Booking" && x.Key != "Installment"))
-                        {
-                            if (@g.Key != null)
-                            {
-                                <table class="table table-striped table-bordered otherrecview" cellspacing="0" width="100%" style="margin-bottom:0px;display:none;">
-                                    <thead class="thead-dark">
-                                        <tr>
-                                            <th colspan="10">@g.Key</th>
-                                        </tr>
-                                        <tr>
-                                            <th>Sr.</th>
-                                            <th>Receipt No.</th>
-                                            <th>Inst No.</th>
-                                            <th>Type</th>
-                                            <th>Status</th>
-                                            <th>Amount</th>
-                                            <th>Date</th>
-                                            <th>Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @{ int srcount = 1;
-                                            foreach (var own in g)
-                                            {
-
-                                                if (own.Status == "Pending")
-                                                {
-                                                    stat = "bgc-yellow-50";
-                                                }
-                                                else if (own.Status == "Dishonored")
-                                                {
-                                                    stat = "bgc-red-50";
-                                                }
-                                                else if (own.Status == "Approved")
-                                                {
-                                                    stat = "bgc-green-50";
-                                                }
-                                                else if (own.Status == "Deposited")
-                                                {
-                                                    stat = "bgc-orange-50";
-                                                }
-                                                else
-                                                {
-                                                    stat = "";
-                                                }
-                                                <tr class="@stat" id="@own.Id">
-                                                    <td>@srcount</td>
-                                                    <td>@own.ReceiptNo</td>
-                                                    <td>@string.Format("{0:n0}", own.Ch_Pay_Draft_No)</td>
-                                                    <td>@own.PaymentType</td>
-                                                    <td>@own.Status</td>
-                                                    <td>@string.Format("{0:n0}", own.Amount)</td>
-                                                    <td>@string.Format("{0:dd-MMM-yyyy}", own.DateTime)</td>
-                                                    <td>
-                                                        <ul style="list-style:none;margin-left:0px;">
-                                                            <li class="dropdown">
-                                                                <a href="" class="dropdown-toggle no-after peers " data-toggle="dropdown">
-                                                                    <i class="ti-more-alt  c-grey-900" style="transform:rotate(90deg);"></i>
-                                                                </a>
-                                                                <ul class="dropdown-menu" style="padding:10px;width:auto !important">
-                                                                    @*<li><a id="@item.Id" class="pointer get-rec-data" data-toggle="modal" data-target="#Modal"><span>Update</span></a></li>*@
-                                                                    <!--<hr />-->
-                                                                    @*<li><a id="" class="del-rec pointer"><span>Delete</span></a></li>*@
-                                                                    <!--<hr />-->
-                                                                    <li><a id="" class="rece-refund-pop pointer" data-toggle="modal" data-target="#Modal"><span>Refund</span></a></li>
-                                                                </ul>
-                                                            </li>
                                                         </ul>
+                                                    </li>
+                                               </ul>
 
-                                                    </td>
-                                                </tr>
-                                                srcount++;
-                                            }
-                                        }
-                                    </tbody>
-                                </table>
+                                          </td>
+                                    </tr>
+                                    srcount++;
+                                }
                             }
                         }
-                    </div>
+                    </tbody>
+                </table>
+            </div>
                 }
             </div>
 
@@ -1036,22 +1152,45 @@
             if (typeOfLink == 'installPlan') {
                 $('.installPlanView').show();
                 $('.SurChargefileView').hide();
-                $('.SurChargefile').removeClass('active');;
+                $('.SurChargefile').removeClass('active');
+                $('.installPlanNotIncluded').hide();
+                $('.Not_Included').removeClass('active');
             }
             else if (typeOfLink == 'SurChargefile') {
                 $('.installPlanView').hide();
                 $('.installPlan').removeClass('active');
+                $('.installPlanNotIncluded').hide();
+                $('.Not_Included').removeClass('active');
                 $('.SurChargefileView').show();
+            }
+            else if (typeOfLink == 'Not_Included') {
+                $('.installPlanView').hide();
+                $('.installPlan').removeClass('active');
+                $('.SurChargefileView').hide();
+                $('.SurChargefile').removeClass('active');;
+                $('.installPlanNotIncluded').show();
             }
             if (typeOfLink == 'instrec') {
                 $('.instrecview').show();
                 $('.otherrecview').hide();
-                $('.otherrec').removeClass('active');;
+                $('.otherrec').removeClass('active');
+                $('.SurChargerecviewPlot').hide();
+                $('.SurchargerecPlot').removeClass('active');
             }
             else if (typeOfLink == 'otherrec') {
                 $('.instrecview').hide();
                 $('.instrec').removeClass('active');
+                $('.instrecview').hide();
+                $('.SurChargerecviewPlot').hide();
+                $('.SurchargerecPlot').removeClass('active');
                 $('.otherrecview').show();
+            }
+            else if (typeOfLink == 'SurchargerecPlot') {
+                $('.instrecview').hide();
+                $('.instrec').removeClass('active');
+                $('.otherrecview').hide();
+                $('.otherrec').removeClass('active');
+                $('.SurChargerecviewPlot').show();
             }
 
         }

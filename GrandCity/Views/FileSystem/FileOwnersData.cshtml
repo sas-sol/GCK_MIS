@@ -225,6 +225,7 @@
                 url: '/FileSystem/UpdateOwnerResult/',
                 data: JSON.stringify(od),
                 success: function (data) {
+                    debugger;
                     $("#upd-info").show();
                     $(".updt-exstng-owner-rec-dsffskfs").hide();
                     $(".up-info :input").prop("readonly", true);
@@ -246,6 +247,7 @@
     });
 
     $(document).on('click', '.new-owner-add', function () {
+        debugger;
         EmptyModel();
         $('#ModalLabel').text("Add New Owner");
         var grpId = $(this).attr('data-grpTag');

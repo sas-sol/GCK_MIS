@@ -7023,6 +7023,7 @@
     <Content Include="Views\Transfer\FileTransferSheet.cshtml" />
     <Content Include="Views\Transfer\File_Undertaking_By_Purchaser.cshtml" />
     <Content Include="Views\Transfer\File_SellerFeeFormat.cshtml" />
+    <Content Include="Views\FileSystem\GetUpdateInfoDetails.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
