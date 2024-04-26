@@ -5955,7 +5955,7 @@ $(document).on("click", ".register-plot", function (e) {
     debugger;
     e.preventDefault();
     //To disable after click
-    $(this).prop("disabled", true);
+    //$(this).prop("disabled", true);
     var isCompPropCheck = $('.comp-prop-check').is(':checked');
     var trans = $('#transaction-id').val();
     var DealersId = $('#Dealers').val();
@@ -5983,7 +5983,8 @@ $(document).on("click", ".register-plot", function (e) {
     }
     var received = 0;
     if (isPay == true) {
-        var DealersId = $('#Dealership').val();
+        //var DealersIds = $('#Dealership').val();
+        var dealershipid = $('#dealer-id').val();
         if (DealersId == '0' || DealersId == '' || DealersId == 'Select Dealer ') {
             alert("Select DealerShip");
             return false;
