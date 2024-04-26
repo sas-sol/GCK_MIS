@@ -655,6 +655,7 @@ namespace MeherEstateDevelopers.Controllers
         }
         public JsonResult RegisterDealerPlot(long? Plot_Id, List<Plot_Ownership> Owners, long TransactionId, bool? isPayment, int? DealersId, BookingReceiptData brdd, long? recamt)
         {
+            long Payment_No = 0;
             long userid = long.Parse(User.Identity.GetUserId());
             AccountHandlerController ah = new AccountHandlerController();
 
@@ -943,14 +944,22 @@ namespace MeherEstateDevelopers.Controllers
 
                     // Receipt Add 
 
-                    var voucher_amt = Math.Round(Convert.ToDecimal((res2.GrandTotal * res2.Percentage_Adj) / 100), 2);
+                    // var voucher_amt = Math.Round(Convert.ToDecimal((res2.GrandTotal * res2.Percentage_Adj) / 100), 2); 
+                    if (recamt > 0 || brdd.Amount > 0)
+                    {
+                        string desc = "Adjustment Voucher Against the Booking of Plot " + plot.Plot_No + "-" + plot.Type + " Block No: " + plot.Block_Name;
 
-                    string desc = "Adjustment Voucher Against the Booking of Plot " + plot.Plot_No + "-" + plot.Type + " Block No: " + plot.Block_Name;
-                    var res5 = db.Sp_Add_Voucher(dealers.Select(x => x.Address).FirstOrDefault(), voucher_amt, GeneralMethods.NumberToWords((int)voucher_amt), "", "", null, "", string.Join("-", dealers.Select(x => x.Mobile_1)), desc,
-                        string.Join("-", dealers.Select(x => x.Name)), dealership.Id, Modules.Dealers.ToString(), dealership.Dealership_Name, "Cash", "",
-                    "", userid, Payments.Adjustment.ToString(), userid, null, comp.Id).FirstOrDefault();
-                    var a = db.Sp_Add_VoucherDetails(voucher_amt, desc, null, null, null, res5.Receipt_Id).FirstOrDefault();
-                   long Payment_No = Convert.ToInt64(res5.Receipt_Id);
+                        var res5 = db.Sp_Add_Voucher(dealers.Select(x => x.Address).FirstOrDefault(), recamt, GeneralMethods.NumberToWords((int)recamt), "", "", null, "", string.Join("-", dealers.Select(x => x.Mobile_1)), desc,
+                         string.Join("-", dealers.Select(x => x.Name)), dealership.Id, Modules.Dealers.ToString(), dealership.Dealership_Name, "Cash", "",
+                     "", TransactionId, Payments.Adjustment.ToString(), userid, null, comp.Id).FirstOrDefault();
+                        var a = db.Sp_Add_VoucherDetails(recamt, desc, null, null, null, res5.Receipt_Id).FirstOrDefault();
+                        Payment_No = Convert.ToInt64(res5.Receipt_Id);
+                    }
+                    else
+                    {
+                        return Json(new { Status = false, Msg = "Amount is Invalid!" });
+                    }
+                   
                     var receiptno = db.Sp_Get_ReceiptNo("Normal").FirstOrDefault();
 
                     if (brdd.PaymentType == "Cash")
@@ -959,7 +968,7 @@ namespace MeherEstateDevelopers.Controllers
                         {
                             var res3 = db.Sp_Add_Receipt(recamt, GeneralMethods.NumberToWords((int)recamt), "", "", null, "", string.Join("-", Owners.Select(x => x.Mobile_1))
                         , string.Join("-", Owners.Select(x => x.Father_Husband)), Plot_Id, string.Join("-", Owners.Select(x => x.Name)), "Cash", Plot_Total_Price,
-                        "MED", Rate_Per_Marla, null, plot.Plot_Size, ReceiptTypes.Booking.ToString(), userid, userid, "", null, Modules.PlotManagement.ToString(), "", plot.Plot_No, plot.Block_Name, plot.Type, GroupTag, TransactionId, res2.DealerName, receiptno, comp.Id).FirstOrDefault();
+                        "Grand City Kharian", Rate_Per_Marla, null, plot.Plot_Size, ReceiptTypes.Booking.ToString(), userid, userid, "", null, Modules.PlotManagement.ToString(), "", plot.Plot_No, plot.Block_Name, plot.Type, GroupTag, TransactionId, res2.DealerName, receiptno, comp.Id).FirstOrDefault();
 
                             Receipt_No = res3.Receipt_No;
                             if (res3.Receipt_Id == -1)
@@ -979,7 +988,7 @@ namespace MeherEstateDevelopers.Controllers
                         {
                             var res3 = db.Sp_Add_Receipt(brdd.Amount, GeneralMethods.NumberToWords((int)brdd.Amount), brdd.Bank, brdd.PayChqNo, brdd.Ch_bk_Pay_Date, brdd.Branch, string.Join("-", Owners.Select(x => x.Mobile_1))
                             , string.Join("-", Owners.Select(x => x.Father_Husband)), Plot_Id, string.Join("-", Owners.Select(x => x.Name)), brdd.PaymentType, Plot_Total_Price,
-                            "MED", Rate_Per_Marla, null, plot.Plot_Size, ReceiptTypes.Booking.ToString(), userid, userid, "", null, Modules.PlotManagement.ToString(), "", plot.Plot_No, plot.Block_Name, plot.Type, GroupTag, TransactionId, res2.DealerName, receiptno, comp.Id).FirstOrDefault();
+                            "Grand City Kharian", Rate_Per_Marla, null, plot.Plot_Size, ReceiptTypes.Booking.ToString(), userid, userid, "", null, Modules.PlotManagement.ToString(), "", plot.Plot_No, plot.Block_Name, plot.Type, GroupTag, TransactionId, res2.DealerName, receiptno, comp.Id).FirstOrDefault();
 
                             var res4 = Convert.ToInt64(db.Sp_Add_Cheque_BankDraft_PayOrder(brdd.Amount, brdd.Bank, brdd.Branch, brdd.PaymentType, null, null, PaymentMethodStatuses.Pending.ToString(),
                                             Modules.PlotManagement.ToString(), Types.Booking.ToString(), userid, brdd.PayChqNo, Plot_Id, brdd.Ch_bk_Pay_Date, plot.Plot_No.ToString(), res3.Receipt_Id, comp.Id, Voucher_Type.BRV.ToString()).FirstOrDefault());

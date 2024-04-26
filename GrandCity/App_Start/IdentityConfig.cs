@@ -98,27 +98,27 @@ namespace MeherEstateDevelopers
             {
                 Destination = "92" + Destination.Remove(0, 1);
             }
-            var res2 = PremiumSub(Body, Destination);
+            //var res2 = PremiumSub(Body, Destination);
 
             return Task.FromResult(0);
         }
         private string PremiumSub(string Body, string Destination)
         {
             string download = "no";
-            try
-            {
-                string apipart1 = "http://smsctp3.eocean.us:24555/api?action=sendmessage&username=sa_gardens_api&password=pak!stan123!4";
-                string apipart2 = "&recipient=" + Destination;
-                string apipart3 = "&originator=99090";
-                string apipart4 = "&messagedata=" + Body;
-                System.Net.WebClient myWebClient;
-                myWebClient = new System.Net.WebClient();
-                download = myWebClient.DownloadString(apipart1 + apipart2 + apipart3 + apipart4);
-            }
-            catch (Exception ex)
-            {
-                download = ex.Message;
-            }
+            //try
+            //{
+            //    string apipart1 = "http://smsctp3.eocean.us:24555/api?action=sendmessage&username=sa_gardens_api&password=pak!stan123!4";
+            //    string apipart2 = "&recipient=" + Destination;
+            //    string apipart3 = "&originator=99090";
+            //    string apipart4 = "&messagedata=" + Body;
+            //    System.Net.WebClient myWebClient;
+            //    myWebClient = new System.Net.WebClient();
+            //    download = myWebClient.DownloadString(apipart1 + apipart2 + apipart3 + apipart4);
+            //}
+            //catch (Exception ex)
+            //{
+            //    download = ex.Message;
+            //}
             return download;
         }
         public Task Broadcast(string Body, string Destination)

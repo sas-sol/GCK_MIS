@@ -17,65 +17,74 @@ namespace MeherEstateDevelopers.Controllers
     {
         // GET: Vouchers
         private Grand_CityEntities db = new Grand_CityEntities();
-        public ActionResult Voucher(long? GroupId)
+        public ActionResult Voucher(long? Transaction_Id)
         {
-            var res = db.Sp_Get_JournalEntries_Parameter_All(GroupId).Select(x => new JournalEntries_Parameter
-            {
-                Credit = x.Credit,
-                Debit = x.Debit,
-                GroupId = GroupId,
-                Head_Code = x.Head_Code,
-                Head_Id = x.Head_Id,
-                Head_Name = x.Head_Name,
-                Id = x.Id,
-                Inst_Bank = x.Inst_Bank,
-                Inst_Date = x.Inst_Date,
-                Inst_No = x.Inst_No,
-                Naration = x.Naration,
-                Qty = x.Qty,
-                Rate = x.Rate,
-                RecordedBy_Date = x.RecordedBy_Date,
-                RecordedBy_Name = x.RecordedBy_Name,
-                Supviseby_Date = x.Supviseby_Date,
-                Supviseby_Name = x.Supviseby_Name,
-                UOM = x.UOM,
-                Voucher_No = x.Voucher_No,
-                Voucher_Type = x.Voucher_Type,
-            }).ToList();
-            var res2 = db.Vouchers.Where(x => x.Transaction_Id == GroupId).FirstOrDefault();
-            var res4 = db.Vouchers.Where(x => x.Group_Id == res2.Group_Id).ToList();
-            if (!res.Any())
-            {
-                var res1 = db.Sp_Get_GeneralEntries_Parameter(GroupId).Select(x => new JournalEntries_Parameter
-                {
-                    Credit = x.Credit,
-                    Debit = x.Debit,
-                    GroupId = GroupId,
-                    Head_Code = x.Head_Code,
-                    Head_Id = x.Head_Id,
-                    Head_Name = x.Head_Name,
-                    Id = x.Id,
-                    Inst_Bank = x.Inst_Bank,
-                    Inst_Date = x.Inst_Date,
-                    Inst_No = x.Inst_No,
-                    Naration = x.Naration,
-                    Qty = x.Qty,
-                    Rate = x.Rate,
-                    RecordedBy_Date = x.Date,
-                    RecordedBy_Name = x.Rec_Name,
-                    Supviseby_Date = x.Sup_Date,
-                    Supviseby_Name = x.Sup_Name,
-                    UOM = x.UOM,
-                    Voucher_No = x.Voucher_No,
-                    Voucher_Type = x.Voucher_Type,
-
-                }).ToList();
-                var res5 = new JournalEntry { JE = res, PV = res2 };
-                return View(res5);
-            }
-            var res3 = new JournalEntry { JE = res, PV = res2, Previous_Vouchers = res4 };
-            return View(res3);
+            var res1 = db.Vouchers.SingleOrDefault(x => x.Transaction_Id == Transaction_Id);
+            var res2 = db.Voucher_Details.Where(x => x.Voucher_Id == res1.Id).ToList();
+            var username = db.Users.Where(x => x.Id == res1.Userid).Select(x => x.Name).FirstOrDefault();
+            res1.Pre_Name = username;
+            var res = new VendorVoucher { Voucher = res1, Details = res2 };
+            return View(res);
         }
+        //public ActionResult Voucher(long? GroupId)
+        //{
+        //    var res = db.Sp_Get_JournalEntries_Parameter_All(GroupId).Select(x => new JournalEntries_Parameter
+        //    {
+        //        Credit = x.Credit,
+        //        Debit = x.Debit,
+        //        GroupId = GroupId,
+        //        Head_Code = x.Head_Code,
+        //        Head_Id = x.Head_Id,
+        //        Head_Name = x.Head_Name,
+        //        Id = x.Id,
+        //        Inst_Bank = x.Inst_Bank,
+        //        Inst_Date = x.Inst_Date,
+        //        Inst_No = x.Inst_No,
+        //        Naration = x.Naration,
+        //        Qty = x.Qty,
+        //        Rate = x.Rate,
+        //        RecordedBy_Date = x.RecordedBy_Date,
+        //        RecordedBy_Name = x.RecordedBy_Name,
+        //        Supviseby_Date = x.Supviseby_Date,
+        //        Supviseby_Name = x.Supviseby_Name,
+        //        UOM = x.UOM,
+        //        Voucher_No = x.Voucher_No,
+        //        Voucher_Type = x.Voucher_Type,
+        //    }).ToList();
+        //    var res2 = db.Vouchers.Where(x => x.Transaction_Id == GroupId).FirstOrDefault();
+        //    var res4 = db.Vouchers.Where(x => x.Group_Id == res2.Group_Id).ToList();
+        //    if (!res.Any())
+        //    {
+        //        var res1 = db.Sp_Get_GeneralEntries_Parameter(GroupId).Select(x => new JournalEntries_Parameter
+        //        {
+        //            Credit = x.Credit,
+        //            Debit = x.Debit,
+        //            GroupId = GroupId,
+        //            Head_Code = x.Head_Code,
+        //            Head_Id = x.Head_Id,
+        //            Head_Name = x.Head_Name,
+        //            Id = x.Id,
+        //            Inst_Bank = x.Inst_Bank,
+        //            Inst_Date = x.Inst_Date,
+        //            Inst_No = x.Inst_No,
+        //            Naration = x.Naration,
+        //            Qty = x.Qty,
+        //            Rate = x.Rate,
+        //            RecordedBy_Date = x.Date,
+        //            RecordedBy_Name = x.Rec_Name,
+        //            Supviseby_Date = x.Sup_Date,
+        //            Supviseby_Name = x.Sup_Name,
+        //            UOM = x.UOM,
+        //            Voucher_No = x.Voucher_No,
+        //            Voucher_Type = x.Voucher_Type,
+
+        //        }).ToList();
+        //        var res5 = new JournalEntry { JE = res, PV = res2 };
+        //        return View(res5);
+        //    }
+        //    var res3 = new JournalEntry { JE = res, PV = res2, Previous_Vouchers = res4 };
+        //    return View(res3);
+        //}
         public ActionResult SAM_Voucher(long Id, long Token)
         {
             var res = db.Sp_Get_Voucher(Id, Token).SingleOrDefault();

@@ -234,7 +234,7 @@ namespace MeherEstateDevelopers.Controllers
                             string desc = "Adjustment Voucher Against the Booking of Plot " + fileno.FileFormNumber + "-" + fileno.Type + " Block No: " + fileno.Block;
                             var res5 = db.Sp_Add_Voucher(dealers.Select(x => x.Address).FirstOrDefault(), recamt, GeneralMethods.NumberToWords((int)recamt), "", "", null, "", string.Join("-", dealers.Select(x => x.Mobile_1).FirstOrDefault()), desc,
                                 string.Join("-", dealers.Select(x => x.Name)), dealership.Id, Modules.Dealers.ToString(), dealership.Dealership_Name, "Cash", "",
-                            "", userid, Payments.Adjustment.ToString(), userid, null, comp.Id).FirstOrDefault();
+                            "", H.RandomNumber(), Payments.Adjustment.ToString(), userid, null, comp.Id).FirstOrDefault();
                            Payment_No = Convert.ToInt64(res5.Receipt_Id);
                             var a = db.Sp_Add_VoucherDetails(recamt, desc, null, null, null, res5.Receipt_Id).FirstOrDefault();
 
@@ -3198,6 +3198,7 @@ namespace MeherEstateDevelopers.Controllers
         {
             long userid = long.Parse(User.Identity.GetUserId());
             AccountHandlerController ah = new AccountHandlerController();
+            Helpers h = new Helpers();
             var comp = ah.Company_Attr(userid);
             var res1 = db.Sp_Get_FileData(FileId).FirstOrDefault();
             var res2 = db.Sp_Get_FileLastOwner(res1.Id).SingleOrDefault();
@@ -3205,7 +3206,7 @@ namespace MeherEstateDevelopers.Controllers
             db.Sp_Update_PlotRefund_Req(Id, Status, "Finance Manager");
             var res = db.Sp_Add_Voucher(res2.Postal_Address, rd.Amount, rd.AmountInWords, rd.Bank, rd.Branch, rd.Ch_bk_Pay_Date, rd.PayChqNo, res2.Mobile_1, "Refund Amount against the " + res3.PaymentType + " Receipt No " + res3.ReceiptNo + "  of File No: " + res1.FileFormNumber + " Block No: " + res1.Block + "`" + Description,
                 res2.Father_Husband, res1.Id, Modules.FileManagement.ToString(), res2.Name, rd.PaymentType, "Meher Estate Developers",
-                 "", userid, Payments.Receipt_Refund.ToString(), userid, null, comp.Id).FirstOrDefault();
+                 "", h.RandomNumber(), Payments.Receipt_Refund.ToString(), userid, null, comp.Id).FirstOrDefault();
             try
             {
                 AccountHandlerController de = new AccountHandlerController();
@@ -3223,7 +3224,7 @@ namespace MeherEstateDevelopers.Controllers
                 }
                 string dt = string.Format("{0:d/M/yyyy}", rd.Ch_bk_Pay_Date);
                 var pathMain = Path.Combine(Server.MapPath("~/Repository/Receipt_Refund_Voucher/" + "/"), rd.PayChqNo + "_" + rd.Bank + "_" + dt.Replace("/", "_") + ".jpg");
-                Helpers h = new Helpers();
+                
                 var Images = h.SaveBase64Image(rd.FileImage, pathMain, res.ToString());
             }
             db.Sp_Update_ReceiptCancel_Parameter(ReceiptId, Description);

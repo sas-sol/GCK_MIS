@@ -8308,11 +8308,12 @@ $(document).on("click", ".dup-rece", function (e) {
     }
 });
 $(document).on("click", ".pay-vou", function (e) {
+    debugger;
     e.preventDefault();
-    var id = $(this).attr("id");
+    var TransacitonId = $(this).attr("TransacitonId");
     var con = confirm("Are you sure you want to print Duplicate Voucher");
     if (con) {
-        window.open("/Vouchers/Voucher?GroupId=" + id, '_blank');
+        window.open("/Vouchers/Voucher?Transaction_Id=" + TransacitonId, '_blank');
     }
 });
 //
