@@ -1734,16 +1734,16 @@ namespace MeherEstateDevelopers.Controllers
                             //{
                             //    headcashier = true;
                             //}
-                            try
-                            {
-                                AccountHandlerController de = new AccountHandlerController();
-                                //var df = de.Receive_Plot_Amount(rd.Amount, plot.Plot_No, plot.Type, plot.Block_Name, rd.PaymentType, rd.PayChqNo, rd.Ch_bk_Pay_Date, rd.Bank, TransactionId, userid, res2.Receipt_No, 1, headcashier, AccountingModulePlots, plot.BlockIden);
-                            }
-                            catch (Exception ex)
-                            {
-                                Transaction.Rollback();
-                                var dg = db.Sp_Add_ErrorLog(ex.Message + ex.InnerException.ToString() + ex.StackTrace, "", "", this.ControllerContext.RouteData.Values["controller"].ToString(), this.ControllerContext.RouteData.Values["action"].ToString());
-                            }
+                            //try
+                            //{
+                            //    AccountHandlerController de = new AccountHandlerController();
+                            //    //var df = de.Receive_Plot_Amount(rd.Amount, plot.Plot_No, plot.Type, plot.Block_Name, rd.PaymentType, rd.PayChqNo, rd.Ch_bk_Pay_Date, rd.Bank, TransactionId, userid, res2.Receipt_No, 1, headcashier, AccountingModulePlots, plot.BlockIden);
+                            //}
+                            //catch (Exception ex)
+                            //{
+                            //    Transaction.Rollback();
+                            //    var dg = db.Sp_Add_ErrorLog(ex.Message + ex.InnerException.ToString() + ex.StackTrace, "", "", this.ControllerContext.RouteData.Values["controller"].ToString(), this.ControllerContext.RouteData.Values["action"].ToString());
+                            //}
                         }
                         if (rd.PaymentType == "Cash")
                         {

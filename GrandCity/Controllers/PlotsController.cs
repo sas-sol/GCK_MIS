@@ -672,6 +672,12 @@ namespace MeherEstateDevelopers.Controllers
             }
             var plot = db.Sp_Get_PlotData(Plot_Id).FirstOrDefault();
             var res2 = db.Biding_Reserve_Plots.Where(x => x.Plot_Id == Plot_Id && x.PlotStatus == "Available").FirstOrDefault();
+            if (res2 != null)
+            {
+                plot.Dealership_Id = res2.Dealer_Id;
+                plot.Dealership_Name = res2.DealerName;
+                db.SaveChanges();
+            }
             var dealership = db.Dealerships.Where(x => x.Id == res2.Dealer_Id).FirstOrDefault();
             var dealers = db.Dealers.Where(x => x.Dealership_Id == res2.Dealer_Id).ToList();
             var installment_plan_Id = db.Plots.Where(x => x.Id == Plot_Id).FirstOrDefault().Installment_Plan_Id;
