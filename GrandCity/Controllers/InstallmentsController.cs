@@ -864,6 +864,8 @@ namespace MeherEstateDevelopers.Controllers
         {
             long userid = long.Parse(User.Identity.GetUserId());
             var appdetail = db.Sp_Get_FileData(Filefromid).FirstOrDefault();
+            var filesdata = db.File_Form.Where(f => f.Id == Filefromid).FirstOrDefault();
+            var phase = db.RealEstate_Phases.Where(p => p.Id == filesdata.Phase_Id).FirstOrDefault();
             
             var balance = db.File_Plot_Balance.Where(x => x.File_Plot_Id == appdetail.Id && x.Module == Modules.FileManagement.ToString()).FirstOrDefault();
             var rem = Math.Round( Convert.ToDouble( balance.Outstanding_Amount), 0 ) - Math.Round(Convert.ToDouble(rd.Amount), 0);
@@ -887,6 +889,12 @@ namespace MeherEstateDevelopers.Controllers
                     var res2 = db.Sp_Add_Receipt(rd.Amount, rd.AmountInWords, rd.Bank, rd.PayChqNo, rd.Ch_bk_Pay_Date, rd.Branch, string.Join(" , ", lastowner.Select(x => x.Mobile_1).Distinct())
                   , string.Join(" , ", lastowner.Select(x => x.Father_Husband).Distinct()), appdetail.Id, string.Join(" , ", lastowner.Select(x => x.Name).Distinct()), rd.PaymentType, rd.TotalAmount,
                   rd.Project_Name, rd.Rate, null, rd.Plot_Size, ReceiptTypes.Installment.ToString(), userid, userid, Paymentfor, null, Modules.FileManagement.ToString(), rd.DevCharges, rd.FilePlotNumber.ToString(), appdetail.Block, appdetail.Type, lastowner.Select(x => x.Group_Tag).FirstOrDefault(), TransactionId, "", receiptno, comp.Id).FirstOrDefault();
+
+                    // add phase in Receipt data
+                    var receiptdata = db.Receipts.Where(r => r.Id == res2.Receipt_Id).FirstOrDefault();
+                    receiptdata.Phase = phase.Phase_Name;
+                    db.SaveChanges();
+
                     if (res2.Receipt_Id > 0)
                     {
                         //bool headcashier = false;
@@ -1722,6 +1730,11 @@ namespace MeherEstateDevelopers.Controllers
                     var res2 = db.Sp_Add_Receipt(rd.Amount, rd.AmountInWords, rd.Bank, rd.PayChqNo, rd.Ch_bk_Pay_Date, rd.Branch, string.Join(",", lastowner.Select(x => x.Mobile_1).Distinct())
                         , string.Join(",", lastowner.Select(x => x.Father_Husband).Distinct()), Plotid, string.Join(",", lastowner.Select(x => x.Name)), rd.PaymentType, rd.TotalAmount,
                         project.Project_Name, rd.Rate, null, rd.Plot_Size, ReceiptTypes.Installment.ToString(), userid, userid, "", null, Modules.PlotManagement.ToString(), "", plot.Plot_No, plot.Block_Name, plot.Type, lastowner.FirstOrDefault().GroupTag, TransactionId, "", receiptno, comp.Id).FirstOrDefault();
+
+                    // add phase in Receipt data
+                    var receipsdata = db.Receipts.Where(r => r.Id == res2.Receipt_Id).FirstOrDefault();
+                    receipsdata.Phase = phase.Phase_Name;
+                    db.SaveChanges();
 
                     if (res2.Receipt_Id > 0)
                     {
@@ -2628,7 +2641,7 @@ namespace MeherEstateDevelopers.Controllers
             {
 
                 var res2 = db.Sp_Add_Receipt(rd.Amount, rd.AmountInWords, rd.Bank, rd.PayChqNo, rd.Ch_bk_Pay_Date, rd.Branch, rd.Mobile_1, rd.Father_Husband, null, rd.Name, rd.PaymentType, rd.TotalAmount,
-                    Module, rd.Rate, null, rd.Plot_Size, ReceiptTypes.Subsidiary_Recovery.ToString(), TransactionId, userid, "", null, Module, rd.DevCharges, Module, rd.Block, rd.Type, 0, TransactionId, "", receiptno, comp.Id).FirstOrDefault();
+                    "Grand City Kharian", rd.Rate, null, rd.Plot_Size, ReceiptTypes.Subsidiary_Recovery.ToString(), TransactionId, userid, "", null, Module, rd.DevCharges, Module, rd.Block, rd.Type, 0, TransactionId, "", receiptno, comp.Id).FirstOrDefault();
                 Helpers h = new Helpers();
                 bool headcashier = false;
                 if (User.IsInRole("Head Cashier"))

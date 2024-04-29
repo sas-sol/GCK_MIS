@@ -157,7 +157,7 @@ namespace MeherEstateDevelopers.Controllers
             List<Sp_Get_InstallmentStructure_Current_Result> installmentstructure = db.Sp_Get_InstallmentStructure_Current(filedatas.Select(x => x.File_Form_Id).FirstOrDefault()).ToList();
             string Devchar = "";
             var FileForm = db.File_Form.Where(x => x.FileFormNumber == FileFormNumber).FirstOrDefault();
-
+            var phase = db.RealEstate_Phases.Where(p => p.Id == FileForm.Phase_Id).FirstOrDefault();
             Helpers H = new Helpers();
             if (DevCharStatus == "true")
             {
@@ -227,6 +227,11 @@ namespace MeherEstateDevelopers.Controllers
                             var res = db.Sp_Add_Receipt(recamt, GeneralMethods.NumberToWords((int)recamt), Receiptdata.Select(x => x.Bank).FirstOrDefault(), Receiptdata.Select(x => x.PayChqNo).FirstOrDefault(), Receiptdata.Select(x => x.Ch_bk_Pay_Date).FirstOrDefault(), Receiptdata.Select(x => x.Branch).FirstOrDefault(), string.Join(",", filedatas.Select(x => x.Mobile_1))
                                                 , string.Join(",", filedatas.Select(x => x.Father_Husband)), fileno.Id, string.Join(",", filedatas.Select(x => x.Name)), Receiptdata.Select(x => x.PaymentType).FirstOrDefault(), file_Installments.Total,
                                                 Receiptdata.Select(x => x.Project_Name).FirstOrDefault(), file_Installments.Rate, null, filedatas.Select(x => x.Plot_Size).FirstOrDefault(), ReceiptTypes.Booking.ToString(), filedatas.Select(x => x.File_Form_Id).FirstOrDefault(), userid, "File Booking", null, Modules.FileManagement.ToString(), Devchar, FileFormNumber, appdetail.File.Block, appdetail.File.Type, filedatas.Select(x => x.Group_Tag).FirstOrDefault(), H.RandomNumber(), appdetail.Dealership.Dealership_Name, receiptno, comp.Id).FirstOrDefault();
+                            // add phase in Receipt data
+                            var receiptdata = db.Receipts.Where(r => r.Id == res.Receipt_Id).FirstOrDefault();
+                            receiptdata.Phase = phase.Phase_Name;
+                            db.SaveChanges();
+
                             ids.Add(res.Receipt_No);
 
                             var dealership = db.Dealerships.Where(x => x.Id == DelerId).FirstOrDefault();
@@ -256,7 +261,13 @@ namespace MeherEstateDevelopers.Controllers
                             var res = db.Sp_Add_Receipt(rd.Amount, rd.AmountInWords, rd.Bank, rd.PayChqNo, rd.Ch_bk_Pay_Date, rd.Branch, string.Join(",", filedatas.Select(x => x.Mobile_1))
                                                 , string.Join(",", filedatas.Select(x => x.Father_Husband)), fileno.Id, string.Join(",", filedatas.Select(x => x.Name)), rd.PaymentType, file_Installments.Total,
                                                 FileForm.Project, file_Installments.Rate, null, filedatas.Select(x => x.Plot_Size).FirstOrDefault(), ReceiptTypes.Booking.ToString(), filedatas.Select(x => x.File_Form_Id).FirstOrDefault(), userid, "File Booking", null, Modules.FileManagement.ToString(), Devchar, FileFormNumber, appdetail.File.Block, appdetail.File.Type, filedatas.Select(x => x.Group_Tag).FirstOrDefault(), H.RandomNumber(), appdetail.Dealership.Dealership_Name, receiptno, comp.Id).FirstOrDefault();
-                            ids.Add(res.Receipt_No);
+
+                                // add phase in Receipt data
+                                var receiptdata = db.Receipts.Where(r => r.Id == res.Receipt_Id).FirstOrDefault();
+                                receiptdata.Phase = phase.Phase_Name;
+                                db.SaveChanges();
+
+                                ids.Add(res.Receipt_No);
                             string text = "";
                             if (rd.PaymentType == "Cash")
                             {
@@ -834,6 +845,8 @@ namespace MeherEstateDevelopers.Controllers
             var comp = ah.Company_Attr(userid);
             var usernam = db.Users.Find(userid).Name;
             var appdetail = db.Sp_Get_FileData(Convert.ToInt64(rd.FilePlotNumber)).FirstOrDefault();
+            var filedata = db.File_Form.Where(f => f.Id == Convert.ToInt64(rd.FilePlotNumber)).FirstOrDefault();
+            var phase = db.RealEstate_Phases.Where(p => p.Id == filedata.Phase_Id).FirstOrDefault();
             var receiptno = db.Sp_Get_ReceiptNo("Normal").FirstOrDefault();
             using (var Transaction = db.Database.BeginTransaction())
             {
@@ -843,6 +856,12 @@ namespace MeherEstateDevelopers.Controllers
                     var res1 = db.Sp_Add_Receipt(rd.Amount, rd.AmountInWords, rd.Bank, rd.PayChqNo, rd.Ch_bk_Pay_Date, rd.Branch, string.Join(",", filedatas.Select(x => x.Mobile_1).Distinct())
                                         , string.Join(",", filedatas.Select(x => x.Father_Husband).Distinct()), appdetail.Id, string.Join(",", filedatas.Select(x => x.Name)), "Cash", filedatas.Select(x => x.Total).FirstOrDefault(),
                                         rd.Project_Name, filedatas.Select(x => x.Rate).FirstOrDefault(), null, filedatas.Select(x => x.Plot_Size).FirstOrDefault(), ReceiptTypes.Transfer.ToString(), TransactionId, userid, "File Transfer", null, Modules.FileManagement.ToString(), rd.DevCharges, rd.File_Plot_Number.ToString(), appdetail.Block, appdetail.Type, Req_Id, TransactionId, "", receiptno, comp.Id).FirstOrDefault();
+                    // add phase in Receipt data
+                    var receiptdata = db.Receipts.Where(r => r.Id == res1.Receipt_Id).FirstOrDefault();
+                    receiptdata.Phase = phase.Phase_Name;
+                    db.SaveChanges();
+
+
                     //{
                     //    bool headcashier = false;
                     //    if (User.IsInRole("Head Cashier"))
