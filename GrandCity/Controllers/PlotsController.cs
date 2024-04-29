@@ -959,7 +959,13 @@ namespace MeherEstateDevelopers.Controllers
                         {
                             var res3 = db.Sp_Add_Receipt(recamt, GeneralMethods.NumberToWords((int)recamt), "", "", null, "", string.Join("-", Owners.Select(x => x.Mobile_1))
                         , string.Join("-", Owners.Select(x => x.Father_Husband)), Plot_Id, string.Join("-", Owners.Select(x => x.Name)), "Cash", Plot_Total_Price,
-                        "MED", Rate_Per_Marla, null, plot.Plot_Size, ReceiptTypes.Booking.ToString(), userid, userid, "", null, Modules.PlotManagement.ToString(), "", plot.Plot_No, plot.Block_Name, plot.Type, GroupTag, TransactionId, res2.DealerName, receiptno, comp.Id).FirstOrDefault();
+                        "Grand City Kharian", Rate_Per_Marla, null, plot.Plot_Size, ReceiptTypes.Booking.ToString(), userid, userid, "", null, Modules.PlotManagement.ToString(), "", plot.Plot_No, plot.Block_Name, plot.Type, GroupTag, TransactionId, res2.DealerName, receiptno, comp.Id).FirstOrDefault();
+                            var plotdata = db.Plots.Where(p => p.Id == Plot_Id).FirstOrDefault();
+                            var phase = db.RealEstate_Phases.Where(p => p.Id == plotdata.Phase_Id).FirstOrDefault();
+                            // add phase in Receipt data
+                            var receiptdata = db.Receipts.Where(r => r.Id == res3.Receipt_Id).FirstOrDefault();
+                            receiptdata.Phase = phase.Phase_Name;
+                            db.SaveChanges();
 
                             Receipt_No = res3.Receipt_No;
                             if (res3.Receipt_Id == -1)
@@ -979,8 +985,13 @@ namespace MeherEstateDevelopers.Controllers
                         {
                             var res3 = db.Sp_Add_Receipt(brdd.Amount, GeneralMethods.NumberToWords((int)brdd.Amount), brdd.Bank, brdd.PayChqNo, brdd.Ch_bk_Pay_Date, brdd.Branch, string.Join("-", Owners.Select(x => x.Mobile_1))
                             , string.Join("-", Owners.Select(x => x.Father_Husband)), Plot_Id, string.Join("-", Owners.Select(x => x.Name)), brdd.PaymentType, Plot_Total_Price,
-                            "MED", Rate_Per_Marla, null, plot.Plot_Size, ReceiptTypes.Booking.ToString(), userid, userid, "", null, Modules.PlotManagement.ToString(), "", plot.Plot_No, plot.Block_Name, plot.Type, GroupTag, TransactionId, res2.DealerName, receiptno, comp.Id).FirstOrDefault();
-
+                            "Grand City Kharian", Rate_Per_Marla, null, plot.Plot_Size, ReceiptTypes.Booking.ToString(), userid, userid, "", null, Modules.PlotManagement.ToString(), "", plot.Plot_No, plot.Block_Name, plot.Type, GroupTag, TransactionId, res2.DealerName, receiptno, comp.Id).FirstOrDefault();
+                            var plotdata = db.Plots.Where(p => p.Id == Plot_Id).FirstOrDefault();
+                            var phase = db.RealEstate_Phases.Where(p => p.Id == plotdata.Phase_Id).FirstOrDefault();
+                            // add phase in Receipt data
+                            var receiptdata = db.Receipts.Where(r => r.Id == res3.Receipt_Id).FirstOrDefault();
+                            receiptdata.Phase = phase.Phase_Name;
+                            db.SaveChanges();
                             var res4 = Convert.ToInt64(db.Sp_Add_Cheque_BankDraft_PayOrder(brdd.Amount, brdd.Bank, brdd.Branch, brdd.PaymentType, null, null, PaymentMethodStatuses.Pending.ToString(),
                                             Modules.PlotManagement.ToString(), Types.Booking.ToString(), userid, brdd.PayChqNo, Plot_Id, brdd.Ch_bk_Pay_Date, plot.Plot_No.ToString(), res3.Receipt_Id, comp.Id, Voucher_Type.BRV.ToString()).FirstOrDefault());
                             Receipt_No = res3.Receipt_No;

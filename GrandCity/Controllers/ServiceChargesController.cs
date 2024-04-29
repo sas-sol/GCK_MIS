@@ -14,6 +14,7 @@ using MeherEstateDevelopers.Models;
 using Microsoft.Ajax.Utilities;
 using Microsoft.AspNet.Identity;
 using Newtonsoft.Json;
+using static System.Net.WebRequestMethods;
 
 namespace MeherEstateDevelopers.Controllers
 {
@@ -1139,6 +1140,8 @@ namespace MeherEstateDevelopers.Controllers
             var comp = ah.Company_Attr(userid);
             var res4 = db.Sp_Get_ElecBill_ById(MeterNo).FirstOrDefault();
             var res1 = db.Sp_Get_PlotData(PlotId).SingleOrDefault();
+            var block = db.RealEstate_Blocks.Where(b => b.Id == res1.BlockIden).FirstOrDefault();
+            var phase = db.RealEstate_Phases.Where(p => p.Id == block.Phase_Id).FirstOrDefault();
             var res2 = db.Sp_Get_PlotLastOwner(PlotId).FirstOrDefault();
             //if (res4.Net_Total > Amount)
             //{
@@ -1146,7 +1149,13 @@ namespace MeherEstateDevelopers.Controllers
             //}
             var receiptno = db.Sp_Get_ReceiptNo("Normal").FirstOrDefault();
             var res3 = db.Sp_Add_Receipt(Amount, GeneralMethods.NumberToWords(Convert.ToInt32(Amount)), null, null, null, null, res2.Mobile_1
-                   , res2.Father_Husband, PlotId, res2.Name, "Cash", 0, "Meher Estate Developers", 0, null, res1.Plot_Size, ReceiptTypes.Electricity_Charges.ToString(), userid, userid, "", null, Modules.PlotManagement.ToString(), "", res1.Plot_No, res1.Block_Name, res1.Type, 0, TransactionId, "", receiptno, comp.Id).FirstOrDefault();
+                   , res2.Father_Husband, PlotId, res2.Name, "Cash", 0, "Grand City Kharian", 0, null, res1.Plot_Size, ReceiptTypes.Electricity_Charges.ToString(), userid, userid, "", null, Modules.PlotManagement.ToString(), "", res1.Plot_No, res1.Block_Name, res1.Type, 0, TransactionId, "", receiptno, comp.Id).FirstOrDefault();
+
+            // add phase in Receipt data
+            var receipsdata = db.Receipts.Where(r => r.Id == res3.Receipt_Id).FirstOrDefault();
+            receipsdata.Phase = phase.Phase_Name;
+            db.SaveChanges();
+
 
             db.Sp_Add_Activity(userid, "Paid Electricity Bill" + Amount + " " + MeterNo, "Update", "Activity_Record", ActivityType.Services.ToString(), PlotId);
 
@@ -1592,6 +1601,8 @@ namespace MeherEstateDevelopers.Controllers
             AccountHandlerController ah = new AccountHandlerController();
             var comp = ah.Company_Attr(userid);
             var res1 = db.Sp_Get_PlotData(PlotId).FirstOrDefault();
+            var block = db.RealEstate_Blocks.Where(b => b.Id == res1.BlockIden).FirstOrDefault();
+            var phase = db.RealEstate_Phases.Where(p => p.Id == block.Phase_Id).FirstOrDefault();
             var res2 = db.Sp_Get_PlotLastOwner(PlotId).ToList();
             var res3 = db.Connection_Charges.SingleOrDefault(x => x.Connection_Name == Connection && x.Plot_Type == res1.Type);
             using (var Transaction = db.Database.BeginTransaction())
@@ -1600,7 +1611,13 @@ namespace MeherEstateDevelopers.Controllers
                 {
                     var receiptno = db.Sp_Get_ReceiptNo("Normal").FirstOrDefault();
                     var res4 = db.Sp_Add_Receipt(res3.Charges, GeneralMethods.NumberToWords(Convert.ToInt32(res3.Charges)), null, null, null, null, res2.FirstOrDefault().Mobile_1
-                           , string.Join(",", res2.Select(x => x.Father_Husband)), PlotId, string.Join(",", res2.Select(x => x.Name)), "Cash", 0, "Meher Estate Developers", 0, null, res1.Plot_Size, ReceiptTypes.New_Connection_Charges.ToString(), userid, userid, "", null, Modules.PlotManagement.ToString(), Connection, res1.Plot_No, res1.Block_Name, res1.Type, 0, TransactionId, "", receiptno, comp.Id).FirstOrDefault();
+                           , string.Join(",", res2.Select(x => x.Father_Husband)), PlotId, string.Join(",", res2.Select(x => x.Name)), "Cash", 0, "Grand City Kharian", 0, null, res1.Plot_Size, ReceiptTypes.New_Connection_Charges.ToString(), userid, userid, "", null, Modules.PlotManagement.ToString(), Connection, res1.Plot_No, res1.Block_Name, res1.Type, 0, TransactionId, "", receiptno, comp.Id).FirstOrDefault();
+                    
+                    //add phase in receipt data
+                    var receiptdata = db.Receipts.Where(r => r.Id == res4.Receipt_Id).FirstOrDefault();
+                    receiptdata.Phase = phase.Phase_Name;
+                    db.SaveChanges();
+
                     bool headcashier = false;
                     if (User.IsInRole("Head Cashier"))
                     {
@@ -1689,6 +1706,8 @@ namespace MeherEstateDevelopers.Controllers
                 // var fileNo = PlotId;
                 //var Fileid = db.File_Form.Where(x => x.FileFormNumber == fileno).Select(x => x.Id).FirstOrDefault();
                 var fileno = db.File_Form.Where(x => x.FileFormNumber == PlotId.ToString()).FirstOrDefault(); // Add fileformNumber
+                //get phase
+                var phase = db.RealEstate_Phases.Where(p => p.Id == fileno.Phase_Id).FirstOrDefault();
                 List<Sp_Get_FileFormData_Result> res = db.Sp_Get_FileFormData(fileno.Id).ToList();
                 if (rd.Type == ReceiptTypes.Duplicate_Customer_File.ToString())
                 {
@@ -1697,7 +1716,12 @@ namespace MeherEstateDevelopers.Controllers
                 var receiptno = db.Sp_Get_ReceiptNo("Normal").FirstOrDefault();
                 var Narration = "Cash Amount Received against Plot no:" + res.FirstOrDefault().FileFormNumber + " Block: " + res.FirstOrDefault().Block + " Plot Type : " + res.FirstOrDefault().Plot_Type;
                 var res4 = db.Sp_Add_Receipt(rd.Amount, GeneralMethods.NumberToWords(Convert.ToInt32(rd.Amount)), null, null, null, null, string.Join(",", res.Select(x => x.Mobile_1))
-                       , string.Join(",", res.Select(x => x.Father_Husband)), fileno.Id, string.Join(",", res.Select(x => x.Name)), rd.PaymentType, 0, "SA Gardens", 0, null, res.FirstOrDefault().Plot_Size, rd.Type, userid, userid, Remarks, null, Modules.FileManagement.ToString(), "", res.FirstOrDefault().FileFormNumber.ToString(), res.FirstOrDefault().Block, res.FirstOrDefault().Plot_Type, 0, TransactionId, "", receiptno, comp.Id).FirstOrDefault();
+                       , string.Join(",", res.Select(x => x.Father_Husband)), fileno.Id, string.Join(",", res.Select(x => x.Name)), rd.PaymentType, 0, "Grand City Kharian", 0, null, res.FirstOrDefault().Plot_Size, rd.Type, userid, userid, Remarks, null, Modules.FileManagement.ToString(), "", res.FirstOrDefault().FileFormNumber.ToString(), res.FirstOrDefault().Block, res.FirstOrDefault().Plot_Type, 0, TransactionId, "", receiptno, comp.Id).FirstOrDefault();
+               
+                // add phase in receipt data
+                var receiptdata = db.Receipts.Where(r => r.Id == res4.Receipt_Id).FirstOrDefault();
+                receiptdata.Phase = phase.Phase_Name;
+                db.SaveChanges();
 
                 if (rd.PaymentType != "Cash")
                 {
@@ -1712,6 +1736,9 @@ namespace MeherEstateDevelopers.Controllers
             else if (Module == Modules.PlotManagement.ToString())
             {
                 var res1 = db.Sp_Get_PlotDetailData(PlotId).SingleOrDefault();
+                //get phase
+                var plotdata = db.Plots.Where(p => p.Id ==  PlotId).FirstOrDefault();
+                var phase = db.RealEstate_Phases.Where(p => p.Id == plotdata.Phase_Id).FirstOrDefault();
                 var res2 = db.Sp_Get_PlotLastOwner(PlotId).FirstOrDefault();
                 if (rd.Type == ReceiptTypes.Duplicate_Customer_File.ToString())
                 {
@@ -1753,6 +1780,11 @@ namespace MeherEstateDevelopers.Controllers
                 var Narration = "Cash Amount Received against Plot no:" + res1.Plot_No + " Block: " + res1.Block_Name + " Plot Type : " + res1.Type;
                 var res4 = db.Sp_Add_Receipt(rd.Amount, GeneralMethods.NumberToWords(Convert.ToInt32(rd.Amount)), null, null, null, null, res2.Mobile_1
                        , res2.Father_Husband, PlotId, res2.Name, rd.PaymentType, 0, "Grand City Kharian", 0, null, res1.Plot_Size, rd.Type, userid, userid, "", null, Modules.PlotManagement.ToString(), "", res1.Plot_No, res1.Block_Name, res1.Type, 0, TransactionId, "", receiptno, comp.Id).FirstOrDefault();
+
+                //add phase in receipt data
+                var receiptdata = db.Receipts.Where(r => r.Id == res4.Receipt_Id).FirstOrDefault();
+                receiptdata.Phase = phase.Phase_Name;
+                db.SaveChanges();
                 if (rd.PaymentType != "Cash")
                 {
                     var res3 = Convert.ToInt64(db.Sp_Add_Cheque_BankDraft_PayOrder(rd.Amount, rd.Bank, rd.Branch, rd.PaymentType, null, null, PaymentMethodStatuses.Pending.ToString(),
@@ -2849,6 +2881,9 @@ namespace MeherEstateDevelopers.Controllers
             AccountHandlerController ah = new AccountHandlerController();
             var comp = ah.Company_Attr(userid);
             var res1 = db.Sp_Get_PlotData(PlotId).SingleOrDefault();
+            //get phase
+            var block = db.RealEstate_Blocks.Where(b => b.Id == res1.BlockIden).FirstOrDefault();
+            var phase = db.RealEstate_Phases.Where(p => p.Id == block.Phase_Id).FirstOrDefault();
             var res2 = db.Sp_Get_PlotLastOwner(PlotId).FirstOrDefault();
             var res4 = db.Sp_Get_PlotLastServiceCharges(PlotId).OrderByDescending(x => x.Id).FirstOrDefault();
             //if(res4.Net_Total > Amount)
@@ -2862,7 +2897,11 @@ namespace MeherEstateDevelopers.Controllers
                 try
                 {
                     var res3 = db.Sp_Add_Receipt(Amount, GeneralMethods.NumberToWords(Convert.ToInt32(Amount)), rd.Bank, rd.PayChqNo, rd.Ch_bk_Pay_Date, rd.Branch, res2.Mobile_1
-                           , res2.Father_Husband, PlotId, res2.Name, rd.PaymentType, 0, "Meher Estate Developers", 0, null, res1.Plot_Size, ReceiptTypes.ServiceCharges.ToString(), userid, userid, "", null, Modules.PlotManagement.ToString(), "", res1.Plot_No, res1.Block_Name, res1.Type, 0, TransactionId, "", receiptno, comp.Id).FirstOrDefault();
+                           , res2.Father_Husband, PlotId, res2.Name, rd.PaymentType, 0, "Grand City Kharian", 0, null, res1.Plot_Size, ReceiptTypes.ServiceCharges.ToString(), userid, userid, "", null, Modules.PlotManagement.ToString(), "", res1.Plot_No, res1.Block_Name, res1.Type, 0, TransactionId, "", receiptno, comp.Id).FirstOrDefault();
+                    // add phase in Receipt data
+                    var receiptdata = db.Receipts.Where(r => r.Id == res3.Receipt_Id).FirstOrDefault();
+                    receiptdata.Phase = phase.Phase_Name;
+                    db.SaveChanges();
 
                     db.Sp_Add_Activity(userid, "Payed Services Charges Bill ", "Update", "Activity_Record", ActivityType.Services.ToString(), PlotId);
                     db.Sp_Update_PlotServiceChargesAmount(res4.Id, Amount);

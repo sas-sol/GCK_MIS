@@ -1758,7 +1758,7 @@ namespace MeherEstateDevelopers.Controllers
                                             var receiptno2 = db.Sp_Get_ReceiptNo("Normal").FirstOrDefault();
                                             var res1 = db.Sp_Add_Receipt(v.Amount, v.AmountInWords, v.Bank, v.PayChqNo, v.Ch_bk_Pay_Date, v.Branch, rcid.Receipt.Contact
                                                                         , rcid.Receipt.Father_Name, rcid.Receipt.File_Plot_No, rcid.Receipt.Name, v.PaymentType, null,
-                                                                        "Meher Estate Developers", null, null, rcid.Receipt.Size, ReceiptTypes.Cancellation.ToString(), userid, userid, "Cancelled against Dishonored Cheque " + bank + "  " + Cheq_No + "  " + receipt + " Date:" + date, null, rcid.Receipt.Module, "", file, rcid.Receipt.Block, rcid.Receipt.Plot_Type, 0, TransactionId, rcid.Receipt.Size, receiptno2, comp.Id).FirstOrDefault();
+                                                                        "Grand City Kharian", null, null, rcid.Receipt.Size, ReceiptTypes.Cancellation.ToString(), userid, userid, "Cancelled against Dishonored Cheque " + bank + "  " + Cheq_No + "  " + receipt + " Date:" + date, null, rcid.Receipt.Module, "", file, rcid.Receipt.Block, rcid.Receipt.Plot_Type, 0, TransactionId, rcid.Receipt.Size, receiptno2, comp.Id).FirstOrDefault();
 
                                             {
                                                 bool headcashier = false;
