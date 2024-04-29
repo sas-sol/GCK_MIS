@@ -33,13 +33,28 @@
                         {
                             if (User.IsInRole("Request For Verification"))
                             {
-                                <div class="col-md-4">
-                                    <h6 style="width: auto;float: left;margin: 7px;">Request For Verifcation</h6>
-                                    <label class="switch">
-                                        <input type="checkbox" id="veri-req-f">
-                                        <span class="slider round"></span>
-                                    </label>
-                                </div>
+                                if (Model.FileData.Verification_Req == false)
+                                {
+                                    <div class="col-md-4">
+                                        <h6 style="width: auto;float: left;margin: 7px;">Request For Verification</h6>
+                                        <label class="switch">
+                                            <input type="checkbox" id="veri-req-f">
+                                            <span class="slider round"></span>
+                                        </label>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="col-md-4">
+                                        <h6 style="width: auto;float: left;margin: 7px;">Request For Verification</h6>
+                                        <label class="switch">
+                                            <input type="checkbox" id="veri-req-f" checked disabled>
+                                            <span class="slider round"></span>
+                                        </label>
+                                    </div>
+                                }
+
+
                             }
                         }
                         @if (Model.FilesOwners.OrderByDescending(x => x.DateTime).FirstOrDefault().Dup_Customer_file == true)
