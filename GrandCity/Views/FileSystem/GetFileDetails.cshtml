@@ -33,12 +33,12 @@
                         {
                             if (User.IsInRole("Request For Verification"))
                             {
-                                if (Model.FileData.Verification_Req == false)
+                                if (Model.FileData.Verification_Req == true)
                                 {
                                     <div class="col-md-4">
                                         <h6 style="width: auto;float: left;margin: 7px;">Request For Verification</h6>
                                         <label class="switch">
-                                            <input type="checkbox" id="veri-req-f">
+                                            <input type="checkbox" id="veri-req-f" checked disabled>
                                             <span class="slider round"></span>
                                         </label>
                                     </div>
@@ -48,7 +48,7 @@
                                     <div class="col-md-4">
                                         <h6 style="width: auto;float: left;margin: 7px;">Request For Verification</h6>
                                         <label class="switch">
-                                            <input type="checkbox" id="veri-req-f" checked disabled>
+                                            <input type="checkbox" id="veri-req-f">
                                             <span class="slider round"></span>
                                         </label>
                                     </div>
@@ -143,10 +143,10 @@
                             <label>Dealership</label>
                             <h5>@Model.FileData.Dealership_Name</h5>
                         </div>
-                        <div class="form-group col-md-3">
+                        @*<div class="form-group col-md-3">
                             <label>Balance Amount</label>
                             <h5>@String.Format("{0:n0}", Model.FileData.Balance_Amount) </h5>
-                        </div>
+                        </div>*@
                     </div>
                 </div>
             </div>

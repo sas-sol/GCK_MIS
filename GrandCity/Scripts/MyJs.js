@@ -649,10 +649,11 @@ $(document).on("submit", "#r-u", function (e) {
 });
 // Select Label for Payment Type
 $(document).on("change", ".paytypesel", function () {
+    debugger;
     var res = $(this).val();
     var id = "#" + $(this).parent().parent().attr("id");
     var text = $("option:selected", this).text();
-    if (res !== "Cash" && res !== "Online") {
+    if (res !== "Cash" && res !== "Online" && res !== "Adjustment" && res !== "Adj_Merge") {
         $(id + " .paymentotherinfo").css("display", "block");
         $(id + " .paymentotherinfo :input").attr("disabled", false);
         $(id + " #paytypelabel").text(text + "No.");
@@ -2220,6 +2221,14 @@ $(document).on("click", "#gen-rec", function (e) {
             data: $("#re-ins").serialize(),
             success: function (data) {
                 window.open("/Banking/InstallmentReceipt?Id=" + data.Receiptid + "&Token=" + data.Token, '_blank');
+                 // Refresh the current window after the receipt window finishes loading
+                  setTimeout(function () {
+                    receiptWindow.location.reload();
+                  }, 2000); // Adjust the delay as needed
+                // Reload the current window after a delay
+                setTimeout(function () {
+                    window.location.reload();
+                }, 4000);
             },
             error: function () {
                 alert("Error Occured");
@@ -3328,9 +3337,10 @@ $(document).on("click", "#add-on-amt_un_sup", function (e) {
 });
 //
 $(document).on("change", ".paytypesel-test", function () {
+    debugger;
     var res = $(this).val();
     var text = $("option:selected", this).text();
-    if (res !== "Cash" && res !== "Online") {
+    if (res !== "Cash" && res !== "Online" && res !== "Adjustment" && res !== "Adj_Merge") {
         $(" .paymentotherinfo").css("display", "block");
         $(" .paymentotherinfo :input").attr("disabled", false);
         $("#paytypelabel").text(text + "No.");
@@ -8531,7 +8541,8 @@ $(document).on("submit", "#re-bid-plot", function (e) {
     var flag = true;
     for (var i = 1; i <= paycont; i++) {
         var cash_che_bank = $("#pay-" + i + " #cah-chq-bak").val();
-        if (cash_che_bank !== "Cash") {
+        if (cash_che_bank !== "Cash" && cash_che_bank !== "Adjustment" && cash_che_bank !== "Adj_Merge") {
+            debugger;
             flag = false;
         }
     }
@@ -10758,16 +10769,18 @@ $(document).on("click", "#gen-fine-rec", function (e) {
         url: $("#pay-fin-char").attr('action'),
         data: $("#pay-fin-char").serialize(),
         success: function (data) {
-            if (data.Status == false) {
-                alert(data.Msg);
-            } else if (data.Status == true) {
-                alert("Receipt generated successfully");
+            Swal.fire({
+                icon: 'success',
+                text: 'Receipt generated successfully'
+            }).then(() => {
                 window.open("/Receipts/FineCharges?Id=" + data.Receiptid + "&ReceiptType=" + data.ReceiptType + "&Token=" + data.Token, '_blank');
-
-            }
-        },
+            })
+        },  
         error: function () {
-            alert("An error occurred while processing your request");
+            Swal.fire({
+                icon: 'error',
+                text: 'Something went wrong'
+            });
         }
     });
 });

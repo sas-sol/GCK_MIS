@@ -937,7 +937,7 @@ namespace MeherEstateDevelopers.Controllers
                         //}
                     }
                     string text = "";
-                    if (rd.PaymentType == "Cash")
+                    if (rd.PaymentType == "Cash" || rd.PaymentType == "Adjustment" || rd.PaymentType == "Adj_Merge")
                     {
                         text = "Dear " + rd.Name + ",\n\r" +
                      "A Payment of Rs " + string.Format("{0:n0}", rd.Amount) + " has been received in cash for File number " + rd.FilePlotNumber + " on " + string.Format("{0:dd MMM yyyy}", DateTime.Now) + ". Thank you for your payment.";
@@ -962,8 +962,8 @@ namespace MeherEstateDevelopers.Controllers
                     {
                         foreach (var v in lastowner)
                         {
-                            SmsService smsService = new SmsService();
-                            smsService.SendMsg(text, v.Mobile_1);
+                            //SmsService smsService = new SmsService();
+                            //smsService.SendMsg(text, v.Mobile_1);
                         }
                     }
                     catch (Exception)
@@ -1034,7 +1034,7 @@ namespace MeherEstateDevelopers.Controllers
 
             db.Sp_Add_FileComments(Filefromid, "Add " + rd.PaymentType + " Receipt of Amount " + rd.Amount + " with receipt no. " + rd.ReceiptNo + " date: " + string.Format("{0:dd-MMM-yyyy}", rd.Date), userid, "Text");
             // db.SP_Files_Log("Create", "Receive Installment of file " + rd.File_Plot_Number + " of Amount " + rd.Amount, "File Installments", Request.UserHostAddress, userid, Filefromid);
-            if (rd.PaymentType == "Cash" || rd.PaymentType == "Online_Cash")
+            if (rd.PaymentType == "Cash" || rd.PaymentType == "Online_Cash" || rd.PaymentType == "Adjustment" || rd.PaymentType == "Adj_Merge")
             {
                 //var res1 = db.Sp_Update_Installments_Cash_Status(installmentids, rd.Amount).FirstOrDefault();
                 if (rd.PaymentType == "Online_Cash")
@@ -1758,7 +1758,7 @@ namespace MeherEstateDevelopers.Controllers
                             //    var dg = db.Sp_Add_ErrorLog(ex.Message + ex.InnerException.ToString() + ex.StackTrace, "", "", this.ControllerContext.RouteData.Values["controller"].ToString(), this.ControllerContext.RouteData.Values["action"].ToString());
                             //}
                         }
-                        if (rd.PaymentType == "Cash")
+                        if (rd.PaymentType == "Cash" || rd.PaymentType == "Adjustment" || rd.PaymentType == "Adj_Merge")
                         {
                             var res10 = db.Sp_Get_ReceivedAmounts(Plotid, Modules.PlotManagement.ToString()).Where(x => (x.Status == "Approved" || x.Status is null)).Sum(x => x.Amount);
                             var res11 = db.Sp_Get_PlotInstallments(Plotid).Sum(x => x.Amount);
@@ -2012,7 +2012,7 @@ namespace MeherEstateDevelopers.Controllers
             var comp = ah.Company_Attr(userid);
             var receiptno = db.Sp_Get_ReceiptNo("Normal").FirstOrDefault();
 
-            if (rd.PaymentType == "Cash")
+            if (rd.PaymentType == "Cash" || rd.PaymentType == "Adjustment" || rd.PaymentType == "Adj_Merge")
             {
 
                 var res2 = db.Sp_Add_Receipt(rd.Amount, rd.AmountInWords, rd.Bank, rd.PayChqNo, rd.Ch_bk_Pay_Date, rd.Branch, rd.Mobile_1, rd.Father_Husband, null, rd.Name, rd.PaymentType, rd.TotalAmount,
@@ -2198,7 +2198,7 @@ namespace MeherEstateDevelopers.Controllers
                         AccountHandlerController de = new AccountHandlerController();
                         de.Receive_Plot_Amount(rd.Amount, plot.shop_no, plot.Type, plot.Floor, rd.PaymentType, rd.PayChqNo, rd.Ch_bk_Pay_Date, rd.Bank, TransactionId, userid, res2.Receipt_No, 1, headcashier, AccountingModuleCommercial, Convert.ToInt64(plot.ProjectId));
                     }
-                    if (rd.PaymentType == "Cash")
+                    if (rd.PaymentType == "Cash" || rd.PaymentType == "Adjustment" || rd.PaymentType == "Adj_Merge")
                     {
                         var res10 = db.Sp_Get_ReceivedAmounts(Comid, plot.Module).Where(x => (x.Status == "Approved" || x.Status is null)).Sum(x => x.Amount);
                         //var res10 = db.Sp_Get_ReceivedAmounts(Comid, ProjectCategory.Building.ToString()).Where(x => (x.Status == "Approved" || x.Status is null)).Sum(x => x.Amount); //For Buildings
@@ -2325,7 +2325,7 @@ namespace MeherEstateDevelopers.Controllers
 
 
                         string text = "";
-                        if (rd.PaymentType == "Cash")
+                        if (rd.PaymentType == "Cash" || rd.PaymentType == "Adjustment" || rd.PaymentType == "Adj_Merge")
                         {
                             text = "Dear " + rd.Name + ",\n\r" +
                          "A Payment of Rs " + string.Format("{0:n0}", rd.Amount) + " has been received in cash for File number " + rd.FilePlotNumber + " on " + string.Format("{0:dd MMM yyyy}", DateTime.Now) + ". Thank you for your payment.";
@@ -2419,7 +2419,7 @@ namespace MeherEstateDevelopers.Controllers
 
 
                         string text = "";
-                        if (rd.PaymentType == "Cash")
+                        if (rd.PaymentType == "Cash" || rd.PaymentType == "Adjustment" || rd.PaymentType == "Adj_Merge")
                         {
                             text = "Dear " + rd.Name + ",\n\r" +
                          "A Payment of Rs " + string.Format("{0:n0}", rd.Amount) + " has been received in cash for File number " + rd.FilePlotNumber + " on " + string.Format("{0:dd MMM yyyy}", DateTime.Now) + ". Thank you for your payment.";
@@ -2637,7 +2637,7 @@ namespace MeherEstateDevelopers.Controllers
 
             var receiptno = db.Sp_Get_ReceiptNo("Normal").FirstOrDefault();
 
-            if (rd.PaymentType == "Cash")
+            if (rd.PaymentType == "Cash" || rd.PaymentType == "Adjustment" || rd.PaymentType == "Adj_Merge")
             {
 
                 var res2 = db.Sp_Add_Receipt(rd.Amount, rd.AmountInWords, rd.Bank, rd.PayChqNo, rd.Ch_bk_Pay_Date, rd.Branch, rd.Mobile_1, rd.Father_Husband, null, rd.Name, rd.PaymentType, rd.TotalAmount,

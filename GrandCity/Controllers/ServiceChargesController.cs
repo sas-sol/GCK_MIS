@@ -2915,7 +2915,7 @@ namespace MeherEstateDevelopers.Controllers
                     int line = 1;
                     if (headcashier)
                     {
-                        if (rd.PaymentType == "Cash")
+                        if (rd.PaymentType == "Cash" )
                         {
                             var Payment = ah.Payment_Head(rd.PaymentType, Transaction_Type.Debit.ToString(),null, comp.Id);
                             var Block_COA = ah.HeadFinder(AccountingModuleFP, COA_Mapper_ModuleTypes.Service_Charges_Income.ToString(), COA_Mapper_HeadType.Transaction_Head.ToString(), comp.Id, res1.BlockIden);//db.Sp_Get_CA_Head_MultiRef_4("Income", "Other Income", "Service Charges", Block + " Block").FirstOrDefault();

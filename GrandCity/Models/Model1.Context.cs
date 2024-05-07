@@ -13117,11 +13117,6 @@ namespace MeherEstateDevelopers.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Sp_Get_FilesReport_Short_Result>("Sp_Get_FilesReport_Short");
         }
     
-        public virtual ObjectResult<Sp_Get_FilesShortSummary_Result> Sp_Get_FilesShortSummary()
-        {
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Sp_Get_FilesShortSummary_Result>("Sp_Get_FilesShortSummary");
-        }
-    
         public virtual ObjectResult<Nullable<long>> Sp_Get_FileStatus(Nullable<long> fileformid)
         {
             var fileformidParameter = fileformid.HasValue ?
@@ -24636,6 +24631,11 @@ namespace MeherEstateDevelopers.Models
                 new ObjectParameter("Module", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("Test_UpdatePlotsNotPaidinstallment_Surcharge", idsParameter, moduleParameter);
+        }
+    
+        public virtual ObjectResult<Sp_Get_FilesShortSummary_Result> Sp_Get_FilesShortSummary()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Sp_Get_FilesShortSummary_Result>("Sp_Get_FilesShortSummary");
         }
     }
 }
