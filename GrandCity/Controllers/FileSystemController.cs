@@ -229,7 +229,7 @@ namespace MeherEstateDevelopers.Controllers
                                                 Receiptdata.Select(x => x.Project_Name).FirstOrDefault(), file_Installments.Rate, null, filedatas.Select(x => x.Plot_Size).FirstOrDefault(), ReceiptTypes.Booking.ToString(), filedatas.Select(x => x.File_Form_Id).FirstOrDefault(), userid, "File Booking", null, Modules.FileManagement.ToString(), Devchar, FileFormNumber, appdetail.File.Block, appdetail.File.Type, filedatas.Select(x => x.Group_Tag).FirstOrDefault(), H.RandomNumber(), appdetail.Dealership.Dealership_Name, receiptno, comp.Id).FirstOrDefault();
                             // add phase in Receipt data
                             var receiptdata = db.Receipts.Where(r => r.Id == res.Receipt_Id).FirstOrDefault();
-                            receiptdata.Phase = phase.Phase_Name;
+                            receiptdata.Phase = phase.Phase_Name != null ? phase.Phase_Name : receiptdata.Phase;
                             db.SaveChanges();
 
                             ids.Add(res.Receipt_No);
@@ -264,7 +264,8 @@ namespace MeherEstateDevelopers.Controllers
 
                                 // add phase in Receipt data
                                 var receiptdata = db.Receipts.Where(r => r.Id == res.Receipt_Id).FirstOrDefault();
-                                receiptdata.Phase = phase.Phase_Name;
+                              receiptdata.Phase = phase.Phase_Name != null ? phase.Phase_Name : receiptdata.Phase;
+
                                 db.SaveChanges();
 
                                 ids.Add(res.Receipt_No);
@@ -858,7 +859,7 @@ namespace MeherEstateDevelopers.Controllers
                                         rd.Project_Name, filedatas.Select(x => x.Rate).FirstOrDefault(), null, filedatas.Select(x => x.Plot_Size).FirstOrDefault(), ReceiptTypes.Transfer.ToString(), TransactionId, userid, "File Transfer", null, Modules.FileManagement.ToString(), rd.DevCharges, rd.File_Plot_Number.ToString(), appdetail.Block, appdetail.Type, Req_Id, TransactionId, "", receiptno, comp.Id).FirstOrDefault();
                     // add phase in Receipt data
                     var receiptdata = db.Receipts.Where(r => r.Id == res1.Receipt_Id).FirstOrDefault();
-                    receiptdata.Phase = phase.Phase_Name;
+                    receiptdata.Phase = phase.Phase_Name != null ? phase.Phase_Name : receiptdata.Phase;
                     db.SaveChanges();
 
 

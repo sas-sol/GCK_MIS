@@ -999,7 +999,7 @@ namespace MeherEstateDevelopers.Controllers
                             var phase = db.RealEstate_Phases.Where(p => p.Id == plotdata.Phase_Id).FirstOrDefault();
                             // add phase in Receipt data
                             var receiptdata = db.Receipts.Where(r => r.Id == res3.Receipt_Id).FirstOrDefault();
-                            receiptdata.Phase = phase.Phase_Name;
+                            receiptdata.Phase = phase.Phase_Name != null ? phase.Phase_Name : receiptdata.Phase;
                             db.SaveChanges();
                             var res4 = Convert.ToInt64(db.Sp_Add_Cheque_BankDraft_PayOrder(brdd.Amount, brdd.Bank, brdd.Branch, brdd.PaymentType, null, null, PaymentMethodStatuses.Pending.ToString(),
                                             Modules.PlotManagement.ToString(), Types.Booking.ToString(), userid, brdd.PayChqNo, Plot_Id, brdd.Ch_bk_Pay_Date, plot.Plot_No.ToString(), res3.Receipt_Id, comp.Id, Voucher_Type.BRV.ToString()).FirstOrDefault());

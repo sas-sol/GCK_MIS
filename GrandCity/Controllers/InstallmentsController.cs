@@ -892,7 +892,7 @@ namespace MeherEstateDevelopers.Controllers
 
                     // add phase in Receipt data
                     var receiptdata = db.Receipts.Where(r => r.Id == res2.Receipt_Id).FirstOrDefault();
-                    receiptdata.Phase = phase.Phase_Name;
+                    receiptdata.Phase = phase.Phase_Name != null ? phase.Phase_Name : receiptdata.Phase;
                     db.SaveChanges();
 
                     if (res2.Receipt_Id > 0)

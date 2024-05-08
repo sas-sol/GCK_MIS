@@ -1615,7 +1615,7 @@ namespace MeherEstateDevelopers.Controllers
                     
                     //add phase in receipt data
                     var receiptdata = db.Receipts.Where(r => r.Id == res4.Receipt_Id).FirstOrDefault();
-                    receiptdata.Phase = phase.Phase_Name;
+
                     db.SaveChanges();
 
                     bool headcashier = false;
@@ -1720,7 +1720,7 @@ namespace MeherEstateDevelopers.Controllers
                
                 // add phase in receipt data
                 var receiptdata = db.Receipts.Where(r => r.Id == res4.Receipt_Id).FirstOrDefault();
-                receiptdata.Phase = phase.Phase_Name;
+                receiptdata.Phase = phase.Phase_Name != null ? phase.Phase_Name : receiptdata.Phase;
                 db.SaveChanges();
 
                 if (rd.PaymentType != "Cash")
@@ -1783,7 +1783,7 @@ namespace MeherEstateDevelopers.Controllers
 
                 //add phase in receipt data
                 var receiptdata = db.Receipts.Where(r => r.Id == res4.Receipt_Id).FirstOrDefault();
-                receiptdata.Phase = phase.Phase_Name;
+                receiptdata.Phase = phase.Phase_Name != null ? phase.Phase_Name : receiptdata.Phase;
                 db.SaveChanges();
                 if (rd.PaymentType != "Cash")
                 {
@@ -2900,7 +2900,7 @@ namespace MeherEstateDevelopers.Controllers
                            , res2.Father_Husband, PlotId, res2.Name, rd.PaymentType, 0, "Grand City Kharian", 0, null, res1.Plot_Size, ReceiptTypes.ServiceCharges.ToString(), userid, userid, "", null, Modules.PlotManagement.ToString(), "", res1.Plot_No, res1.Block_Name, res1.Type, 0, TransactionId, "", receiptno, comp.Id).FirstOrDefault();
                     // add phase in Receipt data
                     var receiptdata = db.Receipts.Where(r => r.Id == res3.Receipt_Id).FirstOrDefault();
-                    receiptdata.Phase = phase.Phase_Name;
+                    receiptdata.Phase = phase.Phase_Name != null ? phase.Phase_Name : receiptdata.Phase;
                     db.SaveChanges();
 
                     db.Sp_Add_Activity(userid, "Payed Services Charges Bill ", "Update", "Activity_Record", ActivityType.Services.ToString(), PlotId);
