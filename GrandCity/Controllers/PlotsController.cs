@@ -962,7 +962,7 @@ namespace MeherEstateDevelopers.Controllers
                    
                     var receiptno = db.Sp_Get_ReceiptNo("Normal").FirstOrDefault();
 
-                    if (brdd.PaymentType == "Cash")
+                    if (brdd.PaymentType == "Cash"  || brdd.PaymentType == "Adjustment" || brdd.PaymentType == "Adj_Merge")
                     {
                         if (recamt > 0 || brdd.Amount > 0)
                         {
@@ -973,7 +973,7 @@ namespace MeherEstateDevelopers.Controllers
                             var phase = db.RealEstate_Phases.Where(p => p.Id == plotdata.Phase_Id).FirstOrDefault();
                             // add phase in Receipt data
                             var receiptdata = db.Receipts.Where(r => r.Id == res3.Receipt_Id).FirstOrDefault();
-                            receiptdata.Phase = phase.Phase_Name;
+                            receiptdata.Phase = "Phase1";
                             db.SaveChanges();
 
                             Receipt_No = res3.Receipt_No;

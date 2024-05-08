@@ -233,6 +233,8 @@
                                 <label>Cash / Bank</label>
                                 <select class="form-control paytypesel" id="cah-chq-bak" required>
                                     <option value="Cash">Cash</option>
+                                    <option value="Adjustment">Adjustment</option>
+                                    <option value="Adj_Merge">Adj_Merge</option>
                                     <option value="BankDraft">Bank Draft</option>
                                     <option value="Cheque">Cheque</option>
                                     <option value="PayOrder">Pay Order</option>
@@ -543,7 +545,8 @@
             var flag = true;
             for (var i = 1; i <= paycont; i++) {
                 var cash_che_bank = $("#pay-" + i + " #cah-chq-bak").val();
-                if (cash_che_bank !== "Cash") {
+                if (cash_che_bank !== "Cash" && cash_che_bank !== "Adjustment" && cash_che_bank !== "Adj_Merge") {
+                    debugger;
                     flag = false;
                 }
             }

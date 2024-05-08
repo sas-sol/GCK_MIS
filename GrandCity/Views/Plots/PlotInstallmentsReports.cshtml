@@ -129,7 +129,9 @@
                     }
                 }
             }
-            @{ OutStand_amt = Model.Report.Sum(x => x.Debit) - Rec_amt;}
+            @*@{ OutStand_amt = Model.Report.Sum(x => x.Debit) - Rec_amt;}*@
+            @{ OutStand_amt = Model.Balance.Outstanding_Amount;}
+
         </tbody>
     </table>
     <table class="table" width="1000">
@@ -162,7 +164,7 @@
                         <td><b>Discount  @Math.Round(Convert.ToDouble(item.Percentage), 2) % </b></td>
                         <td>@string.Format("{0:n0}", item.Discount_Amount)</td>
                         <td><b>Outstanding Amount</b></td>
-                        @{ OutStand_amt -= item.Discount_Amount; }
+                        @{ OutStand_amt -=item.Discount_Amount; }
                         <td>@string.Format("{0:n0}", OutStand_amt)</td>
                     </tr>
                     <tr>

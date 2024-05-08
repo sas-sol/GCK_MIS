@@ -49,7 +49,9 @@ namespace MeherEstateDevelopers.Models
                 new BanksModel {Name="Tameer Bank" },
                 new BanksModel {Name="U Microfinance Bank" },
                 new BanksModel {Name="United Bank" },
-                new BanksModel {Name="UnCategorized" }
+                new BanksModel {Name="UnCategorized" },
+                 new BanksModel {Name="Easypaisa" },
+                  new BanksModel {Name="Raast" }
             };
         }
         public static List<BanksModel> Cities()

@@ -269,7 +269,7 @@ namespace MeherEstateDevelopers.Controllers
 
                                 ids.Add(res.Receipt_No);
                             string text = "";
-                            if (rd.PaymentType == "Cash")
+                            if (rd.PaymentType == "Cash" || rd.PaymentType == "Adjustment" || rd.PaymentType == "Adj_Merge")
                             {
                                 text = "Dear " + string.Join(",", filedatas.Select(x => x.Name)) + ",\n\r" +
                                  "A Payment of Rs " + string.Format("{0:n0}", rd.Amount) + " has been received in cash for File number# " + rd.File_Plot_Number + " on " + string.Format("{0:dd MMM yyyy}", DateTime.Now) + ". Thank you for your payment.";
@@ -3380,6 +3380,7 @@ namespace MeherEstateDevelopers.Controllers
                 this.TestAdjustIntallments(item.Id);
             }
         }
+        
         protected override void Dispose(bool disposing)
         {
             if (disposing)

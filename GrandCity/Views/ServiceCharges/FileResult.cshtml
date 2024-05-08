@@ -1,4 +1,9 @@
-﻿@model MeherEstateDevelopers.Models.Sp_Get_FileFormData_Result
+﻿<!-- SweetAlert2 CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+<!-- SweetAlert2 JS -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+@model MeherEstateDevelopers.Models.Sp_Get_FileFormData_Result
 @if (Model != null)
 {
     using (Html.BeginForm("PayFineCharges", "ServiceCharges", FormMethod.Post, new { @id = "pay-fin-char", @class = "", role = "form", autocomplete = "off" }))
@@ -64,8 +69,9 @@
                             <div class="form-group col-md-2">
                                 <label>Payment Type</label>
                                 <select class="form-control paytypesel-test" id="cah-chq-bak" name="PaymentType">
-                                    <option value="Cash">Select</option>
                                     <option value="Cash">Cash</option>
+                                    <option value="Adjustment">Adjustment</option>
+                                    <option value="Adj_Merge">Adj_Merge</option>
                                     <option value="BankDraft">Bank Draft</option>
                                     <option value="Cheque">Cheque</option>
                                     <option value="PayOrder">Pay Order</option>
@@ -134,34 +140,34 @@ else
     });
 </script>
 @*<script>
-    $(document).on("change", ".rec-type", function () {
-        var val = $(this).val();
-        if (val == "Fines_Penalities" || val == "Out_Station_Charges") {
-            $(".amt , .coma ").removeAttr("readonly");
-            $(".amt , .coma ").val('');
-        }
-        else if (val == "Power_Of_Attorney") {
-            $(".coma").val("5,000");
-            $(".amt").val(5000);
-            $(".amt , .coma ").attr("readonly", "true")
-        }
-        else if (val == "Duplicate_AllotmentLetter") {
-            var v = $("#plt-size").text();
-            var size = v.split(' ')[0];
-            i
-            var amount = size * 3000;
-            $(".coma").val(Number(amount).toLocaleString());
-            $(".amt").val(amount);
-            $(".amt , .coma ").attr("readonly", "true")
-        }
-        else if (val == "Duplicate_Customer_File") {
-            var v = $("#plt-size").text();
-            var size = v.split(' ')[0];
-            var amount = size * 500;
-            $(".coma").val(Number(amount).toLocaleString());
-            $(".amt").val(amount);
-            $(".amt , .coma ").attr("readonly", "true")
-        }
-    });
-</script>*@
+        $(document).on("change", ".rec-type", function () {
+            var val = $(this).val();
+            if (val == "Fines_Penalities" || val == "Out_Station_Charges") {
+                $(".amt , .coma ").removeAttr("readonly");
+                $(".amt , .coma ").val('');
+            }
+            else if (val == "Power_Of_Attorney") {
+                $(".coma").val("5,000");
+                $(".amt").val(5000);
+                $(".amt , .coma ").attr("readonly", "true")
+            }
+            else if (val == "Duplicate_AllotmentLetter") {
+                var v = $("#plt-size").text();
+                var size = v.split(' ')[0];
+                i
+                var amount = size * 3000;
+                $(".coma").val(Number(amount).toLocaleString());
+                $(".amt").val(amount);
+                $(".amt , .coma ").attr("readonly", "true")
+            }
+            else if (val == "Duplicate_Customer_File") {
+                var v = $("#plt-size").text();
+                var size = v.split(' ')[0];
+                var amount = size * 500;
+                $(".coma").val(Number(amount).toLocaleString());
+                $(".amt").val(amount);
+                $(".amt , .coma ").attr("readonly", "true")
+            }
+        });
+    </script>*@
 

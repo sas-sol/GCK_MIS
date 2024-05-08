@@ -128,7 +128,7 @@
             decimal? Total_Amt = 0;
             decimal? Rec_amt = 0;
         }
-        @foreach (var item in Model.Report.Where(z => z.Date <= DateTime.Now && z.Type != "10").OrderBy(x => x.Date))
+        @foreach (var item in Model.Report.Where(z => z.Type != "10"))
         {
             if (item.Description == "Advance")
             {
