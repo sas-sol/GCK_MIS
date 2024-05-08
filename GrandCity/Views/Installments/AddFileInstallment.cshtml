@@ -1,0 +1,161 @@
+﻿<!-- SweetAlert2 CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+<!-- SweetAlert2 JS -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+@using (Html.BeginForm("PayfileInstallment", "Installments", FormMethod.Post, new { @id = "pay-file-ins", @class = "", role = "form", autocomplete = "off" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <input type="hidden" id="plotid" name="PlotId" value="@ViewBag.Plotid" />
+            <input type="hidden" id="amt-plot-no" name="File_Plot_Number" value="@ViewBag.Plotid" />
+            <input type="hidden" id="filepltno" name="FilePlotNumber" />
+            <input type="hidden" id="amt-in-wrds" name="AmountInWords" />
+            <input type="hidden" id="mbl" name="Mobile_1" value="@ViewBag.Mobile" />
+            <input type="hidden" id="fth-husbad" name="Father_Husband" value="@ViewBag.Father" />
+            <input type="hidden" id="name" name="Name" value="@ViewBag.Name" />
+            <input type="hidden" id="total-amt" name="TotalAmount" />
+            <input type="hidden" id="prj-name" name="Project_Name" value="Grand City Kharian" />
+            <input type="hidden" id="rate" name="Rate" />
+            <input type="hidden" id="plot-size" name="Plot_Size" />
+            <input type="hidden" id="rec-Block" name="Block" />
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-2">
+            <label>Receipt No.</label>
+            <input type="text" class="form-control" id="Receipt" name="ReceiptNo">
+        </div>
+        <div class="form-group col-md-2">
+            <label>Cash / Bank</label>
+            <select class="form-control paytypesel-test" id="cah-chq-bak" name="PaymentType">
+                <option value="Cash">Cash</option>
+                <option value="Adjustment">Adjustment</option>
+                <option value="Adj_Merge">Adj_Merge</option>
+                <option value="BankDraft">Bank Draft</option>
+                <option value="Cheque">Cheque</option>
+                <option value="PayOrder">Pay Order</option>
+                <option value="Online_Cash">Online - Cash</option>
+                <option value="Online_Cheque">Online - Cheque</option>
+                <option value="Online_Payorder">Online - PayOrder</option>
+                <option value="Online_Bankdraft">Online - BankDraft</option>
+                <option value="Debit/Credit Card">Debit/Credit Card</option>
+            </select>
+        </div>
+
+        <div class="form-group col-md-2">
+            <label>Amount</label>
+            <input class="form-control coma" placeholder="850,000" required>
+            <input type="hidden" id="amt" name="Amount" class="amt" required>
+        </div>
+
+        <div class="form-group col-md-2">
+            <label for="Dates">Receipt Date</label>
+            <input type="datetime-local" class="form-control" id="Date" name="Date">
+        </div>
+
+        <div class="form-group col-md-2">
+            <label>Type</label>
+            <select class="form-control" id="Module" name="Module">
+                <option value="Booking">Booking</option>
+                <option value="Installment">Installment</option>
+                <option value="SurCharge">SurCharge</option>
+                <option value="Other_Charges">Other_Charges</option>
+                <option value="Activation_Charges">Activation_Charges</option>
+                <option value="Demarcation">Demarcation</option>
+                <option value="Govt_Tax">Govt_Tax</option>
+                <option value="Processing_Fee">Processing_Fee</option>
+            </select>
+        </div>
+        <div class="form-group col-md-3 paymentotherinfo">
+            <label id="paytypelabel"></label>
+            <input type="text" class="form-control" id="paymenttype" name="PayChqNo" placeholder="" disabled>
+        </div>
+        <div class="form-group col-md-3 paymentotherinfo">
+            <label>Bank</label>
+            @Html.DropDownList("Bank", null, "Choose..", new { @class = "form-control", disabled = "" })
+        </div>
+        <div class="form-group col-md-2 paymentotherinfo">
+            <label>Branch </label>
+            <input type="text" class="form-control" id="Branch" name="Branch" placeholder="Mall Rd" disabled>
+        </div>
+        <div class="form-group col-md-2 paymentotherinfo">
+            <label>Date</label>
+            <input type="datetime-local" class="form-control" name="Ch_bk_Pay_Date" placeholder="mm/dd/yyyy" disabled required>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-3">
+            <input type="file" id="files" name="Files" style="margin:10px;" />
+        </div>
+    </div>
+    @*<div class="form-row">
+            <div class="col-md-6">
+                <div id="my_camera"></div>
+                <input class="btn btn-primary" style="margin-top:3%" onClick="take_snapshot()" value="Take Photo">
+            </div>
+            <div class="col-md-6"><div id="results" style="width:455px;height:270px"></div></div>
+        </div>*@
+}
+
+<script>
+    $(function () {
+        $('.modal-footer').append('<button class="btn btn-info" id="sav-fil-rece" type="submit">Save</button>');
+        $('.modal-Header').text('File Installment');
+        var block = $("#Block option:selected").text();
+        block = block.replace(/(\r\n\t|\n|\r\t)/gm, "");
+        $("#total-amt").val($("#totalprice").val());
+        $("#plot-size").val($("#pl-size").val());
+        $("#rec-Block").val($("#blk").val());
+
+        $("#filepltno").val($("#app-num").val());
+
+        $("#amt-file-id").val($("#plt-id").val());
+    });
+    function take_snapshot() {
+        // take snapshot and get image data
+        Webcam.snap(function (data_uri) {
+            document.getElementById('results').innerHTML = '<img style="transform: rotate(180deg);width:100%" id="snap-photo" src="' + data_uri + '"/>' +
+                '<input type="hidden" name="CameraImg" value="' + data_uri + '">';
+        });
+    }
+
+    Webcam.set({
+        // live preview size
+        width: 455,
+        height: 270,
+
+        // device capture size
+        dest_width: 1280,
+        dest_height: 720,
+
+        // final cropped size
+        crop_width: 1280,
+        crop_height: 720,
+
+        // format and quality
+        image_format: 'png',
+        jpeg_quality: 90
+    });
+
+
+    Webcam.attach('#my_camera');
+</script>
+<style>
+    .paymentotherinfo {
+        display: none;
+    }
+
+    #inst-stat {
+        height: 1245px;
+        overflow-y: scroll;
+    }
+
+    video {
+        -webkit-transform: rotate(180deg);
+        -moz-transform: rotate(180deg);
+        -o-transform: rotate(180deg);
+        -ms-transform: rotate(180deg);
+        transform: rotate(180deg);
+    }
+</style>

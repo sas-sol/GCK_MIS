@@ -138,9 +138,7 @@
                             <div class="col-md-2">
                                 <h6 class="c-grey-900">@count Owner Information</h6>
                             </div>
-                            @*<div class="col-md-2">
-                                    <input type="button" class="btn btn-primary plot-inst-btn" data-toggle="modal" data-target="#Modal" value="Receive Installments" />
-                                </div>*@
+                            
                             @if (own.Allotment_Letter != 1)
                             {
                                 <div class="col-md-2">
@@ -158,6 +156,9 @@
                         </div>
                         <div class="own-det @own.GroupTag" id="@own.Id">
                             <div class="row">
+                                @*<div class="col-md-2">
+                                    <input type="button" class="btn btn-primary plot-inst-btn" data-toggle="modal" data-target="#Modal" value="Manual Installments" />
+                                </div>*@
                                 <div class="col-md-12">
                                     <div class="form-row">
                                         <div class="form-group col-md-3">
@@ -363,18 +364,21 @@
 
                                         </div>
                                     }
-                                    <div class="form-row">
-                                        <div class="col-md-2">
-                                            <button class="btn btn-primary upd-info" style="margin-top:5px" id="">Update Information</button>
-                                        </div>
-                                        <div class="col-md-2">
-                                            <button class="btn btn-primary up_inst_btn_plot" style="margin-top: 5px" data-toggle="modal" data-target="#Modal">Update Installment</button>
-                                        </div>
-                                        <div class="col-md-2">
-                                            <button class="btn btn-success sav-info" style="margin-top:5px;display:none" id="">Save</button>
-                                        </div>
-
+                                <div class="form-row">
+                                    <div class="col-md-2">
+                                        <button class="btn btn-primary upd-info" style="margin-top:5px" id="">Update Information</button>
                                     </div>
+                                    <div class="col-md-2">
+                                        <button class="btn btn-primary up_inst_btn_plot" style="margin-top: 5px" data-toggle="modal" data-target="#Modal">Update Installment</button>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <input type="button" class="btn btn-primary plot-inst-btn" style="margin-top: 5px" data-toggle="modal" data-target="#Modal" value="Manual Installments" />
+                                    </div>
+                                    <div class="col-md-2">
+                                        <button class="btn btn-success sav-info" style="margin-top:5px;display:none" id="">Save</button>
+                                    </div>
+
+                                </div>
                                 </div>
                             </div>
                         </div>

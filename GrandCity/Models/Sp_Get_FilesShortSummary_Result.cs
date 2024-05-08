@@ -13,6 +13,9 @@ namespace MeherEstateDevelopers.Models
     
     public partial class Sp_Get_FilesShortSummary_Result
     {
+        public Nullable<int> Total_Files { get; set; }
+        public Nullable<int> VerifiedFiles { get; set; }
+        public Nullable<int> NotVerified { get; set; }
         public Nullable<int> Rejected { get; set; }
         public Nullable<int> Registered { get; set; }
         public Nullable<int> Pending { get; set; }

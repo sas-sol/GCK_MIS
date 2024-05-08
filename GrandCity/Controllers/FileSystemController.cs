@@ -1934,6 +1934,21 @@ namespace MeherEstateDevelopers.Controllers
             db.Sp_Add_Activity(userid, "Accessed File Verifications  Page ", "Read", "Activity_Record", ActivityType.Details_Access.ToString(), userid);
             return View(fileslist);
         }
+        public ActionResult GetVerfiedFiles()
+        {
+            long userid = long.Parse(User.Identity.GetUserId());
+            var fileslist = db.File_Form.Where(f => f.Verified == true).ToList();
+            db.Sp_Add_Activity(userid, "Accessed File Verifications  Page ", "Read", "Activity_Record", ActivityType.Details_Access.ToString(), userid);
+            return View(fileslist);
+        }
+        public ActionResult GetNotVerfiedFiles()
+        {
+            long userid = long.Parse(User.Identity.GetUserId());
+            var fileslist = db.File_Form.Where(f => f.Verified == null).ToList();
+            db.Sp_Add_Activity(userid, "Accessed File Verifications  Page ", "Read", "Activity_Record", ActivityType.Details_Access.ToString(), userid);
+            return View(fileslist);
+        }
+
         public ActionResult GetFileVeriR(string FileId)
         {
             long userid = long.Parse(User.Identity.GetUserId());
@@ -3333,7 +3348,23 @@ namespace MeherEstateDevelopers.Controllers
             var res = new FilePlotReport { NDC = NDC, WDC = WDC, TBA = TBA };
             return PartialView(res);
         }
-
+        public ActionResult FilesDataDetailView()
+        {
+            var res1 = db.File_Form.GroupBy(x => new { Type = x.Type, Phase_Name = x.Phase }).
+               Select(x => new PhaseReport { Type = x.Key.Type, Total = x.Count() }).ToList();
+            var res2 = db.File_Form.GroupBy(x => new { Block = x.Block, Phase_Name = x.Phase, Type = x.Type, Status = ((FileStatus)x.Status).ToString(), }).
+                Select(x => new PlotStatusReport { Block = x.Key.Block, Plot_Type = x.Key.Type, Status = x.Key.Status, PhaseName = x.Key.Phase_Name, Total = x.Count() }).ToList();
+            var res3 = db.File_Form.GroupBy(x => new { Type = x.Type, Block = x.Block, Verified = x.Verified }).
+                 Select(x => new VerifiReport { Block = x.Key.Block, Type = x.Key.Type, Verified = x.Key.Verified, Total = x.Count() }).ToList();
+            var res4 = db.File_Form.GroupBy(x => new { Type = x.Type, Block = x.Block }).
+              Select(x => new ConstructionReport { Block = x.Key.Block, Type = x.Key.Type, Total = x.Count() }).ToList();
+            CompiledReport result = new CompiledReport();
+            result.Phases = res1;
+            result.PlotStatuses = res2;
+            result.PlotVerifications = res3;
+            result.PlotConstructions = res4;
+            return View(result);
+        }
         public ActionResult FilesPlotsReportDetails(string id, string block)
         {
             ViewBag.id = id;

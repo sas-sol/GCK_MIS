@@ -14,7 +14,7 @@
             <input type="hidden" id="fth-husbad" name="Father_Husband" value="@ViewBag.Father" />
             <input type="hidden" id="name" name="Name" value="@ViewBag.Name" />
             <input type="hidden" id="total-amt" name="TotalAmount" />
-            <input type="hidden" id="prj-name" name="Project_Name" value="SA Systems" />
+            <input type="hidden" id="prj-name" name="Project_Name" value="Grand City Kharian" />
             <input type="hidden" id="rate" name="Rate" />
             <input type="hidden" id="plot-size" name="Plot_Size" />
             <input type="hidden" id="rec-Block" name="Block" />
@@ -29,6 +29,8 @@
             <label>Cash / Bank</label>
             <select class="form-control paytypesel-test" id="cah-chq-bak" name="PaymentType">
                 <option value="Cash">Cash</option>
+                <option value="Adjustment">Adjustment</option>
+                <option value="Adj_Merge">Adj_Merge</option>
                 <option value="BankDraft">Bank Draft</option>
                 <option value="Cheque">Cheque</option>
                 <option value="PayOrder">Pay Order</option>
@@ -55,9 +57,12 @@
             <select class="form-control" id="Module" name="Module">
                 <option value="Booking">Booking</option>
                 <option value="Installment">Installment</option>
-                <option value="Transfer">Transfer</option>
-                <option value="Registry">Registry</option>
-                <option value="Cancellation">Cancellation</option>
+                <option value="SurCharge">SurCharge</option>
+                <option value="Other_Charges">Other_Charges</option>
+                <option value="Activation_Charges">Activation_Charges</option>
+                <option value="Demarcation">Demarcation</option>
+                <option value="Govt_Tax">Govt_Tax</option>
+                <option value="Processing_Fee">Processing_Fee</option>
             </select>
         </div>
         <div class="form-group col-md-3 paymentotherinfo">

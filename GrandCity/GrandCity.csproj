@@ -7024,6 +7024,10 @@
     <Content Include="Views\Transfer\File_Undertaking_By_Purchaser.cshtml" />
     <Content Include="Views\Transfer\File_SellerFeeFormat.cshtml" />
     <Content Include="Views\FileSystem\GetUpdateInfoDetails.cshtml" />
+    <Content Include="Views\FileSystem\FilesDataDetailView.cshtml" />
+    <Content Include="Views\FileSystem\GetVerfiedFiles.cshtml" />
+    <Content Include="Views\FileSystem\GetNotVerfiedFiles.cshtml" />
+    <Content Include="Views\Installments\AddFileInstallment.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
