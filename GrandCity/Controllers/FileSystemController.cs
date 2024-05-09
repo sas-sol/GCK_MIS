@@ -846,7 +846,11 @@ namespace MeherEstateDevelopers.Controllers
             var comp = ah.Company_Attr(userid);
             var usernam = db.Users.Find(userid).Name;
             var appdetail = db.Sp_Get_FileData(Convert.ToInt64(rd.FilePlotNumber)).FirstOrDefault();
-            var filedata = db.File_Form.Where(f => f.Id == Convert.ToInt64(rd.FilePlotNumber)).FirstOrDefault();
+            //var filedata = db.File_Form.Where(f => f.Id == Convert.ToInt64(rd.FilePlotNumber)).FirstOrDefault();
+            var filedata = db.File_Form
+                .AsEnumerable() // Switch to LINQ to Objects
+                .Where(f => f.Id == Convert.ToInt64(rd.FilePlotNumber)) // Perform conversion in memory
+                .FirstOrDefault();
             var phase = db.RealEstate_Phases.Where(p => p.Id == filedata.Phase_Id).FirstOrDefault();
             var receiptno = db.Sp_Get_ReceiptNo("Normal").FirstOrDefault();
             using (var Transaction = db.Database.BeginTransaction())
