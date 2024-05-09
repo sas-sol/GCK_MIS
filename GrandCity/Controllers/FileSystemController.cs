@@ -1956,7 +1956,6 @@ namespace MeherEstateDevelopers.Controllers
             return View(fileslist);
         }
 
-        public ActionResult GetFileVeriR(string FileId)
         [NoDirectAccess] public ActionResult GetFileVeriR(string FileId)
         {
             long userid = long.Parse(User.Identity.GetUserId());

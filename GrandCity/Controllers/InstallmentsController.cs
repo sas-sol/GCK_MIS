@@ -1105,7 +1105,7 @@ namespace MeherEstateDevelopers.Controllers
             ViewBag.Bank = new SelectList(Nomenclature.Banks(), "Name", "Name");
             return PartialView();
         }
-        public ActionResult AddCommercialInstallment(long Id, string Name, string Father, string Mobile)
+       
         [NoDirectAccess] public ActionResult AddCommercialInstallment(long Id, string Name, string Father, string Mobile)
         {
             ViewBag.shopid = Id;
