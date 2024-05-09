@@ -7,6 +7,7 @@ using System.Xml.Linq;
 using MeherEstateDevelopers.Models;
 using Microsoft.AspNet.Identity;
 using MeherEstateDevelopers.Filters;
+using static MeherEstateDevelopers.MvcApplication;
 
 namespace MeherEstateDevelopers.Controllers
 {
@@ -17,14 +18,14 @@ namespace MeherEstateDevelopers.Controllers
         
         // GET: Graph
         private Grand_CityEntities db = new Grand_CityEntities();
-        public ActionResult DailyCollection()
+        [NoDirectAccess] public ActionResult DailyCollection()
         {
 
             long userid = long.Parse(User.Identity.GetUserId());
             db.Sp_Add_Activity(userid, "Accessed Daily Collections Page ", "Read", "Activity_Record", ActivityType.Details_Access.ToString(), userid);
             return View();
         }
-        public ActionResult DailyCollectionSearch(DateTime? From, DateTime? To, long?[] Users)
+        [NoDirectAccess] public ActionResult DailyCollectionSearch(DateTime? From, DateTime? To, long?[] Users)
         {
 
             long userid = long.Parse(User.Identity.GetUserId());
@@ -71,7 +72,7 @@ namespace MeherEstateDevelopers.Controllers
         }
 
         [Authorize(Roles = "CEO,Financial Dashboard")]
-        public ActionResult MonthlyInflow_Outflow(DateTime From, DateTime To)
+        [NoDirectAccess] public ActionResult MonthlyInflow_Outflow(DateTime From, DateTime To)
         {
             Report_Amounts data = new Report_Amounts()
             {
@@ -205,7 +206,7 @@ namespace MeherEstateDevelopers.Controllers
             return data;
         }
 
-        public ActionResult PurchaseOrdersDep(DateTime From, DateTime To)
+        [NoDirectAccess] public ActionResult PurchaseOrdersDep(DateTime From, DateTime To)
         {
             var res = db.Sp_Reports_PurchaseOrder(From , To).ToList();
 

@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Mvc;
+using static MeherEstateDevelopers.MvcApplication;
 
 namespace MeherEstateDevelopers.Controllers
 {
@@ -20,7 +21,7 @@ namespace MeherEstateDevelopers.Controllers
         string AccountingModuleCom = COA_Mapper_Modules.Commercial.ToString();
 
         Grand_CityEntities db = new Grand_CityEntities();
-        public ActionResult PlotTransferRequest()
+        [NoDirectAccess] public ActionResult PlotTransferRequest()
         {
             ViewBag.Block = new SelectList(db.Sp_Get_Block(), "Id", "Block_Name");
             ViewBag.City = new SelectList(Nomenclature.Cities(), "Name", "Name");
@@ -94,7 +95,7 @@ namespace MeherEstateDevelopers.Controllers
             //db.SP_Files_Log("Add", "Request Transfer Plot " + Plotdata.Plot_Id + "", "Plot Transfer", Request.UserHostAddress, userid, Plotdata.Plot_Id);
 
         }
-        public ActionResult PlotNDCForm(long SerialNum)
+        [NoDirectAccess] public ActionResult PlotNDCForm(long SerialNum)
         {
             var ptr = db.Plots_Transfer_Request.Where(x => x.GroupTag == SerialNum).ToList();
             var res = db.Sp_Get_NDCFormDetails_Plot(ptr.Select(x => x.Plot_Id).FirstOrDefault()).ToList();
@@ -105,7 +106,7 @@ namespace MeherEstateDevelopers.Controllers
 
             return View(new NDC_View { CurrentTransferRequest = ptr, PreviousOwners = res });
         }
-        public ActionResult PlotTransferRequestList()
+        [NoDirectAccess] public ActionResult PlotTransferRequestList()
         {
             var res = db.Sp_Get_TransferRequestList_Plot().ToList();
             long userid = long.Parse(User.Identity.GetUserId());
@@ -114,7 +115,7 @@ namespace MeherEstateDevelopers.Controllers
 
             return View(res);
         }
-        public ActionResult PlotTransferDetails(long Id)
+        [NoDirectAccess] public ActionResult PlotTransferDetails(long Id)
         {
             ViewBag.TransferRequestId = Id;
             long userid = long.Parse(User.Identity.GetUserId());
@@ -170,13 +171,13 @@ namespace MeherEstateDevelopers.Controllers
 
             return Json(true);
         }
-        public ActionResult PlotTransfer()
+        [NoDirectAccess] public ActionResult PlotTransfer()
         {
             ViewBag.Block = new SelectList(db.Sp_Get_Block(), "Id", "Block_Name");
             ViewBag.City = new SelectList(Nomenclature.Cities(), "Name", "Name");
             return View();
         }
-        public ActionResult PlotTransferData(long Id)
+        [NoDirectAccess] public ActionResult PlotTransferData(long Id)
         {
             long userid = long.Parse(User.Identity.GetUserId());
             //db.Sp_Add_Activity(userid, "", "Create", Modules.PlotManagement.ToString());
@@ -598,7 +599,7 @@ namespace MeherEstateDevelopers.Controllers
                 }
             }
         }
-        public ActionResult RepurchaseTransfer(long Id)
+        [NoDirectAccess] public ActionResult RepurchaseTransfer(long Id)
         {
             long userid = long.Parse(User.Identity.GetUserId());
             var res1 = db.Sp_Get_PlotData(Id).SingleOrDefault();
@@ -626,12 +627,12 @@ namespace MeherEstateDevelopers.Controllers
             };
             return View(S);
         }
-        public ActionResult FilesTransfersList()
+        [NoDirectAccess] public ActionResult FilesTransfersList()
         {
             var res = db.Sp_Get_FilesTransferList().ToList();
             return View(res);
         }
-        public ActionResult FileTransferLetter(long Id)
+        [NoDirectAccess] public ActionResult FileTransferLetter(long Id)
         {
             long userid = long.Parse(User.Identity.GetUserId());
             var res3 = db.Files_Transfer.Where(x => x.Id == Id).FirstOrDefault();
@@ -673,12 +674,12 @@ namespace MeherEstateDevelopers.Controllers
 
             return View(res1);
         }
-        public ActionResult PlotsTransfersList()
+        [NoDirectAccess] public ActionResult PlotsTransfersList()
         {
             var res = db.Sp_Get_PlotsTransferList().ToList();
             return View(res);
         }
-        public ActionResult PlotsTransferLetter(long Id)
+        [NoDirectAccess] public ActionResult PlotsTransferLetter(long Id)
         {
             var res3 = db.Plot_Ownership.Where(x => x.Id == Id).FirstOrDefault();
             var res2 = db.Sp_Get_PlotData(res3.Plot_Id).FirstOrDefault();
@@ -748,7 +749,7 @@ namespace MeherEstateDevelopers.Controllers
             db.SaveChanges();
             return Json(true);
         }
-        public ActionResult TaxCalculator()
+        [NoDirectAccess] public ActionResult TaxCalculator()
         {
             ViewBag.Block = new SelectList(db.Sp_Get_Block(), "Id", "Block_Name");
             return View();
@@ -793,7 +794,7 @@ namespace MeherEstateDevelopers.Controllers
         //
         //
 
-        public ActionResult CommercialTransferRequest()
+        [NoDirectAccess] public ActionResult CommercialTransferRequest()
         {
 
             ViewBag.Projects = new SelectList(db.RealEstate_Projects.Where(x => x.Type == "Building").ToList(), "Id", "Project_Name");
@@ -856,7 +857,7 @@ namespace MeherEstateDevelopers.Controllers
             //db.SP_Files_Log("Add", "Request Transfer Plot " + Plotdata.Plot_Id + "", "Plot Transfer", Request.UserHostAddress, userid, Plotdata.Plot_Id);
 
         }
-        public ActionResult CommercialNDCForm(long SerialNum)
+        [NoDirectAccess] public ActionResult CommercialNDCForm(long SerialNum)
         {
             var ptr = db.Commercial_Transfer_Request.Where(x => x.GroupTag == SerialNum).ToList();
             var res = db.Sp_Get_NDCFormDetails_Commercial(ptr.Select(x => x.Com_Id).FirstOrDefault()).ToList();
@@ -867,7 +868,7 @@ namespace MeherEstateDevelopers.Controllers
 
             return View(new NDC_View_Commercial { CurrentTransferRequest = ptr, PreviousOwners = res });
         }
-        public ActionResult CommercialTransferRequestList()
+        [NoDirectAccess] public ActionResult CommercialTransferRequestList()
         {
             var res = db.Sp_Get_TransferRequestList_Commercial().ToList();
             long userid = long.Parse(User.Identity.GetUserId());
@@ -876,7 +877,7 @@ namespace MeherEstateDevelopers.Controllers
 
             return View(res);
         }
-        public ActionResult CommercialTransferDetails(long Id)
+        [NoDirectAccess] public ActionResult CommercialTransferDetails(long Id)
         {
             long userid = long.Parse(User.Identity.GetUserId());
             //db.Sp_Add_Activity(userid, "", "Create", Modules.PlotManagement.ToString());
@@ -930,12 +931,12 @@ namespace MeherEstateDevelopers.Controllers
 
             return Json(true);
         }
-        public ActionResult CommercialTransfer()
+        [NoDirectAccess] public ActionResult CommercialTransfer()
         {
             ViewBag.Projects = new SelectList(db.RealEstate_Projects.Where(x => x.Type == ProjectCategory.Building.ToString()).ToList(), "Id", "Project_Name");
             return View();
         }
-        public ActionResult CommercialTransferData(long Id)
+        [NoDirectAccess] public ActionResult CommercialTransferData(long Id)
         {
             long userid = long.Parse(User.Identity.GetUserId());
             //db.Sp_Add_Activity(userid, "", "Create", Modules.PlotManagement.ToString());
@@ -1087,12 +1088,12 @@ namespace MeherEstateDevelopers.Controllers
                 }
             }
         }
-        public ActionResult CommercialTransfersList()
+        [NoDirectAccess] public ActionResult CommercialTransfersList()
         {
             var res = db.Sp_Get_PlotsTransferList().ToList();
             return View(res);
         }
-        public ActionResult CommercialTransferLetter(long Id)
+        [NoDirectAccess] public ActionResult CommercialTransferLetter(long Id)
         {
             var res3 = db.Commercial_Room_Transfer.Where(x => x.Id == Id).FirstOrDefault();
             var res2 = db.Commercial_Rooms.Where(x => x.Id == res3.ComRom_Id).FirstOrDefault();
@@ -1146,7 +1147,7 @@ namespace MeherEstateDevelopers.Controllers
             db.SaveChanges();
             return Json(true);
         }
-        //public ActionResult TaxCalculator()
+        //[NoDirectAccess] public ActionResult TaxCalculator()
         //{
         //    ViewBag.Block = new SelectList(db.Sp_Get_Block(), "Id", "Block_Name");
         //    return View();
@@ -1184,11 +1185,11 @@ namespace MeherEstateDevelopers.Controllers
                 return Json(false);
             }
         }
-        //public ActionResult TransferIntimation(long Id)
+        //[NoDirectAccess] public ActionResult TransferIntimation(long Id)
         //{ 
         //    return View();
         //}
-        public ActionResult SellerFeeFormat(long Id)
+        [NoDirectAccess] public ActionResult SellerFeeFormat(long Id)
         {
             var res5 = db.Sp_Get_TransferRequestDetails_Plot(Id).ToList();
             var res = db.Sp_Get_NDCFormDetails_Plot(res5.Select(x => x.Plot_Id).FirstOrDefault()).ToList();
@@ -1196,7 +1197,7 @@ namespace MeherEstateDevelopers.Controllers
             var plt = db.Plots.Where(p => p.Id == plotid).FirstOrDefault();
             return View(new SellerFeeFormatView { CurrentOwner = res5, PreviousOwners = res, Plots = plt });
         }
-        public ActionResult File_SellerFeeFormat(string Id)
+        [NoDirectAccess] public ActionResult File_SellerFeeFormat(string Id)
         {
             var fileform = db.File_Form.Where(f => f.FileFormNumber == Id).FirstOrDefault();
             Sp_Get_FileFormData_Result res = db.Sp_Get_FileFormData(fileform.Id).FirstOrDefault();
@@ -1257,7 +1258,7 @@ namespace MeherEstateDevelopers.Controllers
             var newres = new TransferRequestDetails { File = fa, TransferTo = tranres, Installments = installments, OtherInstallments = otherinstallments, ReceivedAmounts = Receivedamts };
             return View(newres);
         }
-        public ActionResult File_Undertaking_By_Purchaser(string Id)
+        [NoDirectAccess] public ActionResult File_Undertaking_By_Purchaser(string Id)
         {
             var fileform = db.File_Form.Where(f => f.FileFormNumber == Id).FirstOrDefault();
             Sp_Get_FileFormData_Result res = db.Sp_Get_FileFormData(fileform.Id).FirstOrDefault();
@@ -1318,7 +1319,7 @@ namespace MeherEstateDevelopers.Controllers
             var newres = new TransferRequestDetails { File = fa, TransferTo = tranres, Installments = installments, OtherInstallments = otherinstallments, ReceivedAmounts = Receivedamts };
             return View(newres);
         }
-        public ActionResult Undertaking_By_Purchaser(long Id)
+        [NoDirectAccess] public ActionResult Undertaking_By_Purchaser(long Id)
         {
             var res5 = db.Sp_Get_TransferRequestDetails_Plot(Id).ToList();
             var res = db.Sp_Get_NDCFormDetails_Plot(res5.Select(x => x.Plot_Id).FirstOrDefault()).ToList();
@@ -1326,7 +1327,7 @@ namespace MeherEstateDevelopers.Controllers
             var plt = db.Plots.Where(p => p.Id == plotid).FirstOrDefault();
             return View(new SellerFeeFormatView { CurrentOwner = res5, PreviousOwners = res, Plots = plt });
         }
-        public ActionResult TransferSheet(long SerialNum)
+        [NoDirectAccess] public ActionResult TransferSheet(long SerialNum)
         {
             var ptr = db.Plots_Transfer_Request.Where(x => x.GroupTag == SerialNum).ToList();
             var res = db.Sp_Get_NDCFormDetails_Plot(ptr.Select(x => x.Plot_Id).FirstOrDefault()).ToList();
@@ -1341,7 +1342,7 @@ namespace MeherEstateDevelopers.Controllers
 
             return View(new NDC_Views { CurrentTransferRequest = ptr, PreviousOwners = res, Plots = plt });
         }
-        public ActionResult FileTransferSheet(long SerialNum)
+        [NoDirectAccess] public ActionResult FileTransferSheet(long SerialNum)
         {
             var res = db.Sp_Get_NDCFormDetails(SerialNum).FirstOrDefault();
             var new_owners = db.Files_Transfer_Request.Where(x => x.Group_Tag == SerialNum).ToList();
@@ -1394,7 +1395,7 @@ namespace MeherEstateDevelopers.Controllers
             db.Sp_Add_Activity(userid, "Accessed NDC " + SerialNum, "Read", "Activity_Record", ActivityType.Details_Access.ToString(), ress.Id);
             return View(ress);
         }
-        //public ActionResult IssuanceOfNDC()
+        //[NoDirectAccess] public ActionResult IssuanceOfNDC()
         //{
         //    return View();
         //}

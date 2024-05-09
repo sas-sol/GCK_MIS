@@ -7,6 +7,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Xml.Linq;
 using MeherEstateDevelopers.Filters;
+using static MeherEstateDevelopers.MvcApplication;
 
 namespace MeherEstateDevelopers.Controllers
 {
@@ -32,14 +33,14 @@ namespace MeherEstateDevelopers.Controllers
         {
             return Json(true);
         }
-        public ActionResult VouchersReports(string r)
+        [NoDirectAccess] public ActionResult VouchersReports(string r)
         {
             var res = db.Journal_Entries.Select(x => new { Id = x.Recorded_By, Name = x.RecordedBy_Name }).Distinct().ToList();
             ViewBag.Users = new SelectList(res, "Id", "Name");
             ViewBag.VT = r;
             return View();
         }
-        public ActionResult SearchVouchers(DateTime? From, DateTime? To,  long?[] Users, string VT)
+        [NoDirectAccess] public ActionResult SearchVouchers(DateTime? From, DateTime? To,  long?[] Users, string VT)
         {
             ViewBag.From = From;
             ViewBag.To = To;
@@ -62,7 +63,7 @@ namespace MeherEstateDevelopers.Controllers
 
             return PartialView();
         }
-        public ActionResult CashReceiptVouchers(DateTime? From, DateTime? To, long?[] Users, string Type)
+        [NoDirectAccess] public ActionResult CashReceiptVouchers(DateTime? From, DateTime? To, long?[] Users, string Type)
         {
             string use = "";
             ViewBag.Type = Type;
@@ -76,7 +77,7 @@ namespace MeherEstateDevelopers.Controllers
             ViewBag.heads = db.Sp_Get_CA_Head_MultiRef("Assets", "Cash").Select(x=> x.Code).ToList();
             return PartialView(res);
         }
-        public ActionResult BankReceiptVouchers(DateTime? From, DateTime? To, long?[] Users, string Type)
+        [NoDirectAccess] public ActionResult BankReceiptVouchers(DateTime? From, DateTime? To, long?[] Users, string Type)
         {
             string use = "";
             ViewBag.Type = Type;
@@ -90,7 +91,7 @@ namespace MeherEstateDevelopers.Controllers
             ViewBag.heads = db.Sp_Get_CA_Head_MultiRef("Assets", "Bank").Select(x => x.Code).ToList();
             return PartialView( res);
         }
-        public ActionResult CashPaymentVouchers(DateTime? From, DateTime? To, long?[] Users, string Type)
+        [NoDirectAccess] public ActionResult CashPaymentVouchers(DateTime? From, DateTime? To, long?[] Users, string Type)
         {
             string use = "";
             ViewBag.Type = Type;
@@ -104,7 +105,7 @@ namespace MeherEstateDevelopers.Controllers
             ViewBag.heads = db.Sp_Get_CA_Head_MultiRef("Assets", "Cash").Select(x => x.Code).ToList();
             return PartialView( res);
         }
-        public ActionResult BankPaymentVouchers(DateTime? From, DateTime? To, long?[] Users, string Type)
+        [NoDirectAccess] public ActionResult BankPaymentVouchers(DateTime? From, DateTime? To, long?[] Users, string Type)
         {
             string use = "";
             ViewBag.Type = Type;
@@ -118,7 +119,7 @@ namespace MeherEstateDevelopers.Controllers
             ViewBag.heads = db.Sp_Get_CA_Head_MultiRef("Assets", "Bank").Select(x => x.Code).ToList();
             return PartialView( res);
         }
-        public ActionResult JournalVouchers(DateTime? From, DateTime? To, long?[] Users, string Type)
+        [NoDirectAccess] public ActionResult JournalVouchers(DateTime? From, DateTime? To, long?[] Users, string Type)
         {
             string use = "";
             ViewBag.Type = Type;
@@ -132,7 +133,7 @@ namespace MeherEstateDevelopers.Controllers
             var res = db.Sp_Get_JournalEntries_All(From, To, Type, use).ToList();
             return PartialView( res);
         }
-        public ActionResult CashBook()
+        [NoDirectAccess] public ActionResult CashBook()
         {
             var All = db.Sp_Get_Cashiers_List().ToList();
             ViewBag.Users = new SelectList(All, "id", "Name");
@@ -142,7 +143,7 @@ namespace MeherEstateDevelopers.Controllers
             return View();
         }
         [HttpPost]
-        public ActionResult SearchCashBook(DateTime? From, DateTime? To, long?[] Users)
+        [NoDirectAccess] public ActionResult SearchCashBook(DateTime? From, DateTime? To, long?[] Users)
         {
             long userid = long.Parse(User.Identity.GetUserId());
             string chids = null;
@@ -168,7 +169,7 @@ namespace MeherEstateDevelopers.Controllers
         }
 
 
-        public ActionResult BankBook()
+        [NoDirectAccess] public ActionResult BankBook()
         {
             var All = db.Users.ToList();
             ViewBag.Users = new SelectList(All, "id", "Name");
@@ -179,7 +180,7 @@ namespace MeherEstateDevelopers.Controllers
             return View();
         }
         [HttpPost]
-        public ActionResult SearchBankBook(DateTime? From, DateTime? To, long?[] Users,int Bank_Id)
+        [NoDirectAccess] public ActionResult SearchBankBook(DateTime? From, DateTime? To, long?[] Users,int Bank_Id)
         {
             long userid = long.Parse(User.Identity.GetUserId());
             if (From == null || To == null)
@@ -212,7 +213,7 @@ namespace MeherEstateDevelopers.Controllers
         }
 
 
-        public ActionResult LandPayments()
+        [NoDirectAccess] public ActionResult LandPayments()
         {
             var banks = db.Bank_Accounts.Select(x => new NameValuestring { Value = x.Id.ToString(), Name = x.Bank + " - " + x.Account_Number }).ToList();
             var all = new NameValuestring()

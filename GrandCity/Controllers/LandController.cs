@@ -5,6 +5,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Xml.Linq;
+using static MeherEstateDevelopers.MvcApplication;
 
 namespace MeherEstateDevelopers.Controllers
 {
@@ -16,14 +17,14 @@ namespace MeherEstateDevelopers.Controllers
         /// <summary>
         /// Land Seller Parties
         /// </summary>
-        public ActionResult LandSellers()
+        [NoDirectAccess] public ActionResult LandSellers()
         {
 
             var res = db.Land_Seller_Party.Where(x => x.Deleted == false || x.Deleted == null).ToList();
 
             return View(res);
         }
-        public ActionResult UpdateSellerDetails(long? id)
+        [NoDirectAccess] public ActionResult UpdateSellerDetails(long? id)
         {
             var res = db.Land_Seller_Party.Where(x => x.Id == id).FirstOrDefault();
             return PartialView(res);
@@ -44,7 +45,7 @@ namespace MeherEstateDevelopers.Controllers
             return Json(new { Status = true, Msg = "Try Again" });
         }
 
-        public ActionResult AddLandSellers()
+        [NoDirectAccess] public ActionResult AddLandSellers()
         {
             return PartialView();
         }
@@ -64,7 +65,7 @@ namespace MeherEstateDevelopers.Controllers
         }
         /////////
 
-        public ActionResult AddLandRecord()
+        [NoDirectAccess] public ActionResult AddLandRecord()
         {
             ViewBag.Deal_No = "L-000001";
             return View();
@@ -80,13 +81,13 @@ namespace MeherEstateDevelopers.Controllers
             return Json(new { items = allsearch }, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult LandRecords()
+        [NoDirectAccess] public ActionResult LandRecords()
         {
             var res = db.Sp_Get_LandRecords().ToList();
             return View(res);
         }
         //Seller Data
-        public ActionResult SellerData()
+        [NoDirectAccess] public ActionResult SellerData()
         {
             return PartialView();
         }
@@ -132,7 +133,7 @@ namespace MeherEstateDevelopers.Controllers
 
         }
 
-        public ActionResult LandRecordDetails(long dealid)
+        [NoDirectAccess] public ActionResult LandRecordDetails(long dealid)
         {
             var res1 = db.Sp_Get_LandDealsDetails(dealid).ToList();
             var res2 = db.Sp_Get_LandPaymentScheduleDetails(dealid).ToList();
@@ -182,7 +183,7 @@ namespace MeherEstateDevelopers.Controllers
             }
 
         }
-        public ActionResult PaymentDetails()
+        [NoDirectAccess] public ActionResult PaymentDetails()
         {
             var res = db.Sp_Get_LandPaymentDetails().ToList();
             return View(res);

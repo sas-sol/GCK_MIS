@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using System.Xml.Linq;
+using static MeherEstateDevelopers.MvcApplication;
 
 namespace MeherEstateDevelopers.Controllers
 {
@@ -14,7 +15,7 @@ namespace MeherEstateDevelopers.Controllers
     {
         // GET: Notify
         private readonly Grand_CityEntities db = new Grand_CityEntities();
-        public ActionResult Index()
+        [NoDirectAccess] public ActionResult Index()
         {
             return View();
         }
@@ -33,7 +34,7 @@ namespace MeherEstateDevelopers.Controllers
             };
             return Json(data);
         }
-        public ActionResult AllNotifications()
+        [NoDirectAccess] public ActionResult AllNotifications()
         {
             long UserId = long.Parse(User.Identity.GetUserId());
             var res = db.Sp_Get_Notifications_User(UserId).ToList();

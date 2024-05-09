@@ -7,6 +7,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Xml.Linq;
 using MeherEstateDevelopers.Filters;
+using static MeherEstateDevelopers.MvcApplication;
 
 namespace MeherEstateDevelopers.Controllers
 {
@@ -303,7 +304,7 @@ namespace MeherEstateDevelopers.Controllers
 
         //    return Json(true);
         //}
-        public ActionResult RegisterdMembers()
+       public ActionResult RegisterdMembers()
         {
             var res = db.RealEstate_Projects.Where(x => x.Type == Modules.Sports.ToString()).ToList();
             return View(res);

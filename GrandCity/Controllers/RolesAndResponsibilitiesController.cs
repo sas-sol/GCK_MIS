@@ -10,6 +10,7 @@ using System.Xml.Linq;
 using MeherEstateDevelopers.Models;
 using Microsoft.AspNet.Identity;
 using MeherEstateDevelopers.Filters;
+using static MeherEstateDevelopers.MvcApplication;
 
 namespace MeherEstateDevelopers.Controllers
 {
@@ -20,7 +21,7 @@ namespace MeherEstateDevelopers.Controllers
         private Grand_CityEntities db = new Grand_CityEntities();
 
         // GET: RolesAndResponsibilities
-        public ActionResult CreateRoles()
+        [NoDirectAccess] public ActionResult CreateRoles()
         {
             var Group = Enum.GetValues(typeof(RoleGroup)).Cast<RoleGroup>().Select(e => new { Value = e, Text = e.ToString().Replace("_", " ") }).ToList();
             ViewBag.Group = new SelectList(Group, "Value", "Text");
@@ -45,12 +46,12 @@ namespace MeherEstateDevelopers.Controllers
             }
         }
 
-        public ActionResult CreateResponsibilities()
+        [NoDirectAccess] public ActionResult CreateResponsibilities()
         {
             return View();
         }
 
-        public ActionResult AssignRoles()
+        [NoDirectAccess] public ActionResult AssignRoles()
         {
             ViewBag.Users = new SelectList(db.Sp_Get_Users(), "Id", "Name");
             ViewBag.Roles = new SelectList(db.Sp_Get_Roles().OrderBy(x => x.Id), "Id", "Name", "Group", 1);
@@ -74,13 +75,13 @@ namespace MeherEstateDevelopers.Controllers
             }
         }
 
-        public ActionResult RolesResponsibilitiesCreation()
+        [NoDirectAccess] public ActionResult RolesResponsibilitiesCreation()
         {
             ViewBag.Roles = new SelectList(db.Sp_Get_Roles(), "Id", "Name");
             return View();
         }
 
-        public ActionResult MISAccountToEmp()
+        [NoDirectAccess] public ActionResult MISAccountToEmp()
         {
             ViewBag.Users = new SelectList(db.Sp_Get_Users(), "Id", "Name");
             ViewBag.Employee = new SelectList(db.Sp_Get_Employee().Where(x => x.Status == "Registered").Select(x => new { x.Id, Name = x.Name + " (" + x.Employee_Code + " )", x.Department }).ToList(), "Id", "Name", "Department");
@@ -112,7 +113,7 @@ namespace MeherEstateDevelopers.Controllers
             base.Dispose(disposing);
         }
 
-        public ActionResult UserRolesManage(long Id)
+        [NoDirectAccess] public ActionResult UserRolesManage(long Id)
         {
             var res = db.Sp_Get_UserAllRoles(Id).ToList();
             ViewBag.Username = db.Users.Where(x => x.Id == Id).Select(x => x.Email).FirstOrDefault();

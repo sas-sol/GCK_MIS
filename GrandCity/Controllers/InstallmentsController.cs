@@ -12,6 +12,7 @@ using Newtonsoft.Json;
 using Microsoft.SqlServer.Server;
 using System.Globalization;
 using System.Data.Entity.Migrations;
+using static MeherEstateDevelopers.MvcApplication;
 
 namespace MeherEstateDevelopers.Controllers
 {
@@ -23,11 +24,11 @@ namespace MeherEstateDevelopers.Controllers
         private string AccountingModulePlots = COA_Mapper_Modules.Files_Plots.ToString();
         private string AccountingModuleCommercial = COA_Mapper_Modules.Commercial.ToString();
         private Grand_CityEntities db = new Grand_CityEntities();
-        public ActionResult ReceiveInstallments()
+        [NoDirectAccess] public ActionResult ReceiveInstallments()
         {
             return View();
         }
-        public ActionResult CreateInstallmentStructure()
+        [NoDirectAccess] public ActionResult CreateInstallmentStructure()
         {
             ViewBag.Projects = new SelectList(db.Sp_Get_RealEstateProjects(), "Id", "Project_Name");
             var plots = db.Sp_Get_Plots_Size().Select(x => new { Plot = x }).ToList();
@@ -79,7 +80,7 @@ namespace MeherEstateDevelopers.Controllers
                 return Json(res);
             
         }
-        public ActionResult PlotInstallmentStructionAs()
+        [NoDirectAccess] public ActionResult PlotInstallmentStructionAs()
         {
             ViewBag.Projects = new SelectList(db.Sp_Get_RealEstateProjects(), "Id", "Project_Name");
             var res = (from x in db.Installment_Plot_Category
@@ -107,7 +108,7 @@ namespace MeherEstateDevelopers.Controllers
                        }).ToList();
             return Json(res);
         }
-        public ActionResult PlotsAssociation()
+        [NoDirectAccess] public ActionResult PlotsAssociation()
         {
             var res = (from x in db.Installment_Plot_Category
                        select x).AsEnumerable().Select(s => new { Id = s.Id, Text = s.Plot_Size + " Marla - " + string.Format("{0:n0}", s.Grand_Total), Group = s.Plot_Size + " Marla" }).ToList();
@@ -136,7 +137,7 @@ namespace MeherEstateDevelopers.Controllers
             }
             return Json(new Return { Msg = "Allocated", Status = true });
         }
-        public ActionResult CreateCommercialInstallmentStructure()
+        [NoDirectAccess] public ActionResult CreateCommercialInstallmentStructure()
         {
             ViewBag.Projects = new SelectList(db.RealEstate_Projects.Where(x => x.Type == ProjectCategory.Building.ToString()), "Id", "Project_Name");
             return View();
@@ -802,7 +803,7 @@ namespace MeherEstateDevelopers.Controllers
             return res;
         }
 
-        public ActionResult AddInstallment()
+        [NoDirectAccess] public ActionResult AddInstallment()
         {
             ViewBag.Bank = new SelectList(Nomenclature.Banks(), "Name", "Name");
             Helpers h = new Helpers();
@@ -981,7 +982,7 @@ namespace MeherEstateDevelopers.Controllers
                 }
             }
         }
-        public ActionResult InstallmentDetails()
+        [NoDirectAccess] public ActionResult InstallmentDetails()
         {
             var res = (from x in db.Installment_Structure
                        join y in db.Installment_Plot_Category on x.Installment_Plot_Id equals y.Id
@@ -1000,12 +1001,12 @@ namespace MeherEstateDevelopers.Controllers
                        }).ToList();
             return PartialView(res);
         }
-        public ActionResult InstallmentDetailsCommercial()
+        [NoDirectAccess] public ActionResult InstallmentDetailsCommercial()
         {
             var res = db.Commercial_Installment_Structure.ToList();
             return PartialView(res);
         }
-        public ActionResult OtherInstallments(string Name, decimal Amount, long Id)
+        [NoDirectAccess] public ActionResult OtherInstallments(string Name, decimal Amount, long Id)
         {
             ViewBag.Name = Name;
             ViewBag.Amount = Amount;
@@ -1015,7 +1016,7 @@ namespace MeherEstateDevelopers.Controllers
             ViewBag.TransactionId = h.RandomNumber();
             return PartialView();
         }
-        public ActionResult AddInstallmentTest()
+        [NoDirectAccess] public ActionResult AddInstallmentTest()
         {
             ViewBag.Bank = new SelectList(Nomenclature.Banks(), "Name", "Name");
             return PartialView();
@@ -1085,7 +1086,7 @@ namespace MeherEstateDevelopers.Controllers
                 return Json(res);
             }
         }
-        public ActionResult AddPlotInstallment(long Id, string Name, string Father, string Mobile)
+        [NoDirectAccess] public ActionResult AddPlotInstallment(long Id, string Name, string Father, string Mobile)
         {
             ViewBag.Plotid = Id;
             ViewBag.Name = Name;
@@ -1104,7 +1105,8 @@ namespace MeherEstateDevelopers.Controllers
             ViewBag.Bank = new SelectList(Nomenclature.Banks(), "Name", "Name");
             return PartialView();
         }
-        public ActionResult AddCommercialInstallment(long Id, string Name, string Father, string Mobile)
+       
+        [NoDirectAccess] public ActionResult AddCommercialInstallment(long Id, string Name, string Father, string Mobile)
         {
             ViewBag.shopid = Id;
             ViewBag.Name = Name;
@@ -1193,7 +1195,7 @@ namespace MeherEstateDevelopers.Controllers
             var res = new { ReturnVal = res2, ReceAmt = Receivedamts };
             return Json(res);
         }
-        //public ActionResult AddCommercialInstallment(long Id, decimal Amount, long InstallmentId)
+        //[NoDirectAccess] public ActionResult AddCommercialInstallment(long Id, decimal Amount, long InstallmentId)
         //{
         //    ViewBag.shopid = Id;
         //    ViewBag.InsAmount = Amount;
@@ -1349,7 +1351,7 @@ namespace MeherEstateDevelopers.Controllers
         // Cash Counter Image/File Uploader
 
         [HttpPost]
-        public ActionResult UploadInstrument(FormCollection fc)
+        [NoDirectAccess] public ActionResult UploadInstrument(FormCollection fc)
         {
             // Checking no of files injected in Request object  
             if (Request.Files.Count > 0)
@@ -1750,12 +1752,12 @@ namespace MeherEstateDevelopers.Controllers
             db.Sp_Update_PlotInstallments(PlotId, 0, 0, 0, installmentplan);
         }
 
-        public ActionResult ReceivePlotInstallments()
+        [NoDirectAccess] public ActionResult ReceivePlotInstallments()
         {
             ViewBag.Block = new SelectList(db.Sp_Get_Block(), "Id", "Block_Name");
             return View();
         }
-        public ActionResult PlotInstallment()
+        [NoDirectAccess] public ActionResult PlotInstallment()
         {
             ViewBag.Bank = new SelectList(Nomenclature.Banks(), "Name", "Name");
             Helpers h = new Helpers();
@@ -1882,7 +1884,7 @@ namespace MeherEstateDevelopers.Controllers
                 }
             }
         }
-        public ActionResult PayLeadPayment(long Id)
+        [NoDirectAccess] public ActionResult PayLeadPayment(long Id)
         {
             ViewBag.Bank = new SelectList(Nomenclature.Banks(), "Name", "Name");
             ViewBag.TransactionId = new Helpers().RandomNumber();
@@ -1950,7 +1952,7 @@ namespace MeherEstateDevelopers.Controllers
                 }
             }
         }
-        public ActionResult PaymentIssue(long Id)
+        [NoDirectAccess] public ActionResult PaymentIssue(long Id)
         {
             var res = db.Sp_Get_Receipt_Parameter_ById(Id).SingleOrDefault();
             return PartialView(res);
@@ -2057,19 +2059,19 @@ namespace MeherEstateDevelopers.Controllers
                 return Json(res5);
             }
         }
-        public ActionResult RefundPlotsManager()
+        [NoDirectAccess] public ActionResult RefundPlotsManager()
         {
 
             return View();
         }
-        public ActionResult OtherRecovery()
+        [NoDirectAccess] public ActionResult OtherRecovery()
         {
             ViewBag.Bank = new SelectList(Nomenclature.Banks(), "Name", "Name");
             Helpers h = new Helpers();
             ViewBag.TransactionId = h.RandomNumber();
             return PartialView();
         }
-        public ActionResult OtherRecoveryOpt(ReceiptData rd, string Module, long TransactionId)
+        [NoDirectAccess] public ActionResult OtherRecoveryOpt(ReceiptData rd, string Module, long TransactionId)
         {
             long userid = long.Parse(User.Identity.GetUserId());
             AccountHandlerController ah = new AccountHandlerController();
@@ -2142,13 +2144,13 @@ namespace MeherEstateDevelopers.Controllers
             return Json(true);
         }
 
-        public ActionResult InstallmentPortal()
+        [NoDirectAccess] public ActionResult InstallmentPortal()
          {
             ViewBag.Block = new SelectList(db.Sp_Get_Block(), "Id", "Block_Name");
             return View();
         }
 
-        public ActionResult FetchInstallmentData(string plotno, long ?Block, string plttype)
+        [NoDirectAccess] public ActionResult FetchInstallmentData(string plotno, long ?Block, string plttype)
         {
             if (string.IsNullOrEmpty(plotno) || string.IsNullOrWhiteSpace(plotno))
             {
@@ -2207,7 +2209,7 @@ namespace MeherEstateDevelopers.Controllers
             }
         }
 
-        public ActionResult CommercialInstallment(long? ShopId, long? OwnId)
+        [NoDirectAccess] public ActionResult CommercialInstallment(long? ShopId, long? OwnId)
         {
             ViewBag.Bank = new SelectList(Nomenclature.Banks(), "Name", "Name");
             ViewBag.Shop = ShopId;
@@ -2302,7 +2304,7 @@ namespace MeherEstateDevelopers.Controllers
             }
         }
 
-        public ActionResult PayReinstateFineCharges(long Req_Id)
+        [NoDirectAccess] public ActionResult PayReinstateFineCharges(long Req_Id)
         {
             ViewBag.Bank = new SelectList(Nomenclature.Banks(), "Name", "Name");
             Helpers h = new Helpers();
@@ -2539,7 +2541,7 @@ namespace MeherEstateDevelopers.Controllers
             var res = db.Sp_Update_ShiftInstallmentPlan(-1, Id, Module);
             return Json(new Return { Msg = "Updated", Status = true });
         }
-        public ActionResult UpdateInstallmentPlans(string Plot_Size)
+        [NoDirectAccess] public ActionResult UpdateInstallmentPlans(string Plot_Size)
         {
             var Size = Plot_Size.Split(' ')[0];
             var res = (from x in db.Installment_Structure
@@ -2592,7 +2594,7 @@ namespace MeherEstateDevelopers.Controllers
             }
             return Json(true);
         }
-		public ActionResult UpdateSingleInstallment(long Id, string Module)
+		[NoDirectAccess] public ActionResult UpdateSingleInstallment(long Id, string Module)
         {
             ViewBag.Module = Module;
             if (Module == Modules.FileManagement.ToString())
@@ -2685,7 +2687,7 @@ namespace MeherEstateDevelopers.Controllers
                 return Json(true);
             }
         }
-        public ActionResult SubsidiaryRecovery()
+        [NoDirectAccess] public ActionResult SubsidiaryRecovery()
         {
             ViewBag.Bank = new SelectList(Nomenclature.Banks(), "Name", "Name");
             ViewBag.Module = new SelectList(db.Sp_Get_Subsidiary_Companies().ToList(), "Head", "Head");
@@ -2746,7 +2748,7 @@ namespace MeherEstateDevelopers.Controllers
             }
         }
 
-        public ActionResult AddInstallmentRow()
+        [NoDirectAccess] public ActionResult AddInstallmentRow()
         {
             ViewBag.Bank = new SelectList(Nomenclature.Banks(), "Name", "Name");
             return PartialView();

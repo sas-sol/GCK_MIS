@@ -5,6 +5,7 @@ using System.Web.Mvc;
 using MeherEstateDevelopers.Models;
 using Microsoft.AspNet.Identity;
 using System.Collections.Generic;
+using static MeherEstateDevelopers.MvcApplication;
 
 namespace MeherEstateDevelopers.Controllers
 {
@@ -13,7 +14,7 @@ namespace MeherEstateDevelopers.Controllers
     public class LeadsController : Controller
     {
         Grand_CityEntities db = new Grand_CityEntities();
-        public ActionResult CreateLeads()
+        [NoDirectAccess] public ActionResult CreateLeads()
         {
             long userid = User.Identity.GetUserId<long>();
             db.Sp_Add_Activity(userid, "Accessed Create Lead Page", "Read", "Activity_Record", ActivityType.Page_Access.ToString(), userid);
@@ -58,7 +59,7 @@ namespace MeherEstateDevelopers.Controllers
             return Json(true);
         }
 
-        public ActionResult CompanyLeads(string Company, DateTime? From, DateTime? To)
+        [NoDirectAccess] public ActionResult CompanyLeads(string Company, DateTime? From, DateTime? To)
         {
             long userid = User.Identity.GetUserId<long>();
             db.Sp_Add_Activity(userid, "Accessed " + Company + " Company Lead Page ", "Read", "Activity_Record", ActivityType.Page_Access.ToString(), userid);
@@ -71,7 +72,7 @@ namespace MeherEstateDevelopers.Controllers
             return PartialView(res);
         }
         
-        public ActionResult SAMLead()
+        [NoDirectAccess] public ActionResult SAMLead()
         {
             ViewBag.Project = "Grand City";
             var All = db.Users.Where(x => x.Roles.Any(y => y.Name == "Sales Executive")).ToList();
@@ -81,19 +82,19 @@ namespace MeherEstateDevelopers.Controllers
             return View();
         }
         
-        public ActionResult SAMSearch()
+        [NoDirectAccess] public ActionResult SAMSearch()
         {
             long userid = User.Identity.GetUserId<long>();
             return PartialView();
         }
         
-        public ActionResult MyLeadSearch()
+        [NoDirectAccess] public ActionResult MyLeadSearch()
         {
             long userid = User.Identity.GetUserId<long>();
             return PartialView();
         }
         
-        public ActionResult MyLeads()
+        [NoDirectAccess] public ActionResult MyLeads()
         {
             long userid = long.Parse(User.Identity.GetUserId());
             //var res = db.Sp_Get_Lead_User(userid).ToList();
@@ -107,7 +108,7 @@ namespace MeherEstateDevelopers.Controllers
             return View(res);
         }
         
-        public ActionResult LeadDetails(long Id)
+        [NoDirectAccess] public ActionResult LeadDetails(long Id)
         {
             long userid = long.Parse(User.Identity.GetUserId());
             var res1 = db.Sp_Get_Lead(Id).SingleOrDefault();
@@ -155,7 +156,7 @@ namespace MeherEstateDevelopers.Controllers
             return Json(true);
         }
         
-        public ActionResult LeadsPayments()
+        [NoDirectAccess] public ActionResult LeadsPayments()
         {
             var res = db.Sp_Get_Leads_NewLeads().ToList();
             long userid = User.Identity.GetUserId<long>();
@@ -164,7 +165,7 @@ namespace MeherEstateDevelopers.Controllers
             return View(res);
         }
         
-        public ActionResult LeadsVoucher()
+        [NoDirectAccess] public ActionResult LeadsVoucher()
         {
             //var res = db.Sp_Get_Leads_Resale().ToList();
             long userid = User.Identity.GetUserId<long>();
@@ -173,7 +174,7 @@ namespace MeherEstateDevelopers.Controllers
             return View();
         }
         
-        public ActionResult AddLeadReceipts(long Id)
+        [NoDirectAccess] public ActionResult AddLeadReceipts(long Id)
         {
             ViewBag.Bank = new SelectList(Nomenclature.Banks(), "Name", "Name");
             var res1 = db.Sp_Get_Lead(Id).SingleOrDefault();
@@ -195,7 +196,7 @@ namespace MeherEstateDevelopers.Controllers
             return Json(true);
         }
         
-        public ActionResult SPELead()
+        [NoDirectAccess] public ActionResult SPELead()
         {
             var All = db.Users.Where(x => x.Roles.Any(y => y.Name == "Sales Executive") && x.Email.Contains("propertyexchange")).ToList();
             ViewBag.LeadsUser = new SelectList(All, "Id", "Name");
@@ -205,7 +206,7 @@ namespace MeherEstateDevelopers.Controllers
             return View();
         }
         
-        public ActionResult LeadsToDeal(long Id)
+        [NoDirectAccess] public ActionResult LeadsToDeal(long Id)
         {
             long userid = long.Parse(User.Identity.GetUserId());
             db.Sp_Add_Activity(userid, "Accessed Leads to Deal Page", "Read", "Activity_Record", ActivityType.Page_Access.ToString(), Id);
@@ -221,7 +222,7 @@ namespace MeherEstateDevelopers.Controllers
             return PartialView(res);
         }
         
-        public ActionResult DealsReport()
+        [NoDirectAccess] public ActionResult DealsReport()
         {
             long userid = User.Identity.GetUserId<long>();
             db.Sp_Add_Activity(userid, "Accessed Deals Report Page", "Read", "Activity_Record", ActivityType.Page_Access.ToString(), userid);
@@ -241,14 +242,14 @@ namespace MeherEstateDevelopers.Controllers
             return Json(true);
         }
 		
-        public ActionResult UploadLeads(string Project, string status)
+        [NoDirectAccess] public ActionResult UploadLeads(string Project, string status)
         {
             ViewBag.Status = status;
             ViewBag.Project = Project;
             return PartialView();
         }
         
-        public ActionResult LeadsDetails(int type, DateTime? From, DateTime? To, string LeadStatus, long? LeadUser, string Phone)
+        [NoDirectAccess] public ActionResult LeadsDetails(int type, DateTime? From, DateTime? To, string LeadStatus, long? LeadUser, string Phone)
         {
             if (LeadStatus == "") { LeadStatus = null; }
             if (LeadUser == 0) { LeadUser = null; }
@@ -307,7 +308,7 @@ namespace MeherEstateDevelopers.Controllers
             }
         }
         
-        public ActionResult MyLeadsDetails(int type, DateTime? From, DateTime? To, string LeadStatus, long? LeadUser, string Phone)
+        [NoDirectAccess] public ActionResult MyLeadsDetails(int type, DateTime? From, DateTime? To, string LeadStatus, long? LeadUser, string Phone)
         {
             if (LeadStatus == "") { LeadStatus = null; }
             if (LeadUser == 0) { LeadUser = null; }
@@ -497,7 +498,7 @@ namespace MeherEstateDevelopers.Controllers
             }
         }
 
-        public ActionResult CreateUnassignLead()
+        [NoDirectAccess] public ActionResult CreateUnassignLead()
         {
             long userid = User.Identity.GetUserId<long>();
             db.Sp_Add_Activity(userid, "Accessed Create Lead Page", "Read", "Activity_Record", ActivityType.Page_Access.ToString(), userid);

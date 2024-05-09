@@ -8,6 +8,7 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using MeherEstateDevelopers.Models;
 using MeherEstateDevelopers.Filters;
+using static MeherEstateDevelopers.MvcApplication;
 
 namespace MeherEstateDevelopers.Controllers
 {
@@ -103,7 +104,7 @@ namespace MeherEstateDevelopers.Controllers
 
         //
         // GET: /Manage/AddPhoneNumber
-        public ActionResult AddPhoneNumber()
+        [NoDirectAccess] public ActionResult AddPhoneNumber()
         {
             return View();
         }
@@ -215,7 +216,7 @@ namespace MeherEstateDevelopers.Controllers
 
         //
         // GET: /Manage/ChangePassword
-        public ActionResult ChangePassword()
+        [NoDirectAccess] public ActionResult ChangePassword()
         {
             return View();
         }
@@ -246,7 +247,7 @@ namespace MeherEstateDevelopers.Controllers
 
         //
         // GET: /Manage/SetPassword
-        public ActionResult SetPassword()
+        [NoDirectAccess] public ActionResult SetPassword()
         {
             return View();
         }
@@ -303,7 +304,7 @@ namespace MeherEstateDevelopers.Controllers
         // POST: /Manage/LinkLogin
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult LinkLogin(string provider)
+        [NoDirectAccess] public ActionResult LinkLogin(string provider)
         {
             // Request a redirect to the external login provider to link a login for the current user
             return new AccountController.ChallengeResult(provider, Url.Action("LinkLoginCallback", "Manage"), User.Identity.GetUserId());

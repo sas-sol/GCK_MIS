@@ -10,6 +10,8 @@ using MeherEstateDevelopers.Filters;
 using Newtonsoft.Json;
 using Microsoft.Ajax.Utilities;
 using System.Data.Entity;
+using static MeherEstateDevelopers.MvcApplication;
+
 namespace MeherEstateDevelopers.Controllers
 {
     [Authorize]
@@ -18,7 +20,7 @@ namespace MeherEstateDevelopers.Controllers
     {
         // GET: Loan and advance
         private Grand_CityEntities db = new Grand_CityEntities();
-        public ActionResult Index()
+        [NoDirectAccess] public ActionResult Index()
         {
             long userid = long.Parse(User.Identity.GetUserId());
             var info = db.Sp_Get_Employee_UserId(userid).SingleOrDefault();
@@ -28,7 +30,7 @@ namespace MeherEstateDevelopers.Controllers
             return View(info);
         }
         // Create
-        public ActionResult Create(long? EmpId)
+        [NoDirectAccess] public ActionResult Create(long? EmpId)
         {
             var info = db.Sp_Get_Employee_Parameter(EmpId).SingleOrDefault();
             var res = db.MIS_Modules_Configurations.Where(x => x.Module == MIS_Modules.HR.ToString()).Select(x => x.Config_For_Update).FirstOrDefault();
@@ -56,7 +58,7 @@ namespace MeherEstateDevelopers.Controllers
             return PartialView(info);
         }
         // Loan For others
-        public ActionResult LoanForOther()
+        [NoDirectAccess] public ActionResult LoanForOther()
         {
             var res = db.MIS_Modules_Configurations.Where(x => x.Module == MIS_Modules.HR.ToString()).Select(x => x.Config_For_Update).FirstOrDefault();
             var cofig = JsonConvert.DeserializeObject<HRConfiguration>(res);
@@ -68,18 +70,18 @@ namespace MeherEstateDevelopers.Controllers
             return PartialView();
         }
         // Balance Details
-        public ActionResult BalanceDetail()
+        [NoDirectAccess] public ActionResult BalanceDetail()
         {
             return View();
         }
-        public ActionResult Summary()
+        [NoDirectAccess] public ActionResult Summary()
         {
             var res = db.Sp_Get_LoanSummary().ToList();
             long userid = long.Parse(User.Identity.GetUserId());
             db.Sp_Add_Activity(userid, "Accessed Loan Summary Page ", "Read", "Activity_Record", ActivityType.Details_Access.ToString(), userid);
             return PartialView(res);
         }
-        public ActionResult Payables(string Status)
+        [NoDirectAccess] public ActionResult Payables(string Status)
         {
             ViewBag.status = Status;
             var res = db.Sp_Get_Payables_Detail(Status).ToList();
@@ -88,7 +90,7 @@ namespace MeherEstateDevelopers.Controllers
             return PartialView(res);
         }
         // Archive Or Receivable
-        public ActionResult ArchiveOrReceivable(string Status)
+        [NoDirectAccess] public ActionResult ArchiveOrReceivable(string Status)
         {
             ViewBag.status = Status;
             var res = db.Sp_Get_Payable_ArchiveOrReceivable(Status).ToList();
@@ -97,14 +99,14 @@ namespace MeherEstateDevelopers.Controllers
             return PartialView(res);
         }
         
-        public ActionResult DirectLoan()
+        [NoDirectAccess] public ActionResult DirectLoan()
         {
             long userid = long.Parse(User.Identity.GetUserId());
             ViewBag.Employee = new SelectList(db.Sp_Get_Employee().ToList(), "Id", "Name", "Department", 1);
             return View();
         }
         // loan table show
-        public ActionResult LoanInstallmentsGeneration(int Installments, int Amt, string Reason, long EmpId)
+        [NoDirectAccess] public ActionResult LoanInstallmentsGeneration(int Installments, int Amt, string Reason, long EmpId)
         {
             long userid = long.Parse(User.Identity.GetUserId());
             EmpModel result = db.Sp_Get_Employee_Parameter(EmpId).Select(z => new EmpModel
@@ -177,7 +179,7 @@ namespace MeherEstateDevelopers.Controllers
         }
         //popup for pendings
         [HttpPost]
-        public ActionResult ManagerPendingLoanDetails(long Id)
+        [NoDirectAccess] public ActionResult ManagerPendingLoanDetails(long Id)
         {
             long userid = long.Parse(User.Identity.GetUserId());
             var res = db.Sp_Get_LoanDetails(Id).SingleOrDefault();
@@ -186,7 +188,7 @@ namespace MeherEstateDevelopers.Controllers
         }
         //popup for pendings
         [HttpPost]
-        public ActionResult HRPendingLoanDetails(long Id)
+        [NoDirectAccess] public ActionResult HRPendingLoanDetails(long Id)
         {
             long userid = long.Parse(User.Identity.GetUserId());
             var res = db.Sp_Get_LoanDetails(Id).SingleOrDefault();
@@ -249,21 +251,21 @@ namespace MeherEstateDevelopers.Controllers
             return Json(true);
         }
         // Employee
-        public ActionResult EmployeeApproved(long EmpId)
+        [NoDirectAccess] public ActionResult EmployeeApproved(long EmpId)
         {
             var res = db.Sp_Get_EmployeeLoan_Management(LoanStatus.Approved.ToString(), LoanStatus.Approved.ToString(), EmpId).ToList();
             long userid = long.Parse(User.Identity.GetUserId());
             db.Sp_Add_Activity(userid, "Accessed Approved Loan of Employees ", "Read", "Activity_Record", ActivityType.Details_Access.ToString(), userid);
             return PartialView(res);
         }
-        public ActionResult EmployeePending(long EmpId)
+        [NoDirectAccess] public ActionResult EmployeePending(long EmpId)
         {
             var res = db.Sp_Get_EmployeeLoan_Management(LoanStatus.Pending.ToString(), LoanStatus.Pending.ToString(), EmpId).ToList();
             long userid = long.Parse(User.Identity.GetUserId());
             db.Sp_Add_Activity(userid, "Accessed Pending Loan of Employees ", "Read", "Activity_Record", ActivityType.Details_Access.ToString(), userid);
             return PartialView(res);
         }
-        public ActionResult EmployeeRejected(long EmpId)
+        [NoDirectAccess] public ActionResult EmployeeRejected(long EmpId)
         {
             var res = db.Sp_Get_EmployeeLoan_Management(LoanStatus.Rejected.ToString(), LoanStatus.Rejected.ToString(), EmpId).ToList();
             long userid = long.Parse(User.Identity.GetUserId());
@@ -271,28 +273,28 @@ namespace MeherEstateDevelopers.Controllers
             return PartialView(res);
         }
         // manager
-        public ActionResult ManagerPending()
+        [NoDirectAccess] public ActionResult ManagerPending()
         {
             long userid = long.Parse(User.Identity.GetUserId());
             var Empid = db.Sp_Get_EmployeeId(userid).FirstOrDefault();
             var result = db.Sp_Get_LoanManagement_Manager(Empid, LoanStatus.Pending.ToString()).ToList();
             return PartialView(result);
         }
-        public ActionResult ActingManagerPending()
+        [NoDirectAccess] public ActionResult ActingManagerPending()
         {
             long userid = long.Parse(User.Identity.GetUserId());
             var Empid = db.Sp_Get_EmployeeId(userid).FirstOrDefault();
             var result = db.LoanRequisitions.Where(x => x.ManagerApproval == LoanStatus.Pending.ToString()).ToList();
             return PartialView(result);
         }
-        public ActionResult ManagerApproved()
+        [NoDirectAccess] public ActionResult ManagerApproved()
         {
             long userid = long.Parse(User.Identity.GetUserId());
             var Empid = db.Sp_Get_EmployeeId(userid).FirstOrDefault();
             var result = db.Sp_Get_LoanManagement_Manager(Empid, LoanStatus.Approved.ToString()).ToList();
             return PartialView(result);
         }
-        public ActionResult ManagerRejected()
+        [NoDirectAccess] public ActionResult ManagerRejected()
         {
             long userid = long.Parse(User.Identity.GetUserId());
             var Empid = db.Sp_Get_EmployeeId(userid).FirstOrDefault();
@@ -300,53 +302,53 @@ namespace MeherEstateDevelopers.Controllers
             return PartialView(result);
         }
         // HR
-        public ActionResult HRPending()
+        [NoDirectAccess] public ActionResult HRPending()
         {
             var res = db.Sp_Get_LoanManagement_HR(LoanStatus.Pending.ToString()).ToList();
             return PartialView(res);
         }
-        public ActionResult HRApproved()
+        [NoDirectAccess] public ActionResult HRApproved()
         {
             var res = db.Sp_Get_LoanManagement_HR(LoanStatus.Approved.ToString()).ToList();
             return PartialView(res);
         }
-        public ActionResult HRRejected()
+        [NoDirectAccess] public ActionResult HRRejected()
         {
             var res = db.Sp_Get_LoanManagement_HR(LoanStatus.Rejected.ToString()).ToList();
             return PartialView(res);
         }
         // Other
-        public ActionResult OtherPending()
+        [NoDirectAccess] public ActionResult OtherPending()
         {
             var res = db.Sp_Get_LoanManagement_Other(LoanStatus.Pending.ToString()).ToList();
             return PartialView(res);
         }
-        public ActionResult OtherApproved()
+        [NoDirectAccess] public ActionResult OtherApproved()
         {
             var res = db.Sp_Get_LoanManagement_Other(LoanStatus.Approved.ToString()).ToList();
             return PartialView("OtherPending", res);
         }
-        public ActionResult OtherRejected()
+        [NoDirectAccess] public ActionResult OtherRejected()
         {
             var res = db.Sp_Get_LoanManagement_Other(LoanStatus.Rejected.ToString()).ToList();
             return PartialView("OtherPending", res);
         }
         //Loan Listing
-        public ActionResult LoanList()
+        [NoDirectAccess] public ActionResult LoanList()
         {
             var res = db.Sp_Get_LoanOrAdvanceList(LoanStatus.Loan.ToString()).ToList();
             long userid = long.Parse(User.Identity.GetUserId());
             db.Sp_Add_Activity(userid, "Accessed Loan List ", "Read", "Activity_Record", ActivityType.Details_Access.ToString(), userid);
             return PartialView(res);
         }
-        public ActionResult AdvanceList()
+        [NoDirectAccess] public ActionResult AdvanceList()
         {
             var res = db.Sp_Get_LoanOrAdvanceList(LoanStatus.Advance_Salary.ToString()).ToList();
             long userid = long.Parse(User.Identity.GetUserId());
             db.Sp_Add_Activity(userid, "Accessed Advance List ", "Read", "Activity_Record", ActivityType.Details_Access.ToString(), userid);
             return PartialView(res);
         }
-        public ActionResult LoanVoucherDetails(long Id)
+        [NoDirectAccess] public ActionResult LoanVoucherDetails(long Id)
         {
             var res = db.Sp_Get_LoanDetails(Id).SingleOrDefault();
             return PartialView(res);
@@ -417,7 +419,7 @@ namespace MeherEstateDevelopers.Controllers
                 return Json(fres);
             }
         }
-        public ActionResult LoanDetails(long Id)
+        [NoDirectAccess] public ActionResult LoanDetails(long Id)
         {
             var res1 = db.Sp_Get_LoanDetails(Id).SingleOrDefault();
             var res2 = db.Sp_Get_LoanInstallments(Id).ToList();
@@ -600,14 +602,14 @@ namespace MeherEstateDevelopers.Controllers
             }
             return 1;
         }
-        public ActionResult EmployeeLoanHistory(int Id)
+        [NoDirectAccess] public ActionResult EmployeeLoanHistory(int Id)
         {
             var loanReqs = db.LoanRequisitions.Where(x => x.Emp_Id == Id).ToList();
             List<long> loanIds = loanReqs.Select(x => (long)x.Id).ToList();
             var installments = db.Loan_Installments.Where(x => loanIds.Contains((long)x.Loan_Id)).ToList();
             return PartialView(new EmployeeProfileLoanView { Requisitions = loanReqs, Installments = installments });
         }
-        public ActionResult UpdateLoanStructure(long Id)
+        [NoDirectAccess] public ActionResult UpdateLoanStructure(long Id)
         {
             var loanData = db.LoanRequisitions.Where(x => x.Id == Id).FirstOrDefault();
             var inst = db.Loan_Installments.Where(x => x.Loan_Id == Id).ToList();
@@ -702,14 +704,14 @@ namespace MeherEstateDevelopers.Controllers
                 return Json(false);
             }
         }
-        public ActionResult LoanReport()
+        [NoDirectAccess] public ActionResult LoanReport()
         {
             var loans = db.LoanRequisitions.Where(x => x.HrApproval.Contains("Ap") && x.ManagerApproval.Contains("Ap")).ToList();
             var filteredIds = loans.Select(x => x.Id).ToList();
             var installments = db.Loan_Installments.Where(x => filteredIds.Contains((long)x.Loan_Id)).ToList();
             return View(new LoanReportView { InstallmentsData = installments, LoansData = loans });
         }
-        public ActionResult LoanWaiveOff(long instId, long display)
+        [NoDirectAccess] public ActionResult LoanWaiveOff(long instId, long display)
         {
             var loanInstData = db.Loan_Installments.Where(x => x.Id == instId).FirstOrDefault();
             var loanReqs = db.LoanRequisitions.Where(x => x.Id == loanInstData.Loan_Id).FirstOrDefault();
@@ -838,7 +840,7 @@ namespace MeherEstateDevelopers.Controllers
                 return Json(new SimpleReturnMessage { Msg = "Failed to update status due to some error. Please try again.", Status = false, _Log = "Message : " + ex.Message + " --------------%%%%%%%%%%%%---------- Inner Exception " + ex.InnerException });
             }
         }
-        public ActionResult PrintLoanVoucher()
+        [NoDirectAccess] public ActionResult PrintLoanVoucher()
         {
             var uid = User.Identity.GetUserId<long>();
             var res = db.Sp_Get_MIS_Requests(uid, "Voucher").ToList();
@@ -997,7 +999,7 @@ namespace MeherEstateDevelopers.Controllers
             db.EmployeeHistories.Add(eh);
             db.SaveChanges();
         }
-        public ActionResult GetLoanPhysicalDoc(long loanId)
+        [NoDirectAccess] public ActionResult GetLoanPhysicalDoc(long loanId)
         {
             var uid = User.Identity.GetUserId<long>();
             var uname = db.Users.Where(x => x.Id == uid).Select(x => x.Name).FirstOrDefault();
@@ -1042,12 +1044,12 @@ namespace MeherEstateDevelopers.Controllers
             });
             return PartialView(new LoanAdvancePhysicalDocModel { Designations = empDeps, EmployeeDetails = empData, LoanData = loanData, PreviousLoanRequests = oldLoanAdvances, PreviousLoanInstallments = oldLoanInstallments });
         }
-        public ActionResult LoanSettlement()
+        [NoDirectAccess] public ActionResult LoanSettlement()
         {
             ViewBag.empsList = new SelectList(db.Employees.Select(x => new { id = x.Id, Name = x.Name + " ( " + x.Employee_Code + " )" + " ( " + x.CNIC + " )" }).ToList(), "Id", "Name");
             return View();
         }
-        public ActionResult ActiveLoans(long empId)
+        [NoDirectAccess] public ActionResult ActiveLoans(long empId)
         {
             var currDt = DateTime.Now.Date;
             var activeLoans = db.Loan_Installments.Where(x => x.Emp_Id == empId).ToList();
@@ -1108,7 +1110,7 @@ namespace MeherEstateDevelopers.Controllers
                 }
             }
         }
-        public ActionResult DepartmentLoanReport()
+        [NoDirectAccess] public ActionResult DepartmentLoanReport()
         {
             var res = db.Comp_Dep_Desig.Where(x => x.Type == CompDepDes.Department.ToString()).ToList();
             Comp_Dep_Desig cdd = new Comp_Dep_Desig();
@@ -1123,7 +1125,7 @@ namespace MeherEstateDevelopers.Controllers
             ViewBag.Department = new SelectList(res, "Id", "Name");
             return View();
         }
-        public ActionResult DepartmentalReportDetail(long[] dep, string EmpStatus, DateTime? start, DateTime? end)
+        [NoDirectAccess] public ActionResult DepartmentalReportDetail(long[] dep, string EmpStatus, DateTime? start, DateTime? end)
         {
             if (dep.Any(x => x == -1))
             {

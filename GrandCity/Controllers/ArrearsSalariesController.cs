@@ -7,6 +7,7 @@ using System.Web;
 using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using System.Xml.Linq;
+using static MeherEstateDevelopers.MvcApplication;
 
 namespace MeherEstateDevelopers.Controllers
 {
@@ -18,7 +19,7 @@ namespace MeherEstateDevelopers.Controllers
         private Grand_CityEntities db = new Grand_CityEntities();
 
         // SALARY INDEX PAGE
-        public ActionResult SalaryIndex()
+       [NoDirectAccess] public ActionResult SalaryIndex()
         {
             var res = db.Sp_Get_Employee().ToList();
             return PartialView(res);
@@ -142,7 +143,7 @@ namespace MeherEstateDevelopers.Controllers
             return Json(true);
         }
         // GET All SALARIES SLIP
-        public ActionResult AllSalaries()
+       [NoDirectAccess] public ActionResult AllSalaries()
         {
             var res = db.Sp_Get_Arrears(null, null, null).ToList();
             long userid = long.Parse(User.Identity.GetUserId());
@@ -150,7 +151,7 @@ namespace MeherEstateDevelopers.Controllers
             return PartialView(res);
         }
         // Hr inproecss salaris show
-        public ActionResult InProcessSalariesSlip()
+       [NoDirectAccess] public ActionResult InProcessSalariesSlip()
         {
             long Userid = long.Parse(User.Identity.GetUserId());
             var res = db.Sp_Get_Arrears("Inprocess", null, null).ToList();
@@ -159,7 +160,7 @@ namespace MeherEstateDevelopers.Controllers
             return PartialView(res);
         }
 
-        public ActionResult FinanceSalarySlipPrint()
+       [NoDirectAccess] public ActionResult FinanceSalarySlipPrint()
         {
             long Userid = long.Parse(User.Identity.GetUserId());
             var uname = db.Users.Where(x => x.Id == Userid).Select(x => x.Name).FirstOrDefault();
@@ -180,7 +181,7 @@ namespace MeherEstateDevelopers.Controllers
             } 
             return View(res);
         }
-        public ActionResult FinanceSalariesSlip(int? Month, int? Year)
+       [NoDirectAccess] public ActionResult FinanceSalariesSlip(int? Month, int? Year)
         {
             long Userid = long.Parse(User.Identity.GetUserId());
             var res = db.Sp_Get_Arrears("Approved",Month, Year).ToList();
@@ -188,7 +189,7 @@ namespace MeherEstateDevelopers.Controllers
             db.Sp_Add_Activity(userid, "Accessed Finance Salaries Slip Page", "Read", "Activity_Record", ActivityType.Page_Access.ToString(), userid);
             return PartialView(res);
         }
-        public ActionResult FinanceApproved()
+       [NoDirectAccess] public ActionResult FinanceApproved()
         {
             
             long Userid = long.Parse(User.Identity.GetUserId());
@@ -199,7 +200,7 @@ namespace MeherEstateDevelopers.Controllers
         }
         // remarks updation
         [HttpPost]
-        public ActionResult UpdateDescription(long? Id, string Remarks)
+       [NoDirectAccess] public ActionResult UpdateDescription(long? Id, string Remarks)
         {
             var res = db.Sp_Update_Arrears_Description(Id, Remarks);
             long userid = long.Parse(User.Identity.GetUserId());
@@ -311,7 +312,7 @@ namespace MeherEstateDevelopers.Controllers
             db.Sp_Delete_Arrear(Id);
             return Json(true);
         }
-        public ActionResult PayArrearsView(long? SalariesId)
+       [NoDirectAccess] public ActionResult PayArrearsView(long? SalariesId)
         {
             long Userid = long.Parse(User.Identity.GetUserId());
             var uname = db.Users.Where(x => x.Id == Userid).Select(x => x.Name).FirstOrDefault();
@@ -351,18 +352,18 @@ namespace MeherEstateDevelopers.Controllers
             return View(res2);
         }
         // Get Salary Distributor
-        public ActionResult DistributorDetail(int? Month, int? Year)
+       [NoDirectAccess] public ActionResult DistributorDetail(int? Month, int? Year)
         {
             var res = db.Sp_Get_Arrear_Distributor(Month, Year).ToList();
             return PartialView(res);
         }
-        public ActionResult FinanceFinalArrSlipSearch(int Month, int Year)
+       [NoDirectAccess] public ActionResult FinanceFinalArrSlipSearch(int Month, int Year)
         {
             ViewBag.Mo = Month;
             ViewBag.Yr = Year;
             return PartialView();
         }
-        public ActionResult DailyDistributorDetail(int? Month, int? Year)
+       [NoDirectAccess] public ActionResult DailyDistributorDetail(int? Month, int? Year)
         {
             var res = db.Sp_Get_Arrear_Distributor(Month, Year).ToList();
             long userid = long.Parse(User.Identity.GetUserId());
@@ -370,13 +371,13 @@ namespace MeherEstateDevelopers.Controllers
             return PartialView(res);
         }
 
-        public ActionResult DistrbutorAndGenerate()
+       [NoDirectAccess] public ActionResult DistrbutorAndGenerate()
         {
             long userid = long.Parse(User.Identity.GetUserId());
             db.Sp_Add_Activity(userid, "Accessed Distributor Page ", "Read", "Activity_Record", ActivityType.Page_Access.ToString(), userid);
             return PartialView();
         }
-        public ActionResult SalariesDetail(long? Id)
+       [NoDirectAccess] public ActionResult SalariesDetail(long? Id)
         {
             long Userid = long.Parse(User.Identity.GetUserId());
             ViewBag.userid = Userid;
@@ -388,7 +389,7 @@ namespace MeherEstateDevelopers.Controllers
 
         }
         // deduction and taxes
-        public ActionResult GetAllownceAndBonus(long Id)
+       [NoDirectAccess] public ActionResult GetAllownceAndBonus(long Id)
         {
             long Userid = long.Parse(User.Identity.GetUserId());
             ViewBag.userid = Userid;
@@ -421,7 +422,7 @@ namespace MeherEstateDevelopers.Controllers
         }
 
         // allowncs and bonus
-        public ActionResult GetDeductionAndTaxes(long? Id)
+       [NoDirectAccess] public ActionResult GetDeductionAndTaxes(long? Id)
         {
             long Userid = long.Parse(User.Identity.GetUserId());
             ViewBag.userid = Userid;
@@ -453,7 +454,7 @@ namespace MeherEstateDevelopers.Controllers
 
         }
 
-        public ActionResult ArrearsManagement()
+       [NoDirectAccess] public ActionResult ArrearsManagement()
         {
             long userid = long.Parse(User.Identity.GetUserId());
             db.Sp_Add_Activity(userid, "Accessed Arrears Management Page ", "Read", "Activity_Record", ActivityType.Page_Access.ToString(), userid);
@@ -467,11 +468,11 @@ namespace MeherEstateDevelopers.Controllers
             db.EmployeeHistories.Add(eh);
             db.SaveChanges();
         }
-        public ActionResult ArchiveArrears()
+       [NoDirectAccess] public ActionResult ArchiveArrears()
         {
             return PartialView();
         }
-        public ActionResult SearchArrears(DateTime From, string Status)
+       [NoDirectAccess] public ActionResult SearchArrears(DateTime From, string Status)
         {
             var res = db.Sp_Get_ArrearsReport(From, Status).ToList();
             if (res == null || res.Count <= 0)

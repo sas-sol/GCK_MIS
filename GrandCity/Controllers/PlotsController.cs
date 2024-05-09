@@ -13,6 +13,7 @@ using System.Threading;
 using UnityEngine.SocialPlatforms;
 using System.Runtime.InteropServices;
 using Excel = Microsoft.Office.Interop.Excel;
+using static MeherEstateDevelopers.MvcApplication;
 
 namespace MeherEstateDevelopers.Controllers
 {
@@ -23,7 +24,7 @@ namespace MeherEstateDevelopers.Controllers
         string AccountingModuleFP = COA_Mapper_Modules.Files_Plots.ToString();
         // GET: Plots
         private Grand_CityEntities db = new Grand_CityEntities();
-        public ActionResult CreatePlotInventory()
+        [NoDirectAccess] public ActionResult CreatePlotInventory()
         {
             long userid = long.Parse(User.Identity.GetUserId());
             db.Sp_Add_Activity(userid, "Accessed Create Plots Invntory Page ", "Read", "Activity_Record", ActivityType.Details_Access.ToString(), userid);
@@ -444,7 +445,7 @@ namespace MeherEstateDevelopers.Controllers
                 return Json(res, JsonRequestBehavior.AllowGet);
             }
         }
-        public ActionResult RegisterPlot()
+        [NoDirectAccess] public ActionResult RegisterPlot()
         {
             Helpers h = new Helpers();
             ViewBag.TransactionId = h.RandomNumber();
@@ -458,7 +459,7 @@ namespace MeherEstateDevelopers.Controllers
         }
 
         //[HttpPost]
-        //public ActionResult UploadFiles(FormCollection fc)
+        //[NoDirectAccess] public ActionResult UploadFiles(FormCollection fc)
         //{
         //    // Checking no of files injected in Request object  
         //    if (Request.Files.Count > 0)
@@ -507,7 +508,7 @@ namespace MeherEstateDevelopers.Controllers
         //        return Json("No files selected.");
         //    }
         //}
-        public ActionResult PlotsShortResult(long PlotId)
+        [NoDirectAccess] public ActionResult PlotsShortResult(long PlotId)
         {
             var res1 = db.Sp_Get_PlotDetailData(PlotId).SingleOrDefault();
             var res2 = db.Sp_Get_PlotLastOwner(PlotId).ToList();
@@ -516,26 +517,26 @@ namespace MeherEstateDevelopers.Controllers
             db.Sp_Add_Activity(userid, "Accessed Plot Details  ", "Read", "Activity_Record", ActivityType.Details_Access.ToString(), PlotId);
             return PartialView(res);
         }
-        public ActionResult RegistryView()
+        [NoDirectAccess] public ActionResult RegistryView()
         {
             var res = db.Sp_Get_PlotsShortSummary().SingleOrDefault();
             long userid = long.Parse(User.Identity.GetUserId());
             db.Sp_Add_Activity(userid, "Accessed Plots Registery Page ", "Read", "Activity_Record", ActivityType.Details_Access.ToString(), userid);
             return PartialView(res);
         }
-        public ActionResult CreatePlotsNomenclature()
+        [NoDirectAccess] public ActionResult CreatePlotsNomenclature()
         {
             return View();
         }
 
-        public ActionResult PlotsInventory()
+        [NoDirectAccess] public ActionResult PlotsInventory()
         {
             var res = db.Plots.Where(x => x.Status == "Available_For_Sale").ToList();
             return View(res);
         }
 
         [HttpPost]
-        public ActionResult DeletePlotInventory(int id)
+        [NoDirectAccess] public ActionResult DeletePlotInventory(int id)
         {
             var PlotDeleted = db.Plots.Where(x => x.Id == id).FirstOrDefault();
             if(PlotDeleted != null)
@@ -637,14 +638,14 @@ namespace MeherEstateDevelopers.Controllers
             var res = new { Commercial = res1, Residential = res2 };
             return Json(res);
         }
-        public ActionResult PlotOwnership()
+        [NoDirectAccess] public ActionResult PlotOwnership()
         {
             ViewBag.City = new SelectList(Nomenclature.Cities(), "Name", "Name");
             ViewBag.Block = new SelectList(db.Sp_Get_Block(), "Id", "Block_Name");
             ViewBag.Dealership = new SelectList(db.Sp_Get_Dealerships().Where(x => x.Status == "Registered").Select(x => new { x.Id, x.Dealership_Name }).Distinct(), "Id", "Dealership_Name");
             return View();
         }
-        public ActionResult PlotBooking()
+        [NoDirectAccess] public ActionResult PlotBooking()
         {
             ViewBag.City = new SelectList(Nomenclature.Cities(), "Name", "Name");
             ViewBag.Block = new SelectList(db.Sp_Get_Block(), "Id", "Block_Name");
@@ -973,7 +974,7 @@ namespace MeherEstateDevelopers.Controllers
                             var phase = db.RealEstate_Phases.Where(p => p.Id == plotdata.Phase_Id).FirstOrDefault();
                             // add phase in Receipt data
                             var receiptdata = db.Receipts.Where(r => r.Id == res3.Receipt_Id).FirstOrDefault();
-                            receiptdata.Phase = "Phase1";
+                            receiptdata.Phase = phase.Phase_Name;
                             db.SaveChanges();
 
                             Receipt_No = res3.Receipt_No;
@@ -1219,7 +1220,7 @@ namespace MeherEstateDevelopers.Controllers
             db.Sp_Update_CurrentOwner(PO.Plot_Id);
             return Json(true);
         }
-        public ActionResult PlotVerification(long Plotid)
+        [NoDirectAccess] public ActionResult PlotVerification(long Plotid)
         {
             long userid = long.Parse(User.Identity.GetUserId());
             db.Sp_Add_Activity(userid, "Access full Data of Plot Id <a class='plt-data' data-id=' " + Plotid + "'>" + Plotid + "</a>  for Verification ", "Read", Modules.PlotManagement.ToString(), ActivityType.Details_Access.ToString(), Plotid);
@@ -1230,7 +1231,7 @@ namespace MeherEstateDevelopers.Controllers
             var res = new PlotDetailData { PlotData = res1, PlotOwners = res2, PlotInstallments = res3, PlotReceipts = res4 };
             return PartialView(res);
         }
-        public ActionResult PlotDetails(long Plotid)
+        [NoDirectAccess] public ActionResult PlotDetails(long Plotid)
         {
             long userid = long.Parse(User.Identity.GetUserId());
             db.Sp_Add_Activity(userid, "Get full Details of Plot Id  <a class='plt-data' data-id=' " + Plotid + "'>" + Plotid + "</a>  ", "Read", Modules.PlotManagement.ToString(), ActivityType.Details_Access.ToString(), Plotid);
@@ -1364,7 +1365,7 @@ namespace MeherEstateDevelopers.Controllers
             }
 
         }
-        public ActionResult UpdateWaveOffStatus(int id)
+        [NoDirectAccess] public ActionResult UpdateWaveOffStatus(int id)
         {
             var plotInstallment = db.Plot_Installments_Surcharge.FirstOrDefault(p => p.Id == id);
 
@@ -1475,7 +1476,7 @@ namespace MeherEstateDevelopers.Controllers
 
         }
 
-        public ActionResult PlotReceipts(long PlotId)
+        [NoDirectAccess] public ActionResult PlotReceipts(long PlotId)
         {
             var res1 = db.Sp_Get_PlotInstallments(PlotId).ToList();
             var res2 = db.Sp_Get_ReceivedAmounts(PlotId, Modules.PlotManagement.ToString()).ToList();
@@ -1483,7 +1484,7 @@ namespace MeherEstateDevelopers.Controllers
             var res = new PlotDetailData { PlotInstallments = res1, PlotReceipts = res2, Discounts = res3 };
             return PartialView();
         }
-        public ActionResult PlotInstallmentsReports(long Plotid)
+        [NoDirectAccess] public ActionResult PlotInstallmentsReports(long Plotid)
         {
             long userid = long.Parse(User.Identity.GetUserId());
             var res1 = db.Sp_Get_PlotData(Plotid).SingleOrDefault();
@@ -1549,7 +1550,7 @@ namespace MeherEstateDevelopers.Controllers
                 return PartialView(null);
             }
         }
-        public ActionResult CancelledOwnerLedger(long Plotid, long OwnerId)
+        [NoDirectAccess] public ActionResult CancelledOwnerLedger(long Plotid, long OwnerId)
         {
             long userid = long.Parse(User.Identity.GetUserId());
             //db.Sp_Add_Activity(userid, "", "Create", Modules.PlotManagement.ToString());
@@ -1583,7 +1584,7 @@ namespace MeherEstateDevelopers.Controllers
 
         [Authorize(Roles = "Plots Information,Administrator")]
         //[LicenseAuthorize]
-        public ActionResult PlotInformation(long? bltId, string plotno)
+        [NoDirectAccess] public ActionResult PlotInformation(long? bltId, string plotno)
         {
             long userid = long.Parse(User.Identity.GetUserId());
             db.Sp_Add_Activity(userid, "Access Page of Plot Information", "Read", Modules.PlotManagement.ToString(), ActivityType.Page_Access.ToString(), null);
@@ -1596,7 +1597,7 @@ namespace MeherEstateDevelopers.Controllers
             return View();
         }
         [Authorize(Roles = "Plots Information Update,Administrator")]
-        public ActionResult UpdatePlotInformation()
+        [NoDirectAccess] public ActionResult UpdatePlotInformation()
         {
             long userid = long.Parse(User.Identity.GetUserId());
             db.Sp_Add_Activity(userid, "Access Page of Plot Updation", "Update", Modules.PlotManagement.ToString(), ActivityType.Page_Access.ToString(), null);
@@ -1604,7 +1605,7 @@ namespace MeherEstateDevelopers.Controllers
             return View();
         }
         [Authorize(Roles = "Plots Information Update,Administrator")]
-        public ActionResult UpdateInformation(long Plotid)
+        [NoDirectAccess] public ActionResult UpdateInformation(long Plotid)
         {
             long userid = long.Parse(User.Identity.GetUserId());
             db.Sp_Add_Activity(userid, "Get full Details of Plot Id  <a class='plt-data' data-id=' " + Plotid + "'>" + Plotid + "</a>  for Updatations ", "Read", Modules.PlotManagement.ToString(), ActivityType.Details_Access.ToString(), Plotid);
@@ -1731,7 +1732,7 @@ namespace MeherEstateDevelopers.Controllers
             }
             return Json(true);
         }
-        public ActionResult PlotDetailReport(long Plotid)
+        [NoDirectAccess] public ActionResult PlotDetailReport(long Plotid)
         {
             long userid = long.Parse(User.Identity.GetUserId());
             db.Sp_Add_Activity(userid, "Access Ledger Report of Plot Id <a class='plt-data' data-id=' " + Plotid + "'>" + Plotid + "</a> ", "Read", Modules.PlotManagement.ToString(), ActivityType.Details_Access.ToString(), Plotid);
@@ -1772,7 +1773,7 @@ namespace MeherEstateDevelopers.Controllers
             var res = new PlotLedger { OwnerData = res2, PlotData = res1, Report = Rm, Discount = discount };
             return View(res);
         }
-        public ActionResult PlotStatment(long Plotid)
+        [NoDirectAccess] public ActionResult PlotStatment(long Plotid)
         {
             long userid = long.Parse(User.Identity.GetUserId());
             db.Sp_Add_Activity(userid, "Access Ledger Report of Plot Id <a class='plt-data' data-id=' " + Plotid + "'>" + Plotid + "</a> ", "Read", Modules.PlotManagement.ToString(), ActivityType.Details_Access.ToString(), Plotid);
@@ -1827,7 +1828,7 @@ namespace MeherEstateDevelopers.Controllers
             var res = new NewPlotLedger { OwnerData = res2, PlotData = res1, Report = Rm, Discount = discount, Balance = balance, Refunded_Repurchased = cr };
             return View(res);
         }
-        public ActionResult PreviousPlotDetailReport(long Plotid, long OwnerId)
+        [NoDirectAccess] public ActionResult PreviousPlotDetailReport(long Plotid, long OwnerId)
         {
             long userid = long.Parse(User.Identity.GetUserId());
             db.Sp_Add_Activity(userid, "Access Ledger Report of Plot Id <a class='plt-data' data-id=' " + Plotid + "'>" + Plotid + "</a> ", "Read", Modules.PlotManagement.ToString(), ActivityType.Details_Access.ToString(), Plotid);
@@ -1889,7 +1890,7 @@ namespace MeherEstateDevelopers.Controllers
             db.Sp_Update_PlotDisputeStatus(Id, Status);
             return Json(true);
         }
-        public ActionResult ReinstatePlot()
+        [NoDirectAccess] public ActionResult ReinstatePlot()
         {
             return PartialView();
         }
@@ -1968,7 +1969,7 @@ namespace MeherEstateDevelopers.Controllers
             db.Sp_Update_PlotRegistryStatus(Id, Status);
             return Json(true);
         }
-        public ActionResult LastestPlotDetails(long Plotid)
+        [NoDirectAccess] public ActionResult LastestPlotDetails(long Plotid)
         {
             long userid = long.Parse(User.Identity.GetUserId());
             db.Sp_Add_Activity(userid, "", "Read", Modules.PlotManagement.ToString(), ActivityType.Details_Access.ToString(), Plotid);
@@ -2015,13 +2016,13 @@ namespace MeherEstateDevelopers.Controllers
             var res = new LatestPlotDetailData { PlotData = res1, PlotOwners = res2, PlotInstallments = res6, PlotReceipts = res4, Discounts = res5, Plot_Price_DC_Rate = DcRate, TransferPending = alreadyTransList };
             return Json(res);
         }
-        public ActionResult PlotsOwnersListUpadate(long Id)
+        [NoDirectAccess] public ActionResult PlotsOwnersListUpadate(long Id)
         {
             long userid = long.Parse(User.Identity.GetUserId());
             var res = db.Plot_Ownership.Where(x => x.Plot_Id == Id).ToList();
             return PartialView(res);
         }
-        public ActionResult PlotRegisteration()
+        [NoDirectAccess] public ActionResult PlotRegisteration()
         {
             long userid = long.Parse(User.Identity.GetUserId());
             db.Sp_Add_Activity(userid, "Page access of Plot Registeration", "Create", Modules.PlotManagement.ToString(), ActivityType.Page_Access.ToString(), null);
@@ -2030,7 +2031,7 @@ namespace MeherEstateDevelopers.Controllers
             ViewBag.Block = new SelectList(db.Sp_Get_Block(), "Id", "Block_Name");
             return View();
         }
-        public ActionResult BidingRegisterPlots()
+        [NoDirectAccess] public ActionResult BidingRegisterPlots()
         {
             long userid = long.Parse(User.Identity.GetUserId());
             ViewBag.Bank = new SelectList(Nomenclature.Banks(), "Name", "Name");
@@ -2047,7 +2048,7 @@ namespace MeherEstateDevelopers.Controllers
                        select new { PlotId = a.Id, Block = "Badar Block", PlotNumber = a.Plot_Number, Sector = a.Sector, Size = a.Plot_Size, Location = a.Plot_Location, Rate = b.RatePerMarla_SqFt }).ToList();
             return Json(res);
         }
-        public ActionResult PlotsVerification(long Plotid)
+        [NoDirectAccess] public ActionResult PlotsVerification(long Plotid)
         {
             long userid = long.Parse(User.Identity.GetUserId());
             db.Sp_Add_Activity(userid, "Get full Details of Plot Id  <a class='plt-data' data-id=' " + Plotid + "'>" + Plotid + "</a> for verification ", "Read", Modules.PlotManagement.ToString(), ActivityType.Details_Access.ToString(), Plotid);
@@ -2067,13 +2068,13 @@ namespace MeherEstateDevelopers.Controllers
             db.SP_Update_VerifyStatus(Id, Modules.PlotManagement.ToString());
             return Json(true);
         }
-        public ActionResult PostPlotVerification()
+        [NoDirectAccess] public ActionResult PostPlotVerification()
         {
             long userid = long.Parse(User.Identity.GetUserId());
             ViewBag.Block = new SelectList(db.Sp_Get_Block(), "Id", "Block_Name");
             return View();
         }
-        public ActionResult PostPlotDetails(long Plotid)
+        [NoDirectAccess] public ActionResult PostPlotDetails(long Plotid)
         {
             long userid = long.Parse(User.Identity.GetUserId());
             db.Sp_Add_Activity(userid, "Get full Details of Plot Id <a class='plt-data' data-id=' " + Plotid + "'>" + Plotid + "</a> ", "Read", Modules.PlotManagement.ToString(), ActivityType.Details_Access.ToString(), Plotid);
@@ -2093,12 +2094,12 @@ namespace MeherEstateDevelopers.Controllers
             return Json(true);
         }
 
-        public ActionResult AddPlotCategory()
+        [NoDirectAccess] public ActionResult AddPlotCategory()
         {
             return PartialView();
         }
         [HttpPost]
-        public ActionResult AddPlotCategory1(decimal front, decimal back, decimal left, decimal right, decimal? north_east, decimal? north_west, decimal? south_east, decimal? south_west)
+        [NoDirectAccess] public ActionResult AddPlotCategory1(decimal front, decimal back, decimal left, decimal right, decimal? north_east, decimal? north_west, decimal? south_east, decimal? south_west)
         {
                 Plots_Category pc = db.Plots_Category.FirstOrDefault(p =>
                 p.Front_Side == front &&
@@ -2136,7 +2137,7 @@ namespace MeherEstateDevelopers.Controllers
                 return Json("Plot Category Already Exists!");
             }
         }
-        public ActionResult UpdatePlotDimension(string Road, string Plotsize, string Dimension, int Plot_Cat, decimal Area, string Location)
+        [NoDirectAccess] public ActionResult UpdatePlotDimension(string Road, string Plotsize, string Dimension, int Plot_Cat, decimal Area, string Location)
         {
             long userid = long.Parse(User.Identity.GetUserId());
             db.Sp_Add_Activity(userid, "Page access Update Plot Dimensions", "Create", Modules.PlotManagement.ToString(), ActivityType.Page_Access.ToString(), null);
@@ -2235,12 +2236,12 @@ namespace MeherEstateDevelopers.Controllers
             db.Sp_Update_RequestForVerify_Plot(Id);
             return Json(true);
         }
-        public ActionResult ReqVerificationList()
+        [NoDirectAccess] public ActionResult ReqVerificationList()
         {
             var res = db.Sp_Get_PlotVerifReq().ToList();
             return View(res);
         }
-        public ActionResult PlotNOC(long Id, string CustomeType)
+        [NoDirectAccess] public ActionResult PlotNOC(long Id, string CustomeType)
         {
             long userid = long.Parse(User.Identity.GetUserId());
             var res1 = db.Sp_Get_PlotData(Id).SingleOrDefault();
@@ -2316,7 +2317,7 @@ namespace MeherEstateDevelopers.Controllers
             ViewBag.Name = name;
             return View(res);
         }
-        public ActionResult DealerNOC(long Id, string DealerType, long Dealer_Id)
+        [NoDirectAccess] public ActionResult DealerNOC(long Id, string DealerType, long Dealer_Id)
         {
             long userid = long.Parse(User.Identity.GetUserId());
             ViewBag.Dealership = db.Dealerships.Where(x => x.Id == Dealer_Id).Select(x => x.Dealership_Name).FirstOrDefault();
@@ -2405,7 +2406,7 @@ namespace MeherEstateDevelopers.Controllers
                 return Json(true);
             }
         }
-        public ActionResult PlotCustomerFile(long Plotid)
+        [NoDirectAccess] public ActionResult PlotCustomerFile(long Plotid)
         {
             long userid = long.Parse(User.Identity.GetUserId());
             string name = db.Users.SingleOrDefault(x => x.Id == userid).Name;
@@ -2424,7 +2425,7 @@ namespace MeherEstateDevelopers.Controllers
             var res = new LatestPlotDetailData { PlotData = res1, PlotOwners = res2, PlotInstallments = res3, PlotReceipts = res4 };
             return View(res);
         }
-        public ActionResult PlotCustomer_App(long Plotid)
+        [NoDirectAccess] public ActionResult PlotCustomer_App(long Plotid)
         {
             long userid = long.Parse(User.Identity.GetUserId());
             string name = db.Users.SingleOrDefault(x => x.Id == userid).Name;
@@ -2485,7 +2486,7 @@ namespace MeherEstateDevelopers.Controllers
                 }
             }
         }
-        public ActionResult VerifiedPlots()
+        [NoDirectAccess] public ActionResult VerifiedPlots()
         {
             long userid = long.Parse(User.Identity.GetUserId());
             db.Sp_Add_Activity(userid, "Page access of Verified Plots", "Read", Modules.PlotManagement.ToString(), ActivityType.Page_Access.ToString(), null);
@@ -2493,7 +2494,7 @@ namespace MeherEstateDevelopers.Controllers
             var res = db.Sp_Get_PlotList_Parameter("Verified").ToList();
             return View(res);
         }
-        public ActionResult DisputedPlots()
+        [NoDirectAccess] public ActionResult DisputedPlots()
         {
             long userid = long.Parse(User.Identity.GetUserId());
             db.Sp_Add_Activity(userid, "Page access of Disputed Plots", "Create", Modules.PlotManagement.ToString(), ActivityType.Page_Access.ToString(), null);
@@ -2501,7 +2502,7 @@ namespace MeherEstateDevelopers.Controllers
             var res = db.Sp_Get_PlotList_Parameter("Disputed").ToList();
             return View("VerifiedPlots", res);
         }
-        public ActionResult PendingApproval()
+        [NoDirectAccess] public ActionResult PendingApproval()
         {
             long userid = long.Parse(User.Identity.GetUserId());
             db.Sp_Add_Activity(userid, "Page access of Pending For Approval", "Create", Modules.PlotManagement.ToString(), ActivityType.Page_Access.ToString(), null);
@@ -2509,7 +2510,7 @@ namespace MeherEstateDevelopers.Controllers
             var res = db.Sp_Get_PlotList_Parameter("PendingApproval").ToList();
             return View("VerifiedPlots", res);
         }
-        public ActionResult NotVerified()
+        [NoDirectAccess] public ActionResult NotVerified()
         {
             long userid = long.Parse(User.Identity.GetUserId());
             db.Sp_Add_Activity(userid, "Page access of Not Verified Plots", "Create", Modules.PlotManagement.ToString(), ActivityType.Page_Access.ToString(), null);
@@ -2517,7 +2518,7 @@ namespace MeherEstateDevelopers.Controllers
             var res = db.Sp_Get_PlotList_Parameter("Pending").ToList();
             return View("VerifiedPlots", res);
         }
-        public ActionResult CancelledPlots()
+        [NoDirectAccess] public ActionResult CancelledPlots()
         {
             long userid = long.Parse(User.Identity.GetUserId());
             db.Sp_Add_Activity(userid, "Page access of Cancelled Plots", "read", Modules.PlotManagement.ToString(), ActivityType.Page_Access.ToString(), null);
@@ -2525,7 +2526,7 @@ namespace MeherEstateDevelopers.Controllers
             var res = db.Sp_Get_PlotList_Parameter("Cancelled").ToList();
             return PartialView("VerifiedPlots", res);
         }
-        public ActionResult HoldedPlots()
+        [NoDirectAccess] public ActionResult HoldedPlots()
         {
             long userid = long.Parse(User.Identity.GetUserId());
             db.Sp_Add_Activity(userid, "Page access of Holded Plots", "Read", Modules.PlotManagement.ToString(), ActivityType.Page_Access.ToString(), null);
@@ -2533,7 +2534,7 @@ namespace MeherEstateDevelopers.Controllers
             var res = db.Sp_Get_PlotList_Parameter("Hold").ToList();
             return View("VerifiedPlots", res);
         }
-        public ActionResult Repurchased()
+        [NoDirectAccess] public ActionResult Repurchased()
         {
             long userid = long.Parse(User.Identity.GetUserId());
             db.Sp_Add_Activity(userid, "Page access of Repurchased Plots", "Read", Modules.PlotManagement.ToString(), ActivityType.Page_Access.ToString(), null);
@@ -2541,7 +2542,7 @@ namespace MeherEstateDevelopers.Controllers
             var res = db.Sp_Get_PlotList_Parameter("Repurchased").ToList();
             return View("VerifiedPlots", res);
         }
-        public ActionResult AvaiableForSalePlots()
+        [NoDirectAccess] public ActionResult AvaiableForSalePlots()
         {
             long userid = long.Parse(User.Identity.GetUserId());
             db.Sp_Add_Activity(userid, "Page access of Avaiable for Sales Plots", "Read", Modules.PlotManagement.ToString(), ActivityType.Page_Access.ToString(), null);
@@ -2550,7 +2551,7 @@ namespace MeherEstateDevelopers.Controllers
             var res = db.Sp_Get_PlotList_Parameter("Available_For_Sale").ToList();
             return View("VerifiedPlots", res);
         }
-        public ActionResult ContructedPlots()
+        [NoDirectAccess] public ActionResult ContructedPlots()
         {
             long userid = long.Parse(User.Identity.GetUserId());
             db.Sp_Add_Activity(userid, "Page access of Constructed Plots", "Create", Modules.PlotManagement.ToString(), ActivityType.Page_Access.ToString(), null);
@@ -2558,7 +2559,7 @@ namespace MeherEstateDevelopers.Controllers
             var res = db.Sp_Get_PlotList_Parameter("Constructed").ToList();
             return View("VerifiedPlots", res);
         }
-        public ActionResult NonDevelopedPlots()
+        [NoDirectAccess] public ActionResult NonDevelopedPlots()
         {
             long userid = long.Parse(User.Identity.GetUserId());
             db.Sp_Add_Activity(userid, "Page access of Non Developed Plots", "Create", Modules.PlotManagement.ToString(), ActivityType.Page_Access.ToString(), null);
@@ -2566,7 +2567,7 @@ namespace MeherEstateDevelopers.Controllers
             var res = db.Sp_Get_PlotList_Parameter("Boundry").ToList();
             return View("VerifiedPlots", res);
         }
-        public ActionResult PlotOthersOwnership()
+        [NoDirectAccess] public ActionResult PlotOthersOwnership()
         {
             ViewBag.City = new SelectList(Nomenclature.Cities(), "Name", "Name");
             ViewBag.Premium_Id = new SelectList(db.PremiumPlots.ToList(), "Id", "Plot_Number");
@@ -2657,7 +2658,7 @@ namespace MeherEstateDevelopers.Controllers
                 }
             }
         }
-        public ActionResult PlotUpStatus(long PlotId, string Status)
+        [NoDirectAccess] public ActionResult PlotUpStatus(long PlotId, string Status)
         {
             ViewBag.PlotId = PlotId;
             ViewBag.Status = Status;
@@ -2748,12 +2749,12 @@ namespace MeherEstateDevelopers.Controllers
             }
             return Json(true);
         }
-        public ActionResult TransferList()
+        [NoDirectAccess] public ActionResult TransferList()
         {
             var res = db.Sp_Get_TransferList_Plot().ToList();
             return View(res);
         }
-        public ActionResult CancellationReqs()
+        [NoDirectAccess] public ActionResult CancellationReqs()
         {
             if (User.IsInRole("Plots Manager"))
             {
@@ -2771,7 +2772,7 @@ namespace MeherEstateDevelopers.Controllers
                 return View(res);
             }
         }
-        public ActionResult PlotCancellationDetails(long Plotid, long Id)
+        [NoDirectAccess] public ActionResult PlotCancellationDetails(long Plotid, long Id)
         {
             long userid = long.Parse(User.Identity.GetUserId());
             db.Sp_Add_Activity(userid, "Get full Details of Plot Id  <a class='plt-data' data-id=' " + Plotid + "'>" + Plotid + "</a>  ", "Read", Modules.PlotManagement.ToString(), ActivityType.Details_Access.ToString(), Plotid);
@@ -2826,7 +2827,7 @@ namespace MeherEstateDevelopers.Controllers
                 }
             }
         }
-        public ActionResult PlotCancelation()
+        [NoDirectAccess] public ActionResult PlotCancelation()
         {
             var banks = db.Bank_Accounts.Select(x => new NameValuestring { Value = x.Id.ToString(), Name = x.Bank + " - " + x.Account_Number }).ToList();
             var all = new NameValuestring()
@@ -2998,7 +2999,7 @@ namespace MeherEstateDevelopers.Controllers
 
             }
         }
-        public ActionResult PlotsFile(long Id)
+        [NoDirectAccess] public ActionResult PlotsFile(long Id)
         {
             var res = db.Sp_Get_PlotData(Id).ToList();
             Helpers h = new Helpers(Modules.PlotManagement, Types.Booking);
@@ -3017,7 +3018,7 @@ namespace MeherEstateDevelopers.Controllers
         }
 
         //create a function for generate Qr code of plots
-        public ActionResult PlotsQrCode()
+        [NoDirectAccess] public ActionResult PlotsQrCode()
         {
             var plots = db.Plots.ToList();
             Helpers h = new Helpers(Modules.PlotManagement, Types.Booking);
@@ -3032,7 +3033,7 @@ namespace MeherEstateDevelopers.Controllers
             }
                return Json("ok", JsonRequestBehavior.AllowGet);
         }
-        public ActionResult BlockFile(string Id)
+        [NoDirectAccess] public ActionResult BlockFile(string Id)
         {
             var res = db.Sp_Get_PlotList_Block_Parameter(Id).Select(x => new Sp_Get_PlotData_Result
             {
@@ -3063,7 +3064,7 @@ namespace MeherEstateDevelopers.Controllers
             return View("PlotsFile", res);
         }
         /// Allotment Letters
-        public ActionResult AllotmentTrackingViews()
+        [NoDirectAccess] public ActionResult AllotmentTrackingViews()
         {
             var res = db.Sp_Get_AllotmentLetterTracking().ToList();
             return PartialView(res);
@@ -3104,7 +3105,7 @@ namespace MeherEstateDevelopers.Controllers
             db.Sp_Update_ALSign(Id, false);
             return Json(true);
         }
-        public ActionResult LetterInfomation(long PlotId, long Id)
+        [NoDirectAccess] public ActionResult LetterInfomation(long PlotId, long Id)
         {
             ViewBag.PlotId = PlotId;
             ViewBag.Id = Id;
@@ -3134,18 +3135,18 @@ namespace MeherEstateDevelopers.Controllers
             var QR_Data = helpers.GenerateQRCode(data);
             return Json(true);
         }
-        public ActionResult AllotmentLetters()
+        [NoDirectAccess] public ActionResult AllotmentLetters()
         {
             var res = db.AllotmentLetters.OrderByDescending(x => x.Datetime).ToList();
             return View(res);
         }
-        public ActionResult AllotmentLetterDelivery()
+        [NoDirectAccess] public ActionResult AllotmentLetterDelivery()
         {
             long userid = long.Parse(User.Identity.GetUserId());
             db.Sp_Add_Activity(userid, "Visited Page of Allotment Letters List", "Read", Modules.PlotManagement.ToString(), ActivityType.Page_Access.ToString(), null);
             return View();
         }
-        public ActionResult PreAllotmentLetter()
+        [NoDirectAccess] public ActionResult PreAllotmentLetter()
         {
             long userid = long.Parse(User.Identity.GetUserId());
             var res1 = (from x in db.PremiumPlots
@@ -3185,7 +3186,7 @@ namespace MeherEstateDevelopers.Controllers
             db.Sp_Update_PossessionLetterRequestStatus(res.Select(x => x.GroupTag).FirstOrDefault(), Status, null);
             return Json(true);
         }
-        public ActionResult PlotAllotmentReqAppr(long Plotid)
+        [NoDirectAccess] public ActionResult PlotAllotmentReqAppr(long Plotid)
         {
             long userid = long.Parse(User.Identity.GetUserId());
             db.Sp_Add_Activity(userid, "Access Page of Approval of Allotment Letter for Plot Id <a class='plt-data' data-id=' " + Plotid + "'>" + Plotid + "</a>", "Create", Modules.PlotManagement.ToString(), ActivityType.Details_Access.ToString(), Plotid);
@@ -3247,7 +3248,7 @@ namespace MeherEstateDevelopers.Controllers
             db.Sp_Update_AllotmentLetterDeliveryPre(Id, Delivered_Date);
             return Json(true);
         }
-        public ActionResult AllotmentDuplicateLetter(long Id)
+        [NoDirectAccess] public ActionResult AllotmentDuplicateLetter(long Id)
         {
             long userid = long.Parse(User.Identity.GetUserId());
             var allot = db.AllotmentLetters.Where(x => x.PlotOwner_Id == Id).FirstOrDefault();
@@ -3259,13 +3260,13 @@ namespace MeherEstateDevelopers.Controllers
             db.Sp_Add_PlotComments(allot.Plot_Id, "Generated Duplicate Allotment Letter for : " + res.Name, userid, ActivityType.Allotment_Letter_Generate.ToString());
             return View(res);
         }
-        public ActionResult AllotmentLettersList()
+        [NoDirectAccess] public ActionResult AllotmentLettersList()
         {
             long userid = long.Parse(User.Identity.GetUserId());
             db.Sp_Add_Activity(userid, "Visited Page of Allotment Letters List", "Read", Modules.PlotManagement.ToString(), ActivityType.Page_Access.ToString(), null);
             return View();
         }
-        public ActionResult VerifiedAllotmentLetters()
+        [NoDirectAccess] public ActionResult VerifiedAllotmentLetters()
         {
             long userid = long.Parse(User.Identity.GetUserId());
             var res = db.Sp_Get_AllotmentLetters("Verified").ToList();
@@ -3273,7 +3274,7 @@ namespace MeherEstateDevelopers.Controllers
             ViewBag.Page = "Verified";
             return PartialView(res);
         }
-        public ActionResult RequestedAllotmentLetters()
+        [NoDirectAccess] public ActionResult RequestedAllotmentLetters()
         {
             long userid = long.Parse(User.Identity.GetUserId());
             var res = db.Sp_Get_AllotmentLetters("Requested").ToList();
@@ -3281,7 +3282,7 @@ namespace MeherEstateDevelopers.Controllers
             ViewBag.Page = "Requested";
             return PartialView("VerifiedAllotmentLetters", res);
         }
-        public ActionResult SignedAllotmentLetters()
+        [NoDirectAccess] public ActionResult SignedAllotmentLetters()
         {
             long userid = long.Parse(User.Identity.GetUserId());
             var res = db.Sp_Get_AllotmentLetters("Signed").ToList();
@@ -3289,7 +3290,7 @@ namespace MeherEstateDevelopers.Controllers
             ViewBag.Page = "Signed";
             return PartialView("VerifiedAllotmentLetters", res);
         }
-        public ActionResult DeliveredAllotmentLetters()
+        [NoDirectAccess] public ActionResult DeliveredAllotmentLetters()
         {
             long userid = long.Parse(User.Identity.GetUserId());
             var res = db.Sp_Get_AllotmentLetters("Delivered").ToList();
@@ -3363,7 +3364,7 @@ namespace MeherEstateDevelopers.Controllers
             var QR_Data = helpers.GenerateQRCode(data);
             return Json(res);
         }
-        public ActionResult AllotmentLetter(long Id)
+        [NoDirectAccess] public ActionResult AllotmentLetter(long Id)
         {
             long userid = long.Parse(User.Identity.GetUserId());
             var res = db.Sp_Get_AllotmentLetter(Id).SingleOrDefault();
@@ -3371,21 +3372,21 @@ namespace MeherEstateDevelopers.Controllers
             var a = db.Sp_Add_Activity(userid, "Access Allotment Letter of Plot No. " + res.Plot_No + " Block No: " + res.Block, "Read", Modules.PlotManagement.ToString(), ActivityType.Details_Access.ToString(), Id);
             return View(res);
         }
-        public ActionResult Special_AllotmentLetter(long Id)
+        [NoDirectAccess] public ActionResult Special_AllotmentLetter(long Id)
         {
             long userid = long.Parse(User.Identity.GetUserId());
             var res = db.Sp_Get_AllotmentLetter(Id).SingleOrDefault();
             db.Sp_Add_Activity(userid, "Access Allotment Letter of Plot No. " + res.Plot_No + " Block No: " + res.Block, "Read", Modules.PlotManagement.ToString(), ActivityType.Details_Access.ToString(), Id);
             return View(res);
         }
-        public ActionResult AllotmentLetterView(long Id)
+        [NoDirectAccess] public ActionResult AllotmentLetterView(long Id)
         {
             long userid = long.Parse(User.Identity.GetUserId());
             var res = db.Sp_Get_AllotmentLetter(Id).SingleOrDefault();
             db.Sp_Add_Activity(userid, "Access Allotment Letter of Plot No. " + res.Plot_No + " Block No: " + res.Block, "Read", Modules.PlotManagement.ToString(), ActivityType.Details_Access.ToString(), Id);
             return View(res);
         }
-        public ActionResult AllotmentRequest()
+        [NoDirectAccess] public ActionResult AllotmentRequest()
         {
             long userid = long.Parse(User.Identity.GetUserId());
             db.Sp_Add_Activity(userid, "Access Page of Allotment Letter Request", "Read", Modules.PlotManagement.ToString(), ActivityType.Page_Access.ToString(), null);
@@ -3393,19 +3394,19 @@ namespace MeherEstateDevelopers.Controllers
             return View(res);
         }
         // Possession Request
-        public ActionResult PossessionRequests()
+        [NoDirectAccess] public ActionResult PossessionRequests()
         {
             long userid = long.Parse(User.Identity.GetUserId());
             db.Sp_Add_Activity(userid, "Access Page of Possession Letter Request", "Read", Modules.PlotManagement.ToString(), ActivityType.Page_Access.ToString(), null);
             return View();
         }
-        public ActionResult PossessionList(int type)
+        [NoDirectAccess] public ActionResult PossessionList(int type)
         {
             var res = db.Sp_Get_PossessionLetterRequests(type).ToList();
             return PartialView(res);
         }
         // For Possession
-        public ActionResult GetPlotPossessionRequest(long Plotid)
+        [NoDirectAccess] public ActionResult GetPlotPossessionRequest(long Plotid)
         {
             long userid = long.Parse(User.Identity.GetUserId());
             db.Sp_Add_Activity(userid, "Access Page of Approval of possession Letter for Plot Id <a class='plt-data' data-id=' " + Plotid + "'>" + Plotid + "</a>", "Create", Modules.PlotManagement.ToString(), ActivityType.Details_Access.ToString(), Plotid);
@@ -3424,7 +3425,7 @@ namespace MeherEstateDevelopers.Controllers
             var res = new PlotDetailData { PlotData = res1, PlotOwners = res2 };
             return View(res);
         }
-        public ActionResult PlotBoundTabular(long Plot_Id)
+        [NoDirectAccess] public ActionResult PlotBoundTabular(long Plot_Id)
         {
             List<Plot> plist = new List<Plot>();
             var res1 = db.Sp_Get_PlotData(Plot_Id).SingleOrDefault();
@@ -3560,7 +3561,7 @@ namespace MeherEstateDevelopers.Controllers
                 return Json(res1);
             }
         }
-        public ActionResult PlotPosition(long Plotid)
+        [NoDirectAccess] public ActionResult PlotPosition(long Plotid)
         {
             long userid = long.Parse(User.Identity.GetUserId());
             var res33 = db.Plots.Where(x => x.Id == Plotid).FirstOrDefault();
@@ -3593,7 +3594,7 @@ namespace MeherEstateDevelopers.Controllers
                 return PartialView(res);
             }
         }
-        //public ActionResult PlotPosition(long Plotid)
+        //[NoDirectAccess] public ActionResult PlotPosition(long Plotid)
         //{
         //    long userid = long.Parse(User.Identity.GetUserId());
         //    var res33 = db.Plots.Where(x => x.Id == Plotid).FirstOrDefault();
@@ -3630,7 +3631,7 @@ namespace MeherEstateDevelopers.Controllers
             db.Sp_Update_PlotsPositions(p.Id, p.North, p.South, p.East, p.West, p.North_East, p.North_West, p.South_West, p.South_East, p.Front);
             return Json(true);
         }
-        public ActionResult PlotBounded(long Plot_Id)
+        [NoDirectAccess] public ActionResult PlotBounded(long Plot_Id)
         {
             List<Plot> plist = new List<Plot>();
             var res1 = db.Sp_Get_PlotData(Plot_Id).SingleOrDefault();
@@ -3727,7 +3728,7 @@ namespace MeherEstateDevelopers.Controllers
                 return Json(true);
             }
         }
-        public ActionResult PossessionPrint(long PlotId)
+        [NoDirectAccess] public ActionResult PossessionPrint(long PlotId)
         {
             long userid = long.Parse(User.Identity.GetUserId());
             var res1 = db.Plots.Where(x => x.Id == PlotId).FirstOrDefault();
@@ -3744,12 +3745,12 @@ namespace MeherEstateDevelopers.Controllers
             var res = new LatestPlotDetailData { PlotData = res5, Plots = res1, PlotBounding = res2, PlotOwners = res3, };
             return View(res);
         }
-        public ActionResult NewAllotmentLetters()
+        [NoDirectAccess] public ActionResult NewAllotmentLetters()
         {
             ViewBag.Block = new SelectList(db.Sp_Get_Block(), "Id", "Block_Name");
             return View();
         }
-        public ActionResult NewOwnerAllotmentLetter(long Plotid)
+        [NoDirectAccess] public ActionResult NewOwnerAllotmentLetter(long Plotid)
         {
             long userid = long.Parse(User.Identity.GetUserId());
             db.Sp_Add_Activity(userid, "Access Page for Requesting New Allotment Letter", "Read", Modules.PlotManagement.ToString(), ActivityType.Details_Access.ToString(), Plotid);
@@ -3769,12 +3770,12 @@ namespace MeherEstateDevelopers.Controllers
             db.Sp_Update_VerifiedforAllotment(Id, PlotOwnId);
             return Json(true);
         }
-        public ActionResult GenerateAllotLetterList()
+        [NoDirectAccess] public ActionResult GenerateAllotLetterList()
         {
             var res = db.Sp_Get_VerifiedforAllotmentLetters().ToList();
             return View(res);
         }
-        public ActionResult AddPlots()
+        [NoDirectAccess] public ActionResult AddPlots()
         {
             ViewBag.Projects = new SelectList(db.Sp_Get_RealEstateProjects(), "Id", "Project_Name");
             var plots = db.Sp_Get_Plots_Size().Select(x => new { Plot = x }).ToList();
@@ -3803,7 +3804,7 @@ namespace MeherEstateDevelopers.Controllers
         }
         /// Plots Surplus Amount
         /// 
-        public ActionResult ExtraAmountRefund()
+        [NoDirectAccess] public ActionResult ExtraAmountRefund()
         {
             if (User.IsInRole("Plots Manager"))
             {
@@ -3821,7 +3822,7 @@ namespace MeherEstateDevelopers.Controllers
                 return View(res);
             }
         }
-        public ActionResult PlotReceiptRefundDetails(long Plotid, long ReqId)
+        [NoDirectAccess] public ActionResult PlotReceiptRefundDetails(long Plotid, long ReqId)
         {
             long userid = long.Parse(User.Identity.GetUserId());
             db.Sp_Add_Activity(userid, "Get full Details of Plot Id  <a class='plt-data' data-id=' " + Plotid + "'>" + Plotid + "</a>  ", "Read", Modules.PlotManagement.ToString(), ActivityType.Details_Access.ToString(), Plotid);
@@ -3841,7 +3842,7 @@ namespace MeherEstateDevelopers.Controllers
             db.Sp_Update_PlotRefund_Req(Id, "Approve", "Plots Manager");
             return Json(true);
         }
-        public ActionResult RefundAmount(long Id)
+        [NoDirectAccess] public ActionResult RefundAmount(long Id)
         {
             var res = db.RefundAmountsReqs.Where(x => x.Id == Id).FirstOrDefault();
             ViewBag.RefundAmount = res.Amount;
@@ -3894,13 +3895,13 @@ namespace MeherEstateDevelopers.Controllers
         ////////////////////
         //   OVerDue Files
         ////////////////////
-        public ActionResult OverDuePlots()
+        [NoDirectAccess] public ActionResult OverDuePlots()
         {
             long userid = long.Parse(User.Identity.GetUserId());
             db.Sp_Add_Activity(userid, "Accessed Overdue Plots List Page ", "Read", "Activity_Record", ActivityType.Details_Access.ToString(), userid);
             return View();
         }
-        public ActionResult OverDuePlotsReport()
+        [NoDirectAccess] public ActionResult OverDuePlotsReport()
         {
             var res1 = db.Sp_Get_Report_OverDue_Plots().ToList();
             var res2 = db.Sp_Get_CancelPlotsReport().ToList();
@@ -3912,7 +3913,7 @@ namespace MeherEstateDevelopers.Controllers
             var res = new Overdue_CancelReport_Plots { CancelPlots = res2, OverduePlots = res1 };
             return PartialView(res);
         }
-        public ActionResult QualifyingPlots()
+        [NoDirectAccess] public ActionResult QualifyingPlots()
         {
             long userid = long.Parse(User.Identity.GetUserId());
             db.Sp_Add_Activity(userid, "Accessed Qualifying plots List Page ", "Read", "Activity_Record", ActivityType.Details_Access.ToString(), userid);
@@ -3937,7 +3938,7 @@ namespace MeherEstateDevelopers.Controllers
             }).ToList();
             return PartialView(res);
         }
-        public ActionResult FirstWarning(Search_OverDue s)
+        [NoDirectAccess] public ActionResult FirstWarning(Search_OverDue s)
         {
             long userid = long.Parse(User.Identity.GetUserId());
             db.Sp_Add_Activity(userid, "Accessed First Warning Plots List Page ", "Read", "Activity_Record", ActivityType.Details_Access.ToString(), userid);
@@ -3963,7 +3964,7 @@ namespace MeherEstateDevelopers.Controllers
             }).ToList();
             return PartialView(res);
         }
-        public ActionResult SecWarning(Search_OverDue s)
+        [NoDirectAccess] public ActionResult SecWarning(Search_OverDue s)
         {
             long userid = long.Parse(User.Identity.GetUserId());
             db.Sp_Add_Activity(userid, "Accessed Second Warning Plots List Page ", "Read", "Activity_Record", ActivityType.Details_Access.ToString(), userid);
@@ -3990,7 +3991,7 @@ namespace MeherEstateDevelopers.Controllers
             }).ToList();
             return PartialView(res);
         }
-        public ActionResult ThirdWarning(Search_OverDue s)
+        [NoDirectAccess] public ActionResult ThirdWarning(Search_OverDue s)
         {
             long userid = long.Parse(User.Identity.GetUserId());
             db.Sp_Add_Activity(userid, "Accessed Second Warning Plots List Page ", "Read", "Activity_Record", ActivityType.Details_Access.ToString(), userid);
@@ -4018,7 +4019,7 @@ namespace MeherEstateDevelopers.Controllers
             }).ToList();
             return PartialView(res);
         }
-        public ActionResult CancelledPlotsLetter(Search_OverDue s)
+        [NoDirectAccess] public ActionResult CancelledPlotsLetter(Search_OverDue s)
         {
             long userid = long.Parse(User.Identity.GetUserId());
             db.Sp_Add_Activity(userid, "Accessed Cancelled Plots List Page ", "Read", "Activity_Record", ActivityType.Details_Access.ToString(), userid);
@@ -4137,7 +4138,7 @@ namespace MeherEstateDevelopers.Controllers
             }
             return Json(true);
         }
-        public ActionResult FirstWarningLetter(long Id)
+        [NoDirectAccess] public ActionResult FirstWarningLetter(long Id)
         {
             long userid = long.Parse(User.Identity.GetUserId());
             db.Sp_Add_Activity(userid, "Print First Warning Letter of File <a class='plt-data' data-id=' " + Id + "'>" + Id + "</a>", "Create", Modules.PlotManagement.ToString(), ActivityType.Warning_Letter.ToString(), Id);
@@ -4168,7 +4169,7 @@ namespace MeherEstateDevelopers.Controllers
             }).FirstOrDefault();
             return View(res);
         }
-        public ActionResult SecondWarningLetter(long Id)
+        [NoDirectAccess] public ActionResult SecondWarningLetter(long Id)
         {
             long userid = long.Parse(User.Identity.GetUserId());
             db.Sp_Add_Activity(userid, "Print Second Warning Letter of File <a class='plt-data' data-id=' " + Id + "'>" + Id + "</a>", "Create", Modules.PlotManagement.ToString(), ActivityType.Warning_Letter.ToString(), Id);
@@ -4199,7 +4200,7 @@ namespace MeherEstateDevelopers.Controllers
             }).FirstOrDefault();
             return View(res);
         }
-        public ActionResult CancellationLetter(long Id)
+        [NoDirectAccess] public ActionResult CancellationLetter(long Id)
         {
             long userid = long.Parse(User.Identity.GetUserId());
             db.Sp_Add_Activity(userid, "Print Cancellation Letter of File <a class='plt-data' data-id=' " + Id + "'>" + Id + "</a>", "Create", Modules.PlotManagement.ToString(), ActivityType.Warning_Letter.ToString(), Id);
@@ -4246,7 +4247,7 @@ namespace MeherEstateDevelopers.Controllers
 
             UpdatePlotInstallmentStatus(res3, res4, discount, Plotid);
         }
-        public ActionResult DiscountRequest(long Plotid)
+        [NoDirectAccess] public ActionResult DiscountRequest(long Plotid)
         {
             var res1 = db.Sp_Get_PlotData(Plotid).SingleOrDefault();
             var res2 = db.Sp_Get_PlotLastOwner(Plotid).ToList();
@@ -4333,7 +4334,7 @@ namespace MeherEstateDevelopers.Controllers
             }
             return Json(true);
         }
-        public ActionResult TransferFeeConfig()
+        [NoDirectAccess] public ActionResult TransferFeeConfig()
         {
             long userid = long.Parse(User.Identity.GetUserId());
             db.Sp_Add_Activity(userid, "Accessed Transfer Fee Cobnfiguration Page ", "Read", "Activity_Record", ActivityType.Details_Access.ToString(), userid);
@@ -4425,7 +4426,7 @@ namespace MeherEstateDevelopers.Controllers
             }
             return Json(true);
         }
-        public ActionResult PlotOwners(long plotId, bool? current)
+        [NoDirectAccess] public ActionResult PlotOwners(long plotId, bool? current)
         {
             if (current == true)
             {
@@ -4479,7 +4480,7 @@ namespace MeherEstateDevelopers.Controllers
             var res = new PlotTaxDetails { CurrentOwners = res2, DC_Rate = rate, Min_Sell_Price = DcRate, PlotSize = res1.Plot_Size, TaxApplicable = (blockData.IsApplicable), Buyer_FilerPerc = parsedInfo.Buyer_FilerPercent, Buyer_NonFilerPerc = parsedInfo.Buyer_NonFilerPercent, Seller_FilerPerc = parsedInfo.Seller_FilerPercent, Seller_NonFilerPerc = parsedInfo.Seller_NonFilerPercent, TransferFee = (6000 * totalMarlas) };
             return Json(res);
         }
-        public ActionResult FingerPrint(long Id)
+        [NoDirectAccess] public ActionResult FingerPrint(long Id)
         {
             var res = db.Plot_Ownership.Where(x => x.Id == Id).FirstOrDefault();
             return View(res);
@@ -4537,7 +4538,7 @@ namespace MeherEstateDevelopers.Controllers
                 //smsService2.PremiumSub("Before Hand : " + beforeHand + " ----- After Hand : " + afterHand, "03231611324");
             }
         }
-        public ActionResult SpecialPrefrencesCharges()
+        [NoDirectAccess] public ActionResult SpecialPrefrencesCharges()
         {
             var res = (from x in db.Plots
                        join y in db.Plot_Installments on x.Id equals y.Plot_Id
@@ -4545,7 +4546,7 @@ namespace MeherEstateDevelopers.Controllers
                        select new SpecialPref { Plot_Size = x.Plot_Size, DueDate = y.DueDate, Amount = y.Amount, Status = y.Status }).ToList();
             return View(res);
         }
-        public ActionResult Dealershipname(long Id)
+        [NoDirectAccess] public ActionResult Dealershipname(long Id)
         {
             ViewBag.Dealership = new SelectList(db.Dealerships.Where(x => x.Status == "Registered"), "Id", "Dealership_Name");
             ViewBag.Plot_Id = Id;
@@ -4714,7 +4715,7 @@ namespace MeherEstateDevelopers.Controllers
         //    return Json(new { Code = iError, Status = matched });
         //}
 
-        public ActionResult NewPlotOwner(long grp)
+        [NoDirectAccess] public ActionResult NewPlotOwner(long grp)
         {
             ViewBag.grpTag = grp;
             return PartialView();
@@ -4746,12 +4747,12 @@ namespace MeherEstateDevelopers.Controllers
             var pltSize = db.Plots.Where(x => x.Id == pltId).Select(x => x.Plot_Size).FirstOrDefault();
             return Json(new { Name = string.Join(" , ", res.Select(x => x.Name)), FatherName = string.Join(" , ", res.Select(x => x.Father_Husband)), Address = string.Join(" , ", res.Select(x => x.Residential_Address)), CNIC = string.Join(" , ", res.Select(x => x.CNIC_NICOP)), Contact = string.Join(" , ", res.Select(x => x.Mobile_1)), Size = pltSize });
         }
-        public ActionResult SpecialPrefList(DateTime? Due_Date, string Status)
+        [NoDirectAccess] public ActionResult SpecialPrefList(DateTime? Due_Date, string Status)
         {
             var res = db.Sp_Get_SpecialPrefPlot_list(Due_Date, Status).ToList();
             return PartialView(res);
         }
-        public ActionResult PlotsDataDetailView()
+        [NoDirectAccess] public ActionResult PlotsDataDetailView()
         {
             var res1 = db.Plots.GroupBy(x => new { Type = x.Type, Phase_name = x.Phase_Name }).
                Select(x => new PhaseReport { Phase = x.Key.Phase_name, Type = x.Key.Type, Total = x.Count() }).ToList();
@@ -4768,11 +4769,11 @@ namespace MeherEstateDevelopers.Controllers
             result.PlotConstructions = res4;
             return View(result);
         }
-        public ActionResult PlotsModuleConfiguration()
+        [NoDirectAccess] public ActionResult PlotsModuleConfiguration()
         {
             return PartialView();
         }
-        public ActionResult DiscountConfiguration()
+        [NoDirectAccess] public ActionResult DiscountConfiguration()
         {
             var res = db.MIS_Modules_Configurations.Where(x => x.Module == "Discount Configuration").FirstOrDefault();
             if (res is null)
@@ -4924,7 +4925,7 @@ namespace MeherEstateDevelopers.Controllers
         //        var com = db.Sp_Add_PlotComments(item, fileName, 20073, "file");
         //    }
         //}
-        public ActionResult SwapPlot()
+        [NoDirectAccess] public ActionResult SwapPlot()
         {
             return View();
         }
@@ -5075,7 +5076,7 @@ namespace MeherEstateDevelopers.Controllers
                 return Json(false);
             }
         }
-        public ActionResult PlotSwapPartial(long id)
+        [NoDirectAccess] public ActionResult PlotSwapPartial(long id)
         {
             var res = db.MIS_Requests.Where(x => x.Id == id).FirstOrDefault();
             SwapPlotRequest spr = JsonConvert.DeserializeObject<SwapPlotRequest>(res.Details);
@@ -5291,7 +5292,7 @@ namespace MeherEstateDevelopers.Controllers
             db.Sp_Update_PlotMorgagedStatus(Id, Status);
             return Json(true);
         }
-        public ActionResult AdjustPlotToOtherPlot()
+        [NoDirectAccess] public ActionResult AdjustPlotToOtherPlot()
         {
             return View();
         }
@@ -5416,14 +5417,14 @@ namespace MeherEstateDevelopers.Controllers
                 return Json(false);
             }
         }
-        public ActionResult PlotAdjustPartial(long id)
+        [NoDirectAccess] public ActionResult PlotAdjustPartial(long id)
         {
             var res = db.MIS_Requests.Where(x => x.Id == id).FirstOrDefault();
             AdjPlotRequest spr = JsonConvert.DeserializeObject<AdjPlotRequest>(res.Details);
             return PartialView(spr);
         }
 
-        public ActionResult Noti(long? id, NotifierMsg? tp, long? noti)
+        [NoDirectAccess] public ActionResult Noti(long? id, NotifierMsg? tp, long? noti)
         {
             Thread notiReader = new Thread(() => Notifier.ReadNotification((long)noti));
             notiReader.Start();
@@ -5437,7 +5438,7 @@ namespace MeherEstateDevelopers.Controllers
                 return RedirectToAction("ProjectConfiguration", "ConstructProjectManagement", new { Id = id });
             }
         }
-        public ActionResult TransferFeesConfiguration()
+        [NoDirectAccess] public ActionResult TransferFeesConfiguration()
         {
             var res = db.MIS_Modules_Configurations.Where(x => x.Module == "Transfer_Fee_Config").FirstOrDefault();
             if (res is null)
@@ -5507,7 +5508,7 @@ namespace MeherEstateDevelopers.Controllers
                 return Json(false);
             }
         }
-        public ActionResult UpdateInstallmentInfo(long id)
+        [NoDirectAccess] public ActionResult UpdateInstallmentInfo(long id)
         {
             ViewBag.id = id;
             var res = db.Plot_Installments.Where(x => x.Plot_Id == id).ToList();
@@ -5551,7 +5552,7 @@ namespace MeherEstateDevelopers.Controllers
             }
             return Json(new { Status = true, Msg = "Updated Succesfully" });
         }
-        public ActionResult EmployeeFile()
+        [NoDirectAccess] public ActionResult EmployeeFile()
         {
             var res = db.Sp_Get_EmployeeFilePlotInfo().ToList();
             long userid = long.Parse(User.Identity.GetUserId());
@@ -5579,7 +5580,7 @@ namespace MeherEstateDevelopers.Controllers
             }
             base.Dispose(disposing);
         }
-        //public ActionResult WHTPlotInstallmentAndReceiptsPartial(long Plotid)
+        //[NoDirectAccess] public ActionResult WHTPlotInstallmentAndReceiptsPartial(long Plotid)
         //{
         //    var uid = User.Identity.GetUserId<long>();
         //    var uname = db.Users.Where(x => x.Id == uid).Select(x => x.Name).FirstOrDefault();

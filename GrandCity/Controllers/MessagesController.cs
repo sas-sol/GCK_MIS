@@ -7,6 +7,7 @@ using System.Web;
 using System.Web.Mvc;
 using MeherEstateDevelopers.Models;
 using System.IO;
+using static MeherEstateDevelopers.MvcApplication;
 
 namespace MeherEstateDevelopers.Controllers
 {
@@ -16,19 +17,19 @@ namespace MeherEstateDevelopers.Controllers
     {
         // GET: Messages
         private Grand_CityEntities db = new Grand_CityEntities();
-        public ActionResult ShortMessages()
+        [NoDirectAccess] public ActionResult ShortMessages()
         {
             int userid = int.Parse(User.Identity.GetUserId());
             var res = db.Sp_Get_Messages_Short(userid).ToList();
             return PartialView(res);
         }
-        public ActionResult PlotsComments(long Plotid)
+        [NoDirectAccess] public ActionResult PlotsComments(long Plotid)
         {
             ViewBag.PlotId = Plotid;
             var res = db.Sp_Get_PlotComments(Plotid).ToList();
             return PartialView(res);
         }
-        public ActionResult CommercialComments(long Commercial_id)
+        [NoDirectAccess] public ActionResult CommercialComments(long Commercial_id)
         {
             ViewBag.PlotId = Commercial_id;
             long userid = long.Parse(User.Identity.GetUserId());
@@ -117,25 +118,25 @@ namespace MeherEstateDevelopers.Controllers
             }
             return Json(fd);
         }
-        public ActionResult FilesComments(long Fileid)
+        [NoDirectAccess] public ActionResult FilesComments(long Fileid)
         {
             ViewBag.Fileid = Fileid;
             var res = db.Sp_Get_FileComments(Fileid).ToList();
             return PartialView(res);
         }
-        public ActionResult LeadComments(long LeadId)
+        [NoDirectAccess] public ActionResult LeadComments(long LeadId)
         {
             ViewBag.LeadId = LeadId;
             var res = db.Sp_Get_LeadFollowups(LeadId).ToList();
             return PartialView(res);
         }
-        public ActionResult DealComments(long DealId)
+        [NoDirectAccess] public ActionResult DealComments(long DealId)
         {
             ViewBag.DealId = DealId;
             var res = db.Sp_Get_PropertyDealFollowups(DealId).ToList();
             return PartialView(res);
         }
-        public ActionResult TicketComments(long TicketId)
+        [NoDirectAccess] public ActionResult TicketComments(long TicketId)
         {
             ViewBag.TicketId = TicketId;
             var res = db.Sp_Get_Ticket_Comments(TicketId).ToList();
@@ -416,7 +417,7 @@ namespace MeherEstateDevelopers.Controllers
         //    }
         //}
 
-        public ActionResult DealershipComments(long DealershipId)
+        [NoDirectAccess] public ActionResult DealershipComments(long DealershipId)
         {
             ViewBag.DealershipId = DealershipId;
             var res = db.Sp_Get_DealershipComments(DealershipId).ToList();

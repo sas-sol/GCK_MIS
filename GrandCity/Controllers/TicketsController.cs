@@ -9,6 +9,7 @@ using System.IO;
 using MeherEstateDevelopers.Filters;
 using MeherEstateDevelopers.Models;
 using MeherEstateDevelopers;
+using static MeherEstateDevelopers.MvcApplication;
 
 namespace MeherEstateDevelopers.Controllers
 {
@@ -20,19 +21,19 @@ namespace MeherEstateDevelopers.Controllers
         // GET: Tickets
         Grand_CityEntities db = new Grand_CityEntities();
         //SAG_HRMS_DBEntities db2 = new SAG_HRMS_DBEntities();
-        public ActionResult CreateTicket()
+        [NoDirectAccess] public ActionResult CreateTicket()
         {
             //var All = db.Users.Where(x => x.Roles.Any(y => y.Name == "Ticket Resolver")).ToList();
             ViewBag.Title = new SelectList(db.Sp_Get_Ticket_Type().ToList(), "Id", "Name");
             ViewBag.Department = new SelectList(db.Comp_Dep_Desig.Where(x => x.Type == CompDepDes.Department.ToString()), "Id", "Name");
             return PartialView();
         }
-        public ActionResult ReceptionTicketing()
+        [NoDirectAccess] public ActionResult ReceptionTicketing()
         {
 
             return View();
         }
-        //public ActionResult CreateReceptionTicket()
+        //[NoDirectAccess] public ActionResult CreateReceptionTicket()
         //{
         //    ViewBag.Title = new SelectList(db.Sp_Get_Ticket_Type().ToList(), "Id", "Name");
         //    //ViewBag.Department = new SelectList(db.Comp_Dep_Desig.Where(x => x.Type == CompDepDes.Department.ToString()), "Id", "Name");
@@ -119,12 +120,12 @@ namespace MeherEstateDevelopers.Controllers
             }
             return Json(new { Status = true, Msg = "Successfully Saved" });
         }
-        public ActionResult AllTickets()
+        [NoDirectAccess] public ActionResult AllTickets()
         {
             ViewBag.Department = new SelectList(db.Comp_Dep_Desig.Where(x => x.Type == CompDepDes.Department.ToString()), "Id", "Name");
             return View();
         }
-        public ActionResult SearchTicket(DateTime? From, DateTime? To, int?[] Dep_Id)
+        [NoDirectAccess] public ActionResult SearchTicket(DateTime? From, DateTime? To, int?[] Dep_Id)
         {
             string chids = "";
             if (Dep_Id != null)
@@ -136,7 +137,7 @@ namespace MeherEstateDevelopers.Controllers
             var res = db.Sp_Get_Tickets(From, To, chids).ToList();
             return PartialView(res);
         }
-        public ActionResult HODSearchTicket(DateTime? From, DateTime? To, long?[] UserId)
+        [NoDirectAccess] public ActionResult HODSearchTicket(DateTime? From, DateTime? To, long?[] UserId)
         {
             string chids = null;
             long userid = long.Parse(User.Identity.GetUserId());
@@ -161,7 +162,7 @@ namespace MeherEstateDevelopers.Controllers
             var res = db.Sp_Get_HODTickets(From, To, chids).ToList();
             return PartialView(res);
         }
-        public ActionResult MyTickets()
+        [NoDirectAccess] public ActionResult MyTickets()
         {
             long userid = long.Parse(User.Identity.GetUserId());
             var empid = db.Sp_Get_Employee_UserId(userid).FirstOrDefault().Id;
@@ -170,7 +171,7 @@ namespace MeherEstateDevelopers.Controllers
 
             return View();
         }
-        public ActionResult SearchMyTicket(DateSearch D)
+        [NoDirectAccess] public ActionResult SearchMyTicket(DateSearch D)
         {
             long userid = long.Parse(User.Identity.GetUserId());
             var res1 = db.Sp_Get_Tickets_CreatedMe(D.From, D.To, userid).ToList();
@@ -178,21 +179,21 @@ namespace MeherEstateDevelopers.Controllers
             var res = new MyTickets { AssignedTickets = res2, CreateTickets = res1 };
             return PartialView(res);
         }
-        public ActionResult ResolvedCustomersTickets()
+        [NoDirectAccess] public ActionResult ResolvedCustomersTickets()
         {
 
             long userid = long.Parse(User.Identity.GetUserId());
             var res = db.Sp_Get_Tickets_Customer(DateTime.Now, DateTime.Now, "Resolved");
             return PartialView(res);
         }
-        public ActionResult PendingCustomersTickets()
+        [NoDirectAccess] public ActionResult PendingCustomersTickets()
         {
 
             long userid = long.Parse(User.Identity.GetUserId());
             var res = db.Sp_Get_Tickets_Customer(DateTime.Now, DateTime.Now, "Pending");
             return PartialView(res);
         }
-        public ActionResult TicketTypes()
+        [NoDirectAccess] public ActionResult TicketTypes()
         {
             ViewBag.Department = new SelectList(db.Comp_Dep_Desig.Where(x => x.Type == CompDepDes.Department.ToString()), "Id", "Name");
             var res = db.Sp_Get_Ticket_Type().ToList();
@@ -222,7 +223,7 @@ namespace MeherEstateDevelopers.Controllers
             return Json(true);
         }
         // [Route("Tickets/TicketDetails/{Id:long}", Name = "TicketDetails")]
-        public ActionResult TicketDetails(long Id)
+        [NoDirectAccess] public ActionResult TicketDetails(long Id)
         {
             long userid = long.Parse(User.Identity.GetUserId());
             ViewBag.Userid = userid;
@@ -288,7 +289,7 @@ namespace MeherEstateDevelopers.Controllers
             return Json(true);
         }
         // Ticket Notification
-        public ActionResult TicketNoti(long? id, NotifierMsg? tp, long? noti)
+        [NoDirectAccess] public ActionResult TicketNoti(long? id, NotifierMsg? tp, long? noti)
         {
             Thread notiReader = new Thread(() => Notifier.ReadNotification((long)noti));
             notiReader.Start();

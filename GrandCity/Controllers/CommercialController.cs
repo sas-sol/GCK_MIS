@@ -10,6 +10,7 @@ using Microsoft.AspNet.Identity;
 using Newtonsoft.Json;
 using MeherEstateDevelopers.Filters;
 using Microsoft.Ajax.Utilities;
+using static MeherEstateDevelopers.MvcApplication;
 
 namespace MeherEstateDevelopers.Controllers
 {
@@ -27,7 +28,7 @@ namespace MeherEstateDevelopers.Controllers
         /// <returns></returns>
         /// 
 
-        public ActionResult ComShortResult(long ComId)
+        [NoDirectAccess] public ActionResult ComShortResult(long ComId)
         {
             var res1 = db.Sp_Get_CommercialData(ComId).SingleOrDefault();
             var res2 = db.Sp_Get_CommercialLastOwner(ComId).ToList();
@@ -37,7 +38,7 @@ namespace MeherEstateDevelopers.Controllers
             return PartialView(res);
         }
 
-        public ActionResult AddShopOrApartment()
+        [NoDirectAccess] public ActionResult AddShopOrApartment()
         {
             ViewBag.Projects = new SelectList(db.RealEstate_Projects.Where(x => x.Type == ProjectCategory.Building.ToString()).ToList(), "Id", "Project_Name");
             ViewBag.Floor = new SelectList(db.Commercial_FloorsPlan.ToList(), "Id", "Floor");
@@ -63,22 +64,22 @@ namespace MeherEstateDevelopers.Controllers
             }
             return Json(true);
         }
-        public ActionResult AllProjects()
+        [NoDirectAccess] public ActionResult AllProjects()
         {
             var res = db.RealEstate_Projects.Where(x => x.Type == ProjectCategory.Building.ToString()).ToList();
             return View(res);
         }
-        public ActionResult Building(long Id)
+        [NoDirectAccess] public ActionResult Building(long Id)
         {
             ViewBag.ProjectId = Id;
             return View();
         }
-        //public ActionResult BuildingDetails(long ProjectId)
+        //[NoDirectAccess] public ActionResult BuildingDetails(long ProjectId)
         //{
         //    var res = db.Sp_Get_Project_Detials(ProjectId).ToList();
         //    return PartialView(res);
         //}
-        public ActionResult BuildingRegistration()
+        [NoDirectAccess] public ActionResult BuildingRegistration()
         {
             ViewBag.ProjectId = new SelectList(db.RealEstate_Projects.ToList(), "Id", "Project_Name");
             return View();
@@ -133,7 +134,7 @@ namespace MeherEstateDevelopers.Controllers
         /// Map Ending
         /// </summary>
         /// <returns></returns>
-        public ActionResult CommercialRegisteration()
+        [NoDirectAccess] public ActionResult CommercialRegisteration()
         {
             ViewBag.Projects = new SelectList(db.RealEstate_Projects.Where(x => x.Type == ProjectCategory.Building.ToString()).ToList(), "Id", "Project_Name");
             ViewBag.Bank = new SelectList(Nomenclature.Banks(), "Name", "Name");
@@ -143,7 +144,7 @@ namespace MeherEstateDevelopers.Controllers
             ViewBag.InstallmentStruct = new SelectList(res, "Id", "Text", "Group", 1);
             return View();
         }
-        public ActionResult GetStructure()
+        [NoDirectAccess] public ActionResult GetStructure()
         {
             var res = (from x in db.Commercial_Installment_Structure
                        select x).AsEnumerable().Select(s => new { Id = s.Plan_Group, Text = s.Plan_Name + " Plan - " + s.TypeName + " - " + s.Advance + " - " + s.Installments, Group = s.Plan_Name }).ToList();
@@ -179,7 +180,7 @@ namespace MeherEstateDevelopers.Controllers
             }
 
         }
-        public ActionResult InstallmetsCategoryCommercial(long Id)
+        [NoDirectAccess] public ActionResult InstallmetsCategoryCommercial(long Id)
         {
             var res = db.Commercial_Installment_Structure.Where(x => x.Plan_Group == Id).ToList();
             return PartialView(res);
@@ -651,7 +652,7 @@ namespace MeherEstateDevelopers.Controllers
                 }
             }
         }
-        public ActionResult CommercialMannualRegisteration()
+        [NoDirectAccess] public ActionResult CommercialMannualRegisteration()
         {
             ViewBag.City = new SelectList(Nomenclature.Cities(), "Name", "Name");
             ViewBag.Projects = new SelectList(db.Sp_Get_RealEstateProjects().Where(x => x.Type == ProjectCategory.Building.ToString()), "Id", "Project_Name");
@@ -671,7 +672,7 @@ namespace MeherEstateDevelopers.Controllers
             var res = db.Sp_Get_Commercial_Units_By_Param(Id, Floor, Type).ToList();
             return Json(res);
         }
-        public ActionResult PreviousOwners(long? Shopid)
+        [NoDirectAccess] public ActionResult PreviousOwners(long? Shopid)
         {
             var res = db.Commercial_Room_Transfer.Where(x => x.ComRom_Id == Shopid && x.Ownership_Status == "Transfer").ToList();
             return PartialView(res);
@@ -724,24 +725,24 @@ namespace MeherEstateDevelopers.Controllers
 
             return Json(true);
         }
-        public ActionResult UpdateCommercialInformation()
+        [NoDirectAccess] public ActionResult UpdateCommercialInformation()
         {
             ViewBag.City = new SelectList(Nomenclature.Cities(), "Name", "Name");
             ViewBag.Projects = new SelectList(db.RealEstate_Projects.Where(x => x.Type == ProjectCategory.Building.ToString()).ToList(), "Id", "Project_Name");
             return View();
         }
-        public ActionResult AllotmentInformation()
+        [NoDirectAccess] public ActionResult AllotmentInformation()
         {
             ViewBag.City = new SelectList(Nomenclature.Cities(), "Name", "Name");
             ViewBag.Projects = new SelectList(db.RealEstate_Projects.Where(x => x.Type == ProjectCategory.Building.ToString()).ToList(), "Id", "Project_Name");
             return View();
         }
-        public ActionResult CommercialOwners(long? Commercial_Id)
+        [NoDirectAccess] public ActionResult CommercialOwners(long? Commercial_Id)
         {
             var res2 = db.Sp_Get_CommercialOwnerDetail(Commercial_Id).ToList();
             return PartialView(res2);
         }
-        public ActionResult CommercialUpStatus(long Comid, string Status)
+        [NoDirectAccess] public ActionResult CommercialUpStatus(long Comid, string Status)
         {
             ViewBag.ComId = Comid;
             ViewBag.Status = Status;
@@ -749,7 +750,7 @@ namespace MeherEstateDevelopers.Controllers
             ViewBag.ComStatus = new SelectList(res, "Value", "Text");
             return PartialView();
         }
-        public ActionResult CommercialInformation(long Commercial_Id)
+        [NoDirectAccess] public ActionResult CommercialInformation(long Commercial_Id)
         {
             ViewBag.Cities = new SelectList(Nomenclature.Cities(), "Name", "Name");
             long userid = long.Parse(User.Identity.GetUserId());
@@ -767,7 +768,7 @@ namespace MeherEstateDevelopers.Controllers
             var res4 = new CommercialDetailData { Discounts = r, commercialData = res, shopOwnersMultiple = res2, CommercialInstallments = res5, CommercialReceipts = Receivedamts };
             return PartialView(res4);
         }
-        public ActionResult AllotmentCommercialInformation(long? Commercial_Id)
+        [NoDirectAccess] public ActionResult AllotmentCommercialInformation(long? Commercial_Id)
         {
             long userid = long.Parse(User.Identity.GetUserId());
             db.Sp_Add_Activity(userid, "Get Commercial Rooms Detail for Update  <a class='blk-data' data-id=' " + Commercial_Id + "'>" + Commercial_Id + "</a>", "Read", Modules.CommercialManagement.ToString(), ActivityType.Details_Access.ToString(), Convert.ToInt64(Commercial_Id));
@@ -779,7 +780,7 @@ namespace MeherEstateDevelopers.Controllers
             var res4 = new CommercialDetailData { commercialData = res, shopOwnersMultiple = res5, shopOwnersforallt = res2, CommercialInstallments = res3, CommercialReceipts = Receivedamts };
             return PartialView(res4);
         }
-        public ActionResult AllotmentCommercialInformationAppr(long? Commercial_Id)
+        [NoDirectAccess] public ActionResult AllotmentCommercialInformationAppr(long? Commercial_Id)
         {
             long userid = long.Parse(User.Identity.GetUserId());
             db.Sp_Add_Activity(userid, "Get Commercial Rooms Detail for Update  <a class='blk-data' data-id=' " + Commercial_Id + "'>" + Commercial_Id + "</a>", "Read", Modules.CommercialManagement.ToString(), ActivityType.Details_Access.ToString(), Convert.ToInt64(Commercial_Id));
@@ -790,7 +791,7 @@ namespace MeherEstateDevelopers.Controllers
             var res4 = new CommercialDetailData { commercialData = res, shopOwnersMultiple = res2, CommercialInstallments = res3, CommercialReceipts = Receivedamts };
             return View(res4);
         }
-        public ActionResult CommercialInformationMapView(long? Commercial_Id)
+        [NoDirectAccess] public ActionResult CommercialInformationMapView(long? Commercial_Id)
         {
             long userid = long.Parse(User.Identity.GetUserId());
             db.Sp_Add_Activity(userid, "Get Commercial Rooms Detail for Update  <a class='blk-data' data-id=' " + Commercial_Id + "'>" + Commercial_Id + "</a>", "Read", Modules.CommercialManagement.ToString(), ActivityType.Details_Access.ToString(), Convert.ToInt64(Commercial_Id));
@@ -802,7 +803,7 @@ namespace MeherEstateDevelopers.Controllers
             var res4 = new CommercialDetailData { Discounts = r, commercialData = res, shopOwnersMultiple = res2, CommercialInstallments = res3, CommercialReceipts = Receivedamts };
             return PartialView(res4);
         }
-        public ActionResult CommercialInfo()
+        [NoDirectAccess] public ActionResult CommercialInfo()
         {
             return PartialView();
         }
@@ -975,11 +976,11 @@ namespace MeherEstateDevelopers.Controllers
         //    }
         //}
 
-        public ActionResult ComUpdateReceipt(long Id)
+        [NoDirectAccess] public ActionResult ComUpdateReceipt(long Id)
         {
             return PartialView();
         }
-        public ActionResult ShopUpdateStatus(long ShopId, string Status)
+        [NoDirectAccess] public ActionResult ShopUpdateStatus(long ShopId, string Status)
         {
             ViewBag.ShopId = ShopId;
             ViewBag.Status = Status;
@@ -1051,7 +1052,7 @@ namespace MeherEstateDevelopers.Controllers
             }
             return Json(true);
         }
-        public ActionResult CancellationReqs()
+        [NoDirectAccess] public ActionResult CancellationReqs()
         {
             if (User.IsInRole("Commercial Manager"))
             {
@@ -1069,7 +1070,7 @@ namespace MeherEstateDevelopers.Controllers
                 return View(res);
             }
         }
-        public ActionResult CommercialCancellationDetails(long Commercial_Id, long Id)
+        [NoDirectAccess] public ActionResult CommercialCancellationDetails(long Commercial_Id, long Id)
         {
             long userid = long.Parse(User.Identity.GetUserId());
             db.Sp_Add_Activity(userid, "Get full Details of Plot Id  <a class='plt-data' data-id=' " + Commercial_Id + "'>" + Commercial_Id + "</a>  ", "Read", Modules.CommercialManagement.ToString(), ActivityType.Details_Access.ToString(), Commercial_Id);
@@ -1128,7 +1129,7 @@ namespace MeherEstateDevelopers.Controllers
                 }
             }
         }
-        public ActionResult ComCancelation()
+        [NoDirectAccess] public ActionResult ComCancelation()
         {
             ViewBag.Bank = new SelectList(Nomenclature.Banks(), "Name", "Name");
             return PartialView();
@@ -1181,7 +1182,7 @@ namespace MeherEstateDevelopers.Controllers
                 }
             }
         }
-        public ActionResult SearchResult(string Text, int SearchOption)
+        [NoDirectAccess] public ActionResult SearchResult(string Text, int SearchOption)
         {
             if (string.IsNullOrEmpty(Text))
             {
@@ -1193,7 +1194,7 @@ namespace MeherEstateDevelopers.Controllers
                 return PartialView(res);
             }
         }
-        public ActionResult CommercialInformationSearch(long Commercial_Id)
+        [NoDirectAccess] public ActionResult CommercialInformationSearch(long Commercial_Id)
         {
             long userid = long.Parse(User.Identity.GetUserId());
             var res = db.Sp_Get_CommercialData(Commercial_Id).FirstOrDefault();
@@ -1208,7 +1209,7 @@ namespace MeherEstateDevelopers.Controllers
             var res4 = new CommercialDetailDataForInfo { Discounts = r, commercialData = res, shopOwnersMultiple = res2, shopOwnersforallt = res5, CommercialInstallments = res3, CommercialReceipts = Receivedamts, Balance = res7 };
             return PartialView(res4);
         }
-        public ActionResult DetailInformation(long Commercial_Id)
+        [NoDirectAccess] public ActionResult DetailInformation(long Commercial_Id)
         {
             long userid = long.Parse(User.Identity.GetUserId());
             db.Sp_Add_Activity(userid, "Get Commercial Rooms Detail for Update  <a class='blk-data' data-id=' " + Commercial_Id + "'>" + Commercial_Id + "</a>", "Read", Modules.CommercialManagement.ToString(), ActivityType.Details_Access.ToString(), Convert.ToInt64(Commercial_Id));
@@ -1290,12 +1291,12 @@ namespace MeherEstateDevelopers.Controllers
             db.Sp_Update_RequestForVerify_Building(Id);
             return Json(true);
         }
-        public ActionResult VerifcationRequests()
+        [NoDirectAccess] public ActionResult VerifcationRequests()
         {
             var res = db.Sp_Get_Requested_Verification_Building(1).ToList();
             return View(res);
         }
-        public ActionResult AllotmentRequest()
+        [NoDirectAccess] public ActionResult AllotmentRequest()
         {
             long userid = long.Parse(User.Identity.GetUserId());
             db.Sp_Add_Activity(userid, "Access Page of Allotment Letter Request", "Read", Modules.CommercialManagement.ToString(), ActivityType.Page_Access.ToString(), null);
@@ -1320,7 +1321,7 @@ namespace MeherEstateDevelopers.Controllers
             db.SP_Update_VerifyStatus(Id, Modules.CommercialManagement.ToString());
             return Json(true);
         }
-        public ActionResult Ledger(long? Commercial_Id)
+        [NoDirectAccess] public ActionResult Ledger(long? Commercial_Id)
         {
             long userid = long.Parse(User.Identity.GetUserId());
             var res1 = db.Sp_Get_CommercialData(Commercial_Id).SingleOrDefault();
@@ -1382,7 +1383,7 @@ namespace MeherEstateDevelopers.Controllers
                 return PartialView(null);
             }
         }
-        public ActionResult LedgerdetailReport(long? Commercial_Id)
+        [NoDirectAccess] public ActionResult LedgerdetailReport(long? Commercial_Id)
         {
 
             long userid = long.Parse(User.Identity.GetUserId());
@@ -1435,7 +1436,7 @@ namespace MeherEstateDevelopers.Controllers
             var res = new CommercialLedger { OwnerData = res2, Data = res1, Report = Rm, Discount = discount, Balance = bal };
             return View(res);
         }
-        public ActionResult PreviousDetailReport(long Commercial_Id, long OwnerId)
+        [NoDirectAccess] public ActionResult PreviousDetailReport(long Commercial_Id, long OwnerId)
         {
             long userid = long.Parse(User.Identity.GetUserId());
             db.Sp_Add_Activity(userid, "Access Ledger Report of Plot Id <a class='plt-data' data-id=' " + Commercial_Id + "'>" + Commercial_Id + "</a> ", "Read", Modules.CommercialManagement.ToString(), ActivityType.Details_Access.ToString(), Commercial_Id);
@@ -1505,7 +1506,7 @@ namespace MeherEstateDevelopers.Controllers
         //    var QR_Data = helpers.GenerateQRCode(data);
         //    return Json(res);
         //}
-        public ActionResult AllotmentLetter(long Id)
+        [NoDirectAccess] public ActionResult AllotmentLetter(long Id)
         {
             long userid = long.Parse(User.Identity.GetUserId());
 
@@ -1513,13 +1514,13 @@ namespace MeherEstateDevelopers.Controllers
             db.Sp_Add_Activity(userid, "Access Allotment Letter of Shop/ Office/ Apartment No. " + res.Plot_No + " Block No: " + res.Block, "Read", Modules.CommercialManagement.ToString(), ActivityType.Details_Access.ToString(), Id);
             return View(res);
         }
-        public ActionResult ProjectShops(long? Project_Id)
+        [NoDirectAccess] public ActionResult ProjectShops(long? Project_Id)
         {
             var res = db.Sp_Get_CommercialProjectShops(Project_Id).ToList();
             return PartialView(res);
         }
         // commercail
-        public ActionResult CommercialUpdation()
+        [NoDirectAccess] public ActionResult CommercialUpdation()
         {
             var res = db.RealEstate_Projects.Where(x => x.Type == ProjectCategory.Building.ToString()).ToList();
             return View(res);
@@ -1551,7 +1552,7 @@ namespace MeherEstateDevelopers.Controllers
             return Json(res);
         }
         //
-        public ActionResult CommercialManagementDetails(long? Id)
+        [NoDirectAccess] public ActionResult CommercialManagementDetails(long? Id)
         {
             var res = db.Sp_Get_CommercialManagementDetail(Id).ToList();
             return PartialView(res);
@@ -1582,13 +1583,13 @@ namespace MeherEstateDevelopers.Controllers
             }
 
         }
-        public ActionResult TranferRequest()
+        [NoDirectAccess] public ActionResult TranferRequest()
         {
             ViewBag.Projects = new SelectList(db.RealEstate_Projects.Where(x => x.Type == ProjectCategory.Building.ToString()).ToList(), "Id", "Project_Name");
             return View();
 
         }
-        public ActionResult GetTranferData(long? COmId)
+        [NoDirectAccess] public ActionResult GetTranferData(long? COmId)
         {
 
             long userid = long.Parse(User.Identity.GetUserId());
@@ -1607,7 +1608,7 @@ namespace MeherEstateDevelopers.Controllers
             return Json(true);
 
         }
-        public ActionResult CustomerFile(long Commercial_Id)
+        [NoDirectAccess] public ActionResult CustomerFile(long Commercial_Id)
         {
             long userid = long.Parse(User.Identity.GetUserId());
             string name = db.Users.SingleOrDefault(x => x.Id == userid).Name;
@@ -1632,7 +1633,7 @@ namespace MeherEstateDevelopers.Controllers
             return View(res);
         }
 
-        public ActionResult CustomerFileAyanCenter(long Commercial_Id)
+        [NoDirectAccess] public ActionResult CustomerFileAyanCenter(long Commercial_Id)
         {
             long userid = long.Parse(User.Identity.GetUserId());
             string name = db.Users.SingleOrDefault(x => x.Id == userid).Name;
@@ -1690,16 +1691,16 @@ namespace MeherEstateDevelopers.Controllers
                 return Json(false);
             }
         }
-        public ActionResult PossessionRequests()
+        [NoDirectAccess] public ActionResult PossessionRequests()
         {
             return View();
         }
-        public ActionResult PossessionList(int tp)
+        [NoDirectAccess] public ActionResult PossessionList(int tp)
         {
             var res = db.Sp_Get_CommercialPossessionsList(tp).ToList();
             return PartialView(res);
         }
-        public ActionResult PossessionWorking(long id)
+        [NoDirectAccess] public ActionResult PossessionWorking(long id)
         {
             long userid = long.Parse(User.Identity.GetUserId());
             var res1 = db.Sp_Get_CommercialData(id).SingleOrDefault();
@@ -1719,7 +1720,7 @@ namespace MeherEstateDevelopers.Controllers
             var res = new CommercialPossessionDataModel { CommercialDetails = res1, CommercialOwnersDetails = res2 };
             return View(res);
         }
-        public ActionResult CommercialBounding(long id)
+        [NoDirectAccess] public ActionResult CommercialBounding(long id)
         {
             long userid = long.Parse(User.Identity.GetUserId());
             var res1 = db.Sp_Get_CommercialData(id).SingleOrDefault();
@@ -1778,7 +1779,7 @@ namespace MeherEstateDevelopers.Controllers
             var res = new CommercialPossessionDataModel { CommercialDetails = res1, CommercialOwnersDetails = res2, Positions = plist, ShopBoundings = boundings };
             return PartialView(res);
         }
-        public ActionResult UpdateCommercialBounding(long id)
+        [NoDirectAccess] public ActionResult UpdateCommercialBounding(long id)
         {
             var res1 = db.Sp_Get_CommercialData(id).SingleOrDefault();
             var room = db.Commercial_Rooms.Where(x => x.Id == id).SingleOrDefault();
@@ -1835,7 +1836,7 @@ namespace MeherEstateDevelopers.Controllers
                 return Json(false);
             }
         }
-        public ActionResult CommercialPositions(long id)
+        [NoDirectAccess] public ActionResult CommercialPositions(long id)
         {
             long userid = long.Parse(User.Identity.GetUserId());
 
@@ -1936,7 +1937,7 @@ namespace MeherEstateDevelopers.Controllers
                 return Json(true);
             }
         }
-        public ActionResult PossessionLetter(long room)
+        [NoDirectAccess] public ActionResult PossessionLetter(long room)
         {
             long userid = long.Parse(User.Identity.GetUserId());
             var res1 = db.Commercial_Rooms.Where(x => x.Id == room).FirstOrDefault();
@@ -1967,7 +1968,7 @@ namespace MeherEstateDevelopers.Controllers
                 return Json(false);
             }
         }
-        public ActionResult CommercialNOC(long Commercial_Id)
+        [NoDirectAccess] public ActionResult CommercialNOC(long Commercial_Id)
         {
             long userid = long.Parse(User.Identity.GetUserId());
             var res1 = db.Sp_Get_CommercialData(Commercial_Id).FirstOrDefault();
@@ -2025,12 +2026,12 @@ namespace MeherEstateDevelopers.Controllers
             ViewBag.Name = name;
             return View(res);
         }
-        public ActionResult CommercialReceivableReport()
+        [NoDirectAccess] public ActionResult CommercialReceivableReport()
         {
             var res = db.Sp_Report_CommercialReceivable(3).ToList();
             return View(res);
         }
-        public ActionResult CommercialToken()
+        [NoDirectAccess] public ActionResult CommercialToken()
         {
             ViewBag.Projects = new SelectList(db.RealEstate_Projects.Where(x => x.Type == ProjectCategory.Building.ToString()).ToList(), "Id", "Project_Name");
             ViewBag.Bank = new SelectList(Nomenclature.Banks(), "Name", "Name");
@@ -2134,7 +2135,7 @@ namespace MeherEstateDevelopers.Controllers
             var data1 = new { Status = "1", Receiptid = res.Receipt_No, Token = comdata.ComRom_Id };
             return Json(data1);
         }
-        public ActionResult CommercialFileRegistration()
+        [NoDirectAccess] public ActionResult CommercialFileRegistration()
         {
             ViewBag.Projects = new SelectList(db.RealEstate_Projects.Where(x => x.Type == ProjectCategory.Building.ToString()).ToList(), "Id", "Project_Name");
             ViewBag.Bank = new SelectList(Nomenclature.Banks(), "Name", "Name");
@@ -2202,7 +2203,7 @@ namespace MeherEstateDevelopers.Controllers
                 UpdatePlotInstallmentStatus(res3, Receivedamts, r, v.Id);
             }
         }
-        public ActionResult AyanCenterApplicationFormPrint()
+        [NoDirectAccess] public ActionResult AyanCenterApplicationFormPrint()
         {
             var project = "Ayan Center";
             var res = db.Sp_Get_Commercial_Project_Inventory(project).ToList();
@@ -2235,7 +2236,7 @@ namespace MeherEstateDevelopers.Controllers
             var res = new CommercialTransferRequestdata { Balance = bal, UnitData = res1, UnitOwners = res2, UnitInstalments = res3, UnitReceipts = Receivedamts, UnitDiscount = r, UnitTransferFee = blockData, UnitTransferRequest = alreadyTransList };
             return Json(res);
         }
-        public ActionResult CommercialTransferFeeConfiguration()
+        [NoDirectAccess] public ActionResult CommercialTransferFeeConfiguration()
         {
             var res = db.MIS_Modules_Configurations.Where(x => x.Module == "Commercial_Transfer_Fee_Config").FirstOrDefault();
             if (res is null)
@@ -2305,12 +2306,12 @@ namespace MeherEstateDevelopers.Controllers
                 return Json(false);
             }
         }
-        public ActionResult CommercialMultiOwners(long Commercial_Id)
+        [NoDirectAccess] public ActionResult CommercialMultiOwners(long Commercial_Id)
         {
             var res = db.Sp_Get_CommercialLastOwner(Commercial_Id).ToList();
             return PartialView(res);
         }
-        public ActionResult UpdateInstallmentInfo(long id)
+        [NoDirectAccess] public ActionResult UpdateInstallmentInfo(long id)
         {
             ViewBag.id = id;
             var res = db.Commercial_Installments.Where(x => x.Com_Id == id).ToList();
@@ -2349,11 +2350,11 @@ namespace MeherEstateDevelopers.Controllers
 
         // Cancellation
 
-        public ActionResult OverDueShop()
+        [NoDirectAccess] public ActionResult OverDueShop()
         {
             return View();
         }
-        public ActionResult QualifyingShops()
+        [NoDirectAccess] public ActionResult QualifyingShops()
         {
             var res = db.Sp_Get_OverdueQualifying_Shops().Select(x => new OverdueQualifying_Shops
             {
@@ -2377,7 +2378,7 @@ namespace MeherEstateDevelopers.Controllers
            
             return PartialView(res);
         }
-        public ActionResult FirstWarning(Search_OverDue s)
+        [NoDirectAccess] public ActionResult FirstWarning(Search_OverDue s)
         {
             var res = db.Sp_Get_FirstWarning_Shop().Select(x => new OverdueQualifying_Shops
             {
@@ -2403,7 +2404,7 @@ namespace MeherEstateDevelopers.Controllers
           
             return PartialView(res);
         }
-        public ActionResult SecWarning(Search_OverDue s)
+        [NoDirectAccess] public ActionResult SecWarning(Search_OverDue s)
         {
             var res = db.Sp_Get_SecWarning_Shop().Select(x => new OverdueQualifying_Shops
             {
@@ -2429,7 +2430,7 @@ namespace MeherEstateDevelopers.Controllers
 
             return PartialView(res);
         }
-        public ActionResult CancelledShopsLetter(Search_OverDue s)
+        [NoDirectAccess] public ActionResult CancelledShopsLetter(Search_OverDue s)
         {
             var res = db.Sp_Get_Cancellation_Shop().Select(x => new OverdueQualifying_Shops
             {
@@ -2555,7 +2556,7 @@ namespace MeherEstateDevelopers.Controllers
             }
             return Json(true);
         }
-        public ActionResult FirstWarningLetter(long Id)
+        [NoDirectAccess] public ActionResult FirstWarningLetter(long Id)
         {
             long userid = long.Parse(User.Identity.GetUserId());
             db.Sp_Add_Activity(userid, "Print First Warning Letter of File <a class='plt-data' data-id=' " + Id + "'>" + Id + "</a>", "Create", ProjectCategory.Building.ToString(), ActivityType.Warning_Letter.ToString(), Id);
@@ -2585,7 +2586,7 @@ namespace MeherEstateDevelopers.Controllers
 
             return View(res);
         }
-        public ActionResult SecondWarningLetter(long Id)
+        [NoDirectAccess] public ActionResult SecondWarningLetter(long Id)
         {
             long userid = long.Parse(User.Identity.GetUserId());
             db.Sp_Add_Activity(userid, "Print Second Warning Letter of File <a class='plt-data' data-id=' " + Id + "'>" + Id + "</a>", "Create", ProjectCategory.Building.ToString(), ActivityType.Warning_Letter.ToString(), Id);
@@ -2614,7 +2615,7 @@ namespace MeherEstateDevelopers.Controllers
             }).FirstOrDefault();
             return View(res);
         }
-        public ActionResult CancellationLetter(long Id)
+        [NoDirectAccess] public ActionResult CancellationLetter(long Id)
         {
             long userid = long.Parse(User.Identity.GetUserId());
             db.Sp_Add_Activity(userid, "Print Cancellation Letter of File <a class='plt-data' data-id=' " + Id + "'>" + Id + "</a>", "Create", ProjectCategory.Building.ToString(), ActivityType.Warning_Letter.ToString(), Id);
@@ -2644,7 +2645,7 @@ namespace MeherEstateDevelopers.Controllers
 
             return PartialView(res);
         }
-        public ActionResult CancellationLetterConfirm(long Id)
+        [NoDirectAccess] public ActionResult CancellationLetterConfirm(long Id)
         {
             long userid = long.Parse(User.Identity.GetUserId());
             db.Sp_Add_Activity(userid, "Print Cancellation Letter of File <a class='plt-data' data-id=' " + Id + "'>" + Id + "</a>", "Create", ProjectCategory.Building.ToString(), ActivityType.Warning_Letter.ToString(), Id);
@@ -2674,7 +2675,7 @@ namespace MeherEstateDevelopers.Controllers
 
             return PartialView(res);
         }
-        public ActionResult ReinstateUnit()
+        [NoDirectAccess] public ActionResult ReinstateUnit()
         {
             return PartialView();
         }

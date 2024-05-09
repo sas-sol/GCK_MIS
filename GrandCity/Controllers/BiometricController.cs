@@ -5,6 +5,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
+using static MeherEstateDevelopers.MvcApplication;
 
 namespace MeherEstateDevelopers.Controllers
 {
@@ -12,7 +13,7 @@ namespace MeherEstateDevelopers.Controllers
     {
         private Grand_CityEntities db = new Grand_CityEntities();
         // GET: Biometric
-        public ActionResult BiometricVerification(long Id, string module)
+        [NoDirectAccess] public ActionResult BiometricVerification(long Id, string module)
         {
             long userid = long.Parse(User.Identity.GetUserId());
             db.Sp_Add_Activity(userid, "Accessed Biometric Verification Page For  " + module, "Read", "Activity_Record", ActivityType.Page_Access.ToString(), userid);
@@ -78,7 +79,7 @@ namespace MeherEstateDevelopers.Controllers
             }
         }
 
-        public ActionResult BioAuthSetting(long Id, string module, string tp)
+        [NoDirectAccess] public ActionResult BioAuthSetting(long Id, string module, string tp)
         {
             ViewBag.modId = Id;
             ViewBag.modTyp = module;
@@ -89,7 +90,7 @@ namespace MeherEstateDevelopers.Controllers
             return View();
         }
 
-        public ActionResult FingerPrint(long Id, string module, string tp)
+        [NoDirectAccess] public ActionResult FingerPrint(long Id, string module, string tp)
         {
             if (module == "FileManagement")
             {

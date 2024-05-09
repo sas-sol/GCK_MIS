@@ -13,6 +13,7 @@ using Microsoft.Ajax.Utilities;
 using System.Threading;
 using System.Web.Razor.Tokenizer;
 using System.Data.Entity;
+using static MeherEstateDevelopers.MvcApplication;
 
 namespace MeherEstateDevelopers.Controllers
 {
@@ -23,7 +24,7 @@ namespace MeherEstateDevelopers.Controllers
         private string AccountingModule = COA_Mapper_Modules.Files_Plots.ToString();
         private Grand_CityEntities db = new Grand_CityEntities();
         // GET: FileSystem
-        public ActionResult FileShortResult(string FileNumber)
+        [NoDirectAccess] public ActionResult FileShortResult(string FileNumber)
         {
             var res1 = db.File_Form.Where(x => x.FileFormNumber == FileNumber).FirstOrDefault();
             var res2 = db.Sp_Get_FileLastOwner(res1.Id).ToList();
@@ -40,15 +41,15 @@ namespace MeherEstateDevelopers.Controllers
             db.Sp_Add_Activity(userid, "Accessed  File Short Details Page For  " + FileNumber, "Read", "Activity_Record", ActivityType.Details_Access.ToString(), userid);
             return PartialView(res);
         }
-        public ActionResult Application_Form_GCK()
+        [NoDirectAccess] public ActionResult Application_Form_GCK()
         {
             return View();
         }
-        public ActionResult New_Application_Form_GCK()
+        [NoDirectAccess] public ActionResult New_Application_Form_GCK()
         {
             return View();
         }
-        public ActionResult AddSecurity()
+        [NoDirectAccess] public ActionResult AddSecurity()
         {
             ViewBag.Projects = new SelectList(db.Sp_Get_RealEstateProjects(), "Id", "Project_Name");
             return View();
@@ -73,7 +74,7 @@ namespace MeherEstateDevelopers.Controllers
                 return Json(false);
             }
         }
-        public ActionResult RegisterFile()
+        [NoDirectAccess] public ActionResult RegisterFile()
         {
             ViewBag.Bank = new SelectList(Nomenclature.Banks(), "Name", "Name");
             ViewBag.City = new SelectList(Nomenclature.Cities(), "Name", "Name");
@@ -86,7 +87,7 @@ namespace MeherEstateDevelopers.Controllers
             return View();
         }
         [HttpPost]
-        public ActionResult UploadFiles(FormCollection fc)
+        [NoDirectAccess] public ActionResult UploadFiles(FormCollection fc)
         {
             // Checking no of files injected in Request object  
             if (Request.Files.Count > 0)
@@ -382,7 +383,7 @@ namespace MeherEstateDevelopers.Controllers
             return df;
         }
         //create a methode to generate Qr code for all files
-        //public ActionResult AddFileQrCode()
+        //[NoDirectAccess] public ActionResult AddFileQrCode()
         //{
         //    Helpers helpers = new Helpers(Modules.FileManagement, Types.FileForm);
         //    var files = db.File_Form.ToList();
@@ -403,7 +404,7 @@ namespace MeherEstateDevelopers.Controllers
         //    }
         //    return Json("ok", JsonRequestBehavior.AllowGet);
         //}
-        //public ActionResult AddFileQrCodes(long Id)
+        //[NoDirectAccess] public ActionResult AddFileQrCodes(long Id)
         //{
         //    Helpers helpers = new Helpers(Modules.FileManagement, Types.FileForm);
         //    for (long fileId = Id; fileId <= 8596; fileId++)
@@ -453,7 +454,7 @@ namespace MeherEstateDevelopers.Controllers
             var res = db.Sp_Update_FileImages(ImageId, File_Id).FirstOrDefault();
             return Json(true);
         }
-        public ActionResult ShowFileFormList(List<DealerFileForm> dealerFileForm)
+        [NoDirectAccess] public ActionResult ShowFileFormList(List<DealerFileForm> dealerFileForm)
         {
             return PartialView(dealerFileForm);
         }
@@ -511,7 +512,7 @@ namespace MeherEstateDevelopers.Controllers
                 return Json(fa);
             }
         }
-        public ActionResult GetFileDetails(string FileId)
+        [NoDirectAccess] public ActionResult GetFileDetails(string FileId)
         {
             long userid = long.Parse(User.Identity.GetUserId());
             var res1 = db.Sp_Get_FileAppFormData(FileId).SingleOrDefault();
@@ -547,7 +548,7 @@ namespace MeherEstateDevelopers.Controllers
             // db.Test_UpdatePendingPlotinstallmentWht(Plotid);
             db.Test_UpdatePendingSurChargeInstallment(FileId, "FileManagement");
 
-            decimal? TotalAmt = 0, AmttoPaid = 0, remamt = 0, TotalAmount = 0;
+            decimal? TotalAmt = 0, AmttoPaid = 0, remamt = 0, TotalAmount  = 0;
 
             string[] Type = { "SurCharge" };
 
@@ -637,7 +638,7 @@ namespace MeherEstateDevelopers.Controllers
 
         }
 
-        public ActionResult GenerateCustomerFile(long Id)
+        [NoDirectAccess] public ActionResult GenerateCustomerFile(long Id)
         {
             long userid = long.Parse(User.Identity.GetUserId());
             var resd = db.Sp_Update_CustomerFileRequest(Id);
@@ -671,7 +672,7 @@ namespace MeherEstateDevelopers.Controllers
             var res = new CustomerFileDetailData { FileData = res1, FilesOwners = res2, FileInstallments = res3, FileReceipts = res4, InstalmentStructureDetail = instStruc };
             return View(res);
         }
-        public ActionResult GenerateCompanyCustomerFile(long Id)
+        [NoDirectAccess] public ActionResult GenerateCompanyCustomerFile(long Id)
         {
             long userid = long.Parse(User.Identity.GetUserId());
             var resd = db.Sp_Update_CustomerFileRequest(Id);
@@ -691,7 +692,7 @@ namespace MeherEstateDevelopers.Controllers
             return View(res);
         }
         //[Route("FileSystem/GenerateCustomerFile_Com/{Id:long}")]
-        public ActionResult GenerateCustomerFile_Com(long Id)
+        [NoDirectAccess] public ActionResult GenerateCustomerFile_Com(long Id)
         {
             long userid = long.Parse(User.Identity.GetUserId());
             var resd = db.Sp_Update_CustomerFileRequest(Id);
@@ -717,7 +718,7 @@ namespace MeherEstateDevelopers.Controllers
             var res = new CustomerFileDetailData { FileData = res1, FilesOwners = res2, FileInstallments = res3, FileReceipts = res4, InstalmentStructureDetail = instStruc };
             return View(res);
         }
-        public ActionResult AllFiles()
+        [NoDirectAccess] public ActionResult AllFiles()
         {
             var res = db.Sp_Get_Files().ToList();
             long userid = long.Parse(User.Identity.GetUserId());
@@ -725,11 +726,12 @@ namespace MeherEstateDevelopers.Controllers
             return View(res);
         }
         [Authorize(Roles = "File Information,Administrator")]
-        public ActionResult FileInformation()
+        
+        [NoDirectAccess] public ActionResult FileInformation()
         {
             return View();
         }
-        public ActionResult FileDelivery()
+        [NoDirectAccess] public ActionResult FileDelivery()
         {
             return View();
         }
@@ -829,12 +831,12 @@ namespace MeherEstateDevelopers.Controllers
             var res = db.Sp_Update_FileDelivery(id);
             return Json(true);
         }
-        public ActionResult FileTransfer()
+        [NoDirectAccess] public ActionResult FileTransfer()
         {
             ViewBag.City = new SelectList(Nomenclature.Cities(), "Name", "Name");
             return View();
         }
-        public ActionResult FileTransferTest()
+        [NoDirectAccess] public ActionResult FileTransferTest()
         {
             ViewBag.City = new SelectList(Nomenclature.Cities(), "Name", "Name");
             return View();
@@ -980,7 +982,7 @@ namespace MeherEstateDevelopers.Controllers
             var newres = new { File = fa, Installments = installments, OtherInstallments = otherinstallments, ReceivedAmounts = Receivedamts, Discounts = Discount };
             return Json(newres);
         }
-        public ActionResult RegisterFileTest()
+        [NoDirectAccess] public ActionResult RegisterFileTest()
         {
             ViewBag.Bank = new SelectList(Nomenclature.Banks(), "Name", "Name");
             ViewBag.City = new SelectList(Nomenclature.Cities(), "Name", "Name");
@@ -1123,11 +1125,11 @@ namespace MeherEstateDevelopers.Controllers
             }
         }
         [Authorize(Roles = "Update File Information,Administrator")]
-        public ActionResult UpdateInformation()
+        [NoDirectAccess] public ActionResult UpdateInformation()
         {
             return View();
         }
-        public ActionResult GetUpdateInfoDetails(string FileId)
+        [NoDirectAccess] public ActionResult GetUpdateInfoDetails(string FileId)
         {
             long userid = long.Parse(User.Identity.GetUserId());
             var res1 = db.Sp_Get_FileAppFormData(FileId).SingleOrDefault();
@@ -1161,12 +1163,12 @@ namespace MeherEstateDevelopers.Controllers
 
             return View(res);
         }
-        public ActionResult UpdationForInstallments(long FileId)
+        [NoDirectAccess] public ActionResult UpdationForInstallments(long FileId)
         {
             ViewBag.FileID = FileId;
             return PartialView();
         }
-        public ActionResult InstallmentPlanMaker(InstallmentPlanUpdation Plan)
+        [NoDirectAccess] public ActionResult InstallmentPlanMaker(InstallmentPlanUpdation Plan)
         {
             List<File_Installments> File_inst = new List<File_Installments>();
             DateTime a = DateTime.UtcNow;
@@ -1372,7 +1374,7 @@ namespace MeherEstateDevelopers.Controllers
             db.Sp_Add_FileComments(Id, "Plot Prefrence of Customer : " + res.Name + " ( " + res.CNIC_NICOP + " ) has been changed from " + res.Plot_Prefrence + " To " + Pref, userid, ActivityType.Record_Upatation.ToString());
             return Json(true);
         }
-        public ActionResult RegisterTokenFiles()
+        [NoDirectAccess] public ActionResult RegisterTokenFiles()
         {
             ViewBag.Bank = new SelectList(Nomenclature.Banks(), "Name", "Name");
             return View();
@@ -1435,7 +1437,7 @@ namespace MeherEstateDevelopers.Controllers
             db.Sp_Add_Activity(userid, "Accessed File Details  Page ", "Read", "Activity_Record", ActivityType.Details_Access.ToString(), Filefromid);
             return Json(newres);
         }
-        public ActionResult FileResult(long Filefromid)
+        [NoDirectAccess] public ActionResult FileResult(long Filefromid)
         {
             Sp_Get_FileFormData_Result res = db.Sp_Get_FileFormData(Filefromid).SingleOrDefault();
             long userid = long.Parse(User.Identity.GetUserId());
@@ -1494,7 +1496,7 @@ namespace MeherEstateDevelopers.Controllers
             db.Sp_Add_Activity(userid, "Accessed File Details Page ", "Read", "Activity_Record", ActivityType.Details_Access.ToString(), Filefromid);
             return PartialView(newres);
         }
-        public ActionResult TransferRequest()
+        [NoDirectAccess] public ActionResult TransferRequest()
         {
             ViewBag.City = new SelectList(Nomenclature.Cities(), "Name", "Name");
             Helpers h = new Helpers();
@@ -1547,7 +1549,7 @@ namespace MeherEstateDevelopers.Controllers
             db.Sp_Add_FileComments(File_Plot_Number, "Generate Transfer Request for Owner : " + string.Join(",", filedatas.Select(x => x.Name).ToList()), userid, ActivityType.Transfer_Request.ToString());
             return Json(TransactionId);
         }
-        public ActionResult TransferRequestList()
+        [NoDirectAccess] public ActionResult TransferRequestList()
         {
             var res = db.Sp_Get_TransferRequestList().ToList();
             long userid = long.Parse(User.Identity.GetUserId());
@@ -1555,7 +1557,7 @@ namespace MeherEstateDevelopers.Controllers
             return View(res);
         }
         [HttpGet]
-        public ActionResult FileTransferRequestDetails(string Id)
+        [NoDirectAccess] public ActionResult FileTransferRequestDetails(string Id)
         {
             var fileform = db.File_Form.Where( f => f.FileFormNumber == Id).FirstOrDefault();
             Sp_Get_FileFormData_Result res = db.Sp_Get_FileFormData(fileform.Id).FirstOrDefault();
@@ -1634,7 +1636,7 @@ namespace MeherEstateDevelopers.Controllers
             db.Sp_Update_TransferRequest_File(Reqid, Blood_rel, Wave_off, OtherTransferCharges, Rate, Remarks);
             return Json(true);
         }
-        public ActionResult NDCForm(long SerialNum)
+        [NoDirectAccess] public ActionResult NDCForm(long SerialNum)
         {
             var res = db.Sp_Get_NDCFormDetails(SerialNum).FirstOrDefault();
             var new_owners = db.Files_Transfer_Request.Where(x => x.Group_Tag == SerialNum).ToList();
@@ -1681,7 +1683,7 @@ namespace MeherEstateDevelopers.Controllers
             db.Sp_Add_Activity(userid, "Accessed NDC " + SerialNum, "Read", "Activity_Record", ActivityType.Details_Access.ToString(), ress.Id);
             return View(ress);
         }
-        public ActionResult FileTransferRequestData(string Id)
+        [NoDirectAccess] public ActionResult FileTransferRequestData(string Id)
         {
             Helpers h = new Helpers();
             ViewBag.TransactionId = h.RandomNumber();
@@ -1932,7 +1934,7 @@ namespace MeherEstateDevelopers.Controllers
                 return Json(res);
             }
         }
-        public ActionResult FileVerification()
+        [NoDirectAccess] public ActionResult FileVerification()
         {
             long userid = long.Parse(User.Identity.GetUserId());
             var fileslist = db.File_Form.Where(f => f.Verification_Req == true & f.Verified == null).ToList(); 
@@ -1954,7 +1956,7 @@ namespace MeherEstateDevelopers.Controllers
             return View(fileslist);
         }
 
-        public ActionResult GetFileVeriR(string FileId)
+        [NoDirectAccess] public ActionResult GetFileVeriR(string FileId)
         {
             long userid = long.Parse(User.Identity.GetUserId());
             var res11 = db.Sp_Get_FileAppFormData(FileId).SingleOrDefault();
@@ -1970,7 +1972,7 @@ namespace MeherEstateDevelopers.Controllers
             var res = new FileDetailData { FileData = res1, FilesOwners = res2, FileInstallments = res3, FileReceipts = res4 };
             return PartialView(res);
         }
-        public ActionResult GetFileVeriResult(string FileId)
+        [NoDirectAccess] public ActionResult GetFileVeriResult(string FileId)
         {
             long userid = long.Parse(User.Identity.GetUserId());
             var res1 = db.Sp_Get_FileAppFormData(FileId).SingleOrDefault();
@@ -1982,7 +1984,7 @@ namespace MeherEstateDevelopers.Controllers
 
             return View(res);
         }
-        public ActionResult OpenFiles()
+        [NoDirectAccess] public ActionResult OpenFiles()
         {
             ViewBag.Dealership = new SelectList(db.Sp_Get_Dealerships(), "Id", "Dealership_Name");
             ViewBag.City = new SelectList(Nomenclature.Cities(), "Name", "Name");
@@ -2091,7 +2093,7 @@ namespace MeherEstateDevelopers.Controllers
         //    var data = new { Status = "2", Receiptid = Dealerid, Token = userid };
         //    return Json(data);
         //}
-        public ActionResult BiddingFileRegister()
+        [NoDirectAccess] public ActionResult BiddingFileRegister()
         {
             ViewBag.City = new SelectList(Nomenclature.Cities(), "Name", "Name");
             ViewBag.Plot_Prefrence = new SelectList(db.Sp_Get_Plot_Prefrences(), "Id", "Plot_Prefrence");
@@ -2164,7 +2166,7 @@ namespace MeherEstateDevelopers.Controllers
         ////////////////////
         //   OVerDue Files
         ////////////////////
-        public ActionResult OverDueFile()
+        [NoDirectAccess] public ActionResult OverDueFile()
         {
             long userid = long.Parse(User.Identity.GetUserId());
             db.Sp_Add_Activity(userid, "Accessed  Overdue Files Page ", "Read", "Activity_Record", ActivityType.Details_Access.ToString(), userid);
@@ -2172,14 +2174,14 @@ namespace MeherEstateDevelopers.Controllers
             ViewBag.Blocks = new SelectList(blocks, "Name", "Name");
             return View();
         }
-        public ActionResult OverDueFiles(string Block)
+        [NoDirectAccess] public ActionResult OverDueFiles(string Block)
         {
             long userid = long.Parse(User.Identity.GetUserId());
             ViewBag.Blocks = Block;
             db.Sp_Add_Activity(userid, "Accessed  Overdue Files Page ", "Read", "Activity_Record", ActivityType.Details_Access.ToString(), userid);
             return View();
         }
-        public ActionResult OverDueFilesReport(string Block)
+        [NoDirectAccess] public ActionResult OverDueFilesReport(string Block)
         {
             var res1 = db.Sp_Get_Report_OverDue(Block).ToList();
             var res2 = db.Sp_Get_CancelFilesReport(Block).ToList();
@@ -2191,7 +2193,7 @@ namespace MeherEstateDevelopers.Controllers
             var res = new Overdue_CancelReport { CancelFiles = res2, OverdueFiles = res1 };
             return PartialView(res);
         }
-        //public ActionResult testingrep()
+        //[NoDirectAccess] public ActionResult testingrep()
         //{
         //    var res2 = db.Sp_Get_CancelFilesReport().ToList();
         //    foreach (var item in res2)
@@ -2201,28 +2203,28 @@ namespace MeherEstateDevelopers.Controllers
         //    }
         //    return View(res2);
         //}
-        public ActionResult QualifyingFiles(Search_OverDue s, string Block)
+        [NoDirectAccess] public ActionResult QualifyingFiles(Search_OverDue s, string Block)
         {
             var res = db.Sp_Get_OverDueAmount_Search(s.Installments, s.S_Inst_Range, s.E_Inst_Range, s.Plot_Size, s.Dealer_Id, s.S_Range, s.E_Range, s.G_Amt, s.L_Amt, Block).ToList();
             long userid = long.Parse(User.Identity.GetUserId());
             db.Sp_Add_Activity(userid, "Accessed  First Warning Files Page ", "Read", "Activity_Record", ActivityType.Details_Access.ToString(), userid);
             return PartialView(res);
         }
-        public ActionResult FirstWarning(Search_OverDue s, string Block)
+        [NoDirectAccess] public ActionResult FirstWarning(Search_OverDue s, string Block)
         {
             var res = db.Sp_Get_FirstWarning_File(s.Installments, s.S_Inst_Range, s.E_Inst_Range, s.Plot_Size, s.Dealer_Id, s.S_Range, s.E_Range, s.G_Amt, s.L_Amt, Block).ToList();
             long userid = long.Parse(User.Identity.GetUserId());
             db.Sp_Add_Activity(userid, "Accessed  Second Warning Files Page ", "Read", "Activity_Record", ActivityType.Details_Access.ToString(), userid);
             return PartialView(res);
         }
-        public ActionResult SecWarning(Search_OverDue s, string Block)
+        [NoDirectAccess] public ActionResult SecWarning(Search_OverDue s, string Block)
         {
             var res = db.Sp_Get_SecWarning_File(s.Installments, s.S_Inst_Range, s.E_Inst_Range, s.Plot_Size, s.Dealer_Id, s.S_Range, s.E_Range, s.G_Amt, s.L_Amt, Block).ToList();
             long userid = long.Parse(User.Identity.GetUserId());
             db.Sp_Add_Activity(userid, "Accessed  Second Warning Files Page ", "Read", "Activity_Record", ActivityType.Details_Access.ToString(), userid);
             return PartialView(res);
         }
-        public ActionResult CancelledFiles(Search_OverDue s , string Block)
+        [NoDirectAccess] public ActionResult CancelledFiles(Search_OverDue s , string Block)
         {
             var res = db.Sp_Get_TempCancel_File(s.Installments, s.S_Inst_Range, s.E_Inst_Range, s.Plot_Size, s.Dealer_Id, s.S_Range, s.E_Range, s.G_Amt, s.L_Amt, Block).ToList();
             long userid = long.Parse(User.Identity.GetUserId());
@@ -2345,14 +2347,14 @@ namespace MeherEstateDevelopers.Controllers
             }
             return Json(true);
         }
-        public ActionResult FirstWarningLetter(long Id)
+        [NoDirectAccess] public ActionResult FirstWarningLetter(long Id)
         {
             long userid = long.Parse(User.Identity.GetUserId());
             db.Sp_Add_Activity(userid, "Print First Warning Letter of File <a class='plt-data' data-id=' " + Id + "'>" + Id + "</a>", "Create", Modules.FileManagement.ToString(), ActivityType.Warning_Letter.ToString(), Id);
             var res = db.Sp_Get_LastOwners_File_Id(Id).ToList(); //db.Sp_Get_CurrentOwner_File_Id(Id).FirstOrDefault();
             return View(res);
         }
-        public ActionResult SecondWarningLetter(long Id)
+        [NoDirectAccess] public ActionResult SecondWarningLetter(long Id)
         {
             long userid = long.Parse(User.Identity.GetUserId());
             db.Sp_Add_Activity(userid, "Print Second Warning Letter of File <a class='plt-data' data-id=' " + Id + "'>" + Id + "</a>", "Create", Modules.FileManagement.ToString(), ActivityType.Warning_Letter.ToString(), Id);
@@ -2360,7 +2362,7 @@ namespace MeherEstateDevelopers.Controllers
             Sp_Get_CurrentOwner_File_Id_Result res = db.Sp_Get_CurrentOwner_File_Id(Id).FirstOrDefault();
             return View(res);
         }
-        public ActionResult CancellationLetter(long Id)
+        [NoDirectAccess] public ActionResult CancellationLetter(long Id)
         {
             long userid = long.Parse(User.Identity.GetUserId());
             db.Sp_Add_Activity(userid, "Print Cancellation Letter of File <a class='plt-data' data-id=' " + Id + "'>" + Id + "</a>", "Create", Modules.FileManagement.ToString(), ActivityType.Warning_Letter.ToString(), Id);
@@ -2371,7 +2373,7 @@ namespace MeherEstateDevelopers.Controllers
         //////////////////////
         // Files Cancelation
         ////////////////////
-        public ActionResult UpdateFileStatus(string FileId)
+        [NoDirectAccess] public ActionResult UpdateFileStatus(string FileId)
         {
             var res1 = db.Sp_Get_FileAppFormData(FileId).SingleOrDefault();
             FileStatus filestat = (FileStatus)res1.Status;
@@ -2438,7 +2440,7 @@ namespace MeherEstateDevelopers.Controllers
             db.Sp_Add_FileComments(Id, "Reinstate the Plot. \n\r", userid, ActivityType.Plot_Status_Updation.ToString());
             return Json(true);
         }
-        public ActionResult CancellationReqs()
+        [NoDirectAccess] public ActionResult CancellationReqs()
         {
             if (User.IsInRole("Files Manager"))
             {
@@ -2457,7 +2459,7 @@ namespace MeherEstateDevelopers.Controllers
                 return View(res);
             }
         }
-        public ActionResult FileCancellationDetails(string FileId, long Id)
+        [NoDirectAccess] public ActionResult FileCancellationDetails(string FileId, long Id)
         {
             long userid = long.Parse(User.Identity.GetUserId());
             ViewBag.CanId = Id;
@@ -2481,7 +2483,7 @@ namespace MeherEstateDevelopers.Controllers
             Notifier.Notify(userid, NotifyTo.Audit, NotifierMsg.Request_For_Verification_File, new object[] { file }, NotifyType.Files.ToString());
             return Json(true);
         }
-        public ActionResult VerificationRequested()
+        [NoDirectAccess] public ActionResult VerificationRequested()
         {
             var res = db.Sp_Get_Files_Veri_Parameter("VerifyRequest").ToList();
             return View(res);
@@ -2554,7 +2556,7 @@ namespace MeherEstateDevelopers.Controllers
                 }
             }
         }
-        public ActionResult FileCancelation()
+        [NoDirectAccess] public ActionResult FileCancelation()
         {
             var banks = db.Bank_Accounts.Select(x => new NameValuestring { Value = x.Id.ToString(), Name = x.Bank + " - " + x.Account_Number }).ToList();
             var all = new NameValuestring()
@@ -2728,13 +2730,13 @@ namespace MeherEstateDevelopers.Controllers
         }
         /////////////
         // Special form Registeration
-        public ActionResult SpecialRegisteration()
+        [NoDirectAccess] public ActionResult SpecialRegisteration()
         {
             ViewBag.City = new SelectList(Nomenclature.Cities(), "Name", "Name", "Lahore");
             ViewBag.Bank = new SelectList(Nomenclature.Banks(), "Name", "Name");
             return View();
         }
-        public ActionResult FileStatusView(int status)
+        [NoDirectAccess] public ActionResult FileStatusView(int status)
         {
             FileStatus filestat = (FileStatus)status;
             ViewBag.Title = filestat.ToString();
@@ -2790,7 +2792,7 @@ namespace MeherEstateDevelopers.Controllers
 
         }
 
-        public ActionResult FileStatusViewSA(int status)
+        [NoDirectAccess] public ActionResult FileStatusViewSA(int status)
         {
             FileStatus filestat = (FileStatus)status;
             ViewBag.Title = filestat.ToString();
@@ -2909,12 +2911,12 @@ namespace MeherEstateDevelopers.Controllers
                 return Json(res);
             }
         }
-        public ActionResult FileOwnersData(long fileId)
+        [NoDirectAccess] public ActionResult FileOwnersData(long fileId)
         {
             var owners = db.Files_Transfer.Where(x => x.File_Form_Id == fileId).ToList();
             return PartialView(owners);
         }
-        public ActionResult NewFileOwner(string fileId)
+        [NoDirectAccess] public ActionResult NewFileOwner(string fileId)
         {
             var res1 = db.Sp_Get_FileAppFormData(fileId).SingleOrDefault();
             ViewBag.fileId = res1.Id;
@@ -3016,7 +3018,7 @@ namespace MeherEstateDevelopers.Controllers
             db.Sp_Add_FileComments(Plot_Id, "Discount of Amount " + res1.Discount_Amount + " (Discount Remarks: " + res1.Remarks + ") is removed", userid, ActivityType.Delete_Receipt.ToString());
             return Json(new Return { Status = true, Msg = "Discount is Removed" });
         }
-        public ActionResult FetchInstallmentData(string Filefromid)
+        [NoDirectAccess] public ActionResult FetchInstallmentData(string Filefromid)
         {
             var res1 = db.Sp_Get_FileAppFormData(Filefromid).SingleOrDefault();
             long userid = long.Parse(User.Identity.GetUserId());
@@ -3084,11 +3086,11 @@ namespace MeherEstateDevelopers.Controllers
             var newres = new FileDetailsModel { File = fa, Installments = installments, OtherInstallments = otherinstallments, ReceivedAmounts = Receivedamts, Discounts = Discount };
             return PartialView(newres);
         }
-        public ActionResult ReinstateFile()
+        [NoDirectAccess] public ActionResult ReinstateFile()
         {
             return PartialView();
         }
-        public ActionResult AddNewOwner(long Grp_Id, long FileId)
+        [NoDirectAccess] public ActionResult AddNewOwner(long Grp_Id, long FileId)
         {
             ViewBag.grp = Grp_Id;
             ViewBag.filid = FileId;
@@ -3108,7 +3110,7 @@ namespace MeherEstateDevelopers.Controllers
             var a = db.Sp_Update_WarningLetter_Steps(Id, Modules.FileManagement.ToString(), Let);
             return Json(new Return { Msg = "Letter is steped back", Status = true });
         }
-        public ActionResult Noti(long? id, NotifierMsg? tp, long? noti)
+        [NoDirectAccess] public ActionResult Noti(long? id, NotifierMsg? tp, long? noti)
         {
             Thread notiReader = new Thread(() => Notifier.ReadNotification((long)noti));
             notiReader.Start();
@@ -3122,7 +3124,7 @@ namespace MeherEstateDevelopers.Controllers
                 return RedirectToAction("Index", "Home");
             }
         }
-        public ActionResult File_TransferFeesConfiguration()
+        [NoDirectAccess] public ActionResult File_TransferFeesConfiguration()
         {
             var res = db.MIS_Modules_Configurations.Where(x => x.Module == MISModuleType.File_Transfer_Fee_Config.ToString()).FirstOrDefault();
             if (res is null)
@@ -3184,7 +3186,7 @@ namespace MeherEstateDevelopers.Controllers
                 return Json(false);
             }
         }
-        public ActionResult ExtraAmountRefundFiles()
+        [NoDirectAccess] public ActionResult ExtraAmountRefundFiles()
         {
             if (User.IsInRole("Plots Manager"))
             {
@@ -3211,7 +3213,7 @@ namespace MeherEstateDevelopers.Controllers
                 this.TestAdjustIntallments(item.Id);
             }
         }
-        public ActionResult FileReceiptRefundDetails(long FileNo, long ReqId)
+        [NoDirectAccess] public ActionResult FileReceiptRefundDetails(long FileNo, long ReqId)
         {
             var res1 = db.Sp_Get_FileFormData(FileNo).FirstOrDefault();
             long userid = long.Parse(User.Identity.GetUserId());
@@ -3225,7 +3227,7 @@ namespace MeherEstateDevelopers.Controllers
             var res = new FileRefundDetailData { FileData = res1, FileOwners = res2, FileInstallments = res5, FileReceipts = res4, File_Req = res6 };
             return View(res);
         }
-        public ActionResult RefundAmount(long Id)
+        [NoDirectAccess] public ActionResult RefundAmount(long Id)
         {
             var res = db.RefundAmountsReqs.Where(x => x.Id == Id).FirstOrDefault();
             ViewBag.RefundAmount = res.Amount;
@@ -3270,7 +3272,7 @@ namespace MeherEstateDevelopers.Controllers
             var fres = new { VoucherId = res.Receipt_Id, Token = userid };
             return Json(fres);
         }
-        public ActionResult UpdateInstallmentInfo(string id)
+        [NoDirectAccess] public ActionResult UpdateInstallmentInfo(string id)
         {
             var res1 = db.Sp_Get_FileAppFormData(id).SingleOrDefault();
             ViewBag.id = res1.Id;
@@ -3322,12 +3324,12 @@ namespace MeherEstateDevelopers.Controllers
         }
 
 
-        public ActionResult FilesPlotsReport()
+        [NoDirectAccess] public ActionResult FilesPlotsReport()
         {
             ViewBag.Block = new SelectList(db.RealEstate_Blocks.Where(x => x.Block_Name != null), "Id", "Block_Name").ToList();
             return View();
         }
-        public ActionResult FilesPlotsReportSearchBlock(string block)
+        [NoDirectAccess] public ActionResult FilesPlotsReportSearchBlock(string block)
         {
             var Total = db.Sp_Get_FilesPlots_Report_blockwise(block, FilePlotsReportType.Total.ToString()).Count();
             var Cancelled = db.Sp_Get_FilesPlots_Report_blockwise(block, FilePlotsReportType.Cancelled.ToString()).Count();
@@ -3396,7 +3398,7 @@ namespace MeherEstateDevelopers.Controllers
         }
     }
 }
-//public ActionResult ExpoRegisterFile()
+//[NoDirectAccess] public ActionResult ExpoRegisterFile()
 //{
 //    ViewBag.Bank = new SelectList(Nomenclature.Banks(), "Name", "Name");
 //    ViewBag.City = new SelectList(Nomenclature.Cities(), "Name", "Name");

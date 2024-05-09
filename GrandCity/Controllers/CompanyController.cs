@@ -10,6 +10,7 @@ using Microsoft.AspNet.Identity;
 using MeherEstateDevelopers.Filters;
 using System.Web.Http.Results;
 using System.Security.Claims;
+using static MeherEstateDevelopers.MvcApplication;
 
 namespace MeherEstateDevelopers.Controllers
 {
@@ -25,7 +26,7 @@ namespace MeherEstateDevelopers.Controllers
         /// </summary>
         /// <returns></returns>
 
-        public ActionResult CreateCompany()
+        [NoDirectAccess] public ActionResult CreateCompany()
         {
             return View();
         }
@@ -142,11 +143,11 @@ namespace MeherEstateDevelopers.Controllers
         /// </summary>
         /// <returns></returns>
 
-        public ActionResult Index()
+        [NoDirectAccess] public ActionResult Index()
         {
             return View();
         }
-        public ActionResult AddCompany()
+        [NoDirectAccess] public ActionResult AddCompany()
         {
             ViewBag.Parent_Company = new SelectList(db.Comp_Dep_Desig.Where(x => x.Type == CompDepDes.Company.ToString()).ToList(), "Id", "Name");
             return View();
@@ -165,7 +166,7 @@ namespace MeherEstateDevelopers.Controllers
             }
             return Json(false);
         }
-        public ActionResult UpdateCompanyDepartmentDesignation()
+        [NoDirectAccess] public ActionResult UpdateCompanyDepartmentDesignation()
         {
             ViewBag.Parent_Company = new SelectList(db.Comp_Dep_Desig.Where(x => x.Type == CompDepDes.Company.ToString()).ToList(), "Id", "Name");
             ViewBag.Department = new SelectList(db.Comp_Dep_Desig.Where(x => x.Type == CompDepDes.Department.ToString()).ToList(), "Id", "Name");
@@ -276,7 +277,7 @@ namespace MeherEstateDevelopers.Controllers
             }
           
         }
-        public ActionResult UpdateParentCompany()
+        [NoDirectAccess] public ActionResult UpdateParentCompany()
         {
             ViewBag.Parent_Company = new SelectList(db.Comp_Dep_Desig.Where(x => x.Type == CompDepDes.Company.ToString()).ToList(), "Id", "Name");
             ViewBag.Department = new SelectList(db.Comp_Dep_Desig.Where(x => x.Type == CompDepDes.Department.ToString()).ToList(), "Id", "Name");
@@ -342,7 +343,7 @@ namespace MeherEstateDevelopers.Controllers
             db.Sp_Delete_Company_Assets(Id);
             return Json(true);
         }
-        public ActionResult AssetAssinToEmployee()
+        [NoDirectAccess] public ActionResult AssetAssinToEmployee()
         {
             ViewBag.AssetName = new SelectList(db.Company_Assets.ToList(), "Id", "Name");
             ViewBag.Employee_Name = new SelectList(db.Employees.ToList(), "Id", "Name");
@@ -359,11 +360,11 @@ namespace MeherEstateDevelopers.Controllers
             var res = db.Sp_Get_CompDepDes(CompDepDes.Company.ToString()).ToList();
             return Json(res);
         }
-        public ActionResult CompanyList()
+        [NoDirectAccess] public ActionResult CompanyList()
         {
             return PartialView();
         }
-        public ActionResult AddDepartments()
+        [NoDirectAccess] public ActionResult AddDepartments()
         {
             ViewBag.Comp_Id = new SelectList(db.Comp_Dep_Desig.Where(x => x.Type == CompDepDes.Company.ToString()).ToList(), "Id", "Name");
             ViewBag.EmpsList = new SelectList(db.Employees.Where(x => x.Status == "Registered").Select(x => new { x.Id, Name = x.Name + " ( " + x.Employee_Code + " ) " }).ToList(), "Id", "Name");
@@ -403,7 +404,7 @@ namespace MeherEstateDevelopers.Controllers
             var res = new { Departments = ee };
             return Json(res);
         }
-        public ActionResult AssignmentAsset()
+        [NoDirectAccess] public ActionResult AssignmentAsset()
         {
 
             return PartialView();
@@ -413,7 +414,7 @@ namespace MeherEstateDevelopers.Controllers
             var res = db.Comp_Dep_Desig.Where(x=> x.Type == CompDepDes.Designation.ToString()).ToList();
             return Json(res);
         }
-        public ActionResult AddDesignation()
+        [NoDirectAccess] public ActionResult AddDesignation()
         {
             ViewBag.Company_Id = new SelectList(db.Comp_Dep_Desig.Where(x => x.Type == CompDepDes.Company.ToString()).ToList(), "Id", "Name");
             return View();
@@ -449,7 +450,7 @@ namespace MeherEstateDevelopers.Controllers
                 }
             }
         }
-        public ActionResult CompanyHierarchy()
+        [NoDirectAccess] public ActionResult CompanyHierarchy()
         {
             return PartialView();
         }
@@ -520,7 +521,7 @@ namespace MeherEstateDevelopers.Controllers
             }
         }
         //Asset MAanagement
-        public ActionResult AddAsset()
+        [NoDirectAccess] public ActionResult AddAsset()
         {
             ViewBag.Company_Id = new SelectList(db.Comp_Dep_Desig.Where(x => x.Type == CompDepDes.Company.ToString()).ToList(), "Id", "Name");
             ViewBag.Type = new SelectList(db.Company_Assets_Types.ToList(), "Id", "Types");
@@ -577,17 +578,17 @@ namespace MeherEstateDevelopers.Controllers
                 return Json(false);
             }
         }
-        public ActionResult AllAssetsList()
+        [NoDirectAccess] public ActionResult AllAssetsList()
         {
             var res = db.Sp_Get_All_AssetList().ToList();
             return PartialView(res);
         }
-        public ActionResult AllVehicleList()
+        [NoDirectAccess] public ActionResult AllVehicleList()
         {
             var res = db.Sp_Get_All_AssetList().ToList();
             return PartialView(res);
         }
-        public ActionResult RemaningAssets(string AssetName)
+        [NoDirectAccess] public ActionResult RemaningAssets(string AssetName)
         {
             ViewBag.EmployeesNames = new SelectList(db.Sp_Get_Employee().ToList(), "Id", "Name", "Department", 1);
             var res = db.Sp_Get_Remaning_Assets_List(AssetName).ToList();
@@ -611,7 +612,7 @@ namespace MeherEstateDevelopers.Controllers
             return Json(true);
             
         }
-        //public ActionResult AssetDetailsList(string AssetName)
+        //[NoDirectAccess] public ActionResult AssetDetailsList(string AssetName)
         //{
         //    var res = db.Sp_Get_Assign_List_Details(AssetName).ToList();
         //    return PartialView(res);
@@ -638,14 +639,14 @@ namespace MeherEstateDevelopers.Controllers
                 return Json(false);
             }
         }
-        //public ActionResult AssetLogsList()
+        //[NoDirectAccess] public ActionResult AssetLogsList()
         //{
         //    var res= db.Sp_Get_Assets_Logs().ToList();
         //    return View(res);
         //}
         ////////////////
 
-        public ActionResult AddVehical()
+        [NoDirectAccess] public ActionResult AddVehical()
         {
             ViewBag.Company_Id = new SelectList(db.Comp_Dep_Desig.Where(x => x.Type == CompDepDes.Company.ToString()).ToList(), "Id", "Name");
             ViewBag.Type = new SelectList(db.Company_Assets_Types.ToList(), "Id", "Types");
@@ -661,7 +662,7 @@ namespace MeherEstateDevelopers.Controllers
         ////////////
       
             
-        public ActionResult FuelDetails()
+        [NoDirectAccess] public ActionResult FuelDetails()
         {
             long userid = long.Parse(User.Identity.GetUserId());
             var VehFuel = db.Company_Assets.Where(x => x.Fuel_Type_Id != null && x.Vehicle_Fuel != null).ToList();
@@ -675,7 +676,7 @@ namespace MeherEstateDevelopers.Controllers
             db.Sp_Assets_Logs("View Fuel Details", GeneralMethods.GetIPAddress(), userid, null, null, null);
             return View(res1);
         }
-        public ActionResult AddFuel()
+        [NoDirectAccess] public ActionResult AddFuel()
         {
             return PartialView();
         }
@@ -695,7 +696,7 @@ namespace MeherEstateDevelopers.Controllers
 
             return Json(true);
         }
-        public ActionResult UpdateFuel()
+        [NoDirectAccess] public ActionResult UpdateFuel()
         {
             var res = db.Fuels.ToList();
             return PartialView(res);
@@ -736,7 +737,7 @@ namespace MeherEstateDevelopers.Controllers
                 }
             }
         }
-        public ActionResult AssignCompany()
+        [NoDirectAccess] public ActionResult AssignCompany()
         {
             ViewBag.Company = new SelectList(db.Sp_Get_Companies(), "Id", "Company_Name");
             ViewBag.Users = new SelectList(db.Sp_Get_Users(), "Id", "Name");
@@ -763,7 +764,7 @@ namespace MeherEstateDevelopers.Controllers
                 return Json(false);
             }
         }
-        public ActionResult UserCompanyManage(long Id)
+        [NoDirectAccess] public ActionResult UserCompanyManage(long Id)
         {
             var res = db.Sp_Get_UserAllCompany(Id).ToList();
             ViewBag.Username = db.Users.Where(x => x.Id == Id).Select(x => x.Email).FirstOrDefault();
