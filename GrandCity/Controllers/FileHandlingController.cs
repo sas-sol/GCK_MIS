@@ -7,6 +7,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using MeherEstateDevelopers.Filters;
+using static MeherEstateDevelopers.MvcApplication;
 
 namespace MeherEstateDevelopers.Controllers
 {
@@ -16,12 +17,12 @@ namespace MeherEstateDevelopers.Controllers
     {
         // GET: FileHandling
         private const int ThumbSize = 80;
-        public ActionResult Index()
+        [NoDirectAccess] public ActionResult Index()
         {
             return View();
         }
 
-        public ActionResult NewVersion(string FileName, string FolderPath)
+        [NoDirectAccess] public ActionResult NewVersion(string FileName, string FolderPath)
         {
             string Name = FileName.Split('.')[0];
             var folder = GetUploadFolder(FolderPath + "/Versions" );
@@ -36,7 +37,7 @@ namespace MeherEstateDevelopers.Controllers
         }
 
         [HttpGet]
-        public ActionResult UploadNewVersion(string FolderPath, IEnumerable<string> names = null)
+        [NoDirectAccess] public ActionResult UploadNewVersion(string FolderPath, IEnumerable<string> names = null)
         {
             FileHandlingController FH = new FileHandlingController();
             var files = FH.Files(FolderPath);
@@ -46,7 +47,7 @@ namespace MeherEstateDevelopers.Controllers
             }, JsonRequestBehavior.AllowGet);
         }
         [HttpPost]
-        public ActionResult UploadNewVersion(List<string> Names,string NewPath,string MainPath,int Version,string FileName)
+        [NoDirectAccess] public ActionResult UploadNewVersion(List<string> Names,string NewPath,string MainPath,int Version,string FileName)
         {
             var files = Request.Files
                 .Cast<string>()
@@ -98,7 +99,7 @@ namespace MeherEstateDevelopers.Controllers
             return file;
         }
         [HttpPost]
-        public ActionResult DeleteFile(string name, string FolderPath)
+        [NoDirectAccess] public ActionResult DeleteFile(string name, string FolderPath)
         {
             var file = GetFile(name, FolderPath);
             file.Delete();
@@ -115,7 +116,7 @@ namespace MeherEstateDevelopers.Controllers
             file.SaveAs(temp);
             return file.FileName;
         }
-        public ActionResult DownloadUrl(string name, string FolderPath)
+        [NoDirectAccess] public ActionResult DownloadUrl(string name, string FolderPath)
         {
             string serverPath = System.Web.Hosting.HostingEnvironment.MapPath("~/Repository/" + FolderPath + "/");
             serverPath = Path.Combine(serverPath, name);
@@ -136,7 +137,7 @@ namespace MeherEstateDevelopers.Controllers
 
             return namesForward;
         }
-        public ActionResult GetFile(string name, string FolderPath, bool thumbnail = false)
+        [NoDirectAccess] public ActionResult GetFile(string name, string FolderPath, bool thumbnail = false)
         {
             var file = GetFile(name, FolderPath);
             var contentType = MimeMapping.GetMimeMapping(file.Name);

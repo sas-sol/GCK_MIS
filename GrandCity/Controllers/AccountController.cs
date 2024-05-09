@@ -10,6 +10,7 @@ using System;
 using MeherEstateDevelopers.Filters;
 using System.Security.Claims;
 using static System.Net.Mime.MediaTypeNames;
+using static MeherEstateDevelopers.MvcApplication;
 
 namespace MeherEstateDevelopers.Controllers
 {
@@ -57,7 +58,7 @@ namespace MeherEstateDevelopers.Controllers
         }
 
         [AllowAnonymous]
-        public ActionResult Login(string returnUrl)
+         public ActionResult Login(string returnUrl)
         {
             if (User.Identity.IsAuthenticated)
             {
@@ -235,7 +236,7 @@ namespace MeherEstateDevelopers.Controllers
         }
 
         [AllowAnonymous]
-        public ActionResult ForgotPassword()
+        [NoDirectAccess] public ActionResult ForgotPassword()
         {
             return View();
         }
@@ -275,12 +276,12 @@ namespace MeherEstateDevelopers.Controllers
         }
 
         [AllowAnonymous]
-        public ActionResult ResetPassword(string code)
+         public ActionResult ResetPassword(string code)
         {
             return code == null ? View("Error") : View();
         }
 
-        public ActionResult ChangePassword()
+         public ActionResult ChangePassword()
         {
             return View();
         }
@@ -341,7 +342,7 @@ namespace MeherEstateDevelopers.Controllers
         }
 
         [AllowAnonymous]
-        public ActionResult ResetPasswordConfirmation()
+         public ActionResult ResetPasswordConfirmation()
         {
             return View();
         }
@@ -349,7 +350,7 @@ namespace MeherEstateDevelopers.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public ActionResult ExternalLogin(string provider, string returnUrl)
+         public ActionResult ExternalLogin(string provider, string returnUrl)
         {
             // Request a redirect to the external login provider
             return new ChallengeResult(provider, Url.Action("ExternalLoginCallback", "Account", new { ReturnUrl = returnUrl }));
@@ -462,7 +463,13 @@ namespace MeherEstateDevelopers.Controllers
         {
             return View();
         }
-   
+        public ActionResult DirectUrlHit(string hittingUrl)
+        {
+            long userid = long.Parse(User.Identity.GetUserId());
+            db.Sp_Add_Activity(userid, hittingUrl, "Write", "", ActivityType.Direct_Url_Hit.ToString(), null);
+            return View();
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)

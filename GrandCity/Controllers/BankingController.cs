@@ -8,6 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Web.Mvc;
 using System.Xml.Linq;
+using static MeherEstateDevelopers.MvcApplication;
 
 namespace MeherEstateDevelopers.Controllers
 {
@@ -20,11 +21,11 @@ namespace MeherEstateDevelopers.Controllers
 
         // Cash counter recovery report
 
-        public ActionResult DailyCashReport()
+        [NoDirectAccess] public ActionResult DailyCashReport()
         {
             return View();
         }
-        public ActionResult FullDailyCashReport()
+        [NoDirectAccess] public ActionResult FullDailyCashReport()
         {
             var All = db.Sp_Get_Cashiers_List().ToList();
             ViewBag.Users = new SelectList(All, "id", "Name");
@@ -33,7 +34,7 @@ namespace MeherEstateDevelopers.Controllers
             db.Sp_Add_Activity(userid, "Accessed Daily Cash Report Page", "Read", "Activity_Record", ActivityType.Banking.ToString(), userid);
             return PartialView();
         }
-        public ActionResult SearchDailyCashReport(DateTime? From, DateTime? To)
+        [NoDirectAccess] public ActionResult SearchDailyCashReport(DateTime? From, DateTime? To)
         {
             long userid = long.Parse(User.Identity.GetUserId());
 
@@ -204,7 +205,7 @@ namespace MeherEstateDevelopers.Controllers
 
             return PartialView(Fresult);
         }
-        public ActionResult PendingDayCloseCashReport()
+        [NoDirectAccess] public ActionResult PendingDayCloseCashReport()
         {
             long userid = long.Parse(User.Identity.GetUserId());
 
@@ -368,7 +369,7 @@ namespace MeherEstateDevelopers.Controllers
 
             return PartialView(Fresult);
         }
-        public ActionResult DayClosedCashReport()
+        [NoDirectAccess] public ActionResult DayClosedCashReport()
         {
             var All = db.Sp_Get_Cashiers_List().ToList();
             ViewBag.Users = new SelectList(All, "id", "Name");
@@ -377,7 +378,7 @@ namespace MeherEstateDevelopers.Controllers
             db.Sp_Add_Activity(userid, "Accessed Day Closed Cash Report Page", "Read", "Activity_Record", ActivityType.Banking.ToString(), userid);
             return PartialView();
         }
-        public ActionResult SearchDayClosedCashReport(DateTime? From, DateTime? To)
+        [NoDirectAccess] public ActionResult SearchDayClosedCashReport(DateTime? From, DateTime? To)
         {
             long userid = long.Parse(User.Identity.GetUserId());
 
@@ -548,21 +549,21 @@ namespace MeherEstateDevelopers.Controllers
             return PartialView(Fresult);
         }
 
-        public ActionResult BankingInstrument()
+        [NoDirectAccess] public ActionResult BankingInstrument()
         {
             long userid = long.Parse(User.Identity.GetUserId());
             db.Sp_Add_Activity(userid, "Accessed Banks Payments Page", "Read", "Activity_Record", ActivityType.Page_Access.ToString(), userid);
             return View();
         }
 
-        public ActionResult AllBankPayments()
+        [NoDirectAccess] public ActionResult AllBankPayments()
         {
 
             long userid = long.Parse(User.Identity.GetUserId());
             db.Sp_Add_Activity(userid, "Accessed Banks Payments Page", "Read", "Activity_Record", ActivityType.Page_Access.ToString(), userid);
             return PartialView();
         }
-        public ActionResult Cheques(string Status, DateTime? From, DateTime? To)
+        [NoDirectAccess] public ActionResult Cheques(string Status, DateTime? From, DateTime? To)
         {
             long userid = long.Parse(User.Identity.GetUserId());
             AccountHandlerController ah = new AccountHandlerController();
@@ -587,7 +588,7 @@ namespace MeherEstateDevelopers.Controllers
             db.Sp_Add_Activity(userid, "Accessed Cheques Page", "Read", "Activity_Record", ActivityType.Page_Access.ToString(), userid);
             return PartialView(res);
         }
-        public ActionResult BankDrafts(string Status, DateTime? From, DateTime? To)
+        [NoDirectAccess] public ActionResult BankDrafts(string Status, DateTime? From, DateTime? To)
         {
             long userid = long.Parse(User.Identity.GetUserId());
             AccountHandlerController ah = new AccountHandlerController();
@@ -613,7 +614,7 @@ namespace MeherEstateDevelopers.Controllers
             db.Sp_Add_Activity(userid, "Accessed Bank Drafts Page", "Read", "Activity_Record", ActivityType.Page_Access.ToString(), userid);
             return PartialView(res);
         }
-        public ActionResult Payorder(string Status, DateTime? From, DateTime? To)
+        [NoDirectAccess] public ActionResult Payorder(string Status, DateTime? From, DateTime? To)
         {
             long userid = long.Parse(User.Identity.GetUserId());
             AccountHandlerController ah = new AccountHandlerController();
@@ -639,7 +640,7 @@ namespace MeherEstateDevelopers.Controllers
             db.Sp_Add_Activity(userid, "Accessed Payorders Page", "Read", "Activity_Record", ActivityType.Page_Access.ToString(), userid);
             return PartialView(res);
         }
-        public ActionResult Online(string Status, DateTime? From, DateTime? To)
+        [NoDirectAccess] public ActionResult Online(string Status, DateTime? From, DateTime? To)
         {
             long userid = long.Parse(User.Identity.GetUserId());
             AccountHandlerController ah = new AccountHandlerController();
@@ -664,7 +665,7 @@ namespace MeherEstateDevelopers.Controllers
             db.Sp_Add_Activity(userid, "Accessed Oline Payments Page", "Read", "Activity_Record", ActivityType.Page_Access.ToString(), userid);
             return PartialView(res);
         }
-        public ActionResult DebitCredit(string Status, DateTime? From, DateTime? To)
+        [NoDirectAccess] public ActionResult DebitCredit(string Status, DateTime? From, DateTime? To)
         {
             long userid = long.Parse(User.Identity.GetUserId());
             AccountHandlerController ah = new AccountHandlerController();
@@ -689,7 +690,7 @@ namespace MeherEstateDevelopers.Controllers
             db.Sp_Add_Activity(userid, "Accessed Debit / Credit Card Payments Page", "Read", "Activity_Record", ActivityType.Page_Access.ToString(), userid);
             return PartialView(res);
         }
-        public ActionResult SearchInstruments(string Type, string Status, DateTime? From, DateTime? To)
+        [NoDirectAccess] public ActionResult SearchInstruments(string Type, string Status, DateTime? From, DateTime? To)
         {
             if (Type == "Cheque")
             {
@@ -714,7 +715,7 @@ namespace MeherEstateDevelopers.Controllers
             return PartialView();
 
         }
-        public ActionResult Cash()
+        [NoDirectAccess] public ActionResult Cash()
         {
             var res = db.Sp_Get_DailyCash_Report().ToList();
 
@@ -722,7 +723,7 @@ namespace MeherEstateDevelopers.Controllers
             db.Sp_Add_Activity(userid, "Accessed Daily Cash Report Page", "Read", "Activity_Record", ActivityType.Details_Access.ToString(), userid);
             return View(res);
         }
-        public ActionResult CBPDetails(string No, DateTime Date, string Bank, string Status)
+        [NoDirectAccess] public ActionResult CBPDetails(string No, DateTime Date, string Bank, string Status)
         {
             var res = db.Sp_Get_Cheque_BankDraft_PayOrder_MultiParamter(No, Status, Bank, Date, Voucher_Type.BRV.ToString()).ToList();
             ViewBag.Bank = db.Bank_Accounts.Select(x => new { x.Bank, x.Account_Number }).ToList();
@@ -833,27 +834,27 @@ namespace MeherEstateDevelopers.Controllers
             }
             return Json(new Return { Status = true, Msg = "Updated" });
         }
-        public ActionResult Receipt(string Id, long Token)
+        [NoDirectAccess] public ActionResult Receipt(string Id, long Token)
         {
             var res = db.Sp_Get_Receipt_Parameter(Id, Token).SingleOrDefault();
             return View(res);
         }
-        public ActionResult InstallmentReceipt(string Id, long Token)
+        [NoDirectAccess] public ActionResult InstallmentReceipt(string Id, long Token)
         {
             var res = db.Sp_Get_Receipt_Parameter(Id, Token).SingleOrDefault();
             return View(res);
         }
-        public ActionResult Dup_Receipt(string Id, long Token)
+        [NoDirectAccess] public ActionResult Dup_Receipt(string Id, long Token)
         {
             var res = db.Sp_Get_Receipt_Parameter(Id, Token).SingleOrDefault();
             return View(res);
         }
-        public ActionResult Dup_InstallmentReceipt(string Id, long Token)
+        [NoDirectAccess] public ActionResult Dup_InstallmentReceipt(string Id, long Token)
         {
             var res = db.Sp_Get_Receipt_Parameter(Id, Token).SingleOrDefault();
             return View(res);
         }
-        public ActionResult FileBiddingReceipt(string Id)
+        [NoDirectAccess] public ActionResult FileBiddingReceipt(string Id)
         {
             var res = (from x in db.Receipts
                        join y in db.File_Form on x.File_Plot_No equals y.Id
@@ -861,17 +862,17 @@ namespace MeherEstateDevelopers.Controllers
                        select x).ToList();
             return View(res);
         }
-        public ActionResult TransferReceipt(string Id, long Token)
+        [NoDirectAccess] public ActionResult TransferReceipt(string Id, long Token)
         {
             var res = db.Sp_Get_Receipt_Parameter(Id, Token).SingleOrDefault();
             return View(res);
         }
 
-        public ActionResult DailySAMCashReport()
+        [NoDirectAccess] public ActionResult DailySAMCashReport()
         {
             return View();
         }
-        public ActionResult DailySAMCashReportView()
+        [NoDirectAccess] public ActionResult DailySAMCashReportView()
         {
             long userid = long.Parse(User.Identity.GetUserId());
             var chids = new XElement("ChPoDd", new XElement("Details", new XAttribute("Ids", userid))).ToString();
@@ -961,7 +962,7 @@ namespace MeherEstateDevelopers.Controllers
             ViewBag.Name = res1.Select(x => x.Cashier_Name).FirstOrDefault();
             return PartialView(Fresult);
         }
-        public ActionResult PendingDailySamCashReport()
+        [NoDirectAccess] public ActionResult PendingDailySamCashReport()
         {
             long userid = long.Parse(User.Identity.GetUserId());
             var chids = new XElement("ChPoDd", new XElement("Details", new XAttribute("Ids", userid))).ToString();
@@ -1051,11 +1052,11 @@ namespace MeherEstateDevelopers.Controllers
             ViewBag.Name = res1.Select(x => x.Cashier_Name).FirstOrDefault();
             return PartialView(Fresult);
         }
-        public ActionResult DayClosedSAMCashReceipt()
+        [NoDirectAccess] public ActionResult DayClosedSAMCashReceipt()
         {
             return PartialView();
         }
-        public ActionResult DayClosedSamCashReceiptView(DateTime? From, DateTime? To)
+        [NoDirectAccess] public ActionResult DayClosedSamCashReceiptView(DateTime? From, DateTime? To)
         {
             if (From is null || To is null)
             {
@@ -1152,7 +1153,7 @@ namespace MeherEstateDevelopers.Controllers
             ViewBag.Name = res1.Select(x => x.Cashier_Name).FirstOrDefault();
             return PartialView(Fresult);
         }
-        public ActionResult ReceiptData(long Id)
+        [NoDirectAccess] public ActionResult ReceiptData(long Id)
         {
             var res = db.Sp_Get_Receipt_Result(Id).FirstOrDefault();
             ViewBag.Bank = new SelectList(Nomenclature.Banks(), "Name", "Name", res.Bank);
@@ -1347,7 +1348,7 @@ namespace MeherEstateDevelopers.Controllers
             }
 
         }
-        public ActionResult AddOnlineAmount()
+        [NoDirectAccess] public ActionResult AddOnlineAmount()
         {
             ViewBag.Bank = new SelectList(Nomenclature.Banks(), "Name", "Name");
             Helpers h = new Helpers();
@@ -1355,7 +1356,7 @@ namespace MeherEstateDevelopers.Controllers
             return PartialView();
         }
 
-        public ActionResult AddOnlineAmountUnSupervised()
+        [NoDirectAccess] public ActionResult AddOnlineAmountUnSupervised()
         {
             Helpers h = new Helpers();
             ViewBag.TransactionId = h.RandomNumber();
@@ -1562,18 +1563,18 @@ namespace MeherEstateDevelopers.Controllers
                 return Json(new Return { Status = false, Msg = "Duplicate transactions are not allowed" });
             }
         }
-        public ActionResult PlotReceipt(string Id, long Token)
+        [NoDirectAccess] public ActionResult PlotReceipt(string Id, long Token)
         {
             var res = db.Sp_Get_Receipt_Parameter(Id, Token).SingleOrDefault();
             return View(res);
         }
-        public ActionResult BidingPlotReceipt(string Id)
+        [NoDirectAccess] public ActionResult BidingPlotReceipt(string Id)
         {
             var res = (from x in db.Receipts where x.DevelopmentCharges == Id select x).ToList();
             return View(res);
         }
    
-        public ActionResult DishonredCheqList()
+        [NoDirectAccess] public ActionResult DishonredCheqList()
         {
             var res = db.Sp_Get_DishonredCheques().ToList();
 
@@ -1581,7 +1582,7 @@ namespace MeherEstateDevelopers.Controllers
             db.Sp_Add_Activity(userid, "Accessed Dishounered Cheques Page", "Read", "Activity_Record", ActivityType.Page_Access.ToString(), userid);
             return View(res);
         }
-        public ActionResult ReturnedCheques()
+        [NoDirectAccess] public ActionResult ReturnedCheques()
         {
             var res = db.Cheque_DemandDraft_PayOrder.Where(x => x.Status == PaymentMethodStatuses.Dishonored.ToString() && x.Delivered_Back == true).ToList();
 
@@ -1589,7 +1590,7 @@ namespace MeherEstateDevelopers.Controllers
             db.Sp_Add_Activity(userid, "Accessed Returnes Cheques Page", "Read", "Activity_Record", ActivityType.Page_Access.ToString(), userid);
             return PartialView(res);
         }
-        public ActionResult DisHoncheqesDetails(string No, DateTime Date, string Bank, string Status)
+        [NoDirectAccess] public ActionResult DisHoncheqesDetails(string No, DateTime Date, string Bank, string Status)
         {
             ViewBag.Bank = new SelectList(Nomenclature.Banks(), "Name", "Name");
             var res = db.Sp_Get_Cheque_BankDraft_PayOrder_MultiParamter(No, Status, Bank, Date, Voucher_Type.BRV.ToString()).ToList();
@@ -1930,49 +1931,49 @@ namespace MeherEstateDevelopers.Controllers
             }
 
         }
-        public ActionResult DishonoredCheqs()
+        [NoDirectAccess] public ActionResult DishonoredCheqs()
         {
             var res = db.Sp_Get_DishonredCheques().ToList();
             return View(res);
         }
-        public ActionResult BanksMIS()
+        [NoDirectAccess] public ActionResult BanksMIS()
         {
             return View();
         }
-        public ActionResult Search_BanksMIS(DateTime From, DateTime To, string Val)
+        [NoDirectAccess] public ActionResult Search_BanksMIS(DateTime From, DateTime To, string Val)
         {
             var res = db.SP_Reports_BANK_MIS(From, To, Val).ToList();
             ViewBag.Bank = db.Bank_Online_Accounts.ToList();
             return PartialView(res);
         }
         // SA Marketing  -- SAS Property Exchange
-        public ActionResult LeadAllBankPayments(string Company)
+        [NoDirectAccess] public ActionResult LeadAllBankPayments(string Company)
         {
             ViewBag.Comp = Company;
             return View();
         }
-        public ActionResult Leads_Cheques(string Status, string Company)
+        [NoDirectAccess] public ActionResult Leads_Cheques(string Status, string Company)
         {
             var res = db.Sp_Get_ChDDPO_Leads("Cheque", Status, Company).ToList();
             ViewBag.Status = Status;
             ViewBag.Comp = Company;
             return PartialView(res);
         }
-        public ActionResult Leads_BankDrafts(string Status, string Company)
+        [NoDirectAccess] public ActionResult Leads_BankDrafts(string Status, string Company)
         {
             var res = db.Sp_Get_ChDDPO_Leads("BankDraft", Status, Company).ToList();
             ViewBag.Comp = Company;
             ViewBag.Status = Status;
             return PartialView(res);
         }
-        public ActionResult Leads_Payorder(string Status, string Company)
+        [NoDirectAccess] public ActionResult Leads_Payorder(string Status, string Company)
         {
             var res = db.Sp_Get_ChDDPO_Leads("PayOrder", Status, Company).ToList();
             ViewBag.Comp = Company;
             ViewBag.Status = Status;
             return PartialView(res);
         }
-        public ActionResult Leads_Online(string Status, string Company)
+        [NoDirectAccess] public ActionResult Leads_Online(string Status, string Company)
         {
             var res = db.Sp_Get_Online_Leads(Status, Company).ToList();
             ViewBag.Comp = Company;
@@ -1980,7 +1981,7 @@ namespace MeherEstateDevelopers.Controllers
             return PartialView(res);
         }
 
-        public ActionResult LeadsCBPDetails(string No, DateTime Date, string Bank, string Status)
+        [NoDirectAccess] public ActionResult LeadsCBPDetails(string No, DateTime Date, string Bank, string Status)
         {
             var res = db.Sp_Get_LeadInstrument_MultiParamter(No, Status, Bank, Date).ToList();
             ViewBag.Bank = new SelectList(Nomenclature.Banks(), "Name", "Name");
@@ -2036,12 +2037,12 @@ namespace MeherEstateDevelopers.Controllers
             }
             return Json(true);
         }
-        public ActionResult LeadsDishonoredCheqs()
+        [NoDirectAccess] public ActionResult LeadsDishonoredCheqs()
         {
             var res = db.Sp_Get_LeadsDishonredCheques().ToList();
             return View(res);
         }
-        public ActionResult LeadsDisHoncheqesDetails(string No, DateTime Date, string Bank, string Status)
+        [NoDirectAccess] public ActionResult LeadsDisHoncheqesDetails(string No, DateTime Date, string Bank, string Status)
         {
             ViewBag.Bank = new SelectList(Nomenclature.Banks(), "Name", "Name");
             var res = db.Sp_Get_LeadInstrument_MultiParamter(No, Status, Bank, Date).ToList();
@@ -2163,7 +2164,7 @@ namespace MeherEstateDevelopers.Controllers
             return Json(data);
         }
         // Banks & Accounts
-        public ActionResult BankAndAccount()
+        [NoDirectAccess] public ActionResult BankAndAccount()
         {
             ViewBag.Bank = new SelectList(Nomenclature.Banks(), "Name", "Name");
             long userid = long.Parse(User.Identity.GetUserId());
@@ -2183,7 +2184,7 @@ namespace MeherEstateDevelopers.Controllers
 
             return Json(res);
         }
-        public ActionResult GetBankAccount()
+        [NoDirectAccess] public ActionResult GetBankAccount()
         {
             var res = db.Bank_Accounts.ToList();
             return PartialView(res);
@@ -2246,7 +2247,7 @@ namespace MeherEstateDevelopers.Controllers
             db.Sp_Update_SAM_CashierDayClose(userid, dt);
             return Json(true);
         }
-        public ActionResult OnlineBankAccount()
+        [NoDirectAccess] public ActionResult OnlineBankAccount()
         {
             long userid = long.Parse(User.Identity.GetUserId());
             AccountHandlerController ah = new AccountHandlerController();
@@ -2270,7 +2271,7 @@ namespace MeherEstateDevelopers.Controllers
             db.SaveChanges();
             return Json(true);
         }
-        public ActionResult GetBankOnlineAccount()
+        [NoDirectAccess] public ActionResult GetBankOnlineAccount()
         {
             var res = db.Bank_Online_Accounts.ToList();
             return PartialView(res);
@@ -2311,14 +2312,14 @@ namespace MeherEstateDevelopers.Controllers
 
 
 
-        public ActionResult InstrumentClearing()
+        [NoDirectAccess] public ActionResult InstrumentClearing()
         {
 
             long userid = long.Parse(User.Identity.GetUserId());
             db.Sp_Add_Activity(userid, "Accessed Banks Payments Page", "Read", "Activity_Record", ActivityType.Page_Access.ToString(), userid);
             return PartialView();
         }
-        public ActionResult PDCCheques(string Status, DateTime? From, DateTime? To)
+        [NoDirectAccess] public ActionResult PDCCheques(string Status, DateTime? From, DateTime? To)
         {
             long userid = long.Parse(User.Identity.GetUserId());
             AccountHandlerController ah = new AccountHandlerController();
@@ -2343,7 +2344,7 @@ namespace MeherEstateDevelopers.Controllers
             db.Sp_Add_Activity(userid, "Accessed Cheques Page", "Read", "Activity_Record", ActivityType.Page_Access.ToString(), userid);
             return PartialView(res);
         }
-        public ActionResult PDCBankDrafts(string Status, DateTime? From, DateTime? To)
+        [NoDirectAccess] public ActionResult PDCBankDrafts(string Status, DateTime? From, DateTime? To)
         {
             long userid = long.Parse(User.Identity.GetUserId());
             AccountHandlerController ah = new AccountHandlerController();
@@ -2369,7 +2370,7 @@ namespace MeherEstateDevelopers.Controllers
             db.Sp_Add_Activity(userid, "Accessed Bank Drafts Page", "Read", "Activity_Record", ActivityType.Page_Access.ToString(), userid);
             return PartialView(res);
         }
-        public ActionResult PDCPayorder(string Status, DateTime? From, DateTime? To)
+        [NoDirectAccess] public ActionResult PDCPayorder(string Status, DateTime? From, DateTime? To)
         {
             long userid = long.Parse(User.Identity.GetUserId());
             AccountHandlerController ah = new AccountHandlerController();
@@ -2395,7 +2396,7 @@ namespace MeherEstateDevelopers.Controllers
             db.Sp_Add_Activity(userid, "Accessed Payorders Page", "Read", "Activity_Record", ActivityType.Page_Access.ToString(), userid);
             return PartialView(res);
         }
-        public ActionResult PDCCBPDetails(string No, DateTime Date, string Bank, string Status)
+        [NoDirectAccess] public ActionResult PDCCBPDetails(string No, DateTime Date, string Bank, string Status)
         {
             var res = db.Sp_Get_Cheque_BankDraft_PayOrder_MultiParamter(No, Status, Bank, Date, Voucher_Type.BPV.ToString()).ToList();
             ViewBag.Bank = db.Bank_Accounts.Select(x => new { x.Bank, x.Account_Number }).ToList();
@@ -2441,7 +2442,7 @@ namespace MeherEstateDevelopers.Controllers
             return Json(new Return { Status = true, Msg = "Updated" });
         }
 
-        public ActionResult PDCSearchInstruments(string Type, string Status, DateTime? From, DateTime? To)
+        [NoDirectAccess] public ActionResult PDCSearchInstruments(string Type, string Status, DateTime? From, DateTime? To)
         {
             if (Type == "Cheque")
             {
@@ -2466,7 +2467,7 @@ namespace MeherEstateDevelopers.Controllers
             return PartialView();
 
         }
-        //public ActionResult PDCOnline(string Status, DateTime? From, DateTime? To)
+        //[NoDirectAccess] public ActionResult PDCOnline(string Status, DateTime? From, DateTime? To)
         //{
         //    long userid = long.Parse(User.Identity.GetUserId());
         //    AccountHandlerController ah = new AccountHandlerController();
@@ -2491,7 +2492,7 @@ namespace MeherEstateDevelopers.Controllers
         //    db.Sp_Add_Activity(userid, "Accessed Oline Payments Page", "Read", "Activity_Record", ActivityType.Page_Access.ToString(), userid);
         //    return PartialView(res);
         //}
-        //public ActionResult PDCDebitCredit(string Status, DateTime? From, DateTime? To)
+        //[NoDirectAccess] public ActionResult PDCDebitCredit(string Status, DateTime? From, DateTime? To)
         //{
         //    long userid = long.Parse(User.Identity.GetUserId());
         //    AccountHandlerController ah = new AccountHandlerController();

@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using MeherEstateDevelopers.Models;
 using MeherEstateDevelopers.Filters;
+using static MeherEstateDevelopers.MvcApplication;
 
 namespace MeherEstateDevelopers.Controllers
 {
@@ -23,7 +24,7 @@ namespace MeherEstateDevelopers.Controllers
             var realEstate_Phases = db.Sp_Get_Project_Phase_Block_Parameter(id);
             return Json(realEstate_Phases);
         }
-        public ActionResult Details(long? id)
+        [NoDirectAccess] public ActionResult Details(long? id)
         {
             if (id == null)
             {
@@ -36,14 +37,14 @@ namespace MeherEstateDevelopers.Controllers
             }
             return View(realEstate_Phases);
         }
-        public ActionResult Create()
+        [NoDirectAccess] public ActionResult Create()
         {
             ViewBag.Project_Id = new SelectList(db.RealEstate_Projects, "Id", "Project_Name");
             return PartialView();
         } 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Phase_Name,Description,Project_Id")] RealEstate_Phases realEstate_Phases)
+        [NoDirectAccess] public ActionResult Create([Bind(Include = "Id,Phase_Name,Description,Project_Id")] RealEstate_Phases realEstate_Phases)
         {
             var res = db.Sp_Add_Phase(realEstate_Phases.Phase_Name, realEstate_Phases.Description, realEstate_Phases.Project_Id).FirstOrDefault();
             if(res == true)
@@ -60,7 +61,7 @@ namespace MeherEstateDevelopers.Controllers
             }
 
         }
-        public ActionResult Edit(long? id)
+        [NoDirectAccess] public ActionResult Edit(long? id)
         {
             if (id == null)
             {
@@ -76,7 +77,7 @@ namespace MeherEstateDevelopers.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Phase_Name,Description,Project_Id")] RealEstate_Phases realEstate_Phases)
+        [NoDirectAccess] public ActionResult Edit([Bind(Include = "Id,Phase_Name,Description,Project_Id")] RealEstate_Phases realEstate_Phases)
         {
             if (ModelState.IsValid)
             {
@@ -95,7 +96,7 @@ namespace MeherEstateDevelopers.Controllers
         /// <param name="disposing">Commercial Floor Creatation</param>
         /// 
 
-        public ActionResult CreateCommercialFloor()
+        [NoDirectAccess] public ActionResult CreateCommercialFloor()
         {
             ViewBag.Project_Id = new SelectList(db.RealEstate_Projects, "Id", "Project_Name");
             return View();

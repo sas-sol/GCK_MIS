@@ -15,6 +15,7 @@ using Microsoft.Ajax.Utilities;
 using Microsoft.AspNet.Identity;
 using Newtonsoft.Json;
 using static System.Net.WebRequestMethods;
+using static MeherEstateDevelopers.MvcApplication;
 
 namespace MeherEstateDevelopers.Controllers
 {
@@ -24,7 +25,7 @@ namespace MeherEstateDevelopers.Controllers
     {
         private string AccountingModuleFP = COA_Mapper_Modules.Files_Plots.ToString();
         private Grand_CityEntities db = new Grand_CityEntities();
-        public ActionResult TypeofCharges()
+        [NoDirectAccess] public ActionResult TypeofCharges()
         {
             return View();
         }
@@ -50,17 +51,17 @@ namespace MeherEstateDevelopers.Controllers
                 return Json(false);
             }
         }
-        public ActionResult AllServiceCharges()
+        [NoDirectAccess] public ActionResult AllServiceCharges()
         {
             var res = db.Sp_Get_ServiceChargesTypeList().ToList();
             return PartialView(res);
         }
-        public ActionResult ElecUnitDetails()
+        [NoDirectAccess] public ActionResult ElecUnitDetails()
         {
             var res = db.Sp_Get_UnitDetails_Electricity().ToList();
             return View(res);
         }
-        public ActionResult UpdateRates(int Id)
+        [NoDirectAccess] public ActionResult UpdateRates(int Id)
         {
             var res = db.Sp_Get_ElectricUnitRate_Parameter(Id).SingleOrDefault();
             return PartialView(res);
@@ -72,19 +73,19 @@ namespace MeherEstateDevelopers.Controllers
         //    db.Sp_Update_ElectricUnitRate(eb.Id, eb.Start_Range, eb.End_Range, eb.Rate);
         //    return Json(true);
         //}
-        public ActionResult Bills()
+        [NoDirectAccess] public ActionResult Bills()
         {
             var res = db.Sp_Get_PlotsServiceChargesListRecord().ToList();
             ViewBag.Blocks = new SelectList(db.Sp_Get_Block(), "Id", "Block_Name", "Phase_Name");
             return View(res);
         }
         // commercial
-        public ActionResult CommercialBills()
+        [NoDirectAccess] public ActionResult CommercialBills()
         {
             ViewBag.Project = new SelectList(db.RealEstate_Projects.Where(x => x.Type == ProjectCategory.Commercial.ToString()).ToList(), "Id", "Project_Name");
             return View();
         }
-        public ActionResult PlotsServiceChargesList(long Id)
+        [NoDirectAccess] public ActionResult PlotsServiceChargesList(long Id)
         {
             var res1 = db.Sp_Get_PlotsServiceChargesList(Id).ToList();
             var rec = res1.Sum(x => x.Grand_Total);
@@ -99,7 +100,7 @@ namespace MeherEstateDevelopers.Controllers
             return PartialView(res);
         }
         // commercial
-        //public ActionResult CommercialServiceChargesList(long Id)
+        //[NoDirectAccess] public ActionResult CommercialServiceChargesList(long Id)
         //{
         //    var res1 = db.Sp_Get_CommercialServiceChargesList(Id).ToList();
         //    var rec = res1.Sum(x => x.Grand_Total);
@@ -116,7 +117,7 @@ namespace MeherEstateDevelopers.Controllers
         //    return PartialView(res);
         //}
         // New Changed
-        public ActionResult ElectricityBill()
+        [NoDirectAccess] public ActionResult ElectricityBill()
         {
             //ViewBag.Blocks = new SelectList(db.Sp_Get_Block(), "Id", "Block_Name", "Phase_Name");
 
@@ -126,12 +127,12 @@ namespace MeherEstateDevelopers.Controllers
         }
 
         // commercial
-        public ActionResult ElectricityBillCommercial()
+        [NoDirectAccess] public ActionResult ElectricityBillCommercial()
         {
             ViewBag.Project = new SelectList(db.RealEstate_Projects.Where(x => x.Type == ProjectCategory.Commercial.ToString()).ToList(), "Id", "Project_Name");
             return View();
         }
-        public ActionResult PlotsElectricityList(long Id)
+        [NoDirectAccess] public ActionResult PlotsElectricityList(long Id)
         {
             var res1 = db.Sp_Get_PlotsElectricCharges_ByBlock(Id).ToList();
             var rec = res1.Sum(x => x.Grand_Total);
@@ -146,7 +147,7 @@ namespace MeherEstateDevelopers.Controllers
             return PartialView(res);
         }
         //// commercial 
-        //public ActionResult CommercialElectricityList(long Id)
+        //[NoDirectAccess] public ActionResult CommercialElectricityList(long Id)
         //{
         //    var res1 = db.Sp_Get_CommercialElectricCharges_ByProject(Id).ToList();
         //    var rec = res1.Sum(x => x.Grand_Total);
@@ -162,7 +163,7 @@ namespace MeherEstateDevelopers.Controllers
         //    var res = new PlotElectricDetails { Receiable = rec, Received = recd, Resi_Receiable = Rrec, Resi_Received = Rrecd,App_Receiable=Arec,App_Received=Arecd, Com_Receiable = Crec, Com_Received = Crecd, CommercialElectricList = res1 };
         //    return PartialView(res);
         //}
-        public ActionResult ServiceChargesBills(long Id)
+        [NoDirectAccess] public ActionResult ServiceChargesBills(long Id)
         {
             var res = db.Sp_Get_PlotServiceChargeBills(Id).ToList();
             return PartialView(res);
@@ -193,7 +194,7 @@ namespace MeherEstateDevelopers.Controllers
             }
 
         }
-        public ActionResult PlotServiceChargesList(long Id)
+        [NoDirectAccess] public ActionResult PlotServiceChargesList(long Id)
         {
             var res1 = db.Sp_Get_ServiceChargesTypeList().ToList();
             var res2 = db.Sp_Get_PlotServiceChargesTypeList(Id).ToList();
@@ -202,7 +203,7 @@ namespace MeherEstateDevelopers.Controllers
             return PartialView(res);
         }
         // commercail
-        //public ActionResult ComServiceChargesList(long Id)
+        //[NoDirectAccess] public ActionResult ComServiceChargesList(long Id)
         //{
         //    var res1 = db.Sp_Get_ServiceChargesTypeList_Commercial().ToList();
         //    var res2 = db.Sp_Get_CommercialServiceChargesTypeList(Id).ToList();
@@ -240,14 +241,14 @@ namespace MeherEstateDevelopers.Controllers
         //        return Json(res);
         //    }
         //}
-        public ActionResult CurrentMonthBill(long PlotId)
+        [NoDirectAccess] public ActionResult CurrentMonthBill(long PlotId)
         {
             var res = db.Sp_Get_PlotServiceChargesTypeList(PlotId).ToList();
             ViewBag.Plot_Id = PlotId;
             return PartialView(res);
         }
         //// commercial
-        //public ActionResult CurrentMonthBillCommercial(long PlotId)
+        //[NoDirectAccess] public ActionResult CurrentMonthBillCommercial(long PlotId)
         //{
         //    var res = db.Sp_Get_CommercialServiceChargesTypeList(PlotId).ToList();
         //    ViewBag.Plot_Id = PlotId;
@@ -318,7 +319,7 @@ namespace MeherEstateDevelopers.Controllers
 
 
         }
-        //public ActionResult FineData()
+        //[NoDirectAccess] public ActionResult FineData()
         //{
         //    var res = db.Fine_And_Penalties.Where(x => x.Fine_Type == FineAndPenaltiesTypes.ServiceChargesFine.ToString()).ToList();
         //    return PartialView(res);
@@ -376,7 +377,7 @@ namespace MeherEstateDevelopers.Controllers
         //    var res = db.Sp_Add_PlotServiceChargeBills_Regen(Totalamt, res1.Module, name, res1.Project_Name, Plot_Id, Convert.ToString(res1.Plot_Id), res1.Module, Arrears, Remarks, details).FirstOrDefault();
         //    return Json(res);
         //}
-        //public ActionResult PlotSubscribedServiceCharges(long Id)
+        //[NoDirectAccess] public ActionResult PlotSubscribedServiceCharges(long Id)
         //{
         //    var res = db.Sp_Get_PlotServiceChargesTypeList(Id).ToList();
         //    ViewBag.PlotId = Id;
@@ -557,7 +558,7 @@ namespace MeherEstateDevelopers.Controllers
                 return sw.GetStringBuilder().ToString();
             }
         }
-        //public ActionResult Download(long BlockId)
+        //[NoDirectAccess] public ActionResult Download(long BlockId)
         //{
         //    var res1 = db.Sp_Get_PlotsServiceCharges_ByBlock(BlockId).ToList();
         //    var res = (from x in res1
@@ -609,7 +610,7 @@ namespace MeherEstateDevelopers.Controllers
         //    fileResult.FileDownloadName = "Document.pdf";
         //    return fileResult;
         //}
-        public ActionResult MeterDetails(long PlotId, int SC_Source)
+        [NoDirectAccess] public ActionResult MeterDetails(long PlotId, int SC_Source)
         {
             if (SC_Source == 1)
             {
@@ -621,40 +622,40 @@ namespace MeherEstateDevelopers.Controllers
             }
             return PartialView();
         }
-        public ActionResult MeterReading()
+        [NoDirectAccess] public ActionResult MeterReading()
         {
             ViewBag.PlotMeters = new SelectList(db.Sp_Get_Block(), "Id", "Block_Name", "Phase_Name");
             return View();
         }
 
         // commercial
-        public ActionResult MeterReadingCommercial()
+        [NoDirectAccess] public ActionResult MeterReadingCommercial()
         {
             ViewBag.Project = new SelectList(db.RealEstate_Projects.Where(x => x.Type == ProjectCategory.Commercial.ToString()).ToList(), "Id", "Project_Name");
             return View();
         }
-        public ActionResult MeterReadingDetails()
+        [NoDirectAccess] public ActionResult MeterReadingDetails()
         {
             return View();
         }
-        public ActionResult PlotsMeterList(long Id)
+        [NoDirectAccess] public ActionResult PlotsMeterList(long Id)
         {
             var res = db.Sp_Get_PlotsMeterDetails_NewMeterReadings(Id).ToList();
             return PartialView(res);
         }
 
         //// commercial
-        //public ActionResult PlotsMeterListCommercial(long? Id) 
+        //[NoDirectAccess] public ActionResult PlotsMeterListCommercial(long? Id) 
         //{
         //    var res = db.Sp_Get_CommercialMeterDetails(Id).ToList();
         //    return PartialView(res);
         //}
-        public ActionResult AddCurrMonthReading()
+        [NoDirectAccess] public ActionResult AddCurrMonthReading()
         {
 
             return PartialView();
         }
-        public ActionResult AddMeterNo()
+        [NoDirectAccess] public ActionResult AddMeterNo()
         {
             return PartialView();
         }
@@ -740,7 +741,7 @@ namespace MeherEstateDevelopers.Controllers
             }
         }
 
-        public ActionResult NewPlotsMeterList(long Id)
+        [NoDirectAccess] public ActionResult NewPlotsMeterList(long Id)
         {
             ViewBag.BlockId = Id;
             var res = db.Sp_Get_PlotsMeterDetails_NewMeterReadings(Id).ToList();
@@ -758,7 +759,7 @@ namespace MeherEstateDevelopers.Controllers
             return Json(true);
         }
 
-        public ActionResult NewMeterReading()
+        [NoDirectAccess] public ActionResult NewMeterReading()
         {
             ViewBag.PlotMeters = new SelectList(db.Sp_Get_Block(), "Id", "Block_Name", "Phase_Name");
             return View();
@@ -852,18 +853,18 @@ namespace MeherEstateDevelopers.Controllers
 
             return Json(true);
         }
-        //public ActionResult AllBlockReadingsTypeWise(string Type)
+        //[NoDirectAccess] public ActionResult AllBlockReadingsTypeWise(string Type)
         //{
         //    ViewBag.Type = Type;
         //    var res = db.Sp_Get_PlotsElectricCharges_NewMeterReadinds_Type_Parameter(Type).ToList();
         //    return PartialView(res);
         //}
-        public ActionResult BillHistory(long PlotId)
+        [NoDirectAccess] public ActionResult BillHistory(long PlotId)
         {
             var res = db.Sp_Get_PlotsElectricCharges_NewMeterReadinds_PlotId_Parameter(PlotId).ToList();
             return PartialView(res);
         }
-        public ActionResult ElectricityCharges_Short(DateTime? month, DateTime? year, long?[] blockid)
+        [NoDirectAccess] public ActionResult ElectricityCharges_Short(DateTime? month, DateTime? year, long?[] blockid)
         {
             List<Sp_Get_Report_ElectricityCharges_Result> res3 = new List<Sp_Get_Report_ElectricityCharges_Result>();
             List<string> blocklist = new List<string>();
@@ -900,7 +901,7 @@ namespace MeherEstateDevelopers.Controllers
             var res = new ElectricityChargesDetails { ElectricityChargesList = res3 };
             return PartialView(res);
         }
-        public ActionResult ServiceCharges_Short(DateTime? month, DateTime? year, long?[] blockid)
+        [NoDirectAccess] public ActionResult ServiceCharges_Short(DateTime? month, DateTime? year, long?[] blockid)
         {
             List<Sp_Get_Report_ServiceCharges_Result> res3 = new List<Sp_Get_Report_ServiceCharges_Result>();
             List<string> blocklist = new List<string>();
@@ -932,7 +933,7 @@ namespace MeherEstateDevelopers.Controllers
             var res = new ElectricityChargesDetails { ServiceChargesList = res3 };
             return PartialView(res);
         }
-        public ActionResult ElectricityBillByTypeWise(long BlockId, string Type)
+        [NoDirectAccess] public ActionResult ElectricityBillByTypeWise(long BlockId, string Type)
         {
             var res = db.Sp_Get_PlotsElectricCharges_NewMeterReadinds_Type_Parameter(Type, BlockId).ToList();
             List<ElectricityBillViewTypeWise> vw = new List<ElectricityBillViewTypeWise>();
@@ -954,7 +955,7 @@ namespace MeherEstateDevelopers.Controllers
             return View(vw);
         }
         // service charges type with block combine
-        public ActionResult ServicechargesBillByTypeWise(long BlockId, string Type)
+        [NoDirectAccess] public ActionResult ServicechargesBillByTypeWise(long BlockId, string Type)
         {
 
             var res1 = db.Sp_Get_ServiceCharges_Type_Parameter(Type, BlockId).ToList();
@@ -1054,13 +1055,13 @@ namespace MeherEstateDevelopers.Controllers
             db.Sp_Update_ElectMeterReading(Id, Reading);
             return Json(true);
         }
-        public ActionResult ServiceChargesBillPayment()
+        [NoDirectAccess] public ActionResult ServiceChargesBillPayment()
         {
             ViewBag.Block = new SelectList(db.Sp_Get_Block(), "Id", "Block_Name", "Phase_Name");
             return View();
         }
 
-        public ActionResult ServiceChargesDetails(string billNo)
+        [NoDirectAccess] public ActionResult ServiceChargesDetails(string billNo)
         {
             var currBill = db.Sp_Get_ServiceCharge_Bill_ById(billNo).FirstOrDefault();
             ViewBag.Plotid = currBill.Plot_Id;
@@ -1068,7 +1069,7 @@ namespace MeherEstateDevelopers.Controllers
             return PartialView(res);
         }
 
-        public ActionResult ElectricityBillDetails(string MeterNo)
+        [NoDirectAccess] public ActionResult ElectricityBillDetails(string MeterNo)
         {
             var currBill = db.Sp_Get_ElecBill_ById(MeterNo).FirstOrDefault();
             ViewBag.Plotid = currBill.Meter_No;
@@ -1076,7 +1077,7 @@ namespace MeherEstateDevelopers.Controllers
             return PartialView(res);
         }
 
-        public ActionResult PayServiceChargesBill(string billNo)
+        [NoDirectAccess] public ActionResult PayServiceChargesBill(string billNo)
         {
             ViewBag.Bank = new SelectList(Nomenclature.Banks(), "Name", "Name");
             var res = db.Sp_Get_ServiceCharge_Bill_ById(billNo).FirstOrDefault();
@@ -1121,7 +1122,7 @@ namespace MeherEstateDevelopers.Controllers
         //    return Json(res);
         //}
 
-        public ActionResult PayElectricityBill(string MeterNo)
+        [NoDirectAccess] public ActionResult PayElectricityBill(string MeterNo)
         {
             var elecCurrBill = db.Electricity_Bill.Where(x => x.Bill_No == MeterNo).FirstOrDefault();
             //var res = db.Sp_Get_PlotLastElectricityBills(elecCurrBill.Plot_Id).OrderByDescending(x => x.Id).FirstOrDefault();
@@ -1194,24 +1195,24 @@ namespace MeherEstateDevelopers.Controllers
             }
             return Json(res);
         }
-        public ActionResult ElectricityBillPayment()
+        [NoDirectAccess] public ActionResult ElectricityBillPayment()
         {
             ViewBag.Block = new SelectList(db.Sp_Get_Block(), "Id", "Block_Name", "Phase_Name");
             return View();
         }
-        public ActionResult ElectricityBillByBlock(long BlockId)
+        [NoDirectAccess] public ActionResult ElectricityBillByBlock(long BlockId)
         {
             var res = db.Sp_Get_PlotsElectricCharges_ByBlock(BlockId).ToList();
             return View(res);
         }
 
         //// commercial
-        //public ActionResult ElectricityBillByProjectCommercial(long ProjectId)
+        //[NoDirectAccess] public ActionResult ElectricityBillByProjectCommercial(long ProjectId)
         //{
         //    var res = db.Sp_Get_CommercialElectricCharges_ByProject(ProjectId).ToList();
         //    return View(res);
         //}
-        public ActionResult ServiceChargesBillsByBlock(long BlockId)
+        [NoDirectAccess] public ActionResult ServiceChargesBillsByBlock(long BlockId)
         {
             var res1 = db.Sp_Get_PlotsServiceCharges_ByBlock(BlockId).ToList();
             var res = (from x in res1
@@ -1261,7 +1262,7 @@ namespace MeherEstateDevelopers.Controllers
             return View(FinalResult);
         }
         // commercial
-        //public ActionResult ServiceChargesBillsByProjectCommercial(long ProjectId)
+        //[NoDirectAccess] public ActionResult ServiceChargesBillsByProjectCommercial(long ProjectId)
         //{
         //    var res1 = db.Sp_Get_CommercialServiceCharges_ByProject(ProjectId).ToList();
         //    var res = (from x in res1
@@ -1284,7 +1285,7 @@ namespace MeherEstateDevelopers.Controllers
         //    return View(res);
         //}
         //// commercial
-        //public ActionResult ServiceChargesBillsByProjectCommercial(long ProjectId)
+        //[NoDirectAccess] public ActionResult ServiceChargesBillsByProjectCommercial(long ProjectId)
         //{
         //    var res1 = db.Sp_Get_CommercialServiceCharges_ByProject(ProjectId).ToList();
         //    var res = (from x in res1
@@ -1307,7 +1308,7 @@ namespace MeherEstateDevelopers.Controllers
         //    return View(res);
         //}
 
-        public ActionResult ViewPlotElectricityBill(string billNo)
+        [NoDirectAccess] public ActionResult ViewPlotElectricityBill(string billNo)
         {
             var res = db.Sp_Get_ElecBill_ById(billNo).ToList();
             var thisbill = res.FirstOrDefault();
@@ -1323,7 +1324,7 @@ namespace MeherEstateDevelopers.Controllers
             return View("ElectricityBillByBlock", new ElectricityBillView { CurrBill = res, PastBills = hist, CurrBillDetails = details });
         }
         //// commercial
-        //public ActionResult ViewPlotElectricityBillCommercial(long Plotid)
+        //[NoDirectAccess] public ActionResult ViewPlotElectricityBillCommercial(long Plotid)
         //{
         //    var res = db.Sp_Get_CommercialElectricCharges_ById(Plotid).Select(x => new Sp_Get_CommercialElectricCharges_ByProject_Result
         //    {
@@ -1347,7 +1348,7 @@ namespace MeherEstateDevelopers.Controllers
         //    return View("ElectricityBillByProjectCommercial", res);
         //}
 
-        public ActionResult ViewPlotServiceBill(long Plotid)
+        [NoDirectAccess] public ActionResult ViewPlotServiceBill(long Plotid)
         {
             var res1 = db.Sp_Get_PlotsServiceCharges_ByPlot(Plotid).ToList();
             var pltId = res1.Select(x => x.Plot_Id).FirstOrDefault();
@@ -1370,7 +1371,7 @@ namespace MeherEstateDevelopers.Controllers
                        }).ToList();
             return View("ServiceChargesBillsByBlock", res);
         }
-        public ActionResult ViewElectricityBill(long Id)
+        [NoDirectAccess] public ActionResult ViewElectricityBill(long Id)
         {
             var res = db.Sp_Get_PlotsElectricCharges_ById(Id).Select(x => new Sp_Get_PlotsElectricCharges_ByBlock_Result
             {
@@ -1392,7 +1393,7 @@ namespace MeherEstateDevelopers.Controllers
 
             return View("ElectricityBillByBlock", res);
         }
-        public ActionResult ViewServiceBill(long Id)
+        [NoDirectAccess] public ActionResult ViewServiceBill(long Id)
         {
             var res1 = db.Sp_Get_PlotsServiceCharges_ById(Id).ToList();
             var pltId = res1.Select(x => x.Plot_Id).FirstOrDefault();
@@ -1448,7 +1449,7 @@ namespace MeherEstateDevelopers.Controllers
             var FinalResult = new ServiceChargesBill { ElectricityData = null/*res11*/, ServiceChargesData = res };
             return View("ServiceChargesBillsByBlock", FinalResult);
         }
-        //public ActionResult ViewServiceBillCommercial(long Id)
+        //[NoDirectAccess] public ActionResult ViewServiceBillCommercial(long Id)
         //{
         //    var res1 = db.Sp_Get_CommercialServiceCharges_ById(Id).ToList();
         //    var res = (from x in res1
@@ -1470,7 +1471,7 @@ namespace MeherEstateDevelopers.Controllers
         //               }).ToList();
         //    return View("ServiceChargesBillsByProjectCommercial", res);
         //}
-        //public ActionResult ViewServiceBillCommercial(long Id)
+        //[NoDirectAccess] public ActionResult ViewServiceBillCommercial(long Id)
         //{
         //    var res1 = db.Sp_Get_CommercialServiceCharges_ById(Id).ToList();
         //    var res = (from x in res1
@@ -1492,7 +1493,7 @@ namespace MeherEstateDevelopers.Controllers
         //               }).ToList();
         //    return View("ServiceChargesBillsByProjectCommercial", res);
         //}
-        public ActionResult NewConnection()
+        [NoDirectAccess] public ActionResult NewConnection()
         {
             long userid = long.Parse(User.Identity.GetUserId());
             db.Sp_Add_Activity(userid, "Access Page of Plot Information", "Read", Modules.PlotManagement.ToString(), ActivityType.Page_Access.ToString(), null);
@@ -1501,7 +1502,7 @@ namespace MeherEstateDevelopers.Controllers
             return View();
         }
         // Commercial
-        public ActionResult NewConnectionCommercial()
+        [NoDirectAccess] public ActionResult NewConnectionCommercial()
         {
             long userid = long.Parse(User.Identity.GetUserId());
             db.Sp_Add_Activity(userid, "Access Page of Plot Information", "Read", Modules.PlotManagement.ToString(), ActivityType.Page_Access.ToString(), null);
@@ -1509,7 +1510,7 @@ namespace MeherEstateDevelopers.Controllers
             ViewBag.Project = new SelectList(db.RealEstate_Projects.ToList(), "Id", "Project_Name");
             return View();
         }
-        public ActionResult PlotsSubscribtions(long Id)
+        [NoDirectAccess] public ActionResult PlotsSubscribtions(long Id)
         {
             var res1 = db.Sp_Get_ServiceChargesTypeList().ToList();
             var res2 = db.Sp_Get_PlotServiceChargesTypeList(Id).ToList();
@@ -1519,7 +1520,7 @@ namespace MeherEstateDevelopers.Controllers
             return PartialView(res);
         }
         // commercial
-        //public ActionResult CommercialSubscribtions(long Id,string Type)
+        //[NoDirectAccess] public ActionResult CommercialSubscribtions(long Id,string Type)
         //{
         //    var res1 = db.Sp_Get_ServiceChargesTypeList_Commercial().ToList();
         //    var res2 = db.Sp_Get_CommercialServiceChargesTypeList(Id).ToList();
@@ -1529,7 +1530,7 @@ namespace MeherEstateDevelopers.Controllers
         //    var res = new Subscribed_Charges { SCComList = res1, Com_SCList = res2, Plot_Meters = res3 };
         //    return PartialView(res);
         //}
-        public ActionResult ManageServiceCharges()
+        [NoDirectAccess] public ActionResult ManageServiceCharges()
         {
             List<Sp_Get_Plotlist_Block_Result> BlkList = new List<Sp_Get_Plotlist_Block_Result>();
             var Blkrest = db.RealEstate_Blocks.ToList();
@@ -1544,16 +1545,16 @@ namespace MeherEstateDevelopers.Controllers
             return View(res);
         }
         // commercail
-        public ActionResult CommercialManageServiceCharges()
+        [NoDirectAccess] public ActionResult CommercialManageServiceCharges()
         {
             var res = db.RealEstate_Projects.Where(x => x.Type == ProjectCategory.Commercial.ToString()).ToList();
             return View(res);
         }
-        public ActionResult ConnectionCharges()
+        [NoDirectAccess] public ActionResult ConnectionCharges()
         {
             return View();
         }
-        public ActionResult ConnectionChargesList()
+        [NoDirectAccess] public ActionResult ConnectionChargesList()
         {
             var res = db.Connection_Charges.ToList();
             return PartialView(res);
@@ -1575,7 +1576,7 @@ namespace MeherEstateDevelopers.Controllers
                 return Json(false);
             }
         }
-        public ActionResult GetCustomerData(long PlotId, string Connection)
+        [NoDirectAccess] public ActionResult GetCustomerData(long PlotId, string Connection)
         {
             var res1 = db.Sp_Get_PlotDetailData(PlotId).SingleOrDefault();
             var res2 = db.Sp_Get_PlotLastOwner(PlotId).ToList();
@@ -1585,7 +1586,7 @@ namespace MeherEstateDevelopers.Controllers
             var res = new NewConnectionCharges { PlotData = res1, OwnerData = res2, Conch = res3 };
             return PartialView(res);
         }
-        //public ActionResult GetCustomerDataCommercial(long PlotId, string Connection)
+        //[NoDirectAccess] public ActionResult GetCustomerDataCommercial(long PlotId, string Connection)
         //{
         //    var res1 = db.Sp_Get_CommercialDetailData(PlotId).SingleOrDefault();
         //    var res2 = db.Sp_Get_CommercialLastOwner(PlotId).SingleOrDefault();
@@ -1661,12 +1662,12 @@ namespace MeherEstateDevelopers.Controllers
         //    var res = new { Receiptid = res4.Receipt_No, Token = userid };
         //    return Json(res);
         //}
-        public ActionResult FineAndOtherChargesCollection()
+        [NoDirectAccess] public ActionResult FineAndOtherChargesCollection()
         {
             return View();
         }
 
-        public ActionResult FineCollection()
+        [NoDirectAccess] public ActionResult FineCollection()
         {
             long userid = long.Parse(User.Identity.GetUserId());
             db.Sp_Add_Activity(userid, "Access Page of Plot Information", "Read", Modules.PlotManagement.ToString(), ActivityType.Page_Access.ToString(), null);
@@ -1674,7 +1675,7 @@ namespace MeherEstateDevelopers.Controllers
             ViewBag.Block = new SelectList(db.Sp_Get_Block(), "Id", "Block_Name");
             return PartialView();
         }
-        public ActionResult FineResult(long PlotId)
+        [NoDirectAccess] public ActionResult FineResult(long PlotId)
         {
             ViewBag.Bank = new SelectList(Nomenclature.Banks(), "Name", "Name");
             var res1 = db.Sp_Get_PlotDetailData(PlotId).SingleOrDefault();
@@ -1685,7 +1686,7 @@ namespace MeherEstateDevelopers.Controllers
 
             return PartialView(res);
         }
-        public ActionResult FileResult(string FileNumber)
+        [NoDirectAccess] public ActionResult FileResult(string FileNumber)
         {
             ViewBag.Bank = new SelectList(Nomenclature.Banks(), "Name", "Name");
             var Fileid = db.File_Form.Where(x => x.FileFormNumber == FileNumber).Select(x => x.Id).FirstOrDefault();
@@ -1814,7 +1815,7 @@ namespace MeherEstateDevelopers.Controllers
         }
 
         //}
-        //public ActionResult 
+        //[NoDirectAccess] public ActionResult 
         public JsonResult AddMeter(string MeterNo, long PlotId)
         {
             var res = db.Plot_ElectricityMeters.SingleOrDefault(x => x.Meter_No == MeterNo);
@@ -1867,7 +1868,7 @@ namespace MeherEstateDevelopers.Controllers
         //    }
 
         //}
-        public ActionResult NewElectricityBill(long Id)
+        [NoDirectAccess] public ActionResult NewElectricityBill(long Id)
         {
             long userid = long.Parse(User.Identity.GetUserId());
             var res = db.Sp_Get_PlotsElectricCharges_ById(Id).Select(x => new Sp_Get_PlotsElectricCharges_ByBlock_Result
@@ -1892,7 +1893,7 @@ namespace MeherEstateDevelopers.Controllers
             return PartialView(res);
         }
         //// commercial
-        //public ActionResult NewElectricityBillCommercial(long Id)
+        //[NoDirectAccess] public ActionResult NewElectricityBillCommercial(long Id)
         //{
         //    long userid = long.Parse(User.Identity.GetUserId());
         //    var res = db.Sp_Get_CommercialElectricCharges_ById(Id).Select(x => new Sp_Get_CommercialElectricCharges_ByProject_Result
@@ -1990,19 +1991,19 @@ namespace MeherEstateDevelopers.Controllers
             }
         }
 
-        public ActionResult ManualMeterReadingRequestForBlock(string block, long blockId)
+        [NoDirectAccess] public ActionResult ManualMeterReadingRequestForBlock(string block, long blockId)
         {
             ViewBag.blkName = block;
             ViewBag.blockId = blockId;
             return PartialView();
         }
 
-        public ActionResult ManualMeterReadingRequests()
+        [NoDirectAccess] public ActionResult ManualMeterReadingRequests()
         {
             return View();
         }
 
-        public ActionResult MeterReadingPermsTabular(int tp)
+        [NoDirectAccess] public ActionResult MeterReadingPermsTabular(int tp)
         {
             var res = db.ServiceChargesPermissions.ToList();
             switch (tp)
@@ -2018,7 +2019,7 @@ namespace MeherEstateDevelopers.Controllers
             }
         }
 
-        public ActionResult ManualMeterReadingDetail(long Id)
+        [NoDirectAccess] public ActionResult ManualMeterReadingDetail(long Id)
         {
             var res = db.ServiceChargesPermissions.Where(x => x.Id == Id).FirstOrDefault();
             return View(res);
@@ -2041,21 +2042,21 @@ namespace MeherEstateDevelopers.Controllers
             }
         }
 
-        public ActionResult FineWaiverRequest(int tp)
+        [NoDirectAccess] public ActionResult FineWaiverRequest(int tp)
         {
             ViewBag.serviceType = tp;
             ViewBag.phases = new SelectList(db.RealEstate_Phases.Select(x => new { x.Id, Name = x.Phase_Name }).ToList(), "Id", "Name");
             return View();
         }
 
-        public ActionResult BillWaiverRequest(int tp)
+        [NoDirectAccess] public ActionResult BillWaiverRequest(int tp)
         {
             ViewBag.serviceType = tp;
             ViewBag.phases = new SelectList(db.RealEstate_Phases.Select(x => new { x.Id, Name = x.Phase_Name }).ToList(), "Id", "Name");
             return PartialView();
         }
 
-        public ActionResult ArrearsWaiverRequest(int tp)
+        [NoDirectAccess] public ActionResult ArrearsWaiverRequest(int tp)
         {
             ViewBag.serviceType = tp;
             ViewBag.phases = new SelectList(db.RealEstate_Phases.Select(x => new { x.Id, Name = x.Phase_Name }).ToList(), "Id", "Name");
@@ -2193,14 +2194,14 @@ namespace MeherEstateDevelopers.Controllers
             }
         }
 
-        public ActionResult RequestsList(string typ, string module)
+        [NoDirectAccess] public ActionResult RequestsList(string typ, string module)
         {
             ViewBag.type = typ;
             ViewBag.mod = module;
             return View();
         }
 
-        public ActionResult PermissionsView(string typ, string mod, int cat)
+        [NoDirectAccess] public ActionResult PermissionsView(string typ, string mod, int cat)
         {
             if (User.IsInRole("Utilities Manager") || User.IsInRole("Administrator"))
             {
@@ -2252,7 +2253,7 @@ namespace MeherEstateDevelopers.Controllers
             return PartialView(null);
         }
 
-        public ActionResult PermissionDetails(long group)
+        [NoDirectAccess] public ActionResult PermissionDetails(long group)
         {
             var res = db.ServiceChargesPermissions.Where(x => x.GroupId == group).ToList();
             return PartialView(res);
@@ -2295,13 +2296,13 @@ namespace MeherEstateDevelopers.Controllers
             }
         }
 
-        public ActionResult BillInstallments(int? tp)
+        [NoDirectAccess] public ActionResult BillInstallments(int? tp)
         {
             ViewBag.serTyp = tp;
             return View();
         }
 
-        public ActionResult MeterBillDetails(string billId, int? tp)
+        [NoDirectAccess] public ActionResult MeterBillDetails(string billId, int? tp)
         {
             ViewBag.serTyp = tp;
 
@@ -2442,12 +2443,12 @@ namespace MeherEstateDevelopers.Controllers
             }
         }
 
-        public ActionResult InstallmentRequests()
+        [NoDirectAccess] public ActionResult InstallmentRequests()
         {
             return View();
         }
 
-        public ActionResult InstReqView(int cat)
+        [NoDirectAccess] public ActionResult InstReqView(int cat)
         {
             var uid = User.Identity.GetUserId<long>();
             if (User.IsInRole("Utilities Manager"))
@@ -2508,7 +2509,7 @@ namespace MeherEstateDevelopers.Controllers
             return PartialView(null);
         }
 
-        public ActionResult InstallmentDetails(long instId)
+        [NoDirectAccess] public ActionResult InstallmentDetails(long instId)
         {
             var instOv = db.ServiceChargesInstallments.Where(x => x.Id == instId).SingleOrDefault();
             if (!(instOv is null))
@@ -2547,7 +2548,7 @@ namespace MeherEstateDevelopers.Controllers
             }
         }
 
-        public ActionResult ConfigurationView()
+        [NoDirectAccess] public ActionResult ConfigurationView()
         {
             var config = db.MIS_Modules_Configurations.Where(x => x.Module == MIS_Modules.ServiceCharges.ToString()).SingleOrDefault();
             if (config is null)
@@ -2587,13 +2588,13 @@ namespace MeherEstateDevelopers.Controllers
             }
         }
 
-        public ActionResult UpdateConfigRequest()
+        [NoDirectAccess] public ActionResult UpdateConfigRequest()
         {
             var res = db.MIS_Modules_Configurations.Where(x => x.Module == MIS_Modules.ServiceCharges.ToString()).SingleOrDefault();
             return View(res);
         }
 
-        public ActionResult MeterWaiver(string bill, int tp, int ser)
+        [NoDirectAccess] public ActionResult MeterWaiver(string bill, int tp, int ser)
         {
             //long bill_Id = long.Parse(Decrypt(bill));
             ViewBag.tp = tp;
@@ -2610,7 +2611,7 @@ namespace MeherEstateDevelopers.Controllers
             }
         }
 
-        public ActionResult TrailBalance(string bill, int tp, int ser)
+        [NoDirectAccess] public ActionResult TrailBalance(string bill, int tp, int ser)
         {
             //long bill_Id = long.Parse(Decrypt(bill));
             ViewBag.tp = tp;
@@ -2690,7 +2691,7 @@ namespace MeherEstateDevelopers.Controllers
             }
         }
 
-        public ActionResult MeterChangeReqForm(string billNo)
+        [NoDirectAccess] public ActionResult MeterChangeReqForm(string billNo)
         {
             //long billId = long.Parse(Decrypt(billNo));
             var bill = db.Sp_Get_ElecBill_ById(billNo).FirstOrDefault();
@@ -2720,12 +2721,12 @@ namespace MeherEstateDevelopers.Controllers
             }
         }
 
-        public ActionResult MeterChangeRequests()
+        [NoDirectAccess] public ActionResult MeterChangeRequests()
         {
             return View();
         }
 
-        public ActionResult MetChgReqsTabular(int tp)
+        [NoDirectAccess] public ActionResult MetChgReqsTabular(int tp)
         {
             string tpDec = string.Empty;
             switch (tp)
@@ -2758,7 +2759,7 @@ namespace MeherEstateDevelopers.Controllers
             return PartialView(null);
         }
 
-        public ActionResult MetChgReqDets(long id)
+        [NoDirectAccess] public ActionResult MetChgReqDets(long id)
         {
             var res = db.Electricity_Meter_Reqs.Where(x => x.Id == id).SingleOrDefault();
             return PartialView(res);

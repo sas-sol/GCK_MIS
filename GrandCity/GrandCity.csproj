@@ -7024,6 +7024,7 @@
     <Content Include="Views\Transfer\File_Undertaking_By_Purchaser.cshtml" />
     <Content Include="Views\Transfer\File_SellerFeeFormat.cshtml" />
     <Content Include="Views\FileSystem\GetUpdateInfoDetails.cshtml" />
+    <Content Include="Views\Account\DirectUrlHit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

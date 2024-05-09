@@ -8,6 +8,7 @@ using Microsoft.AspNet.Identity;
 using MeherEstateDevelopers.Filters;
 using Newtonsoft.Json;
 using System.IO;
+using static MeherEstateDevelopers.MvcApplication;
 
 namespace MeherEstateDevelopers.Controllers
 {
@@ -17,14 +18,14 @@ namespace MeherEstateDevelopers.Controllers
     {
         // GET: PropertyDeal
         private Grand_CityEntities db = new Grand_CityEntities();
-        public ActionResult AllDeales()
+        [NoDirectAccess] public ActionResult AllDeales()
         {
             var res = db.Sp_Get_PropertyDeals().ToList().OrderByDescending(x => x.Datetime);
             long userid = long.Parse(User.Identity.GetUserId());
             db.Sp_Add_Activity(userid, "Accessed All Deals  Page ", "Read", "Activity_Record", ActivityType.Details_Access.ToString(), userid);
             return View(res);
         }
-        public ActionResult CreateDeal()
+        [NoDirectAccess] public ActionResult CreateDeal()
         {
             ViewBag.Projects = new SelectList(db.RealEstate_Projects.Where(x => x.Type == "General" || x.Type == "Building").ToList(), "Project_Name", "Project_Name");
             ViewBag.Block = new SelectList(db.Sp_Get_Block().ToList(), "Id", "Block_Name");
@@ -224,7 +225,7 @@ namespace MeherEstateDevelopers.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult CreateLeadToDeal(Property_Deal p, string Buyer_Seller, string File_Plot, string Name, string Mobile, string Address, decimal? Offered_Price, decimal? Demand, decimal? RatePerMarla, string Source, long? PlotId, long LeadId, string Project, long? UnitNo)
+        [NoDirectAccess] public ActionResult CreateLeadToDeal(Property_Deal p, string Buyer_Seller, string File_Plot, string Name, string Mobile, string Address, decimal? Offered_Price, decimal? Demand, decimal? RatePerMarla, string Source, long? PlotId, long LeadId, string Project, long? UnitNo)
         {
             var userid = long.Parse(User.Identity.GetUserId());
             var u = db.Users.Find(userid);
@@ -493,7 +494,7 @@ namespace MeherEstateDevelopers.Controllers
             db.Sp_Delete_LeadData(LeadId);
             return RedirectToAction("DealDetails", "PropertyDeal", new { Id = Deal_Id });
         }
-        public ActionResult DealDetails(long Id)
+        [NoDirectAccess] public ActionResult DealDetails(long Id)
         {
             long userid = long.Parse(User.Identity.GetUserId());
             ViewBag.UserId = userid;
@@ -516,7 +517,7 @@ namespace MeherEstateDevelopers.Controllers
             var res = new DealModel { Deal = res1, Parties = res2, Request = res5, Ledger = Ledgers, Receipts = res3, Voucher = res4 };
             return View(res);
         }
-        public ActionResult AddBuyer()
+        [NoDirectAccess] public ActionResult AddBuyer()
         {
             return PartialView();
         }
@@ -544,7 +545,7 @@ namespace MeherEstateDevelopers.Controllers
             db.SaveChanges();
             return Json(true);
         }
-        public ActionResult UpdatePartyInfo(long Id)
+        [NoDirectAccess] public ActionResult UpdatePartyInfo(long Id)
         {
             var res = db.Property_Deal_Parties.Where(x => x.Id == Id).FirstOrDefault();
             var res1 = db.Sp_Get_PropertyDeals_Parties(res.Deal_Id).Select(x => new { x.Status, x.Type }).ToList();
@@ -650,12 +651,12 @@ namespace MeherEstateDevelopers.Controllers
             return Json(new Return { Status = true, Msg = "Payment has been requested successfully" });
             //}
         }
-        public ActionResult PaymentsRequest()
+        [NoDirectAccess] public ActionResult PaymentsRequest()
         {
             var res = db.Sp_Get_PropertyDeal_Request("Pending").ToList();
             return View(res);
         }
-        public ActionResult CashierDealDetails(long Id)
+        [NoDirectAccess] public ActionResult CashierDealDetails(long Id)
         {
             var res1 = db.Property_Deal.Where(x => x.Id == Id).FirstOrDefault();
             var res2 = db.Sp_Get_PropertyDeals_Parties(Id).ToList();
@@ -676,7 +677,7 @@ namespace MeherEstateDevelopers.Controllers
             db.Sp_Add_Activity(userid, "Accessed  Cashier Deals Details  Page ", "Read", "Activity_Record", ActivityType.Details_Access.ToString(), Id);
             return View(res);
         }
-        public ActionResult PaymentRequestDetails(long Id)
+        [NoDirectAccess] public ActionResult PaymentRequestDetails(long Id)
         {
             var res = db.Sp_Get_PropertyDeal_Request_Id(Id).FirstOrDefault();
             ViewBag.Bank = new SelectList(Nomenclature.Banks(), "Name", "Name");
@@ -816,7 +817,7 @@ namespace MeherEstateDevelopers.Controllers
                 return Json(false);
             }
         }
-        public ActionResult CurrentBalance()
+        [NoDirectAccess] public ActionResult CurrentBalance()
         {
             var res1 = db.PropertyDeal_Receipts.Where(x => x.Type != "Direct Payment").Select(x => new DealLedger { Block = x.Block, Plot_number = x.File_Plot_Number, Amount = x.Amount, Name = x.Name, Receipt = "Receipt", ReceiptNo = x.ReceiptNo, Type = x.Type, Date = x.DateTime }).ToList();
             var res2 = db.PropertyDeal_Voucher.Select(x => new DealLedger { Block = x.Block, Plot_number = x.File_Plot_Number, Amount = x.Amount * -1, Name = x.Name, Receipt = "Voucher", ReceiptNo = x.VoucherNo, Type = x.Type, Date = x.DateTime }).ToList();
@@ -825,7 +826,7 @@ namespace MeherEstateDevelopers.Controllers
             Ledgers.AddRange(res2);
             return View(Ledgers);
         }
-        public ActionResult DirectDeal(long Id)
+        [NoDirectAccess] public ActionResult DirectDeal(long Id)
         {
             var res2 = db.Property_Deal_Parties.Where(x => x.Deal_Id == Id).ToList();
             var res3 = db.PropertyDeal_Receipts.Where(x => x.Lead_Id == Id && x.Cancel == null && x.Type == "Commession").ToList();
@@ -859,7 +860,7 @@ namespace MeherEstateDevelopers.Controllers
             var res = db.Sp_Delete_PropertyDeal_Req(Id);
             return Json(true);
         }
-        public ActionResult CommissionApproval()
+        [NoDirectAccess] public ActionResult CommissionApproval()
         {
             var res = db.Sp_Get_PropertyDeal_CommissionReq().ToList();
             return View(res);
@@ -922,17 +923,17 @@ namespace MeherEstateDevelopers.Controllers
                 }
             }
         }
-        public ActionResult PremiumHomes()
+        [NoDirectAccess] public ActionResult PremiumHomes()
         {
             return View();
         }
-        public ActionResult PremiumHomesInventory()
+        [NoDirectAccess] public ActionResult PremiumHomesInventory()
         {
             var project = "SA Premium Homes";
             var res = db.Sp_Get_Commercial_Project_Inventory(project).ToList();
             return PartialView(res);
         }
-        public ActionResult PremiumHomesLeads(DateTime? From, DateTime? To, long? salesperson)
+        [NoDirectAccess] public ActionResult PremiumHomesLeads(DateTime? From, DateTime? To, long? salesperson)
         {
             var All = db.Users.Where(x => x.Roles.Any(y => y.Name == "Sales Executive" || y.Name == "Sales Manager")).ToList();
             ViewBag.Users = new SelectList(All, "id", "Name");
@@ -946,7 +947,7 @@ namespace MeherEstateDevelopers.Controllers
             var res = db.Sp_Get_Commercial_Project_Leads(project, From, To, salesperson).ToList();
             return PartialView(res);
         }
-        public ActionResult PremiumUnassignedLeads(DateTime? From, DateTime? To)
+        [NoDirectAccess] public ActionResult PremiumUnassignedLeads(DateTime? From, DateTime? To)
         {
             var project = "SA Premium Homes";
             ViewBag.Project = project;
@@ -959,7 +960,7 @@ namespace MeherEstateDevelopers.Controllers
             var res = db.Sp_Get_Project_Unassigned_Leads(project, From, To).ToList();
             return View(res);
         }
-        public ActionResult AssignNewLeads()
+        [NoDirectAccess] public ActionResult AssignNewLeads()
         {
             var All = db.Users.Where(x => x.Roles.Any(y => y.Name == "Sales Executive") && x.Active == 1).ToList();
             var project = "SA Premium Homes";
@@ -972,7 +973,7 @@ namespace MeherEstateDevelopers.Controllers
         {
             return new FinancialYear { Start = new DateTime(2022, 7, 1), End = new DateTime(2023, 6, 30) };
         }
-        public ActionResult PremiumHomesRoom(long Id)
+        [NoDirectAccess] public ActionResult PremiumHomesRoom(long Id)
         {
             var res1 = db.Sp_Get_CommercialData(Id).FirstOrDefault();
             var res2 = db.Sp_Get_Receipts_Param(res1.Project_Name, ReceiptTypes.BookingToken.ToString(), res1.shop_no).ToList();
@@ -980,11 +981,11 @@ namespace MeherEstateDevelopers.Controllers
             var res = new PremiumHomeRoomModel { RoomData = res1, Receipts = res2, Leads = res3 };
             return View(res);
         }
-        public ActionResult PremiumHomeLead()
+        [NoDirectAccess] public ActionResult PremiumHomeLead()
         {
             return PartialView();
         }
-        public ActionResult PremiumLeadInfo(long Id)
+        [NoDirectAccess] public ActionResult PremiumLeadInfo(long Id)
         {
             var res = db.Property_Deal_Parties.Where(x => x.Id == Id).FirstOrDefault();
             var res1 = db.Sp_Get_PropertyDeals_Parties(res.Deal_Id).Select(x => new { x.Status, x.Type }).ToList();
@@ -1032,7 +1033,7 @@ namespace MeherEstateDevelopers.Controllers
                 return Json(false);
             }
         }
-        public ActionResult PremiumLeadDetails(long Id)
+        [NoDirectAccess] public ActionResult PremiumLeadDetails(long Id)
         {
             var project = "SA Premium Homes";
             long userid = long.Parse(User.Identity.GetUserId());
@@ -1083,14 +1084,14 @@ namespace MeherEstateDevelopers.Controllers
         //    return Json(true);
         //}
 
-        public ActionResult CommercialProjectReceiptRequest()
+        [NoDirectAccess] public ActionResult CommercialProjectReceiptRequest()
         {
             //var project = "SA Premium Homes";
             // Change  
             var res = db.ReceiptRequests.Where(x => x.Status == "Pending").ToList();
             return View(res);
         }
-        public ActionResult CommercialProjectReceipt(long Id)
+        [NoDirectAccess] public ActionResult CommercialProjectReceipt(long Id)
         {
             ViewBag.TransactionId = new Helpers().RandomNumber();
             var res = db.Sp_Get_Commercial_Receipt_Request(Id).FirstOrDefault();
@@ -1158,7 +1159,7 @@ namespace MeherEstateDevelopers.Controllers
             var data1 = new { Status = "1", Receiptid = res.Receipt_No, Token = TransactionId };
             return Json(data1);
         }
-        public ActionResult AddNewInventory()
+        [NoDirectAccess] public ActionResult AddNewInventory()
         {
             return PartialView();
         }
@@ -1186,7 +1187,7 @@ namespace MeherEstateDevelopers.Controllers
             var res = db.Sp_Get_CommercialData(Id).FirstOrDefault();
             return Json(res);
         }
-        public ActionResult PrintPremiumHomesForms()
+        [NoDirectAccess] public ActionResult PrintPremiumHomesForms()
         {
             var project = "SA Premium Homes";
             var res = db.Sp_Get_Commercial_Project_Inventory(project).ToList();
@@ -1201,7 +1202,7 @@ namespace MeherEstateDevelopers.Controllers
             return View(res);
         }
         //
-        public ActionResult SAGardenUnassignedLeads(DateTime? From, DateTime? To)
+        [NoDirectAccess] public ActionResult SAGardenUnassignedLeads(DateTime? From, DateTime? To)
         {
             var project = "Grand City";
             ViewBag.Project = project;
@@ -1214,13 +1215,13 @@ namespace MeherEstateDevelopers.Controllers
             var res = db.Sp_Get_Project_Unassigned_Leads(project, From, To).ToList();
             return View(res);
         }
-        public ActionResult SAGardenUploadLeads(string Project, string status)
+        [NoDirectAccess] public ActionResult SAGardenUploadLeads(string Project, string status)
         {
             ViewBag.Status = status;
             ViewBag.Project = Project;
             return PartialView();
         }
-        public ActionResult SAGardenAssignNewLeads()
+        [NoDirectAccess] public ActionResult SAGardenAssignNewLeads()
         {
             var All = db.Users.Where(x => x.Roles.Any(y => y.Name == "Sales Executive") && x.Active == 1).ToList();
             var project = "Grand City";
@@ -1245,7 +1246,7 @@ namespace MeherEstateDevelopers.Controllers
                 return Json(false);
             }
         }
-        public ActionResult LeadsFollowup()
+        [NoDirectAccess] public ActionResult LeadsFollowup()
         {
             long userid = User.Identity.GetUserId<long>();
             var All = db.Users.Where(x => x.Name != null).Select(x => new { x.Id, x.Name }).ToList();
@@ -1254,7 +1255,7 @@ namespace MeherEstateDevelopers.Controllers
             db.Sp_Add_Activity(userid, "Accessed Follow up List Page ", "Read", "Activity_Record", ActivityType.Details_Access.ToString(), userid);
             return View();
         }
-        //public ActionResult LeadsFollowup_Search(DateTime? From, DateTime? To, long? User)
+        //[NoDirectAccess] public ActionResult LeadsFollowup_Search(DateTime? From, DateTime? To, long? User)
         //{
         //    if (From == null || To == null)
         //    {

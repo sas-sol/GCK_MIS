@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using System.Xml.Linq;
+using static MeherEstateDevelopers.MvcApplication;
 
 namespace MeherEstateDevelopers.Controllers
 {
@@ -23,7 +24,7 @@ namespace MeherEstateDevelopers.Controllers
         // GET: Dealership
         private readonly Grand_CityEntities db = new Grand_CityEntities();
         [Authorize(Roles = "Dealership Information,Administrator")]
-        public ActionResult AllDealerships()
+        [NoDirectAccess] public ActionResult AllDealerships()
         {
             long userid = long.Parse(User.Identity.GetUserId());
 
@@ -31,7 +32,7 @@ namespace MeherEstateDevelopers.Controllers
             db.Sp_Add_Activity(userid, "Accessed All Dealersip Page ", "Read", "Activity_Record", ActivityType.Page_Access.ToString(), userid);
             return View(res);
         }
-        public ActionResult DealershipData(long Id)
+        [NoDirectAccess] public ActionResult DealershipData(long Id)
         {
             long userid = long.Parse(User.Identity.GetUserId());
             ViewBag.Id = Id;
@@ -42,7 +43,7 @@ namespace MeherEstateDevelopers.Controllers
             db.Sp_Add_Activity(userid, "Accessed Dealership Details  Page ", "Read", "Activity_Record", ActivityType.Details_Access.ToString(), Id);
             return View(res);
         }
-        public ActionResult SAMarketingData(long Id)
+        [NoDirectAccess] public ActionResult SAMarketingData(long Id)
         {
             long userid = long.Parse(User.Identity.GetUserId());
             ViewBag.Id = Id;
@@ -53,17 +54,17 @@ namespace MeherEstateDevelopers.Controllers
             db.Sp_Add_Activity(userid, "Accessed  SA Marketing Page ", "Read", "Activity_Record", ActivityType.Details_Access.ToString(), Id);
             return View(res);
         }
-        public ActionResult DealerStockSummary(long Id)
+        [NoDirectAccess] public ActionResult DealerStockSummary(long Id)
         {
             var res = db.Sp_Get_DealershipFilesReport(Id).ToList();
             return PartialView(res);
         }
-        public ActionResult DealerPlotSummary(long Id)
+        [NoDirectAccess] public ActionResult DealerPlotSummary(long Id)
         {
             var res = db.Sp_Get_Dealership_Plots_Report(Id).ToList();
             return PartialView(res);
         }
-        public ActionResult AddDealer()
+        [NoDirectAccess] public ActionResult AddDealer()
         {
             return View();
         }
@@ -113,7 +114,7 @@ namespace MeherEstateDevelopers.Controllers
             }
         }
         [Authorize(Roles = "Generate File,Administrator")]
-        public ActionResult DealerFormAssociation()
+        [NoDirectAccess] public ActionResult DealerFormAssociation()
         {
             ViewBag.Projects = new SelectList(db.Sp_Get_RealEstateProjects().ToList(), "Id", "Project_Name");
             var plots = db.Sp_Get_Plots_Size().Select(x => new { Plot = x }).ToList();
@@ -185,7 +186,7 @@ namespace MeherEstateDevelopers.Controllers
             }
             return Json(Dff);
         }
-        public ActionResult GenerateDealerForms(long Group_Id)
+        [NoDirectAccess] public ActionResult GenerateDealerForms(long Group_Id)
         {
             var res1 = db.Sp_Get_FileAppForms_GParameter(Group_Id).ToList();
             var res = res1.Select(x => new DealerFileForm
@@ -201,7 +202,7 @@ namespace MeherEstateDevelopers.Controllers
             });
             return View(res);
         }
-        public ActionResult GenerateDealForms(long Group_Id)
+        [NoDirectAccess] public ActionResult GenerateDealForms(long Group_Id)
         {
             var res1 = db.Sp_Get_FileAppForms_GParameter(Group_Id).ToList();
             db.Sp_Update_Print_Flag(Group_Id);
@@ -218,12 +219,12 @@ namespace MeherEstateDevelopers.Controllers
 
             return View(res);
         }
-        public ActionResult AllGeneratedFiles()
+        [NoDirectAccess] public ActionResult AllGeneratedFiles()
         {
             var res = db.Sp_Get_FileAppForms().ToList();
             return View(res);
         }
-        public ActionResult UpdateInfo(long Id)
+        [NoDirectAccess] public ActionResult UpdateInfo(long Id)
         {
             var res = db.Dealerships.SingleOrDefault(x => x.Id == Id);
             return PartialView(res);
@@ -236,12 +237,12 @@ namespace MeherEstateDevelopers.Controllers
             db.Sp_Add_DealershipComments(Id, "Updated Details " + string.Join(" , ",Dealername,Status,Date), userid, "Update_Dealership");
             return Json(true);
         }
-        public ActionResult DealersData(long Id)
+        [NoDirectAccess] public ActionResult DealersData(long Id)
         {
             var res = db.Dealers.Where(x => x.Dealership_Id == Id).ToList();
             return PartialView(res);
         }
-        public ActionResult AddDealers(long Id)
+        [NoDirectAccess] public ActionResult AddDealers(long Id)
         {
             ViewBag.Dealer = db.Dealerships.SingleOrDefault(x => x.Id == Id).Registeration_Date;
             ViewBag.Id = Id;
@@ -292,7 +293,7 @@ namespace MeherEstateDevelopers.Controllers
             }).SingleOrDefault();
             return Json(res);
         }
-        public ActionResult NewFileDesign(long Group_Id)
+        [NoDirectAccess] public ActionResult NewFileDesign(long Group_Id)
         {
             var res1 = db.Sp_Get_FileAppForms_GParameter(Group_Id).ToList();
             var res = res1.Select(x => new DealerFileForm
@@ -309,7 +310,7 @@ namespace MeherEstateDevelopers.Controllers
             });
             return View(res);
         }
-        public ActionResult DealershipRegisteration()
+        [NoDirectAccess] public ActionResult DealershipRegisteration()
         {
             ViewBag.Dealership = new SelectList(db.Dealerships.Select(x => new { x.Id, x.Dealership_Name }), "Id", "Dealership_Name");
             ViewBag.Bank = new SelectList(Nomenclature.Banks().ToList(), "Name", "Name");
@@ -368,7 +369,7 @@ namespace MeherEstateDevelopers.Controllers
                 }
             }
         }
-        public ActionResult DealershipSecurity()
+        [NoDirectAccess] public ActionResult DealershipSecurity()
         {
             ViewBag.Dealership = new SelectList(db.Dealerships.Select(x => new { x.Id, x.Dealership_Name }), "Id", "Dealership_Name");
             ViewBag.Bank = new SelectList(Nomenclature.Banks().ToList(), "Name", "Name");
@@ -473,7 +474,7 @@ namespace MeherEstateDevelopers.Controllers
             }
         }
 
-        public ActionResult DealershipPayment()
+        [NoDirectAccess] public ActionResult DealershipPayment()
         {
             ViewBag.Dealership = new SelectList(db.Dealerships.Select(x => new { x.Id, x.Dealership_Name }), "Id", "Dealership_Name");
             ViewBag.Bank = new SelectList(Nomenclature.Banks().ToList(), "Name", "Name");
@@ -548,7 +549,7 @@ namespace MeherEstateDevelopers.Controllers
             }
         }
 
-        public ActionResult SpecialForm(long Group_Id)
+        [NoDirectAccess] public ActionResult SpecialForm(long Group_Id)
         {
             var res1 = db.Sp_Get_FileAppForms_GParameter(Group_Id).ToList();
             List<FileData> re = new List<FileData>();
@@ -591,7 +592,7 @@ namespace MeherEstateDevelopers.Controllers
         /////////////
 
         // Add deal
-        public ActionResult Deal()
+        [NoDirectAccess] public ActionResult Deal()
         {
             ViewBag.Projects = new SelectList(db.Sp_Get_RealEstateProjects(), "Id", "Project_Name");
             ViewBag.Dealership = new SelectList(db.Sp_Get_Dealerships(), "Id", "Dealership_Name");
@@ -623,13 +624,13 @@ namespace MeherEstateDevelopers.Controllers
 
         //}
         // Deal List
-        //public ActionResult DealList()
+        //[NoDirectAccess] public ActionResult DealList()
         //{
         //    var res = db.Sp_Get_Deals().ToList();
         //    return View(res);
         //}
         //// Update Deal View
-        //public ActionResult DealUpdation(long Id)
+        //[NoDirectAccess] public ActionResult DealUpdation(long Id)
         //{
         //    var res = db.Sp_Get_Deal_Parameter(Id).SingleOrDefault();
         //    return PartialView(res);
@@ -641,13 +642,13 @@ namespace MeherEstateDevelopers.Controllers
         //    return Json(true);
         //}
         // deal basic details
-        //public ActionResult Detail(long details)
+        //[NoDirectAccess] public ActionResult Detail(long details)
         //{
         //    var res = db.Sp_Get_Deal_Parameter(details).SingleOrDefault();
         //    return View(res);
         //}
         // Deal With Assignment
-        //public ActionResult FullDeal(long Id)
+        //[NoDirectAccess] public ActionResult FullDeal(long Id)
         //{
 
         //    var Plan = db.Final_Deal_Plans.Where(x => x.Deal_Id == Id).ToList();
@@ -657,14 +658,14 @@ namespace MeherEstateDevelopers.Controllers
         //    return PartialView(res);
         //}
         // Version 
-        public ActionResult Version()
+        [NoDirectAccess] public ActionResult Version()
         {
             ViewBag.Dealership = new SelectList(db.Sp_Get_Dealerships(), "Id", "Dealership_Name");
             ViewBag.Projects = new SelectList(db.Sp_Get_RealEstateProjects(), "Id", "Project_Name");
             return View();
         }
         // Version List
-        //public ActionResult VersionList(long Deal_Id)
+        //[NoDirectAccess] public ActionResult VersionList(long Deal_Id)
         //{
         //    ViewBag.Advancevalue = db.Dealers_Deals.Where(x => x.Id == Deal_Id).Select(x => x.Advance).SingleOrDefault();
         //    var res = db.Sp_Get_Version(Deal_Id).ToList();
@@ -719,13 +720,13 @@ namespace MeherEstateDevelopers.Controllers
         //    }
         //}
         // Deals Files List
-        public ActionResult DealFiles()
+        [NoDirectAccess] public ActionResult DealFiles()
         {
             var res = db.Sp_Get_DealFiles().ToList();
             return View(res);
         }
         // Voucher
-        //public ActionResult DealVoucher(int PlanId, long FileFormId)
+        //[NoDirectAccess] public ActionResult DealVoucher(int PlanId, long FileFormId)
         //{
         //    Helpers h = new Helpers();
         //    long Groupid = h.RandomNumber();
@@ -762,14 +763,14 @@ namespace MeherEstateDevelopers.Controllers
         //    return View(res4);
         //}
         // Ledger Report
-        //public ActionResult Ledger(long Deal_Id)
+        //[NoDirectAccess] public ActionResult Ledger(long Deal_Id)
         //{
         //    var res1 = db.Sp_Get_Ledger(Deal_Id).ToList();
         //    long userid = long.Parse(User.Identity.GetUserId());
         //    db.Sp_Add_Activity(userid, "Accessed Dealership Ledger Page ", "Read", "Activity_Record", ActivityType.Details_Access.ToString(), Deal_Id);
         //    return PartialView(res1);
         //}
-        //public ActionResult Receipt()
+        //[NoDirectAccess] public ActionResult Receipt()
         //{
         //    var res = db.Sp_Get_Deal_Receipt().ToList();
         //    return View(res);
@@ -841,7 +842,7 @@ namespace MeherEstateDevelopers.Controllers
 
         //}
         // Printed FilesFormNumber List show
-        public ActionResult FilesRetrievel(long Groupid)
+        [NoDirectAccess] public ActionResult FilesRetrievel(long Groupid)
         {
             var res = db.Sp_Get_Printed_FilesFormsNumber(Groupid).ToList();
             return PartialView(res);
@@ -883,7 +884,7 @@ namespace MeherEstateDevelopers.Controllers
 
         //}
         // rebate voucher 
-        public ActionResult RebateVoucherRelease(long VoucherId)
+        [NoDirectAccess] public ActionResult RebateVoucherRelease(long VoucherId)
         {
             var res4 = db.Vouchers.Where(x => x.Id == VoucherId).SingleOrDefault();
             return View(res4);
@@ -966,7 +967,7 @@ namespace MeherEstateDevelopers.Controllers
 
         }
 
-        public ActionResult Dealer_Commessions(long Id)
+        [NoDirectAccess] public ActionResult Dealer_Commessions(long Id)
         {
             var res = db.Dealer_Commession.Where(x => x.Dealer_Id == Id).ToList();
             return View(res);
@@ -1062,7 +1063,7 @@ namespace MeherEstateDevelopers.Controllers
 
             //}
         }
-        public ActionResult DealershipLedger(long Id)
+        [NoDirectAccess] public ActionResult DealershipLedger(long Id)
         {
             var dealer = db.Dealerships.Where(x => x.Id == Id).FirstOrDefault();
             ViewBag.Id = Id;
@@ -1072,7 +1073,7 @@ namespace MeherEstateDevelopers.Controllers
             return View();
         }
         [HttpPost]
-        //public ActionResult DealerLedgerSearch(DateTime? From, DateTime? To, long Id)
+        //[NoDirectAccess] public ActionResult DealerLedgerSearch(DateTime? From, DateTime? To, long Id)
         //{
         //    var dealer = db.Dealerships.Where(x => x.Id == Id).FirstOrDefault();
         //    var fiscal = this.GetFinancialYear();
@@ -1168,7 +1169,7 @@ namespace MeherEstateDevelopers.Controllers
             }
         }
         // Add Deal Allotment Plan
-        //public ActionResult AllotmentPlan(long Id)
+        //[NoDirectAccess] public ActionResult AllotmentPlan(long Id)
         //{
         //    ViewBag.DealerAdvance = db.Dealers_Deals.Where(x => x.Id == Id).Select(x => x.Advance).SingleOrDefault();
         //    ViewBag.DealId = Id;
@@ -1194,12 +1195,12 @@ namespace MeherEstateDevelopers.Controllers
 
 
 
-        //public ActionResult GeneratedFiles(long GroupId)
+        //[NoDirectAccess] public ActionResult GeneratedFiles(long GroupId)
         //{
         //    var res = db.Final_Deal_Plans.Where(x => x.Group_Id == GroupId).ToList();
         //    return PartialView(res);
         //}
-        public ActionResult CommessionList()
+        [NoDirectAccess] public ActionResult CommessionList()
         {
             var res = db.Dealer_Commession.ToList();
             long userid = long.Parse(User.Identity.GetUserId());
@@ -1207,7 +1208,7 @@ namespace MeherEstateDevelopers.Controllers
             return View(res);
         }
         
-        public ActionResult UpdateDealerId(long Id)
+        [NoDirectAccess] public ActionResult UpdateDealerId(long Id)
         {
             var res = db.Dealer_Commession.Where(x=>x.Id == Id).FirstOrDefault();
             //if (res.Module == "FileManagement")
@@ -1241,7 +1242,7 @@ namespace MeherEstateDevelopers.Controllers
         }
 
 
-        public ActionResult PlotsAssignment()
+        [NoDirectAccess] public ActionResult PlotsAssignment()
         {
             var res = (from x in db.Installment_Plot_Category
                        select x).AsEnumerable().Select(s => new { Id = s.Id, Text = s.Plot_Size + " Marla - " + string.Format("{0:n0}", s.Grand_Total), Group = s.Plot_Size + " Marla" }).ToList();
@@ -1256,7 +1257,7 @@ namespace MeherEstateDevelopers.Controllers
 
         //Brought from Iqbal gardens
 
-        public ActionResult DealerPlotsAssociation()
+        [NoDirectAccess] public ActionResult DealerPlotsAssociation()
         {
             ViewBag.Dealership = new SelectList(db.Sp_Get_Dealerships().Where(x => x.Status == "Registered").Select(x => new { x.Id, x.Dealership_Name }).Distinct().ToList(), "Id", "Dealership_Name");
             var res = (from x in db.Installment_Plot_Category
@@ -1290,7 +1291,7 @@ namespace MeherEstateDevelopers.Controllers
             }
             return Json(new Return { Msg = "Allocated", Status = true });
         }
-        public ActionResult PlotsAssignmentEdit(long GroupTag)
+        [NoDirectAccess] public ActionResult PlotsAssignmentEdit(long GroupTag)
         {
             var res = db.Biding_Reserve_Plots.Where(x => x.GroupTag == GroupTag).ToList();
             var res2 = db.DealerDeals.Where(x => x.GroupTag == GroupTag).FirstOrDefault();
@@ -1448,13 +1449,13 @@ namespace MeherEstateDevelopers.Controllers
                 return Json(new Return { Msg = "Failed to save the deal data. Please try again.", Status = false });
             }
         }
-        public ActionResult DealershipDeals()
+        [NoDirectAccess] public ActionResult DealershipDeals()
         {
             long userid = long.Parse(User.Identity.GetUserId());
             db.Sp_Add_Activity(userid, "Accessed  Dealership Deals Page ", "Read", "Activity_Record", ActivityType.Details_Access.ToString(), userid);
             return View();
         }
-        public ActionResult DealershipDealsDetails(long DealerId)
+        [NoDirectAccess] public ActionResult DealershipDealsDetails(long DealerId)
         {
             var deals = db.DealerDeals.Where(x => x.DealerId == DealerId).ToList();
             long?[] grps = deals.Where(x => x.GroupTag != null).Select(x => x.GroupTag).Distinct().ToArray();
@@ -1463,7 +1464,7 @@ namespace MeherEstateDevelopers.Controllers
             db.Sp_Add_Activity(userid, "Accessed Deatils of Dealership Deals Page for " + string.Join(",", deals.Select(x=>x.DealerName)), "Read", "Activity_Record", ActivityType.Details_Access.ToString(), DealerId);
             return PartialView(new DealershipDealsDetailsModel { DealPlots = res, Deals = deals });
         }
-        public ActionResult DealershipDealSecurity(long Id)
+        [NoDirectAccess] public ActionResult DealershipDealSecurity(long Id)
         {
             var res = db.DealerDeals.Where(x => x.Id == Id).FirstOrDefault();
             ViewBag.Amount = res.BalanceAmount;
@@ -1474,7 +1475,7 @@ namespace MeherEstateDevelopers.Controllers
             db.Sp_Add_Activity(userid, "Accessed Dealership deal Security Page ", "Read", "Activity_Record", ActivityType.Details_Access.ToString(), Id);
             return View(res);
         }
-        public ActionResult DealerDealForm(long Id,long? Dealer)
+        [NoDirectAccess] public ActionResult DealerDealForm(long Id,long? Dealer)
         {
             var res = db.Biding_Reserve_Plots.Where(x => x.GroupTag == Id).ToList();
             Helpers h = new Helpers(Modules.DealersForm, Types.Booking);
@@ -1522,7 +1523,7 @@ namespace MeherEstateDevelopers.Controllers
         //    return Json(true);
         //}
 
-        public ActionResult DealerListForPrint(long id,long grp)
+        [NoDirectAccess] public ActionResult DealerListForPrint(long id,long grp)
         {
             var res = db.Dealers.Where(x => x.Dealership_Id == id).ToList();
             ViewBag.grp = grp;

@@ -5,6 +5,8 @@ using System.Linq;
 using System.Web.Mvc;
 using MeherEstateDevelopers.Models;
 using Microsoft.AspNet.Identity;
+using static MeherEstateDevelopers.MvcApplication;
+
 namespace MeherEstateDevelopers.Controllers
 {
     [LogAction]
@@ -17,7 +19,7 @@ namespace MeherEstateDevelopers.Controllers
         {
             return View();
         }
-        public ActionResult MyActivity()
+        [NoDirectAccess] public ActionResult MyActivity()
         {
             long userid = long.Parse(User.Identity.GetUserId());
             List<ActivitiesList> res = new List<ActivitiesList>();
@@ -35,7 +37,7 @@ namespace MeherEstateDevelopers.Controllers
             return PartialView(res);
         }
 
-        //public ActionResult ManagerLevlActivityListshow(DateTime? fromd, DateTime? tdate)
+        //[NoDirectAccess] public ActionResult ManagerLevlActivityListshow(DateTime? fromd, DateTime? tdate)
 
         //{
         //    List<ActivitiesList> res = new List<ActivitiesList>();
@@ -61,7 +63,7 @@ namespace MeherEstateDevelopers.Controllers
         //    res.AddRange(res2);
         //    return View(res);
         //}
-        //public ActionResult SearchActivitReport(DateTime? From, DateTime? To)
+        //[NoDirectAccess] public ActionResult SearchActivitReport(DateTime? From, DateTime? To)
         //{
 
         //    List<ActivitiesList> res = new List<ActivitiesList>();
@@ -85,7 +87,7 @@ namespace MeherEstateDevelopers.Controllers
         //    res.AddRange(res2);
         //    return PartialView(res);
         //}
-        public ActionResult SearchMyActivitReport(DateTime? From, DateTime? To)
+        [NoDirectAccess] public ActionResult SearchMyActivitReport(DateTime? From, DateTime? To)
         {
             long userid = long.Parse(User.Identity.GetUserId());
             List<ActivitiesList> res = new List<ActivitiesList>();

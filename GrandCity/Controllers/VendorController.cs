@@ -5,6 +5,7 @@ using System;
 using System.Linq;
 using System.Web.Mvc;
 using System.Xml.Linq;
+using static MeherEstateDevelopers.MvcApplication;
 
 namespace MeherEstateDevelopers.Controllers
 {
@@ -14,26 +15,26 @@ namespace MeherEstateDevelopers.Controllers
     {
         private Grand_CityEntities db = new Grand_CityEntities();
         // GET: Vendor
-        public ActionResult Index()
+        [NoDirectAccess] public ActionResult Index()
         {
             return View();
         }
-        public ActionResult VendorList()
+        [NoDirectAccess] public ActionResult VendorList()
         {
             var res = db.Sp_Get_Vendor().ToList();
             return PartialView(res);
         }
-        public ActionResult ActiveVendors()
+        [NoDirectAccess] public ActionResult ActiveVendors()
         {
             var res = db.Sp_Get_Vendor_Status(1).ToList();
             return PartialView(res);
         } 
-        public ActionResult ArchiveVendors()
+        [NoDirectAccess] public ActionResult ArchiveVendors()
         {
             var res = db.Sp_Get_Vendor_Status(0).ToList();
             return View(res);
         }
-        public ActionResult RegisterVendor()
+        [NoDirectAccess] public ActionResult RegisterVendor()
         {
             return PartialView();
         }
@@ -63,7 +64,7 @@ namespace MeherEstateDevelopers.Controllers
                 }
             }
         }
-        public ActionResult TemporaryRegisterVendor()
+        [NoDirectAccess] public ActionResult TemporaryRegisterVendor()
         {
             return PartialView();
         }
@@ -77,7 +78,7 @@ namespace MeherEstateDevelopers.Controllers
 
             return Json(true);
         }
-        public ActionResult VendorDetails(long Id)
+        [NoDirectAccess] public ActionResult VendorDetails(long Id)
         {
             var res1 = db.Vendors.Where(x => x.Id == Id).FirstOrDefault();
             var res2 = db.Vendor_Representative.Where(x => x.Vendor_Id == Id).ToList();
@@ -123,7 +124,7 @@ namespace MeherEstateDevelopers.Controllers
 
             return View(res);
         }
-        public ActionResult VendorTerms(long Id)
+        [NoDirectAccess] public ActionResult VendorTerms(long Id)
         {
             var res = db.Vendor_Credit_Terms.Where(x => x.Vendor_Id == Id).ToList();
             return PartialView(res);
@@ -145,7 +146,7 @@ namespace MeherEstateDevelopers.Controllers
                 var ret = new { Status = true, Msg = "Successfully Added" };
                 return Json(ret);
         }
-        public ActionResult AddVendorRepresentative()
+        [NoDirectAccess] public ActionResult AddVendorRepresentative()
         {
 
             return PartialView();
@@ -158,12 +159,12 @@ namespace MeherEstateDevelopers.Controllers
             db.SaveChanges();
             return Json(true);
         }
-        public ActionResult VendorDetail(long? VendorBidId, long? VendorId)
+        [NoDirectAccess] public ActionResult VendorDetail(long? VendorBidId, long? VendorId)
         {
             var res = db.Sp_Get_VendorDetail(VendorId).ToList();
             return PartialView(res);
         }
-        public ActionResult VendorDetailById(long? VendorId)
+        [NoDirectAccess] public ActionResult VendorDetailById(long? VendorId)
         {
             var res = db.Vendors.Where(x => x.Id == VendorId).ToList();
             long userid = long.Parse(User.Identity.GetUserId());
@@ -186,7 +187,7 @@ namespace MeherEstateDevelopers.Controllers
             db.Sp_Add_Activity(userid, "Deleted Vendor "+ Id , "Delete", "Activity_Record", ActivityType.Vendor.ToString(), Id);
             return Json(true);
         }
-        public ActionResult VendorUpdate(long Id)
+        [NoDirectAccess] public ActionResult VendorUpdate(long Id)
         {
             var res = db.Vendors.Where(x => x.Id == Id).FirstOrDefault();
             return PartialView(res);
@@ -206,13 +207,13 @@ namespace MeherEstateDevelopers.Controllers
             return Json(new { items = allsearch }, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult AddTermsVendor()
+        [NoDirectAccess] public ActionResult AddTermsVendor()
         {
 
 
             return PartialView();
         }
-        public ActionResult PurchaseOrdersList(long Id)
+        [NoDirectAccess] public ActionResult PurchaseOrdersList(long Id)
         {
             ViewBag.Id = Id;
 
@@ -220,7 +221,7 @@ namespace MeherEstateDevelopers.Controllers
         }
 
 
-        public ActionResult PurchaseOrders(long Id,DateTime? From,DateTime? To)
+        [NoDirectAccess] public ActionResult PurchaseOrders(long Id,DateTime? From,DateTime? To)
         {
             long userid = User.Identity.GetUserId<long>();
             var res1 = db.Sp_Get_Stock_In_Userid(userid, null, null, null, PurchaseRequisitionStatus.Purchase_Order_Generated.ToString()).Select(x => x.Group_Id).ToList();
@@ -240,13 +241,13 @@ namespace MeherEstateDevelopers.Controllers
             
             return PartialView(res);
         } 
-        public ActionResult VendorPayments(long Id)
+        [NoDirectAccess] public ActionResult VendorPayments(long Id)
         {
 
             var res = db.Vouchers.Where(x => x.Vendor_Id == Id).ToList();
             return PartialView(res);
         } 
-        public ActionResult Ledger(long Id)
+        [NoDirectAccess] public ActionResult Ledger(long Id)
         {
 
 

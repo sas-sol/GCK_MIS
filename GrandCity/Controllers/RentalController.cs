@@ -7,6 +7,7 @@ using MeherEstateDevelopers.Models;
 using System.IO;
 using Microsoft.AspNet.Identity;
 using MeherEstateDevelopers.Filters;
+using static MeherEstateDevelopers.MvcApplication;
 
 namespace MeherEstateDevelopers.Controllers
 {
@@ -16,19 +17,19 @@ namespace MeherEstateDevelopers.Controllers
     {
         // GET: Rental
         private Grand_CityEntities db = new Grand_CityEntities();
-        public ActionResult Index()
+        [NoDirectAccess] public ActionResult Index()
         {
             var res = db.Sp_Get_PlotRentals().ToList();
             return View(res);
         }
-        public ActionResult AddRental()
+        [NoDirectAccess] public ActionResult AddRental()
         {
             long userid = long.Parse(User.Identity.GetUserId());
             db.Sp_Add_Activity(userid, "Access Page of Rental", "Update", Modules.PlotManagement.ToString(), ActivityType.Page_Access.ToString(), null);
             ViewBag.Block = new SelectList(db.Sp_Get_Block(), "Id", "Block_Name");
             return View();
         }
-        public ActionResult AddRentalDetails(long Plot_Id)
+        [NoDirectAccess] public ActionResult AddRentalDetails(long Plot_Id)
         {
             var res1 = db.Sp_Get_PlotData(Plot_Id).FirstOrDefault();
             var res2 = db.Sp_Get_PlotLastOwner(Plot_Id).ToList();
@@ -139,13 +140,13 @@ namespace MeherEstateDevelopers.Controllers
         //    db.Sp_Add_Activity(userid, "Updated Details in Plot Rental " + r.Serial_No, "Update", "Activity_Record", ActivityType.Rental.ToString(), userid);
         //    return Json(ren.Id);
         //}
-        public ActionResult RentalInfo(long id)
+        [NoDirectAccess] public ActionResult RentalInfo(long id)
         {
             var res = db.Plot_Rental.Where(x => x.Id == id).FirstOrDefault();
             var pltOwner = db.Sp_Get_PlotLastOwner(res.Plot_Id).ToList();
             return View(new RentalInfoView { PlotOwners = pltOwner, RentalDetails = res });
         }
-        public ActionResult EditRental(long id)
+        [NoDirectAccess] public ActionResult EditRental(long id)
         {
             var res = db.Plot_Rental.Where(x => x.Id == id).FirstOrDefault();
             var res1 = db.Sp_Get_PlotData(res.Plot_Id).FirstOrDefault();
@@ -157,19 +158,19 @@ namespace MeherEstateDevelopers.Controllers
             return PartialView(new RentalInfoViewEdit { PlotOwners = res2, RentalDetails = res,PlotData = res1 });
            
         }
-        public ActionResult Rental_NOC(long Plot_Id)
+        [NoDirectAccess] public ActionResult Rental_NOC(long Plot_Id)
         {
             return View();
         }
-        public ActionResult Rental_List()
+        [NoDirectAccess] public ActionResult Rental_List()
         {
             return View();
         }
-        public ActionResult RentalDetails()
+        [NoDirectAccess] public ActionResult RentalDetails()
         {
             return PartialView();
         }
-        public ActionResult RentalNOC(long id)
+        [NoDirectAccess] public ActionResult RentalNOC(long id)
         {
             var res = db.Plot_Rental.Where(x => x.Id == id).FirstOrDefault();
             var uid = User.Identity.GetUserId<long>();

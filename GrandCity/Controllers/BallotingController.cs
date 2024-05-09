@@ -10,6 +10,7 @@ using MeherEstateDevelopers.Models;
 using Microsoft.AspNet.Identity;
 using Newtonsoft.Json;
 using MeherEstateDevelopers.Filters;
+using static MeherEstateDevelopers.MvcApplication;
 
 namespace MeherEstateDevelopers.Controllers
 {
@@ -22,7 +23,7 @@ namespace MeherEstateDevelopers.Controllers
 
         private Grand_CityEntities db = new Grand_CityEntities();
 
-        public ActionResult BallotingReport()
+        [NoDirectAccess] public ActionResult BallotingReport()
         {
             var res = db.Sp_Get_Report_Balloting_Est().ToList();
 
@@ -31,7 +32,7 @@ namespace MeherEstateDevelopers.Controllers
             return View(res);
         }
 
-        public ActionResult Ballot()
+        [NoDirectAccess] public ActionResult Ballot()
         {
             var blks = db.BallotPlots.Select(x => x.Block).Distinct().ToList();
             var sects = db.BallotPlots.Select(x => x.Sector).Distinct().OrderBy(x => x).ToList();
@@ -531,7 +532,7 @@ namespace MeherEstateDevelopers.Controllers
             }
         }
 
-        public ActionResult BallotResult(BallotReqtModel[] reqPlots, int? pdInst, DateTime? bookStart, DateTime? bookEnd, int? threshold, bool? allAvailable)
+        [NoDirectAccess] public ActionResult BallotResult(BallotReqtModel[] reqPlots, int? pdInst, DateTime? bookStart, DateTime? bookEnd, int? threshold, bool? allAvailable)
         {
 
             long userid = long.Parse(User.Identity.GetUserId());
@@ -1474,7 +1475,7 @@ namespace MeherEstateDevelopers.Controllers
             }
         }
 
-        public ActionResult UploadPlotsInventory()
+        [NoDirectAccess] public ActionResult UploadPlotsInventory()
         {
             return PartialView();
         }
@@ -1563,7 +1564,7 @@ namespace MeherEstateDevelopers.Controllers
             }
         }
 
-        public ActionResult BallotedPlots()
+        [NoDirectAccess] public ActionResult BallotedPlots()
         {
             //var res = db.BallotPlots.Where(x => x.Status == "Balloted").ToList();
             var res = db.Sp_Get_BallotedPlotsList().ToList();
@@ -1575,7 +1576,7 @@ namespace MeherEstateDevelopers.Controllers
             return Json(res);
         }
 
-        public ActionResult BallotInventory()
+        [NoDirectAccess] public ActionResult BallotInventory()
         {
             var res = db.BallotPlots.ToList();
             return View(res);
@@ -1677,7 +1678,7 @@ namespace MeherEstateDevelopers.Controllers
 
         //Ballot Event Related Functionalities are as below
 
-        public ActionResult EntryPoint()
+        [NoDirectAccess] public ActionResult EntryPoint()
         {
             //Getting data and throwing it to front end to avoid minimal client server interaction;
             var res = db.Sp_Get_BallotEventFiles_ForEntry().ToList();
@@ -1728,7 +1729,7 @@ namespace MeherEstateDevelopers.Controllers
             }
         }
 
-        //public ActionResult KioskScreen()
+        //[NoDirectAccess] public ActionResult KioskScreen()
         //{
         //    long uid = User.Identity.GetUserId<long>();
         //    if(!kioskServers.Any(x=>x.UserId == uid))
@@ -1738,7 +1739,7 @@ namespace MeherEstateDevelopers.Controllers
         //    return View();
         //}
 
-        //public ActionResult KioskAllottedFiles()
+        //[NoDirectAccess] public ActionResult KioskAllottedFiles()
         //{
         //    try
         //    {
@@ -1778,19 +1779,19 @@ namespace MeherEstateDevelopers.Controllers
         //    }
         //}
 
-        public ActionResult AtendeeMonitoring()
+        [NoDirectAccess] public ActionResult AtendeeMonitoring()
         {
             var res = db.Ballot_Event_Entry.ToList();
             var res2 = db.Sp_Get_BallotedPlotsList().ToList();
             return View(new AttendeeMonitorModel { GuestsList = res, ServedFiles = res2 });
         }
 
-        public ActionResult OldBallot()
+        [NoDirectAccess] public ActionResult OldBallot()
         {
             return View();
         }
 
-        public ActionResult BallotResultOld(long? id)
+        [NoDirectAccess] public ActionResult BallotResultOld(long? id)
         {
             if (id is null)
             {
@@ -1801,7 +1802,7 @@ namespace MeherEstateDevelopers.Controllers
             return PartialView(output);
         }
 
-        public ActionResult IntimationLetter(long id)
+        [NoDirectAccess] public ActionResult IntimationLetter(long id)
         {
             long uid = User.Identity.GetUserId<long>();
             var res = db.Sp_Get_BallotIntimationLetter(id, uid).FirstOrDefault();
@@ -1930,7 +1931,7 @@ namespace MeherEstateDevelopers.Controllers
         //    return Json(true);
         //}
 
-        public ActionResult ManualPlotAssignment()
+        [NoDirectAccess] public ActionResult ManualPlotAssignment()
         {
             return View();
         }
@@ -2006,7 +2007,7 @@ namespace MeherEstateDevelopers.Controllers
             }
         }
 
-        public ActionResult MapViewSherAfghan()
+        [NoDirectAccess] public ActionResult MapViewSherAfghan()
         {
             return View();
         }
@@ -2426,7 +2427,7 @@ namespace MeherEstateDevelopers.Controllers
 
 
 
-        public ActionResult BallotLettersPrintAll(string ident, string sect)
+        [NoDirectAccess] public ActionResult BallotLettersPrintAll(string ident, string sect)
         {
             var res = db.BallotPlots.Where(x => x.Status == "Balloted" && x.PlotType == ident && x.Sector == sect).ToList();
             return View(res);
@@ -2465,17 +2466,17 @@ namespace MeherEstateDevelopers.Controllers
                 var retDat = db.Sp_Update_SpecialPrefCharge(v.Id, 0);
             }
         }
-        //public ActionResult BallotSearch(long? Id)
+        //[NoDirectAccess] public ActionResult BallotSearch(long? Id)
         //{
         //    var res = db.BallotPlots.Where(x => x.Id == Id).FirstOrDefault();
         //    return PartialView(res);
         //}
-        public ActionResult BallotSearch(string plotno)
+        [NoDirectAccess] public ActionResult BallotSearch(string plotno)
         {
             var res = db.BallotPlots.Where(x => x.PlotNo == plotno).FirstOrDefault();
             return PartialView(res);
         }
-        public ActionResult NewPlot_Ballot()
+        [NoDirectAccess] public ActionResult NewPlot_Ballot()
         {
             ViewBag.Blocks = new SelectList(db.Sp_Get_Block(), "Block_Name", "Block_Name", "Project_Name");
             return PartialView();
@@ -2521,11 +2522,11 @@ namespace MeherEstateDevelopers.Controllers
         }
 
 
-        public ActionResult WelcomeBallotScreen()
+        [NoDirectAccess] public ActionResult WelcomeBallotScreen()
         {
             return View();
         }
-        public ActionResult BallotScreen()
+        [NoDirectAccess] public ActionResult BallotScreen()
         {
             var res = db.BallotPlots.OrderByDescending(x => x.BallotedOn).Take(500).ToList();
             return PartialView(res);

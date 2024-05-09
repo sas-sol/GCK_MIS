@@ -804,7 +804,8 @@ namespace MeherEstateDevelopers.Models
         Lead,
         PR_Send_Back,
         PO_Send_Back,
-        Material_Shift
+        Material_Shift,
+        Direct_Url_Hit
     }
     public enum LeadsStatus
     {

@@ -6,6 +6,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using MeherEstateDevelopers.Models;
+using static MeherEstateDevelopers.MvcApplication;
 
 namespace MeherEstateDevelopers.Controllers
 {
@@ -15,21 +16,21 @@ namespace MeherEstateDevelopers.Controllers
     {
         // GET: SideWidgets
         private Grand_CityEntities db = new Grand_CityEntities();
-        public ActionResult LeftSideWidget()
+        [NoDirectAccess] public ActionResult LeftSideWidget()
         {
             return PartialView();
         }
-        public ActionResult StaffLeftSideWidget()
+        [NoDirectAccess] public ActionResult StaffLeftSideWidget()
         {
             var userid = long.Parse(User.Identity.GetUserId());
             var res = db.Sp_Get_UserGroup(userid).ToList();
             return PartialView(res);
         }
-        public ActionResult LeftSideCEOWidget()
+        [NoDirectAccess] public ActionResult LeftSideCEOWidget()
         {
             return PartialView();
         }
-        public ActionResult Header()
+        [NoDirectAccess] public ActionResult Header()
         {
             long userid = long.Parse(User.Identity.GetUserId());
             var res1 = db.Sp_Get_UserDetails_Short(userid).SingleOrDefault();
@@ -42,7 +43,7 @@ namespace MeherEstateDevelopers.Controllers
             var res = new Header { Details = res1, Noties = res2, Companylist = res3  };
             return PartialView(res);
         }
-        public ActionResult StaffHeader()
+        [NoDirectAccess] public ActionResult StaffHeader()
         {
             long userid = long.Parse(User.Identity.GetUserId());
             var res1 = db.Sp_Get_UserDetails_Short(userid).SingleOrDefault();
@@ -55,13 +56,13 @@ namespace MeherEstateDevelopers.Controllers
             var res = new Header { Details = res1, Noties = res2, Companylist = res3 };
             return PartialView(res);
         }
-        public ActionResult GuestHeader()
+        [NoDirectAccess] public ActionResult GuestHeader()
         {
             long userid = long.Parse(User.Identity.GetUserId());
             var res = db.Sp_Get_UserDetails_Short(userid).SingleOrDefault();
             return PartialView(res);
         }
-        public ActionResult Footer()
+        [NoDirectAccess] public ActionResult Footer()
         {
             return PartialView();
         }

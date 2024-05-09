@@ -6,6 +6,7 @@ using System.Web;
 using System.Web.Mvc;
 using MeherEstateDevelopers.Models;
 using Microsoft.AspNet.Identity;
+using static MeherEstateDevelopers.MvcApplication;
 
 namespace MeherEstateDevelopers.Controllers
 {
@@ -48,13 +49,13 @@ namespace MeherEstateDevelopers.Controllers
         //    return Json(true);
         //}
 
-        public ActionResult Text()
+        [NoDirectAccess] public ActionResult Text()
         {
             ViewBag.Block1 = new SelectList(db.Sp_Get_Block(), "Id", "Block_Name");
             ViewBag.Block = new SelectList(db.Sp_Get_Block(), "Id", "Block_Name");
             return View();
         }
-        public ActionResult CreateDraft(long? group_tag)
+        [NoDirectAccess] public ActionResult CreateDraft(long? group_tag)
         {
              
             Helpers h = new Helpers();
@@ -63,7 +64,7 @@ namespace MeherEstateDevelopers.Controllers
 
             return PartialView(res);
         }
-        public ActionResult DisplayDraft()
+        [NoDirectAccess] public ActionResult DisplayDraft()
         {
             var res = db.Sms_Draft.ToList();
             return PartialView(res);
@@ -981,7 +982,7 @@ namespace MeherEstateDevelopers.Controllers
 //        }
 
 
-//        //public ActionResult Index()
+//        //[NoDirectAccess] public ActionResult Index()
 //        //{
 //        //    return View();
 //        //}
@@ -1075,7 +1076,7 @@ namespace MeherEstateDevelopers.Controllers
 //        //        smsService.PromotionalSub(text, item);
 //        //    }
 //        //}
-//        //public ActionResult PlotNumberChange()
+//        //[NoDirectAccess] public ActionResult PlotNumberChange()
 //        //{
 //        //    string[] sectorA = { "335", "352", "339", "205", "32","310","4", "272", "159", "158", "141", "258", "271", "77", "301" };
 //        //    string[] sectorC = {
@@ -1093,7 +1094,7 @@ namespace MeherEstateDevelopers.Controllers
 //        //    plots.AddRange(res2);
 //        //    return View(plots);
 //        //}
-//        //public ActionResult SherzamLetter()
+//        //[NoDirectAccess] public ActionResult SherzamLetter()
 //        //{
 //        //    string[] plot = {"406","390","339","102","77","74","72","70","420","412","384","334","171","342","45","276","347","392","277","309","407","183","182","81" };
 //        //    var res1 = (from x in db.Plots
@@ -1102,7 +1103,7 @@ namespace MeherEstateDevelopers.Controllers
 //        //    return View(res1);
 //        //}
 
-//        //public ActionResult PaymentModeSMS()
+//        //[NoDirectAccess] public ActionResult PaymentModeSMS()
 //        //{
 //        //    PaymentModeInformation();
 //        //    return Json(true,JsonRequestBehavior.AllowGet);

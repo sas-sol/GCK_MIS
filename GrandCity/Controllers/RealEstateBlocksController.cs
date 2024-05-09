@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using MeherEstateDevelopers.Models;
 using MeherEstateDevelopers.Filters;
+using static MeherEstateDevelopers.MvcApplication;
 
 namespace MeherEstateDevelopers.Controllers
 {
@@ -18,12 +19,12 @@ namespace MeherEstateDevelopers.Controllers
         private Grand_CityEntities db = new Grand_CityEntities();
 
         // GET: RealEstate_Blocks
-        public ActionResult GetPhaseAndBlock()
+        [NoDirectAccess] public ActionResult GetPhaseAndBlock()
         {
             var realEstate_Blocks = db.RealEstate_Blocks.Include(r => r.RealEstate_Phases);
             return View(realEstate_Blocks.ToList());
         }
-        public ActionResult Details(long? id)
+        [NoDirectAccess] public ActionResult Details(long? id)
         {
             if (id == null)
             {
@@ -36,14 +37,14 @@ namespace MeherEstateDevelopers.Controllers
             }
             return View(realEstate_Blocks);
         }
-        public ActionResult Create()
+        [NoDirectAccess] public ActionResult Create()
         {
             ViewBag.Phase_Id = new SelectList(db.Sp_Get_Phase(), "Id", "Phase_Name","Project_Name",1);
             return PartialView();
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Block_Name,Phase_Id")] RealEstate_Blocks realEstate_Blocks)
+        [NoDirectAccess] public ActionResult Create([Bind(Include = "Id,Block_Name,Phase_Id")] RealEstate_Blocks realEstate_Blocks)
         {
             var res = db.Sp_Add_Block(realEstate_Blocks.Block_Name,realEstate_Blocks.Phase_Id).FirstOrDefault();
             if (res == true)
@@ -60,7 +61,7 @@ namespace MeherEstateDevelopers.Controllers
             }
 
         }
-        public ActionResult Edit(long? id)
+        [NoDirectAccess] public ActionResult Edit(long? id)
         {
             if (id == null)
             {
@@ -76,7 +77,7 @@ namespace MeherEstateDevelopers.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Blocks,Phase_Id")] RealEstate_Blocks realEstate_Blocks)
+        [NoDirectAccess] public ActionResult Edit([Bind(Include = "Id,Blocks,Phase_Id")] RealEstate_Blocks realEstate_Blocks)
         {
             if (ModelState.IsValid)
             {
@@ -87,7 +88,7 @@ namespace MeherEstateDevelopers.Controllers
             ViewBag.Phase_Id = new SelectList(db.RealEstate_Phases, "Id", "Phase_Name", realEstate_Blocks.Phase_Id);
             return View(realEstate_Blocks);
         }
-        public ActionResult Delete(long? id)
+        [NoDirectAccess] public ActionResult Delete(long? id)
         {
             if (id == null)
             {
@@ -102,7 +103,7 @@ namespace MeherEstateDevelopers.Controllers
         }
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(long id)
+        [NoDirectAccess] public ActionResult DeleteConfirmed(long id)
         {
             RealEstate_Blocks realEstate_Blocks = db.RealEstate_Blocks.Find(id);
             db.RealEstate_Blocks.Remove(realEstate_Blocks);
@@ -120,7 +121,7 @@ namespace MeherEstateDevelopers.Controllers
             var res = db.Commercial_Rooms.Where(x =>x.Floor_Id == Id && x.Status == PlotsStatus.Available_For_Sale.ToString()).ToList();/*   new SelectList(db.Commercial_Rooms.Where(x => x.Plan_Id == proid && x.Floor_Id== Id),"Id", "Com_App_Shop_Number");*/
             return Json(res);
         }
-        public ActionResult VerifcationRequests()
+        [NoDirectAccess] public ActionResult VerifcationRequests()
         {
             var res = db.Sp_Get_Requested_Verification_Building(1).ToList();
             return View(res);

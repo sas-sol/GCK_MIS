@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using static MeherEstateDevelopers.MvcApplication;
 
 namespace MeherEstateDevelopers.Controllers
 {
@@ -16,7 +17,7 @@ namespace MeherEstateDevelopers.Controllers
     {
         private Grand_CityEntities db = new Grand_CityEntities();
 
-        public ActionResult NewReminder(string modId, string mode,string title)
+        [NoDirectAccess] public ActionResult NewReminder(string modId, string mode,string title)
         {
             ViewBag.modId = modId;
             ViewBag.mode = mode;
@@ -52,13 +53,13 @@ namespace MeherEstateDevelopers.Controllers
             }
         }
 
-        public ActionResult ReminderDetailsPartial(long rem)
+        [NoDirectAccess] public ActionResult ReminderDetailsPartial(long rem)
         {
             var res = db.MIS_Reminders.Where(x => x.Id == rem).FirstOrDefault();
             return PartialView(res);
         }
 
-        public ActionResult ReminderDetails(long rem)
+        [NoDirectAccess] public ActionResult ReminderDetails(long rem)
         {
             var res = db.MIS_Reminders.Where(x => x.Id == rem).FirstOrDefault();
             return View(res);
@@ -69,7 +70,7 @@ namespace MeherEstateDevelopers.Controllers
             return Json(false);
         }
 
-        public ActionResult ReminderComments(long remId)
+        [NoDirectAccess] public ActionResult ReminderComments(long remId)
         {
             ViewBag.Fileid = remId;
             var res = db.Sp_Get_ReminderComments(remId).ToList();
@@ -118,7 +119,7 @@ namespace MeherEstateDevelopers.Controllers
             return Json(fd);
         }
 
-        public ActionResult RemindersWidget()
+        [NoDirectAccess] public ActionResult RemindersWidget()
         {
             var uid = User.Identity.GetUserId<long>();
             var rems = db.MIS_Reminders.Where(x => x.CreatedBy_Id == uid && x.Status != "Closed" && x.RemindOn.Value <= DateTime.Now).ToList();
@@ -205,19 +206,19 @@ namespace MeherEstateDevelopers.Controllers
             }
         }
 
-        public ActionResult Index()
+        [NoDirectAccess] public ActionResult Index()
         {
             return View();
         }
         
-        public ActionResult GetRemindersByType(string type)
+        [NoDirectAccess] public ActionResult GetRemindersByType(string type)
         {
             var uid = User.Identity.GetUserId<long>();
             var res = db.MIS_Reminders.Where(x => x.Status == type && x.CreatedBy_Id == uid).ToList();
             return PartialView(res);
         }
 
-        public ActionResult GetUpcomingRemindersByModule(string module,long modId)
+        [NoDirectAccess] public ActionResult GetUpcomingRemindersByModule(string module,long modId)
         {
             var res = db.MIS_Reminders.Where(x => x.ModuleType == module && x.ModuleId == modId).ToList();
             return PartialView(res);

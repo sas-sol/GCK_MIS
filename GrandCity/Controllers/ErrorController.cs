@@ -7,8 +7,7 @@ using System.Web.Mvc;
 using System.Text;
 using System.Security.Cryptography;
 using Microsoft.AspNet.Identity;
-
-
+using static MeherEstateDevelopers.MvcApplication;
 
 namespace MeherEstateDevelopers.Controllers
 {
@@ -16,28 +15,28 @@ namespace MeherEstateDevelopers.Controllers
     {
         private Grand_CityEntities db = new Grand_CityEntities();
         // GET: Error
-        public ActionResult Index()
+        [NoDirectAccess] public ActionResult Index()
         {
             return View();
         }
-        public ActionResult Error404()
-        {
-            // Return the Error404 view
-            return View();
-        }
-        public ActionResult Error400()
+        [NoDirectAccess] public ActionResult Error404()
         {
             // Return the Error404 view
             return View();
         }
-        public ActionResult Error500()
+        [NoDirectAccess] public ActionResult Error400()
+        {
+            // Return the Error404 view
+            return View();
+        }
+        [NoDirectAccess] public ActionResult Error500()
         {
             // Return the Error404 view
             return View();
         }
        
         [HttpPost]
-        public ActionResult ReportError(ErrorLog errorData)
+        [NoDirectAccess] public ActionResult ReportError(ErrorLog errorData)
         {
             try
             {

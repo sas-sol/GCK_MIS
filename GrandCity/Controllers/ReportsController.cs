@@ -12,6 +12,7 @@ using System.Diagnostics;
 using Microsoft.AspNet.Identity;
 using Newtonsoft.Json;
 using execldataimport.Controllers;
+using static MeherEstateDevelopers.MvcApplication;
 
 namespace MeherEstateDevelopers.Controllers
 {
@@ -21,7 +22,7 @@ namespace MeherEstateDevelopers.Controllers
     {
         private Grand_CityEntities db = new Grand_CityEntities();
         // GET: Reports
-        public ActionResult RecoveryReport()
+        [NoDirectAccess] public ActionResult RecoveryReport()
         {
             //var All = db.Users.Where(x => x.Roles.Any(y => y.Name == "Cashier")).ToList();
             var All = db.Sp_Get_Cashiers_List().ToList();
@@ -33,7 +34,7 @@ namespace MeherEstateDevelopers.Controllers
             return View();
         }
         [HttpPost]
-        public ActionResult SearchAccountReport(DateTime? From, DateTime? To, long?[] Users, string[] Type)
+        [NoDirectAccess] public ActionResult SearchAccountReport(DateTime? From, DateTime? To, long?[] Users, string[] Type)
         {
             string chids = null, types = null;
 
@@ -108,14 +109,14 @@ namespace MeherEstateDevelopers.Controllers
             db.Sp_Add_Activity(userid, "Searched Accounts Reports From: " + From + "To: " + To, "Read", "Activity_Record", ActivityType.Reports.ToString(), userid);
             return PartialView(res);
         }
-        public ActionResult SAMRecoveryReport()
+        [NoDirectAccess] public ActionResult SAMRecoveryReport()
         {
             var All = db.Sp_Get_Cashiers_List().ToList();
             ViewBag.Users = new SelectList(All, "id", "Name");
             return View();
         }
         [HttpPost]
-        public ActionResult SearchSAMAccountReport(DateTime? From, DateTime? To, long?[] Users)
+        [NoDirectAccess] public ActionResult SearchSAMAccountReport(DateTime? From, DateTime? To, long?[] Users)
         {
             string chids = null;
             if (Users != null)
@@ -210,7 +211,7 @@ namespace MeherEstateDevelopers.Controllers
             db.Sp_Add_Activity(userid, "Searched SAM Accounts Reports From: " + From + "To: " + To, "Read", "Activity_Record", ActivityType.Reports.ToString(), userid);
             return PartialView(Fresult);
         }
-        public ActionResult FileStatment(long Token)
+        [NoDirectAccess] public ActionResult FileStatment(long Token)
         {
             long userid = long.Parse(User.Identity.GetUserId());
             string name = db.Users.SingleOrDefault(x => x.Id == userid).Name;
@@ -265,7 +266,7 @@ namespace MeherEstateDevelopers.Controllers
             return View(newres);
         }
 
-        public ActionResult FileStatmentAcc(string Token)
+        [NoDirectAccess] public ActionResult FileStatmentAcc(string Token)
         {
             long userid = long.Parse(User.Identity.GetUserId());
 
@@ -346,7 +347,7 @@ namespace MeherEstateDevelopers.Controllers
             var res = new NewFileLedger { OwnerData = res2, FileData = fa, Report = Rm, Balance = balance };
             return View(res);
         }
-        public ActionResult FileStatmentCancel(string FileNumber, long OwnerId)
+        [NoDirectAccess] public ActionResult FileStatmentCancel(string FileNumber, long OwnerId)
         {
             var res1 = db.Sp_Get_FileAppFormData(FileNumber).SingleOrDefault();
             if (res1 == null) { return Json(false); }
@@ -463,7 +464,7 @@ namespace MeherEstateDevelopers.Controllers
             var newres = new NewFileLedger { FileData = fa, Report = Rm, Balance = balance, OwnerData = res2 };
             return View("FileStatmentAcc", newres);
         }
-        public ActionResult FileBalanceRep(long Token)
+        [NoDirectAccess] public ActionResult FileBalanceRep(long Token)
         {
             Sp_Get_FileFormData_Result res = db.Sp_Get_FileFormData(Token).SingleOrDefault();
 
@@ -513,44 +514,44 @@ namespace MeherEstateDevelopers.Controllers
 
             return View(fres);
         }
-        public ActionResult AllReports()
+        [NoDirectAccess] public ActionResult AllReports()
         {
             return View();
         }
-        public ActionResult FileReport()
+        [NoDirectAccess] public ActionResult FileReport()
         {
             return PartialView();
         }
-        public ActionResult AllFilesReports()
+        [NoDirectAccess] public ActionResult AllFilesReports()
         {
             return View();
         }
-        public ActionResult MonthlyFilesRecovery(DateTime Month)
+        [NoDirectAccess] public ActionResult MonthlyFilesRecovery(DateTime Month)
         {
             var res = db.Sp_Get_Report_MonthRecoveryReport(Month).ToList();
             return PartialView(res);
         }
-        public ActionResult Index()
+        [NoDirectAccess] public ActionResult Index()
         {
             return View();
         }
-        public ActionResult PlotsOutstanding()
-        {
-            ViewBag.Blocks = new SelectList(db.Sp_Get_Block(), "Id", "Block_Name", "Phase_Name");
-            return View();
-        }
-        public ActionResult FilesOutstanding()
+        [NoDirectAccess] public ActionResult PlotsOutstanding()
         {
             ViewBag.Blocks = new SelectList(db.Sp_Get_Block(), "Id", "Block_Name", "Phase_Name");
             return View();
         }
-        public ActionResult PlotsfilesCosolidatedReports()
+        [NoDirectAccess] public ActionResult FilesOutstanding()
+        {
+            ViewBag.Blocks = new SelectList(db.Sp_Get_Block(), "Id", "Block_Name", "Phase_Name");
+            return View();
+        }
+        [NoDirectAccess] public ActionResult PlotsfilesCosolidatedReports()
         {
             ViewBag.Blocks = new SelectList(db.Sp_Get_Block(), "Id", "Block_Name", "Phase_Name");
             return View();
         }
 
-        public ActionResult FilesStatus()
+        [NoDirectAccess] public ActionResult FilesStatus()
         {
             var res = db.Sp_Reports_FilesStatus().ToList();
             List<string> cat = new List<string>();
@@ -630,18 +631,18 @@ namespace MeherEstateDevelopers.Controllers
             // var result = new { PlotResult = res1, fileResult = res2 };
             //return Json(result);
         }
-        public ActionResult PlotsOutStandingReport_View(string Block)
+        [NoDirectAccess] public ActionResult PlotsOutStandingReport_View(string Block)
         {
             var Id = db.RealEstate_Blocks.Where(x => x.Block_Name == Block).Select(x => x.Id).FirstOrDefault();
             var res = db.Sp_Get_Reports_PlotOutstandingByBlock(Id).ToList();
             return View(res);
         }
-        public ActionResult ServiceChargesBills()
+        [NoDirectAccess] public ActionResult ServiceChargesBills()
         {
             ViewBag.Blocks = new SelectList(db.Sp_Get_Block(), "Id", "Block_Name", "Phase_Name");
             return View();
         }
-        public ActionResult ServiceCharges(DateTime? month, DateTime? year, long?[] blockid)
+        [NoDirectAccess] public ActionResult ServiceCharges(DateTime? month, DateTime? year, long?[] blockid)
         {
             List<Sp_Get_Report_ServiceCharges_Result> res3 = new List<Sp_Get_Report_ServiceCharges_Result>();
             var plotSizes = db.Plots.Select(x => new { x.Id, x.Plot_Size }).ToList();
@@ -681,12 +682,12 @@ namespace MeherEstateDevelopers.Controllers
             var res = new ServiceChargesDetails { Receiable = rec, Received = recd, Resi_Receiable = Rrec, Resi_Received = Rrecd, Com_Receiable = Crec, Com_Received = Crecd, ServiceChargesList = res3 };
             return PartialView(res);
         }
-        public ActionResult ElectricityCharges()
+        [NoDirectAccess] public ActionResult ElectricityCharges()
         {
             ViewBag.Blocks = new SelectList(db.Sp_Get_Block(), "Id", "Block_Name", "Phase_Name");
             return View();
         }
-        public ActionResult ElectricityChargesBill(DateTime? month, DateTime? year, long?[] blockid)
+        [NoDirectAccess] public ActionResult ElectricityChargesBill(DateTime? month, DateTime? year, long?[] blockid)
         {
             List<Sp_Get_Report_ElectricityCharges_Result> res3 = new List<Sp_Get_Report_ElectricityCharges_Result>();
             List<string> blocklist = new List<string>();
@@ -727,12 +728,12 @@ namespace MeherEstateDevelopers.Controllers
             var res = new ElectricityChargesDetails { Receiveable = rec, Received = recd, Resi_Receiable = Rrec, Resi_Received = Rrecd, Com_Receiable = Crec, Com_Received = Crecd, ElectricityChargesList = res3 };
             return PartialView(res);
         }
-        public ActionResult ServiceChargesBills_Short()
+        [NoDirectAccess] public ActionResult ServiceChargesBills_Short()
         {
             ViewBag.Blocks = new SelectList(db.Sp_Get_Block(), "Id", "Block_Name", "Phase_Name");
             return PartialView();
         }
-        public ActionResult ServiceCharges_Short(DateTime? month, DateTime? year, long?[] blockid)
+        [NoDirectAccess] public ActionResult ServiceCharges_Short(DateTime? month, DateTime? year, long?[] blockid)
         {
             List<Sp_Get_Report_ServiceCharges_Result> res3 = new List<Sp_Get_Report_ServiceCharges_Result>();
             List<string> blocklist = new List<string>();
@@ -789,12 +790,12 @@ namespace MeherEstateDevelopers.Controllers
             var res = new ServiceChargesDetails { Receiable = rec, Received = recd, Resi_Receiable = Rrec, Resi_Received = Rrecd, Com_Receiable = Crec, Com_Received = Crecd, ServiceChargesList = null, totalcounter1 = bb1, totalcounter2 = bb2 };
             return PartialView(res);
         }
-        public ActionResult ElectricityChargesBill_Short()
+        [NoDirectAccess] public ActionResult ElectricityChargesBill_Short()
         {
             ViewBag.Blocks = new SelectList(db.Sp_Get_Block(), "Id", "Block_Name", "Phase_Name");
             return PartialView();
         }
-        public ActionResult ElectricityCharges_Short(DateTime? month, DateTime? year, long?[] blockid)
+        [NoDirectAccess] public ActionResult ElectricityCharges_Short(DateTime? month, DateTime? year, long?[] blockid)
         {
             List<Sp_Get_Report_ElectricityCharges_Result> res3 = new List<Sp_Get_Report_ElectricityCharges_Result>();
             List<string> blocklist = new List<string>();
@@ -855,14 +856,14 @@ namespace MeherEstateDevelopers.Controllers
             var res = new ElectricityChargesDetails { Receiveable = rec, Received = recd, Resi_Receiable = Rrec, Resi_Received = Rrecd, Com_Receiable = Crec, Com_Received = Crecd, ElectricityChargesList = null, totalcounter1 = bb1, totalcounter2 = bb2 };
             return PartialView(res);
         }
-        public ActionResult PlotBookingRep()
+        [NoDirectAccess] public ActionResult PlotBookingRep()
         {
 
             return View();
         }
         //................ Booking Reports
         [Authorize(Roles = "CEO,Financial Dashboard,Administrator")]
-        public ActionResult PlotBooking(DateTime Startdate, DateTime? Enddate)
+        [NoDirectAccess] public ActionResult PlotBooking(DateTime Startdate, DateTime? Enddate)
         {
             var res = db.SP_Reports_RegisterPlots(Startdate, Enddate).ToList();
             ViewBag.From = Startdate;
@@ -924,7 +925,7 @@ namespace MeherEstateDevelopers.Controllers
             return Json(res);
         }
         //[Authorize(Roles = "CEO,Financial Dashboard")]
-        //public ActionResult PlotBookingBarGraph(DateTime Startdate, DateTime? Enddate)
+        //[NoDirectAccess] public ActionResult PlotBookingBarGraph(DateTime Startdate, DateTime? Enddate)
         //{
         //    var res = db.SP_Reports_RegisterPlots(Startdate, Enddate).ToList();
         //    List<string> cat = new List<string>();
@@ -961,7 +962,7 @@ namespace MeherEstateDevelopers.Controllers
         //}
         //.....................Transfer Reports...............................
         [Authorize(Roles = "CEO,Financial Dashboard,Administrator")]
-        public ActionResult PlotTranfer(DateTime Startdate, DateTime? Enddate)
+        [NoDirectAccess] public ActionResult PlotTranfer(DateTime Startdate, DateTime? Enddate)
         {
             var res = db.Sp_Reports_FileTransfer(Startdate, Enddate).ToList();
             ViewBag.From = Startdate;
@@ -1018,7 +1019,7 @@ namespace MeherEstateDevelopers.Controllers
             return Json(res);
         }
         //[Authorize(Roles = "CEO,Financial Dashboard")]
-        //public ActionResult PlotTransferBarGraph(DateTime Startdate, DateTime? Enddate)
+        //[NoDirectAccess] public ActionResult PlotTransferBarGraph(DateTime Startdate, DateTime? Enddate)
         //{
         //    var res = db.Sp_Reports_FileTransfer(Startdate, Enddate).ToList();
 
@@ -1058,7 +1059,7 @@ namespace MeherEstateDevelopers.Controllers
         //}
         //.................... Payment Types ...............................
         [Authorize(Roles = "CEO,Financial Dashboard,Administrator")]
-        public ActionResult PaymentTypes(DateTime Startdate, DateTime? Enddate)
+        [NoDirectAccess] public ActionResult PaymentTypes(DateTime Startdate, DateTime? Enddate)
         {
             try
             {
@@ -1138,7 +1139,7 @@ namespace MeherEstateDevelopers.Controllers
                 return null;
             }
         }
-        public ActionResult RevenueReport(DateTime? From, DateTime? To)
+        [NoDirectAccess] public ActionResult RevenueReport(DateTime? From, DateTime? To)
         {
             try
             {
@@ -1392,7 +1393,7 @@ namespace MeherEstateDevelopers.Controllers
                 return null;
             }
         }
-        public ActionResult PayableReport(DateTime? From, DateTime? To)
+        [NoDirectAccess] public ActionResult PayableReport(DateTime? From, DateTime? To)
         {
             try
             {
@@ -1533,7 +1534,7 @@ namespace MeherEstateDevelopers.Controllers
             }
         }
         [Authorize(Roles = "CEO,Financial Dashboard,Administrator")]
-        public ActionResult PaymentBarTypes(DateTime Startdate, DateTime? Enddate)
+        [NoDirectAccess] public ActionResult PaymentBarTypes(DateTime Startdate, DateTime? Enddate)
         {
             try
             {
@@ -1610,7 +1611,7 @@ namespace MeherEstateDevelopers.Controllers
             }
         }
         //..................... Installment report
-        public ActionResult AllMonthlyInstallment()
+        [NoDirectAccess] public ActionResult AllMonthlyInstallment()
         {
             var blocks = db.RealEstate_Blocks.Select(x => new NameValuestring { Value = x.Id.ToString(), Name = x.Block_Name }).ToList();
             var Projects = db.RealEstate_Projects.Select(x => new NameValuestring { Value = "B-" + x.Id, Name = x.Project_Name }).ToList();
@@ -1629,7 +1630,7 @@ namespace MeherEstateDevelopers.Controllers
 
 
         [Authorize(Roles = "CEO,Financial Dashboard,Administrator")]
-        public ActionResult MonthlyInstallment(DateTime? From, DateTime? To, string Type, string TypeName)
+        [NoDirectAccess] public ActionResult MonthlyInstallment(DateTime? From, DateTime? To, string Type, string TypeName)
         {
             if (From == null || To == null)
             {
@@ -1776,7 +1777,7 @@ namespace MeherEstateDevelopers.Controllers
             data.Categories.AddRange(cat);
             return data;
         }
-        public ActionResult PlotsRecovery(DateTime? From, DateTime? To)
+        [NoDirectAccess] public ActionResult PlotsRecovery(DateTime? From, DateTime? To)
         {
             var res = db.Sp_Get_Reports_BlockOutstanding(From, To).ToList();
             List<string> cat = new List<string>();
@@ -1815,7 +1816,7 @@ namespace MeherEstateDevelopers.Controllers
             data.Categories.AddRange(cat);
             return PartialView(data);
         }
-        public ActionResult FilesYearlyRecovery(long? block, string blockName, string propertytype)
+        [NoDirectAccess] public ActionResult FilesYearlyRecovery(long? block, string blockName, string propertytype)
         {
             var res = db.Sp_Get_Reports_FilesInstallment_Year(1, "Residential").ToList();
             ViewBag.titleName = string.Concat(blockName, " Block All Recovery");
@@ -1962,12 +1963,12 @@ namespace MeherEstateDevelopers.Controllers
             data.Categories.AddRange(cat);
             return PartialView(data);
         }
-        public ActionResult TransferAllotmentLetters()
+        [NoDirectAccess] public ActionResult TransferAllotmentLetters()
         {
             var res = db.Sp_Report_TransferAllotmentStatus().ToList();
             return View(res);
         }
-        public ActionResult MapsReport()
+        [NoDirectAccess] public ActionResult MapsReport()
         {
 
             var res1 = db.Test_Activity().ToList();
@@ -1984,7 +1985,7 @@ namespace MeherEstateDevelopers.Controllers
             ViewBag.Res = Address;
             return View();
         }
-        public ActionResult LeadsPlotSizeReports(string Status, DateTime? Startdate, DateTime? Enddate, long?[] Users, string Comp)
+        [NoDirectAccess] public ActionResult LeadsPlotSizeReports(string Status, DateTime? Startdate, DateTime? Enddate, long?[] Users, string Comp)
         {
             string users = null;
             Status = (string.IsNullOrEmpty(Status)) ? null : Status;
@@ -2064,7 +2065,7 @@ namespace MeherEstateDevelopers.Controllers
             data.Categories.AddRange(cat);
             return PartialView(data);
         }
-        public ActionResult PropertyDealsPlotSizeReports(string Status, DateTime? Startdate, DateTime? Enddate, long?[] Users, string Comp, string Type)
+        [NoDirectAccess] public ActionResult PropertyDealsPlotSizeReports(string Status, DateTime? Startdate, DateTime? Enddate, long?[] Users, string Comp, string Type)
         {
             string users = null;
             ViewBag.Type = Type;
@@ -2145,23 +2146,23 @@ namespace MeherEstateDevelopers.Controllers
             data.Categories.AddRange(cat);
             return PartialView(data);
         }
-        public ActionResult LeadsReports()
+        [NoDirectAccess] public ActionResult LeadsReports()
         {
             return View();
         }
-        public ActionResult SAMLeadsReports()
+        [NoDirectAccess] public ActionResult SAMLeadsReports()
         {
             var All = db.Users.Where(x => x.Roles.Any(y => y.Name == "Sales Executive") && x.Email.Contains("sa.marketing")).ToList();
             ViewBag.LeadsUser = new SelectList(All, "Id", "Name");
             return PartialView();
         }
-        public ActionResult PropertyExchangeLeadsReports()
+        [NoDirectAccess] public ActionResult PropertyExchangeLeadsReports()
         {
             var All = db.Users.Where(x => x.Roles.Any(y => y.Name == "Sales Executive") && x.Email.Contains("property")).ToList();
             ViewBag.LeadsUser = new SelectList(All, "Id", "Name");
             return PartialView();
         }
-        public ActionResult LeadsStatusReport(string Status, DateTime? Startdate, DateTime? Enddate, long?[] Users, string Comp)
+        [NoDirectAccess] public ActionResult LeadsStatusReport(string Status, DateTime? Startdate, DateTime? Enddate, long?[] Users, string Comp)
         {
             string users = null;
             Status = (string.IsNullOrEmpty(Status)) ? null : Status;
@@ -2220,7 +2221,7 @@ namespace MeherEstateDevelopers.Controllers
             data.Categories.AddRange(cat);
             return PartialView(data);
         }
-        public ActionResult LeadsRecovery(DateTime? Startdate, DateTime? Enddate, long?[] Users, string Comp)
+        [NoDirectAccess] public ActionResult LeadsRecovery(DateTime? Startdate, DateTime? Enddate, long?[] Users, string Comp)
         {
             string users = null;
             if (Users != null)
@@ -2278,7 +2279,7 @@ namespace MeherEstateDevelopers.Controllers
             data.Categories.AddRange(cat);
             return PartialView(data);
         }
-        //public ActionResult LeadsMonthlyRevenue(DateTime From, DateTime To)
+        //[NoDirectAccess] public ActionResult LeadsMonthlyRevenue(DateTime From, DateTime To)
         //{
         //    Report_Amounts data = new Report_Amounts()
         //    {
@@ -2361,7 +2362,7 @@ namespace MeherEstateDevelopers.Controllers
         //    return data;
         //}
 
-        public ActionResult DealsListReport(string Status, DateTime? Startdate, DateTime? Enddate, long?[] Users, string Comp)
+        [NoDirectAccess] public ActionResult DealsListReport(string Status, DateTime? Startdate, DateTime? Enddate, long?[] Users, string Comp)
         {
             string users = null;
             Status = (string.IsNullOrEmpty(Status)) ? null : Status;
@@ -2397,14 +2398,14 @@ namespace MeherEstateDevelopers.Controllers
 
 
 
-        //public ActionResult 
+        //[NoDirectAccess] public ActionResult 
 
 
         /////////////// 
         /// Files
         ///////////////
 
-        public ActionResult FilesTiles()
+        [NoDirectAccess] public ActionResult FilesTiles()
         {
             var res = db.Sp_Get_FilesReport_Short().ToList();
             return PartialView(res);
@@ -2414,7 +2415,7 @@ namespace MeherEstateDevelopers.Controllers
         /// Tickets Reports
         ///////////////
 
-        public ActionResult TicketStatus(DateTime? From, DateTime? To, int?[] Dep_Id)
+        [NoDirectAccess] public ActionResult TicketStatus(DateTime? From, DateTime? To, int?[] Dep_Id)
         {
             string chids = null;
             if (Dep_Id != null)
@@ -2458,7 +2459,7 @@ namespace MeherEstateDevelopers.Controllers
             data.Categories.AddRange(cat);
             return PartialView(data);
         }
-        public ActionResult HODTicketStatus(DateTime? From, DateTime? To, long?[] UserId)
+        [NoDirectAccess] public ActionResult HODTicketStatus(DateTime? From, DateTime? To, long?[] UserId)
         {
             string chids = null;
             long userid = long.Parse(User.Identity.GetUserId());
@@ -2514,7 +2515,7 @@ namespace MeherEstateDevelopers.Controllers
             data.Categories.AddRange(cat);
             return PartialView(data);
         }
-        public ActionResult MyTicketStatus(DateTime? From, DateTime? To)
+        [NoDirectAccess] public ActionResult MyTicketStatus(DateTime? From, DateTime? To)
         {
             long userid = long.Parse(User.Identity.GetUserId());
             var res = db.SP_Reports_MyTicket(From, To, userid).ToList();
@@ -2555,7 +2556,7 @@ namespace MeherEstateDevelopers.Controllers
         /// Dealership Reports
         ///////////////
 
-        public ActionResult StockIssuanceReport(long Id)
+        [NoDirectAccess] public ActionResult StockIssuanceReport(long Id)
         {
             var res1 = db.Sp_Get_DealershipFilesReport(Id).ToList();
             var res = (from x in res1
@@ -2613,7 +2614,7 @@ namespace MeherEstateDevelopers.Controllers
             data.Categories.AddRange(cat);
             return PartialView(data);
         }
-        public ActionResult Reports()
+        [NoDirectAccess] public ActionResult Reports()
         {
             List<CanceledFileReport> fileReport = new List<CanceledFileReport>();
             var cancelledFiles = db.SP_Get_CancelledFiles().ToList();
@@ -2639,7 +2640,7 @@ namespace MeherEstateDevelopers.Controllers
 
             return PartialView(fileReport);
         }
-        public ActionResult AttendanceReport(DateTime? start, DateTime? end, long? depart, string typ)
+        [NoDirectAccess] public ActionResult AttendanceReport(DateTime? start, DateTime? end, long? depart, string typ)
         {
             //for present absent and leaves
             List<Sp_Get_Attendance_Report_Graphical_Result> apr;
@@ -2711,7 +2712,7 @@ namespace MeherEstateDevelopers.Controllers
                 return PartialView(null);
             }
         }
-        public ActionResult PayrollReport(DateTime? start, DateTime? end, long? depart, string typ)
+        [NoDirectAccess] public ActionResult PayrollReport(DateTime? start, DateTime? end, long? depart, string typ)
         {
             try
             {
@@ -2734,7 +2735,7 @@ namespace MeherEstateDevelopers.Controllers
                 return PartialView();
             }
         }
-        public ActionResult DetailedAttendanceReport(DateTime? start, DateTime? end, string depart, string typ)
+        [NoDirectAccess] public ActionResult DetailedAttendanceReport(DateTime? start, DateTime? end, string depart, string typ)
         {
             //for present absent and leaves
             List<Sp_Get_Attendance_Period_Result> apr;
@@ -2782,7 +2783,7 @@ namespace MeherEstateDevelopers.Controllers
             }
             return PartialView(new DetailedAttendanceReportView { Attendance = apr, StartDate = start, EndDate = end, AppliedLeaves = leaves, RostersTemplatesInfo = __RostersInfo });
         }
-        public ActionResult DetailedPayrollReport(DateTime? start, DateTime? end, long? depart, string typ)
+        [NoDirectAccess] public ActionResult DetailedPayrollReport(DateTime? start, DateTime? end, long? depart, string typ)
         {
             List<Sp_Get_Payroll_Details_Result> res;
             if ((start is null) || end is null)
@@ -2802,7 +2803,7 @@ namespace MeherEstateDevelopers.Controllers
             }
             return View(res);
         }
-        public ActionResult SalaryComparativeReport(DateTime? start, DateTime? end, string typ, long[] ids)
+        [NoDirectAccess] public ActionResult SalaryComparativeReport(DateTime? start, DateTime? end, string typ, long[] ids)
         {
             var idData = (ids is null) ? string.Empty : new XElement("CompDepDesigs", ids.Select(x => new XElement("IdsData",
                     new XAttribute("Id", x)))).ToString();
@@ -2829,29 +2830,29 @@ namespace MeherEstateDevelopers.Controllers
         //    var res = db.Sp_Get_CompanyProperties().ToList().Count;
         //    return Json(res);
         //}
-        //public ActionResult CompanyOwned()
+        //[NoDirectAccess] public ActionResult CompanyOwned()
         //{
         //    var res = db.Sp_Get_CompanyProperties().ToList();
         //    return View(res);
         //}
 
-        public ActionResult LateReport()
+        [NoDirectAccess] public ActionResult LateReport()
         {
 
 
             return PartialView();
         }
-        public ActionResult LateReportData(DateTime From)
+        [NoDirectAccess] public ActionResult LateReportData(DateTime From)
         {
             var res = db.Sp_Get_LateComers(From).ToList();
             return PartialView(res);
         }
-        //public ActionResult FilesTabularSummary()
+        //[NoDirectAccess] public ActionResult FilesTabularSummary()
         //{
         //    var filesData = db.File_Form.Select(x => new Files_ABS_Summary { BallotPlotId = x.BallotedPlot_Id, FileFormNumber = (long)x.FileFormNumber, Status = ((FileStatus)x.Status).ToString(), TypeName = x.Type, StatusVal = x.Status }).ToList();
         //    return PartialView(filesData);
         //}
-        public ActionResult SAPremiumSalesReport()
+        [NoDirectAccess] public ActionResult SAPremiumSalesReport()
         {
             CommercialController cc = new CommercialController();
             cc.UpdateCommercialUnitsBalance();
@@ -2860,22 +2861,22 @@ namespace MeherEstateDevelopers.Controllers
             var res = db.Sp_Get_ComProj_SalesReport(ProjectName, Module).ToList();
             return View(res);
         }
-        //public ActionResult SAFileSalesReport()
+        //[NoDirectAccess] public ActionResult SAFileSalesReport()
         //{
         //    var res = db.Sp_Get_FilePlot_SalesReport("File").ToList();
         //    return View(res);
         //}
-        //public ActionResult SAPlotSalesReport()
+        //[NoDirectAccess] public ActionResult SAPlotSalesReport()
         //{
         //    var res = db.Sp_Get_FilePlot_SalesReport("Plot").ToList();
         //    return View(res);
         //}
-        public ActionResult MaterialReceivingReport()
+        [NoDirectAccess] public ActionResult MaterialReceivingReport()
         {
 
             return View();
         }
-        public ActionResult SearchMaterialReceivingReport(DateTime? From, DateTime? To)
+        [NoDirectAccess] public ActionResult SearchMaterialReceivingReport(DateTime? From, DateTime? To)
         {
             if (From is null || To is null)
             {
@@ -2888,17 +2889,17 @@ namespace MeherEstateDevelopers.Controllers
             var res = db.Sp_Get_Material_Receiving_Report(From, To).ToList();
             return PartialView(res);
         }
-        public ActionResult OverDueFiles()
+        [NoDirectAccess] public ActionResult OverDueFiles()
         {
             return View();
         }
-        public ActionResult RegisterOverdue(int Status)
+        [NoDirectAccess] public ActionResult RegisterOverdue(int Status)
         {
             ViewBag.Title = "Registered Files Overdue";
             var res = db.Sp_Reports_OverDue(Status).ToList();
             return PartialView(res);
         }
-        public ActionResult MonthlyDue(int? month, int? year)
+        [NoDirectAccess] public ActionResult MonthlyDue(int? month, int? year)
         {
             DateTime date = DateTime.Now;
             if (month != null || year != null)
@@ -2909,11 +2910,11 @@ namespace MeherEstateDevelopers.Controllers
             var res = db.Sp_Reports_MonthlyOverdue(date.Month, date.Year).ToList();
             return PartialView(res);
         }
-        public ActionResult PurchaseReqReport() // Report 3
+        [NoDirectAccess] public ActionResult PurchaseReqReport() // Report 3
         {
             return View();
         }
-        public ActionResult PurchaseReqReport_Search(string PRNo, DateTime? From, DateTime? To)
+        [NoDirectAccess] public ActionResult PurchaseReqReport_Search(string PRNo, DateTime? From, DateTime? To)
         {
             long userid = User.Identity.GetUserId<long>();
             if (From == null || To == null)
@@ -2924,22 +2925,22 @@ namespace MeherEstateDevelopers.Controllers
             var res = db.Sp_Get_PurchaseReq_Report(PRNo, From, To).ToList();
             return PartialView(res);
         }
-        public ActionResult PurchaseReqPndReport() // Report 4 Pending requisitions
+        [NoDirectAccess] public ActionResult PurchaseReqPndReport() // Report 4 Pending requisitions
         {
             return View();
         }
-        public ActionResult PurchaseReqPndReport_Search(string PRNo)
+        [NoDirectAccess] public ActionResult PurchaseReqPndReport_Search(string PRNo)
         {
             long userid = User.Identity.GetUserId<long>();
             db.Sp_Add_Activity(userid, "Generate Purchase Requsition Report ", "Read", "Activity_Record", ActivityType.Page_Access.ToString(), userid);
             var res = db.Sp_Get_PurchaseReq_Pndg_Report(PRNo).ToList();
             return PartialView(res);
         }
-        public ActionResult PurchaseReqItemReport() // report 6
+        [NoDirectAccess] public ActionResult PurchaseReqItemReport() // report 6
         {
             return View();
         }
-        public ActionResult PurchaseReqItemReport_Search(string Grn, DateTime? From, DateTime? To)
+        [NoDirectAccess] public ActionResult PurchaseReqItemReport_Search(string Grn, DateTime? From, DateTime? To)
         {
             long userid = User.Identity.GetUserId<long>();
             //db.Sp_Add_Activity(userid, "Generate Purchase Requsition Report ", "Read", "Activity_Record", ActivityType.Page_Access.ToString(), userid);
@@ -2951,11 +2952,11 @@ namespace MeherEstateDevelopers.Controllers
             var res = db.Sp_Get_InventoryItem_PR_PO_GRN_Report(Grn, From, To).ToList();
             return PartialView(res);
         }
-        public ActionResult PurchaseOrderReport() // report 9
+        [NoDirectAccess] public ActionResult PurchaseOrderReport() // report 9
         {
             return View();
         }
-        public ActionResult PurchaseOrderReport_Search(string PO, DateTime? From, DateTime? To)
+        [NoDirectAccess] public ActionResult PurchaseOrderReport_Search(string PO, DateTime? From, DateTime? To)
         {
             long userid = User.Identity.GetUserId<long>();
             //db.Sp_Add_Activity(userid, "Generate Purchase Requsition Report ", "Read", "Activity_Record", ActivityType.Page_Access.ToString(), userid);
@@ -2968,7 +2969,7 @@ namespace MeherEstateDevelopers.Controllers
             var res = db.Sp_Get_PurchaseOrder_Report(PO, From, To).ToList();
             return PartialView(res);
         }
-        public ActionResult SAFileSalesReport_Search(int blockId, string Sector)
+        [NoDirectAccess] public ActionResult SAFileSalesReport_Search(int blockId, string Sector)
         {
             if (Sector == "")
             {
@@ -2979,20 +2980,20 @@ namespace MeherEstateDevelopers.Controllers
             return PartialView(res);
         }
 
-        public ActionResult SABalanceSheetReport()
+        [NoDirectAccess] public ActionResult SABalanceSheetReport()
         {
             return View();
         }
-        public ActionResult SABalanceSheetReport_Search(string Comp, DateTime To)
+        [NoDirectAccess] public ActionResult SABalanceSheetReport_Search(string Comp, DateTime To)
         {
             var res = db.SP_GET_BalanceSheet_AllCom(To, "/" + Comp + "/");//.ToList();
             return PartialView(res);
         }
-        public ActionResult IncomeStatementReport()
+        [NoDirectAccess] public ActionResult IncomeStatementReport()
         {
             return View();
         }
-        public ActionResult SAIncomeStatementReport_Search(string Comp, DateTime? From, DateTime? To)
+        [NoDirectAccess] public ActionResult SAIncomeStatementReport_Search(string Comp, DateTime? From, DateTime? To)
         {
             long userid = User.Identity.GetUserId<long>();
             db.Sp_Add_Activity(userid, "Get Balance Sheet List of  " + Comp, "Read", "Activity_Record", ActivityType.Page_Access.ToString(), userid);
@@ -3003,11 +3004,11 @@ namespace MeherEstateDevelopers.Controllers
             var res = db.Sp_Get_Income_Statment(comp.Id, From, To).ToList();
             return PartialView(res);
         }
-        public ActionResult SARefundReport()
+        [NoDirectAccess] public ActionResult SARefundReport()
         {
             return View();
         }
-        public ActionResult SARefundReport_Search(string Module, DateTime? From, DateTime? To, string size, string block)
+        [NoDirectAccess] public ActionResult SARefundReport_Search(string Module, DateTime? From, DateTime? To, string size, string block)
         {
             if (size == "")
             {
@@ -3021,7 +3022,7 @@ namespace MeherEstateDevelopers.Controllers
             return PartialView(res);
         }
 
-        public ActionResult SAPlotSalesReport()
+        [NoDirectAccess] public ActionResult SAPlotSalesReport()
         {
             FiletransferController sc = new FiletransferController();
             sc.miger();
@@ -3038,7 +3039,7 @@ namespace MeherEstateDevelopers.Controllers
             ViewBag.Blocks = new SelectList(blocks, "Name", "Name");
             return View();
         }
-        public ActionResult SAPlotSalesReport_Search(DateTime? From, DateTime? To, string Block, string Type)
+        [NoDirectAccess] public ActionResult SAPlotSalesReport_Search(DateTime? From, DateTime? To, string Block, string Type)
         {
             if (From == null || To == null)
             {
@@ -3057,7 +3058,7 @@ namespace MeherEstateDevelopers.Controllers
             return PartialView(res);
         }
 
-        public ActionResult GetSaleData(JqueryDatatableParam param, DateTime? From, DateTime? To, string Block, string Type)
+        [NoDirectAccess] public ActionResult GetSaleData(JqueryDatatableParam param, DateTime? From, DateTime? To, string Block, string Type)
         {
             if (From == null || To == null)
             {

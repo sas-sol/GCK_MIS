@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using MeherEstateDevelopers.Filters;
 using MeherEstateDevelopers.Models;
+using static MeherEstateDevelopers.MvcApplication;
 
 namespace MeherEstateDevelopers.Controllers
 {
@@ -17,12 +18,12 @@ namespace MeherEstateDevelopers.Controllers
     {
         private Grand_CityEntities db = new Grand_CityEntities();
 
-        public ActionResult ProjectConfiguration()
+        [NoDirectAccess] public ActionResult ProjectConfiguration()
         {
             return View();
         }
         
-        public ActionResult Details(long? id)
+        [NoDirectAccess] public ActionResult Details(long? id)
         {
             if (id == null)
             {
@@ -36,12 +37,12 @@ namespace MeherEstateDevelopers.Controllers
             return View(realEstate_Projects);
         }
 
-        public ActionResult Create()
+        [NoDirectAccess] public ActionResult Create()
         {
             return PartialView();
         }
         
-        public ActionResult ProjectList()
+        [NoDirectAccess] public ActionResult ProjectList()
         {
             var __rpl = db.RealEstate_Projects.Where(x=>x.Type == "General").ToList();
             var __phases = db.RealEstate_Phases.Select(x => new { x.Id, x.Phase_Name, x.Project_Id, MType = 2 }).ToList();
@@ -87,19 +88,19 @@ namespace MeherEstateDevelopers.Controllers
             return PartialView(__frmtd);
         }
         
-        public ActionResult ProjectsDetail()
+        [NoDirectAccess] public ActionResult ProjectsDetail()
         {
             return PartialView();
         }
         
-        public ActionResult NewProject()
+        [NoDirectAccess] public ActionResult NewProject()
         {
             return PartialView();
         }
         
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Project_Name,Description,Type")] RealEstate_Projects realEstate_Projects)
+        [NoDirectAccess] public ActionResult Create([Bind(Include = "Id,Project_Name,Description,Type")] RealEstate_Projects realEstate_Projects)
         {
             var res = db.Sp_Add_RealEstateProject(realEstate_Projects.Project_Name, realEstate_Projects.Description, realEstate_Projects.Type).FirstOrDefault();
             //if (res == true)
@@ -116,7 +117,7 @@ namespace MeherEstateDevelopers.Controllers
             //}
         }
         
-        public ActionResult Edit(long? id)
+        [NoDirectAccess] public ActionResult Edit(long? id)
         {
             if (id == null)
             {
@@ -132,7 +133,7 @@ namespace MeherEstateDevelopers.Controllers
         
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Project_Name,Description")] RealEstate_Projects realEstate_Projects)
+        [NoDirectAccess] public ActionResult Edit([Bind(Include = "Id,Project_Name,Description")] RealEstate_Projects realEstate_Projects)
         {
             if (ModelState.IsValid)
             {
@@ -143,7 +144,7 @@ namespace MeherEstateDevelopers.Controllers
             return View(realEstate_Projects);
         }
         
-        public ActionResult RealestatePrjDetail(long Id)
+        [NoDirectAccess] public ActionResult RealestatePrjDetail(long Id)
         {
             return View();
         }
