@@ -1,0 +1,235 @@
+﻿@model MeherEstateDevelopers.Models.CompiledReport
+
+@{
+    if (User.IsInRole("Administrator"))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    }
+}
+<div class="col-md-12">
+    <div class="bgc-white bd bdrs-3 p-20 mB-20">
+        @*<h4 class="c-grey-900" style="text-align:center"> Meher Estate Developers Inventory is @string.Format("{0:n0}",Model.Phases.Sum(x=> x.Total))</h4>*@
+
+        <div class="row">
+            <div class="col-md-3"></div>
+            <div class="col-md-6">
+                <table class="table table-bordered">
+                    <tr class="thead-dark">
+                        <th></th>
+                        <th>Residential</th>
+                        <th>Commercial</th>
+                        <th>Total</th>
+                    </tr>
+                    @foreach (var g in Model.Phases.GroupBy(x => x.Phase).OrderBy(x => x.Key))
+                    {
+                        <tr>
+                            <td>@g.Key</td>
+                            <td class="cen">@g.Where(x => x.Type == "Residential").Select(x => x.Total).FirstOrDefault()</td>
+                            <td class="cen">@g.Where(x => x.Type == "Commercial").Select(x => x.Total).FirstOrDefault()</td>
+                            <th class="cen">@g.Sum(x => x.Total)</th>
+                        </tr>
+                    }
+                    <tr>
+                        <th></th>
+                        <th class="cen">@Model.Phases.Where(x => x.Type == "Residential").Sum(x => x.Total)</th>
+                        <th class="cen">@Model.Phases.Where(x => x.Type == "Commercial").Sum(x => x.Total)</th>
+                        <th class="cen">@Model.Phases.Sum(x => x.Total)</th>
+                    </tr>
+                </table>
+
+            </div>
+            <div class="col-md-3"></div>
+        </div>
+
+        <div class="form-row cards-list">
+            @foreach (var gg in Model.PlotStatuses.GroupBy(x => x.Block))
+            {
+                <div class="card">
+                    <div class="card_title title-black">
+                        @gg.Key Block
+                    </div>
+                    <table border="1px solid" class="mt-3" width="100%">
+                        <tr class="thead-dark">
+                            <th></th>
+                            <th>Residential</th>
+                            <th>Commercial</th>
+                            <th>Total</th>
+                        </tr>
+                        @foreach (var g in gg.GroupBy(x => x.Status))
+                        {
+                            <tr>
+                                <td>@g.Key.Replace("_", " ")</td>
+                                <td class="cen">@g.Where(x => x.Plot_Type == "Residential").Select(x => x.Total).FirstOrDefault()</td>
+                                <td class="cen">@g.Where(x => x.Plot_Type == "Commercial").Select(x => x.Total).FirstOrDefault()</td>
+                                <th class="cen">@g.Sum(x => x.Total)</th>
+                            </tr>
+                        }
+                        <tr>
+                            <th></th>
+                            <th class="cen">@gg.Where(x => x.Plot_Type == "Residential").Sum(x => x.Total)</th>
+                            <th class="cen">@gg.Where(x => x.Plot_Type == "Commercial").Sum(x => x.Total)</th>
+                            <th class="cen">@gg.Sum(x => x.Total)</th>
+                        </tr>
+                    </table>
+                    <hr />
+                    <h6>Verfication Status</h6>
+                    <table border="1px solid" class="mt-3" width="100%">
+                        <tr class="thead-dark">
+                            <th></th>
+                            <th>Residential</th>
+                            <th>Commercial</th>
+                            <th>Total</th>
+                        </tr>
+                        @foreach (var g in Model.PlotVerifications.Where(x => x.Block == gg.Key).GroupBy(x => x.Verified))
+                        {
+                            <tr>
+                                <td>@((g.Key == true) ? "Verified" : "Not Verfied")</td>
+                                <td class="cen">@g.Where(x => x.Type == "Residential").Select(x => x.Total).FirstOrDefault()</td>
+                                <td class="cen">@g.Where(x => x.Type == "Commercial").Select(x => x.Total).FirstOrDefault()</td>
+                                <th class="cen">@g.Sum(x => x.Total)</th>
+                            </tr>
+                        }
+                        <tr>
+                            <th></th>
+                            <th class="cen">@Model.PlotVerifications.Where(x => x.Block == gg.Key && x.Type == "Residential").Sum(x => x.Total)</th>
+                            <th class="cen">@Model.PlotVerifications.Where(x => x.Block == gg.Key && x.Type == "Commercial").Sum(x => x.Total)</th>
+                            <th class="cen">@Model.PlotVerifications.Where(x => x.Block == gg.Key).Sum(x => x.Total)</th>
+                        </tr>
+                    </table>
+                    <hr />
+                    <h6>Block Develop Status</h6>
+                    <table border="1px solid" class="mt-3" width="100%">
+                        <tr class="thead-dark">
+                            <th></th>
+                            <th>Residential</th>
+                            <th>Commercial</th>
+                            <th>Total</th>
+                        </tr>
+                        @foreach (var g in Model.PlotConstructions.Where(x => x.Block == gg.Key).GroupBy(x => x.DevelopStatus))
+                        {
+                            <tr>
+                                <td>@g.Key.Replace("_", " ")</td>
+                                <td class="cen">@g.Where(x => x.Type == "Residential").Select(x => x.Total).FirstOrDefault()</td>
+                                <td class="cen">@g.Where(x => x.Type == "Commercial").Select(x => x.Total).FirstOrDefault()</td>
+                                <th class="cen">@g.Sum(x => x.Total)</th>
+                            </tr>
+                        }
+                        <tr>
+                            <th></th>
+                            <th class="cen">@Model.PlotConstructions.Where(x => x.Block == gg.Key && x.Type == "Residential").Sum(x => x.Total)</th>
+                            <th class="cen">@Model.PlotConstructions.Where(x => x.Block == gg.Key && x.Type == "Commercial").Sum(x => x.Total)</th>
+                            <th class="cen">@Model.PlotConstructions.Where(x => x.Block == gg.Key).Sum(x => x.Total)</th>
+                        </tr>
+                    </table>
+
+
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<style>
+    .cards-list {
+        z-index: 0;
+        width: 100%;
+        display: flex;
+        justify-content: space-around;
+        flex-wrap: wrap;
+    }
+
+    .card {
+        padding: 10px;
+        margin: 30px auto;
+        width: 400px;
+        height: 600px;
+        border-radius: 40px;
+        box-shadow: 1px 5px 2px 3px rgba(0,0,0,0.25), -5px -5px 5px 5px rgba(0,0,0,0.22);
+        cursor: pointer;
+        transition: 0.4s;
+        overflow: hidden;
+    }
+
+        .card table td {
+            font-size: 12px
+        }
+
+        .card table .cen {
+            text-align: center
+        }
+
+    .Suspended {
+        margin: 30px auto;
+        width: 300px;
+        height: 450px;
+        border-radius: 40px;
+        box-shadow: 5px 5px 30px 7px rgb(255, 0, 0), -5px -5px 30px 7px rgb(255, 0, 0);
+        cursor: pointer;
+        transition: 0.4s;
+    }
+
+    .Cancelled {
+        margin: 30px auto;
+        width: 300px;
+        height: 450px;
+        border-radius: 40px;
+        box-shadow: 0px 0px 7px 1px rgb(255, 0, 0), -5px -5px 7px 5px rgb(255, 0, 0);
+        cursor: pointer;
+        transition: 0.4s;
+    }
+
+        .Cancelled:hover {
+            transform: scale(1.09);
+            box-shadow: 0px 2px 0px 0px rgb(255, 0, 0), 0px 0px 4px 2px rgb(255, 0, 0);
+        }
+
+    .card .card_image {
+        width: 80px;
+        height: 80px;
+        border-radius: 40px;
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: 5px;
+    }
+
+        .card .card_image img {
+            width: inherit;
+            height: inherit;
+            border-radius: 40px;
+            object-fit: cover;
+        }
+
+    .card .card_title {
+        text-align: center;
+        border-radius: 0px 0px 40px 40px;
+        font-weight: bold;
+    }
+
+    .card:hover {
+        transform: scale(1.09);
+        box-shadow: 0px 2px 0px 0px rgba(0,0,0,0.25), 0px 0px 4px 2px rgba(0,0,0,0.22);
+    }
+
+    .title-white {
+        color: white;
+    }
+
+    .title-black {
+        color: black;
+    }
+
+    div.cancel {
+        background-color: #dd3333;
+        width: 43%;
+        margin-left: -34px;
+        color: white;
+        padding: 18px 23px;
+        height: 8%;
+        font-size: 12px;
+        transform: rotate( -50deg );
+    }
+</style>

@@ -6507,15 +6507,31 @@ $(document).on("click", "#gen-ins", function () {
 });
 // plot installments information
 $(document).on("click", ".plot-inst-btn", function () {
+    debugger;
     var div = $(this).closest(".own-det")
     var id = $("#plt-id").val();
     var mob = $(div).find("input[name=Mobile_1]").val()
     var fth = $(div).find("input[name=Father_Husband]").val();
     var nam = $(div).find("input[name=Name]").val();
+    //var nam = $(div).find(".Name").val();
+    //var fth = $(div).find(".Father_Husband").val();
+    //var mob = $(div).find(".Mobile_1").val();
     EmptyModel();
     $('.modal-body').load('/Installments/AddPlotInstallment/', { Id: id, Name: nam, Father: fth, Mobile: mob }, function () {
     });
 });
+// file installments information
+//$(document).on("click", ".file-inst-btn", function () {
+//    debugger;
+//    var div = $(this).closest(".file-owner-data-nsdjk")
+//    var fileId = $("#app-num").val();
+//    var mob = $(div).find("input[name=Mobile_1]").val()
+//    var fth = $(div).find("input[name=Father_Husband]").val();
+//    var nam = $(div).find("input[name=Name]").val();
+//    EmptyModel();
+//    $('.modal-body').load('/Installments/AddFileInstallment/', { Id: id, Name: nam, Father: fth, Mobile: mob }, function () {
+//    });
+//});
 //... Commercial Installments Information
 $(document).on("click", ".com-inst-btn", function () {
     var div = $(this).closest(".own-det")
@@ -7110,6 +7126,90 @@ $(document).on("click", "#sav-plt-rece", function (e) {
                 processData: false,
                 contentType: false,
                 url: $("#pay-plot-ins").attr('action'),
+                data: data,
+                success: function (data) {
+                    if (data.ReturnVal == 0) {
+                        //alert("Reciept Already Exists")
+                        Swal.fire({
+                            icon: 'info',
+                            text: 'The receipt already exists'
+                        });
+                    }
+                    else {
+                        $("#rec-amts tbody").empty();
+                        //alert("Installment Added");
+                        Swal.fire({
+                            icon: 'success',
+                            text: 'Receipt generated successfully'
+                        }).then(() => {
+                            var total = 0;
+                            $.each(data.ReceAmt, function (i) {
+                                var a = i + 1;
+                                total = total + data.ReceAmt[i].Amount;
+                                var html = '<tr id="' + data.ReceAmt[i].Id + '" data-token="' + data.ReceAmt[i].TokenParameter + '" >' +
+                                    '<td scope="row">' + a + '</td>' +
+                                    '<td scope="row">' + data.ReceAmt[i].ReceiptNo + '</td>' +
+                                    '<td>' + data.ReceAmt[i].Amount + '</td>' +
+                                    '<td>' + moment(data.ReceAmt[i].DateTime).format("DD-MMM-YYYY") + '</td>' +
+                                    '<td>' + data.ReceAmt[i].PaymentType + '</td><td><i class="ti-close del-rec"></i></td></tr>';
+                                $("#rec-amts tbody").append(html);
+                            });
+                            var html1 = '<tr><td>Total</td><td colspan="5">' + total + '</td></tr>'
+                            $("#rec-amts tbody").append(html1);
+                            var id = $("#plt-id").val();
+                            $("#plot-rep").load("/Plots/PlotInstallmentsReports/", { Plotid: id }, function () { });
+                        })
+                    }
+                },
+                error: function (xmlhttprequest, textstatus, message) {
+                    $('#gen-rec').attr("disabled", false);
+                    $('#sav-plt-rece').attr("disabled", false);
+                    if (textstatus === "timeout") {
+                        //alert("got timeout");
+                        Swal.fire({
+                            icon: 'error',
+                            text: 'Request timed out'
+                        });
+                    } else {
+                        //alert(textstatus);
+                        Swal.fire({
+                            icon: 'error',
+                            text: 'Something went wrong'
+                        });
+                    }
+                }
+            });
+        }
+    });
+});
+$(document).on("click", "#sav-fil-rece", function (e) {
+    debugger;
+    e.preventDefault();
+    $(this).attr("disabled", true);
+    var balamt = $("#bal-amt").val();
+    var amt = $("#amt").val();
+    $('#gen-oth-rec').attr("disabled", true);
+    $("#amt-in-wrds").val(InWords($("#amt").val()));
+    var form = $("#pay-file-ins");
+    var data = new FormData();
+    var files = $("#files").get(0).files;
+    data.append("Files", files[0]);
+    $.each(form.serializeArray(), function (key, input) {
+        data.append(input.name, input.value);
+    });
+    Swal.fire({
+        text: 'Are you sure you want to generate the Receipt?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                type: "POST",
+                processData: false,
+                contentType: false,
+                url: $("#pay-file-ins").attr('action'),
                 data: data,
                 success: function (data) {
                     if (data.ReturnVal == 0) {

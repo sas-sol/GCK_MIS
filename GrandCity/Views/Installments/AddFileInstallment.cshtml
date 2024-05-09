@@ -2,13 +2,14 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
 <!-- SweetAlert2 JS -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-@using (Html.BeginForm("PayPlotInstallment", "Installments", FormMethod.Post, new { @id = "pay-plot-ins", @class = "", role = "form", autocomplete = "off" }))
+@using (Html.BeginForm("PayfileInstallment", "Installments", FormMethod.Post, new { @id = "pay-file-ins", @class = "", role = "form", autocomplete = "off" }))
 {
     @Html.AntiForgeryToken()
     <div class="form-row">
         <div class="form-group col-md-6">
             <input type="hidden" id="plotid" name="PlotId" value="@ViewBag.Plotid" />
-            <input type="hidden" id="amt-plot-no" name="File_Plot_Number" />
+            <input type="hidden" id="amt-plot-no" name="File_Plot_Number" value="@ViewBag.Plotid" />
+            <input type="hidden" id="filepltno" name="FilePlotNumber" />
             <input type="hidden" id="amt-in-wrds" name="AmountInWords" />
             <input type="hidden" id="mbl" name="Mobile_1" value="@ViewBag.Mobile" />
             <input type="hidden" id="fth-husbad" name="Father_Husband" value="@ViewBag.Father" />
@@ -49,9 +50,10 @@
         </div>
 
         <div class="form-group col-md-2">
-            <label>Receipt Date</label>
-            <input type="text" class="form-control" data-provide="datepicker" id="Date" name="Date">
+            <label for="Dates">Receipt Date</label>
+            <input type="datetime-local" class="form-control" id="Date" name="Date">
         </div>
+
         <div class="form-group col-md-2">
             <label>Type</label>
             <select class="form-control" id="Module" name="Module">
@@ -79,7 +81,7 @@
         </div>
         <div class="form-group col-md-2 paymentotherinfo">
             <label>Date</label>
-            <input type="text" class="form-control" data-provide="datepicker" name="Ch_bk_Pay_Date" placeholder="mm/dd/yyyy" disabled required>
+            <input type="datetime-local" class="form-control" name="Ch_bk_Pay_Date" placeholder="mm/dd/yyyy" disabled required>
         </div>
     </div>
     <div class="form-row">
@@ -98,23 +100,15 @@
 
 <script>
     $(function () {
-        $('.modal-footer').append('<button class="btn btn-info" id="sav-plt-rece" type="submit">Save</button>');
-        $('.modal-Header').text('Plot Installment');
+        $('.modal-footer').append('<button class="btn btn-info" id="sav-fil-rece" type="submit">Save</button>');
+        $('.modal-Header').text('File Installment');
         var block = $("#Block option:selected").text();
         block = block.replace(/(\r\n\t|\n|\r\t)/gm, "");
-        $("#total-amt").val($("#plt-pric").val());
+        $("#total-amt").val($("#totalprice").val());
         $("#plot-size").val($("#pl-size").val());
-        $("#rec-Block").val(block);
+        $("#rec-Block").val($("#blk").val());
 
-        var fileplotid = $("#plt-lst").val();
-        if (fileplotid == "" || fileplotid == null) {
-            $("#amt-plot-no").val($("#plot-details").val());
-        }
-        else {
-            $("#amt-plot-no").val(fileplotid);
-        }
-
-
+        $("#filepltno").val($("#app-num").val());
 
         $("#amt-file-id").val($("#plt-id").val());
     });

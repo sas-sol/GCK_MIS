@@ -893,7 +893,7 @@ namespace MeherEstateDevelopers.Controllers
 
                     // add phase in Receipt data
                     var receiptdata = db.Receipts.Where(r => r.Id == res2.Receipt_Id).FirstOrDefault();
-                    receiptdata.Phase = phase.Phase_Name;
+                    receiptdata.Phase = phase.Phase_Name != null ? phase.Phase_Name : receiptdata.Phase;
                     db.SaveChanges();
 
                     if (res2.Receipt_Id > 0)
@@ -1095,6 +1095,17 @@ namespace MeherEstateDevelopers.Controllers
             ViewBag.Bank = new SelectList(Nomenclature.Banks(), "Name", "Name");
             return PartialView();
         }
+        public ActionResult AddFileInstallment(string Id, string Name, string Father, string Mobile)
+        {
+            var file = db.File_Form.Where(f => f.FileFormNumber == Id).FirstOrDefault();
+            ViewBag.Plotid = file.Id;
+            ViewBag.Name = Name;
+            ViewBag.Father = Father;
+            ViewBag.Mobile = Mobile;
+            ViewBag.Bank = new SelectList(Nomenclature.Banks(), "Name", "Name");
+            return PartialView();
+        }
+        public ActionResult AddCommercialInstallment(long Id, string Name, string Father, string Mobile)
         [NoDirectAccess] public ActionResult AddCommercialInstallment(long Id, string Name, string Father, string Mobile)
         {
             ViewBag.shopid = Id;
@@ -1471,6 +1482,60 @@ namespace MeherEstateDevelopers.Controllers
             }
             var Receivedamts = db.Sp_Get_ReceivedAmounts(rd.File_Plot_Number, Modules.PlotManagement.ToString()).ToList();
             db.SP_Update_PlotVerificationToNull(rd.File_Plot_Number);
+            var res = new { ReturnVal = res2, ReceAmt = Receivedamts };
+            return Json(res);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public JsonResult PayfileInstallment(ReceiptData rd, string Module, string CameraImg)
+        {
+            long userid = long.Parse(User.Identity.GetUserId());
+            var Plot = db.Sp_Get_PlotData(rd.File_Plot_Number).FirstOrDefault();
+            var res2 = db.Sp_Add_PlotReceipt_Manual(rd.Amount, rd.AmountInWords, rd.Bank, rd.PayChqNo, rd.Ch_bk_Pay_Date, rd.Branch, rd.Mobile_1
+                , rd.Father_Husband, rd.File_Plot_Number.ToString(), rd.Name, rd.PaymentType, rd.TotalAmount,
+                rd.Project_Name, rd.Rate, null, rd.Plot_Size, Module, userid, userid, rd.ReceiptNo, rd.Date, rd.Phase, rd.Block, null, Modules.FileManagement.ToString(), rd.FilePlotNumber).FirstOrDefault();
+            db.Sp_Add_Activity(userid, "Add receipt of Plot Id  <a class='plt-data' data-id=' " + rd.File_Plot_Number + "'>" + rd.File_Plot_Number + "</a>---", "Create", Modules.FileManagement.ToString(), ActivityType.Add_Receipt.ToString(), rd.File_Plot_Number);
+            Helpers h = new Helpers();
+            bool headcashier = false;
+            if (User.IsInRole("Head Cashier"))
+            {
+                headcashier = true;
+            }
+
+            int index = 0;
+            foreach (string file in Request.Files)
+            {
+                HttpPostedFileBase hpf = Request.Files[index] as HttpPostedFileBase;
+                index++;
+                if (hpf.ContentLength == 0)
+                    continue;
+                try
+                {
+                    var imageName = Path.GetExtension(hpf.FileName);
+                    if (!Directory.Exists(Server.MapPath("~/FileReceipts/Files/" + rd.File_Plot_Number + "/")))
+                    {
+                        Directory.CreateDirectory(Server.MapPath("~/FileReceipts/Files/" + rd.File_Plot_Number));
+                    }
+                    var filename = res2 + Path.GetExtension(hpf.FileName);
+                    string savedFileName = Path.Combine(Server.MapPath("~/FileReceipts/Files/" + rd.File_Plot_Number + "/"), filename);
+                    hpf.SaveAs(savedFileName);
+                    //db.Sp_Update_PlotReceipt_Img(res2, filename);
+                }
+                catch (Exception)
+                {
+                }
+            }
+            if (!string.IsNullOrEmpty(CameraImg))
+            {
+                if (!Directory.Exists(Server.MapPath("~/FileReceipts/Files/" + rd.File_Plot_Number + "/")))
+                {
+                    Directory.CreateDirectory(Server.MapPath("~/FileReceipts/Files/" + rd.File_Plot_Number));
+                }
+                var pathMain = Path.Combine(Server.MapPath("~/FileReceipts/Files/" + rd.File_Plot_Number + "/"), res2 + ".png");
+                //var Imgres = h.SaveBase64Image(CameraImg, pathMain, res2.ToString());
+            }
+            var Receivedamts = db.Sp_Get_ReceivedAmounts(rd.File_Plot_Number, Modules.FileManagement.ToString()).ToList();
+            db.SP_Update_VerificationToNull(rd.File_Plot_Number, Modules.FileManagement.ToString());
             var res = new { ReturnVal = res2, ReceAmt = Receivedamts };
             return Json(res);
         }

@@ -132,9 +132,35 @@
                 </div>
                     <div class="col-md-12">
                         <div class="form-row">
-                            <div class="col-md-2"></div>
-                            <div class="col-md-8" style="align-items: center; justify-content: center; display: flex; flex-direction: row; ">
+                            <div class="col-md-12" style="align-items: center; justify-content: center; display: flex; flex-direction: row; ">
+                               <div class="hexy">
+                                    <div class="hexy-overlay row">
+                                        <button class="btn btn-outline-primary dets-btn-hexy" data-lnk="/FileSystem/FilesDataDetailView">Details &nbsp;<i class="fas fa-arrow-right view-dets-anim"></i>&nbsp;&nbsp;&nbsp;</button>
+                                    </div>
+                                    <div class="hex-content">
+                                        <h6 class="hexy-title-lbl">Total Files</h6>
+                                        <span style="font-size: 0.9vw " class="">@Model.FilesSummary.Total_Files</span>
+                                    </div>
+                                </div>
                                 <div class="hexy">
+                                    <div class="hexy-overlay row">
+                                        <button class="btn btn-outline-primary dets-btn-hexy" data-lnk="/FileSystem/GetVerfiedFiles">Details &nbsp;<i class="fas fa-arrow-right view-dets-anim"></i>&nbsp;&nbsp;&nbsp;</button>
+                                    </div>
+                                    <div class="hex-content">
+                                        <h6 class="hexy-title-lbl">Verified Files</h6>
+                                        <span style="font-size: 0.9vw " class="">@Model.FilesSummary.VerifiedFiles</span>
+                                    </div>
+                                </div>
+                                <div class="hexy">
+                                    <div class="hexy-overlay row">
+                                        <button class="btn btn-outline-primary dets-btn-hexy" data-lnk="/FileSystem/GetNotVerfiedFiles">Details &nbsp;<i class="fas fa-arrow-right view-dets-anim"></i>&nbsp;&nbsp;&nbsp;</button>
+                                    </div>
+                                    <div class="hex-content">
+                                        <h6 class="hexy-title-lbl">Not Verified Files</h6>
+                                        <span style="font-size: 0.9vw " class="">@Model.FilesSummary.NotVerified</span>
+                                    </div>
+                                </div>
+                                @*<div class="hexy">
                                     <div class="hexy-overlay row">
                                         <button class="btn btn-outline-primary dets-btn-hexy" data-lnk="/FileSystem/FilessDataDetailView">Details &nbsp;<i class="fas fa-arrow-right view-dets-anim"></i>&nbsp;&nbsp;&nbsp;</button>
                                     </div>
@@ -160,7 +186,7 @@
                                         <h6 class="hexy-title-lbl">Not Verified Files</h6>
                                         <span style="font-size: 0.9vw " class="">@Model.FilesSummary.NotVerified</span>
                                     </div>
-                                </div>
+                                </div>*@
                                 <div class="hexy">
                                     <div class="hexy-overlay row">
                                         <button class="btn btn-outline-primary dets-btn-hexy" data-lnk="/FileSystem/FileStatusView?status=15">Details &nbsp;<i class="fas fa-arrow-right view-dets-anim"></i>&nbsp;&nbsp;&nbsp;</button>
@@ -198,8 +224,6 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-2"></div>
-
                         </div>
                     </div>
                 </div>

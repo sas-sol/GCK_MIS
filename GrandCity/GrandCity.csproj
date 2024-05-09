@@ -6551,7 +6551,6 @@
     <Content Include="Views\GeneralEntry\TempAccountJV.cshtml" />
     <Content Include="Views\RealEstateProjects\NewProject.cshtml" />
     <Content Include="Views\RealEstateProjects\ProjectList.cshtml" />
-    <Content Include="Views\Plots\PlotsDataDetailView.cshtml" />
     <Content Include="Views\Commercial\CommercialNOC.cshtml" />
     <Content Include="Views\Loan\GetLoanPhysicalDoc.cshtml" />
     <Content Include="Views\FileSystem\GenerateCompanyCustomerFile.cshtml" />
@@ -7025,6 +7024,11 @@
     <Content Include="Views\Transfer\File_SellerFeeFormat.cshtml" />
     <Content Include="Views\FileSystem\GetUpdateInfoDetails.cshtml" />
     <Content Include="Views\Account\DirectUrlHit.cshtml" />
+    <Content Include="Views\FileSystem\FilesDataDetailView.cshtml" />
+    <Content Include="Views\FileSystem\GetVerfiedFiles.cshtml" />
+    <Content Include="Views\FileSystem\GetNotVerfiedFiles.cshtml" />
+    <Content Include="Views\Installments\AddFileInstallment.cshtml" />
+    <Content Include="Views\Plots\PlotsDataDetailView.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -230,7 +230,7 @@ namespace MeherEstateDevelopers.Controllers
                                                 Receiptdata.Select(x => x.Project_Name).FirstOrDefault(), file_Installments.Rate, null, filedatas.Select(x => x.Plot_Size).FirstOrDefault(), ReceiptTypes.Booking.ToString(), filedatas.Select(x => x.File_Form_Id).FirstOrDefault(), userid, "File Booking", null, Modules.FileManagement.ToString(), Devchar, FileFormNumber, appdetail.File.Block, appdetail.File.Type, filedatas.Select(x => x.Group_Tag).FirstOrDefault(), H.RandomNumber(), appdetail.Dealership.Dealership_Name, receiptno, comp.Id).FirstOrDefault();
                             // add phase in Receipt data
                             var receiptdata = db.Receipts.Where(r => r.Id == res.Receipt_Id).FirstOrDefault();
-                            receiptdata.Phase = phase.Phase_Name;
+                            receiptdata.Phase = phase.Phase_Name != null ? phase.Phase_Name : receiptdata.Phase;
                             db.SaveChanges();
 
                             ids.Add(res.Receipt_No);
@@ -265,7 +265,8 @@ namespace MeherEstateDevelopers.Controllers
 
                                 // add phase in Receipt data
                                 var receiptdata = db.Receipts.Where(r => r.Id == res.Receipt_Id).FirstOrDefault();
-                                receiptdata.Phase = phase.Phase_Name;
+                              receiptdata.Phase = phase.Phase_Name != null ? phase.Phase_Name : receiptdata.Phase;
+
                                 db.SaveChanges();
 
                                 ids.Add(res.Receipt_No);
@@ -847,7 +848,11 @@ namespace MeherEstateDevelopers.Controllers
             var comp = ah.Company_Attr(userid);
             var usernam = db.Users.Find(userid).Name;
             var appdetail = db.Sp_Get_FileData(Convert.ToInt64(rd.FilePlotNumber)).FirstOrDefault();
-            var filedata = db.File_Form.Where(f => f.Id == Convert.ToInt64(rd.FilePlotNumber)).FirstOrDefault();
+            //var filedata = db.File_Form.Where(f => f.Id == Convert.ToInt64(rd.FilePlotNumber)).FirstOrDefault();
+            var filedata = db.File_Form
+                .AsEnumerable() // Switch to LINQ to Objects
+                .Where(f => f.Id == Convert.ToInt64(rd.FilePlotNumber)) // Perform conversion in memory
+                .FirstOrDefault();
             var phase = db.RealEstate_Phases.Where(p => p.Id == filedata.Phase_Id).FirstOrDefault();
             var receiptno = db.Sp_Get_ReceiptNo("Normal").FirstOrDefault();
             using (var Transaction = db.Database.BeginTransaction())
@@ -860,7 +865,7 @@ namespace MeherEstateDevelopers.Controllers
                                         rd.Project_Name, filedatas.Select(x => x.Rate).FirstOrDefault(), null, filedatas.Select(x => x.Plot_Size).FirstOrDefault(), ReceiptTypes.Transfer.ToString(), TransactionId, userid, "File Transfer", null, Modules.FileManagement.ToString(), rd.DevCharges, rd.File_Plot_Number.ToString(), appdetail.Block, appdetail.Type, Req_Id, TransactionId, "", receiptno, comp.Id).FirstOrDefault();
                     // add phase in Receipt data
                     var receiptdata = db.Receipts.Where(r => r.Id == res1.Receipt_Id).FirstOrDefault();
-                    receiptdata.Phase = phase.Phase_Name;
+                    receiptdata.Phase = phase.Phase_Name != null ? phase.Phase_Name : receiptdata.Phase;
                     db.SaveChanges();
 
 
@@ -1936,6 +1941,22 @@ namespace MeherEstateDevelopers.Controllers
             db.Sp_Add_Activity(userid, "Accessed File Verifications  Page ", "Read", "Activity_Record", ActivityType.Details_Access.ToString(), userid);
             return View(fileslist);
         }
+        public ActionResult GetVerfiedFiles()
+        {
+            long userid = long.Parse(User.Identity.GetUserId());
+            var fileslist = db.File_Form.Where(f => f.Verified == true).ToList();
+            db.Sp_Add_Activity(userid, "Accessed File Verifications  Page ", "Read", "Activity_Record", ActivityType.Details_Access.ToString(), userid);
+            return View(fileslist);
+        }
+        public ActionResult GetNotVerfiedFiles()
+        {
+            long userid = long.Parse(User.Identity.GetUserId());
+            var fileslist = db.File_Form.Where(f => f.Verified == null).ToList();
+            db.Sp_Add_Activity(userid, "Accessed File Verifications  Page ", "Read", "Activity_Record", ActivityType.Details_Access.ToString(), userid);
+            return View(fileslist);
+        }
+
+        public ActionResult GetFileVeriR(string FileId)
         [NoDirectAccess] public ActionResult GetFileVeriR(string FileId)
         {
             long userid = long.Parse(User.Identity.GetUserId());
@@ -3335,8 +3356,24 @@ namespace MeherEstateDevelopers.Controllers
             var res = new FilePlotReport { NDC = NDC, WDC = WDC, TBA = TBA };
             return PartialView(res);
         }
-
-        [NoDirectAccess] public ActionResult FilesPlotsReportDetails(string id, string block)
+        public ActionResult FilesDataDetailView()
+        {
+            var res1 = db.File_Form.GroupBy(x => new { Type = x.Type, Phase_Name = x.Phase }).
+               Select(x => new PhaseReport { Type = x.Key.Type, Total = x.Count() }).ToList();
+            var res2 = db.File_Form.GroupBy(x => new { Block = x.Block, Phase_Name = x.Phase, Type = x.Type, Status = ((FileStatus)x.Status).ToString(), }).
+                Select(x => new PlotStatusReport { Block = x.Key.Block, Plot_Type = x.Key.Type, Status = x.Key.Status, PhaseName = x.Key.Phase_Name, Total = x.Count() }).ToList();
+            var res3 = db.File_Form.GroupBy(x => new { Type = x.Type, Block = x.Block, Verified = x.Verified }).
+                 Select(x => new VerifiReport { Block = x.Key.Block, Type = x.Key.Type, Verified = x.Key.Verified, Total = x.Count() }).ToList();
+            var res4 = db.File_Form.GroupBy(x => new { Type = x.Type, Block = x.Block }).
+              Select(x => new ConstructionReport { Block = x.Key.Block, Type = x.Key.Type, Total = x.Count() }).ToList();
+            CompiledReport result = new CompiledReport();
+            result.Phases = res1;
+            result.PlotStatuses = res2;
+            result.PlotVerifications = res3;
+            result.PlotConstructions = res4;
+            return View(result);
+        }
+        public ActionResult FilesPlotsReportDetails(string id, string block)
         {
             ViewBag.id = id;
             var res = db.Sp_Get_FilesPlots_Details_Report(block, id).ToList();
