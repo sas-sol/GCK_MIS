@@ -1477,68 +1477,69 @@ function InitPlots(i) {
     });
 }
 // Add the file forms 
-$(document).on("submit", "#de-fo-as", function (e) {
-    e.preventDefault();
-    if (formcontrolToken) {
-        return false;
-    }
-    else {
-        var totalcount = 0;
-        $(".total-file").each(function () {
-            totalcount = totalcount + parseInt($(this).val());
-        });
-        //if (totalcount > 50) {
-        //    alert("Please Enter Total MAX 50 Files");
-        //    return false;
-        //}
-        formcontrolToken = true;
-        var filesformdata = [];
-        for (var i = 1; i <= filealloccounter; i++) {
-            var fillalc = { Phase: "", Block: "", Dealership_Name: "", Dealership_Id: "", Plot_Size: "", Filecount: "", Dev_Charges_Id: "", Dev_Charges_Text: "", Sec_NoSec_Id: "", Security: "", Installment_Plan: "" };
-            fillalc.Phase = $('#phase').val();
-            fillalc.Phase_Name = $('#phase option:selected').text();
-            fillalc.Block = $('#block').val();
-            fillalc.Block_Name = $('#block option:selected').text();
-            fillalc.Type = $('#type option:selected').val();
-            fillalc.Dealership_Id = $('#Dealership').val();
-            fillalc.Dealership_Name = $('#Dealership option:selected').text();
-            fillalc.Plot_Size = $('#file-asoc-' + i + ' .plots').val();
-            fillalc.Commession = $('#file-asoc-' + i + ' .com').val();
-            fillalc.Filecount = $('#file-asoc-' + i + ' .total-file').val();
-            fillalc.Dev_Charges_Id = $('#file-asoc-' + i + ' .dev-char option:selected').val();
-            fillalc.Dev_Charges_Text = $('#file-asoc-' + i + ' .dev-char option:selected').text();
-            fillalc.Sec_NoSec_Id = $('#file-asoc-' + i + ' .sec-cha').val();
-            fillalc.Sec_NoSec_Name = $('#file-asoc-' + i + ' .sec-cha option:selected').text();
-            fillalc.Security = $('#file-asoc-' + i + ' .sec').val();
-            fillalc.Installment_Plan = $('#file-asoc-' + i + ' .plt-ins').val();
-            filesformdata.push(fillalc);
-        }
-        $("#del-sub-btn").attr("disabled", true);
-        $("#reset").show();
-        if (Installment_Plan == null) {
-            $.ajax({
-                type: "POST",
-                contentType: "application/json; charset=utf-8",
-                url: $("#de-fo-as").attr('action'),
-                data: JSON.stringify(filesformdata),
-                success: function (data) {
-                    $('#re-fi-for').load('/FileSystem/ShowFileFormList/', { dealerFileForm: data })
-                    window.open("/Dealership/NewFileDesign?Group_Id=" + data[0].Group_Id, '_blank');
-                }
-                , error: function (xmlhttprequest, textstatus, message) {
-                    if (textstatus === "timeout") {
-                        alert("got timeout");
-                    } else {
-                        alert(textstatus);
-                    }
-                }
-            });
-        }
-        else {
-            alert("Select Installment Plan.");
-        }
-    }
-});
+//$(document).on("submit", "#de-fo-as", function (e) {
+//    debugger;
+//    e.preventDefault();
+//    if (formcontrolToken) {
+//        return false;
+//    }
+//    else {
+//        var totalcount = 0;
+//        $(".total-file").each(function () {
+//            totalcount = totalcount + parseInt($(this).val());
+//        });
+//        //if (totalcount > 50) {
+//        //    alert("Please Enter Total MAX 50 Files");
+//        //    return false;
+//        //}
+//        formcontrolToken = true;
+//        var filesformdata = [];
+//        for (var i = 1; i <= filealloccounter; i++) {
+//            var fillalc = { Phase: "", Block: "", Dealership_Name: "", Dealership_Id: "", Plot_Size: "", Filecount: "", Dev_Charges_Id: "", Dev_Charges_Text: "", Sec_NoSec_Id: "", Security: "", Installment_Plan: "" };
+//            fillalc.Phase = $('#phase').val();
+//            fillalc.Phase_Name = $('#phase option:selected').text();
+//            fillalc.Block = $('#block').val();
+//            fillalc.Block_Name = $('#block option:selected').text();
+//            fillalc.Type = $('#type option:selected').val();
+//            fillalc.Dealership_Id = $('#Dealership').val();
+//            fillalc.Dealership_Name = $('#Dealership option:selected').text();
+//            fillalc.Plot_Size = $('#file-asoc-' + i + ' .plots').val();
+//            fillalc.Commession = $('#file-asoc-' + i + ' .com').val();
+//            fillalc.Filecount = $('#file-asoc-' + i + ' .total-file').val();
+//            fillalc.Dev_Charges_Id = $('#file-asoc-' + i + ' .dev-char option:selected').val();
+//            fillalc.Dev_Charges_Text = $('#file-asoc-' + i + ' .dev-char option:selected').text();
+//            fillalc.Sec_NoSec_Id = $('#file-asoc-' + i + ' .sec-cha').val();
+//            fillalc.Sec_NoSec_Name = $('#file-asoc-' + i + ' .sec-cha option:selected').text();
+//            fillalc.Security = $('#file-asoc-' + i + ' .sec').val();
+//            fillalc.Installment_Plan = $('#file-asoc-' + i + ' .plt-ins').val();
+//            filesformdata.push(fillalc);
+//        }
+//        $("#del-sub-btn").attr("disabled", true);
+//        $("#reset").show();
+//        if (Installment_Plan == "") {
+//            $.ajax({
+//                type: "POST",
+//                contentType: "application/json; charset=utf-8",
+//                url: $("#de-fo-as").attr('action'),
+//                data: JSON.stringify(filesformdata),
+//                success: function (data) {
+//                    $('#re-fi-for').load('/FileSystem/ShowFileFormList/', { dealerFileForm: data })
+//                    window.open("/Dealership/NewFileDesign?Group_Id=" + data[0].Group_Id, '_blank');
+//                }
+//                , error: function (xmlhttprequest, textstatus, message) {
+//                    if (textstatus === "timeout") {
+//                        alert("got timeout");
+//                    } else {
+//                        alert(textstatus);
+//                    }
+//                }
+//            });
+//        }
+//        else {
+//            alert("Select Installment Plan.");
+//        }
+//    }
+//});
 // Get Application Form Details
 $(document).on("click", "#sea-file", function () {
     var val = $('#app-num').val();

@@ -183,13 +183,27 @@
                 fillalc.Sec_NoSec_Id = $('#file-asoc-' + i + ' .sec-cha').val();
                 fillalc.Sec_NoSec_Name = $('#file-asoc-' + i + ' .sec-cha option:selected').text();
                 fillalc.Security = $('#file-asoc-' + i + ' .sec').val();
-                fillalc.Installment_Plan = $('#file-asoc-' + i + ' .plt-ins').val();
+                //fillalc.Installment_Plan = $('#file-asoc-' + i + ' .plt-ins');
+                var installmentPlanSelect = $('#file-asoc-' + i + ' .plt-ins');
+                var installmentPlanValue = installmentPlanSelect.val();
+
+                // Use the retrieved value as needed
+                fillalc.Installment_Plan = installmentPlanValue;
                 filesformdata.push(fillalc);
             }
             $("#del-sub-btn").attr("disabled", true);
             $("#reset").show();
-            var InstallId = $('#plt-ins').val();
-            if (InstallId == "") {
+           
+           // var InstallId = $('#plt-ins').val();
+            var hasEmptyInstallmentPlan = filesformdata.some(function (fillalc) {
+                return fillalc.Installment_Plan === "";
+            });
+
+            if (hasEmptyInstallmentPlan) {
+
+                alert("Select Installment Plan.");
+            }
+            else {
                 $.ajax({
                     type: "POST",
                     contentType: "application/json; charset=utf-8",
@@ -207,9 +221,6 @@
                         }
                     }
                 });
-            }
-            else {
-                alert("Select Installment Plan.");
             }
         }
     });
