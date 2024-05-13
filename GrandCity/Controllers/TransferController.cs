@@ -323,6 +323,8 @@ namespace MeherEstateDevelopers.Controllers
             long? grpTag = PO.Select(x => x.GroupTag).FirstOrDefault();
             long blk = db.Plots.Where(x => x.Id == Plot_Id).Select(x => x.Block_Id).FirstOrDefault();
             var lastOwners = db.Sp_Get_PlotLastOwner(Plot_Id).ToList();
+            var plotdet = db.Plots.Where(p => p.Id == Plot_Id).FirstOrDefault();
+            var phase = db.RealEstate_Phases.Where( p => p.Id == plotdet.Phase_Id).FirstOrDefault();
             string[] types = { "Booking", "Installment", "Advance" };
             var lastInstDate = db.Sp_Get_ReceivedAmounts(Plot_Id, Modules.PlotManagement.ToString()).Where(x => types.Contains(x.Type)).OrderByDescending(x => x.DateTime).Select(x => x.DateTime).FirstOrDefault();
             //yean wala kaam below
@@ -367,7 +369,11 @@ namespace MeherEstateDevelopers.Controllers
                     var receiptno1 = db.Sp_Get_ReceiptNo("Normal").FirstOrDefault();
                     var res1 = db.Sp_Add_Receipt(rd.Amount, rd.AmountInWords, rd.Bank, rd.PayChqNo, rd.Ch_bk_Pay_Date, rd.Branch, string.Join(",", PO.Select(x => x.Mobile_1).FirstOrDefault())
                                         , string.Join("/", PO.Select(x => x.Father_Husband)), rd.File_Plot_Number, string.Join("/", PO.Select(x => x.Name)), PaymentMethod.Cash.ToString(), 0,
-                                        "Meher Estate Developers", 0, null, PO.Select(x => x.Plot_Size).FirstOrDefault(), ReceiptTypes.Transfer.ToString(), userid, userid, "Plot Transfer", null, Modules.PlotManagement.ToString(), Group_Id.ToString(), rd.FilePlotNumber.ToString(), plot.Block_Name, plot.Type, Group_Id, TransactionId, "", receiptno1, comp.Id).FirstOrDefault();
+                                        "Grand City Kharian", 0, null, PO.Select(x => x.Plot_Size).FirstOrDefault(), ReceiptTypes.Transfer.ToString(), userid, userid, "Plot Transfer", null, Modules.PlotManagement.ToString(), Group_Id.ToString(), rd.FilePlotNumber.ToString(), plot.Block_Name, plot.Type, Group_Id, TransactionId, "", receiptno1, comp.Id).FirstOrDefault();
+                    // add phase in Receipt data
+                    var receiptdata = db.Receipts.Where(r => r.Id == res1.Receipt_Id).FirstOrDefault();
+                    receiptdata.Phase = phase.Phase_Name != null ? phase.Phase_Name : receiptdata.Phase;
+                    db.SaveChanges();
 
                     {
                         bool headcashier = false;
@@ -417,9 +423,13 @@ namespace MeherEstateDevelopers.Controllers
                                 var receiptno2 = db.Sp_Get_ReceiptNo("Normal").FirstOrDefault();
                                 var receipt = db.Sp_Add_Receipt(amt, amtInWords, rd.Bank, rd.PayChqNo, rd.Ch_bk_Pay_Date, rd.Branch, v.Mobile_1
                                                 , v.Father_Husband, rd.File_Plot_Number, v.Name, PaymentMethod.Cash.ToString(), plt_prc,
-                                                rd.Project_Name, 0, null, v.Plot_Size, ReceiptTypes.Advance_Tax_236_K.ToString(), userid, userid, v.CNIC_NICOP,
+                                                "Grand City Kharian", 0, null, v.Plot_Size, ReceiptTypes.Advance_Tax_236_K.ToString(), userid, userid, v.CNIC_NICOP,
                                                 null, Modules.PlotManagement.ToString(), Group_Id.ToString(),
                                                 rd.FilePlotNumber.ToString(), plot.Block_Name, plot.Type, Group_Id, transId, "", receiptno2, comp.Id).FirstOrDefault();
+                                // add phase in Receipt data
+                                var receiptsdata = db.Receipts.Where(r => r.Id == receipt.Receipt_Id).FirstOrDefault();
+                                receiptsdata.Phase = phase.Phase_Name != null ? phase.Phase_Name : receiptsdata.Phase;
+                                db.SaveChanges();
 
                                 {
                                     bool headcashier = false;
@@ -477,9 +487,15 @@ namespace MeherEstateDevelopers.Controllers
                                         var receiptno3 = db.Sp_Get_ReceiptNo("Normal").FirstOrDefault();
                                         var receipt = db.Sp_Add_Receipt(amt, amtInWords, rd.Bank, rd.PayChqNo, rd.Ch_bk_Pay_Date, rd.Branch, v.Mobile_1
                                                         , v.Father_Husband, rd.File_Plot_Number, v.Name, PaymentMethod.Cash.ToString(), plt_prc,
-                                                        rd.Project_Name, 0, null, v.Plot_Size, ReceiptTypes.Advance_Tax_236_C.ToString(), userid, userid, v.CNIC_NICOP,
+                                                        "Grand City Kharian", 0, null, v.Plot_Size, ReceiptTypes.Advance_Tax_236_C.ToString(), userid, userid, v.CNIC_NICOP,
                                                         null, Modules.PlotManagement.ToString(), Group_Id.ToString(),
                                                         rd.FilePlotNumber.ToString(), plot.Block_Name, plot.Type, Group_Id, transId, "", receiptno3, comp.Id).FirstOrDefault();
+
+                                        // add phase in Receipt data
+                                        var receiptdatas = db.Receipts.Where(r => r.Id == receipt.Receipt_Id).FirstOrDefault();
+                                        receiptdatas.Phase = phase.Phase_Name != null ? phase.Phase_Name : receiptdatas.Phase;
+                                        db.SaveChanges();
+
                                         receipt.IsTax = true;
                                         taxReceipts.Add(receipt);
                                         {
@@ -513,9 +529,15 @@ namespace MeherEstateDevelopers.Controllers
                                     var receiptno3 = db.Sp_Get_ReceiptNo("Normal").FirstOrDefault();
                                     var receipt = db.Sp_Add_Receipt(amt, amtInWords, rd.Bank, rd.PayChqNo, rd.Ch_bk_Pay_Date, rd.Branch, v.Mobile_1
                                                     , v.Father_Husband, rd.File_Plot_Number, v.Name, PaymentMethod.Cash.ToString(), plt_prc,
-                                                    rd.Project_Name, 0, null, v.Plot_Size, ReceiptTypes.Advance_Tax_236_C.ToString(), userid, userid, v.CNIC_NICOP,
+                                                    "Grand City Kharian", 0, null, v.Plot_Size, ReceiptTypes.Advance_Tax_236_C.ToString(), userid, userid, v.CNIC_NICOP,
                                                     null, Modules.PlotManagement.ToString(), Group_Id.ToString(),
                                                     rd.FilePlotNumber.ToString(), plot.Block_Name, plot.Type, Group_Id, transId, "", receiptno3, comp.Id).FirstOrDefault();
+
+                                    // add phase in Receipt data
+                                    var receiptdatas = db.Receipts.Where(r => r.Id == receipt.Receipt_Id).FirstOrDefault();
+                                    receiptdatas.Phase = phase.Phase_Name != null ? phase.Phase_Name : receiptdatas.Phase;
+                                    db.SaveChanges();
+
                                     receipt.IsTax = true;
                                     taxReceipts.Add(receipt);
                                     {

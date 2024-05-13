@@ -24,7 +24,7 @@
                         <th>Commercial</th>
                         <th>Total</th>
                     </tr>
-                    @foreach (var g in Model.Phases.GroupBy(x => x.Phase).OrderBy(x => x.Key))
+                    @foreach (var g in Model.Phases.GroupBy(x => x.Phase).OrderBy(x=> x.Key))
                     {
                         <tr>
                             <td>@g.Key</td>
@@ -35,9 +35,9 @@
                     }
                     <tr>
                         <th></th>
-                        <th class="cen">@Model.Phases.Where(x => x.Type == "Residential").Sum(x => x.Total)</th>
-                        <th class="cen">@Model.Phases.Where(x => x.Type == "Commercial").Sum(x => x.Total)</th>
-                        <th class="cen">@Model.Phases.Sum(x => x.Total)</th>
+                        <th class="cen">@Model.Phases.Where(x => x.Type == "Residential").Sum(x=> x.Total)</th>
+                        <th class="cen">@Model.Phases.Where(x => x.Type == "Commercial").Sum(x=> x.Total)</th>
+                        <th class="cen">@Model.Phases.Sum(x=> x.Total)</th>
                     </tr>
                 </table>
 
@@ -46,7 +46,7 @@
         </div>
 
         <div class="form-row cards-list">
-            @foreach (var gg in Model.PlotStatuses.GroupBy(x => x.Block))
+            @foreach (var gg in Model.PlotStatuses.GroupBy(x=> x.Block))
             {
                 <div class="card">
                     <div class="card_title title-black">
@@ -143,7 +143,7 @@
     }
 
     .card {
-        padding: 10px;
+        padding:10px;
         margin: 30px auto;
         width: 400px;
         height: 600px;
@@ -155,11 +155,10 @@
     }
 
         .card table td {
-            font-size: 12px
+        font-size:12px
         }
-
-        .card table .cen {
-            text-align: center
+        .card table .cen{
+            text-align:center
         }
 
     .Suspended {
@@ -233,3 +232,4 @@
         transform: rotate( -50deg );
     }
 </style>
+
