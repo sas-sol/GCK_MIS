@@ -490,7 +490,7 @@
                                 <th>Status</th>
                                 <th>Amount</th>
                                 <th>Date</th>
-                                <th></th>
+                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -541,14 +541,32 @@
                                             <td>@item.Status</td>
                                             <td>@string.Format("{0:0,0.##}", item.Amount)</td>
                                             <td>@string.Format("{0:dd-MMM-yyyy}", item.DateTime)</td>
-                                            <td>
+                                              <td>
+                                                <ul style="list-style:none;margin-left:0px;">
+                                                    <li class="dropdown">
+                                                        <a href="" class="dropdown-toggle no-after peers " data-toggle="dropdown">
+                                                            <i class="ti-more-alt  c-grey-900" style="transform:rotate(90deg);"></i>
+                                                        </a>
+                                                        <ul class="dropdown-menu" style="padding:10px;width:auto !important">
+                                                            <li><a id="@item.Id" class="pointer get-rec-data" data-toggle="modal" data-target="#Modal"><span>Update</span></a></li>
+                                                            <!--<hr />-->
+                                                            @*<li><a id="" class="del-rec pointer"><span>Delete</span></a></li>*@
+                                                            <!--<hr />-->
+                                                            <li><a id="@item.Id" class="rece-refund-pop pointer" data-toggle="modal" data-target="#Modal"><span>Refund</span></a></li>
+                                                        </ul>
+                                                    </li>
+                                                </ul>
+
+                                               </td>
+                                            @*<td>
                                                 @{
                                                     if (item.Verified == true)
                                                     {
                                                         <i class="ti-check" style="color:green"></i>
                                                     }
                                                 }
-                                            </td>
+                                            </td>*@
+                                  
                                         </tr>
                                         srcount++;
                                     }
@@ -572,7 +590,7 @@
                                 <th>Status</th>
                                 <th>Amount</th>
                                 <th>Date</th>
-                                <th></th>
+                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -623,14 +641,32 @@
                                             <td>@item.Status</td>
                                             <td>@string.Format("{0:0,0.##}", item.Amount)</td>
                                             <td>@string.Format("{0:dd-MMM-yyyy}", item.DateTime)</td>
-                                            <td>
+                                           
+                                              <td>
+                                                <ul style="list-style:none;margin-left:0px;">
+                                                    <li class="dropdown">
+                                                        <a href="" class="dropdown-toggle no-after peers " data-toggle="dropdown">
+                                                            <i class="ti-more-alt  c-grey-900" style="transform:rotate(90deg);"></i>
+                                                        </a>
+                                                        <ul class="dropdown-menu" style="padding:10px;width:auto !important">
+                                                            <li><a id="@item.Id" class="pointer get-rec-data" data-toggle="modal" data-target="#Modal"><span>Update</span></a></li>
+                                                            <!--<hr />-->
+                                                            @*<li><a id="" class="del-rec pointer"><span>Delete</span></a></li>*@
+                                                            <!--<hr />-->
+                                                            <li><a id="@item.Id" class="rece-refund-pop pointer" data-toggle="modal" data-target="#Modal"><span>Refund</span></a></li>
+                                                        </ul>
+                                                    </li>
+                                                </ul>
+
+                                               </td>
+                                             @*<td>
                                                 @{
                                                     if (item.Verified == true)
                                                     {
                                                         <i class="ti-check" style="color:green"></i>
                                                     }
                                                 }
-                                            </td>
+                                            </td>*@
                                         </tr>
                                         srcount++;
                                     }
@@ -654,7 +690,7 @@
                                 <th>Status</th>
                                 <th>Amount</th>
                                 <th>Date</th>
-                                <th></th>
+                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -705,14 +741,32 @@
                                             <td>@item.Status</td>
                                             <td>@string.Format("{0:0,0.##}", item.Amount)</td>
                                             <td>@string.Format("{0:dd-MMM-yyyy}", item.DateTime)</td>
-                                            <td>
+                                      
+                                              <td>
+                                                <ul style="list-style:none;margin-left:0px;">
+                                                    <li class="dropdown">
+                                                        <a href="" class="dropdown-toggle no-after peers " data-toggle="dropdown">
+                                                            <i class="ti-more-alt  c-grey-900" style="transform:rotate(90deg);"></i>
+                                                        </a>
+                                                        <ul class="dropdown-menu" style="padding:10px;width:auto !important">
+                                                            <li><a id="@item.Id" class="pointer get-rec-data" data-toggle="modal" data-target="#Modal"><span>Update</span></a></li>
+                                                            <!--<hr />-->
+                                                            @*<li><a id="" class="del-rec pointer"><span>Delete</span></a></li>*@
+                                                            <!--<hr />-->
+                                                            <li><a id="@item.Id" class="rece-refund-pop pointer" data-toggle="modal" data-target="#Modal"><span>Refund</span></a></li>
+                                                        </ul>
+                                                    </li>
+                                                </ul>
+
+                                               </td>
+                                                  @*<td>
                                                 @{
                                                     if (item.Verified == true)
                                                     {
                                                         <i class="ti-check" style="color:green"></i>
                                                     }
                                                 }
-                                            </td>
+                                            </td>*@
                                         </tr>
                                         srcount++;
                                     }

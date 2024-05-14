@@ -443,7 +443,7 @@
     <div class="bgc-white p-20 bd row">
         <div class="col-md-12">
             <div class="form-row">
-                <div class="col-md-5" style="max-height:500px;overflow-y:scroll">
+                <div class="col-md-4" style="max-height:500px;overflow-y:scroll">
                     <div class="form-row">
                         <ul class="nav nav-tabs">
                             <li class="nav-item">
@@ -670,7 +670,7 @@
                     }*@
                 @if (Model.PlotReceipts.Any())
                 {
-            <div class="col-md-7" style="max-height:500px;overflow-y:scroll">
+            <div class="col-md-8" style="max-height:500px;overflow-y:scroll">
                 <div class="form-row">
                     <ul class="nav nav-tabs">
                         <li class="nav-item">
@@ -743,11 +743,11 @@
                                             <i class="ti-more-alt  c-grey-900" style="transform:rotate(90deg);"></i>
                                         </a>
                                         <ul class="dropdown-menu" style="padding:10px;width:auto !important">
-                                            @*<li><a id="@item.Id" class="pointer get-rec-data" data-toggle="modal" data-target="#Modal"><span>Update</span></a></li>*@
+                                            <li><a id="@own.Id" class="pointer get-rec-data" data-toggle="modal" data-target="#Modal"><span>Update</span></a></li>
                                             <!--<hr />-->
                                             @*<li><a id="" class="del-rec pointer"><span>Delete</span></a></li>*@
                                             <!--<hr />-->
-                                            <li><a id="" class="rece-refund-pop pointer" data-toggle="modal" data-target="#Modal"><span>Refund</span></a></li>
+                                            <li><a id="@own.Id" class="rece-refund-pop pointer" data-toggle="modal" data-target="#Modal"><span>Refund</span></a></li>
                                         </ul>
                                     </li>
                                 </ul>
@@ -818,11 +818,11 @@
                                             <i class="ti-more-alt  c-grey-900" style="transform:rotate(90deg);"></i>
                                         </a>
                                         <ul class="dropdown-menu" style="padding:10px;width:auto !important">
-                                            @*<li><a id="@item.Id" class="pointer get-rec-data" data-toggle="modal" data-target="#Modal"><span>Update</span></a></li>*@
+                                            <li><a id="@own.Id" class="pointer get-rec-data" data-toggle="modal" data-target="#Modal"><span>Update</span></a></li>
                                             <!--<hr />-->
                                             @*<li><a id="" class="del-rec pointer"><span>Delete</span></a></li>*@
                                             <!--<hr />-->
-                                            <li><a id="" class="rece-refund-pop pointer" data-toggle="modal" data-target="#Modal"><span>Refund</span></a></li>
+                                            <li><a id="@own.Id" class="rece-refund-pop pointer" data-toggle="modal" data-target="#Modal"><span>Refund</span></a></li>
                                         </ul>
                                     </li>
                                 </ul>
@@ -893,11 +893,11 @@
                                                                 <i class="ti-more-alt  c-grey-900" style="transform:rotate(90deg);"></i>
                                                        </a>
                                                        <ul class="dropdown-menu" style="padding:10px;width:auto !important">
-                                                                @*<li><a id="@item.Id" class="pointer get-rec-data" data-toggle="modal" data-target="#Modal"><span>Update</span></a></li>*@
+                                                                <li><a id="@own.Id" class="pointer get-rec-data" data-toggle="modal" data-target="#Modal"><span>Update</span></a></li>
                                                                 <!--<hr />-->
                                                                 @*<li><a id="" class="del-rec pointer"><span>Delete</span></a></li>*@
                                                                 <!--<hr />-->
-                                                                <li><a id="" class="rece-refund-pop pointer" data-toggle="modal" data-target="#Modal"><span>Refund</span></a></li>
+                                                                <li><a id="@own.Id" class="rece-refund-pop pointer" data-toggle="modal" data-target="#Modal"><span>Refund</span></a></li>
                                                         </ul>
                                                     </li>
                                                </ul>
@@ -917,9 +917,9 @@
         </div>
     </div>
     <div class="form-row">
-        <div class="col-md-8" id="plot-rep">
+        <div class="col-md-9" id="plot-rep">
         </div>
-        <div class="col-md-4">
+        <div class="col-md-3">
         </div>
     </div>
 </div>

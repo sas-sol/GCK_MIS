@@ -1973,7 +1973,7 @@ namespace MeherEstateDevelopers.Controllers
             {
                 var res2 = db.Sp_Get_PlotLastOwner(res.File_Plot_No).FirstOrDefault();
                 //Was passing 0 as total plot price, replaced it with plot ownership total amount
-                var res4 = db.Sp_Add_Booking_Cancelation(Amount, res2.Mobile_1, res2.Father_Husband, res.File_Plot_No, res2.Name, 0, "Meher Estate Developers",
+                var res4 = db.Sp_Add_Booking_Cancelation(Amount, res2.Mobile_1, res2.Father_Husband, res.File_Plot_No, res2.Name, 0, "Grand City Kharian",
                     res.Size, Cancellations.Receipt_Refund.ToString(), userid, userid, "Refund Amount ", Modules.PlotManagement.ToString(),
                     res.File_Plot_Number, res.Block, 0, 0, "Amount Refund",res.Plot_Type).FirstOrDefault();
                 RefundAmountsReq refa = new RefundAmountsReq()

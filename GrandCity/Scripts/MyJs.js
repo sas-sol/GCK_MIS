@@ -3921,15 +3921,14 @@ $(document).on("click", "#adjust-rec-fin", function () {
 //
 $(document).on("click", "#up-rece-btn", function () {
     var amt = Number($("input[name=Amount]").val());
-    if (amt <= 0 || amt == null) {
-        //alert("Amount Cannot be empty or zero");
+    if (amt <= 0 || isNaN(amt)) {
         Swal.fire({
             icon: 'info',
             text: 'Enter a valid amount to proceed'
         });
         return false;
     }
-    //if (confirm("Are you sure you want to update")) {
+
     Swal.fire({
         text: 'Are you sure you want to update the receipt?',
         icon: 'question',
@@ -3947,19 +3946,18 @@ $(document).on("click", "#up-rece-btn", function () {
                         Swal.fire({
                             icon: 'success',
                             text: data.Msg
+                        }).then(() => {
+                            window.location.reload();
                         });
-                        //alert(data.Msg);
                     }
                     else {
                         Swal.fire({
                             icon: 'info',
                             text: data.Msg
                         });
-                        //alert(data.Msg);
                     }
                 },
                 error: function () {
-                    //alert("Error");
                     Swal.fire({
                         icon: 'error',
                         text: 'Something went wrong'
@@ -3969,6 +3967,7 @@ $(document).on("click", "#up-rece-btn", function () {
         }
     });
 });
+
 //
 //
 $(document).on("click", ".del__rece__btn", function () {
@@ -11813,6 +11812,7 @@ $(document).on("click", ".up-stat-c", function () {
 });
 //
 $(document).on("click", "#ref-amt-plt", function () {
+    debugger;
     var pltid = 0;
     var id = $('#receipt-id').val();
     var refamt = $('.ref-amt').val();
@@ -11825,6 +11825,9 @@ $(document).on("click", "#ref-amt-plt", function () {
         pltid = $("#plt-id").val();
     }
     else if (mod == "Building") {
+        pltid = $("#shp-id").val();
+    }
+    else if (mod == "FileManagement") {
         pltid = $("#shp-id").val();
     }
     var receamt = RemoveComma($('#rec-amt').text());
@@ -11850,9 +11853,15 @@ $(document).on("click", "#ref-amt-plt", function () {
                     }).then(() => {
                         if (mod == "PlotManagement") {
                             window.open("/Receipts/RefundReceipt?Id=" + data.ReceiptId + "&Token=" + data.Token, '_blank');
+                            window.location.reload();
                         }
                         else if (mod == "CommercialManagement") {
                             window.open("/Receipts/RefundReceipt?Id=" + data.ReceiptId + "&Token=" + data.Token, '_blank');
+                            window.location.reload();
+                        }
+                        else if (mod == "FileManagement") {
+                            window.open("/Receipts/RefundReceipt?Id=" + data.ReceiptId + "&Token=" + data.Token, '_blank');
+                            window.location.reload();
                         }
                     })
                     
