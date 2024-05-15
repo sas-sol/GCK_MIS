@@ -367,6 +367,7 @@ namespace MeherEstateDevelopers.Controllers
             if (fileFormToUpdate != null)
             {
                 fileFormToUpdate.FileFormNumber = newFileFormno;
+                fileFormToUpdate.Project = "Grand City Kharian";
                 db.SaveChanges();
             }
 
