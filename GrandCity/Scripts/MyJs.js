@@ -1447,7 +1447,7 @@ function InitPlotInstallmentPlan(pltgroup, id) {
     $("#" + id + " .plt-ins").empty();
     var $prevGroup, prevGroupName;
     var fdata = plotins.filter(x => x.Group.Name == pltgroup);
-    alert(plotins.filter(x => x.Group.Name == pltgroup));
+    //alert(plotins.filter(x => x.Group.Name == pltgroup));
     $.each(fdata, function () {
         if (prevGroupName !== this.Group.Name) {
             $prevGroup = $('<optgroup />').prop('label', this.Group.Name).appendTo("#" + id + " .plt-ins");
