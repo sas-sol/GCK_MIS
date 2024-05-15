@@ -1547,5 +1547,12 @@ namespace MeherEstateDevelopers.Controllers
             ))).ToString(); db.Sp_Update_FilesDealers(DealerXML, Dealer_Id, Commission);
             return Json(true);
         }
+        public JsonResult test(long[] Ids, long Dealer_Id, decimal Commission)
+        {
+            var DealerXML = new XElement("Dealers", Ids.Select(x => new XElement("Dealersdata",
+            new XAttribute("Id", x)
+            ))).ToString(); db.Sp_Update_FilesDealers(DealerXML, Dealer_Id, Commission);
+            return Json(true);
+        }
     }
 }
