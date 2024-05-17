@@ -5,10 +5,11 @@
     <span class="counter bgc-blue">@Model.Count()</span>
 }
 <a href="" class="dropdown-toggle no-after" data-toggle="dropdown">
-    <i class="ti-alarm-clock" title="Reminders" style="color: navajowhite"></i>@*#00bcd4*@
+    @*<i class="ti-alarm-clock" title="Reminders" style="color: navajowhite"></i>*@
+    <i class="fa fa-1x fa-clock-o " title="Reminders"  style="color: #f1c07b"></i>
 </a>
 <ul class="dropdown-menu" style="max-width:350px">
-    <li class="pX-20 pY-15 bdB"><i class="ti-alarm-clock pR-10"></i> <span class="fsz-sm fw-600 c-grey-900">Reminders</span> &nbsp;&nbsp;<i class="fa fa-plus nw-reminder-btn pointer" data-toggle="modal" data-target="#Modal" title="New Reminder" style="color:limegreen;"></i></li>
+    <li class="pX-20 pY-15 bdB"><i class="fa fa-1x fa-clock-o " title="Reminders" style="color: #f1c07b"></i> <span class="fsz-sm fw-600 c-grey-900">Reminders</span> &nbsp;&nbsp;<i class="fa fa-plus nw-reminder-btn pointer" data-toggle="modal" data-target="#Modal" title="New Reminder" style="color:limegreen;"></i></li>
     <li>
         <ul class="ovY-a pos-r scrollable lis-n p-0 m-0 fsz-sm">
             @{
