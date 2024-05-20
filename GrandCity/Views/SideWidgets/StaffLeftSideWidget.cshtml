@@ -21,6 +21,9 @@
         align-items: center;
         border-radius: 8px
     }
+    .custom-icon {
+        color: #B3000C;
+    }
 </style>
 <div class="sidebar">
     <div class="sidebar-inner" style="background-color: #1f1f1f; box-shadow: 20px 0px 5px rgba(0, 0, 0, 0.5); ">
@@ -42,7 +45,7 @@
                 </div>
                 <div class="peer">
                     <div class="mobile-toggle sidebar-toggle">
-                        <a href="javascript:void(0);" class="td-n"><i class="ti-arrow-circle-left"></i></a>
+                        <a href="javascript:void(0);" class="td-n">@*<i class="ti-arrow-circle-left"></i>*@<i class="fa fa-1x fa-arrow-alt-circle-left custom-icon"></i></a>
                     </div>
                 </div>
             </div>
@@ -51,7 +54,7 @@
 
             <li class="nav-item mT-30 active">
                 <a class="dropdown-toggle staff-dash-tile" href="javascript:void(0);" data-dash="home">
-                    <span class="icon-holder"><i class="c-blue-500 ti-home"></i> </span><span class="title" style="color: #f1c07b;">Dashboard</span>
+                    <span class="icon-holder"><i class="fa fa-1x fa-home custom-icon"></i> </span><span class="title" style="color: #f1c07b;">Dashboard</span>
                 </a>
             </li>
 
@@ -61,11 +64,11 @@
                 <li class="nav-item dropdown">
                     <a class="dropdown-toggle staff-dash-tile" href="javascript:void(0);">
                         <span class="icon-holder">
-                            <i class="c-red-500 ti-agenda"></i>
+                            <i class="fa fa-1x fa-user-tie custom-icon"></i>
                         </span>
                         <span class="title" style="color: #f1c07b;">Roles & Responsibilities </span>
                         <span class="arrow">
-                            <i class="ti-angle-right"></i>
+                            <i class="fa fa-1x fa-angle-right custom-icon"></i>
                         </span>
                     </a>
                     <ul class="dropdown-menu">
@@ -88,11 +91,11 @@
                 <li class="nav-item dropdown">
                     <a class="dropdown-toggle staff-dash-tile" href="javascript:void(0);">
                         <span class="icon-holder">
-                            <i class="c-red-500 ti-home"></i>
+                            <i class="fa fa-1x fa-home custom-icon"></i>
                         </span>
                         <span class="title" style="color: #f1c07b;">Real Estate Configuration  </span>
                         <span class="arrow">
-                            <i class="ti-angle-right"></i>
+                            <i class="fa fa-1x fa-angle-right custom-icon"></i>
                         </span>
                     </a>
                     <ul class="dropdown-menu">
@@ -117,11 +120,11 @@
                 <li class="nav-item dropdown">
                     <a class="dropdown-toggle staff-dash-tile" href="javascript:void(0);" data-dash="dealer">
                         <span class="icon-holder">
-                            <i class="c-red-500 ti-id-badge"></i>
+                            <i class="fa fa-1x fa-id-badge custom-icon"></i>
                         </span>
                         <span class="title" style="color: #f1c07b;">Dealership Management  </span>
                         <span class="arrow">
-                            <i class="ti-angle-right"></i>
+                            <i class="fa fa-1x fa-angle-right custom-icon"></i>
                         </span>
                     </a>
                     <ul class="dropdown-menu">
@@ -143,7 +146,7 @@
                 <li class="nav-item dropdown">
                     <a class="dropdown-toggle staff-dash-tile" href="javascript:void(0);" data-dash="cash counter">
                         <span class="icon-holder">
-                            <i class="c-blue-500 ti-user"></i>
+                            <i class="fa fa-1x fa-cash-register custom-icon"></i>
                         </span>
                         <span class="title" style="color: #f1c07b;">Cash Counter</span>
                     </a>
@@ -155,7 +158,7 @@
                 <li class="nav-item dropdown">
                     <a class="dropdown-toggle staff-dash-tile" href="javascript:void(0);" data-dash="Files Plots">
                         <span class="icon-holder">
-                            <i class="c-blue-500 ti-file"></i>
+                            <i class="fa fa-1x fa-file custom-icon"></i>
                         </span>
                         <span class="title" style="color: #f1c07b;">Files & Plots</span>
                     </a>
@@ -166,7 +169,7 @@
                 <li class="nav-item dropdown">
                     <a class="dropdown-toggle staff-dash-tile" href="javascript:void(0);" data-dash="ballot">
                         <span class="icon-holder">
-                            <i class="c-blue-500 ti-file"></i>
+                            <i class="fa fa-1x fa-vote-yea custom-icon"></i>
                         </span>
                         <span class="title" style="color: #f1c07b;">Balloting</span>
                     </a>
@@ -178,7 +181,8 @@
                 <li class="nav-item dropdown">
                     <a class="dropdown-toggle staff-dash-tile" href="javascript:void(0);" data-dash="building">
                         <span class="icon-holder">
-                            <i class="c-blue-500 ti-layout-menu-v"></i>
+                            @*<i class="c-blue-500 ti-layout-menu-v"></i>*@
+                            <i class="fa fa-building custom-icon"></i>
                         </span>
                         <span class="title" style="color: #f1c07b;">Building Management</span>
                     </a>
@@ -189,7 +193,8 @@
                 <li class="nav-item dropdown">
                     <a class="dropdown-toggle staff-dash-tile" href="javascript:void(0);" data-dash="land">
                         <span class="icon-holder">
-                            <i class="c-blue-500 ti-map"></i>
+                            @*<i class="c-blue-500 ti-map"></i>*@
+                            <i class="fa fa-landmark custom-icon"></i>
                         </span>
                         <span class="title" style="color: #f1c07b;">Land Management</span>
                     </a>
@@ -201,11 +206,13 @@
                 <li class="nav-item dropdown">
                     <a class="dropdown-toggle staff-dash-tile" href="javascript:void(0);" data-dash="accounts">
                         <span class="icon-holder">
-                            <i class="c-teal-500 ti-view-list-alt"></i>
+                            @*<i class="c-teal-500 ti-view-list-alt"></i>*@
+                            <i class="fa fa-1x fa-calculator custom-icon"></i>
                         </span>
                         <span class="title" style="color: #f1c07b;">Accounts</span>
                         <span class="arrow">
-                            <i class="ti-angle-right"></i>
+                            @*<i class="ti-angle-right"></i>*@
+                            <i class="fa fa-1x fa-angle-right custom-icon"></i>
                         </span>
                     </a>
                     <ul class="dropdown-menu">
@@ -224,7 +231,8 @@
                                 <a href="javascript:void(0);">
                                     <span style="color: #f1c07b;">Payables</span>
                                     <span class="arrow">
-                                        <i class="ti-angle-right"></i>
+                                        @*<i class="ti-angle-right"></i>*@
+                                        <i class="fa fa-1x fa-angle-right custom-icon"></i>
                                     </span>
                                 </a>
                                 <ul class="dropdown-menu">
@@ -262,7 +270,7 @@
                                 <a href="javascript:void(0);">
                                     <span style="color: #f1c07b;">Receivables</span>
                                     <span class="arrow">
-                                        <i class="ti-angle-right"></i>
+                                        <i class="fa fa-1x fa-angle-right custom-icon"></i>
                                     </span>
                                 </a>
                                 <ul class="dropdown-menu">
@@ -291,7 +299,7 @@
                                 <a href="javascript:void(0);">
                                     <span>Vouchers</span>
                                     <span class="arrow">
-                                        <i class="ti-angle-right"></i>
+                                        <i class="fa fa-1x fa-angle-right custom-icon"></i>
                                     </span>
                                 </a>
                                 <ul class="dropdown-menu">
@@ -310,7 +318,7 @@
                                 <a href="javascript:void(0);">
                                     <span style="color: #f1c07b;">Posting Accounts</span>
                                     <span class="arrow">
-                                        <i class="ti-angle-right"></i>
+                                        <i class="fa fa-1x fa-angle-right custom-icon"></i>
                                     </span>
                                 </a>
                                 <ul class="dropdown-menu">
@@ -341,7 +349,7 @@
                                 <a href="javascript:void(0);">
                                     <span style="color: #f1c07b;">Journal Entry</span>
                                     <span class="arrow">
-                                        <i class="ti-angle-right"></i>
+                                        <i class="fa fa-1x fa-angle-right custom-icon"></i>
                                     </span>
                                 </a>
                                 <ul class="dropdown-menu">
@@ -387,7 +395,7 @@
                                 <a href="javascript:void(0);">
                                     <span style="color: #f1c07b;">Daily Recovery</span>
                                     <span class="arrow">
-                                        <i class="ti-angle-right"></i>
+                                        <i class="fa fa-1x fa-angle-right custom-icon"></i>
                                     </span>
                                 </a>
                                 <ul class="dropdown-menu">
@@ -457,7 +465,7 @@
                 <li class="nav-item dropdown">
                     <a class="dropdown-toggle staff-dash-tile" href="javascript:void(0);" data-dash="audit">
                         <span class="icon-holder">
-                            <i class="c-pink-500 ti-user"></i>
+                            <i class="fa fa-1x fa fa-users  custom-icon"></i>
                         </span>
                         <span class="title" style="color: #f1c07b;">Audit</span>
                     </a>
@@ -471,7 +479,7 @@
                 <li class="nav-item dropdown">
                     <a class="dropdown-toggle staff-dash-tile" href="javascript:void(0);" data-dash="prj management">
                         <span class="icon-holder">
-                            <i class="c-orange-500 ti-write"></i>
+                            <i class="fa fa-1x fa-project-diagram custom-icon"></i>
                         </span>
                         <span class="title" style="color: #f1c07b;">Project Management</span>
                     </a>
@@ -485,7 +493,7 @@
                 <li class="nav-item dropdown">
                     <a class="dropdown-toggle staff-dash-tile" href="javascript:void(0);" data-dash="Inventory">
                         <span class="icon-holder">
-                            <i class="c-green-500 ti-stack-overflow"></i>
+                            <i class="fa fa-archive custom-icon"></i>
                         </span>
                         <span class="title" style="color: #f1c07b;">Inventory Management</span>
                     </a>
@@ -499,7 +507,7 @@
                 <li class="nav-item dropdown">
                     <a class="dropdown-toggle staff-dash-tile" href="javascript:void(0);" data-dash="Procurement">
                         <span class="icon-holder">
-                            <i class="c-pink-500 ti-shopping-cart-full"></i>
+                            <i class="fa fa-1x fa fa-users  custom-icon"></i>
                         </span>
                         <span class="title" style="color: #f1c07b;">Procurement Management</span>
                     </a>
@@ -513,7 +521,7 @@
                 <li class="nav-item dropdown">
                     <a class="dropdown-toggle staff-dash-tile" href="javascript:void(0);" data-dash="asset">
                         <span class="icon-holder">
-                            <i class="c-pink-500 ti-user"></i>
+                            <i class="fa fa-1x fa fa-briefcase custom-icon"></i>
                         </span>
                         <span class="title" style="color: #f1c07b;">Assets Management</span>
                     </a>
@@ -527,7 +535,7 @@
                 <li class="nav-item dropdown">
                     <a class="dropdown-toggle staff-dash-tile" href="javascript:void(0);" data-dash="vehical">
                         <span class="icon-holder">
-                            <i class="c-pink-500 ti-user"></i>
+                            <i class="fa fa-1x fa fa-car custom-icon"></i>
                         </span>
                         <span class="title" style="color: #f1c07b;">Vehical Management</span>
                     </a>
@@ -541,7 +549,7 @@
                 <li class="nav-item dropdown">
                     <a class="dropdown-toggle staff-dash-tile" href="javascript:void(0);" data-dash="hr">
                         <span class="icon-holder">
-                            <i class="c-pink-500 ti-user"></i>
+                            <i class="fa fa-1x fa fa-users  custom-icon"></i>
                         </span>
                         <span class="title" style="color: #f1c07b;">Human Resource</span>
                     </a>
@@ -555,7 +563,7 @@
                 <li class="nav-item dropdown">
                     <a class="dropdown-toggle staff-dash-tile" href="javascript:void(0);" data-dash="call center">
                         <span class="icon-holder">
-                            <i class="c-pink-500 ti-headphone-alt"></i>
+                            <i class="fa fa-1x fa fa-headset  custom-icon"></i>
                         </span>
                         <span class="title" style="color: #f1c07b;">Call Center</span>
                     </a>
@@ -567,7 +575,7 @@
                 <li class="nav-item dropdown">
                     <a class="dropdown-toggle staff-dash-tile" href="/SMS/Text">
                         <span class="icon-holder">
-                            <i class="c-pink-500 ti-headphone-alt"></i>
+                            <i class="fa fa-1x fa fa-headset  custom-icon"></i>
                         </span>
                         <span class="title" style="color: #f1c07b;">Communication</span>
                     </a>
@@ -591,7 +599,7 @@
                 <li class="nav-item dropdown">
                     <a class="dropdown-toggle staff-dash-tile" href="javascript:void(0);" data-dash="sa marketing">
                         <span class="icon-holder">
-                            <i class="c-pink-500 ti-user"></i>
+                            <i class="fa fa-1x fa fa-bullhorn  custom-icon"></i>
                         </span>
                         <span class="title" style="color: #f1c07b;">SA Marketing</span>
                     </a>
@@ -603,7 +611,7 @@
                 <li class="nav-item dropdown">
                     <a class="dropdown-toggle staff-dash-tile" href="javascript:void(0);" data-dash="reports">
                         <span class="icon-holder">
-                            <i class="c-blue-500 ti-user"></i>
+                            <i class="fa fa-1x fa-chart-line custom-icon"></i>
                         </span>
                         <span class="title" style="color: #f1c07b;">Reports</span>
                     </a>
@@ -615,7 +623,7 @@
                 <li class="nav-item dropdown">
                     <a class="dropdown-toggle staff-dash-tile" href="javascript:void(0);" data-dash="service charges">
                         <span class="icon-holder">
-                            <i class="c-orange-500 ti-server"></i>
+                            <i class="fa fa-1x fa fa-coins custom-icon"></i>
                         </span>
                         <span class="title" style="color: #f1c07b;">Service Charges</span>
                     </a>
@@ -629,7 +637,7 @@
                 <li class="nav-item dropdown">
                     <a class="dropdown-toggle staff-dash-tile" href="javascript:void(0);" data-dash="Admin Facilities">
                         <span class="icon-holder">
-                            <i class="c-orange-500 ti-server"></i>
+                            <i class="fa fa-cog custom-icon"></i>
                         </span>
                         <span class="title" style="color: #f1c07b;">Admin Facilities</span>
                     </a>
@@ -642,7 +650,7 @@
                 <li class="nav-item dropdown">
                     <a class="dropdown-toggle " href="/Finance/AllPattyCash/" data-dash="petty cash">
                         <span class="icon-holder">
-                            <i class="c-orange-500 ti-write"></i>
+                            <i class="fa fa-money-bill custom-icon"></i>
                         </span>
                         <span class="title" style="color: #f1c07b;">Petty Cash</span>
                     </a>
@@ -653,7 +661,7 @@
                 <li class="nav-item dropdown">
                     <a class="dropdown-toggle " href="/HOH/AllShops/" data-dash="hoh">
                         <span class="icon-holder">
-                            <i class="c-orange-500 ti-write"></i>
+                            <i class="fa fa-money-bill custom-icon"></i>
                         </span>
                         <span class="title" style="color: #f1c07b;">House of Heritage</span>
                     </a>

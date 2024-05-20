@@ -3853,6 +3853,7 @@ $(document).on("click", ".upda___fil__str", function () {
 //
 $(document).on("click", ".get-rec-data", function () {
     EmptyModel();
+    debugger;
     var id = $(this).closest('tr').attr("id");
     $('.modal-body').load('/Banking/ReceiptData/', { Id: id }, function () {
     });

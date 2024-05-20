@@ -18,6 +18,9 @@
             margin: 0px -90px 0px 0px;
         }
     }
+    .header-icon {
+        color: #f1c07b;
+    }
     /*.background {
         color: #1d1c1c;
         width: 70px;
@@ -108,7 +111,8 @@
         <ul class="nav-right">
             <li class="notifications dropdown">
                 <a href="" class="dropdown-toggle no-after" data-toggle="dropdown">
-                    <i class="ti-cloud"></i>
+                    @*<i class="ti-cloud"></i>*@
+                    <i class="fa fa-1x fa-cloud header-icon"></i>
                 </a>
                 <ul class="dropdown-menu">
                     <li class="pX-20 pY-15 bdB"><span class="fsz-sm fw-600 c-grey-900">Company</span></li>
@@ -137,11 +141,12 @@
                 {
                     <span class="counter bgc-red">@Model.Details.Total_Notifications</span>
                 }
-                <a href="" class="dropdown-toggle no-after" data-toggle="dropdown">
-                    <i class="ti-bell"></i>
-                </a>
+            <a href="" class="dropdown-toggle no-after" data-toggle="dropdown">
+                @*<i class="ti-bell"></i>*@
+                <i class="fa fa-1x fa-bell header-icon"></i>
+            </a>
                 <ul class="dropdown-menu">
-                    <li class="pX-20 pY-15 bdB"><i class="ti-bell pR-10"></i> <span class="fsz-sm fw-600 c-grey-900">Notifications</span></li>
+                    <li class="pX-20 pY-15 bdB"><i class="fa fa-1x fa-bell header-icon"></i> <span class="fsz-sm fw-600 c-grey-900">Notifications</span></li>
                     <li>
                         <ul class="noti-list ovY-a pos-r scrollable lis-n p-0 m-0 fsz-sm">
                             @if (Model.Noties.Any())
@@ -180,7 +185,7 @@
                             }
                         </ul>
                     </li>
-                    <li class="pX-20 pY-15 ta-c bdT"><span><a href="/Notify/AllNotifications" class="c-grey-600 cH-blue fsz-sm td-n">View All Notifications <i class="ti-angle-right fsz-xs mL-10"></i></a></span></li>
+                    <li class="pX-20 pY-15 ta-c bdT"><span><a href="/Notify/AllNotifications" class="c-grey-600 cH-blue fsz-sm td-n">View All Notifications <i class="fa fa-1x fa-angle-right" style="color: #f1c07b"></i></a></span></li>
                 </ul>
             </li>
             @* For Messgaes *@
@@ -222,11 +227,11 @@
                     @*<li><a href="javascript:void()" data-toggle="modal" data-target="#Modal" class="gen-tick d-b td-n pY-5 bgcH-grey-100 c-grey-700"><i class="ti-panel mR-10"></i> <span>Report a Problem</span></a></li>*@
                     @if (User.IsInRole("Cashier"))
                     {
-                        <li><a href="/Finance/Receipts/" target="_blank" class="d-b td-n pY-5 bgcH-grey-100 c-grey-700"><i class="ti-user mR-10"></i> <span>Receipts</span></a></li>
+                        <li><a href="/Finance/Receipts/" target="_blank" class="d-b td-n pY-5 bgcH-grey-100 c-grey-700"><i class="fa fa-1x fa-user-tie custom-icon"></i> <span>Receipts</span></a></li>
                         @*<li><a href="/Finance/MarketingReceipts/" target="_blank" class="d-b td-n pY-5 bgcH-grey-100 c-grey-700"><i class="ti-user mR-10"></i> <span>Marketing Receipts</span></a></li>
                             <li><a href="/Banking/DishonredCheqList/" target="_blank" class="d-b td-n pY-5 bgcH-grey-100 c-grey-700"><i class="ti-user mR-10"></i> <span>Dishoner Cheques List</span></a></li>
                             <li><a href="/Banking/LeadsDishonoredCheqs/" target="_blank" class="d-b td-n pY-5 bgcH-grey-100 c-grey-700"><i class="ti-user mR-10"></i> <span>Leads Dishoner Cheques List</span></a></li>*@
-                        <li><a href="/Banking/DailyCashReport/" target="_blank" class="d-b td-n pY-5 bgcH-grey-100 c-grey-700"><i class="ti-user mR-10"></i> <span>Daily Report</span></a></li>
+                        <li><a href="/Banking/DailyCashReport/" target="_blank" class="d-b td-n pY-5 bgcH-grey-100 c-grey-700"><i class="fa fa-1x fa-user-tie custom-icon"></i> <span>Daily Report</span></a></li>
                         if (User.IsInRole("SAM Cashier"))
                         {
                             @*<li><a href="/Banking/DailySAMCashReport/" target="_blank" class="d-b td-n pY-5 bgcH-grey-100 c-grey-700"><i class="ti-user mR-10"></i> <span>Daily SAM Report</span></a></li>*@
@@ -234,11 +239,11 @@
                     }
                     @if (User.IsInRole("kiosk"))
                     {
-                        <li><a href="/Balloting/BallotLetterReports/" target="_blank" class="d-b td-n pY-5 bgcH-grey-100 c-grey-700"><i class="ti-user mR-10"></i> <span>Ballot Issance</span></a></li>
+                        <li><a href="/Balloting/BallotLetterReports/" target="_blank" class="d-b td-n pY-5 bgcH-grey-100 c-grey-700"><i class="fa fa-1x fa-user-tie custom-icon"></i> <span>Ballot Issance</span></a></li>
                     }
                     <li><a href="" class="d-b td-n pY-5 bgcH-grey-100 c-grey-700"><i class="ti-user mR-10"></i> <span>Profile</span></a></li>
                     <li role="separator" class="divider"></li>
-                    <li><a href="javascript:document.getElementById('logoutForm').submit()" class="d-b td-n pY-5 bgcH-grey-100 c-grey-700"><i class="ti-power-off mR-10"></i> <span>Logout</span></a></li>
+                    <li><a href="javascript:document.getElementById('logoutForm').submit()" class="d-b td-n pY-5 bgcH-grey-100 c-grey-700"><i class="fa fa-1x fa fa-power-off custom-icon"></i> <span>Logout</span></a></li>
                     @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm" }))
                     {
                         @Html.AntiForgeryToken()
