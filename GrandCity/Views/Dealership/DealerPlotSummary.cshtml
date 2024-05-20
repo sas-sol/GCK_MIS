@@ -36,8 +36,8 @@
                         <td>@item.Key.Block_Name</td>
                         <td>@item.Key.DealTitle</td>
                         <td>@String.Format("{0:MM/dd/yyyy}", item.Key.Deal_Date)</td>
-                        <td>@item.Where(x=> x.STATUS == "Registered").Sum(x => x.Total)</td>
-                        <td>@item.Where(x=> x.STATUS == "Available_For_Sale").Sum(x => x.Total)</td>
+                        <td>@item.Where(x=> x.Status == "Registered").Sum(x => x.Total)</td>
+                        <td>@item.Where(x=> x.Status == "Available_For_Sale").Sum(x => x.Total)</td>
                         <td>@item.Sum(x=> x.Total)</td>
                     </tr>
                     sr1++;
