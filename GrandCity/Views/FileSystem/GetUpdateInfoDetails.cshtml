@@ -7,6 +7,12 @@
     //var bookdate = Model.FileReceipts.Where(x => x.Type == "Booking").OrderByDescending(x => x.DateTime).Select(x => x.DateTime).FirstOrDefault();
 
 }
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 <style>
     tr td, tr th {
         font-size: 11px;
@@ -75,185 +81,185 @@
                     <div class="wrap-sfk">
                         <input type="hidden" class="file-trans-id" value="@v.Id" />
                         <div class="row" style="margin-top:5px;">
-                                <div class="col-md-1">
-                                    <h5>@(count++).</h5>
-                                </div>
-                                <div class="col-md-11">
-                                    <div class="text-right">
-                                        <!-- Add this div to align content to the right -->
-                                        <input type="button" class="btn btn-primary file-inst-btn" data-toggle="modal" data-target="#Modal" value="Manual Installments" />
-                                    </div>
+                            <div class="col-md-1">
+                                <h5>@(count++).</h5>
+                            </div>
+                            <div class="col-md-11">
+                                <div class="text-right">
+                                    <!-- Add this div to align content to the right -->
+                                    <input type="button" class="btn btn-primary file-inst-btn" data-toggle="modal" data-target="#Modal" value="Manual Installments" />
                                 </div>
                             </div>
-                            <div class="form-row file-owner-data-nsdjk">
-                                <input type="hidden" class="file-trans-id" value="@v.Id" />
-                                <div class="form-group col-md-2 up-info">
-                                    <label>Name</label>
-                                    <input type="text" class="form-control Name" name="Name" readonly value="@v.Name">
-                                </div>
-                                <div class="form-group col-md-2 up-info">
-                                    <label>Father's/Husband's Name</label>
-                                    <input type="text" class="form-control Father_Husband" name="Father_Husband" readonly value="@v.Father_Husband">
-                                </div>
-                                <div class="form-group col-md-4 up-info">
-                                    <label>Postal Address</label>
-                                    <input type="text" class="form-control Postal_Address" readonly value="@v.Postal_Address">
-                                </div>
-                                <div class="form-group col-md-4 up-info">
-                                    <label>Residential Address</label>
-                                    <input type="text" class="form-control Residential_Address" readonly value="@v.Residential_Address">
-                                </div>
-                                <div class="form-group col-md-2 up-info">
-                                    <label>City</label>
-                                    <input type="text" class="form-control City" readonly value="@v.City">
-                                </div>
-                                <div class="form-group col-md-2 up-info">
-                                    <label>Date Of Birth</label>
-                                    <input type="text" class="form-control Date_Of_Birth" readonly value="@v.Date_Of_Birth">
-                                </div>
-                                <div class="form-group col-md-2 up-info">
-                                    <label>CNIC / NICOP</label>
-                                    <input type="text" class="form-control CNIC_NICOP" readonly value="@v.CNIC_NICOP">
-                                </div>
-                                <div class="form-group col-md-2 up-info">
-                                    <label>Occupation</label>
-                                    <input type="text" class="form-control Occupation" readonly value="@v.Occupation">
-                                </div>
-                                <div class="form-group col-md-2 up-info">
-                                    <label>Nationality</label>
-                                    <input type="text" class="form-control Nationality" readonly value="@v.Nationality">
-                                </div>
-                                <div class="form-group col-md-2 up-info">
-                                    <label>Email</label>
-                                    <input type="text" class="form-control Email" readonly value="@v.Email">
-                                </div>
-                                <div class="form-group col-md-2 up-info">
-                                    <label>Phone Office</label>
-                                    <input type="text" class="form-control Phone_Office" readonly value="@v.Phone_Office">
-                                </div>
-                                <div class="form-group col-md-2 up-info">
-                                    <label>Residential</label>
-                                    <input type="text" class="form-control Residential" readonly value="@v.Residential">
-                                </div>
-                                <div class="form-group col-md-2 up-info">
-                                    <label>Mobile 1</label>
-                                    <input type="text" class="form-control Mobile_1" name="Mobile_1" readonly value="@v.Mobile_1">
-                                </div>
-                                <div class="form-group col-md-2 up-info">
-                                    <label>Mobile 2</label>
-                                    <input type="text" class="form-control Mobile_2" readonly value="@v.Mobile_2">
-                                </div>
-                                <div class="form-group col-md-2 up-info">
-                                    <label>Ownership Date</label>
-                                    <input type="text" class="form-control DateTime" data-provide="datepicker" readonly value="@((v.DateTime is null)?"-":v.DateTime.Value.ToString("MM/dd/yyy"))">
-                                </div>
-                                <div class="form-group col-md-2">
-                                    <label>Ownership Status</label>
-                                    <select class="form-control owner-stat-jfkldgf" disabled>
-                                        @if (v.Ownership_Status == "Owner")
-                                        {
-                                            <option value="Owner" selected>Owner</option>
-                                            <option value="Transfer">Transferred</option>
-                                            <option value="Cancelled">Cancelled</option>
-                                        }
-                                        else if (v.Ownership_Status == "Transfer")
-                                        {
-                                            <option value="Owner">Owner</option>
-                                            <option value="Transfer" selected>Transferred</option>
-                                            <option value="Cancelled">Cancelled</option>
-                                        }
-                                        else if (v.Ownership_Status == "Cancelled")
-                                        {
-                                            <option value="Owner">Owner</option>
-                                            <option value="Transfer">Transferred</option>
-                                            <option value="Cancelled" selected>Cancelled</option>
-                                        }
-                                        else
-                                        {
-                                            <option value="" selected>Choose</option>
-                                            <option value="Owner">Owner</option>
-                                            <option value="Transfer">Transferred</option>
-                                            <option value="Cancelled" selected>Cancelled</option>
-                                        }
-                                    </select>
-                                </div>
+                        </div>
+                        <div class="form-row file-owner-data-nsdjk">
+                            <input type="hidden" class="file-trans-id" value="@v.Id" />
+                            <div class="form-group col-md-2 up-info">
+                                <label>Name</label>
+                                <input type="text" class="form-control Name" name="Name" readonly value="@v.Name">
+                            </div>
+                            <div class="form-group col-md-2 up-info">
+                                <label>Father's/Husband's Name</label>
+                                <input type="text" class="form-control Father_Husband" name="Father_Husband" readonly value="@v.Father_Husband">
+                            </div>
+                            <div class="form-group col-md-4 up-info">
+                                <label>Postal Address</label>
+                                <input type="text" class="form-control Postal_Address" readonly value="@v.Postal_Address">
+                            </div>
+                            <div class="form-group col-md-4 up-info">
+                                <label>Residential Address</label>
+                                <input type="text" class="form-control Residential_Address" readonly value="@v.Residential_Address">
+                            </div>
+                            <div class="form-group col-md-2 up-info">
+                                <label>City</label>
+                                <input type="text" class="form-control City" readonly value="@v.City">
+                            </div>
+                            <div class="form-group col-md-2 up-info">
+                                <label>Date Of Birth</label>
+                                <input type="text" class="form-control Date_Of_Birth" readonly value="@v.Date_Of_Birth">
+                            </div>
+                            <div class="form-group col-md-2 up-info">
+                                <label>CNIC / NICOP</label>
+                                <input type="text" class="form-control CNIC_NICOP" readonly value="@v.CNIC_NICOP">
+                            </div>
+                            <div class="form-group col-md-2 up-info">
+                                <label>Occupation</label>
+                                <input type="text" class="form-control Occupation" readonly value="@v.Occupation">
+                            </div>
+                            <div class="form-group col-md-2 up-info">
+                                <label>Nationality</label>
+                                <input type="text" class="form-control Nationality" readonly value="@v.Nationality">
+                            </div>
+                            <div class="form-group col-md-2 up-info">
+                                <label>Email</label>
+                                <input type="text" class="form-control Email" readonly value="@v.Email">
+                            </div>
+                            <div class="form-group col-md-2 up-info">
+                                <label>Phone Office</label>
+                                <input type="text" class="form-control Phone_Office" readonly value="@v.Phone_Office">
+                            </div>
+                            <div class="form-group col-md-2 up-info">
+                                <label>Residential</label>
+                                <input type="text" class="form-control Residential" readonly value="@v.Residential">
+                            </div>
+                            <div class="form-group col-md-2 up-info">
+                                <label>Mobile 1</label>
+                                <input type="text" class="form-control Mobile_1" name="Mobile_1" readonly value="@v.Mobile_1">
+                            </div>
+                            <div class="form-group col-md-2 up-info">
+                                <label>Mobile 2</label>
+                                <input type="text" class="form-control Mobile_2" readonly value="@v.Mobile_2">
+                            </div>
+                            <div class="form-group col-md-2 up-info">
+                                <label>Ownership Date</label>
+                                <input type="text" class="form-control DateTime" data-provide="datepicker" readonly value="@((v.DateTime is null)?"-":v.DateTime.Value.ToString("MM/dd/yyy"))">
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label>Ownership Status</label>
+                                <select class="form-control owner-stat-jfkldgf" disabled>
+                                    @if (v.Ownership_Status == "Owner")
+                                    {
+                                        <option value="Owner" selected>Owner</option>
+                                        <option value="Transfer">Transferred</option>
+                                        <option value="Cancelled">Cancelled</option>
+                                    }
+                                    else if (v.Ownership_Status == "Transfer")
+                                    {
+                                        <option value="Owner">Owner</option>
+                                        <option value="Transfer" selected>Transferred</option>
+                                        <option value="Cancelled">Cancelled</option>
+                                    }
+                                    else if (v.Ownership_Status == "Cancelled")
+                                    {
+                                        <option value="Owner">Owner</option>
+                                        <option value="Transfer">Transferred</option>
+                                        <option value="Cancelled" selected>Cancelled</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="" selected>Choose</option>
+                                        <option value="Owner">Owner</option>
+                                        <option value="Transfer">Transferred</option>
+                                        <option value="Cancelled" selected>Cancelled</option>
+                                    }
+                                </select>
+                            </div>
 
-                                <hr />
-                                <h6 class="c-grey-900">Nominee</h6>
-                                <div class="mT-30 up-info">
-                                    <div class="form-row">
-                                        <div class="form-group col-md-2">
-                                            <label>Name</label>
-                                            <input type="text" class="form-control Nominee_Name" readonly value="@v.Nominee_Name">
-                                        </div>
-                                        <div class="form-group col-md-2">
-                                            <label>CNIC / NICOP</label>
-                                            <input type="text" class="form-control Nominee_CNIC_NICOP" readonly value="@v.Nominee_CNIC_NICOP">
-                                        </div>
-                                        <div class="form-group col-md-2">
-                                            <label>Relation</label>
-                                            <input class="form-control Nominee_Relation" readonly value="@v.Nominee_Relation">
-                                        </div>
-                                        <div class="form-group col-md-5">
-                                            <label>Address</label>
-                                            <input type="text" class="form-control Nominee_Address" readonly value="@v.Nominee_Address">
-                                        </div>
-
+                            <hr />
+                            <h6 class="c-grey-900">Nominee</h6>
+                            <div class="mT-30 up-info">
+                                <div class="form-row">
+                                    <div class="form-group col-md-2">
+                                        <label>Name</label>
+                                        <input type="text" class="form-control Nominee_Name" readonly value="@v.Nominee_Name">
                                     </div>
+                                    <div class="form-group col-md-2">
+                                        <label>CNIC / NICOP</label>
+                                        <input type="text" class="form-control Nominee_CNIC_NICOP" readonly value="@v.Nominee_CNIC_NICOP">
+                                    </div>
+                                    <div class="form-group col-md-2">
+                                        <label>Relation</label>
+                                        <input class="form-control Nominee_Relation" readonly value="@v.Nominee_Relation">
+                                    </div>
+                                    <div class="form-group col-md-5">
+                                        <label>Address</label>
+                                        <input type="text" class="form-control Nominee_Address" readonly value="@v.Nominee_Address">
+                                    </div>
+
                                 </div>
                             </div>
-                            <div class="form-row">
-                                @using (Html.BeginForm("FiesImageUploader", "FileSystem", FormMethod.Post, new { @id = "file-imge", @class = "", role = "form", enctype = "multipart/form-data" }))
-                                {
-                                    <div class="col-md-3" id="1">
-                                        <input type="hidden" name="ImageId" class="Plot_id" />
-                                        <input type="hidden" name="File_Id" class="file_id" value="@v.File_Form_Id" />
-                                        <input type="file" id="file1" name="File"><br>
-                                        <img src="/assets/static/images/def-img.png" id="img1" class="img1" width="200" height="200"><br>
-                                        <button class="btn btn-success btn_gen__poss" style="margin-top:10px" type="submit" name="" value="1">Save Image</button>
-                                    </div>
-                                }
-                                @using (Html.BeginForm("FiesImageUploader", "FileSystem", FormMethod.Post, new { @id = "file-imge", @class = "", role = "form", enctype = "multipart/form-data" }))
-                                {
-                                    <div class="col-md-3" id="2">
-                                        <input type="hidden" name="ImageId" class="Plot_id" />
-                                        <input type="hidden" name="File_Id" class="file_id" value="@v.File_Form_Id" />
-                                        <input type="file" id="file2" name="File"><br>
-                                        <img src="/assets/static/images/def-img.png" id="img2" class="img1" width="200" height="200"><br>
-                                        <button class="btn btn-success btn_gen__poss" style="margin-top:10px" type="submit" name="" value="2">Save Image</button>
-                                    </div>
-                                }
-                                @using (Html.BeginForm("FiesImageUploader", "FileSystem", FormMethod.Post, new { @id = "file-imge", @class = "", role = "form", enctype = "multipart/form-data" }))
-                                {
-                                    <div class="col-md-3" id="3">
-                                        <input type="hidden" name="ImageId" class="Plot_id" />
-                                        <input type="hidden" name="File_Id" class="file_id" value="@v.File_Form_Id" />
-                                        <input type="file" id="file3" name="File" value="3"><br>
-                                        <img src="/assets/static/images/def-img.png" id="img3" class="img1" width="200" height="200">
-                                        <button class="btn btn-success btn_gen__poss" style="margin-top:10px" type="submit" name="" value="3">Save Image</button>
-                                    </div>
-                                }
-                                @using (Html.BeginForm("FiesImageUploader", "FileSystem", FormMethod.Post, new { @id = "file-imge", @class = "", role = "form", enctype = "multipart/form-data" }))
-                                {
-                                    <div class="col-md-3" id="4">
-                                        <input type="hidden" name="ImageId" class="Plot_id" />
-                                        <input type="hidden" name="File_Id" class="file_id" value="@v.File_Form_Id" />
-                                        <input type="file" id="file4" name="File"><br>
-                                        <img src="/assets/static/images/def-img.png" id="img4" class="img1" width="200" height="200">
-                                        <button class="btn btn-success btn_gen__poss" style="margin-top:10px" type="submit" name="" value="4">Save Image</button>
-                                    </div>
-                                }
-
-                            </div>
-                            @if (!User.IsInRole("File Customer Image Update"))
+                        </div>
+                        <div class="form-row">
+                            @using (Html.BeginForm("FiesImageUploader", "FileSystem", FormMethod.Post, new { @id = "file-imge", @class = "", role = "form", enctype = "multipart/form-data" }))
                             {
-                                <div class="col-md-12 central-text-align mt-md-3 mb-md-3">
-                                    <button class="btn btn-success updt-exstng-owner-rec-dsffskfs" style="display:none;">Save Record</button>
+                                <div class="col-md-3" id="1">
+                                    <input type="hidden" name="ImageId" class="Plot_id" />
+                                    <input type="hidden" name="File_Id" class="file_id" value="@v.File_Form_Id" />
+                                    <input type="file" id="file1" name="File"><br>
+                                    <img src="/assets/static/images/def-img.png" id="img1" class="img1" width="200" height="200"><br>
+                                    <button class="btn btn-success btn_gen__poss" style="margin-top:10px" type="submit" name="" value="1">Save Image</button>
+                                </div>
+                            }
+                            @using (Html.BeginForm("FiesImageUploader", "FileSystem", FormMethod.Post, new { @id = "file-imge", @class = "", role = "form", enctype = "multipart/form-data" }))
+                            {
+                                <div class="col-md-3" id="2">
+                                    <input type="hidden" name="ImageId" class="Plot_id" />
+                                    <input type="hidden" name="File_Id" class="file_id" value="@v.File_Form_Id" />
+                                    <input type="file" id="file2" name="File"><br>
+                                    <img src="/assets/static/images/def-img.png" id="img2" class="img1" width="200" height="200"><br>
+                                    <button class="btn btn-success btn_gen__poss" style="margin-top:10px" type="submit" name="" value="2">Save Image</button>
+                                </div>
+                            }
+                            @using (Html.BeginForm("FiesImageUploader", "FileSystem", FormMethod.Post, new { @id = "file-imge", @class = "", role = "form", enctype = "multipart/form-data" }))
+                            {
+                                <div class="col-md-3" id="3">
+                                    <input type="hidden" name="ImageId" class="Plot_id" />
+                                    <input type="hidden" name="File_Id" class="file_id" value="@v.File_Form_Id" />
+                                    <input type="file" id="file3" name="File" value="3"><br>
+                                    <img src="/assets/static/images/def-img.png" id="img3" class="img1" width="200" height="200">
+                                    <button class="btn btn-success btn_gen__poss" style="margin-top:10px" type="submit" name="" value="3">Save Image</button>
+                                </div>
+                            }
+                            @using (Html.BeginForm("FiesImageUploader", "FileSystem", FormMethod.Post, new { @id = "file-imge", @class = "", role = "form", enctype = "multipart/form-data" }))
+                            {
+                                <div class="col-md-3" id="4">
+                                    <input type="hidden" name="ImageId" class="Plot_id" />
+                                    <input type="hidden" name="File_Id" class="file_id" value="@v.File_Form_Id" />
+                                    <input type="file" id="file4" name="File"><br>
+                                    <img src="/assets/static/images/def-img.png" id="img4" class="img1" width="200" height="200">
+                                    <button class="btn btn-success btn_gen__poss" style="margin-top:10px" type="submit" name="" value="4">Save Image</button>
                                 </div>
                             }
 
-                            <hr />
                         </div>
+                        @if (!User.IsInRole("File Customer Image Update"))
+                        {
+                            <div class="col-md-12 central-text-align mt-md-3 mb-md-3">
+                                <button class="btn btn-success updt-exstng-owner-rec-dsffskfs" style="display:none;">Save Record</button>
+                            </div>
+                        }
+
+                        <hr />
+                    </div>
                 }
 
             }
@@ -541,32 +547,32 @@
                                             <td>@item.Status</td>
                                             <td>@string.Format("{0:0,0.##}", item.Amount)</td>
                                             <td>@string.Format("{0:dd-MMM-yyyy}", item.DateTime)</td>
-                                              <td>
+                                            <td>
                                                 <ul style="list-style:none;margin-left:0px;">
                                                     <li class="dropdown">
-                                                        <a href="" class="dropdown-toggle no-after peers " data-toggle="dropdown">
-                                                            <i class="ti-more-alt  c-grey-900" style="transform:rotate(90deg);"></i>
+                                                        <a href="" class="dropdown-toggle no-after peers" data-toggle="dropdown">
+                                                            <i class="ti-more-alt c-grey-900" style="transform:rotate(90deg);"></i>
                                                         </a>
                                                         <ul class="dropdown-menu" style="padding:10px;width:auto !important">
-                                                            <li><a id="@item.Id" class="pointer get-rec-data" data-toggle="modal" data-target="#Modal"><span>Update</span></a></li>
-                                                            <!--<hr />-->
-                                                            @*<li><a id="" class="del-rec pointer"><span>Delete</span></a></li>*@
-                                                            <!--<hr />-->
-                                                            <li><a id="@item.Id" class="rece-refund-pop pointer" data-toggle="modal" data-target="#Modal"><span>Refund</span></a></li>
+                                                            <li>
+                                                                <a id="@item.Id" class="pointer get-rec-data" data-toggle="modal" data-target="#Modal"><span>Update</span></a>
+                                                            </li>
+                                                            <li>
+                                                                <a id="@item.Id" class="rece-refund-pop pointer" data-toggle="modal" data-target="#Modal"><span>Refund</span></a>
+                                                            </li>
                                                         </ul>
                                                     </li>
                                                 </ul>
-
-                                               </td>
+                                            </td>
                                             @*<td>
-                                                @{
-                                                    if (item.Verified == true)
-                                                    {
-                                                        <i class="ti-check" style="color:green"></i>
+                                                    @{
+                                                        if (item.Verified == true)
+                                                        {
+                                                            <i class="ti-check" style="color:green"></i>
+                                                        }
                                                     }
-                                                }
-                                            </td>*@
-                                  
+                                                </td>*@
+
                                         </tr>
                                         srcount++;
                                     }
@@ -641,8 +647,8 @@
                                             <td>@item.Status</td>
                                             <td>@string.Format("{0:0,0.##}", item.Amount)</td>
                                             <td>@string.Format("{0:dd-MMM-yyyy}", item.DateTime)</td>
-                                           
-                                              <td>
+
+                                            <td>
                                                 <ul style="list-style:none;margin-left:0px;">
                                                     <li class="dropdown">
                                                         <a href="" class="dropdown-toggle no-after peers " data-toggle="dropdown">
@@ -658,15 +664,15 @@
                                                     </li>
                                                 </ul>
 
-                                               </td>
-                                             @*<td>
-                                                @{
-                                                    if (item.Verified == true)
-                                                    {
-                                                        <i class="ti-check" style="color:green"></i>
+                                            </td>
+                                            @*<td>
+                                                    @{
+                                                        if (item.Verified == true)
+                                                        {
+                                                            <i class="ti-check" style="color:green"></i>
+                                                        }
                                                     }
-                                                }
-                                            </td>*@
+                                                </td>*@
                                         </tr>
                                         srcount++;
                                     }
@@ -741,8 +747,8 @@
                                             <td>@item.Status</td>
                                             <td>@string.Format("{0:0,0.##}", item.Amount)</td>
                                             <td>@string.Format("{0:dd-MMM-yyyy}", item.DateTime)</td>
-                                      
-                                              <td>
+
+                                            <td>
                                                 <ul style="list-style:none;margin-left:0px;">
                                                     <li class="dropdown">
                                                         <a href="" class="dropdown-toggle no-after peers " data-toggle="dropdown">
@@ -758,15 +764,15 @@
                                                     </li>
                                                 </ul>
 
-                                               </td>
-                                                  @*<td>
-                                                @{
-                                                    if (item.Verified == true)
-                                                    {
-                                                        <i class="ti-check" style="color:green"></i>
+                                            </td>
+                                            @*<td>
+                                                    @{
+                                                        if (item.Verified == true)
+                                                        {
+                                                            <i class="ti-check" style="color:green"></i>
+                                                        }
                                                     }
-                                                }
-                                            </td>*@
+                                                </td>*@
                                         </tr>
                                         srcount++;
                                     }

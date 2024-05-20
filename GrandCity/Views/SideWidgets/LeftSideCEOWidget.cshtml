@@ -1,4 +1,10 @@
-﻿<div class="sidebar">
+﻿ <style>
+     .custom-icon {
+        color: #B3000C;
+    }
+</style>
+
+<div class="sidebar">
     @*<div class="sidebar-inner">*@
     <div class="sidebar-inner" style="background-color: #1f1f1f; box-shadow: 20px 0px 5px rgba(0, 0, 0, 0.5); ">
 
@@ -28,17 +34,19 @@
         <ul class="sidebar-menu scrollable pos-r">
             <li class="nav-item mT-30 active">
                 <a class="sidebar-link" href="javascript:void(0);" default>
-                    <span class="icon-holder"><i class="c-blue-500 ti-home"></i> </span><span class="title" style="color: #f1c07b;">Dashboard</span>
+                    @*<span class="icon-holder"><i class="c-blue-500 ti-home"></i> </span><span class="title" style="color: #f1c07b;">Dashboard</span>*@
+                    <span class="icon-holder"><i class="fa fa-1x fa-home custom-icon"></i> </span><span class="title" style="color: #f1c07b;">Dashboard</span>
+
                 </a>
             </li>
             <li class="nav-item dropdown">
                 <a class="dropdown-toggle ceo-dash-tile" href="javascript:void(0);">
                     <span class="icon-holder">
-                        <i class="c-red-500 ti-agenda"></i>
+                        <i class="fa fa-1x fa-user-tie custom-icon"></i>
                     </span>
                     <span class="title" style="color: #f1c07b;">Roles & Responsibilities</span>
                     <span class="arrow">
-                        <i class="ti-angle-right"></i>
+                        <i class="fa fa-1x fa-angle-right custom-icon"></i>
                     </span>
                 </a>
                 <ul class="dropdown-menu">
@@ -56,7 +64,7 @@
             <li class="nav-item dropdown">
                 <a class="dropdown-toggle ceo-dash-tile" href="javascript:void(0);" data-dash="dealer">
                     <span class="icon-holder">
-                        <i class="c-teal-500 ti-id-badge"></i>
+                        <i class="fa fa-1x fa-id-badge custom-icon"></i>
                     </span>
                     <span class="title" style="color: #f1c07b;">Dealership Management</span>
                 </a>
@@ -64,7 +72,7 @@
             <li class="nav-item dropdown">
                 <a class="dropdown-toggle ceo-dash-tile" href="javascript:void(0);" data-dash="cash counter">
                     <span class="icon-holder">
-                        <i class="c-blue-500 ti-user"></i>
+                        <i class="fa fa-1x fa-cash-register custom-icon"></i>
                     </span>
                     <span class="title" style="color: #f1c07b;">Cash Counter</span>
                 </a>
@@ -72,7 +80,7 @@
             <li class="nav-item dropdown">
                 <a class="dropdown-toggle ceo-dash-tile" href="javascript:void(0);" data-dash="file management">
                     <span class="icon-holder">
-                        <i class="c-blue-500 ti-file"></i>
+                        <i class="fa fa-1x fa-file custom-icon"></i>
                     </span>
                     <span class="title" style="color: #f1c07b;">Files Management</span>
                 </a>
@@ -80,7 +88,7 @@
             <li class="nav-item dropdown ">
                 <a class="dropdown-toggle ceo-dash-tile" href="javascript:void(0);" data-dash="plot management">
                     <span class="icon-holder">
-                        <i class="c-blue-500 ti-comment-alt"></i>
+                        <i class="fa fa-1x fa-file custom-icon"></i>
                     </span>
                     <span class="title" style="color: #f1c07b;">Plots Management</span>
                 </a>
@@ -88,7 +96,8 @@
             <li class="nav-item dropdown">
                 <a class="dropdown-toggle ceo-dash-tile" href="javascript:void(0);" data-dash="file delivery">
                     <span class="icon-holder">
-                        <i class="c-blue-500 ti-share"></i>
+                        @*<i class="c-blue-500 ti-share"></i>*@
+                        <i class="fa fa-1x fa-file-export custom-icon"></i>
                     </span>
                     <span class="title" style="color: #f1c07b;">File Delivery</span>
                 </a>
@@ -96,7 +105,8 @@
             <li class="nav-item dropdown">
                 <a class="dropdown-toggle ceo-dash-tile" href="javascript:void(0);" data-dash="transfer requests">
                     <span class="icon-holder">
-                        <i class="c-teal-500 ti-receipt"></i>
+                        @*<i class="c-teal-500 ti-receipt"></i>*@
+                        <i class="fa fa-1x fa-exchange-alt custom-icon"></i>
                     </span>
                     <span class="title" style="color: #f1c07b;">Transfer Requests</span>
                 </a>
@@ -104,7 +114,8 @@
             <li class="nav-item dropdown">
                 <a class="dropdown-toggle ceo-dash-tile" href="javascript:void(0);" data-dash="accounts">
                     <span class="icon-holder">
-                        <i class="c-purple-500 ti-agenda"></i>
+                        @*<i class="c-purple-500 ti-agenda"></i>*@
+                        <i class="fa fa-1x fa-calculator custom-icon"></i>
                     </span>
                     <span class="title" style="color: #f1c07b;">Accounts</span>
                 </a>
@@ -112,7 +123,8 @@
             <li class="nav-item dropdown">
                 <a class="dropdown-toggle ceo-dash-tile" href="javascript:void(0);" data-dash="audit">
                     <span class="icon-holder">
-                        <i class="c-pink-500 ti-user"></i>
+                        @*<i class="c-pink-500 ti-user"></i>*@
+                        <i class="fa fa-1x fa-file-alt custom-icon"></i>
                     </span>
                     <span class="title" style="color: #f1c07b;">Audit</span>
                 </a>
@@ -120,7 +132,8 @@
             <li class="nav-item dropdown">
                 <a class="dropdown-toggle ceo-dash-tile" href="javascript:void(0);" data-dash="prj management">
                     <span class="icon-holder">
-                        <i class="c-orange-500 ti-write"></i>
+                        @*<i class="c-orange-500 ti-write"></i>*@
+                        <i class="fa fa-1x fa-project-diagram custom-icon"></i>
                     </span>
                     <span class="title" style="color: #f1c07b;">Project Management</span>
                 </a>
@@ -128,7 +141,8 @@
             <li class="nav-item dropdown">
                 <a class="dropdown-toggle ceo-dash-tile" href="javascript:void(0);" data-dash="asset">
                     <span class="icon-holder">
-                        <i class="c-pink-500 ti-user"></i>
+                        @*<i class="c-pink-500 ti-user"></i>*@
+                        <i class="fa fa-1x fa fa-briefcase custom-icon"></i>
                     </span>
                     <span class="title" style="color: #f1c07b;">Assets Management</span>
                 </a>
@@ -136,7 +150,8 @@
             <li class="nav-item dropdown">
                 <a class="dropdown-toggle ceo-dash-tile" href="javascript:void(0);" data-dash="vehical">
                     <span class="icon-holder">
-                        <i class="c-pink-500 ti-user"></i>
+                        @*<i class="c-pink-500 ti-user"></i>*@
+                        <i class="fa fa-1x fa fa-car custom-icon"></i>
                     </span>
                     <span class="title" style="color: #f1c07b;">Vehical Management</span>
                 </a>
@@ -144,7 +159,8 @@
             <li class="nav-item dropdown">
                 <a class="dropdown-toggle ceo-dash-tile" href="javascript:void(0);" data-dash="hr">
                     <span class="icon-holder">
-                        <i class="c-pink-500 ti-user"></i>
+                        @*<i class="c-pink-500 ti-user"></i>*@
+                        <i class="fa fa-1x fa fa-users  custom-icon"></i>
                     </span>
                     <span class="title" style="color: #f1c07b;">Human Resource</span>
                 </a>
@@ -152,7 +168,8 @@
             <li class="nav-item dropdown">
                 <a class="dropdown-toggle ceo-dash-tile" href="javascript:void(0);" data-dash="call center">
                     <span class="icon-holder">
-                        <i class="c-pink-500 ti-headphone-alt"></i>
+                        @*<i class="c-pink-500 ti-headphone-alt"></i>*@
+                        <i class="fa fa-1x fa fa-headset  custom-icon"></i>
                     </span>
                     <span class="title" style="color: #f1c07b;">Call Center</span>
                 </a>
@@ -168,7 +185,8 @@
             <li class="nav-item dropdown">
                 <a class="dropdown-toggle ceo-dash-tile" href="javascript:void(0);" data-dash="sa marketing">
                     <span class="icon-holder">
-                        <i class="c-pink-500 ti-user"></i>
+                        @*<i class="c-pink-500 ti-user"></i>*@
+                        <i class="fa fa-1x fa fa-bullhorn  custom-icon"></i>
                     </span>
                     <span class="title" style="color: #f1c07b;">SA Marketing</span>
                 </a>
@@ -176,7 +194,8 @@
             <li class="nav-item dropdown">
                 <a class="dropdown-toggle ceo-dash-tile" href="javascript:void(0);" data-dash="property exchange">
                     <span class="icon-holder">
-                        <i class="c-deep-purple-500 ti-archive"></i>
+                        @*<i class="c-deep-purple-500 ti-archive"></i>*@
+                        <i class="fa fa-1x fa fa-exchange-alt custom-icon"></i>
                     </span>
                     <span class="title" style="color: #f1c07b;">SAG Property Exchange</span>
                 </a>
@@ -184,7 +203,8 @@
             <li class="nav-item dropdown">
                 <a class="dropdown-toggle ceo-dash-tile" href="javascript:void(0);" data-dash="reports">
                     <span class="icon-holder">
-                        <i class="c-blue-500 ti-user"></i>
+                        @*<i class="c-blue-500 ti-user"></i>*@
+                        <i class="fa fa-1x fa-chart-line custom-icon"></i>
                     </span>
                     <span class="title" style="color: #f1c07b;">Reports</span>
                 </a>
@@ -193,7 +213,8 @@
             <li class="nav-item dropdown">
                 <a class="dropdown-toggle ceo-dash-tile" href="javascript:void(0);" data-dash="service charges">
                     <span class="icon-holder">
-                        <i class="c-orange-500 ti-server"></i>
+                        @*<i class="c-orange-500 ti-server"></i>*@
+                        <i class="fa fa-1x fa fa-coins custom-icon"></i>
                     </span>
                     <span class="title" style="color: #f1c07b;">Service Charges</span>
                 </a>

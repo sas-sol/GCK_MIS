@@ -12,7 +12,13 @@
         margin-left: 4px;
         border-radius: 8px /*#C4A484*/
     }
+
+    .custom-icon {
+        color: #B3000C;
+    }
 </style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
 <div class="sidebar">
     <div class="sidebar-inner" style="background-color: #1f1f1f; box-shadow: 20px 0px 5px rgba(0, 0, 0, 0.5); ">
         @*#9ED1CA;*@ @*#1f1f1f*@ @*#dcaf6e*@
@@ -48,7 +54,8 @@
                 <li class="nav-item mT-30 active">
                     <a class="sidebar-link" href="/Home/Index" default>
                         @*color: black !important *@
-                        <span class="icon-holder"><i class="c-blue-500 ti-home"></i> </span><span class="title" style="color: #f1c07b;">Dashboard</span>
+                        @*<span class="icon-holder"><i class="c-blue-500 ti-home"></i> </span><span class="title" style="color: #f1c07b;">Dashboard</span>*@
+                        <span class="icon-holder"><i class="fa fa-1x fa-home custom-icon"></i> </span><span class="title" style="color: #f1c07b;">Dashboard</span>
                     </a>
                 </li>
             }
@@ -57,11 +64,13 @@
                 <li class="nav-item dropdown">
                     <a class="dropdown-toggle dash-tile" href="javascript:void(0);">
                         <span class="icon-holder">
-                            <i class="c-red-500 ti-agenda"></i>
+                            @*<i class="c-red-500 ti-agenda"></i>*@
+                            <i class="fa fa-1x fa-user-tie custom-icon"></i>
                         </span>
                         <span class="title" style="color: #f1c07b;">Roles & Responsibilities</span>
                         <span class="arrow">
-                            <i class="ti-angle-right"></i>
+                            @*<i class="ti-angle-right"></i>*@
+                            <i class="fa fa-1x fa-angle-right custom-icon"></i>
                         </span>
                     </a>
                     <ul class="dropdown-menu">
@@ -79,11 +88,12 @@
                 <li class="nav-item dropdown">
                     <a class="dropdown-toggle dash-tile" href="javascript:void(0);">
                         <span class="icon-holder">
-                            <i class="c-red-500 ti-home"></i>
+                            @*<i class="c-red-500 ti-home"></i>*@
+                            <i class="fa fa-1x fa-home custom-icon"></i>
                         </span>
                         <span class="title" style="color: #f1c07b;">Real Estate Configuration</span>
                         <span class="arrow">
-                            <i class="ti-angle-right"></i>
+                            <i class="fa fa-1x fa-angle-right custom-icon"></i>
                         </span>
                     </a>
                     <ul class="dropdown-menu">
@@ -102,18 +112,19 @@
                 <li class="nav-item dropdown">
                     <a class="dropdown-toggle dash-tile" href="javascript:void(0);" data-dash="dealer">
                         <span class="icon-holder">
-                            <i class="c-red-500 ti-id-badge"></i>
+                            @*<i class="c-red-500 ti-id-badge"></i>*@
+                            <i class="fa fa-1x fa-id-badge custom-icon"></i>
                         </span>
                         <span class="title" style="color: #f1c07b;">Dealership Management</span>
                         <span class="arrow">
-                            <i class="ti-angle-right"></i>
+                            <i class="fa fa-1x fa-angle-right custom-icon"></i>
                         </span>
                     </a>
                     @*<ul class="dropdown-menu">
-                        <li>
-                            <a class='sidebar-link get-link' data-link="/Dealership/DealershipRegisteration/" href="javascript:void(0);" style="color: black !important;">Registeration</a>
-                        </li>
-                    </ul>*@
+                            <li>
+                                <a class='sidebar-link get-link' data-link="/Dealership/DealershipRegisteration/" href="javascript:void(0);" style="color: black !important;">Registeration</a>
+                            </li>
+                        </ul>*@
                 </li>
             }
             @if (User.IsInRole("Cash_Counter_Auth"))
@@ -121,7 +132,8 @@
                 <li class="nav-item dropdown">
                     <a class="dropdown-toggle dash-tile" href="javascript:void(0);" data-dash="cash counter">
                         <span class="icon-holder">
-                            <i class="c-blue-500 ti-user"></i>
+                            @*<i class="c-blue-500 ti-user"></i*@
+                            <i class="fa fa-1x fa-cash-register custom-icon"></i>
                         </span>
                         <span class="title" style="color: #f1c07b;">Cash Counter</span>
                     </a>
@@ -132,7 +144,8 @@
                 <li class="nav-item dropdown">
                     <a class="dropdown-toggle dash-tile" href="javascript:void(0);" data-dash="files Plots">
                         <span class="icon-holder">
-                            <i class="c-blue-500 ti-file"></i>
+                            @*<i class="c-blue-500 ti-file"></i>*@
+                            <i class="fa fa-1x fa-file custom-icon"></i>
                         </span>
                         <span class="title" style="color: #f1c07b;">Files Plots</span>
                     </a>
@@ -143,34 +156,36 @@
                 <li class="nav-item dropdown">
                     <a class="dropdown-toggle dash-tile" href="javascript:void(0);" data-dash="ballot">
                         <span class="icon-holder">
-                            <i class="c-blue-500 ti-file"></i>
+                            @*<i class="c-blue-500 ti-file"></i>*@
+                            <i class="fa fa-1x fa-vote-yea custom-icon"></i>
                         </span>
                         <span class="title" style="color: #f1c07b;">Balloting</span>
                     </a>
                 </li>
             }
             @*<li class="nav-item dropdown">
-                <a class="dropdown-toggle dash-tile" href="javascript:void(0);" data-dash="accounts">
-                    <span class="icon-holder">
-                        <i class="c-teal-500 ti-view-list-alt"></i>
-                    </span>
-                    <span class="title" style="color: black !important;">Accounts</span>
-                </a>
-            </li>*@
+                    <a class="dropdown-toggle dash-tile" href="javascript:void(0);" data-dash="accounts">
+                        <span class="icon-holder">
+                            <i class="c-teal-500 ti-view-list-alt"></i>
+                        </span>
+                        <span class="title" style="color: black !important;">Accounts</span>
+                    </a>
+                </li>*@
             @*<li class="nav-item dropdown">
-                <a class="dropdown-toggle dash-tile" href="javascript:void(0);" data-dash="tickets">
-                    <span class="icon-holder">
-                        <i class="c-pink-500 ti-ticket"></i>
-                    </span>
-                    <span class="title" style="color: black !important;">Tickets</span>
-                </a>
-            </li>*@
+                    <a class="dropdown-toggle dash-tile" href="javascript:void(0);" data-dash="tickets">
+                        <span class="icon-holder">
+                            <i class="c-pink-500 ti-ticket"></i>
+                        </span>
+                        <span class="title" style="color: black !important;">Tickets</span>
+                    </a>
+                </li>*@
             @if (User.IsInRole("Audit_Auth"))
             {
                 <li class="nav-item dropdown">
                     <a class="dropdown-toggle dash-tile" href="javascript:void(0);" data-dash="audit">
                         <span class="icon-holder">
-                            <i class="c-pink-500 ti-user"></i>
+                            @*<i class="c-pink-500 ti-user"></i>*@
+                            <i class="fa fa-1x fa-file-alt custom-icon"></i>
                         </span>
                         <span class="title" style="color: #f1c07b;">Audit</span>
                     </a>
@@ -182,7 +197,8 @@
                 <li class="nav-item dropdown">
                     <a class="dropdown-toggle dash-tile" href="javascript:void(0);" data-dash="reports">
                         <span class="icon-holder">
-                            <i class="c-blue-500 ti-user"></i>
+                            @*<i class="c-blue-500 ti-user"></i>*@
+                            <i class="fa fa-1x fa-chart-line custom-icon"></i>
                         </span>
                         <span class="title" style="color: #f1c07b;">Reports</span>
                     </a>
