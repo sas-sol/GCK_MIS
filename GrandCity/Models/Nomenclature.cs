@@ -585,6 +585,9 @@ namespace MeherEstateDevelopers.Models
         Online_Cheque,
         Online_Payorder,
         Online_Bankdraft,
+        Adjustment,
+        Adj_Merge
+
     }
     public enum PaymentMethodStatuses
     {

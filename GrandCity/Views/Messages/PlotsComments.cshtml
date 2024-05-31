@@ -60,10 +60,18 @@
                         <div class="layer">
                             <div class="peers fxw-nw ai-c pY-3 pX-10 bgc-white bdrs-2 lh-3/2 @color">
                                 <div class="peer-greed ord-0">
+
                                     @if (item.Msg_Type == "file")
                                     {
+                                        string fileExtension = System.IO.Path.GetExtension((string)item.Comment)?.ToLower();
+                                        if (fileExtension == ".pdf")
+                                        {
+                                            <iframe src="/Repository/PlotsData/@item.Plot_Id/@item.Comment" width="300" height="300"></iframe>
+                                        }
+                                        else {
                                         <img src="/Repository/PlotsData/@item.Plot_Id/@item.Comment" width="200" height="200" />
                                         @*<img src="/Repository/PlotsData/@item.Plot_Id/@item.Comment" width="200" height="200" />*@
+                                        }
                                     }
                                     else
                                     {

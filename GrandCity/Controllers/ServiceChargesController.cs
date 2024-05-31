@@ -1724,7 +1724,7 @@ namespace MeherEstateDevelopers.Controllers
                 receiptdata.Phase = phase.Phase_Name != null ? phase.Phase_Name : receiptdata.Phase;
                 db.SaveChanges();
 
-                if (rd.PaymentType != "Cash")
+                if (rd.PaymentType != "Cash" || rd.PaymentType != "Adjustment" || rd.PaymentType != "Adj_Merge")
                 {
                     var res3 = Convert.ToInt64(db.Sp_Add_Cheque_BankDraft_PayOrder(rd.Amount, rd.Bank, rd.Branch, rd.PaymentType, null, null, PaymentMethodStatuses.Pending.ToString(),
                                        Modules.FileManagement.ToString(), Types.Installment.ToString(), userid, rd.PayChqNo, PlotId, rd.Ch_bk_Pay_Date, rd.FilePlotNumber.ToString(), res4.Receipt_Id, comp.Id, Voucher_Type.BRV.ToString()).FirstOrDefault());
@@ -1786,7 +1786,7 @@ namespace MeherEstateDevelopers.Controllers
                 var receiptdata = db.Receipts.Where(r => r.Id == res4.Receipt_Id).FirstOrDefault();
                 receiptdata.Phase = phase.Phase_Name != null ? phase.Phase_Name : receiptdata.Phase;
                 db.SaveChanges();
-                if (rd.PaymentType != "Cash")
+                if (rd.PaymentType != "Cash" || rd.PaymentType != "Adjustment" || rd.PaymentType != "Adj_Merge")
                 {
                     var res3 = Convert.ToInt64(db.Sp_Add_Cheque_BankDraft_PayOrder(rd.Amount, rd.Bank, rd.Branch, rd.PaymentType, null, null, PaymentMethodStatuses.Pending.ToString(),
                                        Modules.PlotManagement.ToString(), Types.Installment.ToString(), userid, rd.PayChqNo, PlotId, rd.Ch_bk_Pay_Date, res1.Plot_No.ToString(), res4.Receipt_Id, comp.Id, Voucher_Type.BRV.ToString()).FirstOrDefault());
