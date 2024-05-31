@@ -737,7 +737,7 @@ namespace MeherEstateDevelopers.Controllers
                 }
             }
         }
-        [NoDirectAccess] public ActionResult AssignCompany()
+        public ActionResult AssignCompany()
         {
             ViewBag.Company = new SelectList(db.Sp_Get_Companies(), "Id", "Company_Name");
             ViewBag.Users = new SelectList(db.Sp_Get_Users(), "Id", "Name");
