@@ -51,12 +51,28 @@
                                 <div class="peer-greed ord-0">
                                     @if (item.Msg_Type == "file")
                                     {
-                                        <img src="/Repository/DealershipData/@item.Dealership_Id/@item.Comment" width="200" height="200" />
+                                        string fileExtension = System.IO.Path.GetExtension((string)item.Comment)?.ToLower();
+                                        if (fileExtension == ".pdf")
+                                        {
+                                            <iframe src="/Repository/DealershipData/@item.Dealership_Id/@item.Comment" width="300" height="300"></iframe>
+                                        }
+                                        else
+                                        {
+                                            <img src="/Repository/DealershipData/@item.Dealership_Id/@item.Comment" width="200" height="200" />
+                                        }
                                     }
                                     else
                                     {
                                         <span>@item.Comment</span>
                                     }
+                                    @*@if (item.Msg_Type == "file")
+        {
+            <img src="/Repository/DealershipData/@item.Dealership_Id/@item.Comment" width="200" height="200" />
+        }
+        else
+        {
+            <span>@item.Comment</span>
+        }*@
                                 </div>
                             </div>
                             <div class="peers fxw-nw ai-c pY-3 pX-10 bgc-white @color">

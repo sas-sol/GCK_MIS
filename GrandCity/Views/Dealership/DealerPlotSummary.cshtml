@@ -19,7 +19,7 @@
                     <th>Phase</th>
                     <th>Block</th>
                     <th>Deal Title</th>
-                    <th>Deal Date</th>
+                    @*<th>Deal Date</th>*@
                     <th>Register</th>
                     <th>Pending</th>
                     <th>Total Form</th>
@@ -35,7 +35,7 @@
                         <td>@item.Key.Phase_Name</td>
                         <td>@item.Key.Block_Name</td>
                         <td>@item.Key.DealTitle</td>
-                        <td>@String.Format("{0:MM/dd/yyyy}", item.Key.Deal_Date)</td>
+                        @*<td>@String.Format("{0:MM/dd/yyyy}", item.Key.Deal_Date)</td>*@
                         <td>@item.Where(x=> x.Status == "Registered").Sum(x => x.Total)</td>
                         <td>@item.Where(x=> x.Status == "Available_For_Sale").Sum(x => x.Total)</td>
                         <td>@item.Sum(x=> x.Total)</td>
