@@ -3323,8 +3323,39 @@ namespace MeherEstateDevelopers.Controllers
 
             return Json(new { Status = true, Msg = "Updated Successfully" });
         }
+        public ActionResult DeleteInstallment(int id ,int fileid)
+        {
+            var installmentsToDelete = db.File_Installments.FirstOrDefault(p => p.Id == id && p.File_Id == fileid);
+
+            if (installmentsToDelete != null)
+            {
+                db.File_Installments.Remove(installmentsToDelete);
+                db.SaveChanges();
+
+                return Json(new { success = true, message = "Row has been deleted successfully." });
+            }
+
+            return Json(new { success = false, message = "Row has been deleted successfully." });
+        }
 
 
+        //public JsonResult DeleteInstallment(int id)
+        //{
+        //    var installmentsToDelete = db.File_Installments.FirstOrDefault(p => p.Id == id);
+
+        //    if (installmentsToDelete != null)
+        //    {
+
+        //        db.File_Installments.Remove(installmentsToDelete);
+
+        //        // Save the changes to the database
+        //        db.SaveChanges();
+
+        //        return Json(new { success = true }, JsonRequestBehavior.AllowGet);
+        //    }
+
+        //    return Json(new { success = false }, JsonRequestBehavior.AllowGet);
+        //}
         [NoDirectAccess] public ActionResult FilesPlotsReport()
         {
             ViewBag.Block = new SelectList(db.RealEstate_Blocks.Where(x => x.Block_Name != null), "Id", "Block_Name").ToList();

@@ -810,6 +810,8 @@ namespace MeherEstateDevelopers.Controllers
             ViewBag.TransactionId = h.RandomNumber();
             return PartialView();
         }
+        [NoDirectAccess]
+      
         [HttpPost]
         public JsonResult CheckInstallment(decimal Amount, decimal Balance, long Filefromid)
         {

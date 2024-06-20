@@ -8,70 +8,123 @@
         <div class="installmentStructure" style="overflow-y:scroll; overflow-x:hidden; height:400px;">
             <input type="hidden" id="com_id" name="comId" value="@ViewBag.id" />
 
-                @foreach (var r in Model.Where(x => x.File_Id == ViewBag.id))
-                {
+            @foreach (var r in Model.Where(x => x.File_Id == ViewBag.id))
+            {
 
-                    <div class="row arrElements" id="allbody">
-                        <div class="col-md-3 ">
-                            <input type="hidden" class="Ins-id" value="@r.Id" />
-                            <input type="text" class="form-control insName" name="name" value="@r.Installment_Name" />
-                        </div>
-                        <div class="col-md-2">
-                            <input type="hidden" class="inst-type-old" value="@r.Installment_Type" />
-                            <select class="inst-type form-control">
-                                <option value="0">Other Charges</option>
-                                <option value="1">Installment</option>
-                                <option value="2">Development Charges</option>
-                                <option value="3">Advance</option>
-                                <option value="4">After_Time</option>
-                                <option value="5"> Special_Preference</option>
-                                <option value="6">Confirmation</option>
-                                <option value="7"> Possession_Charges</option>
-                                <option value="8">Balloting</option>
-                                <option value="9">Half Yearly</option>
-                                <option value="10">Not_Included</option>
-                            </select>
-                        </div>
-                        <div class="col-md-3 ">
-                            <input type="text" class="form-control coma amunt" name="amount" value="@string.Format("{0:n0}", r.Amount)" />
-                        </div>
-                        <div class="col-md-3 ">
-                            @{ var date = @String.Format("{0:MM/dd/yyyy}", r.Due_Date); }
-                            <input type="text" class="form-control datTim" data-provide="datepicker" value="@date" />
-                        </div>
-                        <div class="col-md-1">
-                            <a href="javascript:void(0);" class="btnRemove"><i class="fas fa-minus-circle"></i></a>
-                        </div>
+                <div class="row arrElements" id="allbody">
+                    <div class="col-md-3 ">
+                        <input type="hidden" class="Ins-id" value="@r.Id" />
+                        <input type="text" class="form-control insName" name="name" value="@r.Installment_Name" />
+                    </div>
+                    <div class="col-md-2">
+                        <input type="hidden" class="inst-type-old" value="@r.Installment_Type" />
+                        <select class="inst-type form-control">
+                            <option value="0">Other Charges</option>
+                            <option value="1">Installment</option>
+                            <option value="2">Development Charges</option>
+                            <option value="3">Advance</option>
+                            <option value="4">After_Time</option>
+                            <option value="5"> Special_Preference</option>
+                            <option value="6">Confirmation</option>
+                            <option value="7"> Possession_Charges</option>
+                            <option value="8">Balloting</option>
+                            <option value="9">Half Yearly</option>
+                            <option value="10">Not_Included</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3 ">
+                        <input type="text" class="form-control coma amunt" name="amount" value="@string.Format("{0:n0}", r.Amount)" />
+                    </div>
+                    <div class="col-md-3 ">
+                        @{ var date = @String.Format("{0:MM/dd/yyyy}", r.Due_Date); }
+                        <input type="text" class="form-control datTim" data-provide="datepicker" value="@date" />
+                    </div>
+                    <div class="col-md-1">
+                        @*<a href="javascript:void(0);" class="btnRemove"><i class="fas fa-minus-circle"></i></a>*@
+                        @*<a href="~/FileSystem/DeleteInstallment?id=@r.Id" >
+            <i class="fas fa-minus-circle"></i>
+        </a>*@
+                        <a href="#" class="btnRemove" data-id="@r.Id"data-file-id="@ViewBag.id"><i class="fas fa-minus-circle"></i></a>
 
                     </div>
-                }
-            </div>
-            <br />
-            <div class="col-md-1">
-                <button id="btnAppend" class="btn btn-primary">Add Row</button>
-            </div>
-        </div>
 
-        <div class="col-md-2 totalamount">
-            <div class="ttl" style="height: 60px; width: 160px; background-color:lightblue; color: black;  border-radius: 10px; text-align: center; padding-top: 16px; position: fixed"><i>Total Amount:</i> </div>
+                </div>
+            }
+        </div>
+        <br />
+        <div class="col-md-1">
+            <button id="btnAppend" class="btn btn-primary">Add Row</button>
         </div>
     </div>
-    <script>
 
-        $(document).ready(function () {
-            $('.inst-type').each(function () {
-                $(this).val($(this).closest('div').find('.inst-type-old').val());
-            });
-            var total = 0;
-            $('.amunt').each(function () {
-                total = total + parseFloat(RemoveComma($(this).val()));
-            });
-            $(".ttl").text(total.toLocaleString());
-            $('.modal-footer').append('<button class="btn btn-success upInsInf" type="submit">Update Installment Info</button>');
+    <div class="col-md-2 totalamount">
+        <div class="ttl" style="height: 60px; width: 160px; background-color:lightblue; color: black;  border-radius: 10px; text-align: center; padding-top: 16px; position: fixed"><i>Total Amount:</i> </div>
+    </div>
+</div>
+<script>
+     $(document).ready(function () {
+        $('.inst-type').each(function () {
+            $(this).val($(this).closest('div').find('.inst-type-old').val());
         });
-    $("#btnAppend").click(function () {
-        $(".installmentStructure").append(
 
+        var total = 0;
+        $('.amunt').each(function () {
+            total = total + parseFloat(RemoveComma($(this).val()));
+        });
+        $(".ttl").text(total.toLocaleString());
+
+        $('.modal-footer').append('<button class="btn btn-success upInsInf" type="submit">Update Installment Info</button>');
+
+     });
+    $(document).ready(function () {
+    var maxId = @Model.Max(p => p.Id); // Assuming Model contains data from File_Installment table
+
+    $("#btnAppend").click(function () {
+        var newId = maxId + 1; // Increment the maximum ID to get the new ID for the new row
+        var fileId = $('#com_id').val();
+        debugger
+        var date = '@String.Format("{0:MM/dd/yyyy}", DateTime.Now)';
+        $(".installmentStructure").append(
+            '<div class="row arrElements">' +
+            '<div class="col-md-3">' +
+            '<input type="text" class="form-control insName" name="name" Placeholder="Installment Name"/>' +
+            '</div>' +
+            '<div class="col-md-2">' +
+            '<select class="inst-type form-control">' +
+            '<option value="0">Other Charges</option>' +
+            '<option value="1">Instalment</option>' +
+            '<option value="2">Development Charges</option>' +
+            '<option value="3">Advance</option>' +
+            '<option value="4">After_Time</option>' +
+            '<option value="5">Half Yearly</option>' +
+            '<option value="6">Confirmation</option>' +
+            '<option value="7">Possession Charges</option>' +
+            '<option value="8">Balloting</option>' +
+            '<option value="9">Half Yearly</option>' +
+            '<option value="10">Not Included</option>' +
+            '</select>' +
+            '</div>' +
+            '<div class="col-md-3">' +
+            '<input type="text" class="form-control coma amunt" name="amount" Placeholder="Amount" />' +
+            '</div>' +
+            '<div class="col-md-3">' +
+            '<input type="text" class="form-control datTim" data-provide="datepicker" Placeholder="MM/DD/YYYY" value="' + date + '"/>' +
+            '</div>' +
+            '<div class="col-md-1">' +
+            '<a href="#" class="btnRemove"  data-id="' + newId + '"data-file-id=" ' + fileId +'"><i class="fas fa-minus-circle"></i></a>' +
+            '</div>' +
+            '</div>'
+        );
+
+        // Increment the maximum ID for the next row
+        maxId++;
+    });
+});
+
+    @*$("#btnAppend").click(function () {
+        var id = $('.Ins-id').val();
+           var date = '@String.Format("{0:MM/dd/yyyy}", DateTime.Now)';
+        $(".installmentStructure").append(
             '<div class="row arrElements">' +
             '<div class="col-md-3">' +
             '<input type="text" class="form-control insName" name="name" Placeholder="Installment Name"/>' +
@@ -83,13 +136,20 @@
             ' <input type="text" class="form-control coma amunt" name="amount" Placeholder="Amount" />' +
             '</div>' +
             '<div class="col-md-3">' +
-            '<input type="text" class="form-control datTim" data-provide="datepicker" Placeholder="MM/DD/YYYY" />' +
+            '<input type="text" class="form-control datTim" data-provide="datepicker" Placeholder="MM/DD/YYYY" value="' + date + '"/>' +
             '</div>' +
             '<div class="col-md-1">' +
-            '<a href="javascript:void(0);" class="btnRemove" ><i class="fas fa-minus-circle"></i></a>' +
+            '   <a href="#" class="btnRemove"  data-id="' + id + '"><i class="fas fa-minus-circle"></i></a>' +
             '</div>' +
             '</div>');
-    });
+
+        // Reinitialize the datepicker for the newly appended input field
+        $(document).find(".datTim:last").datepicker({
+            format: 'mm/dd/yyyy',
+            autoclose: true
+        });
+    });*@
+
 
     $(document).on("click", ".upInsInf", function () {
         debugger;
@@ -146,5 +206,93 @@
             }
         });
     });
-    </script>
+    $(document).on('click', '.btnRemove', function () {
+        var id = $(this).data('id');
+        var element = $(this).closest('.arrElements');
+        var  fileId = $('#com_id').val();
+        debugger;
+    Swal.fire({
+        text: 'Are you sure you want to discard the row?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                type: "POST",
+                url: '/FileSystem/DeleteInstallment?id=' + id + '&fileid=' + fileId,
+                dataType: "json",
+                success: function (data) {
+                    if (data.success) {
+                        Swal.fire({
+                            icon: 'success',
+                            text: data.message
+                        }).then(() => {
+                            window.location.reload(); // Refresh the page
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'success',
+                            text: data.message
+                        }).then(() => {
+                            element.remove('.arrElements'); // Remove the element here
+                        });
+                    }
+                },
+                error: function () {
+                    Swal.fire({
+                        icon: 'error',
+                        text: 'Something went wrong'
+                    });
+                }
+            });
+        }
+    });
+});
+    //$(document).on('click', '.btnRemove', function () {
+    //    var id = $(this).data('id');
+    //    var rowToRemove = $(this).closest('.arrElements'); // Get the row to remove
+    //    debugger;
+    //    Swal.fire({
+    //        text: 'Are you sure you want to discard the row?',
+    //        icon: 'question',
+    //        showCancelButton: true,
+    //        confirmButtonText: 'Yes',
+    //        cancelButtonText: 'No'
+    //    }).then((result) => {
+    //        if (result.isConfirmed) {
+    //            $.ajax({
+    //                type: "POST",
+    //                url: '/FileSystem/DeleteInstallment?id=' + id,
+    //                dataType: "json",
+    //                success: function (data) {
+    //                    if (data.success) {
+    //                        Swal.fire({
+    //                            icon: 'success',
+    //                            text: data.message
+    //                        }).then(() => {
+    //                            rowToRemove.remove(); // Remove the row from the DOM
+    //                        });
+    //                    } else {
+    //                        Swal.fire({
+    //                            icon: 'error',
+    //                            text: data.message
+    //                        });
+    //                    }
+    //                },
+    //                error: function () {
+    //                    Swal.fire({
+    //                        icon: 'error',
+    //                        text: 'Something went wrong'
+    //                    });
+    //                }
+    //            });
+    //        }
+    //    });
+    //});
+
+
+
+</script>
 

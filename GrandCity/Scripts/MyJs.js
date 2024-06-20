@@ -24661,20 +24661,20 @@ $(document).on('click', '.up_inst_btn_plot', function () {
 //
 // Installments Update for Files, Plots and Commercial Module End
 //
-//
-$(document).on('click', '.btnRemove', function () {
-    Swal.fire({
-        text: 'Are you sure you want to discard the row?',
-        icon: 'question',
-        showCancelButton: true,
-        confirmButtonText: 'Yes',
-        cancelButtonText: 'No'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            $(this).closest('.arrElements').remove();
-        }
-    });
-});
+
+//$(document).on('click', '.btnRemove', function () {
+//    Swal.fire({
+//        text: 'Are you sure you want to discard the row?',
+//        icon: 'question',
+//        showCancelButton: true,
+//        confirmButtonText: 'Yes',
+//        cancelButtonText: 'No'
+//    }).then((result) => {
+//        if (result.isConfirmed) {
+//            $(this).closest('.arrElements').remove();
+//        }
+//    });
+//});
 $(document).on("change", ".amunt", function () {
     var total = 0;
     $('.amunt').each(function () {

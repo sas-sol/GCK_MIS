@@ -5552,6 +5552,20 @@ namespace MeherEstateDevelopers.Controllers
             }
             return Json(new { Status = true, Msg = "Updated Succesfully" });
         }
+        public ActionResult DeleteInstallment(int id , int plotid)
+        {
+            var installmentsToDelete = db.Plot_Installments.FirstOrDefault(p => p.Id == id && p.Plot_Id == plotid);
+
+            if (installmentsToDelete != null)
+            {
+                db.Plot_Installments.Remove(installmentsToDelete);
+                db.SaveChanges();
+
+                return Json(new { success = true, message = "Row has been deleted successfully." });
+            }
+
+            return Json(new { success = false, message = "Row has been deleted successfully." });
+        }
         [NoDirectAccess] public ActionResult EmployeeFile()
         {
             var res = db.Sp_Get_EmployeeFilePlotInfo().ToList();
@@ -5567,7 +5581,9 @@ namespace MeherEstateDevelopers.Controllers
                 var res3 = db.Sp_Get_PlotInstallments(item.Id).ToList();
                 var res4 = db.Sp_Get_ReceivedAmounts(item.Id, Modules.PlotManagement.ToString()).ToList();
                 var discount = db.Discounts.Where(x => x.Module_Id == item.Id && x.Plot_Is_Cancelled == null && x.Module == Modules.PlotManagement.ToString()).ToList();
-                UpdatePlotInstallmentStatus(res3, res4, discount, item.Id);
+                if(res4.Count > 0)
+                { UpdatePlotInstallmentStatus(res3, res4, discount, item.Id); }
+              
             }
 
         }
