@@ -542,7 +542,7 @@ namespace MeherEstateDevelopers.Controllers
             var res = new FileDetailData { FileData = res1, FilesOwners = res2, FileInstallments = UpdatePlotInstallments, FileReceipts = res4, Discounts = res5, PlotInstallmentsSurcharge = UpdateSurChargeInstallments };
             db.Sp_Add_Activity(userid, "Get full Details of File  <a class='file-data' data-id=' " + FileId + "'>" + FileId + "</a>  ", "Read", Modules.FileManagement.ToString(), ActivityType.Details_Access.ToString(), res1.Id);
 
-            return PartialView(res);
+           return PartialView(res);
         }
         public void UpdateFileInstallmentStatusSurcharge(List<Plot_Installments_Surcharge> inst, List<Sp_Get_ReceivedAmounts_Surcharge_Result> Receipts, long? FileId)
         {
