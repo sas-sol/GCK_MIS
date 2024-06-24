@@ -1428,7 +1428,7 @@ namespace MeherEstateDevelopers.Controllers
         {
             long userid = long.Parse(User.Identity.GetUserId());
             var Plot = db.Sp_Get_PlotData(rd.File_Plot_Number).FirstOrDefault();
-            var res2 = db.Sp_Add_PlotReceipt_Manual(rd.Amount, rd.AmountInWords, rd.Bank, rd.PayChqNo, rd.Ch_bk_Pay_Date, rd.Branch, rd.Mobile_1
+            var res2 = db.Sp_Add_PlotReceipt_Manual("",rd.Amount, rd.AmountInWords, rd.Bank, rd.PayChqNo, rd.Ch_bk_Pay_Date, rd.Branch, rd.Mobile_1
                 , rd.Father_Husband, rd.File_Plot_Number.ToString(), rd.Name, rd.PaymentType, rd.TotalAmount,
                 rd.Project_Name, rd.Rate, null, rd.Plot_Size, Module, userid, userid, rd.ReceiptNo, rd.Date, rd.Phase, rd.Block, null, Modules.PlotManagement.ToString(), rd.FilePlotNumber).FirstOrDefault();
             db.Sp_Add_Activity(userid, "Add receipt of Plot Id  <a class='plt-data' data-id=' " + rd.File_Plot_Number + "'>" + rd.File_Plot_Number + "</a>---", "Create", Modules.PlotManagement.ToString(), ActivityType.Add_Receipt.ToString(), rd.File_Plot_Number);
