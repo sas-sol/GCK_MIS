@@ -330,7 +330,7 @@ namespace MeherEstateDevelopers.Controllers
             {
                 try
                 {
-                    var res4 = db.Sp_Add_Receipt(Amount, GeneralMethods.NumberToWords(Convert.ToInt32(Amount)), bankName, chqNo, null, bankBranch, string.Join(",", res1.Select(x=> x.Mobile_1))
+                    var res4 = db.Sp_Add_Receipt("", Amount, GeneralMethods.NumberToWords(Convert.ToInt32(Amount)), bankName, chqNo, null, bankBranch, string.Join(",", res1.Select(x=> x.Mobile_1))
                    , string.Join(",", res1.Select(x => x.Father_Name)), Id, string.Join(",", res1.Select(x => x.Name)), payType, 0, "Grand City Kharian", 0, null, null, ReceiptTypes.DealershipRegisteration.ToString(), userid, userid, ""
                    , null, Modules.PlotManagement.ToString(), null, res2.Dealership_Name, null, null, 0, TransactionId, res2.Dealership_Name, receiptno, comp.Id).FirstOrDefault();
                     var desc = "Dealership Registration Fee by " + res2.Dealership_Name;
@@ -393,7 +393,7 @@ namespace MeherEstateDevelopers.Controllers
             {
                 try
                 {
-                    var res4 = db.Sp_Add_Receipt(Amount, GeneralMethods.NumberToWords(Convert.ToInt32(Amount)), Bank, Inst_No, Inst_Date, Branch, string.Join(",", res1.Select(x => x.Mobile_1))
+                    var res4 = db.Sp_Add_Receipt("", Amount, GeneralMethods.NumberToWords(Convert.ToInt32(Amount)), Bank, Inst_No, Inst_Date, Branch, string.Join(",", res1.Select(x => x.Mobile_1))
                       , string.Join(",", res1.Select(x => x.Name)), Id, res2.Dealership_Name, PaymentType, 0, "Grand City Kharian", 0, null, null, ReceiptTypes.DealerAdvance.ToString(), userid, userid, Description, null, Modules.PlotManagement.ToString(), null, res2.Dealership_Name, null, null, 0, TransactionId,res2.Dealership_Name, receiptno,comp.Id).FirstOrDefault();
 
                     if (PaymentType != "Cash")

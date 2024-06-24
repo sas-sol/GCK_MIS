@@ -219,7 +219,7 @@ namespace MeherEstateDevelopers.Controllers
                                 calf = db.AdminProjects.Where(x => x.Project_Id == item).Select(x => x.Out_Mem_Fee).SingleOrDefault().Value;
                             }
                             var name = db.RealEstate_Projects.Where(x => x.Id == item).Select(x => x.Project_Name).SingleOrDefault();
-                            var res3 = db.Sp_Add_Receipt(calf, GeneralMethods.NumberToWords(Convert.ToInt32(calf)), null, null, null, null, M.Mobile_1
+                            var res3 = db.Sp_Add_Receipt("", calf, GeneralMethods.NumberToWords(Convert.ToInt32(calf)), null, null, null, null, M.Mobile_1
                                                  , M.Father_Name, id, M.Name, "Cash", 0,
                                                  Modules.Sports.ToString(), 0, null, null, ReceiptTypes.Membership_Fee.ToString(), userid, userid, name, null,
                                                  Types.Sports.ToString(), null, null, null,null, id,TransactionId,"", receiptno, comp.Id).FirstOrDefault();
@@ -453,7 +453,7 @@ namespace MeherEstateDevelopers.Controllers
                 try
                 {
                     db.Sp_Update_Fee_Status(userid, FeeId);
-                    var ReceiptId = db.Sp_Add_Receipt(MFD.FeeAmount, GeneralMethods.NumberToWords(Convert.ToInt32(MFD.FeeAmount)), null, null, null, null, MemberData.Mobile_1
+                    var ReceiptId = db.Sp_Add_Receipt("", MFD.FeeAmount, GeneralMethods.NumberToWords(Convert.ToInt32(MFD.FeeAmount)), null, null, null, null, MemberData.Mobile_1
                                                                           , MemberData.Father_Name, MemberData.Id, MemberData.Name, "Cash", 0,
                                                                           MFD.Project_Name, 0, null, "", ReceiptTypes.Membership_Monthly_Fee.ToString(), userid, userid,
                                                                           MFD.Project_Name, null, MFD.Project_Name, null, null, null,null, MemberData.Id,TransactionId,"",receiptno, comp.Id).FirstOrDefault();

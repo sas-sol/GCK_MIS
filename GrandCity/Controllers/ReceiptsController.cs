@@ -505,7 +505,7 @@ namespace MeherEstateDevelopers.Controllers
                 {
                     try
                     {
-                        var res = db.Sp_Add_Receipt(reqDets.TotalAmount, amtInWords, "", string.Join(" , ", servs.Select(x => x.Description)), null, "", reqDets.CustomerContact,
+                        var res = db.Sp_Add_Receipt("", reqDets.TotalAmount, amtInWords, "", string.Join(" , ", servs.Select(x => x.Description)), null, "", reqDets.CustomerContact,
                                                     reqDets.CustomerFatherName, reqDets.CustomerId, reqDets.CustomerName, "Cash", null, "", null, "", reqDets.PlotSize, "Architecture_Fees", null, uid, reqDets.CustomerCNIC,
                                                     DateTime.Now, "", "", reqDets.CustomerAddress, "", null, null, token, "", receiptno, comp.Id).FirstOrDefault();
                         bool headcashier = false;

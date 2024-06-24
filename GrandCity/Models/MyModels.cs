@@ -976,7 +976,7 @@ namespace MeherEstateDevelopers.Models
         public string FilePlotNumber { get; set; }
         public string FileImage { get; set; }
         public string ModuleType { get; set; }
-        public string Description { get; set; }
+        public string Description { get; set; } 
     }
 
     public class BookingReceiptData

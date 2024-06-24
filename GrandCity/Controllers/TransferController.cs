@@ -367,7 +367,7 @@ namespace MeherEstateDevelopers.Controllers
                     reg = reg.PadLeft(6, '0');
                     db.Sp_Update_PlotRegNo(Group_Id, reg);
                     var receiptno1 = db.Sp_Get_ReceiptNo("Normal").FirstOrDefault();
-                    var res1 = db.Sp_Add_Receipt(rd.Amount, rd.AmountInWords, rd.Bank, rd.PayChqNo, rd.Ch_bk_Pay_Date, rd.Branch, string.Join(",", PO.Select(x => x.Mobile_1).FirstOrDefault())
+                    var res1 = db.Sp_Add_Receipt(rd.Description,rd.Amount, rd.AmountInWords, rd.Bank, rd.PayChqNo, rd.Ch_bk_Pay_Date, rd.Branch, string.Join(",", PO.Select(x => x.Mobile_1).FirstOrDefault())
                                         , string.Join("/", PO.Select(x => x.Father_Husband)), rd.File_Plot_Number, string.Join("/", PO.Select(x => x.Name)), PaymentMethod.Cash.ToString(), 0,
                                         "Grand City Kharian", 0, null, PO.Select(x => x.Plot_Size).FirstOrDefault(), ReceiptTypes.Transfer.ToString(), userid, userid, "Plot Transfer", null, Modules.PlotManagement.ToString(), Group_Id.ToString(), rd.FilePlotNumber.ToString(), plot.Block_Name, plot.Type, Group_Id, TransactionId, "", receiptno1, comp.Id).FirstOrDefault();
                     // add phase in Receipt data
@@ -421,7 +421,7 @@ namespace MeherEstateDevelopers.Controllers
                                 }
                                 long transId = h.RandomNumber();
                                 var receiptno2 = db.Sp_Get_ReceiptNo("Normal").FirstOrDefault();
-                                var receipt = db.Sp_Add_Receipt(amt, amtInWords, rd.Bank, rd.PayChqNo, rd.Ch_bk_Pay_Date, rd.Branch, v.Mobile_1
+                                var receipt = db.Sp_Add_Receipt(rd.Description,amt, amtInWords, rd.Bank, rd.PayChqNo, rd.Ch_bk_Pay_Date, rd.Branch, v.Mobile_1
                                                 , v.Father_Husband, rd.File_Plot_Number, v.Name, PaymentMethod.Cash.ToString(), plt_prc,
                                                 "Grand City Kharian", 0, null, v.Plot_Size, ReceiptTypes.Advance_Tax_236_K.ToString(), userid, userid, v.CNIC_NICOP,
                                                 null, Modules.PlotManagement.ToString(), Group_Id.ToString(),
@@ -485,7 +485,7 @@ namespace MeherEstateDevelopers.Controllers
                                     {
                                         long transId = h.RandomNumber();
                                         var receiptno3 = db.Sp_Get_ReceiptNo("Normal").FirstOrDefault();
-                                        var receipt = db.Sp_Add_Receipt(amt, amtInWords, rd.Bank, rd.PayChqNo, rd.Ch_bk_Pay_Date, rd.Branch, v.Mobile_1
+                                        var receipt = db.Sp_Add_Receipt(rd.Description,amt, amtInWords, rd.Bank, rd.PayChqNo, rd.Ch_bk_Pay_Date, rd.Branch, v.Mobile_1
                                                         , v.Father_Husband, rd.File_Plot_Number, v.Name, PaymentMethod.Cash.ToString(), plt_prc,
                                                         "Grand City Kharian", 0, null, v.Plot_Size, ReceiptTypes.Advance_Tax_236_C.ToString(), userid, userid, v.CNIC_NICOP,
                                                         null, Modules.PlotManagement.ToString(), Group_Id.ToString(),
@@ -527,7 +527,7 @@ namespace MeherEstateDevelopers.Controllers
                                 {
                                     long transId = h.RandomNumber();
                                     var receiptno3 = db.Sp_Get_ReceiptNo("Normal").FirstOrDefault();
-                                    var receipt = db.Sp_Add_Receipt(amt, amtInWords, rd.Bank, rd.PayChqNo, rd.Ch_bk_Pay_Date, rd.Branch, v.Mobile_1
+                                    var receipt = db.Sp_Add_Receipt(rd.Description,amt, amtInWords, rd.Bank, rd.PayChqNo, rd.Ch_bk_Pay_Date, rd.Branch, v.Mobile_1
                                                     , v.Father_Husband, rd.File_Plot_Number, v.Name, PaymentMethod.Cash.ToString(), plt_prc,
                                                     "Grand City Kharian", 0, null, v.Plot_Size, ReceiptTypes.Advance_Tax_236_C.ToString(), userid, userid, v.CNIC_NICOP,
                                                     null, Modules.PlotManagement.ToString(), Group_Id.ToString(),
@@ -1030,7 +1030,7 @@ namespace MeherEstateDevelopers.Controllers
                     //}
 
                     var receiptno = db.Sp_Get_ReceiptNo("Normal").FirstOrDefault();
-                    var res10 = db.Sp_Add_Receipt(rd.Amount, rd.AmountInWords, rd.Bank, rd.PayChqNo, rd.Ch_bk_Pay_Date, rd.Branch, string.Join(",", res5.Select(x => x.Mobile_1).FirstOrDefault())
+                    var res10 = db.Sp_Add_Receipt(rd.Description,rd.Amount, rd.AmountInWords, rd.Bank, rd.PayChqNo, rd.Ch_bk_Pay_Date, rd.Branch, string.Join(",", res5.Select(x => x.Mobile_1).FirstOrDefault())
                                         , string.Join("/", res5.Select(x => x.Father_Husband)), res1.Id, string.Join("/", res5.Select(x => x.Name)), PaymentMethod.Cash.ToString(), 0,
                                         res1.Project_Name, 0, null, res1.Area.ToString(), ReceiptTypes.Transfer.ToString(), userid, userid, res1.Type + " Transfer", null, Modules.CommercialManagement.ToString(), "", res1.shop_no + " " + res1.ApplicationNo, res1.Floor, res1.Area.ToString(), grpTag, TransactionId, "", receiptno, comp.Id).FirstOrDefault();
 
