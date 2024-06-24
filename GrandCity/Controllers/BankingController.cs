@@ -1669,7 +1669,7 @@ namespace MeherEstateDevelopers.Controllers
                                     foreach (var v in FineData)
                                     {
                                         var receiptno1 = db.Sp_Get_ReceiptNo("Normal").FirstOrDefault();
-                                        var res1 = db.Sp_Add_Receipt(v.Amount, v.AmountInWords, v.Bank, v.PayChqNo, v.Ch_bk_Pay_Date, v.Branch, rcid.Receipt.Contact
+                                        var res1 = db.Sp_Add_Receipt("",v.Amount, v.AmountInWords, v.Bank, v.PayChqNo, v.Ch_bk_Pay_Date, v.Branch, rcid.Receipt.Contact
                                                                     , rcid.Receipt.Father_Name, rcid.Receipt.File_Plot_No, rcid.Receipt.Name, v.PaymentType, null,
                                                                     "Grand City", null, null, rcid.Receipt.Size, ReceiptTypes.Cancellation.ToString(), userid, userid, "Cancelled against Dishonored Cheque " + bank + "  " + Cheq_No + "  " + receipt + " Date:" + date, null, rcid.Receipt.Module, "", file, rcid.Receipt.Block, rcid.Receipt.Plot_Type, Owner_Id, TransactionId, rcid.Receipt.Dealership, receiptno1, comp.Id).FirstOrDefault();
                                         {
@@ -1757,7 +1757,7 @@ namespace MeherEstateDevelopers.Controllers
                                         foreach (var v in FineData)
                                         {
                                             var receiptno2 = db.Sp_Get_ReceiptNo("Normal").FirstOrDefault();
-                                            var res1 = db.Sp_Add_Receipt(v.Amount, v.AmountInWords, v.Bank, v.PayChqNo, v.Ch_bk_Pay_Date, v.Branch, rcid.Receipt.Contact
+                                            var res1 = db.Sp_Add_Receipt("",v.Amount, v.AmountInWords, v.Bank, v.PayChqNo, v.Ch_bk_Pay_Date, v.Branch, rcid.Receipt.Contact
                                                                         , rcid.Receipt.Father_Name, rcid.Receipt.File_Plot_No, rcid.Receipt.Name, v.PaymentType, null,
                                                                         "Grand City Kharian", null, null, rcid.Receipt.Size, ReceiptTypes.Cancellation.ToString(), userid, userid, "Cancelled against Dishonored Cheque " + bank + "  " + Cheq_No + "  " + receipt + " Date:" + date, null, rcid.Receipt.Module, "", file, rcid.Receipt.Block, rcid.Receipt.Plot_Type, 0, TransactionId, rcid.Receipt.Size, receiptno2, comp.Id).FirstOrDefault();
 
@@ -1834,7 +1834,7 @@ namespace MeherEstateDevelopers.Controllers
                                     var Transaction_Id = h.RandomNumber();
                                     var receiptno3 = db.Sp_Get_ReceiptNo("Normal").FirstOrDefault();
 
-                                    var res2 = db.Sp_Add_Receipt(rcid.Receipt.Amount, rcid.Receipt.AmountinWords, rd.Bank, rd.PayChqNo, rd.Ch_bk_Pay_Date, rd.Branch, rcid.Receipt.Contact
+                                    var res2 = db.Sp_Add_Receipt("",rcid.Receipt.Amount, rcid.Receipt.AmountinWords, rd.Bank, rd.PayChqNo, rd.Ch_bk_Pay_Date, rd.Branch, rcid.Receipt.Contact
                                                    , rcid.Receipt.Father_Name, rcid.Receipt.File_Plot_No, rcid.Receipt.Name, rd.PaymentType, null,
                                                    rcid.Receipt.Project, null, null, rcid.Receipt.Size, rcid.Receipt.Type, userid, userid, "Against Dishonored Cheque -" + bank + " - " + Cheq_No + " - " + "Amount: " + string.Format("{0:n0}", rcid.Receipt.Amount) + " Receipt No: " + rcid.Receipt.ReceiptNo, null, rcid.Receipt.Module, rcid.Receipt.DevelopmentCharges, Plot_No, Block, Type, Owner_Id, Transaction_Id, rcid.Receipt.Size, receiptno3, comp.Id).FirstOrDefault();
 

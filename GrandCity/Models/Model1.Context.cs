@@ -6973,135 +6973,6 @@ namespace MeherEstateDevelopers.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<long>>("Sp_Add_RealEstateProject", nameParameter, desParameter, typeParameter);
         }
     
-        public virtual ObjectResult<Sp_Add_Receipt_Result> Sp_Add_Receipt(Nullable<decimal> amount, string amountinWords, string bank, string ch_Pay_Draft_No, Nullable<System.DateTime> ch_Pay_Draft_Date, string branch, string contact, string father_Name, Nullable<long> file_Plot_No, string name, string paymentType, Nullable<decimal> plot_Total_Amount, string project, Nullable<decimal> ratePerMarla, string registeration_No, string size, string type, Nullable<long> token, Nullable<long> userid, string text, Nullable<System.DateTime> expdate, string mod, string devchar, string filePlotNumber, string block, string plot_Type, Nullable<long> owner_id, Nullable<long> trans, string dealership, string receiptno, Nullable<int> comp_Id)
-        {
-            var amountParameter = amount.HasValue ?
-                new ObjectParameter("Amount", amount) :
-                new ObjectParameter("Amount", typeof(decimal));
-    
-            var amountinWordsParameter = amountinWords != null ?
-                new ObjectParameter("AmountinWords", amountinWords) :
-                new ObjectParameter("AmountinWords", typeof(string));
-    
-            var bankParameter = bank != null ?
-                new ObjectParameter("Bank", bank) :
-                new ObjectParameter("Bank", typeof(string));
-    
-            var ch_Pay_Draft_NoParameter = ch_Pay_Draft_No != null ?
-                new ObjectParameter("Ch_Pay_Draft_No", ch_Pay_Draft_No) :
-                new ObjectParameter("Ch_Pay_Draft_No", typeof(string));
-    
-            var ch_Pay_Draft_DateParameter = ch_Pay_Draft_Date.HasValue ?
-                new ObjectParameter("Ch_Pay_Draft_Date", ch_Pay_Draft_Date) :
-                new ObjectParameter("Ch_Pay_Draft_Date", typeof(System.DateTime));
-    
-            var branchParameter = branch != null ?
-                new ObjectParameter("Branch", branch) :
-                new ObjectParameter("Branch", typeof(string));
-    
-            var contactParameter = contact != null ?
-                new ObjectParameter("Contact", contact) :
-                new ObjectParameter("Contact", typeof(string));
-    
-            var father_NameParameter = father_Name != null ?
-                new ObjectParameter("Father_Name", father_Name) :
-                new ObjectParameter("Father_Name", typeof(string));
-    
-            var file_Plot_NoParameter = file_Plot_No.HasValue ?
-                new ObjectParameter("File_Plot_No", file_Plot_No) :
-                new ObjectParameter("File_Plot_No", typeof(long));
-    
-            var nameParameter = name != null ?
-                new ObjectParameter("Name", name) :
-                new ObjectParameter("Name", typeof(string));
-    
-            var paymentTypeParameter = paymentType != null ?
-                new ObjectParameter("PaymentType", paymentType) :
-                new ObjectParameter("PaymentType", typeof(string));
-    
-            var plot_Total_AmountParameter = plot_Total_Amount.HasValue ?
-                new ObjectParameter("Plot_Total_Amount", plot_Total_Amount) :
-                new ObjectParameter("Plot_Total_Amount", typeof(decimal));
-    
-            var projectParameter = project != null ?
-                new ObjectParameter("Project", project) :
-                new ObjectParameter("Project", typeof(string));
-    
-            var ratePerMarlaParameter = ratePerMarla.HasValue ?
-                new ObjectParameter("RatePerMarla", ratePerMarla) :
-                new ObjectParameter("RatePerMarla", typeof(decimal));
-    
-            var registeration_NoParameter = registeration_No != null ?
-                new ObjectParameter("Registeration_No", registeration_No) :
-                new ObjectParameter("Registeration_No", typeof(string));
-    
-            var sizeParameter = size != null ?
-                new ObjectParameter("Size", size) :
-                new ObjectParameter("Size", typeof(string));
-    
-            var typeParameter = type != null ?
-                new ObjectParameter("Type", type) :
-                new ObjectParameter("Type", typeof(string));
-    
-            var tokenParameter = token.HasValue ?
-                new ObjectParameter("Token", token) :
-                new ObjectParameter("Token", typeof(long));
-    
-            var useridParameter = userid.HasValue ?
-                new ObjectParameter("userid", userid) :
-                new ObjectParameter("userid", typeof(long));
-    
-            var textParameter = text != null ?
-                new ObjectParameter("text", text) :
-                new ObjectParameter("text", typeof(string));
-    
-            var expdateParameter = expdate.HasValue ?
-                new ObjectParameter("expdate", expdate) :
-                new ObjectParameter("expdate", typeof(System.DateTime));
-    
-            var modParameter = mod != null ?
-                new ObjectParameter("mod", mod) :
-                new ObjectParameter("mod", typeof(string));
-    
-            var devcharParameter = devchar != null ?
-                new ObjectParameter("devchar", devchar) :
-                new ObjectParameter("devchar", typeof(string));
-    
-            var filePlotNumberParameter = filePlotNumber != null ?
-                new ObjectParameter("FilePlotNumber", filePlotNumber) :
-                new ObjectParameter("FilePlotNumber", typeof(string));
-    
-            var blockParameter = block != null ?
-                new ObjectParameter("block", block) :
-                new ObjectParameter("block", typeof(string));
-    
-            var plot_TypeParameter = plot_Type != null ?
-                new ObjectParameter("plot_Type", plot_Type) :
-                new ObjectParameter("plot_Type", typeof(string));
-    
-            var owner_idParameter = owner_id.HasValue ?
-                new ObjectParameter("owner_id", owner_id) :
-                new ObjectParameter("owner_id", typeof(long));
-    
-            var transParameter = trans.HasValue ?
-                new ObjectParameter("trans", trans) :
-                new ObjectParameter("trans", typeof(long));
-    
-            var dealershipParameter = dealership != null ?
-                new ObjectParameter("dealership", dealership) :
-                new ObjectParameter("dealership", typeof(string));
-    
-            var receiptnoParameter = receiptno != null ?
-                new ObjectParameter("Receiptno", receiptno) :
-                new ObjectParameter("Receiptno", typeof(string));
-    
-            var comp_IdParameter = comp_Id.HasValue ?
-                new ObjectParameter("comp_Id", comp_Id) :
-                new ObjectParameter("comp_Id", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Sp_Add_Receipt_Result>("Sp_Add_Receipt", amountParameter, amountinWordsParameter, bankParameter, ch_Pay_Draft_NoParameter, ch_Pay_Draft_DateParameter, branchParameter, contactParameter, father_NameParameter, file_Plot_NoParameter, nameParameter, paymentTypeParameter, plot_Total_AmountParameter, projectParameter, ratePerMarlaParameter, registeration_NoParameter, sizeParameter, typeParameter, tokenParameter, useridParameter, textParameter, expdateParameter, modParameter, devcharParameter, filePlotNumberParameter, blockParameter, plot_TypeParameter, owner_idParameter, transParameter, dealershipParameter, receiptnoParameter, comp_IdParameter);
-        }
-    
         public virtual ObjectResult<Sp_Add_Receipt_Contra_Result> Sp_Add_Receipt_Contra(Nullable<decimal> amount, string amountinWords, string bank, string ch_Pay_Draft_No, Nullable<System.DateTime> ch_Pay_Draft_Date, string branch, string contact, string father_Name, Nullable<long> file_Plot_No, string name, string paymentType, Nullable<decimal> plot_Total_Amount, string project, Nullable<decimal> ratePerMarla, string registeration_No, string size, string type, Nullable<long> token, Nullable<long> userid, string text, Nullable<System.DateTime> expdate, string mod, string devchar, string filePlotNumber, string block, string plot_Type, Nullable<long> owner_id, Nullable<long> trans)
         {
             var amountParameter = amount.HasValue ?
@@ -24636,6 +24507,139 @@ namespace MeherEstateDevelopers.Models
         public virtual ObjectResult<Sp_Get_FilesShortSummary_Result> Sp_Get_FilesShortSummary()
         {
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Sp_Get_FilesShortSummary_Result>("Sp_Get_FilesShortSummary");
+        }
+    
+        public virtual ObjectResult<Sp_Add_Receipt_Result> Sp_Add_Receipt(string description, Nullable<decimal> amount, string amountinWords, string bank, string ch_Pay_Draft_No, Nullable<System.DateTime> ch_Pay_Draft_Date, string branch, string contact, string father_Name, Nullable<long> file_Plot_No, string name, string paymentType, Nullable<decimal> plot_Total_Amount, string project, Nullable<decimal> ratePerMarla, string registeration_No, string size, string type, Nullable<long> token, Nullable<long> userid, string text, Nullable<System.DateTime> expdate, string mod, string devchar, string filePlotNumber, string block, string plot_Type, Nullable<long> owner_id, Nullable<long> trans, string dealership, string receiptno, Nullable<int> comp_Id)
+        {
+            var descriptionParameter = description != null ?
+                new ObjectParameter("Description", description) :
+                new ObjectParameter("Description", typeof(string));
+    
+            var amountParameter = amount.HasValue ?
+                new ObjectParameter("Amount", amount) :
+                new ObjectParameter("Amount", typeof(decimal));
+    
+            var amountinWordsParameter = amountinWords != null ?
+                new ObjectParameter("AmountinWords", amountinWords) :
+                new ObjectParameter("AmountinWords", typeof(string));
+    
+            var bankParameter = bank != null ?
+                new ObjectParameter("Bank", bank) :
+                new ObjectParameter("Bank", typeof(string));
+    
+            var ch_Pay_Draft_NoParameter = ch_Pay_Draft_No != null ?
+                new ObjectParameter("Ch_Pay_Draft_No", ch_Pay_Draft_No) :
+                new ObjectParameter("Ch_Pay_Draft_No", typeof(string));
+    
+            var ch_Pay_Draft_DateParameter = ch_Pay_Draft_Date.HasValue ?
+                new ObjectParameter("Ch_Pay_Draft_Date", ch_Pay_Draft_Date) :
+                new ObjectParameter("Ch_Pay_Draft_Date", typeof(System.DateTime));
+    
+            var branchParameter = branch != null ?
+                new ObjectParameter("Branch", branch) :
+                new ObjectParameter("Branch", typeof(string));
+    
+            var contactParameter = contact != null ?
+                new ObjectParameter("Contact", contact) :
+                new ObjectParameter("Contact", typeof(string));
+    
+            var father_NameParameter = father_Name != null ?
+                new ObjectParameter("Father_Name", father_Name) :
+                new ObjectParameter("Father_Name", typeof(string));
+    
+            var file_Plot_NoParameter = file_Plot_No.HasValue ?
+                new ObjectParameter("File_Plot_No", file_Plot_No) :
+                new ObjectParameter("File_Plot_No", typeof(long));
+    
+            var nameParameter = name != null ?
+                new ObjectParameter("Name", name) :
+                new ObjectParameter("Name", typeof(string));
+    
+            var paymentTypeParameter = paymentType != null ?
+                new ObjectParameter("PaymentType", paymentType) :
+                new ObjectParameter("PaymentType", typeof(string));
+    
+            var plot_Total_AmountParameter = plot_Total_Amount.HasValue ?
+                new ObjectParameter("Plot_Total_Amount", plot_Total_Amount) :
+                new ObjectParameter("Plot_Total_Amount", typeof(decimal));
+    
+            var projectParameter = project != null ?
+                new ObjectParameter("Project", project) :
+                new ObjectParameter("Project", typeof(string));
+    
+            var ratePerMarlaParameter = ratePerMarla.HasValue ?
+                new ObjectParameter("RatePerMarla", ratePerMarla) :
+                new ObjectParameter("RatePerMarla", typeof(decimal));
+    
+            var registeration_NoParameter = registeration_No != null ?
+                new ObjectParameter("Registeration_No", registeration_No) :
+                new ObjectParameter("Registeration_No", typeof(string));
+    
+            var sizeParameter = size != null ?
+                new ObjectParameter("Size", size) :
+                new ObjectParameter("Size", typeof(string));
+    
+            var typeParameter = type != null ?
+                new ObjectParameter("Type", type) :
+                new ObjectParameter("Type", typeof(string));
+    
+            var tokenParameter = token.HasValue ?
+                new ObjectParameter("Token", token) :
+                new ObjectParameter("Token", typeof(long));
+    
+            var useridParameter = userid.HasValue ?
+                new ObjectParameter("userid", userid) :
+                new ObjectParameter("userid", typeof(long));
+    
+            var textParameter = text != null ?
+                new ObjectParameter("text", text) :
+                new ObjectParameter("text", typeof(string));
+    
+            var expdateParameter = expdate.HasValue ?
+                new ObjectParameter("expdate", expdate) :
+                new ObjectParameter("expdate", typeof(System.DateTime));
+    
+            var modParameter = mod != null ?
+                new ObjectParameter("mod", mod) :
+                new ObjectParameter("mod", typeof(string));
+    
+            var devcharParameter = devchar != null ?
+                new ObjectParameter("devchar", devchar) :
+                new ObjectParameter("devchar", typeof(string));
+    
+            var filePlotNumberParameter = filePlotNumber != null ?
+                new ObjectParameter("FilePlotNumber", filePlotNumber) :
+                new ObjectParameter("FilePlotNumber", typeof(string));
+    
+            var blockParameter = block != null ?
+                new ObjectParameter("block", block) :
+                new ObjectParameter("block", typeof(string));
+    
+            var plot_TypeParameter = plot_Type != null ?
+                new ObjectParameter("plot_Type", plot_Type) :
+                new ObjectParameter("plot_Type", typeof(string));
+    
+            var owner_idParameter = owner_id.HasValue ?
+                new ObjectParameter("owner_id", owner_id) :
+                new ObjectParameter("owner_id", typeof(long));
+    
+            var transParameter = trans.HasValue ?
+                new ObjectParameter("trans", trans) :
+                new ObjectParameter("trans", typeof(long));
+    
+            var dealershipParameter = dealership != null ?
+                new ObjectParameter("dealership", dealership) :
+                new ObjectParameter("dealership", typeof(string));
+    
+            var receiptnoParameter = receiptno != null ?
+                new ObjectParameter("Receiptno", receiptno) :
+                new ObjectParameter("Receiptno", typeof(string));
+    
+            var comp_IdParameter = comp_Id.HasValue ?
+                new ObjectParameter("comp_Id", comp_Id) :
+                new ObjectParameter("comp_Id", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Sp_Add_Receipt_Result>("Sp_Add_Receipt", descriptionParameter, amountParameter, amountinWordsParameter, bankParameter, ch_Pay_Draft_NoParameter, ch_Pay_Draft_DateParameter, branchParameter, contactParameter, father_NameParameter, file_Plot_NoParameter, nameParameter, paymentTypeParameter, plot_Total_AmountParameter, projectParameter, ratePerMarlaParameter, registeration_NoParameter, sizeParameter, typeParameter, tokenParameter, useridParameter, textParameter, expdateParameter, modParameter, devcharParameter, filePlotNumberParameter, blockParameter, plot_TypeParameter, owner_idParameter, transParameter, dealershipParameter, receiptnoParameter, comp_IdParameter);
         }
     }
 }

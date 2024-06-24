@@ -485,7 +485,7 @@ namespace MeherEstateDevelopers.Controllers
                                 DiscountAmount = 0;
                             }
                             var receiptno = db.Sp_Get_ReceiptNo("Normal").FirstOrDefault();
-                            res = db.Sp_Add_Receipt(rd.Amount, GeneralMethods.NumberToWords(Convert.ToInt32(rd.Amount)), rd.Bank, rd.PayChqNo, rd.Ch_bk_Pay_Date, rd.Branch, comdata.Mobile_1
+                            res = db.Sp_Add_Receipt("",rd.Amount, GeneralMethods.NumberToWords(Convert.ToInt32(rd.Amount)), rd.Bank, rd.PayChqNo, rd.Ch_bk_Pay_Date, rd.Branch, comdata.Mobile_1
                                                                                          , comdata.Father_Husband, comdata.ComRom_Id, comdata.Name, rd.PaymentType, 0,
                                                                                          CommercialRoomDetails.Project_Name, 0, null, "", ReceiptTypes.Booking.ToString(), comdata.ComRom_Id, userid, ComRom_Num, null, Modules.CommercialManagement.ToString(), null, ComRom_Num, CommercialRoomDetails.Floor, null, OwnerId, TransactionId, "", receiptno, comp.Id).FirstOrDefault();
                             {
