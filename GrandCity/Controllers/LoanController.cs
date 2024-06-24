@@ -1070,7 +1070,7 @@ namespace MeherEstateDevelopers.Controllers
                     var installmentsData = db.Loan_Installments.Where(x => installments.Contains(x.Id)).ToList();
                     var empId = installmentsData.Select(y => y.Emp_Id).FirstOrDefault();
                     var empdata = db.Employees.Where(x => x.Id == empId).FirstOrDefault();
-                    var res = db.Sp_Add_Receipt(installmentsData.Sum(x => x.Loan_Amt), GeneralMethods.NumberToWords(Convert.ToInt32(installmentsData.Sum(x => x.Loan_Amt))), string.Empty, string.Empty, null, string.Empty, empdata.Mobile_1,
+                    var res = db.Sp_Add_Receipt("", installmentsData.Sum(x => x.Loan_Amt), GeneralMethods.NumberToWords(Convert.ToInt32(installmentsData.Sum(x => x.Loan_Amt))), string.Empty, string.Empty, null, string.Empty, empdata.Mobile_1,
                         empdata.Father_Name, empdata.Id, empdata.Name, "Cash", null, "Grand City Kharian", 0, string.Empty, string.Empty, "LoanSettlement", uid, uid,
                         "Settlement for Installments " + string.Join(" , ", installmentsData.Select(x => x.Date.Value.ToString("MM/yyyy"))), null, "Loan", string.Empty, empdata.Employee_Code, string.Empty, string.Empty,
                         empdata.Id, new Helpers().RandomNumber(), "", receiptno, comp.Id).FirstOrDefault();
