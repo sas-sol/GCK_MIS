@@ -1149,7 +1149,7 @@ namespace MeherEstateDevelopers.Controllers
             //    return Json(false);
             //}
             var receiptno = db.Sp_Get_ReceiptNo("Normal").FirstOrDefault();
-            var res3 = db.Sp_Add_Receipt(Amount, GeneralMethods.NumberToWords(Convert.ToInt32(Amount)), null, null, null, null, res2.Mobile_1
+            var res3 = db.Sp_Add_Receipt("", Amount, GeneralMethods.NumberToWords(Convert.ToInt32(Amount)), null, null, null, null, res2.Mobile_1
                    , res2.Father_Husband, PlotId, res2.Name, "Cash", 0, "Grand City Kharian", 0, null, res1.Plot_Size, ReceiptTypes.Electricity_Charges.ToString(), userid, userid, "", null, Modules.PlotManagement.ToString(), "", res1.Plot_No, res1.Block_Name, res1.Type, 0, TransactionId, "", receiptno, comp.Id).FirstOrDefault();
 
             // add phase in Receipt data
@@ -1611,7 +1611,7 @@ namespace MeherEstateDevelopers.Controllers
                 try
                 {
                     var receiptno = db.Sp_Get_ReceiptNo("Normal").FirstOrDefault();
-                    var res4 = db.Sp_Add_Receipt(res3.Charges, GeneralMethods.NumberToWords(Convert.ToInt32(res3.Charges)), null, null, null, null, res2.FirstOrDefault().Mobile_1
+                    var res4 = db.Sp_Add_Receipt("", res3.Charges, GeneralMethods.NumberToWords(Convert.ToInt32(res3.Charges)), null, null, null, null, res2.FirstOrDefault().Mobile_1
                            , string.Join(",", res2.Select(x => x.Father_Husband)), PlotId, string.Join(",", res2.Select(x => x.Name)), "Cash", 0, "Grand City Kharian", 0, null, res1.Plot_Size, ReceiptTypes.New_Connection_Charges.ToString(), userid, userid, "", null, Modules.PlotManagement.ToString(), Connection, res1.Plot_No, res1.Block_Name, res1.Type, 0, TransactionId, "", receiptno, comp.Id).FirstOrDefault();
                     
                     //add phase in receipt data
@@ -1716,7 +1716,7 @@ namespace MeherEstateDevelopers.Controllers
                 }
                 var receiptno = db.Sp_Get_ReceiptNo("Normal").FirstOrDefault();
                 var Narration = "Cash Amount Received against Plot no:" + res.FirstOrDefault().FileFormNumber + " Block: " + res.FirstOrDefault().Block + " Plot Type : " + res.FirstOrDefault().Plot_Type;
-                var res4 = db.Sp_Add_Receipt(rd.Amount, GeneralMethods.NumberToWords(Convert.ToInt32(rd.Amount)), null, null, null, null, string.Join(",", res.Select(x => x.Mobile_1))
+                var res4 = db.Sp_Add_Receipt("", rd.Amount, GeneralMethods.NumberToWords(Convert.ToInt32(rd.Amount)), null, null, null, null, string.Join(",", res.Select(x => x.Mobile_1))
                        , string.Join(",", res.Select(x => x.Father_Husband)), fileno.Id, string.Join(",", res.Select(x => x.Name)), rd.PaymentType, 0, "Grand City Kharian", 0, null, res.FirstOrDefault().Plot_Size, rd.Type, userid, userid, Remarks, null, Modules.FileManagement.ToString(), "", res.FirstOrDefault().FileFormNumber.ToString(), res.FirstOrDefault().Block, res.FirstOrDefault().Plot_Type, 0, TransactionId, "", receiptno, comp.Id).FirstOrDefault();
                
                 // add phase in receipt data
@@ -1779,7 +1779,7 @@ namespace MeherEstateDevelopers.Controllers
                 Helpers h = new Helpers();
                 var receiptno = db.Sp_Get_ReceiptNo("Normal").FirstOrDefault();
                 var Narration = "Cash Amount Received against Plot no:" + res1.Plot_No + " Block: " + res1.Block_Name + " Plot Type : " + res1.Type;
-                var res4 = db.Sp_Add_Receipt(rd.Amount, GeneralMethods.NumberToWords(Convert.ToInt32(rd.Amount)), null, null, null, null, res2.Mobile_1
+                var res4 = db.Sp_Add_Receipt("", rd.Amount, GeneralMethods.NumberToWords(Convert.ToInt32(rd.Amount)), null, null, null, null, res2.Mobile_1
                        , res2.Father_Husband, PlotId, res2.Name, rd.PaymentType, 0, "Grand City Kharian", 0, null, res1.Plot_Size, rd.Type, userid, userid, "", null, Modules.PlotManagement.ToString(), "", res1.Plot_No, res1.Block_Name, res1.Type, 0, TransactionId, "", receiptno, comp.Id).FirstOrDefault();
 
                 //add phase in receipt data
@@ -2897,7 +2897,7 @@ namespace MeherEstateDevelopers.Controllers
             {
                 try
                 {
-                    var res3 = db.Sp_Add_Receipt(Amount, GeneralMethods.NumberToWords(Convert.ToInt32(Amount)), rd.Bank, rd.PayChqNo, rd.Ch_bk_Pay_Date, rd.Branch, res2.Mobile_1
+                    var res3 = db.Sp_Add_Receipt("", Amount, GeneralMethods.NumberToWords(Convert.ToInt32(Amount)), rd.Bank, rd.PayChqNo, rd.Ch_bk_Pay_Date, rd.Branch, res2.Mobile_1
                            , res2.Father_Husband, PlotId, res2.Name, rd.PaymentType, 0, "Grand City Kharian", 0, null, res1.Plot_Size, ReceiptTypes.ServiceCharges.ToString(), userid, userid, "", null, Modules.PlotManagement.ToString(), "", res1.Plot_No, res1.Block_Name, res1.Type, 0, TransactionId, "", receiptno, comp.Id).FirstOrDefault();
                     // add phase in Receipt data
                     var receiptdata = db.Receipts.Where(r => r.Id == res3.Receipt_Id).FirstOrDefault();

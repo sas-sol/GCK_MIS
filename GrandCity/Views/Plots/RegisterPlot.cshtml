@@ -255,6 +255,10 @@
                             <input class="form-control coma" placeholder="250,000" required>
                             <input type="hidden" id="Amount" class="amt" required>
                         </div>
+                        <div class="form-group col-md-2">
+                            <label>Description</label>
+                            <input type="text" class="form-control" id="description" name="Description" placeholder="Add Remarks here" required>
+                        </div>
                         <div class="form-group col-md-2 paymentotherinfo">
                             <label id="paytypelabel">-</label>
                             <input type="text" class="form-control" id="paymenttype" placeholder="" disabled required>
@@ -272,9 +276,9 @@
                             <input type="text" class="form-control" id="Branch" placeholder="Mall Rd" disabled required>
                         </div>
                         @*<div class="form-group col-md-1 paymentotherinfo">
-                                <label>Scan File </label>
-                                <button class=" btn btn-block" data-v="1" type="button" id="scanbtn">Scan</button>
-                            </div>*@
+            <label>Scan File </label>
+            <button class=" btn btn-block" data-v="1" type="button" id="scanbtn">Scan</button>
+        </div>*@
                         <div class="form-group col-md-3 paymentotherinfo">
                             <div style="padding-bottom: 10px !important; cursor: pointer;" onclick="UpFileee()" id="btnUpload" value="Upload Files">Upload</div>
                             <input type="file" id="FileUpload1" />
@@ -472,89 +476,89 @@
             }).then((result) => {
                 if (result.isConfirmed) {
                     let strct = `<hr/>
-<div class="row own-row-dat">
+                    <div class="row own-row-dat">
 
-                                <div class="col-md-12">
-                                    <div class="form-row">
-<div class="form-group col-md-3">
-    <label>Name</label>
-    <input type="text" class="form-control Name" name="Name">
-</div>
-<div class="form-group col-md-3">
-    <label>Father's/Husband's Name</label>
-    <input type="text" class="form-control Father_Husband" name="Father_Husband">
-</div>
-<div class="form-group col-md-3">
-    <label>CNIC / NICOP</label>
-    <input type="text" class="form-control CNIC_NICOP" name="CNIC_NICOP" placeholder="12345-1234567-1   or   123456-123456-1">
-</div>
-<div class="form-group col-md-2">
-    <label>Date Of Birth</label>
-    <input type="text" class="form-control Date_Of_Birth" data-provide="datepicker" placeholder="mm/dd/yyyy" name="Date_Of_Birth">
-</div>
-<div class="form-group col-md-6">
-    <label>Postal Address</label>
-    <input type="text" class="form-control Postal_Address" name="Postal_Address" placeholder="1234 Main St">
-</div>
-<div class="form-group col-md-6">
-    <label>Residential Address</label>
-    <input type="text" class="form-control Residential_Address" name="Residential_Address" placeholder="Apartment, Plot, or floor">
-</div>
-<div class="form-group col-md-2">
-    <label>City</label>
-@Html.DropDownList("City", null, "Choose..", new { @class = "form-control", required = "" })</div>
-<div class="form-group col-md-3">
-    <label>Occupation</label>
-    <input type="text" class="form-control Occupation" name="Occupation">
-</div>
-<div class="form-group col-md-2">
-    <label>Nationality</label>
-    <input type="text" class="form-control Nationality" name="Nationality">
-</div>
-<div class="form-group col-md-3">
-    <label>Email</label>
-    <input type="text" class="form-control Email" name="Email">
-</div>
-                                    </div>
-<div class="form-row">
-    <div class="form-group col-md-3">
-        <label>Phone Office</label>
-        <input type="text" class="form-control Phone_Office" name="Phone_Office">
-    </div>
-    <div class="form-group col-md-3">
-        <label>Residential</label>
-        <input type="text" class="form-control Residential" name="Residential">
-    </div>
-    <div class="form-group col-md-3">
-        <label>Mobile 1</label>
-        <input type="text" class="form-control Mobile_1" placeholder="03121234567" name="Mobile_1">
-    </div>
-    <div class="form-group col-md-3">
-        <label>Mobile 2</label>
-        <input type="text" class="form-control Mobile_2" pattern="^0\d{10}" placeholder="03121234567" name="Mobile_2">
-    </div>
-</div>
-<h6 class="c-grey-900">Nominee</h6>
-<div class="form-row">
-    <div class="form-group col-md-3">
-        <label>Name</label>
-        <input type="text" class="form-control Nominee_Name" name="Nominee_Name">
-    </div>
-    <div class="form-group col-md-2">
-        <label>CNIC / NICOP</label>
-        <input type="text" class="form-control Nominee_CNIC_NICOP"  placeholder="12345-1234567-1 or 123456-123456-1" name="Nominee_CNIC_NICOP">
-    </div>
-    <div class="form-group col-md-2">
-        <label>Relation</label>
-        <input class="form-control Nominee_Relation" name="Nominee_Relation" placeholder="">
-    </div>
-    <div class="form-group col-md-5">
-        <label>Address</label>
-        <input type="text" class="form-control Nominee_Address" name="Nominee_Address" placeholder="1234 Main St">
-    </div>
-</div>
-                                </div>
-                            </div>`;
+                                                    <div class="col-md-12">
+                                                        <div class="form-row">
+                    <div class="form-group col-md-3">
+                        <label>Name</label>
+                        <input type="text" class="form-control Name" name="Name">
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label>Father's/Husband's Name</label>
+                        <input type="text" class="form-control Father_Husband" name="Father_Husband">
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label>CNIC / NICOP</label>
+                        <input type="text" class="form-control CNIC_NICOP" name="CNIC_NICOP" placeholder="12345-1234567-1   or   123456-123456-1">
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label>Date Of Birth</label>
+                        <input type="text" class="form-control Date_Of_Birth" data-provide="datepicker" placeholder="mm/dd/yyyy" name="Date_Of_Birth">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Postal Address</label>
+                        <input type="text" class="form-control Postal_Address" name="Postal_Address" placeholder="1234 Main St">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Residential Address</label>
+                        <input type="text" class="form-control Residential_Address" name="Residential_Address" placeholder="Apartment, Plot, or floor">
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label>City</label>
+                    @Html.DropDownList("City", null, "Choose..", new { @class = "form-control", required = "" })</div>
+                    <div class="form-group col-md-3">
+                        <label>Occupation</label>
+                        <input type="text" class="form-control Occupation" name="Occupation">
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label>Nationality</label>
+                        <input type="text" class="form-control Nationality" name="Nationality">
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label>Email</label>
+                        <input type="text" class="form-control Email" name="Email">
+                    </div>
+                                                        </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-3">
+                            <label>Phone Office</label>
+                            <input type="text" class="form-control Phone_Office" name="Phone_Office">
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label>Residential</label>
+                            <input type="text" class="form-control Residential" name="Residential">
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label>Mobile 1</label>
+                            <input type="text" class="form-control Mobile_1" placeholder="03121234567" name="Mobile_1">
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label>Mobile 2</label>
+                            <input type="text" class="form-control Mobile_2" pattern="^0\d{10}" placeholder="03121234567" name="Mobile_2">
+                        </div>
+                    </div>
+                    <h6 class="c-grey-900">Nominee</h6>
+                    <div class="form-row">
+                        <div class="form-group col-md-3">
+                            <label>Name</label>
+                            <input type="text" class="form-control Nominee_Name" name="Nominee_Name">
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label>CNIC / NICOP</label>
+                            <input type="text" class="form-control Nominee_CNIC_NICOP"  placeholder="12345-1234567-1 or 123456-123456-1" name="Nominee_CNIC_NICOP">
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label>Relation</label>
+                            <input class="form-control Nominee_Relation" name="Nominee_Relation" placeholder="">
+                        </div>
+                        <div class="form-group col-md-5">
+                            <label>Address</label>
+                            <input type="text" class="form-control Nominee_Address" name="Nominee_Address" placeholder="1234 Main St">
+                        </div>
+                    </div>
+                    </div>
+                    </div>`;
             $('.Tran-own').append(strct);
         });
         $('.comp-prop-check').unbind().change(function () {

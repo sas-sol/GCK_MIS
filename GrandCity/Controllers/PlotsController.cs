@@ -967,7 +967,7 @@ namespace MeherEstateDevelopers.Controllers
                     {
                         if (recamt > 0 || brdd.Amount > 0)
                         {
-                            var res3 = db.Sp_Add_Receipt(recamt, GeneralMethods.NumberToWords((int)recamt), "", "", null, "", string.Join("-", Owners.Select(x => x.Mobile_1))
+                            var res3 = db.Sp_Add_Receipt(brdd.Description,recamt, GeneralMethods.NumberToWords((int)recamt), "", "", null, "", string.Join("-", Owners.Select(x => x.Mobile_1))
                         , string.Join("-", Owners.Select(x => x.Father_Husband)), Plot_Id, string.Join("-", Owners.Select(x => x.Name)), "Cash", Plot_Total_Price,
                         "Grand City Kharian", Rate_Per_Marla, null, plot.Plot_Size, ReceiptTypes.Booking.ToString(), userid, userid, "", null, Modules.PlotManagement.ToString(), "", plot.Plot_No, plot.Block_Name, plot.Type, GroupTag, TransactionId, res2.DealerName, receiptno, comp.Id).FirstOrDefault();
                             var plotdata = db.Plots.Where(p => p.Id == Plot_Id).FirstOrDefault();
@@ -993,7 +993,7 @@ namespace MeherEstateDevelopers.Controllers
                     {
                         if (brdd.Ch_bk_Pay_Date !=null && brdd.Amount <= 0)
                         {
-                            var res3 = db.Sp_Add_Receipt(brdd.Amount, GeneralMethods.NumberToWords((int)brdd.Amount), brdd.Bank, brdd.PayChqNo, brdd.Ch_bk_Pay_Date, brdd.Branch, string.Join("-", Owners.Select(x => x.Mobile_1))
+                            var res3 = db.Sp_Add_Receipt("", brdd.Amount, GeneralMethods.NumberToWords((int)brdd.Amount), brdd.Bank, brdd.PayChqNo, brdd.Ch_bk_Pay_Date, brdd.Branch, string.Join("-", Owners.Select(x => x.Mobile_1))
                             , string.Join("-", Owners.Select(x => x.Father_Husband)), Plot_Id, string.Join("-", Owners.Select(x => x.Name)), brdd.PaymentType, Plot_Total_Price,
                             "Grand City Kharian", Rate_Per_Marla, null, plot.Plot_Size, ReceiptTypes.Booking.ToString(), userid, userid, "", null, Modules.PlotManagement.ToString(), "", plot.Plot_No, plot.Block_Name, plot.Type, GroupTag, TransactionId, res2.DealerName, receiptno, comp.Id).FirstOrDefault();
                             var plotdata = db.Plots.Where(p => p.Id == Plot_Id).FirstOrDefault();

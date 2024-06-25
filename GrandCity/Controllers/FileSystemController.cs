@@ -225,7 +225,7 @@ namespace MeherEstateDevelopers.Controllers
                         if (payType == "DealerAdjustment")
                         {
                             var receiptno = db.Sp_Get_ReceiptNo("Normal").FirstOrDefault();
-                            var res = db.Sp_Add_Receipt(recamt, GeneralMethods.NumberToWords((int)recamt), Receiptdata.Select(x => x.Bank).FirstOrDefault(), Receiptdata.Select(x => x.PayChqNo).FirstOrDefault(), Receiptdata.Select(x => x.Ch_bk_Pay_Date).FirstOrDefault(), Receiptdata.Select(x => x.Branch).FirstOrDefault(), string.Join(",", filedatas.Select(x => x.Mobile_1))
+                            var res = db.Sp_Add_Receipt(Receiptdata.Select(x => x.Description).FirstOrDefault(), recamt, GeneralMethods.NumberToWords((int)recamt), Receiptdata.Select(x => x.Bank).FirstOrDefault(), Receiptdata.Select(x => x.PayChqNo).FirstOrDefault(), Receiptdata.Select(x => x.Ch_bk_Pay_Date).FirstOrDefault(), Receiptdata.Select(x => x.Branch).FirstOrDefault(), string.Join(",", filedatas.Select(x => x.Mobile_1))
                                                 , string.Join(",", filedatas.Select(x => x.Father_Husband)), fileno.Id, string.Join(",", filedatas.Select(x => x.Name)), Receiptdata.Select(x => x.PaymentType).FirstOrDefault(), file_Installments.Total,
                                                 Receiptdata.Select(x => x.Project_Name).FirstOrDefault(), file_Installments.Rate, null, filedatas.Select(x => x.Plot_Size).FirstOrDefault(), ReceiptTypes.Booking.ToString(), filedatas.Select(x => x.File_Form_Id).FirstOrDefault(), userid, "File Booking", null, Modules.FileManagement.ToString(), Devchar, FileFormNumber, appdetail.File.Block, appdetail.File.Type, filedatas.Select(x => x.Group_Tag).FirstOrDefault(), H.RandomNumber(), appdetail.Dealership.Dealership_Name, receiptno, comp.Id).FirstOrDefault();
                             // add phase in Receipt data
@@ -259,7 +259,7 @@ namespace MeherEstateDevelopers.Controllers
                         foreach (var rd in Receiptdata)
                         {
                             var receiptno = db.Sp_Get_ReceiptNo("Normal").FirstOrDefault();
-                            var res = db.Sp_Add_Receipt(rd.Amount, rd.AmountInWords, rd.Bank, rd.PayChqNo, rd.Ch_bk_Pay_Date, rd.Branch, string.Join(",", filedatas.Select(x => x.Mobile_1))
+                            var res = db.Sp_Add_Receipt(rd.Description, rd.Amount, rd.AmountInWords, rd.Bank, rd.PayChqNo, rd.Ch_bk_Pay_Date, rd.Branch, string.Join(",", filedatas.Select(x => x.Mobile_1))
                                                 , string.Join(",", filedatas.Select(x => x.Father_Husband)), fileno.Id, string.Join(",", filedatas.Select(x => x.Name)), rd.PaymentType, file_Installments.Total,
                                                 FileForm.Project, file_Installments.Rate, null, filedatas.Select(x => x.Plot_Size).FirstOrDefault(), ReceiptTypes.Booking.ToString(), filedatas.Select(x => x.File_Form_Id).FirstOrDefault(), userid, "File Booking", null, Modules.FileManagement.ToString(), Devchar, FileFormNumber, appdetail.File.Block, appdetail.File.Type, filedatas.Select(x => x.Group_Tag).FirstOrDefault(), H.RandomNumber(), appdetail.Dealership.Dealership_Name, receiptno, comp.Id).FirstOrDefault();
 
@@ -861,7 +861,7 @@ namespace MeherEstateDevelopers.Controllers
                 try
                 {
                     db.Sp_Add_FileTransfer(Req_Id).FirstOrDefault();
-                    var res1 = db.Sp_Add_Receipt(rd.Amount, rd.AmountInWords, rd.Bank, rd.PayChqNo, rd.Ch_bk_Pay_Date, rd.Branch, string.Join(",", filedatas.Select(x => x.Mobile_1).Distinct())
+                    var res1 = db.Sp_Add_Receipt("", rd.Amount, rd.AmountInWords, rd.Bank, rd.PayChqNo, rd.Ch_bk_Pay_Date, rd.Branch, string.Join(",", filedatas.Select(x => x.Mobile_1).Distinct())
                                         , string.Join(",", filedatas.Select(x => x.Father_Husband).Distinct()), appdetail.Id, string.Join(",", filedatas.Select(x => x.Name)), "Cash", filedatas.Select(x => x.Total).FirstOrDefault(),
                                         rd.Project_Name, filedatas.Select(x => x.Rate).FirstOrDefault(), null, filedatas.Select(x => x.Plot_Size).FirstOrDefault(), ReceiptTypes.Transfer.ToString(), TransactionId, userid, "File Transfer", null, Modules.FileManagement.ToString(), rd.DevCharges, rd.File_Plot_Number.ToString(), appdetail.Block, appdetail.Type, Req_Id, TransactionId, "", receiptno, comp.Id).FirstOrDefault();
                     // add phase in Receipt data

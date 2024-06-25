@@ -249,6 +249,10 @@
                                 <input class="form-control coma" placeholder="250,000" required>
                                 <input type="hidden" id="Amount" class="amt" required>
                             </div>
+                            <div class="form-group col-md-2">
+                                <label>Description</label>
+                                <input type="text" class="form-control" id="description" name="Description" placeholder="Add Remarks here" required>
+                            </div>
                             <div class="form-group col-md-2 paymentotherinfo">
                                 <label id="paytypelabel">-</label>
                                 <input type="text" class="form-control" id="paymenttype" placeholder="" disabled required>
@@ -267,11 +271,10 @@
                                 <label>Branch </label>
                                 <input type="text" class="form-control" id="Branch" placeholder="Mall Rd" disabled required>
                             </div>
-                            @*<div class="form-group col-md-1 paymentotherinfo">
+                                    @*<div class="form-group col-md-1 paymentotherinfo">
                                     <label>Scan File </label>
                                     <button class=" btn btn-block" data-v="1" type="button" id="scanbtn">Scan</button>
-
-                                </div>*@
+                                    </div>*@
                             <div class="form-group col-md-3">
                                 @*<input type="button" onclick="UpFileee()" id="btnUpload" value="Upload Files" />*@
                                 <div style="padding-bottom: 10px !important; cursor: pointer;" onclick="UpFileee()" id="btnUpload" value="Upload Files">Upload</div>
@@ -554,7 +557,7 @@
             for (var i = 1; i <= paycont; i++) {
                 var recedata = {
                     Amount: "", AmountInWords: "", Bank: "", PayChqNo: "", PaymentType: "",
-                    Project_Name: "", Branch: "", Ch_bk_Pay_Date: "", FileImage: "",
+                    Project_Name: "", Branch: "", Ch_bk_Pay_Date: "", FileImage: "", Description: "",
                 };
                 recedata.Amount = $("#pay-" + i + " #Amount").val();
                 recedata.AmountInWords = InWords($("#pay-" + i + " #Amount").val());
@@ -566,8 +569,10 @@
                 recedata.Ch_bk_Pay_Date = $("#pay-" + i + " #cbp-date").val();
                 recedata.FileImage = $("#pay-" + i + " #scanned").attr('src');
                 recedata.Mobile_1 = $(this).find("input[name=Mobile_1]").val();
+                recedata.Description = $("#pay-" + i + " #description").val();
                     debugger;
                 allrecepts.push(recedata);
+                console.log(recedata);
             }
             $("#reg-file").prop("disabled", true);
             var fileno = $("#app-num").val();

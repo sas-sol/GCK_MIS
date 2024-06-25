@@ -1124,7 +1124,7 @@ namespace MeherEstateDevelopers.Controllers
             db.Sp_Add_CommercialComments(Convert.ToInt32(recData.Module_Id), roomData.ApplicationNo + "Token", userid, ActivityType.Record_Upatation.ToString());
 
             var receiptno = db.Sp_Get_ReceiptNo("Normal").FirstOrDefault();
-            var res = db.Sp_Add_Receipt(recData.Amount, GeneralMethods.NumberToWords(Convert.ToInt32(recData.Amount)), Bank, InstNo, InstDate, Branch, recData.Contact
+            var res = db.Sp_Add_Receipt("", recData.Amount, GeneralMethods.NumberToWords(Convert.ToInt32(recData.Amount)), Bank, InstNo, InstDate, Branch, recData.Contact
                                                           , recData.Father_Name, recData.Module_Id, recData.Name, PaymentType, 0,
                                                           recData.Project, 0, null, "", ReceiptTypes.BookingToken.ToString(), TransactionId, userid, "Commercial Token", exp
                                                           , recData.Module, null, roomData.ApplicationNo, roomData.FloorName, null, recData.Lead_Id, TransactionId, "", receiptno, comp.Id).FirstOrDefault();

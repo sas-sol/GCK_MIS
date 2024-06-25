@@ -976,6 +976,7 @@ namespace MeherEstateDevelopers.Models
         public string FilePlotNumber { get; set; }
         public string FileImage { get; set; }
         public string ModuleType { get; set; }
+        public string Description { get; set; } 
     }
 
     public class BookingReceiptData
@@ -986,6 +987,7 @@ namespace MeherEstateDevelopers.Models
         public DateTime? Ch_bk_Pay_Date { get; set; }
         public string Bank { get; set; }
         public string Branch { get; set; }
+        public string Description { get; set; }
     }
     public class RecoveryReport
     {

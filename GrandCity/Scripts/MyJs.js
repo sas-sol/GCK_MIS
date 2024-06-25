@@ -6183,7 +6183,8 @@ $(document).on("click", ".register-plot", function (e) {
         PayChqNo: $('.paymentotherinfo #paymenttype').val(),
         Ch_bk_Pay_Date: $('#cbp-date').val(),
         Bank: $('#Bank').val(),
-        Branch: $('#Branch').val()
+        Branch: $('#Branch').val(),
+        Description: $('#description').val()
     }
     //debugger
     var data = { Owners: own, Plot_Id: $("#plt-id").val(), TransactionId: trans, isPayment: true, DealersId: DealersId, brdd: rd ,recamt: received};

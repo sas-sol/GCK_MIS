@@ -889,7 +889,7 @@ namespace MeherEstateDevelopers.Controllers
                 try
                 {
 
-                    var res2 = db.Sp_Add_Receipt(rd.Amount, rd.AmountInWords, rd.Bank, rd.PayChqNo, rd.Ch_bk_Pay_Date, rd.Branch, string.Join(" , ", lastowner.Select(x => x.Mobile_1).Distinct())
+                    var res2 = db.Sp_Add_Receipt(rd.Description,rd.Amount, rd.AmountInWords, rd.Bank, rd.PayChqNo, rd.Ch_bk_Pay_Date, rd.Branch, string.Join(" , ", lastowner.Select(x => x.Mobile_1).Distinct())
                   , string.Join(" , ", lastowner.Select(x => x.Father_Husband).Distinct()), appdetail.Id, string.Join(" , ", lastowner.Select(x => x.Name).Distinct()), rd.PaymentType, rd.TotalAmount,
                   rd.Project_Name, rd.Rate, null, rd.Plot_Size, ReceiptTypes.Installment.ToString(), userid, userid, Paymentfor, null, Modules.FileManagement.ToString(), rd.DevCharges, rd.FilePlotNumber.ToString(), appdetail.Block, appdetail.Type, lastowner.Select(x => x.Group_Tag).FirstOrDefault(), TransactionId, "", receiptno, comp.Id).FirstOrDefault();
 
@@ -1123,7 +1123,7 @@ namespace MeherEstateDevelopers.Controllers
         {
             //Hash
             long userid = long.Parse(User.Identity.GetUserId());
-            var res2 = db.Sp_Add_PlotReceipt_Manual(rd.Amount, rd.AmountInWords, rd.Bank, rd.PayChqNo, rd.Ch_bk_Pay_Date, rd.Branch, rd.Mobile_1
+            var res2 = db.Sp_Add_PlotReceipt_Manual(rd.Description,rd.Amount, rd.AmountInWords, rd.Bank, rd.PayChqNo, rd.Ch_bk_Pay_Date, rd.Branch, rd.Mobile_1
                 , rd.Father_Husband, rd.File_Plot_Number.ToString(), rd.Name, rd.PaymentType, rd.TotalAmount,
                 rd.Project_Name, rd.Rate, null, rd.Plot_Size, Module, userid, userid, rd.ReceiptNo, rd.Date, rd.Phase, rd.Block, null, Modules.CommercialManagement.ToString(), rd.FilePlotNumber).FirstOrDefault();
 
@@ -1430,7 +1430,7 @@ namespace MeherEstateDevelopers.Controllers
         {
             long userid = long.Parse(User.Identity.GetUserId());
             var Plot = db.Sp_Get_PlotData(rd.File_Plot_Number).FirstOrDefault();
-            var res2 = db.Sp_Add_PlotReceipt_Manual(rd.Amount, rd.AmountInWords, rd.Bank, rd.PayChqNo, rd.Ch_bk_Pay_Date, rd.Branch, rd.Mobile_1
+            var res2 = db.Sp_Add_PlotReceipt_Manual(rd.Description,rd.Amount, rd.AmountInWords, rd.Bank, rd.PayChqNo, rd.Ch_bk_Pay_Date, rd.Branch, rd.Mobile_1
                 , rd.Father_Husband, rd.File_Plot_Number.ToString(), rd.Name, rd.PaymentType, rd.TotalAmount,
                 rd.Project_Name, rd.Rate, null, rd.Plot_Size, Module, userid, userid, rd.ReceiptNo, rd.Date, rd.Phase, rd.Block, null, Modules.PlotManagement.ToString(), rd.FilePlotNumber).FirstOrDefault();
             db.Sp_Add_Activity(userid, "Add receipt of Plot Id  <a class='plt-data' data-id=' " + rd.File_Plot_Number + "'>" + rd.File_Plot_Number + "</a>---", "Create", Modules.PlotManagement.ToString(), ActivityType.Add_Receipt.ToString(), rd.File_Plot_Number);
@@ -1493,7 +1493,7 @@ namespace MeherEstateDevelopers.Controllers
         {
             long userid = long.Parse(User.Identity.GetUserId());
             var Plot = db.Sp_Get_PlotData(rd.File_Plot_Number).FirstOrDefault();
-            var res2 = db.Sp_Add_PlotReceipt_Manual(rd.Amount, rd.AmountInWords, rd.Bank, rd.PayChqNo, rd.Ch_bk_Pay_Date, rd.Branch, rd.Mobile_1
+            var res2 = db.Sp_Add_PlotReceipt_Manual(rd.Description, rd.Amount, rd.AmountInWords, rd.Bank, rd.PayChqNo, rd.Ch_bk_Pay_Date, rd.Branch, rd.Mobile_1
                 , rd.Father_Husband, rd.File_Plot_Number.ToString(), rd.Name, rd.PaymentType, rd.TotalAmount,
                 rd.Project_Name, rd.Rate, null, rd.Plot_Size, Module, userid, userid, rd.ReceiptNo, rd.Date, rd.Phase, rd.Block, null, Modules.FileManagement.ToString(), rd.FilePlotNumber).FirstOrDefault();
             db.Sp_Add_Activity(userid, "Add receipt of Plot Id  <a class='plt-data' data-id=' " + rd.File_Plot_Number + "'>" + rd.File_Plot_Number + "</a>---", "Create", Modules.FileManagement.ToString(), ActivityType.Add_Receipt.ToString(), rd.File_Plot_Number);
@@ -1795,7 +1795,7 @@ namespace MeherEstateDevelopers.Controllers
                 try
                 {
 
-                    var res2 = db.Sp_Add_Receipt(rd.Amount, rd.AmountInWords, rd.Bank, rd.PayChqNo, rd.Ch_bk_Pay_Date, rd.Branch, string.Join(",", lastowner.Select(x => x.Mobile_1).Distinct())
+                    var res2 = db.Sp_Add_Receipt(rd.Description,rd.Amount, rd.AmountInWords, rd.Bank, rd.PayChqNo, rd.Ch_bk_Pay_Date, rd.Branch, string.Join(",", lastowner.Select(x => x.Mobile_1).Distinct())
                         , string.Join(",", lastowner.Select(x => x.Father_Husband).Distinct()), Plotid, string.Join(",", lastowner.Select(x => x.Name)), rd.PaymentType, rd.TotalAmount,
                         project.Project_Name, rd.Rate, null, rd.Plot_Size, ReceiptTypes.Installment.ToString(), userid, userid, "", null, Modules.PlotManagement.ToString(), "", plot.Plot_No, plot.Block_Name, plot.Type, lastowner.FirstOrDefault().GroupTag, TransactionId, "", receiptno, comp.Id).FirstOrDefault();
 
@@ -2083,7 +2083,7 @@ namespace MeherEstateDevelopers.Controllers
             if (rd.PaymentType == "Cash" || rd.PaymentType == "Adjustment" || rd.PaymentType == "Adj_Merge")
             {
 
-                var res2 = db.Sp_Add_Receipt(rd.Amount, rd.AmountInWords, rd.Bank, rd.PayChqNo, rd.Ch_bk_Pay_Date, rd.Branch, rd.Mobile_1, rd.Father_Husband, null, rd.Name, rd.PaymentType, rd.TotalAmount,
+                var res2 = db.Sp_Add_Receipt(rd.Description,rd.Amount, rd.AmountInWords, rd.Bank, rd.PayChqNo, rd.Ch_bk_Pay_Date, rd.Branch, rd.Mobile_1, rd.Father_Husband, null, rd.Name, rd.PaymentType, rd.TotalAmount,
                     rd.Project_Name, rd.Rate, null, rd.Plot_Size, ReceiptTypes.Other_Recovery.ToString(), userid, userid, "", null, Module, rd.DevCharges, rd.FilePlotNumber, rd.Block, rd.Type, 0, TransactionId, "", receiptno, comp.Id).FirstOrDefault();
                 Helpers h = new Helpers();
                 bool headcashier = false;
@@ -2107,9 +2107,9 @@ namespace MeherEstateDevelopers.Controllers
             {
                 var res1 = db.Sp_Add_Amount_Clearance(rd.Amount, "", Modules.PlotManagement.ToString(), Types.Installment.ToString()).FirstOrDefault();
 
-                var res2 = db.Sp_Add_Receipt(rd.Amount, rd.AmountInWords, rd.Bank, rd.PayChqNo, rd.Ch_bk_Pay_Date, rd.Branch, rd.Mobile_1
-                    , rd.Father_Husband, 0, rd.Name, rd.PaymentType, rd.TotalAmount,
-                    rd.Project_Name, rd.Rate, null, rd.Plot_Size, ReceiptTypes.Other_Recovery.ToString(), res1, userid, "", null, Module, rd.DevCharges, rd.FilePlotNumber, rd.Block, rd.Type, 0, TransactionId, "", receiptno, comp.Id).FirstOrDefault();
+                var res2 = db.Sp_Add_Receipt(rd.Description,rd.Amount, rd.AmountInWords, rd.Bank, rd.PayChqNo, rd.Ch_bk_Pay_Date, rd.Branch, rd.Mobile_1
+                , rd.Father_Husband, 0, rd.Name, rd.PaymentType, rd.TotalAmount,
+                rd.Project_Name, rd.Rate, null, rd.Plot_Size, ReceiptTypes.Other_Recovery.ToString(), res1, userid, "", null, Module, rd.DevCharges, rd.FilePlotNumber, rd.Block, rd.Type, 0, TransactionId, "", receiptno, comp.Id).FirstOrDefault();
 
                 Helpers h = new Helpers();
                 //bool headcashier = false;
@@ -2247,7 +2247,7 @@ namespace MeherEstateDevelopers.Controllers
             {
                 try
                 {
-                    var res2 = db.Sp_Add_Receipt(rd.Amount, rd.AmountInWords, rd.Bank, rd.PayChqNo, rd.Ch_bk_Pay_Date, rd.Branch, lastowner.Mobile_1
+                    var res2 = db.Sp_Add_Receipt(rd.Description, rd.Amount, rd.AmountInWords, rd.Bank, rd.PayChqNo, rd.Ch_bk_Pay_Date, rd.Branch, lastowner.Mobile_1
                         , lastowner.Father_Husband, Comid, lastowner.Name, rd.PaymentType, rd.TotalAmount,
                         plot.Project_Name, rd.Rate, null,plot.Total_SqFt_Marlas.ToString() + " sq.ft", ReceiptTypes.Installment.ToString(), userid, userid, "", null, Modules.CommercialManagement.ToString()
                         , "", plot.shop_no + " " + plot.ApplicationNo + " - " + plot.Type, plot.Floor, plot.Type, lastowner.GroupTag, TransactionId, "", receiptno, comp.Id).FirstOrDefault();
@@ -2377,7 +2377,7 @@ namespace MeherEstateDevelopers.Controllers
                         AccountHandlerController de = new AccountHandlerController();
                         Helpers H = new Helpers();
 
-                        var res2 = db.Sp_Add_Receipt(rd.Amount, GeneralMethods.NumberToWords(Convert.ToInt32(rd.Amount)), rd.Bank, rd.PayChqNo, rd.Ch_bk_Pay_Date, rd.Branch, string.Join(" , ", lastowner.Select(x => x.Mobile_1))
+                        var res2 = db.Sp_Add_Receipt(rd.Description, rd.Amount, GeneralMethods.NumberToWords(Convert.ToInt32(rd.Amount)), rd.Bank, rd.PayChqNo, rd.Ch_bk_Pay_Date, rd.Branch, string.Join(" , ", lastowner.Select(x => x.Mobile_1))
                       , string.Join(" , ", lastowner.Select(x => x.Father_Husband)), File_Id, string.Join(" , ", lastowner.Select(x => x.Name)), rd.PaymentType, rd.TotalAmount,
                         rd.Project_Name, rd.Rate, null, appdetail.Plot_Size, ReceiptTypes.Fines_And_Penalties.ToString(), userid, userid, "", null, Modules.FileManagement.ToString(), "Plot Reinstate Charges", appdetail.FileFormNumber.ToString(), appdetail.Block, appdetail.Type, lastowner.Select(x => x.Group_Tag).FirstOrDefault(), TransactionId, "", receiptno, comp.Id).FirstOrDefault();
                         {
@@ -2471,7 +2471,7 @@ namespace MeherEstateDevelopers.Controllers
                         AccountHandlerController de = new AccountHandlerController();
                         Helpers H = new Helpers();
 
-                        var res2 = db.Sp_Add_Receipt(rd.Amount, GeneralMethods.NumberToWords(Convert.ToInt32(rd.Amount)), rd.Bank, rd.PayChqNo, rd.Ch_bk_Pay_Date, rd.Branch, string.Join(" , ", lastowner.Select(x => x.Mobile_1))
+                        var res2 = db.Sp_Add_Receipt(rd.Description, rd.Amount, GeneralMethods.NumberToWords(Convert.ToInt32(rd.Amount)), rd.Bank, rd.PayChqNo, rd.Ch_bk_Pay_Date, rd.Branch, string.Join(" , ", lastowner.Select(x => x.Mobile_1))
                       , string.Join(" , ", lastowner.Select(x => x.Father_Husband)), File_Id, string.Join(" , ", lastowner.Select(x => x.Name)), rd.PaymentType, rd.TotalAmount,
                         rd.Project_Name, rd.Rate, null, appdetail.Plot_Size, ReceiptTypes.Fines_And_Penalties.ToString(), userid, userid, "", null, Modules.FileManagement.ToString(), "Plot Reinstate Charges", appdetail.Plot_No.ToString(), appdetail.Block_Name, appdetail.Type, lastowner.Select(x => x.GroupTag).FirstOrDefault(), TransactionId, "", receiptno, comp.Id).FirstOrDefault();
                         {
@@ -2708,7 +2708,7 @@ namespace MeherEstateDevelopers.Controllers
             if (rd.PaymentType == "Cash" || rd.PaymentType == "Adjustment" || rd.PaymentType == "Adj_Merge")
             {
 
-                var res2 = db.Sp_Add_Receipt(rd.Amount, rd.AmountInWords, rd.Bank, rd.PayChqNo, rd.Ch_bk_Pay_Date, rd.Branch, rd.Mobile_1, rd.Father_Husband, null, rd.Name, rd.PaymentType, rd.TotalAmount,
+                var res2 = db.Sp_Add_Receipt(rd.Description, rd.Amount, rd.AmountInWords, rd.Bank, rd.PayChqNo, rd.Ch_bk_Pay_Date, rd.Branch, rd.Mobile_1, rd.Father_Husband, null, rd.Name, rd.PaymentType, rd.TotalAmount,
                     "Grand City Kharian", rd.Rate, null, rd.Plot_Size, ReceiptTypes.Subsidiary_Recovery.ToString(), TransactionId, userid, "", null, Module, rd.DevCharges, Module, rd.Block, rd.Type, 0, TransactionId, "", receiptno, comp.Id).FirstOrDefault();
                 Helpers h = new Helpers();
                 bool headcashier = false;
@@ -2730,7 +2730,7 @@ namespace MeherEstateDevelopers.Controllers
             }
             else
             {
-                var res2 = db.Sp_Add_Receipt(rd.Amount, rd.AmountInWords, rd.Bank, rd.PayChqNo, rd.Ch_bk_Pay_Date, rd.Branch, rd.Mobile_1
+                var res2 = db.Sp_Add_Receipt(rd.Description, rd.Amount, rd.AmountInWords, rd.Bank, rd.PayChqNo, rd.Ch_bk_Pay_Date, rd.Branch, rd.Mobile_1
                     , rd.Father_Husband, 0, rd.Name, rd.PaymentType, rd.TotalAmount,
                     rd.Project_Name, rd.Rate, null, rd.Plot_Size, ReceiptTypes.Subsidiary_Recovery.ToString(), userid, userid, "", null, Module, rd.DevCharges, rd.FilePlotNumber, rd.Block, rd.Type, 0, TransactionId, "", receiptno, comp.Id).FirstOrDefault();
 
