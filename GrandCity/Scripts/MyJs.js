@@ -1403,6 +1403,7 @@ $(document).on("change", "#phase", function () {
 
 // Get Security Fees of Phase and Block
 $(document).on("change", ".pha-blk", function () {
+    debugger;
     var blockid = $("#block").val();
     var phaseid = $("#phase").val();
    /* var sectorid = $("#sector").val();  */
@@ -1411,7 +1412,37 @@ $(document).on("change", ".pha-blk", function () {
         url: '/FileSystem/GetFileSecurity/',
         data: { Phase: phaseid, Block: blockid},
         success: function (data) {
+            console.log(data);
             $("#sec-fee").html(data.Price)
+        }
+        , error: function (xmlhttprequest, textstatus, message) {
+            if (textstatus === "timeout") {
+                alert("got timeout");
+            } else {
+                alert(textstatus);
+            }
+        }
+    });
+});
+// Get Lat File Number of Specific Block
+$(document).on("change", ".p-blk", function () {
+    debugger;
+    var blockid = $("#block").val();
+    
+    $.ajax({
+        type: "POST",
+        url: '/FileSystem/GetLastFileOfBlock/',
+        data: {Block: blockid },
+        success: function (data) {
+            if (data == false) {
+                $("#last_file").html("File Not Exist")
+                $("#first_file").html("File Not Exist") 
+            }
+            else {
+                $("#last_file").html(data.LastFile)
+                $("#first_file").html(data.FirstFile)
+            }
+            
         }
         , error: function (xmlhttprequest, textstatus, message) {
             if (textstatus === "timeout") {

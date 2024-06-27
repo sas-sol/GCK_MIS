@@ -14,6 +14,7 @@ using System.Threading;
 using System.Web.Razor.Tokenizer;
 using System.Data.Entity;
 using static MeherEstateDevelopers.MvcApplication;
+using System.Runtime.Remoting.Contexts;
 
 namespace MeherEstateDevelopers.Controllers
 {
@@ -62,12 +63,28 @@ namespace MeherEstateDevelopers.Controllers
             long userid = long.Parse(User.Identity.GetUserId());
             return Json(res);
         }
-        public JsonResult GetFileSecurity(long? Phase, long? Block ,long? Sector)
+        public JsonResult GetFileSecurity(long? Phase, long? Block, long? Sector)
         {
             var res = db.Sp_Get_File_Security(Phase, Block).SingleOrDefault();
+
             if (res != null)
             {
+                
                 return Json(res);
+            }
+            else
+            {
+                return Json(false);
+            }
+        }
+        public JsonResult GetLastFileOfBlock(long? Block)
+        {
+            var result = db.File_Form.Where(ff => ff.Block_Id == Block).OrderByDescending(ff => ff.Id).FirstOrDefault();
+            var results = db.File_Form.Where(ff => ff.Block_Id == Block).FirstOrDefault();
+            if (result != null)
+            {
+                var data = new { FirstFile = results.FileFormNumber, LastFile = result.FileFormNumber };
+                return Json(data);
             }
             else
             {

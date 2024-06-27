@@ -32,113 +32,127 @@
 <div class="row gap-20 pos-r">
     <div class="col-md-12">
         <div class="bgc-white p-20 bd">
-            <h6 class="c-grey-900">Dealer File Form Association</h6>
-            <div class="mT-30">
-                @using (Html.BeginForm("DealerFormAssociation", "Dealership", FormMethod.Post, new { @id = "de-fo-as", @class = "", role = "form" }))
-                {
-                    @Html.AntiForgeryToken()
-                    <div class="form-row">
-                        <div class="form-group col-md-3">
-                            <label>Project</label>
-                            @Html.DropDownList("Projects", null, "Select Project", htmlAttributes: new { @class = "form-control prj-phas" })
-                        </div>
-                        <div class="form-group col-md-3">
-                            <label>Phases</label>
-                            <select class="form-control pha-blk" name="Phase" id="phase">
-                                <option>Select Phases</option>
-                            </select>
-                        </div>
-                        <div class="form-group col-md-3">
-                            <label>Block</label>
-                            <select class="form-control pha-blk" name="Block" id="block">
-                                <option>Select Block</option>
-                            </select>
-                        </div>
-                        <div class="form-group col-md-3">
-                            <label>Type</label>
-                            <select class="form-control type" name="Type" id="type">
-                                <option>Select Type</option>
-                                <option value="Residential">Residential</option>
-                                <option value="Commercial">Commercial</option>
-                            </select>
-                        </div>
-                        <div class="form-group  col-md-3">
-                            <label>Dealership</label>
-                            @Html.DropDownList("Dealership", null, "Select Dealership", htmlAttributes: new { @class = "form-control" })
-                        </div>
-                          
-                        @*<div class="form-group col-md-3">
-                                <label>Valid Date</label>
-                                <input type="text" id="valid_Date" name="valid_Date" placeholder="MM/DD/YYYY" data-provide="datepicker" class="form-control" />
-                            </div>*@
-                        @*<div class="form-group col-md-1">
-                            <label>Sector</label>
-                            <select class="form-control type" name="Sector" id="Sector">
-                                <option value="A">A</option>
-                                <option value="B">B</option>
-                                <option value="C">C</option>
-                                <option value="D">D</option>
-                                <option value="E">E</option>
-                            </select>
-                        </div>*@
-                    </div>
-                    @*<div class="form-row">
-                            <div class="col-md-3">
-                                <h6 class="c-grey-900">Security Fees: </h6>
-                                <label id="sec-fee"></label>
-                            </div>
-                            <div class="form-group col-md-2">
-                                <h6>Total Security: </h6>
-                                <label id="tot-sec"></label>
-                            </div>
-                        </div>*@
-                    <div id="file-form">
-                        <div class="form-row" id="file-asoc-1">
-                            <div class="form-group col-md-1">
-                                <label>Plot Size</label>
-                                <select class="form-control plots">
-                                    <option>Select Plot Size</option>
-                                </select>
-                            </div>
-                            <div class="form-group col-md-1">
-                                <label>Total Files</label>
-                                <input type="number" min="1" class="form-control total-file" />
-                            </div>
-                            <div class="form-group col-md-2">
-                                <label>-</label>
-                                <select class="form-control dev-char">
-                                    <option>Select Development Charges</option>
-                                    <option value="1">With Development Charges</option>
-                                    <option value="0">Without Development Charges</option>
-                                </select>
-                            </div>
-                            <div class="form-group col-md-2">
-                                <label>Commession</label>
-                                <input type="text" class="form-control com" />
-                            </div>
-                            @*<div class="form-group col-md-2">
-            <label>Security</label>
-            <input type="text" class="form-control sec" readonly />
-        </div>*@
-                            <div class="form-group col-md-3">
-                                <label>Choose Installment Structure</label>
-                                <select class="form-control plt-ins">
-                                </select>
-                            </div>
-                            <div class="form-group col-md-1">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row py-3">
-                        <a href="javascript:void(0);" class="ad-file-inf"><i class="ti-plus"></i>&nbsp;Add Row</a>
-                    </div>
-                    <button type="submit" class="btn btn-primary" id="del-sub-btn">Assign</button>
-                    <button type="button" class="btn btn-info" id="reset" style="display:none" onclick="window.location.reload()">Reset Page</button>
-                }
+            <div class="row">
+                <div class="col-md-7"><h6 class="c-grey-900">Dealer File Form Association</h6></div>
+                <div class="col-md-3 d-flex align-items-center">
+                    <h6 class="c-grey-900">First File Number: </h6>
+                    <label id="first_file" style="color: green; margin-left: 5px;"></label>
+                </div>
+                <div class="col-md-2 d-flex align-items-center">
+                    <h6 class="c-grey-900">Last File Number: </h6>
+                    <label id="last_file" style="color: green; margin-left: 5px;"></label>
+                </div>
             </div>
-            <hr />
-            <div class="row" id="re-fi-for"></div>
-        </div>
+                <div class="mT-30">
+                    @using (Html.BeginForm("DealerFormAssociation", "Dealership", FormMethod.Post, new { @id = "de-fo-as", @class = "", role = "form" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        <div class="form-row">
+                            <div class="form-group col-md-3">
+                                <label>Project</label>
+                                @Html.DropDownList("Projects", null, "Select Project", htmlAttributes: new { @class = "form-control prj-phas" })
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label>Phases</label>
+                                <select class="form-control pha-blk" name="Phase" id="phase">
+                                    <option>Select Phases</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label>Block</label>
+                                <select class="form-control p-blk" name="Block" id="block">
+                                    <option>Select Block</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label>Type</label>
+                                <select class="form-control type" name="Type" id="type">
+                                    <option>Select Type</option>
+                                    <option value="Residential">Residential</option>
+                                    <option value="Commercial">Commercial</option>
+                                </select>
+                            </div>
+                            <div class="form-group  col-md-3">
+                                <label>Dealership</label>
+                                @Html.DropDownList("Dealership", null, "Select Dealership", htmlAttributes: new { @class = "form-control" })
+                            </div>
+                            @*<div class="form-group  col-md-3">
+                        <label>Last File Number: </label>
+                        <label id="last_file" style="color: green"></label>
+                    </div>*@
+
+                            @*<div class="form-group col-md-3">
+                        <label>Valid Date</label>
+                        <input type="text" id="valid_Date" name="valid_Date" placeholder="MM/DD/YYYY" data-provide="datepicker" class="form-control" />
+                    </div>*@
+                            @*<div class="form-group col-md-1">
+                        <label>Sector</label>
+                        <select class="form-control type" name="Sector" id="Sector">
+                            <option value="A">A</option>
+                            <option value="B">B</option>
+                            <option value="C">C</option>
+                            <option value="D">D</option>
+                            <option value="E">E</option>
+                        </select>
+                    </div>*@
+                        </div>
+                        @*<div class="form-row">
+                    <div class="col-md-3">
+                        <h6 class="c-grey-900">Security Fees: </h6>
+                        <label id="sec-fee"></label>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <h6>Total Security: </h6>
+                        <label id="tot-sec"></label>
+                    </div>
+                </div>*@
+                        <div id="file-form">
+                            <div class="form-row" id="file-asoc-1">
+                                <div class="form-group col-md-1">
+                                    <label>Plot Size</label>
+                                    <select class="form-control plots">
+                                        <option>Select Plot Size</option>
+                                    </select>
+                                </div>
+                                <div class="form-group col-md-1">
+                                    <label>Total Files</label>
+                                    <input type="number" min="1" class="form-control total-file" />
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <label>-</label>
+                                    <select class="form-control dev-char">
+                                        <option>Select Development Charges</option>
+                                        <option value="1">With Development Charges</option>
+                                        <option value="0">Without Development Charges</option>
+                                    </select>
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <label>Commession</label>
+                                    <input type="text" class="form-control com" />
+                                </div>
+                                @*<div class="form-group col-md-2">
+                            <label>Security</label>
+                            <input type="text" class="form-control sec" readonly />
+                        </div>*@
+                                <div class="form-group col-md-3">
+                                    <label>Choose Installment Structure</label>
+                                    <select class="form-control plt-ins">
+                                    </select>
+                                </div>
+                                <div class="form-group col-md-1">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row py-3">
+                            <a href="javascript:void(0);" class="ad-file-inf"><i class="ti-plus"></i>&nbsp;Add Row</a>
+                        </div>
+                        <button type="submit" class="btn btn-primary" id="del-sub-btn">Assign</button>
+                        <button type="button" class="btn btn-info" id="reset" style="display:none" onclick="window.location.reload()">Reset Page</button>
+                    }
+                </div>
+                <hr />
+                <div class="row" id="re-fi-for"></div>
+            </div>
     </div>
 </div>
 
