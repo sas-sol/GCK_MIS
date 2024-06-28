@@ -5523,19 +5523,23 @@ namespace MeherEstateDevelopers.Controllers
             // new XAttribute("DueDate", x.DueDate)))).ToString();
 
             //var res = db.Sp_Update_Installment_File_Plot_Comm(id, "PlotManagement", InstallmentStructureData);
+            long maxId = db.Plot_Installments.Select(pi => (long?)pi.Id).Max() ?? 0;
+            long Id = maxId + 1;
             foreach (var item in installmentData)
             {
                 if (item.Id == 0)
                 {
                     var InstallmentStructureData = new XElement("InstallmentData", new XElement("InstallmentDataInfo",
                         new XAttribute("Id", item.Id),
+                        new XAttribute("Plot_Id", item.Plot_Id),
                         new XAttribute("InstallmentType", item.Installment_Type),
                         new XAttribute("InstallmentName", item.Installment_Name),
                         new XAttribute("Amount", item.Amount),
                         new XAttribute("DueDate", item.DueDate))).ToString();
+                        
 
                     // Call the stored procedure for each installment
-                    var res = db.Sp_InsertUpdate_Installment_File_Plot_Comm(plotid, "PlotManagement", InstallmentStructureData);
+                    var res = db.Sp_InsertUpdate_Installment_File_Plot_Comm(Id, "PlotManagement", InstallmentStructureData);
                 }
                 else
                 {

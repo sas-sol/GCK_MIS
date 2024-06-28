@@ -3312,17 +3312,20 @@ namespace MeherEstateDevelopers.Controllers
         {
             foreach (var item in installmentData)
             {
-                if(item.Id==0)
+                long maxId = db.File_Installments.Select(pi => (long?)pi.Id).Max() ?? 0;
+                long Id = maxId + 1;
+                if (item.Id==0)
                 { 
                     var InstallmentStructureData = new XElement("InstallmentData", new XElement("InstallmentDataInfo",
                         new XAttribute("Id", item.Id),
+                        new XAttribute("File_Id", item.File_Id),
                         new XAttribute("InstallmentType", item.Installment_Type),
                         new XAttribute("InstallmentName", item.Installment_Name),
                         new XAttribute("Amount", item.Amount),
                         new XAttribute("DueDate", item.Due_Date))).ToString();
 
                     // Call the stored procedure for each installment
-                    var res = db.Sp_InsertUpdate_Installment_File_Plot_Comm(fileid, "FileManagement", InstallmentStructureData);
+                    var res = db.Sp_InsertUpdate_Installment_File_Plot_Comm(Id, "FileManagement", InstallmentStructureData);
                 }
                 else
                 {
