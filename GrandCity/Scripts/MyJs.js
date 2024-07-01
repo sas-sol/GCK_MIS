@@ -1424,7 +1424,7 @@ $(document).on("change", ".pha-blk", function () {
         }
     });
 });
-// Get Lat File Number of Specific Block
+// Get Last File Number of Specific Block
 $(document).on("change", ".p-blk", function () {
     debugger;
     var blockid = $("#block").val();
@@ -10884,6 +10884,7 @@ $(document).on("submit", "#pay-con-char", function (e) {
 //
 $(document).on("click", "#gen-fine-rec", function (e) {
     e.preventDefault();
+debugger;
 
     // Validate amount
     if ($("#amt").val() <= 0) {

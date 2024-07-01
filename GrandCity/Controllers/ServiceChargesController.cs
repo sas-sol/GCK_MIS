@@ -1702,33 +1702,40 @@ namespace MeherEstateDevelopers.Controllers
             long userid = long.Parse(User.Identity.GetUserId());
             AccountHandlerController ah = new AccountHandlerController();
             var comp = ah.Company_Attr(userid);
+            string paymenttype = "";
+            if (rd.PaymentType == "Adjustment" || rd.PaymentType == "Adj_Merge" || rd.PaymentType == "Cash")
+            {
+                paymenttype = "Cash";
+            }
             if (Module == Modules.FileManagement.ToString())
             {
                 // var fileNo = PlotId;
                 //var Fileid = db.File_Form.Where(x => x.FileFormNumber == fileno).Select(x => x.Id).FirstOrDefault();
-                var fileno = db.File_Form.Where(x => x.FileFormNumber == PlotId.ToString()).FirstOrDefault(); // Add fileformNumber
+                var fileno = db.File_Form.Where(x => x.Id == PlotId).FirstOrDefault(); // Add fileformNumber
                 //get phase
                 var phase = db.RealEstate_Phases.Where(p => p.Id == fileno.Phase_Id).FirstOrDefault();
-                List<Sp_Get_FileFormData_Result> res = db.Sp_Get_FileFormData(fileno.Id).ToList();
+                var res = db.Sp_Get_FileFormData(fileno.Id).FirstOrDefault();
                 if (rd.Type == ReceiptTypes.Duplicate_Customer_File.ToString())
                 {
-                    var a = db.Sp_Update_Duplicate_Check(res.FirstOrDefault().File_Transfer_Id, Modules.FileManagement.ToString(), rd.Type);
+                    var a = db.Sp_Update_Duplicate_Check(res.File_Transfer_Id, Modules.FileManagement.ToString(), rd.Type);
                 }
+                var fileformnum = res.FileFormNumber;
                 var receiptno = db.Sp_Get_ReceiptNo("Normal").FirstOrDefault();
-                var Narration = "Cash Amount Received against Plot no:" + res.FirstOrDefault().FileFormNumber + " Block: " + res.FirstOrDefault().Block + " Plot Type : " + res.FirstOrDefault().Plot_Type;
-                var res4 = db.Sp_Add_Receipt("", rd.Amount, GeneralMethods.NumberToWords(Convert.ToInt32(rd.Amount)), null, null, null, null, string.Join(",", res.Select(x => x.Mobile_1))
-                       , string.Join(",", res.Select(x => x.Father_Husband)), fileno.Id, string.Join(",", res.Select(x => x.Name)), rd.PaymentType, 0, "Grand City Kharian", 0, null, res.FirstOrDefault().Plot_Size, rd.Type, userid, userid, Remarks, null, Modules.FileManagement.ToString(), "", res.FirstOrDefault().FileFormNumber.ToString(), res.FirstOrDefault().Block, res.FirstOrDefault().Plot_Type, 0, TransactionId, "", receiptno, comp.Id).FirstOrDefault();
+                var Narration = "Cash Amount Received against Plot no:" + res.FileFormNumber + " Block: " + res.Block + " Plot Type : " + res.Plot_Type;
+                var res4 = db.Sp_Add_Receipt(Remarks, rd.Amount, GeneralMethods.NumberToWords(Convert.ToInt32(rd.Amount)), null, null, null, null, string.Join(",", res.Mobile_1)
+                       , string.Join(",", res.Father_Husband), fileno.Id, string.Join(",", res.Name), rd.PaymentType, 0, "Grand City Kharian", 0, null, res.Plot_Size, rd.Type, userid, userid, Remarks, null, Modules.FileManagement.ToString(), "", res.FileFormNumber.ToString(), res.Block, res.Plot_Type, 0, TransactionId, "", receiptno, comp.Id).FirstOrDefault();
                
                 // add phase in receipt data
                 var receiptdata = db.Receipts.Where(r => r.Id == res4.Receipt_Id).FirstOrDefault();
                 receiptdata.Phase = phase.Phase_Name != null ? phase.Phase_Name : receiptdata.Phase;
                 db.SaveChanges();
 
-                if (rd.PaymentType != "Cash" || rd.PaymentType != "Adjustment" || rd.PaymentType != "Adj_Merge")
+                if (paymenttype != "Cash")
                 {
                     var res3 = Convert.ToInt64(db.Sp_Add_Cheque_BankDraft_PayOrder(rd.Amount, rd.Bank, rd.Branch, rd.PaymentType, null, null, PaymentMethodStatuses.Pending.ToString(),
                                        Modules.FileManagement.ToString(), Types.Installment.ToString(), userid, rd.PayChqNo, PlotId, rd.Ch_bk_Pay_Date, rd.FilePlotNumber.ToString(), res4.Receipt_Id, comp.Id, Voucher_Type.BRV.ToString()).FirstOrDefault());
                 }
+
                 var res1 = new { Status = true, Receiptid = res4.Receipt_No, ReceiptType = rd.Type, Token = userid };
                 return Json(res1);
                 db.Sp_Add_Activity(userid, "Pay Fine Charges" + rd.Amount + " Remarks: " + Remarks, "Update", "Activity_Record", ActivityType.Services.ToString(), TransactionId);
@@ -1779,14 +1786,14 @@ namespace MeherEstateDevelopers.Controllers
                 Helpers h = new Helpers();
                 var receiptno = db.Sp_Get_ReceiptNo("Normal").FirstOrDefault();
                 var Narration = "Cash Amount Received against Plot no:" + res1.Plot_No + " Block: " + res1.Block_Name + " Plot Type : " + res1.Type;
-                var res4 = db.Sp_Add_Receipt("", rd.Amount, GeneralMethods.NumberToWords(Convert.ToInt32(rd.Amount)), null, null, null, null, res2.Mobile_1
+                var res4 = db.Sp_Add_Receipt(Remarks, rd.Amount, GeneralMethods.NumberToWords(Convert.ToInt32(rd.Amount)), null, null, null, null, res2.Mobile_1
                        , res2.Father_Husband, PlotId, res2.Name, rd.PaymentType, 0, "Grand City Kharian", 0, null, res1.Plot_Size, rd.Type, userid, userid, "", null, Modules.PlotManagement.ToString(), "", res1.Plot_No, res1.Block_Name, res1.Type, 0, TransactionId, "", receiptno, comp.Id).FirstOrDefault();
 
                 //add phase in receipt data
                 var receiptdata = db.Receipts.Where(r => r.Id == res4.Receipt_Id).FirstOrDefault();
                 receiptdata.Phase = phase.Phase_Name != null ? phase.Phase_Name : receiptdata.Phase;
                 db.SaveChanges();
-                if (rd.PaymentType != "Cash" || rd.PaymentType != "Adjustment" || rd.PaymentType != "Adj_Merge")
+                if (paymenttype != "Cash")
                 {
                     var res3 = Convert.ToInt64(db.Sp_Add_Cheque_BankDraft_PayOrder(rd.Amount, rd.Bank, rd.Branch, rd.PaymentType, null, null, PaymentMethodStatuses.Pending.ToString(),
                                        Modules.PlotManagement.ToString(), Types.Installment.ToString(), userid, rd.PayChqNo, PlotId, rd.Ch_bk_Pay_Date, res1.Plot_No.ToString(), res4.Receipt_Id, comp.Id, Voucher_Type.BRV.ToString()).FirstOrDefault());
