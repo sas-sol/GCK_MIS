@@ -588,6 +588,7 @@ namespace MeherEstateDevelopers.Controllers
         }
         public JsonResult PlotsOutStandingReport(long Id)
         {
+            UpdatePlot_BalancesBlock(Id);
             var res1 = db.Sp_Get_Reports_PlotOutstandingByBlock(Id).ToList();
             var Total = res1.Sum(x => x.total);
             var Received = res1.Sum(x => x.Received);
@@ -597,8 +598,24 @@ namespace MeherEstateDevelopers.Controllers
             var res = new { Result = res1, TotalAmt = Total, ReceivedAmt = Received, Discount = Discount, Remaining = Remain, Access = access };
             return Json(res);
         }
+        public void UpdatePlot_BalancesBlock(long Id)
+        {
+            PlotsController p = new PlotsController();
+            var res = db.Plots.Where(x => x.Status == "Registered" && x.Block_Id == Id).ToList();
+            foreach (var item in res)
+            {
+                var res3 = db.Sp_Get_PlotInstallments(item.Id).ToList();
+                var res4 = db.Sp_Get_ReceivedAmounts(item.Id, Modules.PlotManagement.ToString()).ToList();
+                var discount = db.Discounts.Where(x => x.Module_Id == item.Id && x.Plot_Is_Cancelled == null && x.Module == Modules.PlotManagement.ToString()).ToList();
+                if (res4.Count > 0)
+                { p.UpdatePlotInstallmentStatus(res3, res4, discount, item.Id); }
+
+            }
+
+        }
         public JsonResult FilesOutStandingReport(long Id)
         {
+            UpdateFile_Balances(Id);
             var res1 = db.Sp_Get_Reports_FilesOutstandingByBlock(Id).ToList();
             var Total = res1.Sum(x => x.total);
             var Received = res1.Sum(x => x.Received);
@@ -607,6 +624,15 @@ namespace MeherEstateDevelopers.Controllers
             var access = res1.Where(x => x.Remaining < 0).Sum(x => x.Remaining);
             var res = new { Result = res1, TotalAmt = Total, ReceivedAmt = Received, Discount = Discount, Remaining = Remain, Access = access };
             return Json(res);
+        }
+        public void UpdateFile_Balances(long Id )
+        {
+            FileSystemController f = new FileSystemController();
+            var res = db.File_Form.Where(x => x.Status == 1 && x.Block_Id == Id).ToList();
+            foreach (var item in res)
+            {
+                f.TestAdjustIntallments(item.Id);
+            }
         }
         public JsonResult FilesPlotsOutStandingReport(long Id)  // working  on this 
         {
