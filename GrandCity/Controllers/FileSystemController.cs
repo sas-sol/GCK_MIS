@@ -1928,7 +1928,7 @@ namespace MeherEstateDevelopers.Controllers
                 db.Test_updateNotPaidinstallment(nopaidis);
                 var pendinginst = inst1.Where(x => x.Due_Date <= curdate).Sum(x => x.Amount);
                 var bal = -(pendinginst - Actamt);
-                db.Test_updatebalance(bal, res1.Where(x => x.Installment_Type != "10").Sum(x => x.Amount), ReceivedAmount, dis.Sum(x => x.Discount_Amount), Fileno, Modules.FileManagement.ToString(), id.Count(), advinst.Due_Date, vouch.Sum(x => x.Amount));
+                db.Test_updatebalance(bal, res1.Where(x => x.Installment_Type != "10" && x.Installment_Type != "0").Sum(x => x.Amount), ReceivedAmount, dis.Sum(x => x.Discount_Amount), Fileno, Modules.FileManagement.ToString(), id.Count(), advinst.Due_Date, vouch.Sum(x => x.Amount));
             }
             catch (Exception e)
             {
