@@ -64,22 +64,22 @@
                                             <a href="/Letter/GenerateLetter?letterType=CancellationLetter&Id=@item.Id&Module=PlotManagement" target="_blank" class="btn btn-dark" data-id="@item.Id" data-ownid="@item.Owner_Id" style="font-size:13px;padding: 3px;color:white">View Cancelled Letter</a>
 
                                             @*@{
-                                                    if (item.Verified == true)
-                                                    {
-                                                        <button class="btn btn-primary can-let-p" data-id="@item.Id" data-ownid="@item.Owner_Id" style="font-size:13px;padding: 3px;">Cancellation Letter</button>
-                                                    }
-                                                    else
-                                                    {
-                                                        if (item.Verification_Req == true)
-                                                        {
-                                                            <label class="switch" style="height:20px;width:46px;margin:0px"><input type="checkbox" data-id="@item.Id" id="veri-req-id" checked><span class="slider round"></span></label>
-                                                        }
-                                                        else
-                                                        {
-                                                            <label class="switch" style="height:20px;width:46px;margin:0px"><input type="checkbox" data-id="@item.Id" id="veri-req-id"><span class="slider round"></span></label>
-                                                        }
-                                                    }
-                                                }*@
+                                        if (item.Verified == true)
+                                        {
+                                            <button class="btn btn-primary can-let-p" data-id="@item.Id" data-ownid="@item.Owner_Id" style="font-size:13px;padding: 3px;">Cancellation Letter</button>
+                                        }
+                                        else
+                                        {
+                                            if (item.Verification_Req == true)
+                                            {
+                                                <label class="switch" style="height:20px;width:46px;margin:0px"><input type="checkbox" data-id="@item.Id" id="veri-req-id" checked><span class="slider round"></span></label>
+                                            }
+                                            else
+                                            {
+                                                <label class="switch" style="height:20px;width:46px;margin:0px"><input type="checkbox" data-id="@item.Id" id="veri-req-id"><span class="slider round"></span></label>
+                                            }
+                                        }
+                                    }*@
 
 
                                         </td>

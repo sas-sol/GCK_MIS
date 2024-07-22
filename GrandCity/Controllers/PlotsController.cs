@@ -2217,14 +2217,14 @@ namespace MeherEstateDevelopers.Controllers
             if (duedate != null)
             {
                 //db.Test_updatebalance(remamt, inst.Sum(x => x.Amount), ReceivedAmount, Dis.Sum(x => x.Discount_Amount), Plotid, Modules.PlotManagement.ToString(), id.Count(), duedate.DueDate, voucher.Sum(x => x.Amount));
-                db.Test_updatebalance(remamt, res1.Where(x => x.Installment_Type != "10").Sum(x => x.Amount), ReceivedAmount, Dis.Sum(x => x.Discount_Amount), Plotid, Modules.PlotManagement.ToString(), id.Count(), duedate.DueDate, voucher.Sum(x => x.Amount));
+                db.Test_updatebalance(remamt, res1.Where(x => x.Installment_Type != "10" && x.Installment_Type != "0").Sum(x => x.Amount), ReceivedAmount, Dis.Sum(x => x.Discount_Amount), Plotid, Modules.PlotManagement.ToString(), id.Count(), duedate.DueDate, voucher.Sum(x => x.Amount));
 
             }
             else
             {
                 //.Where(x => x.Installment_Type != "2")
                 //db.Test_updatebalance(remamt, inst.Sum(x => x.Amount), ReceivedAmount, Dis.Sum(x => x.Discount_Amount), Plotid, Modules.PlotManagement.ToString(), id.Count(), null, voucher.Sum(x => x.Amount));
-                db.Test_updatebalance(remamt, res1.Where(x => x.Installment_Type != "10").Sum(x => x.Amount), ReceivedAmount, Dis.Sum(x => x.Discount_Amount), Plotid, Modules.PlotManagement.ToString(), id.Count(), duedate.DueDate, voucher.Sum(x => x.Amount));
+                db.Test_updatebalance(remamt, res1.Where(x => x.Installment_Type != "10" && x.Installment_Type != "0").Sum(x => x.Amount), ReceivedAmount, Dis.Sum(x => x.Discount_Amount), Plotid, Modules.PlotManagement.ToString(), id.Count(), duedate.DueDate, voucher.Sum(x => x.Amount));
 
             }
         }

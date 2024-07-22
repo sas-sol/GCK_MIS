@@ -1189,7 +1189,7 @@ $(document).on("keyup", "#rate-marla", function () {
     $("#f-p-pric").val(pltval.toLocaleString());
 });
 // Create File Installment Structure
-$(document).on("submit", "#cr-inst-str", function (e) {
+$(document).lec on("submit", "#cr-inst-str", function (e) {
     debugger
     e.preventDefault();
     var totalprice = parseFloat(RemoveComma($("#gr-tlt").val()));
