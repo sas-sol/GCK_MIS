@@ -11,6 +11,7 @@ namespace MeherEstateDevelopers.Api_Controllers
     public class BanksApiController : BaseApiController
     {
         private Grand_CityEntities db = new Grand_CityEntities();
+
         [HttpPost]
         public IHttpActionResult FileDetail([FromUri] string FileFormNumber)
         {
@@ -383,5 +384,6 @@ namespace MeherEstateDevelopers.Api_Controllers
                 return Ok(data);
             }
         }
+
     }
 }

@@ -2783,6 +2783,7 @@ namespace MeherEstateDevelopers.Controllers
             var res3 = db.Sp_Get_PlotInstallments(Plotid).ToList();
             var res4 = db.Sp_Get_ReceivedAmounts(Plotid, Modules.PlotManagement.ToString()).ToList();
             var discounts = db.Discounts.Where(x => x.Module_Id == Plotid && x.Plot_Is_Cancelled == null && x.Module == "PlotManagement").ToList();
+
             UpdatePlotInstallmentStatus(res3, res4, discounts, Plotid);
             var res5 = db.Sp_Get_PlotInstallments(Plotid).ToList();
             var res6 = db.Cancellation_Receipts.Where(x => x.File_Plot_No == Plotid).FirstOrDefault();

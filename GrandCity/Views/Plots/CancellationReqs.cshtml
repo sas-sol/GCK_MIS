@@ -26,11 +26,16 @@
                         foreach (var item in Model)
                         {
                             string rol = "";
-                            if(User.IsInRole("Finance Manager") || User.IsInRole("Plots Manager") || User.IsInRole("Administrator") &&!(User.IsInRole("ReadOnly")))
+                            if (User.IsInRole("Finance Manager") || User.IsInRole("Plots Manager") || User.IsInRole("Administrator") && !(User.IsInRole("ReadOnly")))
                             {
                                 rol = "plot-can-det";
                             }
-                            <tr class="pointer @rol" data-pltid="@item.PlotId" id="@item.Id">
+                            if(item.PlotsMang_Approval == true)
+                            {
+                                rol = "";
+                            }
+                            @*<tr class="pointer @rol" data-pltid="@item.PlotId" id="@item.Id">*@
+                            <tr class="@(item.PlotsMang_Approval == true ? "" : "pointer") @rol" data-pltid="@item.PlotId" id="@item.Id">
                                 <td>@item.Plot_No</td>
                                 <td>@item.Block</td>
                                 <td>@item.Plot_Size</td>
@@ -41,11 +46,11 @@
                                 <td>@item.Remarks</td>
                                 @if (item.PlotsMang_Approval == true)
                                 {
-                                    <td><i class="ti-check" style="color:green"></i></td>
+                                    <td><i class="fas fa-check" style="color:green"></i></td>
                                 }
                                 else if (item.PlotsMang_Approval == false)
                                 {
-                                    <td><i class="ti-close" style="color:red"></i></td>
+                                    <td><i class="fas fa-times" style="color:red"></i></td>
                                 }
                                 else
                                 {
