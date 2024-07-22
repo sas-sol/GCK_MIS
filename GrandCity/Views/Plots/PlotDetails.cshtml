@@ -666,7 +666,7 @@ else
                                 decimal overduetotal = 0;
                                 foreach (var own in Model.PlotInstallments)
                                 {
-                                    if (own.Installment_Type !="10")
+                                    if (own.Installment_Type !="10" && own.Installment_Type != "11")
                                     {
                                         string[] adva = { "Advance", "Booking" };
                                         var statuscolor = "";

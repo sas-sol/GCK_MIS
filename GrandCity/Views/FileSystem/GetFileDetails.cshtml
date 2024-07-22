@@ -399,7 +399,7 @@
                                   decimal overduetotal = 0;
                                   foreach (var item in Model.FileInstallments)
                                   {
-                                      if (item.Installment_Type !="10")
+                                      if (item.Installment_Type !="10" && item.Installment_Type != "11")
                                       {
                                           var statuscolor = "";
                                           if (item.Status == "NotPaid")
@@ -494,7 +494,11 @@
                                             }
                                         </tr>
                                     }
+
                                 }
+                              
+                                
+
                             </tbody>
                         </table>
 
