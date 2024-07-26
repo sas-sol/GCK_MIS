@@ -1189,7 +1189,7 @@ $(document).on("keyup", "#rate-marla", function () {
     $("#f-p-pric").val(pltval.toLocaleString());
 });
 // Create File Installment Structure
-$(document).lec on("submit", "#cr-inst-str", function (e) {
+$(document).on("submit", "#cr-inst-str", function (e) {
     debugger
     e.preventDefault();
     var totalprice = parseFloat(RemoveComma($("#gr-tlt").val()));
@@ -3088,7 +3088,7 @@ $(document).on('click', '#add-new-unidnfd-rcpt-row', function () {
      <div class="form-group col-md-3" >
           <select class="form-control" name="Bank" id="Bank">` + banklists + `</select>
      </div>
-        <i class="ti-trash rmv-unidnfd-rcpt-row rmv" style="margin: 1% 0 0 2%;"></i>
+        <i class="fas fa-trash rmv-unidnfd-rcpt-row rmv" style="margin: 1% 0 0 2%;"></i>
     </div>
 </div>`;
     $('#ad-demand').append(_strct);
@@ -3233,6 +3233,16 @@ $(document).on("change", ".dep-tick-type", function (e) {
             alert("Error Occured");
         }
     });
+});
+//Search Pending Receipts
+$(document).on("click", ".Un-identified-res-bkmis", function () {
+    debugger
+    var from = $("#from").val();
+    var to = $("#to").val();
+    var val = $("#bank").val();
+    SASLoad("#bookin");
+    $("#report").load("/Finance/SearchPendingReceiptWithoutFileId/", { From: from, To: to, Val: val });
+    SASUnLoad("#bookin");
 });
 $(document).on("change", "#title", function () {
     var id = $(this).val();
@@ -4493,7 +4503,7 @@ $(document).on("click", "#ad-rec-adj-unspr-pndg-req", function () {
 
 //
 $(document).on("click", "#ad-rec-adj-unspr-pndg-multiunits", function () {
-
+    debugger;
     fileplotarray = [];
     var id = $("#rece-id").val();
     var i = 1;

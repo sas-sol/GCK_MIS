@@ -17,13 +17,15 @@ namespace MeherEstateDevelopers.Controllers
     {
         // GET: Finance
         Grand_CityEntities db = new Grand_CityEntities();
-        [NoDirectAccess] public ActionResult CancelRequests()
+        [NoDirectAccess]
+        public ActionResult CancelRequests()
         {
             long userid = long.Parse(User.Identity.GetUserId());
             db.Sp_Add_Activity(userid, "Accessed Cancel Requests Page ", "Read", "Activity_Record", ActivityType.Details_Access.ToString(), userid);
             return View();
         }
-        [NoDirectAccess] public ActionResult Receipts()
+        [NoDirectAccess]
+        public ActionResult Receipts()
         {
             var All = db.Sp_Get_Cashiers_List().ToList();
             var all = new Sp_Get_Cashiers_List_Result()
@@ -38,7 +40,8 @@ namespace MeherEstateDevelopers.Controllers
             db.Sp_Add_Activity(userid, "Accessed Receipts Page ", "Read", "Activity_Record", ActivityType.Details_Access.ToString(), userid);
             return View();
         }
-        [NoDirectAccess] public ActionResult ReceiptSearchResult(DateTime? From, DateTime? To, long?[] Users)
+        [NoDirectAccess]
+        public ActionResult ReceiptSearchResult(DateTime? From, DateTime? To, long?[] Users)
         {
 
             long userid = long.Parse(User.Identity.GetUserId());
@@ -87,7 +90,8 @@ namespace MeherEstateDevelopers.Controllers
             return PartialView(res);
         }
 
-        [NoDirectAccess] public ActionResult PendingReceipts()
+        [NoDirectAccess]
+        public ActionResult PendingReceipts()
         {
             var userid = long.Parse(User.Identity.GetUserId());
             if (User.IsInRole("Administrator") || User.IsInRole("Check Others Receipts"))
@@ -102,16 +106,26 @@ namespace MeherEstateDevelopers.Controllers
             }
             return View();
         }
-        [NoDirectAccess] public ActionResult PendingReceiptSearchResult(DateTime? From, DateTime? To)
+        [NoDirectAccess]
+        public ActionResult PendingReceiptSearchResult(DateTime? From, DateTime? To)
         {
             From = (From == null) ? new DateTime(2019, 1, 1) : From;
             To = (To == null) ? DateTime.Now : To;
             var res = db.Sp_Get_Receipt_Pending(From, To).ToList();
             return PartialView(res);
         }
-        [NoDirectAccess] public ActionResult PendingReceiptWithoutFileId()
+        [NoDirectAccess]
+        public ActionResult PendingReceiptWithoutFileId()
         {
-            var res = db.Sp_Get_Receipts_Pending().ToList();
+            ViewBag.BankList = new SelectList(Nomenclature.Banks(), "Name", "Name");
+            return View();
+        }
+        [NoDirectAccess]
+        public ActionResult SearchPendingReceiptWithoutFileId(DateTime From, DateTime To, string Val)
+        {
+            var res = db.Sp_Get_Receipts_Pending()
+                       .Where(x => x.Bank == Val && x.DateTime >= From && x.DateTime <= To)
+                       .ToList();
             return View(res);
         }
         public JsonResult UpdatePendingreceipt(long Id, decimal? Amount, string Amntwords, string PaymentType, string Bank, string Instno, string Type)
@@ -121,7 +135,8 @@ namespace MeherEstateDevelopers.Controllers
         }
 
 
-        [NoDirectAccess] public ActionResult PendingReceiptsDetails(long Id)
+        [NoDirectAccess]
+        public ActionResult PendingReceiptsDetails(long Id)
         {
             var res = db.Receipts_Pending.Where(x => x.Id == Id).FirstOrDefault();
             ViewBag.Block = new SelectList(db.Sp_Get_Block(), "Id", "Block_Name");
@@ -129,13 +144,14 @@ namespace MeherEstateDevelopers.Controllers
 
             return PartialView(res);
         }
-        [NoDirectAccess] public ActionResult PendingReceiptsMultifileplot(long Id)
+        [NoDirectAccess]
+        public ActionResult PendingReceiptsMultifileplot(long Id)
         {
             var res = db.Receipts_Pending.Where(x => x.Id == Id).FirstOrDefault();
 
 
-            ViewBag.Bank = new SelectList(db.Bank_Accounts.Select(x => new { id = x.Id, text = x.Bank + " - " + x.Account_Number }).ToList(), "id", "text");
-
+            //ViewBag.Bank = new SelectList(db.Bank_Accounts.Select(x => new { id = x.Id, text = x.Bank + " - " + x.Account_Number }).ToList(), "id", "text");
+            ViewBag.Bank = new SelectList(Nomenclature.Banks(), "Name", "Name");
             return PartialView(res);
         }
 
@@ -198,7 +214,8 @@ namespace MeherEstateDevelopers.Controllers
         }
 
 
-        [NoDirectAccess] public ActionResult ReceiptsDetails(long Id)
+        [NoDirectAccess]
+        public ActionResult ReceiptsDetails(long Id)
         {
             var res = db.Sp_Get_Receipt_Parameter_ById(Id).FirstOrDefault();
             ViewBag.Bank = new SelectList(Nomenclature.Banks(), "Name", "Name", res.Bank);
@@ -216,12 +233,14 @@ namespace MeherEstateDevelopers.Controllers
             var res = db.Sp_Add_Receipt_UpdateRequest(Bank, Ch_Pay_Draft_No, Ch_Pay_Draft_date, userid, Description, ReceiptId, Status.Pending.ToString(), PaymentType).FirstOrDefault();
             return Json(true);
         }
-        [NoDirectAccess] public ActionResult UpdateRequests()
+        [NoDirectAccess]
+        public ActionResult UpdateRequests()
         {
             var res = db.Sp_Get_ReceiptRequests_Update().ToList();
             return View(res);
         }
-        [NoDirectAccess] public ActionResult RequestDetails(long Id)
+        [NoDirectAccess]
+        public ActionResult RequestDetails(long Id)
         {
             var res = db.Sp_Get_ReceiptRequests_Update_Details(Id).FirstOrDefault();
             ViewBag.Bank = new SelectList(Nomenclature.Banks(), "Name", "Name", res.Bank);
@@ -248,7 +267,8 @@ namespace MeherEstateDevelopers.Controllers
 
             return Json(true);
         }
-        [NoDirectAccess] public ActionResult CancelReq(long Id)
+        [NoDirectAccess]
+        public ActionResult CancelReq(long Id)
         {
             var res = db.Sp_Get_Receipt_Parameter_ById(Id).FirstOrDefault();
             var geent = db.General_Entries.Where(x => x.Voucher_No == res.ReceiptNo).FirstOrDefault();
@@ -271,13 +291,15 @@ namespace MeherEstateDevelopers.Controllers
             var res = db.Sp_Update_Receipt_Req(ReceiptId, Description);
             return Json(true);
         }
-        [NoDirectAccess] public ActionResult AllCancelRequests()
+        [NoDirectAccess]
+        public ActionResult AllCancelRequests()
         {
             var All = db.Sp_Get_Cashiers_List().ToList();
             ViewBag.Users = new SelectList(All, "id", "Name");
             return View();
         }
-        [NoDirectAccess] public ActionResult AllCancelRequestSearch(DateTime? From, DateTime? To, long?[] Users)
+        [NoDirectAccess]
+        public ActionResult AllCancelRequestSearch(DateTime? From, DateTime? To, long?[] Users)
         {
             long userid = long.Parse(User.Identity.GetUserId());
             string chids = null;
@@ -290,7 +312,8 @@ namespace MeherEstateDevelopers.Controllers
             var res = db.Sp_Get_CancelReq(From, To, chids).ToList();
             return PartialView(res);
         }
-        [NoDirectAccess] public ActionResult CancelRequestDetails(long Id)
+        [NoDirectAccess]
+        public ActionResult CancelRequestDetails(long Id)
         {
             var res = db.Sp_Get_Receipt_Parameter_ById(Id).FirstOrDefault();
             ViewBag.Bank = new SelectList(Nomenclature.Banks(), "Name", "Name");
@@ -381,7 +404,8 @@ namespace MeherEstateDevelopers.Controllers
 
         //----------------------------------------
 
-        [NoDirectAccess] public ActionResult ReceiptDetails(long Id)
+        [NoDirectAccess]
+        public ActionResult ReceiptDetails(long Id)
         {
             var res = db.Sp_Get_Receipt_Parameter_ById(Id).FirstOrDefault();
             ViewBag.Block = new SelectList(db.Sp_Get_Block(), "Id", "Block_Name");
@@ -393,17 +417,20 @@ namespace MeherEstateDevelopers.Controllers
             var res = db.Sp_Add_ReceiptAdjust(ReceiptId, Reason, PaymentType, userid, From, To, To_Id, To_Name, Block, Module, FromModule, ToMod).FirstOrDefault();
             return Json(res);
         }
-        [NoDirectAccess] public ActionResult FinancialAdjustList()
+        [NoDirectAccess]
+        public ActionResult FinancialAdjustList()
         {
             var res = db.Sp_Get_ReceiptAdjustReqs_Finance().ToList();
             return View(res);
         }
-        [NoDirectAccess] public ActionResult FinanceAdjustmentDetails(long Id)
+        [NoDirectAccess]
+        public ActionResult FinanceAdjustmentDetails(long Id)
         {
             var res = db.Sp_Get_ReceiptAdjustReqs_Details(Id).FirstOrDefault();
             return PartialView(res);
         }
-        [NoDirectAccess] public ActionResult ReceiptAdjustmentDetails(long Id)
+        [NoDirectAccess]
+        public ActionResult ReceiptAdjustmentDetails(long Id)
         {
             var res = db.Sp_Get_ReceiptAdjustReqs_Details(Id).FirstOrDefault();
 
@@ -411,7 +438,8 @@ namespace MeherEstateDevelopers.Controllers
             db.Sp_Add_Activity(userid, "Accessed Receipts Adjustments Details Page ", "Read", "Activity_Record", ActivityType.Details_Access.ToString(), Id);
             return PartialView(res);
         }
-        [NoDirectAccess] public ActionResult RecordAdjustment()
+        [NoDirectAccess]
+        public ActionResult RecordAdjustment()
         {
             var res = db.Sp_Get_ReceiptAdjustReqs_Records().ToList();
 
@@ -627,7 +655,8 @@ namespace MeherEstateDevelopers.Controllers
         }
 
         //-----------------------------------
-        [NoDirectAccess] public ActionResult RefundAmount(long Plot_Id, string Module)
+        [NoDirectAccess]
+        public ActionResult RefundAmount(long Plot_Id, string Module)
         {
             if (Module == Modules.PlotManagement.ToString())
             {
@@ -661,13 +690,15 @@ namespace MeherEstateDevelopers.Controllers
         }
 
         /////////////////////////////////////
-        [NoDirectAccess] public ActionResult MarketingReceipts()
+        [NoDirectAccess]
+        public ActionResult MarketingReceipts()
         {
             var All = db.Sp_Get_Cashiers_List().ToList();
             ViewBag.Users = new SelectList(All, "id", "Name");
             return View();
         }
-        [NoDirectAccess] public ActionResult MarketingReceiptSearchResult(DateTime? From, DateTime? To, long?[] Users)
+        [NoDirectAccess]
+        public ActionResult MarketingReceiptSearchResult(DateTime? From, DateTime? To, long?[] Users)
         {
             string chids = null;
             if (Users != null)
@@ -708,7 +739,8 @@ namespace MeherEstateDevelopers.Controllers
             }).ToList();
             return PartialView(res);
         }
-        [NoDirectAccess] public ActionResult MarketingReceiptsDetails(long Id, string LeadDeal)
+        [NoDirectAccess]
+        public ActionResult MarketingReceiptsDetails(long Id, string LeadDeal)
         {
             var res = db.Sp_Get_MarketingReceipt_Parameter_ById(Id, LeadDeal).FirstOrDefault();
             ViewBag.Bank = new SelectList(Nomenclature.Banks(), "Name", "Name", res.Bank);
@@ -726,12 +758,14 @@ namespace MeherEstateDevelopers.Controllers
             var res = db.Sp_Add_MarketingReceipt_UpdateRequest(Bank, Ch_Pay_Draft_No, Ch_Pay_Draft_date, userid, Description, ReceiptId, Status.Pending.ToString(), PaymentType).FirstOrDefault();
             return Json(true);
         }
-        [NoDirectAccess] public ActionResult MarketingUpdateRequests()
+        [NoDirectAccess]
+        public ActionResult MarketingUpdateRequests()
         {
             var res = db.Sp_Get_MarketingReceiptRequests_Update().ToList();
             return View(res);
         }
-        [NoDirectAccess] public ActionResult MarketingRequestDetails(long Id, string LeadDeal)
+        [NoDirectAccess]
+        public ActionResult MarketingRequestDetails(long Id, string LeadDeal)
         {
             var res = db.Sp_Get_MarketingReceiptRequests_Update_Details(Id, LeadDeal).FirstOrDefault();
             ViewBag.Bank = new SelectList(Nomenclature.Banks(), "Name", "Name", res.Bank);
@@ -748,7 +782,8 @@ namespace MeherEstateDevelopers.Controllers
             db.Sp_Update_MarketingReceiptInfo(Bank, Ch_Pay_Draft_No, Ch_Pay_Draft_date, history, ReceiptId, Status.Approved.ToString(), RequestId, PaymentType, LeadDeal);
             return Json(true);
         }
-        [NoDirectAccess] public ActionResult MarketingCancelReq(long Id, string LeadDeal)
+        [NoDirectAccess]
+        public ActionResult MarketingCancelReq(long Id, string LeadDeal)
         {
             var res = db.Sp_Get_MarketingReceipt_Parameter_ById(Id, LeadDeal).FirstOrDefault();
             ViewBag.Bank = new SelectList(Nomenclature.Banks(), "Name", "Name", res.Bank);
@@ -763,13 +798,15 @@ namespace MeherEstateDevelopers.Controllers
             var res = db.Sp_Update_MarketingReceipt_Req(ReceiptId, Description, LeadDeal);
             return Json(true);
         }
-        [NoDirectAccess] public ActionResult MarketingAllCancelRequests()
+        [NoDirectAccess]
+        public ActionResult MarketingAllCancelRequests()
         {
             var All = db.Sp_Get_Cashiers_List().ToList();
             ViewBag.Users = new SelectList(All, "id", "Name");
             return View();
         }
-        [NoDirectAccess] public ActionResult MarketingAllCancelRequestSearch(DateTime? From, DateTime? To, long?[] Users)
+        [NoDirectAccess]
+        public ActionResult MarketingAllCancelRequestSearch(DateTime? From, DateTime? To, long?[] Users)
         {
             long userid = long.Parse(User.Identity.GetUserId());
             string chids = null;
@@ -782,7 +819,8 @@ namespace MeherEstateDevelopers.Controllers
             var res = db.Sp_Get_MarketingCancelReq(From, To, chids).ToList();
             return PartialView(res);
         }
-        [NoDirectAccess] public ActionResult MarketingCancelRequestDetails(long Id, string LeadDeal)
+        [NoDirectAccess]
+        public ActionResult MarketingCancelRequestDetails(long Id, string LeadDeal)
         {
             var res = db.Sp_Get_MarketingReceipt_Parameter_ById(Id, LeadDeal).FirstOrDefault();
             ViewBag.Bank = new SelectList(Nomenclature.Banks(), "Name", "Name");
@@ -797,7 +835,8 @@ namespace MeherEstateDevelopers.Controllers
             var res = db.Sp_Update_MarketingReceiptCancelation(ReceiptId, Description, userid, Cancel_Reversal, LeadDeal);
             return Json(true);
         }
-        [NoDirectAccess] public ActionResult AllRequestedPayments()
+        [NoDirectAccess]
+        public ActionResult AllRequestedPayments()
         {
             var res = db.VoucherRequests.ToList();
             return View(res);
@@ -831,7 +870,8 @@ namespace MeherEstateDevelopers.Controllers
             return Json(fres);
         }
         // Patty cash Settelments
-        [NoDirectAccess] public ActionResult PattyCashSattlment()
+        [NoDirectAccess]
+        public ActionResult PattyCashSattlment()
         {
             Helpers h = new Helpers();
             ViewBag.Transaction_Id = h.RandomNumber();
@@ -862,11 +902,13 @@ namespace MeherEstateDevelopers.Controllers
                 return Json(ret);
             }
         }
-        [NoDirectAccess] public ActionResult AllPattyCash()
+        [NoDirectAccess]
+        public ActionResult AllPattyCash()
         {
             return View();
         }
-        [NoDirectAccess] public ActionResult PattyCashStatus(string Status)
+        [NoDirectAccess]
+        public ActionResult PattyCashStatus(string Status)
         {
             long? userid = long.Parse(User.Identity.GetUserId());
             var emp = db.Sp_Get_EmployeeId(userid).FirstOrDefault();
@@ -880,16 +922,19 @@ namespace MeherEstateDevelopers.Controllers
             var res = db.Sp_Get_PattyCashItems_List(Status, ids, User.IsInRole("Administrator")).ToList();
             return PartialView(res);
         }
-        [NoDirectAccess] public ActionResult MyPattyCashEntry()
+        [NoDirectAccess]
+        public ActionResult MyPattyCashEntry()
         {
             return View();
         }
-        [NoDirectAccess] public ActionResult MyPattyCashList(long Userid, string Status)
+        [NoDirectAccess]
+        public ActionResult MyPattyCashList(long Userid, string Status)
         {
             var res = db.Sp_Get_PattyCashItems_User(Userid, Status).ToList();
             return PartialView(res);
         }
-        [NoDirectAccess] public ActionResult PattyCashEntryDetails(long Group_Id)
+        [NoDirectAccess]
+        public ActionResult PattyCashEntryDetails(long Group_Id)
         {
             var res = db.Sp_Get_PattyCashItems(Group_Id).ToList();
             return View(res);
@@ -901,7 +946,8 @@ namespace MeherEstateDevelopers.Controllers
             var ret = new { Status = true, Msg = "Approved" };
             return Json(ret);
         }
-        [NoDirectAccess] public ActionResult PettyCashPrint(long Group_Id)
+        [NoDirectAccess]
+        public ActionResult PettyCashPrint(long Group_Id)
         {
             var res = db.Sp_Get_PattyCashItems(Group_Id).ToList();
 
@@ -909,7 +955,8 @@ namespace MeherEstateDevelopers.Controllers
             db.Sp_Add_Activity(userid, "Printed Patty Cash Page " + res.Select(x => x.Description).FirstOrDefault(), "Read", "Activity_Record", ActivityType.Details_Access.ToString(), Group_Id);
             return View(res);
         }
-        [NoDirectAccess] public ActionResult PettyCashAccount()
+        [NoDirectAccess]
+        public ActionResult PettyCashAccount()
         {
             var res = db.PattyCash_Accounts.Where(x => x.Status == "Active").ToList();
             List<PettyCashAccountsDetModel> pcad = new List<PettyCashAccountsDetModel>();
@@ -946,7 +993,8 @@ namespace MeherEstateDevelopers.Controllers
             return Json(ret);
         }
 
-        [NoDirectAccess] public ActionResult NewPattyCashAccount()
+        [NoDirectAccess]
+        public ActionResult NewPattyCashAccount()
         {
             return PartialView();
         }
@@ -1003,11 +1051,13 @@ namespace MeherEstateDevelopers.Controllers
             var result = db.Sp_Get_PattyCash_EmployeeList("", s, string.Empty).Select(x => new { id = x.Id, text = x.Name + "(" + x.Employee_Code + ")" }).ToList();
             return Json(result, JsonRequestBehavior.AllowGet);
         }
-        [NoDirectAccess] public ActionResult PattyCashSettlements()
+        [NoDirectAccess]
+        public ActionResult PattyCashSettlements()
         {
             return PartialView();
         }
-        [NoDirectAccess] public ActionResult PattyCashSupervisionList()
+        [NoDirectAccess]
+        public ActionResult PattyCashSupervisionList()
         {
             long? userid = long.Parse(User.Identity.GetUserId());
             var emp = db.Sp_Get_EmployeeId(userid).FirstOrDefault();
@@ -1026,7 +1076,8 @@ namespace MeherEstateDevelopers.Controllers
             var res = db.Sp_Get_PattyCashItems_List("Approved", ids, bit).ToList();
             return PartialView(res);
         }
-        [NoDirectAccess] public ActionResult PattyCashSupervisionDetails(long Group_Id)
+        [NoDirectAccess]
+        public ActionResult PattyCashSupervisionDetails(long Group_Id)
         {
             long userid = long.Parse(User.Identity.GetUserId());
 
@@ -1044,7 +1095,8 @@ namespace MeherEstateDevelopers.Controllers
         //    db.Sp_Update_PattyCash_ExpenseAccount(empid, headid);
         //    return Json(true);
         //}
-        [NoDirectAccess] public ActionResult PayPattyCash()
+        [NoDirectAccess]
+        public ActionResult PayPattyCash()
         {
             Helpers h = new Helpers();
             ViewBag.TransactionId = h.RandomNumber();
@@ -1312,7 +1364,8 @@ namespace MeherEstateDevelopers.Controllers
             }
         }
 
-        [NoDirectAccess] public ActionResult TaxPayment()
+        [NoDirectAccess]
+        public ActionResult TaxPayment()
         {
             var banks = db.Bank_Accounts.Select(x => new NameValuestring { Value = x.Id.ToString(), Name = x.Bank + " - " + x.Account_Number }).ToList();
             var all = new NameValuestring()

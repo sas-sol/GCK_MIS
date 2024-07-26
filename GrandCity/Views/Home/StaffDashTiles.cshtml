@@ -1543,6 +1543,17 @@
                         </div>
                     </li>*@
             }
+            if (User.IsInRole("Banks Collection"))
+            {
+                <li>
+                    <a href="/Finance/PendingReceiptWithoutFileId">
+                        <div class="c" style="box-shadow: 10px 0px 10px rgba(0, 0, 0, 0.5); margin:10px; ">
+                            Suspense Receipts
+                            @*<img src="../assets/static/images/NewTiles/FPR/5.png" alt="Receipt Cancellation Request" width="250" height="250" />*@
+                        </div>
+                    </a>
+                </li>
+            }
             if (User.IsInRole("SAM Instruments"))
             {
                 <li>
@@ -1596,13 +1607,13 @@
             }
             if (User.IsInRole("Banks Collection"))
             {
-                <li>
-                    <a style="color:black !important" href="/Banking/BanksMIS">
-                        <div class="c" style="box-shadow: 10px 0px 10px rgba(0, 0, 0, 0.5); margin:10px; ">
-                            Online Bank Reconciliation
-                        </div>
-                    </a>
-                </li>
+                @*<li>
+                        <a style="color:black !important" href="/Banking/BanksMIS">
+                            <div class="c" style="box-shadow: 10px 0px 10px rgba(0, 0, 0, 0.5); margin:10px; ">
+                                Online Bank Reconciliation
+                            </div>
+                        </a>
+                    </li>*@
                 @*<li>
                         <div style="width:160px">
                             <a href="/Banking/BanksMIS">
@@ -1802,6 +1813,7 @@
                         </div>
                     </a>
                 </li>
+
                 @*<li>
                         <div class="hexagon bg-green">
                             <div class="text" style="">
@@ -1851,7 +1863,19 @@
                     </li>*@
             }
 
-
+            <li>
+                <a href="/Plots/AllotmentRequest">
+                    <div class="c" style="box-shadow: 10px 0px 10px rgba(0, 0, 0, 0.5); margin:10px; ">
+                        Allotment Letter Request
+                        @* <img src="../assets/static/images/NewTiles/Audit/3.png" alt="Allotment Letter Request" width="250" height="250" />*@
+                    </div>
+                </a>
+                @*<div style="width:160px">
+                        <a href="/Plots/AllotmentRequest">
+                            <img src="~/assets/static/images/Tileicons/all-reqs.png" style="width:100%" />
+                        </a>
+                    </div>*@
+            </li>
 
             @*if (User.IsInRole("Allotment Letter Requests"))
                 {
@@ -3938,15 +3962,15 @@
             </a>
         </li>
         @*<li>
-            <div class="hexagon bg-warning font-white">
-                <div class="text" style="text-align: center;font-size: 17px;">
-                    <i class="fa fa-th-large heavyFont"></i>
-                    <br />
-                    <br />
-                    <a class="" href="/ServiceCharges/InstallmentRequests?tp=0" data-sertype="1">Bill Installment Requests</a>
+                <div class="hexagon bg-warning font-white">
+                    <div class="text" style="text-align: center;font-size: 17px;">
+                        <i class="fa fa-th-large heavyFont"></i>
+                        <br />
+                        <br />
+                        <a class="" href="/ServiceCharges/InstallmentRequests?tp=0" data-sertype="1">Bill Installment Requests</a>
+                    </div>
                 </div>
-            </div>
-        </li>*@
+            </li>*@
     }
 </ul>
 </div>

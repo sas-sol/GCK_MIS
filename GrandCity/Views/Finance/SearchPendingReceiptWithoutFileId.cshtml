@@ -1,0 +1,71 @@
+﻿@model IEnumerable<MeherEstateDevelopers.Models.Sp_Get_Receipts_Pending_Result>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="bdrs-3 ov-h bgc-white p-10 bd">
+            <h3>Suspense Receipts</h3>
+
+            <table id="result" class="table table-borderless clickable-rows" cellspacing="0" width="100%">
+                <thead>
+                    <tr class="thead-dark">
+                        <th class="col-date">Sr#</th>
+                        <th class="col-date">Date</th>
+                        <th class="col-rece">Receipt No</th>
+                        <th class="col-rece">Bank</th>
+                        <th class="col-amt">Amount</th>
+                        <th class="col-type">Type</th>
+                        <th class="col-type">UserName</th>
+                        @*<th class="col-type">Remarks</th>*@
+                        <th class="col-size">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        int i = 1;
+                        if (Model.Any())
+                        {
+                            foreach (var item in Model.OrderByDescending(x => x.DateTime))
+                            {
+
+                                <tr id="@item.Id">
+                                    <td class="col-date">@i</td>
+                                    <td class="col-date">@string.Format("{0:MM/dd/yyyy}", item.DateTime)</td>
+                                    <td class="col-rece">@item.ReceiptNo</td>
+                                    <td class="col-rece">@item.Bank</td>
+                                    <td class="col-amt">@string.Format("{0:n0}", item.Amount)</td>
+                                    <td class="col-type">@item.Type</td>
+                                    <td class="col-type">@item.UserName</td>
+                                    @*<td class="col-type" style="width: 350px; word-wrap: break-word; overflow-wrap: break-word;">
+                                        @item.Remarks
+                                    </td>*@
+
+
+
+                                    <td class="col-deal">
+                                        <i class="fa fa-pencil rc-up-Unspr-Pnd" data-toggle="modal" data-target="#Modal" style="margin-right:15px" title="Update"></i>
+                                        <i class="fa fa-pencil-square-o rc-up-Unspr-Pnd-multifileplot" data-toggle="modal" data-target="#Modal" style="margin-right:15px" title="Adjust Amounts of receipt"></i>
+
+                                        @*<i class="fa fa-remove sus-rc-can" data-toggle="modal" data-target="#Modal" style="margin-right:15px" title="Cancel"></i>*@
+                                    </td>
+
+                                </tr>
+                                i++;
+                            }
+                            <tr>
+                                <td colspan="2"></td>
+                                <td colspan="2"><b>Total</b></td>
+                                <td colspan="3"><b>@string.Format("{0:n0}", Model.Sum(x => x.Amount))</b></td>
+                            </tr>
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="10">No Record Found</td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
