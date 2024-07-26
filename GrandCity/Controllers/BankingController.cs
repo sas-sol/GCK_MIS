@@ -1360,7 +1360,8 @@ namespace MeherEstateDevelopers.Controllers
         {
             Helpers h = new Helpers();
             ViewBag.TransactionId = h.RandomNumber();
-            ViewBag.Bank = new SelectList(db.Bank_Accounts.Select(x => new { id = x.Id, text = x.Bank + " - " + x.Account_Number }).ToList(), "id", "text");
+            ViewBag.Bank = new SelectList(Nomenclature.Banks(), "Name", "Name");
+            //ViewBag.Bank = new SelectList(db.Bank_Accounts.Select(x => new { id = x.Id, text = x.Bank + " - " + x.Account_Number }).ToList(), "id", "text");
             return PartialView();
         }
         [HttpPost]
@@ -1369,9 +1370,9 @@ namespace MeherEstateDevelopers.Controllers
         {
             long userid = long.Parse(User.Identity.GetUserId());
             var receiptno = db.Sp_Get_ReceiptNo(From_Bank).FirstOrDefault() + "-" + From_Bank;
-            var bank = int.Parse(rd.Bank);
-            var banks = db.Bank_Accounts.Where(x => x.Id == bank).FirstOrDefault();
-            var res = db.Sp_Add_UnadjustableAmounts_Pending(rd.Amount, rd.AmountInWords, banks.Bank, rd.PayChqNo, null
+            var bank = rd.Bank;
+            //var banks = db.Bank_Accounts.Where(x => x.Id == bank).FirstOrDefault();
+            var res = db.Sp_Add_UnadjustableAmounts_Pending(rd.Amount, rd.AmountInWords, bank, rd.PayChqNo, null
                          , null, null, null, rd.PaymentType, rd.TotalAmount,
                          rd.Project_Name, rd.Rate, null, null, "Installment", userid, userid, rd.Date, null /*Filefromid*/, From_Bank, null, "", null /*res1.Plot_No.ToString()*/, null, TransactionId, receiptno, null).FirstOrDefault();
             if (res == "0")
@@ -1401,9 +1402,9 @@ namespace MeherEstateDevelopers.Controllers
                             var TransactionId = h.RandomNumber();
 
                             var receiptno = db.Sp_Get_ReceiptNo(item.From_Bank).FirstOrDefault() + "-" + item.From_Bank;
-                            var bank = int.Parse(item.Bank);
-                            var banks = db.Bank_Accounts.Where(x => x.Id == bank).FirstOrDefault();
-                            var res = db.Sp_Add_UnadjustableAmounts_Pending(item.Amount, item.AmountInWords, banks.Bank, pndreceipt.Ch_Pay_Draft_No, null
+                            //var bank = int.Parse(item.Bank);
+                            //var banks = db.Bank_Accounts.Where(x => x.Id == bank).FirstOrDefault();
+                            var res = db.Sp_Add_UnadjustableAmounts_Pending(item.Amount, item.AmountInWords, pndreceipt.Bank, pndreceipt.Ch_Pay_Draft_No, null
                                          , null, pndreceipt.Id, null, pndreceipt.PaymentType, pndreceipt.Plot_Total_Amount,
                                          pndreceipt.Project, pndreceipt.RatePerMarla, null, null, "Installment", userid, userid, pndreceipt.DateTime, null /*Filefromid enter effected receipt id in saleid coulmn*/, item.From_Bank, null, "", null /*res1.Plot_No.ToString()*/, null, TransactionId, receiptno, null).FirstOrDefault();
                             if (res == "0")

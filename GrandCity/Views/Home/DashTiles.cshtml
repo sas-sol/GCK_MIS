@@ -351,9 +351,9 @@
                     </div>*@
                 </li>
                 <!--<li>
-                <a href="/FileSystem/FileDelivery">
-                    <div class="c" style="box-shadow: 10px 0px 10px rgba(0, 0, 0, 0.5); margin:10px; ">
-                        File Delivery-->
+            <a href="/FileSystem/FileDelivery">
+                <div class="c" style="box-shadow: 10px 0px 10px rgba(0, 0, 0, 0.5); margin:10px; ">
+                    File Delivery-->
                 @*<img src="../assets/static/images/NewTiles/FPR/File/8.png" alt="File Delivery" width="250" height="250" />*@
                 <!--</div>
             </a>-->
@@ -365,11 +365,11 @@
                 <!--</li>-->
                 <li>
                     <a href="/FileSystem/TransferRequest">
-                         <div class="c" style="box-shadow: 10px 0px 10px rgba(0, 0, 0, 0.5); margin:10px; ">
-                             Initiate File Transfer
-                                @* <img src="../assets/static/images/NewTiles/FPR/File/3.png" alt="File Transfer" width="250" height="250" />*@
-                         </div>
-                     </a>
+                        <div class="c" style="box-shadow: 10px 0px 10px rgba(0, 0, 0, 0.5); margin:10px; ">
+                            Initiate File Transfer
+                            @* <img src="../assets/static/images/NewTiles/FPR/File/3.png" alt="File Transfer" width="250" height="250" />*@
+                        </div>
+                    </a>
                 </li>
                 <li>
                     <a href="/FileSystem/TransferRequestList">
@@ -645,6 +645,17 @@
                         </a>
                     </div>*@
                 </li>
+                if (User.IsInRole("Banks Collection") || User.IsInRole("Administrator"))
+                {
+                    <li>
+                        <a href="/Finance/PendingReceiptWithoutFileId">
+                            <div class="c" style="box-shadow: 10px 0px 10px rgba(0, 0, 0, 0.5); margin:10px; ">
+                                Suspense Receipts
+                                @*<img src="../assets/static/images/NewTiles/FPR/5.png" alt="Receipt Cancellation Request" width="250" height="250" />*@
+                            </div>
+                       </a>
+                    </li>
+                }
 
             }
             else if (ViewBag.Dash == "prj management")
@@ -782,9 +793,9 @@
                     </div>*@
                 </li>
                 <!--<li>
-                <a style="color:black !important" href="/Reports/OverDueFiles/">
-                    <div class="c" style="box-shadow: 10px 0px 10px rgba(0, 0, 0, 0.5); margin:10px; ">
-                        Overdue Files Report-->
+            <a style="color:black !important" href="/Reports/OverDueFiles/">
+                <div class="c" style="box-shadow: 10px 0px 10px rgba(0, 0, 0, 0.5); margin:10px; ">
+                    Overdue Files Report-->
                 @*<img src="../assets/static/images/NewTiles/Reports/4.png" alt="Overdue Files Report" width="250" height="250" />*@
                 <!--</div>
             </a>-->
@@ -874,20 +885,20 @@
             else if (ViewBag.Dash == "ballot")
             {
                 <!--<li>
-                    <a style="color:black !important" href="/Balloting/Ballot">
-                        <div class="c" style="box-shadow: 10px 0px 10px rgba(0, 0, 0, 0.5); margin:10px; ">
-                            Balloting-->
-                            @*<img src="../assets/static/images/NewTiles/Balloting/1.png" alt="Balloting" width="250" height="250" />*@
-                        <!--</div>
-                    </a>-->
+                <a style="color:black !important" href="/Balloting/Ballot">
+                    <div class="c" style="box-shadow: 10px 0px 10px rgba(0, 0, 0, 0.5); margin:10px; ">
+                        Balloting-->
+                @*<img src="../assets/static/images/NewTiles/Balloting/1.png" alt="Balloting" width="250" height="250" />*@
+                <!--</div>
+            </a>-->
 
-                    @*<div class="hexagon bg-grey">
-                        <div class="text" style="">
-                            <i class="fas fa-directions fa-3x"></i>
-                            <br />
-                            <a style="color:black !important" href="/Balloting/Ballot">Perform Ballot</a>
-                        </div>
-                    </div>*@
+                @*<div class="hexagon bg-grey">
+                    <div class="text" style="">
+                        <i class="fas fa-directions fa-3x"></i>
+                        <br />
+                        <a style="color:black !important" href="/Balloting/Ballot">Perform Ballot</a>
+                    </div>
+                </div>*@
                 <!--</li>-->
                 <li>
                     <a style="color:black !important" href="/Balloting/BallotedPlots">

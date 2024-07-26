@@ -4,7 +4,7 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 @model MeherEstateDevelopers.Models.PlotDetailData
 @{
-    string[] Types = { "Booking", "Installment" };
+    string[] Types = { "Booking", "Installment" , "Processing_Fee" , "Adjustment", "Adj_Merge", "Other_Charges" , "Possession_Charges", "SurCharge", "Other_Recovery", "Transfer", "PROCES" };
 
     if (User.IsInRole("Administrator")) { Layout = "~/Views/Shared/_AdminLayout.cshtml"; } else { Layout = "~/Views/Shared/_StaffLayout.cshtml"; } }
 <link href="~/Content/albery.css" rel="stylesheet" />
