@@ -1485,8 +1485,9 @@ $(document).on("click", ".ad-file-inf", function () {
         </select></div>
         <div class="form-group col-md-2"><input type="text" class="form-control com" />
          </div>
-        <div class="form-group col-md-3"><select class="form-control plt-ins"></select></div>
-        <div class="form-group col-md-1" ><a href="javascript:void(0);" data-filaloc="${filealloccounter}" class="rm-file-as td-n c-grey-900 cH-blue-500 fsz-md mR-30" title=""><i class="ti-close"></i></a></div></div>`;
+          <div class="form-group col-md-3">  <input type="text" class="form-control delaercomAmt" /> </div>
+        <div class="form-group col-md-2"><select class="form-control plt-ins"></select></div>
+        <div class="form-group col-md-1" ><a href="javascript:void(0);" data-filaloc="${filealloccounter}" class="rm-file-as td-n c-grey-900 cH-blue-500 fsz-md mR-30" title=""><i class="fa fa-trash"></i></a></div></div>`;
     $('#file-form').append(html);
     InitPlots(filealloccounter);
 });

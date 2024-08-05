@@ -27,38 +27,47 @@
             </div>
         </div>
         <div class="col-md-12 mt-md-3">
-            <div class="row mt-md-2">
+            <!--<div class="row plt-asgnmnt-data mt-md-2">
                 <div class="col-md-2">
                     <label><b>Plot</b></label>
+                    <select class="form-control plts-lst">
+                    </select>
                 </div>
                 <div class="col-md-2">
                     <label><b>Plot Price</b></label>
-                </div>
+                    <input type="text" class="form-control coma plt-prc-fld" placeholder="Plot Price" value="" />
+                </div>-->
                 @*<div class="col-md-1">
             <label><b>Discount</b></label>
               <div class="col-md-1">  this is commented according to requirement
                 <input type="text" class="form-control coma plt-disc-fld" placeholder="Discount" value="" />
                </div>
         </div>*@
-                <div class="col-md-2">
+                <!--<div class="col-md-2">
                     <label><b>Special Charges</b></label>
+                    <input type="text" class="form-control coma plt-sp-chg-fld" placeholder="Special Charges" value="0" />
                 </div>
-                <div class="col-md-1">
+                <div class="col-md-2">
                     <label><b>Development Charges</b></label>
+                    <input type="text" class="form-control coma plt-dc-chg-fld" placeholder="Development Charges" value="0" />
                 </div>
-                <div class="col-md-1">
+                <div class="col-md-3">
                     <label><b>Dealer Commission Percentage</b></label>
-                </div>
-                <div class="col-md-1">
+                    <input type="text" class="form-control coma plt-deal-com-chg-fld" placeholder="Dealer Commission" value="0" />
+                </div><br />
+                <div class="col-md-2">
                     <label><b>Total Price</b></label>
-                </div>
-                <div class="col-md-1">
+                    <label><b class="ttl-plt-prc-inclsv-all">0</b></label>
+                </div><br />
+                <div class="col-md-2">
                     <label><b>Percentage Adj</b></label>
-                </div>
-                <div class="col-md-1">
+                    <input type="text" class="form-control coma plt-deal-adj" placeholder="Dealer Adj %" value="0" />
+                </div><br />
+                <div class="col-md-3">
                     <label><b>DealerShip Commission Amount</b></label>
+                    <input type="text" class="form-control coma dealershipcomamt" placeholder="Dealership Amount" value="0" />
                 </div>
-            </div>
+            </div>-->
         </div>
         <div class="col-md-12 plts-asgnmnt-area mt-md-3">
             @*<div class="row plt-asgnmnt-data mt-md-2">
@@ -88,7 +97,7 @@
         </div>
         <hr />
         <div class="row mt-md-3" style="justify-content:center;">
-            <button class="btn btn-outline-primary add-plt-rw" title="Add another plot for this dealer."><i class="fa fa-plus-circle"></i></button>
+            <button class="btn btn-outline-primary add-plt-rw" title="Add another plot for this dealer.">@*<i class="fa fa-plus-circle"></i>*@Add New Deal Details</button>
         </div>
         <hr />
         <div class="row" style="justify-content:flex-end; align-items:center;">
@@ -159,29 +168,37 @@
         $('.add-plt-rw').unbind().click(function () {
             // yahan pe new row append krani hai
             let __strctr__ = `<div class="row plt-asgnmnt-data mt-md-2">
-                <div class="col-md-2">
+                <div class="col-md-2 form-group">
+                  <label><b>Plot</b></label>
                     <select class="form-control plts-lst">
                     </select>
                 </div>
-                <div class="col-md-2">
+                <div class="col-md-2 form-group">
+                  <label><b>Plot Price</b></label>
                     <input type="text" class="form-control coma plt-prc-fld" placeholder="Plot Price" value="" />
                 </div>
-                <div class="col-md-2">
+                <div class="col-md-2 form-group">
+                <label><b>Special Charges</b></label>
                     <input type="text" class="form-control coma plt-sp-chg-fld" placeholder="Special Charges" value="0" />
                 </div>
-                <div class="col-md-1">
+                <div class="col-md-2 form-group">
+                     <label><b>Development Charges</b></label>
                     <input type="text" class="form-control coma plt-dc-chg-fld" placeholder="Development Charges" value="0" />
                 </div>
-                <div class="col-md-1">
+                <div class="col-md-3 form-group">
+                  <label><b>Dealer Commission Percentage</b></label>
                     <input type="text" class="form-control coma plt-deal-com-chg-fld" placeholder="Dealer Commission" value="0" />
                 </div>
-                <div class="col-md-1">
+                <div class="col-md-2 form-group">
+                    <label><b>Total Price</b></label>
                     <label><b class="ttl-plt-prc-inclsv-all">0</b></label>
                 </div>
-                <div class="col-md-1">
+                <div class="col-md-2 form-group">
+                  <label><b>Percentage Adj</b></label>
                     <input type="text" class="form-control coma plt-deal-adj" placeholder="Dealer Adj %" value="0" />
                 </div>
-                  <div class="col-md-1">
+                  <div class="col-md-3 form-group">
+                   <label><b>DealerShip Commission Amount</b></label>
                   <input type="text" class="form-control coma dealershipcomamt" placeholder="Dealership Amount" value="0" />
                   </div>
                     <i class="fa fa-trash rmv-row-plt-assgnmnt"></i>
@@ -210,6 +227,7 @@
                     }
                 }
             });
+
             $('.plts-lst').last().unbind().change(function () {
                 let chosenVal = $(this).val();
                 let that = $(this);
