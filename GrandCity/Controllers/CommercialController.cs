@@ -1151,7 +1151,7 @@ namespace MeherEstateDevelopers.Controllers
                     db.Sp_Update_CommercialCancelation_Req(Id, ComId, Remarks, Status, "Finance Manager", userid);
                     var res = db.Sp_Add_Voucher(res2.Postal_Address, rd.Amount, rd.AmountInWords, rd.Bank, rd.Branch, rd.Ch_bk_Pay_Date, rd.PayChqNo, res2.Mobile_1, "Against Cancellation of " + res1.Type + " no: " + res1.shop_no + " Floor: " + res1.Floor + "`" + Description,
                         res2.Father_Husband, res1.Id, Modules.CommercialManagement.ToString(), res2.Name, rd.PaymentType, res1.Project_Name,
-                         "", userid, Payments.Cancellation.ToString(), userid, null, comp.Id).FirstOrDefault();
+                         "", userid, Payments.Cancellation.ToString(), userid, null, comp.Id,null,null,null).FirstOrDefault();
                     if (rd.PaymentType != "Cash")
                     {
                         if (!Directory.Exists(Server.MapPath("~/Repository/Com_Cancellation_Vouchers/" + "/")))

@@ -367,7 +367,7 @@ namespace MeherEstateDevelopers.Controllers
             {
                 var r = db.Sp_Add_Voucher("-", rd.Amount, rd.AmountinWords, rd.Bank, rd.Branch_Name, rd.Ch_Pay_Draft_Date, rd.Ch_Pay_Draft_No, rd.Contact, Description,
                             rd.Father_Name, rd.File_Plot_No, rd.Module, rd.Name, rd.PaymentType, "Meher Estate Developers",
-                         "", userid, "Payment Voucher", userid, null, comp.Id).FirstOrDefault();
+                         "", userid, "Payment Voucher", userid, null, comp.Id,null,null,null).FirstOrDefault();
                 //bool headcashier = false;
                 //if (User.IsInRole("Head Cashier"))
                 //{
@@ -849,7 +849,7 @@ namespace MeherEstateDevelopers.Controllers
             var rd = db.VoucherRequests.Where(x => x.Id == Id).FirstOrDefault();
             var r = db.Sp_Add_Voucher(rd.Voucher_For, rd.Amount, GeneralMethods.NumberToWords(Convert.ToInt32(rd.Amount)), null, null, null, null, rd.CNIC, rd.Remarks,
                             rd.Father_Name, rd.Module_Id, rd.Module, rd.Name, "Cash", "Meher Estate Developers",
-                         "", userid, "Payment Voucher", userid, null, comp.Id).FirstOrDefault();
+                         "", userid, "Payment Voucher", userid, null, comp.Id, null, null, null).FirstOrDefault();
             {
                 bool headcashier = false;
                 if (User.IsInRole("Head Cashier"))
@@ -1147,7 +1147,7 @@ namespace MeherEstateDevelopers.Controllers
             }
 
             var r = db.Sp_Add_Voucher("", amount, amtinwords, paymentaccount.Head, "", instDate, instNo, "", desc, "", null, Modules.PattyCash_Management.ToString(), receivedby,
-                paytype, "Meher Estate Developers", desc, TransactionId, "Payment Voucher", userid, null, comp.Id).FirstOrDefault();
+                paytype, "Meher Estate Developers", desc, TransactionId, "Payment Voucher", userid, null, comp.Id, null, null, null).FirstOrDefault();
             try
             {
                 de.PattyCashPaymentReleaseEntry(desc, receivedby, payeeId, payaccId, amount, TransactionId, r.Receipt_No, instNo, instDate, userid, headcashier);

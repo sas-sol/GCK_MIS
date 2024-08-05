@@ -751,7 +751,7 @@
                 <td colspan="21"></td>
             </tr>
             <tr style='height:30px;'>
-                <td class="s27" >Sr.</td>
+                <td class="s27">Sr.</td>
                 <td class="s27" colspan="12">DESCRIPTION</td>
                 <td class="s28" colspan="2">Qty</td>
                 <td class="s28" colspan="2">Rate</td>
@@ -779,6 +779,19 @@
                 <td class="s41" colspan="16">@Model.Voucher.Description</td>
                 <td class="s48" colspan="2">Total Amount</td>
                 <td class="s49" colspan="3"> Rs = @string.Format("{0:n0}", Model.Voucher.Amount)/-  </td>
+
+            </tr>
+            <tr style='height:44px;'>
+                <td class="s48"  colspan="2">Dealer Commission Adjustment</td>
+                <td class="s49" colspan="3"> Rs = @string.Format("{0:n0}", Model.Voucher.DealerCommissionAdj)/-  </td>
+            </tr>
+            <tr style='height:44px;'>
+                <td class="s48" colspan="2">Dealer Principal Credit</td>
+                <td class="s49" colspan="3"> Rs = @string.Format("{0:n0}", Model.Voucher.DealerPrincipalCredit)/-  </td>
+            </tr>
+            <tr style='height:44px;'>
+                <td class="s48" colspan="2">Net To Company</td>
+                <td class="s49" colspan="3"> Rs = @string.Format("{0:n0}", Model.Voucher.NetToCash)/-  </td>
             </tr>
             <tr style='height:60px;'>
                 <td colspan="21"></td>

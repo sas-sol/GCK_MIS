@@ -6079,229 +6079,393 @@ $(document).on("click", ".sec-plt-lst", function () {
     });
 });
 //Register Plot
-$(document).on("click", ".register-plot", function (e) {
-    debugger;
-    e.preventDefault();
-    //To disable after click
-    //$(this).prop("disabled", true);
-    var isCompPropCheck = $('.comp-prop-check').is(':checked');
-    var trans = $('#transaction-id').val();
-    var DealersId = $('#Dealers').val();
-    var availbal = (Number(RemoveComma($('#avl-bal').text())));
-    var recamt = Number(RemoveComma($('#rec-amt').val()));
-    var pltpric = Number(RemoveComma($('#plt-pric').text()));
-    var Amount = Number(RemoveComma($('#Amount').val()));
-    //if (availbal < pltpric) {
-    //    //alert("Plot Cannot be Register Due to Low Dealer Balance");
-    //    Swal.fire({
-    //        icon: 'info',
-    //        text: "Unable to Register Plot Due to Insufficient Dealer Balance"
-    //    });
-    //    return false;
-    //}
-    debugger
-    var payType = $(".pay-check option:selected").val();
-    var isPay = true;
-    if (payType == "DealerAdjustment") {
-        if (availbal < recamt) {
-            alert("Plot Cannot be Register Due to Low Dealer Balance");
-            return false;
-        }
-        isPay = false;
-    }
-    var received = 0;
-    if (isPay == true) {
-        //var DealersIds = $('#Dealership').val();
-        var dealershipid = $('#dealer-id').val();
-        if (DealersId == '0' || DealersId == '' || DealersId == 'Select Dealer ') {
-            alert("Select DealerShip");
-            return false;
-        }
-        if (Amount == '0' || Amount == null) {
-            alert("Please Enter Booking Amount")
-            return false;
-        }
-        if (pltpric > Amount) {
-            alert("Plot Cannot be Register Due to Recieved Amount is Less than Advance");
-            return false;
-        }
-        received = Amount;
-    }
-    else {
-        //For DealerShip
-        var Dealership = $('#dealership').text();
+//$(document).on("click", ".register-plot", function (e) {
+//    debugger;
+//    e.preventDefault();
+//    //To disable after click
+//    //$(this).prop("disabled", true);
+//    var isCompPropCheck = $('.comp-prop-check').is(':checked');
+//    var trans = $('#transaction-id').val();
+//    var DealersId = $('#Dealers').val();
+//    var availbal = (Number(RemoveComma($('#avl-bal').text())));
+//    var recamt = Number(RemoveComma($('#rec-amt').val()));
+//    var pltpric = Number(RemoveComma($('#plt-pric').text()));
+//    var Amount = Number(RemoveComma($('#Amount').val()));
+//    var Dealercomision = Number(RemoveComma($('.Dealercom').val()));
+//    var DealerShipPC = Number(RemoveComma($('.DealerPC').val()));
+//    var Netcash = Number(RemoveComma($('.Nettocash').val()));
+//    //if (availbal < pltpric) {
+//    //    //alert("Plot Cannot be Register Due to Low Dealer Balance");
+//    //    Swal.fire({
+//    //        icon: 'info',
+//    //        text: "Unable to Register Plot Due to Insufficient Dealer Balance"
+//    //    });
+//    //    return false;
+//    //}
+//    debugger
+//    var payType = $(".pay-check option:selected").val();
+//    var isPay = true;
+//    if (payType == "DealerAdjustment") {
+//        if (availbal < recamt) {
+//            alert("Plot Cannot be Register Due to Low Dealer Balance");
+//            return false;
+//        }
+//        isPay = false;
+//    }
+//    var received = 0;
+//    if (isPay == true) {
+//        //var DealersIds = $('#Dealership').val();
+//        var dealershipid = $('#dealer-id').val();
+//        if (DealersId == '0' || DealersId == '' || DealersId == 'Select Dealer ') {
+//            alert("Select DealerShip");
+//            return false;
+//        }
+//        if (Amount == '0' || Amount == null) {
+//            alert("Please Enter Booking Amount")
+//            return false;
+//        }
+//        if (pltpric > Amount) {
+//            alert("Plot Cannot be Register Due to Recieved Amount is Less than Advance");
+//            return false;
+//        }
+//        received = Amount;
+//    }
+//    else {
+//        //For DealerShip
+//        var Dealership = $('#dealership').text();
 
-        if (recamt == '0' || recamt == null) {
-            alert("Please Enter Booking Amount")
-            return false;
-        }
-        received = recamt;
-    }
-    mobileptrn = true;
-    CNICptrn = true;
+//        if (recamt == '0' || recamt == null) {
+//            alert("Please Enter Booking Amount")
+//            return false;
+//        }
+//        received = recamt;
+//    }
+//    mobileptrn = true;
+//    CNICptrn = true;
 
-    var own = [];
-    $('.Tran-own').each(function () {
-        var mobilePattern = /^\d{11}$/; // A simple pattern for a 10-digit mobile number
-        var cnicPattern = /^\d{5,6}-\d{6,7}-\d{1}$/; // Pattern for CNIC/NICOP
+//    var own = [];
+//    $('.Tran-own').each(function () {
+//        var mobilePattern = /^\d{11}$/; // A simple pattern for a 10-digit mobile number
+//        var cnicPattern = /^\d{5,6}-\d{6,7}-\d{1}$/; // Pattern for CNIC/NICOP
 
-        var plotowndata = {
-            Id: 0,
-            Name: $(this).find("input[name=Name]").val(),
-            Father_Husband: $(this).find("input[name=Father_Husband]").val(),
-            Postal_Address: $(this).find("input[name=Postal_Address]").val(),
-            Residential_Address: $(this).find("input[name=Residential_Address]").val(),
-            Phone_Office: $(this).find("input[name=Phone_Office]").val(),
-            Residential: $(this).find("input[name=Residential]").val(),
-            Mobile_1: $(this).find("input[name=Mobile_1]").val(),
-            Mobile_2: $(this).find("input[name=Mobile_2]").val(),
-            Ownership_DateTime: $(this).find("input[name=Ownership_DateTime]").val(),
-            Email: $(this).find("input[name=Email]").val(),
-            Occupation: $(this).find("input[name=Occupation]").val(),
-            Nationality: $(this).find("input[name=Nationality]").val(),
-            Date_Of_Birth: $(this).find("input[name=Date_Of_Birth]").val(),
-            CNIC_NICOP: $(this).find("input[name=CNIC_NICOP]").val(),
-            Nominee_Name: $(this).find("input[name=Nominee_Name]").val(),
-            Nominee_Relation: $(this).find("input[name=Nominee_Relation]").val(),
-            Nominee_Address: $(this).find("input[name=Nominee_Address]").val(),
-            Nominee_CNIC_NICOP: $(this).find("input[name=Nominee_CNIC_NICOP]").val(),
-            Plot_Id: $("#plt-id").val(),
-            City: $("#City option:selected").val(),
-            //City: $("#City").val(),
-            Currency_Note_No: $(this).find("input[name=CN]").val(),
-            Total_Price: Number(RemoveComma($('#plt-pric').text())),
-             IsCompanyProperty: isCompPropCheck
+//        var plotowndata = {
+//            Id: 0,
+//            Name: $(this).find("input[name=Name]").val(),
+//            Father_Husband: $(this).find("input[name=Father_Husband]").val(),
+//            Postal_Address: $(this).find("input[name=Postal_Address]").val(),
+//            Residential_Address: $(this).find("input[name=Residential_Address]").val(),
+//            Phone_Office: $(this).find("input[name=Phone_Office]").val(),
+//            Residential: $(this).find("input[name=Residential]").val(),
+//            Mobile_1: $(this).find("input[name=Mobile_1]").val(),
+//            Mobile_2: $(this).find("input[name=Mobile_2]").val(),
+//            Ownership_DateTime: $(this).find("input[name=Ownership_DateTime]").val(),
+//            Email: $(this).find("input[name=Email]").val(),
+//            Occupation: $(this).find("input[name=Occupation]").val(),
+//            Nationality: $(this).find("input[name=Nationality]").val(),
+//            Date_Of_Birth: $(this).find("input[name=Date_Of_Birth]").val(),
+//            CNIC_NICOP: $(this).find("input[name=CNIC_NICOP]").val(),
+//            Nominee_Name: $(this).find("input[name=Nominee_Name]").val(),
+//            Nominee_Relation: $(this).find("input[name=Nominee_Relation]").val(),
+//            Nominee_Address: $(this).find("input[name=Nominee_Address]").val(),
+//            Nominee_CNIC_NICOP: $(this).find("input[name=Nominee_CNIC_NICOP]").val(),
+//            Plot_Id: $("#plt-id").val(),
+//            City: $("#City option:selected").val(),
+//            //City: $("#City").val(),
+//            Currency_Note_No: $(this).find("input[name=CN]").val(),
+//            Total_Price: Number(RemoveComma($('#plt-pric').text())),
+//             IsCompanyProperty: isCompPropCheck
 
-        }
-        if (!plotowndata.Mobile_1.match(mobilePattern)) {
-            mobileptrn = false;
-        }
+//        }
+//        if (!plotowndata.Mobile_1.match(mobilePattern)) {
+//            mobileptrn = false;
+//        }
 
-        if (!plotowndata.CNIC_NICOP.match(cnicPattern)) {
-            CNICptrn = false;
-        }
+//        if (!plotowndata.CNIC_NICOP.match(cnicPattern)) {
+//            CNICptrn = false;
+//        }
 
-        own.push(plotowndata)
-    });
-    if (!mobileptrn) {
-        alert("Invalid mobile number format for owner.");
-        return false;
-    }
-    if (!CNICptrn) {
-        alert("Invalid CNIC format for owner.");
-        return false;
-    }
-    var isValid = own.every(function (owner) {
-        return owner.Name && owner.Father_Husband && owner.Mobile_1 && owner.CNIC_NICOP && owner.Date_Of_Birth && owner.Nominee_CNIC_NICOP && owner.Nominee_Name && owner.Postal_Address && owner.Residential_Address && owner.City && owner.Nominee_Address;
-    });
+//        own.push(plotowndata)
+//    });
+//    if (!mobileptrn) {
+//        alert("Invalid mobile number format for owner.");
+//        return false;
+//    }
+//    if (!CNICptrn) {
+//        alert("Invalid CNIC format for owner.");
+//        return false;
+//    }
+//    var isValid = own.every(function (owner) {
+//        return owner.Name && owner.Father_Husband && owner.Mobile_1 && owner.CNIC_NICOP && owner.Date_Of_Birth && owner.Nominee_CNIC_NICOP && owner.Nominee_Name && owner.Postal_Address && owner.Residential_Address && owner.City && owner.Nominee_Address;
+//    });
 
-    if (!isValid) {
-        alert("Please fill in all required fields for each owner.");
-        // Find the first input that is missing and set focus
-        $('.Tran-own').each(function () {
-            if (!$(this).find("input[name=Name]").val()) {
-                $(this).find("input[name=Name]").focus();
-                return false; // Stop the loop
-            } else if (!$(this).find("input[name=Father_Husband]").val()) {
-                $(this).find("input[name=Father_Husband]").focus();
-                return false; // Stop the loop
-            } else if (!$(this).find("input[name=Date_Of_Birth]").val()) {
-                $(this).find("input[name=Date_Of_Birth]").focus();
-                return false; // Stop the loop
-            } else if (!$(this).find("input[name=Postal_Address]").val()) {
-                $(this).find("input[name=Postal_Address]").focus();
-                return false; // Stop the loop
-            } else if (!$(this).find("input[name=Residential_Address]").val()) {
-                $(this).find("input[name=Residential_Address]").focus();
-                return false; // Stop the loop
-            } else if (!$(this).find("input[name=Mobile_1]").val()) {
-                $(this).find("input[name=Mobile_1]").focus();
-                return false; // Stop the loop
-            } else if (!$(this).find("input[name=City]").val()) {
-                $(this).find("input[name=City]").focus();
-                return false; // Stop the loop
-            } else if (!$(this).find("input[name=Nominee_Name]").val()) {
-                $(this).find("input[name=Nominee_Name]").focus();
-                return false; // Stop the loop
-            } else if (!$(this).find("input[name=Nominee_CNIC_NICOP]").val()) {
-                $(this).find("input[name=Nominee_CNIC_NICOP]").focus();
-                return false; // Stop the loop
-            } else if (!$(this).find("input[name=Nominee_Relation]").val()) {
-                $(this).find("input[name=Nominee_Address]").focus();
-                return false; // Stop the loop
-            } else if (!$(this).find("input[name=Nominee_Address]").val()) {
-                $(this).find("input[name=Nominee_Address]").focus();
-                return false; // Stop the loop
+//    if (!isValid) {
+//        alert("Please fill in all required fields for each owner.");
+//        // Find the first input that is missing and set focus
+//        $('.Tran-own').each(function () {
+//            if (!$(this).find("input[name=Name]").val()) {
+//                $(this).find("input[name=Name]").focus();
+//                return false; // Stop the loop
+//            } else if (!$(this).find("input[name=Father_Husband]").val()) {
+//                $(this).find("input[name=Father_Husband]").focus();
+//                return false; // Stop the loop
+//            } else if (!$(this).find("input[name=Date_Of_Birth]").val()) {
+//                $(this).find("input[name=Date_Of_Birth]").focus();
+//                return false; // Stop the loop
+//            } else if (!$(this).find("input[name=Postal_Address]").val()) {
+//                $(this).find("input[name=Postal_Address]").focus();
+//                return false; // Stop the loop
+//            } else if (!$(this).find("input[name=Residential_Address]").val()) {
+//                $(this).find("input[name=Residential_Address]").focus();
+//                return false; // Stop the loop
+//            } else if (!$(this).find("input[name=Mobile_1]").val()) {
+//                $(this).find("input[name=Mobile_1]").focus();
+//                return false; // Stop the loop
+//            } else if (!$(this).find("input[name=City]").val()) {
+//                $(this).find("input[name=City]").focus();
+//                return false; // Stop the loop
+//            } else if (!$(this).find("input[name=Nominee_Name]").val()) {
+//                $(this).find("input[name=Nominee_Name]").focus();
+//                return false; // Stop the loop
+//            } else if (!$(this).find("input[name=Nominee_CNIC_NICOP]").val()) {
+//                $(this).find("input[name=Nominee_CNIC_NICOP]").focus();
+//                return false; // Stop the loop
+//            } else if (!$(this).find("input[name=Nominee_Relation]").val()) {
+//                $(this).find("input[name=Nominee_Address]").focus();
+//                return false; // Stop the loop
+//            } else if (!$(this).find("input[name=Nominee_Address]").val()) {
+//                $(this).find("input[name=Nominee_Address]").focus();
+//                return false; // Stop the loop
+//            }
+//        });
+
+//        return false;
+//    }
+
+
+//    //debugger
+//    //var PaymentT = $('#cah-chq-bak').val();
+//    //var BAmount = $('#Amount').val();
+//    //var Ch_D_ONo = $('.paymentotherinfo #paymenttype').val();
+//    //var Datetime = $('#cbp-date').val();
+//    //var bank = $('#Bank').val();
+//    //var branch = $('#Branch').val();
+
+//    var rd = {
+//        PaymentType: $('#cah-chq-bak').val(),
+//        Amount: $('#Amount').val(),
+//        PayChqNo: $('.paymentotherinfo #paymenttype').val(),
+//        Ch_bk_Pay_Date: $('#cbp-date').val(),
+//        Bank: $('#Bank').val(),
+//        Branch: $('#Branch').val(),
+//        Description: $('#description').val()
+//    }
+//    debugger
+//    var data = { Owners: own, Plot_Id: $("#plt-id").val(), TransactionId: trans, isPayment: true, DealersId: DealersId, brdd: rd, recamt: received, Dealercomision: Dealercomision, DealerPercentCredit: DealerShipPC, NetToCash: Netcash};
+//    console.log(data);
+//    //var conf = confirm("Are You Want to Submit Owners Informations");
+//    //if (conf) {
+//    Swal.fire({
+//        //title: 'Are you sure you want to Register the Plot?',
+//        text: 'Are you sure you want to Register the Plot?',
+//        icon: 'question',
+//        showCancelButton: true,
+//        confirmButtonText: 'Yes',
+//        cancelButtonText: 'No'
+//    }).then((result) => {
+//        if (result.isConfirmed) {
+//            $.ajax({
+//                type: "POST",
+//                contentType: "application/json; charset=utf-8",
+//                url: '/Plots/RegisterDealerPlot/',
+//                data: JSON.stringify(data),
+//                success: function (data) {
+//                    if (data.Status) {
+//                        alert("Plot Registered")
+//                        //Swal.fire({
+//                        //    icon: 'success',
+//                        //    title: 'Success!',
+//                        //    text: "Plot has been Registered Successfully"
+//                        //});
+//                        window.open("/Banking/PlotReceipt?Id=" + data.ReceiptId + "&Token=" + data.Token, '_blank');
+//                        if (data.PaymentNo != 0) {
+//                            window.open("/Vouchers/SAGVouchers_Vendor?Id=" + data.PaymentNo + "&Token=" + data.Token, '_blank');
+//                        }
+
+//                        //window.location.reload();
+//                    }
+//                    else {
+//                        //alert(data.Msg)
+//                        Swal.fire({
+//                            icon: 'error',
+//                            title: 'Error!',
+//                            text: data.Msg
+//                        });
+//                    }
+
+//                }
+//            });
+//        }
+//    });
+//});
+$(document).ready(function () {
+    $(document).on("click", ".register-plot", function (e) {
+        e.preventDefault();
+        debugger;
+
+        var isCompPropCheck = $('.comp-prop-check').is(':checked');
+        var trans = $('#transaction-id').val();
+        var DealersId = $('#Dealers').val();
+        var availbal = Number(RemoveComma($('#avl-bal').text()));
+        var recamt = Number(RemoveComma($('#rec-amt').val()));
+        var pltpric = Number(RemoveComma($('#plt-pric').text()));
+        var Amount = Number(RemoveComma($('#Amount').val()));
+        var Dealercomision = Number(RemoveComma($('.Dealercom').val()));
+        var DealerShipPC = Number(RemoveComma($('.DealerPC').val()));
+        var Netcash = Number(RemoveComma($('.Nettocash').val()));
+        var totalAmt = Dealercomision + DealerShipPC + Netcash;
+        var payType = $(".pay-check option:selected").val();
+        var isPay = true;
+        if (payType == "DealerAdjustment") {
+            if (availbal < recamt) {
+                alert("Plot Cannot be Register Due to Low Dealer Balance");
+                return false;
             }
-        });
-
-        return false;
-    }
-
-
-    //debugger
-    //var PaymentT = $('#cah-chq-bak').val();
-    //var BAmount = $('#Amount').val();
-    //var Ch_D_ONo = $('.paymentotherinfo #paymenttype').val();
-    //var Datetime = $('#cbp-date').val();
-    //var bank = $('#Bank').val();
-    //var branch = $('#Branch').val();
-
-    var rd = {
-        PaymentType: $('#cah-chq-bak').val(),
-        Amount: $('#Amount').val(),
-        PayChqNo: $('.paymentotherinfo #paymenttype').val(),
-        Ch_bk_Pay_Date: $('#cbp-date').val(),
-        Bank: $('#Bank').val(),
-        Branch: $('#Branch').val(),
-        Description: $('#description').val()
-    }
-    //debugger
-    var data = { Owners: own, Plot_Id: $("#plt-id").val(), TransactionId: trans, isPayment: true, DealersId: DealersId, brdd: rd ,recamt: received};
-    //var conf = confirm("Are You Want to Submit Owners Informations");
-    //if (conf) {
-    Swal.fire({
-        //title: 'Are you sure you want to Register the Plot?',
-        text: 'Are you sure you want to Register the Plot?',
-        icon: 'question',
-        showCancelButton: true,
-        confirmButtonText: 'Yes',
-        cancelButtonText: 'No'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            $.ajax({
-                type: "POST",
-                contentType: "application/json; charset=utf-8",
-                url: '/Plots/RegisterDealerPlot/',
-                data: JSON.stringify(data),
-                success: function (data) {
-                    if (data.Status) {
-                        alert("Plot Registered")
-                        //Swal.fire({
-                        //    icon: 'success',
-                        //    title: 'Success!',
-                        //    text: "Plot has been Registered Successfully"
-                        //});
-                        window.open("/Banking/PlotReceipt?Id=" + data.ReceiptId + "&Token=" + data.Token, '_blank');
-                        if (data.PaymentNo != 0) {
-                            window.open("/Vouchers/SAGVouchers_Vendor?Id=" + data.PaymentNo + "&Token=" + data.Token, '_blank');
-                        }
-
-                        //window.location.reload();
-                    }
-                    else {
-                        //alert(data.Msg)
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Error!',
-                            text: data.Msg
-                        });
-                    }
-
-                }
+            isPay = false;
+        }
+        if (recamt != totalAmt) {
+            Swal.fire({
+                icon: 'info',
+                text: "Unable to Register File because Adjustment Amount is not equal to Total Amount"
             });
         }
+        var received = 0;
+        if (isPay) {
+            var dealershipid = $('#dealer-id').val();
+            if (!DealersId || DealersId === '0' || DealersId === 'Select Dealer ') {
+                alert("Select DealerShip");
+                return false;
+            }
+            if (!Amount) {
+                alert("Please Enter Booking Amount");
+                return false;
+            }
+            if (pltpric > Amount) {
+                alert("Plot Cannot be Register Due to Received Amount is Less than Advance");
+                return false;
+            }
+            received = Amount;
+        } else {
+            var Dealership = $('#dealership').text();
+            if (!recamt) {
+                alert("Please Enter Booking Amount");
+                return false;
+            }
+            received = recamt;
+        }
+
+        var own = [];
+        $('.Tran-own').each(function () {
+            var plotowndata = {
+                Id: 0,
+                Name: $(this).find("input[name=Name]").val(),
+                Father_Husband: $(this).find("input[name=Father_Husband]").val(),
+                Postal_Address: $(this).find("input[name=Postal_Address]").val(),
+                Residential_Address: $(this).find("input[name=Residential_Address]").val(),
+                Phone_Office: $(this).find("input[name=Phone_Office]").val(),
+                Residential: $(this).find("input[name=Residential]").val(),
+                Mobile_1: $(this).find("input[name=Mobile_1]").val(),
+                Mobile_2: $(this).find("input[name=Mobile_2]").val(),
+                Ownership_DateTime: $(this).find("input[name=Ownership_DateTime]").val(),
+                Email: $(this).find("input[name=Email]").val(),
+                Occupation: $(this).find("input[name=Occupation]").val(),
+                Nationality: $(this).find("input[name=Nationality]").val(),
+                Date_Of_Birth: $(this).find("input[name=Date_Of_Birth]").val(),
+                CNIC_NICOP: $(this).find("input[name=CNIC_NICOP]").val(),
+                Nominee_Name: $(this).find("input[name=Nominee_Name]").val(),
+                Nominee_Relation: $(this).find("input[name=Nominee_Relation]").val(),
+                Nominee_Address: $(this).find("input[name=Nominee_Address]").val(),
+                Nominee_CNIC_NICOP: $(this).find("input[name=Nominee_CNIC_NICOP]").val(),
+                Plot_Id: $("#plt-id").val(),
+                City: $("#City option:selected").val(),
+                Currency_Note_No: $(this).find("input[name=CN]").val(),
+                Total_Price: pltpric,
+                IsCompanyProperty: isCompPropCheck
+            };
+
+            own.push(plotowndata);
+        });
+
+        var isValid = own.every(function (owner) {
+            return owner.Name && owner.Father_Husband && owner.Mobile_1 && owner.CNIC_NICOP && owner.Date_Of_Birth && owner.Nominee_CNIC_NICOP && owner.Nominee_Name && owner.Postal_Address && owner.Residential_Address && owner.City && owner.Nominee_Address;
+        });
+
+        if (!isValid) {
+            alert("Please fill in all required fields for each owner.");
+            return false;
+        }
+
+        var rd = {
+            PaymentType: $('#cah-chq-bak').val(),
+            Amount: $('#Amount').val(),
+            PayChqNo: $('.paymentotherinfo #paymenttype').val(),
+            Ch_bk_Pay_Date: $('#cbp-date').val(),
+            Bank: $('#Bank').val(),
+            Branch: $('#Branch').val(),
+            Description: $('#description').val()
+        };
+
+        var data = {
+            Owners: own,
+            Plot_Id: $("#plt-id").val(),
+            TransactionId: trans,
+            isPayment: true,
+            DealersId: DealersId,
+            brdd: rd,
+            recamt: received,
+            Dealercomision: Dealercomision,
+            DealerPercentCredit: DealerShipPC,
+            NetToCash: Netcash
+        };
+
+        Swal.fire({
+            text: 'Are you sure you want to Register the Plot?',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Yes',
+            cancelButtonText: 'No'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    type: "POST",
+                    contentType: "application/json; charset=utf-8",
+                    url: '/Plots/RegisterDealerPlot/',
+                    data: JSON.stringify(data),
+                    success: function (response) {
+                        if (response.Status) {
+                            alert("Plot Registered");
+                            window.open("/Banking/PlotReceipt?Id=" + response.ReceiptId + "&Token=" + response.Token, '_blank');
+                            if (response.PaymentNo != 0) {
+                                window.open("/Vouchers/SAGVouchers_Vendor?Id=" + response.PaymentNo + "&Token=" + response.Token, '_blank');
+                            }
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error!',
+                                text: response.Msg
+                            });
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('Error:', error);
+                    }
+                });
+            }
+        });
     });
+
+    function RemoveComma(value) {
+        return value.replace(/,/g, '');
+    }
 });
 
 $('.pay-check').change(function () {

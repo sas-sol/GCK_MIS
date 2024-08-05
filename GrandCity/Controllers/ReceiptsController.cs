@@ -563,7 +563,7 @@ namespace MeherEstateDevelopers.Controllers
                     try
                     {
                         var voch = db.Sp_Add_Voucher(null, reqDets.TotalAmount, GeneralMethods.NumberToWords(Convert.ToInt32(reqDets.TotalAmount)), "", "", null, "", reqDets.CustomerContact,
-                       reqDets.ServicesDetails, reqDets.CustomerName, reqDets.CustomerId, "Architecture", reqDets.CustomerName, "Cash", null, null, token, "Architecture_Submission", uid, null, comp.Id).SingleOrDefault();
+                       reqDets.ServicesDetails, reqDets.CustomerName, reqDets.CustomerId, "Architecture", reqDets.CustomerName, "Cash", null, null, token, "Architecture_Submission", uid, null, comp.Id,null,null,null).SingleOrDefault();
                         bool headcashier = false;
                         if (User.IsInRole("Head Cashier"))
                         {
