@@ -127,13 +127,13 @@
                                     </select>
                                 </div>
                                 <div class="form-group col-md-2">
-                                    <label>Commession</label>
+                                    <label>Commession Percentage</label>
                                     <input type="text" class="form-control com" />
                                 </div>
-                                @*<div class="form-group col-md-2">
-                            <label>Security</label>
-                            <input type="text" class="form-control sec" readonly />
-                        </div>*@
+                                <div class="form-group col-md-3">
+                                    <label>DealerShip Commission Amount</label>
+                                  <input type="text" class="form-control delaercomAmt" />
+                                </div>
                                 <div class="form-group col-md-3">
                                     <label>Choose Installment Structure</label>
                                     <select class="form-control plt-ins">
@@ -191,6 +191,7 @@
                 fillalc.Sector = $('#Sector').val();
                 fillalc.Plot_Size = $('#file-asoc-' + i + ' .plots').val();
                 fillalc.Commession = $('#file-asoc-' + i + ' .com').val();
+                fillalc.DealerShipCommisionAmt = $('#file-asoc-' + i + ' .delaercomAmt').val();
                 fillalc.Filecount = $('#file-asoc-' + i + ' .total-file').val();
                 fillalc.Dev_Charges_Id = $('#file-asoc-' + i + ' .dev-char option:selected').val();
                 fillalc.Dev_Charges_Text = $('#file-asoc-' + i + ' .dev-char option:selected').text();

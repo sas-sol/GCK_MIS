@@ -1635,7 +1635,7 @@ namespace MeherEstateDevelopers.Controllers
             var res12 = db.Sp_Get_ReceivedAmounts_NotIncluded(Plotid, Modules.PlotManagement.ToString()).ToList();
             UpdatePlotInstallmentStatusNotIncluded(res3, res12, Plotid);
             var UpdatePlotInstallments = db.Sp_Get_PlotInstallments(Plotid).ToList();
-            var res = new PlotDetailData { PlotData = res1, PlotOwners = res2, PlotInstallments = UpdatePlotInstallments, PlotReceipts = res4, PlotInstallmentsSurcharge = UpdateSurChargeInstallments };
+            var res = new PlotDetailData { PlotData = res1, PlotOwners = res2, PlotInstallments = UpdatePlotInstallments, PlotReceipts = res4, PlotInstallmentsSurcharge = UpdateSurChargeInstallments , Discounts = discount };
             return PartialView(res);
         }
         public JsonResult UpdateConstructionStatus(long Id, string DevelopStatus)

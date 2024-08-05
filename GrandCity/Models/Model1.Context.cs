@@ -47,7 +47,6 @@ namespace MeherEstateDevelopers.Models
         public virtual DbSet<BallotPlot> BallotPlots { get; set; }
         public virtual DbSet<Bank_Accounts> Bank_Accounts { get; set; }
         public virtual DbSet<Bank_Online_Accounts> Bank_Online_Accounts { get; set; }
-        public virtual DbSet<Biding_Reserve_Plots> Biding_Reserve_Plots { get; set; }
         public virtual DbSet<Bill> Bills { get; set; }
         public virtual DbSet<Cancellation_Receipts> Cancellation_Receipts { get; set; }
         public virtual DbSet<Cheque_DemandDraft_PayOrder> Cheque_DemandDraft_PayOrder { get; set; }
@@ -107,7 +106,6 @@ namespace MeherEstateDevelopers.Models
         public virtual DbSet<ErrorLog> ErrorLogs { get; set; }
         public virtual DbSet<FamilyProperty> FamilyProperties { get; set; }
         public virtual DbSet<File_Cancelation_Req> File_Cancelation_Req { get; set; }
-        public virtual DbSet<File_Form> File_Form { get; set; }
         public virtual DbSet<File_Installments> File_Installments { get; set; }
         public virtual DbSet<File_Plot_Balance> File_Plot_Balance { get; set; }
         public virtual DbSet<Files_Comments> Files_Comments { get; set; }
@@ -291,6 +289,8 @@ namespace MeherEstateDevelopers.Models
         public virtual DbSet<Plot_Installments_Surcharge> Plot_Installments_Surcharge { get; set; }
         public virtual DbSet<Files_Transfer> Files_Transfer { get; set; }
         public virtual DbSet<Plot_Ownership> Plot_Ownership { get; set; }
+        public virtual DbSet<Biding_Reserve_Plots> Biding_Reserve_Plots { get; set; }
+        public virtual DbSet<File_Form> File_Form { get; set; }
     
         public virtual int Add_CustomerLogin(string name, string father_Husband, string email, string phone, string cNIC, string password)
         {
@@ -3720,83 +3720,6 @@ namespace MeherEstateDevelopers.Models
                 new ObjectParameter("type", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("Sp_Add_FileComments", fileidParameter, comentParameter, useridParameter, typeParameter);
-        }
-    
-        public virtual ObjectResult<Sp_Add_FileForm_Result> Sp_Add_FileForm(Nullable<long> qRCode, string plot_Size, Nullable<long> dealership_Id, Nullable<decimal> security, Nullable<long> phase_Id, Nullable<long> block_Id, Nullable<long> status, Nullable<bool> development_Charges, Nullable<bool> security_NoSecurity, Nullable<decimal> security_Amount, Nullable<long> groupid, Nullable<long> instplanid, Nullable<long> userid, string type, Nullable<decimal> com, string blocknam, string sector, string num)
-        {
-            var qRCodeParameter = qRCode.HasValue ?
-                new ObjectParameter("QRCode", qRCode) :
-                new ObjectParameter("QRCode", typeof(long));
-    
-            var plot_SizeParameter = plot_Size != null ?
-                new ObjectParameter("Plot_Size", plot_Size) :
-                new ObjectParameter("Plot_Size", typeof(string));
-    
-            var dealership_IdParameter = dealership_Id.HasValue ?
-                new ObjectParameter("Dealership_Id", dealership_Id) :
-                new ObjectParameter("Dealership_Id", typeof(long));
-    
-            var securityParameter = security.HasValue ?
-                new ObjectParameter("Security", security) :
-                new ObjectParameter("Security", typeof(decimal));
-    
-            var phase_IdParameter = phase_Id.HasValue ?
-                new ObjectParameter("Phase_Id", phase_Id) :
-                new ObjectParameter("Phase_Id", typeof(long));
-    
-            var block_IdParameter = block_Id.HasValue ?
-                new ObjectParameter("Block_Id", block_Id) :
-                new ObjectParameter("Block_Id", typeof(long));
-    
-            var statusParameter = status.HasValue ?
-                new ObjectParameter("Status", status) :
-                new ObjectParameter("Status", typeof(long));
-    
-            var development_ChargesParameter = development_Charges.HasValue ?
-                new ObjectParameter("Development_Charges", development_Charges) :
-                new ObjectParameter("Development_Charges", typeof(bool));
-    
-            var security_NoSecurityParameter = security_NoSecurity.HasValue ?
-                new ObjectParameter("Security_NoSecurity", security_NoSecurity) :
-                new ObjectParameter("Security_NoSecurity", typeof(bool));
-    
-            var security_AmountParameter = security_Amount.HasValue ?
-                new ObjectParameter("Security_Amount", security_Amount) :
-                new ObjectParameter("Security_Amount", typeof(decimal));
-    
-            var groupidParameter = groupid.HasValue ?
-                new ObjectParameter("groupid", groupid) :
-                new ObjectParameter("groupid", typeof(long));
-    
-            var instplanidParameter = instplanid.HasValue ?
-                new ObjectParameter("instplanid", instplanid) :
-                new ObjectParameter("instplanid", typeof(long));
-    
-            var useridParameter = userid.HasValue ?
-                new ObjectParameter("userid", userid) :
-                new ObjectParameter("userid", typeof(long));
-    
-            var typeParameter = type != null ?
-                new ObjectParameter("type", type) :
-                new ObjectParameter("type", typeof(string));
-    
-            var comParameter = com.HasValue ?
-                new ObjectParameter("com", com) :
-                new ObjectParameter("com", typeof(decimal));
-    
-            var blocknamParameter = blocknam != null ?
-                new ObjectParameter("blocknam", blocknam) :
-                new ObjectParameter("blocknam", typeof(string));
-    
-            var sectorParameter = sector != null ?
-                new ObjectParameter("Sector", sector) :
-                new ObjectParameter("Sector", typeof(string));
-    
-            var numParameter = num != null ?
-                new ObjectParameter("num", num) :
-                new ObjectParameter("num", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Sp_Add_FileForm_Result>("Sp_Add_FileForm", qRCodeParameter, plot_SizeParameter, dealership_IdParameter, securityParameter, phase_IdParameter, block_IdParameter, statusParameter, development_ChargesParameter, security_NoSecurityParameter, security_AmountParameter, groupidParameter, instplanidParameter, useridParameter, typeParameter, comParameter, blocknamParameter, sectorParameter, numParameter);
         }
     
         public virtual ObjectResult<Nullable<bool>> Sp_Add_FileInstallmentsPlan(string instplan, Nullable<long> fileid)

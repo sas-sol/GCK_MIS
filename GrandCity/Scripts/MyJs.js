@@ -72,21 +72,44 @@ var citylist = '<option value="">Choose..</option><option value="Abbottabad">Abb
     '<option value="Zhob">Zhob</option><option value="Other">Other</option>';
 
 var banklists = '<option value="">Choose..</option>' +
-    '<option value="1">Dubai Islamic Bank - 0441619001</option>' +
-    '<option value="2">Dubai Islamic Bank - 0441619002</option>' +
-    '<option value="3">Habib Bank - 06447902018403</option>' +
-    '<option value="4">JS Bank - 174334</option>' +
-    '<option value="5">Faysal Bank - 0186007000000684</option>' +
-    '<option value="6">Bank Alfalah - 0136-1005789121</option>' +
-    '<option value="7">Dubai Islamic Bank - 0441619004</option>' +
-    '<option value="8">Allied Bank - 0010031815300016</option>' +
-    '<option value="9">Habib Bank - 0126-79040349-55</option>' +
-    '<option value="10">Habib Bank - 00427991891003</option>' +
-    '<option value="11">Bank Alfalah - 0136-1007542638</option>' +
-    '<option value="12">Bank Alfalah - 0136-1007542962</option>' +
-    '<option value="13">Bank Alfalah - 0136-1007543221</option>' +
-    '<option value="14">Bank Alfalah - 0136-1007542829</option>' +
-    '<option value="15">Bank Alfalah - 0682-1007937888</option>';
+    '<option value="Al Baraka Bank1">Al Baraka Bank</option>' +
+    '<option value="Allied Bank">Allied Bank</option>' +
+    '<option value="Apna Microfinance Bank">Apna Microfinance Bank</option>' +
+    '<option value="Askari Bank">Askari Bank</option>' +
+    '<option value="Bank Al Habib">Bank Al Habib</option>' +
+    '<option value="Bank Alfalah">Bank Alfalah</option>' +
+    '<option value="Bank Islami">Bank Islami</option>' +
+    '<option value="Bank of Punjab">Bank of Punjab</option>' +
+    '<option value="Burj Bank">Burj Bank</option>' +
+    '<option value="Citibank N.A.">Citibank N.A.</option>' +
+    '<option value="Dubai Islamic Bank">Dubai Islamic Bank</option>' +
+    '<option value="FINCA Microfinance Bank">FINCA Microfinance Bank</option>' +
+    '<option value="Faysal Bank">Faysal Bank</option>' +
+    '<option value="First Women Bank Limited">First Women Bank Limited</option>' +
+    '<option value="Habib Bank">Habib Bank</option>' +
+    '<option value="Habib Metropolitan Bank">Habib Metropolitan Bank</option>' +
+    '<option value="ICBC">ICBC</option>' +
+    '<option value="JS Bank">JS Bank</option>' +
+    '<option value="KASB Bank Limited">KASB Bank Limited</option>' +
+    '<option value="MCB">MCB</option>' +
+    '<option value="MIB">MIB</option>' +
+    '<option value="Meezan Bank Limited">Meezan Bank Limited</option>' +
+    '<option value="Mobilink Microfinance Bank LTD">Mobilink Microfinance Bank LTD</option>' +
+    '<option value="NIB">NIB</option>' +
+    '<option value="National Bank of Pakistan">National Bank of Pakistan</option>' +
+    '<option value="Standard Chartered">Standard Chartered</option>' +
+    '<option value="Samba Bank">Samba Bank</option>' +
+    '<option value="Silk Bank">Silk Bank</option>' +
+    '<option value="Sindh Bank">Sindh Bank</option>' +
+    '<option value="Soneri Bank">Soneri Bank</option>' +
+    '<option value="Summit Bank">Summit Bank</option>' +
+    '<option value="Tameer Bank">Tameer Bank</option>' +
+    '<option value="U Microfinance Bank">U Microfinance Bank</option>' +
+    '<option value="United Bank">United Bank</option>' +
+    '<option value="UnCategorized">UnCategorized</option>' +
+    '<option value="Easypaisa">Easypaisa</option>' +
+    '<option value="Raast">Raast</option>' +
+    '<option value="First Microfinance Bank">First Microfinance Bank</option>';
 
 var unitlist = `<option value=""></option>
      <option value="Each">Each</option>
@@ -3081,9 +3104,14 @@ $(document).on('click', '#add-new-unidnfd-rcpt-row', function () {
             <input type="text" class="form-control coma" id="Amount" name="Amount">   </div>
       <div class="form-group col-md-2">
             <select class="form-control" id="From_Bank" name="From_Bank">
-                <option value="DIB">Dubai Islamic Bank</option>
-                <option value="HBL">Habib Bank Limited</option>
-            </select>
+                <option value="UBL7019">110001001001-UBL A-C (PK25UNIL0109000228187019)</option>
+               <option value="HBL0503">110001001110001001002-HBL A-C (PK42HABB0023487000510503)</option>
+               <option value="AlBaraka4017">110001001110001001003-AL-Baraka A-C (PK63AIIN0000102535994017)</option>
+              <option value="AlFalah2045">110001001110001001005-Al-Falah A-C (PK54ALFH5657005001452045)</option>
+              <option value="UBL1104">110001001110001001006-UBL A-C (PK79UNIL0109000241541104)</option>
+              <option value="BankIslami0001">110001001110001001007-Bank Islami A-C (PK98BKIP0207000325060001)</option>
+             <option value="AlBaraka4087">110001001110001001004-AL-Baraka A-C (PK16AIIN0000102535994087)</option>
+        </select>
         </div>
      <div class="form-group col-md-3" >
           <select class="form-control" name="Bank" id="Bank">` + banklists + `</select>
@@ -3367,6 +3395,7 @@ $(document).on("click", "#add-on-amt_un_sup", function (e) {
         success: function (data) {
             if (data.Status) {
                 alert("receipt no is " + data.ReceiptNo);
+                location.reload();
             }
             else {
                 alert(data.Msg);

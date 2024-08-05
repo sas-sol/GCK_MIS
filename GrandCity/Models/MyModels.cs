@@ -1054,7 +1054,7 @@ namespace MeherEstateDevelopers.Models
         public long Group_Id { get; set; }
         public int Installment_Plan { get; set; }
         public long? userid { get; set; }
-
+        public decimal? DealerShipCommisionAmt { get; set; }
     }
     //public class DealershipDeals
     //{

@@ -25,7 +25,6 @@
         <EntityTypeShape EntityType="Grand_CityModel.BallotPlot" Width="1.5" PointX="19.75" PointY="8.375" IsExpanded="true" />
         <EntityTypeShape EntityType="Grand_CityModel.Bank_Accounts" Width="1.5" PointX="19.75" PointY="17.375" IsExpanded="true" />
         <EntityTypeShape EntityType="Grand_CityModel.Bank_Online_Accounts" Width="1.5" PointX="19.75" PointY="20.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="Grand_CityModel.Biding_Reserve_Plots" Width="1.5" PointX="20.75" PointY="2.375" IsExpanded="true" />
         <EntityTypeShape EntityType="Grand_CityModel.Bill" Width="1.5" PointX="14.75" PointY="22.375" IsExpanded="true" />
         <EntityTypeShape EntityType="Grand_CityModel.Cancellation_Receipts" Width="1.5" PointX="21.75" PointY="7.375" IsExpanded="true" />
         <EntityTypeShape EntityType="Grand_CityModel.Cheque_DemandDraft_PayOrder" Width="1.5" PointX="21.75" PointY="14.375" IsExpanded="true" />
@@ -85,7 +84,6 @@
         <EntityTypeShape EntityType="Grand_CityModel.ErrorLog" Width="1.5" PointX="31.75" PointY="6.375" IsExpanded="true" />
         <EntityTypeShape EntityType="Grand_CityModel.FamilyProperty" Width="1.5" PointX="6.75" PointY="33.375" IsExpanded="true" />
         <EntityTypeShape EntityType="Grand_CityModel.File_Cancelation_Req" Width="1.5" PointX="31.75" PointY="10.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="Grand_CityModel.File_Form" Width="1.5" PointX="8.75" PointY="33.375" IsExpanded="true" />
         <EntityTypeShape EntityType="Grand_CityModel.File_Installments" Width="1.5" PointX="10.75" PointY="33.375" IsExpanded="true" />
         <EntityTypeShape EntityType="Grand_CityModel.File_Plot_Balance" Width="1.5" PointX="31.75" PointY="15.375" IsExpanded="true" />
         <EntityTypeShape EntityType="Grand_CityModel.Files_Comments" Width="1.5" PointX="26.75" PointY="33.375" IsExpanded="true" />
@@ -283,6 +281,8 @@
         <EntityTypeShape EntityType="Grand_CityModel.Plot_Installments_Surcharge" Width="1.5" PointX="55.375" PointY="36.75" />
         <EntityTypeShape EntityType="Grand_CityModel.Files_Transfer" Width="1.5" PointX="55.375" PointY="45.75" />
         <EntityTypeShape EntityType="Grand_CityModel.Plot_Ownership" Width="1.5" PointX="51.375" PointY="55.75" />
+        <EntityTypeShape EntityType="Grand_CityModel.Biding_Reserve_Plots" Width="1.5" PointX="56.375" PointY="0.75" />
+        <EntityTypeShape EntityType="Grand_CityModel.File_Form" Width="1.5" PointX="57.375" PointY="6.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

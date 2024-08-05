@@ -372,13 +372,14 @@ namespace MeherEstateDevelopers.Controllers
                 Sec_NoSec_Name = item.Sec_NoSec_Name,
                 Group_Id = item.Group_Id,
                 Installment_Plan = item.Installment_Plan,
-                userid = item.userid
+                userid = item.userid,
+                DealerShipCommisionAmt = item.DealerShipCommisionAmt
             };
             Helpers helpers = new Helpers(Modules.FileManagement, Types.FileForm);
             var no = helpers.stringRandomNumber();
             var FileFormNo = db.Sp_Add_FileForm(null, item.Plot_Size + " Marla", item.Dealership_Id, item.Security, item.Phase, item.Block,
                 (int)FileStatus.Pending, item.Dev_Charges_Id, helpers.GetBool(item.Sec_NoSec_Id), item.Security,
-                item.Group_Id, item.Installment_Plan, item.userid, item.Type, item.Commession, item.Block_Name, item.Sector, no).FirstOrDefault();
+                item.Group_Id, item.Installment_Plan, item.userid, item.Type, item.Commession, item.Block_Name, item.Sector, no,item.DealerShipCommisionAmt).FirstOrDefault();
             string newFileFormno = $"{item.Block_Name}-{FileFormNo.File_Form_Id} ";
             var fileFormToUpdate = db.File_Form.FirstOrDefault(f => f.Id == FileFormNo.Id);
             if (fileFormToUpdate != null)
@@ -530,6 +531,23 @@ namespace MeherEstateDevelopers.Controllers
                 return Json(fa);
             }
         }
+
+        [NoDirectAccess]
+        public ActionResult DeleteDiscount(int id)
+        {
+            var dis = db.Discounts.FirstOrDefault(p => p.Id == id);
+
+            if (dis != null)
+            {
+                db.Discounts.Remove(dis);
+                db.SaveChanges();
+
+                return Json(new { success = true, message = "Discount deleted successfully." });
+            }
+
+            return Json(new { success = false, message = "Discount not found." });
+        }
+
         [NoDirectAccess] public ActionResult GetFileDetails(string FileId)
         {
             long userid = long.Parse(User.Identity.GetUserId());
