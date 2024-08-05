@@ -54,5 +54,8 @@ namespace MeherEstateDevelopers.Models
         public Nullable<int> Comp_Id { get; set; }
         public Nullable<long> Sale_Id { get; set; }
         public Nullable<bool> Plot_Is_Cancelled { get; set; }
+        public Nullable<long> DealerPrincipalCredit { get; set; }
+        public Nullable<long> NetToCash { get; set; }
+        public Nullable<long> DealerCommissionAdj { get; set; }
     }
 }

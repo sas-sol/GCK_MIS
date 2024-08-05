@@ -372,7 +372,7 @@ namespace MeherEstateDevelopers.Controllers
                         res1.Type + " Salary for the Month" + string.Format("{0: MMMM yyyy}", DateTime.Now);
                         var res = db.Sp_Add_Voucher(res2.Department_Designation, res1.Amount, GeneralMethods.NumberToWords(Convert.ToInt32(res1.Amount)),
                             null, null, null, null, res2.Mobile_1, Remarks, res2.Father_Name, res1.Id, res1.Type, res2.Name, "Cash", null,
-                              "", userid, res1.Type, userid, null, comp.Id).FirstOrDefault();
+                              "", userid, res1.Type, userid, null, comp.Id,null,null,null).FirstOrDefault();
                         db.Sp_Update_LoanStatus(res1.Id);
                         MarkActivity(new EmployeeHistory
                         {
@@ -870,7 +870,7 @@ namespace MeherEstateDevelopers.Controllers
                 try
                 {
                     var voch = db.Sp_Add_Voucher(null, instData.Loan_Amt, GeneralMethods.NumberToWords(Convert.ToInt32(instData.Loan_Amt)), null, null, null, null, emp.Mobile_1,
-                        string.Join(" , ", lwr.DescriptionText, instData.Date.Value.ToLongDateString()), emp.Father_Name, reqId, Modules.LoanManagement.ToString(), emp.Name, "Cash", null, null, TransactionId, "Loan Installment Voucher", uid, null, comp.Id).SingleOrDefault();
+                        string.Join(" , ", lwr.DescriptionText, instData.Date.Value.ToLongDateString()), emp.Father_Name, reqId, Modules.LoanManagement.ToString(), emp.Name, "Cash", null, null, TransactionId, "Loan Installment Voucher", uid, null, comp.Id, null, null, null).SingleOrDefault();
                     bool headcashier = false;
                     if (User.IsInRole("Head Cashier"))
                     {

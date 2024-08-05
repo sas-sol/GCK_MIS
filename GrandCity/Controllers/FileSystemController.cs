@@ -166,7 +166,7 @@ namespace MeherEstateDevelopers.Controllers
             return Json(true, JsonRequestBehavior.AllowGet);
         }
         [HttpPost]
-        public JsonResult RegisterFile(List<Files_Transfer> filedatas, bool? Flag, string DevCharStatus, string FileFormNumber, List<ReceiptData> Receiptdata, bool? FullPaid, long? DelerId, long? recamt, string payType)
+        public JsonResult RegisterFile(List<Files_Transfer> filedatas, bool? Flag, string DevCharStatus, string FileFormNumber, List<ReceiptData> Receiptdata, bool? FullPaid, long? DelerId, long? recamt, string payType, long? Dealercomision, long? DealerPercentCredit, long? NetToCash)
         {
             long userid = long.Parse(User.Identity.GetUserId());
             AccountHandlerController ah = new AccountHandlerController();
@@ -177,6 +177,7 @@ namespace MeherEstateDevelopers.Controllers
             var FileForm = db.File_Form.Where(x => x.FileFormNumber == FileFormNumber).FirstOrDefault();
             var phase = db.RealEstate_Phases.Where(p => p.Id == FileForm.Phase_Id).FirstOrDefault();
             Helpers H = new Helpers();
+            long token = H.RandomNumber();
             if (DevCharStatus == "true")
             {
                 Devchar = "With Development Charges";
@@ -251,14 +252,14 @@ namespace MeherEstateDevelopers.Controllers
                             db.SaveChanges();
 
                             ids.Add(res.Receipt_No);
-
                             var dealership = db.Dealerships.Where(x => x.Id == DelerId).FirstOrDefault();
                             var dealers = db.Dealers.Where(x => x.Dealership_Id == dealership.Id).ToList();
                             string desc = "Adjustment Voucher Against the Booking of Plot " + fileno.FileFormNumber + "-" + fileno.Type + " Block No: " + fileno.Block;
                             var res5 = db.Sp_Add_Voucher(dealers.Select(x => x.Address).FirstOrDefault(), recamt, GeneralMethods.NumberToWords((int)recamt), "", "", null, "", string.Join("-", dealers.Select(x => x.Mobile_1).FirstOrDefault()), desc,
                                 string.Join("-", dealers.Select(x => x.Name)), dealership.Id, Modules.Dealers.ToString(), dealership.Dealership_Name, "Cash", "",
-                            "", H.RandomNumber(), Payments.Adjustment.ToString(), userid, null, comp.Id).FirstOrDefault();
+                            "", token, Payments.Adjustment.ToString(), userid, null, comp.Id, DealerPercentCredit, NetToCash, Dealercomision).FirstOrDefault();
                            Payment_No = Convert.ToInt64(res5.Receipt_Id);
+                           
                             var a = db.Sp_Add_VoucherDetails(recamt, desc, null, null, null, res5.Receipt_Id).FirstOrDefault();
 
                             string text = "Dear " + string.Join(",", filedatas.Select(x => x.Name)) + ",\n\r" +
@@ -324,7 +325,7 @@ namespace MeherEstateDevelopers.Controllers
                         }
                         }
                         Transaction.Commit();
-                        var data = new { Status = true, Msg = "File has been Registered", Receiptid = ids, PaymentNo = Payment_No, Token = filedatas.Select(x => x.File_Form_Id).FirstOrDefault() };
+                        var data = new { Status = true, Msg = "File has been Registered", Receiptid = ids, PaymentNo = Payment_No, Token = token };
                         return Json(data);
                     }
                     else
@@ -372,13 +373,14 @@ namespace MeherEstateDevelopers.Controllers
                 Sec_NoSec_Name = item.Sec_NoSec_Name,
                 Group_Id = item.Group_Id,
                 Installment_Plan = item.Installment_Plan,
-                userid = item.userid
+                userid = item.userid,
+                DealerShipCommisionAmt = item.DealerShipCommisionAmt
             };
             Helpers helpers = new Helpers(Modules.FileManagement, Types.FileForm);
             var no = helpers.stringRandomNumber();
             var FileFormNo = db.Sp_Add_FileForm(null, item.Plot_Size + " Marla", item.Dealership_Id, item.Security, item.Phase, item.Block,
                 (int)FileStatus.Pending, item.Dev_Charges_Id, helpers.GetBool(item.Sec_NoSec_Id), item.Security,
-                item.Group_Id, item.Installment_Plan, item.userid, item.Type, item.Commession, item.Block_Name, item.Sector, no).FirstOrDefault();
+                item.Group_Id, item.Installment_Plan, item.userid, item.Type, item.Commession, item.Block_Name, item.Sector, no,item.DealerShipCommisionAmt).FirstOrDefault();
             string newFileFormno = $"{item.Block_Name}-{FileFormNo.File_Form_Id} ";
             var fileFormToUpdate = db.File_Form.FirstOrDefault(f => f.Id == FileFormNo.Id);
             if (fileFormToUpdate != null)
@@ -530,6 +532,23 @@ namespace MeherEstateDevelopers.Controllers
                 return Json(fa);
             }
         }
+
+        [NoDirectAccess]
+        public ActionResult DeleteDiscount(int id)
+        {
+            var dis = db.Discounts.FirstOrDefault(p => p.Id == id);
+
+            if (dis != null)
+            {
+                db.Discounts.Remove(dis);
+                db.SaveChanges();
+
+                return Json(new { success = true, message = "Discount deleted successfully." });
+            }
+
+            return Json(new { success = false, message = "Discount not found." });
+        }
+
         [NoDirectAccess] public ActionResult GetFileDetails(string FileId)
         {
             long userid = long.Parse(User.Identity.GetUserId());
@@ -2620,7 +2639,7 @@ namespace MeherEstateDevelopers.Controllers
 
                         res = db.Sp_Add_Voucher("-", Amount, GeneralMethods.NumberToWords(Convert.ToInt32(Amount)), null, null, null, null, String.Join(",", res2.Select(x => x.Mobile_1)), Narration,
                                           String.Join(",", res2.Select(x => x.Father_Husband)), res1.Id, Modules.FileManagement.ToString(), String.Join(",", res2.Select(x => x.Name)), payType, "Meher Estate Developers",
-                                          "", TransactionId, "Sale return Voucher", userid, null, comp.Id).FirstOrDefault();
+                                          "", TransactionId, "Sale return Voucher", userid, null, comp.Id,null,null,null).FirstOrDefault();
 
                         string Sales = "";
                         string Receivable = "";
@@ -2689,7 +2708,7 @@ namespace MeherEstateDevelopers.Controllers
 
                         res = db.Sp_Add_Voucher("-", Amount, GeneralMethods.NumberToWords(Convert.ToInt32(Amount)), bank.Bank, branch, instDate, instNo, String.Join(",", res2.Select(x => x.Mobile_1)), Narration,
                                           String.Join(",", res2.Select(x => x.Father_Husband)), res1.Id, Modules.FileManagement.ToString(), String.Join(",", res2.Select(x => x.Name)), payType, "Meher Estate Developers",
-                                          "", TransactionId, "Sale return Voucher", userid, null, comp.Id).FirstOrDefault();
+                                          "", TransactionId, "Sale return Voucher", userid, null, comp.Id,null,null,null).FirstOrDefault();
 
 
 
@@ -3265,7 +3284,7 @@ namespace MeherEstateDevelopers.Controllers
             db.Sp_Update_PlotRefund_Req(Id, Status, "Finance Manager");
             var res = db.Sp_Add_Voucher(res2.Postal_Address, rd.Amount, rd.AmountInWords, rd.Bank, rd.Branch, rd.Ch_bk_Pay_Date, rd.PayChqNo, res2.Mobile_1, "Refund Amount against the " + res3.PaymentType + " Receipt No " + res3.ReceiptNo + "  of File No: " + res1.FileFormNumber + " Block No: " + res1.Block + "`" + Description,
                 res2.Father_Husband, res1.Id, Modules.FileManagement.ToString(), res2.Name, rd.PaymentType, "Meher Estate Developers",
-                 "", h.RandomNumber(), Payments.Receipt_Refund.ToString(), userid, null, comp.Id).FirstOrDefault();
+                 "", h.RandomNumber(), Payments.Receipt_Refund.ToString(), userid, null, comp.Id, null, null, null).FirstOrDefault();
             try
             {
                 AccountHandlerController de = new AccountHandlerController();

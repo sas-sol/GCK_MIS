@@ -47,7 +47,6 @@ namespace MeherEstateDevelopers.Models
         public virtual DbSet<BallotPlot> BallotPlots { get; set; }
         public virtual DbSet<Bank_Accounts> Bank_Accounts { get; set; }
         public virtual DbSet<Bank_Online_Accounts> Bank_Online_Accounts { get; set; }
-        public virtual DbSet<Biding_Reserve_Plots> Biding_Reserve_Plots { get; set; }
         public virtual DbSet<Bill> Bills { get; set; }
         public virtual DbSet<Cancellation_Receipts> Cancellation_Receipts { get; set; }
         public virtual DbSet<Cheque_DemandDraft_PayOrder> Cheque_DemandDraft_PayOrder { get; set; }
@@ -107,7 +106,6 @@ namespace MeherEstateDevelopers.Models
         public virtual DbSet<ErrorLog> ErrorLogs { get; set; }
         public virtual DbSet<FamilyProperty> FamilyProperties { get; set; }
         public virtual DbSet<File_Cancelation_Req> File_Cancelation_Req { get; set; }
-        public virtual DbSet<File_Form> File_Form { get; set; }
         public virtual DbSet<File_Installments> File_Installments { get; set; }
         public virtual DbSet<File_Plot_Balance> File_Plot_Balance { get; set; }
         public virtual DbSet<Files_Comments> Files_Comments { get; set; }
@@ -267,7 +265,6 @@ namespace MeherEstateDevelopers.Models
         public virtual DbSet<Vendor> Vendors { get; set; }
         public virtual DbSet<Vendor_Credit_Terms> Vendor_Credit_Terms { get; set; }
         public virtual DbSet<Vendor_Representative> Vendor_Representative { get; set; }
-        public virtual DbSet<Voucher> Vouchers { get; set; }
         public virtual DbSet<Voucher_Details> Voucher_Details { get; set; }
         public virtual DbSet<VoucherRequest> VoucherRequests { get; set; }
         public virtual DbSet<Warehouse_Shelf> Warehouse_Shelf { get; set; }
@@ -291,6 +288,9 @@ namespace MeherEstateDevelopers.Models
         public virtual DbSet<Plot_Installments_Surcharge> Plot_Installments_Surcharge { get; set; }
         public virtual DbSet<Files_Transfer> Files_Transfer { get; set; }
         public virtual DbSet<Plot_Ownership> Plot_Ownership { get; set; }
+        public virtual DbSet<Biding_Reserve_Plots> Biding_Reserve_Plots { get; set; }
+        public virtual DbSet<File_Form> File_Form { get; set; }
+        public virtual DbSet<Voucher> Vouchers { get; set; }
     
         public virtual int Add_CustomerLogin(string name, string father_Husband, string email, string phone, string cNIC, string password)
         {
@@ -3720,83 +3720,6 @@ namespace MeherEstateDevelopers.Models
                 new ObjectParameter("type", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("Sp_Add_FileComments", fileidParameter, comentParameter, useridParameter, typeParameter);
-        }
-    
-        public virtual ObjectResult<Sp_Add_FileForm_Result> Sp_Add_FileForm(Nullable<long> qRCode, string plot_Size, Nullable<long> dealership_Id, Nullable<decimal> security, Nullable<long> phase_Id, Nullable<long> block_Id, Nullable<long> status, Nullable<bool> development_Charges, Nullable<bool> security_NoSecurity, Nullable<decimal> security_Amount, Nullable<long> groupid, Nullable<long> instplanid, Nullable<long> userid, string type, Nullable<decimal> com, string blocknam, string sector, string num)
-        {
-            var qRCodeParameter = qRCode.HasValue ?
-                new ObjectParameter("QRCode", qRCode) :
-                new ObjectParameter("QRCode", typeof(long));
-    
-            var plot_SizeParameter = plot_Size != null ?
-                new ObjectParameter("Plot_Size", plot_Size) :
-                new ObjectParameter("Plot_Size", typeof(string));
-    
-            var dealership_IdParameter = dealership_Id.HasValue ?
-                new ObjectParameter("Dealership_Id", dealership_Id) :
-                new ObjectParameter("Dealership_Id", typeof(long));
-    
-            var securityParameter = security.HasValue ?
-                new ObjectParameter("Security", security) :
-                new ObjectParameter("Security", typeof(decimal));
-    
-            var phase_IdParameter = phase_Id.HasValue ?
-                new ObjectParameter("Phase_Id", phase_Id) :
-                new ObjectParameter("Phase_Id", typeof(long));
-    
-            var block_IdParameter = block_Id.HasValue ?
-                new ObjectParameter("Block_Id", block_Id) :
-                new ObjectParameter("Block_Id", typeof(long));
-    
-            var statusParameter = status.HasValue ?
-                new ObjectParameter("Status", status) :
-                new ObjectParameter("Status", typeof(long));
-    
-            var development_ChargesParameter = development_Charges.HasValue ?
-                new ObjectParameter("Development_Charges", development_Charges) :
-                new ObjectParameter("Development_Charges", typeof(bool));
-    
-            var security_NoSecurityParameter = security_NoSecurity.HasValue ?
-                new ObjectParameter("Security_NoSecurity", security_NoSecurity) :
-                new ObjectParameter("Security_NoSecurity", typeof(bool));
-    
-            var security_AmountParameter = security_Amount.HasValue ?
-                new ObjectParameter("Security_Amount", security_Amount) :
-                new ObjectParameter("Security_Amount", typeof(decimal));
-    
-            var groupidParameter = groupid.HasValue ?
-                new ObjectParameter("groupid", groupid) :
-                new ObjectParameter("groupid", typeof(long));
-    
-            var instplanidParameter = instplanid.HasValue ?
-                new ObjectParameter("instplanid", instplanid) :
-                new ObjectParameter("instplanid", typeof(long));
-    
-            var useridParameter = userid.HasValue ?
-                new ObjectParameter("userid", userid) :
-                new ObjectParameter("userid", typeof(long));
-    
-            var typeParameter = type != null ?
-                new ObjectParameter("type", type) :
-                new ObjectParameter("type", typeof(string));
-    
-            var comParameter = com.HasValue ?
-                new ObjectParameter("com", com) :
-                new ObjectParameter("com", typeof(decimal));
-    
-            var blocknamParameter = blocknam != null ?
-                new ObjectParameter("blocknam", blocknam) :
-                new ObjectParameter("blocknam", typeof(string));
-    
-            var sectorParameter = sector != null ?
-                new ObjectParameter("Sector", sector) :
-                new ObjectParameter("Sector", typeof(string));
-    
-            var numParameter = num != null ?
-                new ObjectParameter("num", num) :
-                new ObjectParameter("num", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Sp_Add_FileForm_Result>("Sp_Add_FileForm", qRCodeParameter, plot_SizeParameter, dealership_IdParameter, securityParameter, phase_IdParameter, block_IdParameter, statusParameter, development_ChargesParameter, security_NoSecurityParameter, security_AmountParameter, groupidParameter, instplanidParameter, useridParameter, typeParameter, comParameter, blocknamParameter, sectorParameter, numParameter);
         }
     
         public virtual ObjectResult<Nullable<bool>> Sp_Add_FileInstallmentsPlan(string instplan, Nullable<long> fileid)
@@ -8807,95 +8730,6 @@ namespace MeherEstateDevelopers.Models
                 new ObjectParameter("installment_plan", typeof(int));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<long>>("Sp_Add_Version", plot_sizeParameter, filecountParameter, dealer_idParameter, delernameParameter, project_idParameter, phase_IdParameter, block_idParameter, rate_marlaParameter, amountParameter, depositParameter, gropu_idParameter, deal_idParameter, pro_nameParameter, phase_nameParameter, blk_nameParameter, installment_planParameter);
-        }
-    
-        public virtual ObjectResult<Sp_Add_Voucher_Result> Sp_Add_Voucher(string address, Nullable<decimal> amount, string amountinWords, string bank, string branch_Name, Nullable<System.DateTime> ch_Pay_Draft_Date, string ch_Pay_Draft_No, string contact, string description, string father_Name, Nullable<long> file_Plot_Id, string module, string name, string paymentType, string project, string text, Nullable<long> tokenParameter, string type, Nullable<long> userid, Nullable<long> vendor, Nullable<int> comp_Id)
-        {
-            var addressParameter = address != null ?
-                new ObjectParameter("Address", address) :
-                new ObjectParameter("Address", typeof(string));
-    
-            var amountParameter = amount.HasValue ?
-                new ObjectParameter("Amount", amount) :
-                new ObjectParameter("Amount", typeof(decimal));
-    
-            var amountinWordsParameter = amountinWords != null ?
-                new ObjectParameter("AmountinWords", amountinWords) :
-                new ObjectParameter("AmountinWords", typeof(string));
-    
-            var bankParameter = bank != null ?
-                new ObjectParameter("Bank", bank) :
-                new ObjectParameter("Bank", typeof(string));
-    
-            var branch_NameParameter = branch_Name != null ?
-                new ObjectParameter("Branch_Name", branch_Name) :
-                new ObjectParameter("Branch_Name", typeof(string));
-    
-            var ch_Pay_Draft_DateParameter = ch_Pay_Draft_Date.HasValue ?
-                new ObjectParameter("Ch_Pay_Draft_Date", ch_Pay_Draft_Date) :
-                new ObjectParameter("Ch_Pay_Draft_Date", typeof(System.DateTime));
-    
-            var ch_Pay_Draft_NoParameter = ch_Pay_Draft_No != null ?
-                new ObjectParameter("Ch_Pay_Draft_No", ch_Pay_Draft_No) :
-                new ObjectParameter("Ch_Pay_Draft_No", typeof(string));
-    
-            var contactParameter = contact != null ?
-                new ObjectParameter("Contact", contact) :
-                new ObjectParameter("Contact", typeof(string));
-    
-            var descriptionParameter = description != null ?
-                new ObjectParameter("Description", description) :
-                new ObjectParameter("Description", typeof(string));
-    
-            var father_NameParameter = father_Name != null ?
-                new ObjectParameter("Father_Name", father_Name) :
-                new ObjectParameter("Father_Name", typeof(string));
-    
-            var file_Plot_IdParameter = file_Plot_Id.HasValue ?
-                new ObjectParameter("File_Plot_Id", file_Plot_Id) :
-                new ObjectParameter("File_Plot_Id", typeof(long));
-    
-            var moduleParameter = module != null ?
-                new ObjectParameter("Module", module) :
-                new ObjectParameter("Module", typeof(string));
-    
-            var nameParameter = name != null ?
-                new ObjectParameter("Name", name) :
-                new ObjectParameter("Name", typeof(string));
-    
-            var paymentTypeParameter = paymentType != null ?
-                new ObjectParameter("PaymentType", paymentType) :
-                new ObjectParameter("PaymentType", typeof(string));
-    
-            var projectParameter = project != null ?
-                new ObjectParameter("Project", project) :
-                new ObjectParameter("Project", typeof(string));
-    
-            var textParameter = text != null ?
-                new ObjectParameter("Text", text) :
-                new ObjectParameter("Text", typeof(string));
-    
-            var tokenParameterParameter = tokenParameter.HasValue ?
-                new ObjectParameter("TokenParameter", tokenParameter) :
-                new ObjectParameter("TokenParameter", typeof(long));
-    
-            var typeParameter = type != null ?
-                new ObjectParameter("Type", type) :
-                new ObjectParameter("Type", typeof(string));
-    
-            var useridParameter = userid.HasValue ?
-                new ObjectParameter("Userid", userid) :
-                new ObjectParameter("Userid", typeof(long));
-    
-            var vendorParameter = vendor.HasValue ?
-                new ObjectParameter("vendor", vendor) :
-                new ObjectParameter("vendor", typeof(long));
-    
-            var comp_IdParameter = comp_Id.HasValue ?
-                new ObjectParameter("comp_Id", comp_Id) :
-                new ObjectParameter("comp_Id", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Sp_Add_Voucher_Result>("Sp_Add_Voucher", addressParameter, amountParameter, amountinWordsParameter, bankParameter, branch_NameParameter, ch_Pay_Draft_DateParameter, ch_Pay_Draft_NoParameter, contactParameter, descriptionParameter, father_NameParameter, file_Plot_IdParameter, moduleParameter, nameParameter, paymentTypeParameter, projectParameter, textParameter, tokenParameterParameter, typeParameter, useridParameter, vendorParameter, comp_IdParameter);
         }
     
         public virtual ObjectResult<Sp_Add_Voucher_Vendor_Result> Sp_Add_Voucher_Vendor(string address, Nullable<decimal> amount, string amountinWords, string bank, string branch_Name, Nullable<System.DateTime> ch_Pay_Draft_Date, string ch_Pay_Draft_No, string contact, string description, string father_Name, Nullable<long> file_Plot_Id, string module, string name, string paymentType, string project, string text, Nullable<long> tokenParameter, string type, Nullable<long> userid, Nullable<long> vendor, Nullable<long> group_Id, string pre_Name, Nullable<long> prepared_By, Nullable<System.DateTime> pre_Datetime, string sup_Name, Nullable<long> supervised_By, Nullable<System.DateTime> sup_Datetime, Nullable<long> transactionId)
@@ -24644,6 +24478,188 @@ namespace MeherEstateDevelopers.Models
                 new ObjectParameter("fileplotnumber", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<long>>("Sp_Add_PlotReceipt_Manual", descriptionParameter, amountParameter, amountinWordsParameter, bankParameter, ch_Pay_Draft_NoParameter, ch_Pay_Draft_DateParameter, branchParameter, contactParameter, father_NameParameter, file_Plot_NoParameter, nameParameter, paymentTypeParameter, plot_Total_AmountParameter, projectParameter, ratePerMarlaParameter, registeration_NoParameter, sizeParameter, typeParameter, tokenParameter, useridParameter, receNoParameter, dateParameter, phaseParameter, blockParameter, imgParameter, moduleParameter, fileplotnumberParameter);
+        }
+    
+        public virtual ObjectResult<Sp_Add_FileForm_Result> Sp_Add_FileForm(Nullable<long> qRCode, string plot_Size, Nullable<long> dealership_Id, Nullable<decimal> security, Nullable<long> phase_Id, Nullable<long> block_Id, Nullable<long> status, Nullable<bool> development_Charges, Nullable<bool> security_NoSecurity, Nullable<decimal> security_Amount, Nullable<long> groupid, Nullable<long> instplanid, Nullable<long> userid, string type, Nullable<decimal> com, string blocknam, string sector, string num, Nullable<decimal> dealerShipCommisionAmt)
+        {
+            var qRCodeParameter = qRCode.HasValue ?
+                new ObjectParameter("QRCode", qRCode) :
+                new ObjectParameter("QRCode", typeof(long));
+    
+            var plot_SizeParameter = plot_Size != null ?
+                new ObjectParameter("Plot_Size", plot_Size) :
+                new ObjectParameter("Plot_Size", typeof(string));
+    
+            var dealership_IdParameter = dealership_Id.HasValue ?
+                new ObjectParameter("Dealership_Id", dealership_Id) :
+                new ObjectParameter("Dealership_Id", typeof(long));
+    
+            var securityParameter = security.HasValue ?
+                new ObjectParameter("Security", security) :
+                new ObjectParameter("Security", typeof(decimal));
+    
+            var phase_IdParameter = phase_Id.HasValue ?
+                new ObjectParameter("Phase_Id", phase_Id) :
+                new ObjectParameter("Phase_Id", typeof(long));
+    
+            var block_IdParameter = block_Id.HasValue ?
+                new ObjectParameter("Block_Id", block_Id) :
+                new ObjectParameter("Block_Id", typeof(long));
+    
+            var statusParameter = status.HasValue ?
+                new ObjectParameter("Status", status) :
+                new ObjectParameter("Status", typeof(long));
+    
+            var development_ChargesParameter = development_Charges.HasValue ?
+                new ObjectParameter("Development_Charges", development_Charges) :
+                new ObjectParameter("Development_Charges", typeof(bool));
+    
+            var security_NoSecurityParameter = security_NoSecurity.HasValue ?
+                new ObjectParameter("Security_NoSecurity", security_NoSecurity) :
+                new ObjectParameter("Security_NoSecurity", typeof(bool));
+    
+            var security_AmountParameter = security_Amount.HasValue ?
+                new ObjectParameter("Security_Amount", security_Amount) :
+                new ObjectParameter("Security_Amount", typeof(decimal));
+    
+            var groupidParameter = groupid.HasValue ?
+                new ObjectParameter("groupid", groupid) :
+                new ObjectParameter("groupid", typeof(long));
+    
+            var instplanidParameter = instplanid.HasValue ?
+                new ObjectParameter("instplanid", instplanid) :
+                new ObjectParameter("instplanid", typeof(long));
+    
+            var useridParameter = userid.HasValue ?
+                new ObjectParameter("userid", userid) :
+                new ObjectParameter("userid", typeof(long));
+    
+            var typeParameter = type != null ?
+                new ObjectParameter("type", type) :
+                new ObjectParameter("type", typeof(string));
+    
+            var comParameter = com.HasValue ?
+                new ObjectParameter("com", com) :
+                new ObjectParameter("com", typeof(decimal));
+    
+            var blocknamParameter = blocknam != null ?
+                new ObjectParameter("blocknam", blocknam) :
+                new ObjectParameter("blocknam", typeof(string));
+    
+            var sectorParameter = sector != null ?
+                new ObjectParameter("Sector", sector) :
+                new ObjectParameter("Sector", typeof(string));
+    
+            var numParameter = num != null ?
+                new ObjectParameter("num", num) :
+                new ObjectParameter("num", typeof(string));
+    
+            var dealerShipCommisionAmtParameter = dealerShipCommisionAmt.HasValue ?
+                new ObjectParameter("DealerShipCommisionAmt", dealerShipCommisionAmt) :
+                new ObjectParameter("DealerShipCommisionAmt", typeof(decimal));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Sp_Add_FileForm_Result>("Sp_Add_FileForm", qRCodeParameter, plot_SizeParameter, dealership_IdParameter, securityParameter, phase_IdParameter, block_IdParameter, statusParameter, development_ChargesParameter, security_NoSecurityParameter, security_AmountParameter, groupidParameter, instplanidParameter, useridParameter, typeParameter, comParameter, blocknamParameter, sectorParameter, numParameter, dealerShipCommisionAmtParameter);
+        }
+    
+        public virtual ObjectResult<Sp_Add_Voucher_Result> Sp_Add_Voucher(string address, Nullable<decimal> amount, string amountinWords, string bank, string branch_Name, Nullable<System.DateTime> ch_Pay_Draft_Date, string ch_Pay_Draft_No, string contact, string description, string father_Name, Nullable<long> file_Plot_Id, string module, string name, string paymentType, string project, string text, Nullable<long> tokenParameter, string type, Nullable<long> userid, Nullable<long> vendor, Nullable<int> comp_Id, Nullable<long> dealerPrincipalCredit, Nullable<long> netToCash, Nullable<long> dealerCommissionAdj)
+        {
+            var addressParameter = address != null ?
+                new ObjectParameter("Address", address) :
+                new ObjectParameter("Address", typeof(string));
+    
+            var amountParameter = amount.HasValue ?
+                new ObjectParameter("Amount", amount) :
+                new ObjectParameter("Amount", typeof(decimal));
+    
+            var amountinWordsParameter = amountinWords != null ?
+                new ObjectParameter("AmountinWords", amountinWords) :
+                new ObjectParameter("AmountinWords", typeof(string));
+    
+            var bankParameter = bank != null ?
+                new ObjectParameter("Bank", bank) :
+                new ObjectParameter("Bank", typeof(string));
+    
+            var branch_NameParameter = branch_Name != null ?
+                new ObjectParameter("Branch_Name", branch_Name) :
+                new ObjectParameter("Branch_Name", typeof(string));
+    
+            var ch_Pay_Draft_DateParameter = ch_Pay_Draft_Date.HasValue ?
+                new ObjectParameter("Ch_Pay_Draft_Date", ch_Pay_Draft_Date) :
+                new ObjectParameter("Ch_Pay_Draft_Date", typeof(System.DateTime));
+    
+            var ch_Pay_Draft_NoParameter = ch_Pay_Draft_No != null ?
+                new ObjectParameter("Ch_Pay_Draft_No", ch_Pay_Draft_No) :
+                new ObjectParameter("Ch_Pay_Draft_No", typeof(string));
+    
+            var contactParameter = contact != null ?
+                new ObjectParameter("Contact", contact) :
+                new ObjectParameter("Contact", typeof(string));
+    
+            var descriptionParameter = description != null ?
+                new ObjectParameter("Description", description) :
+                new ObjectParameter("Description", typeof(string));
+    
+            var father_NameParameter = father_Name != null ?
+                new ObjectParameter("Father_Name", father_Name) :
+                new ObjectParameter("Father_Name", typeof(string));
+    
+            var file_Plot_IdParameter = file_Plot_Id.HasValue ?
+                new ObjectParameter("File_Plot_Id", file_Plot_Id) :
+                new ObjectParameter("File_Plot_Id", typeof(long));
+    
+            var moduleParameter = module != null ?
+                new ObjectParameter("Module", module) :
+                new ObjectParameter("Module", typeof(string));
+    
+            var nameParameter = name != null ?
+                new ObjectParameter("Name", name) :
+                new ObjectParameter("Name", typeof(string));
+    
+            var paymentTypeParameter = paymentType != null ?
+                new ObjectParameter("PaymentType", paymentType) :
+                new ObjectParameter("PaymentType", typeof(string));
+    
+            var projectParameter = project != null ?
+                new ObjectParameter("Project", project) :
+                new ObjectParameter("Project", typeof(string));
+    
+            var textParameter = text != null ?
+                new ObjectParameter("Text", text) :
+                new ObjectParameter("Text", typeof(string));
+    
+            var tokenParameterParameter = tokenParameter.HasValue ?
+                new ObjectParameter("TokenParameter", tokenParameter) :
+                new ObjectParameter("TokenParameter", typeof(long));
+    
+            var typeParameter = type != null ?
+                new ObjectParameter("Type", type) :
+                new ObjectParameter("Type", typeof(string));
+    
+            var useridParameter = userid.HasValue ?
+                new ObjectParameter("Userid", userid) :
+                new ObjectParameter("Userid", typeof(long));
+    
+            var vendorParameter = vendor.HasValue ?
+                new ObjectParameter("vendor", vendor) :
+                new ObjectParameter("vendor", typeof(long));
+    
+            var comp_IdParameter = comp_Id.HasValue ?
+                new ObjectParameter("comp_Id", comp_Id) :
+                new ObjectParameter("comp_Id", typeof(int));
+    
+            var dealerPrincipalCreditParameter = dealerPrincipalCredit.HasValue ?
+                new ObjectParameter("DealerPrincipalCredit", dealerPrincipalCredit) :
+                new ObjectParameter("DealerPrincipalCredit", typeof(long));
+    
+            var netToCashParameter = netToCash.HasValue ?
+                new ObjectParameter("NetToCash", netToCash) :
+                new ObjectParameter("NetToCash", typeof(long));
+    
+            var dealerCommissionAdjParameter = dealerCommissionAdj.HasValue ?
+                new ObjectParameter("DealerCommissionAdj", dealerCommissionAdj) :
+                new ObjectParameter("DealerCommissionAdj", typeof(long));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Sp_Add_Voucher_Result>("Sp_Add_Voucher", addressParameter, amountParameter, amountinWordsParameter, bankParameter, branch_NameParameter, ch_Pay_Draft_DateParameter, ch_Pay_Draft_NoParameter, contactParameter, descriptionParameter, father_NameParameter, file_Plot_IdParameter, moduleParameter, nameParameter, paymentTypeParameter, projectParameter, textParameter, tokenParameterParameter, typeParameter, useridParameter, vendorParameter, comp_IdParameter, dealerPrincipalCreditParameter, netToCashParameter, dealerCommissionAdjParameter);
         }
     }
 }

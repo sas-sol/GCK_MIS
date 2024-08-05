@@ -654,7 +654,7 @@ namespace MeherEstateDevelopers.Controllers
             ViewBag.TransactionId = h.RandomNumber();
             return View();
         }
-        public JsonResult RegisterDealerPlot(long? Plot_Id, List<Plot_Ownership> Owners, long TransactionId, bool? isPayment, int? DealersId, BookingReceiptData brdd, long? recamt)
+        public JsonResult RegisterDealerPlot(long? Plot_Id, List<Plot_Ownership> Owners, long TransactionId, bool? isPayment, int? DealersId, BookingReceiptData brdd, long? recamt,long? Dealercomision , long? DealerPercentCredit, long? NetToCash)
         {
             long Payment_No = 0;
             long userid = long.Parse(User.Identity.GetUserId());
@@ -952,7 +952,7 @@ namespace MeherEstateDevelopers.Controllers
 
                         var res5 = db.Sp_Add_Voucher(dealers.Select(x => x.Address).FirstOrDefault(), recamt, GeneralMethods.NumberToWords((int)recamt), "", "", null, "", string.Join("-", dealers.Select(x => x.Mobile_1)), desc,
                          string.Join("-", dealers.Select(x => x.Name)), dealership.Id, Modules.Dealers.ToString(), dealership.Dealership_Name, "Cash", "",
-                     "", TransactionId, Payments.Adjustment.ToString(), userid, null, comp.Id).FirstOrDefault();
+                     "", TransactionId, Payments.Adjustment.ToString(), userid, null, comp.Id, DealerPercentCredit, NetToCash, Dealercomision).FirstOrDefault();
                         var a = db.Sp_Add_VoucherDetails(recamt, desc, null, null, null, res5.Receipt_Id).FirstOrDefault();
                         Payment_No = Convert.ToInt64(res5.Receipt_Id);
                     }
@@ -1091,7 +1091,7 @@ namespace MeherEstateDevelopers.Controllers
                     }
                     Transaction.Commit();
                     this.updatebalance(plot.Id);
-                    return Json(new { Status = true, ReceiptId = Receipt_No, PaymentNo = Payment_No, Token = userid });
+                    return Json(new { Status = true, ReceiptId = Receipt_No, PaymentNo = Payment_No, Token = TransactionId });
                 }
                 catch (Exception ex)
                 {
@@ -1635,7 +1635,7 @@ namespace MeherEstateDevelopers.Controllers
             var res12 = db.Sp_Get_ReceivedAmounts_NotIncluded(Plotid, Modules.PlotManagement.ToString()).ToList();
             UpdatePlotInstallmentStatusNotIncluded(res3, res12, Plotid);
             var UpdatePlotInstallments = db.Sp_Get_PlotInstallments(Plotid).ToList();
-            var res = new PlotDetailData { PlotData = res1, PlotOwners = res2, PlotInstallments = UpdatePlotInstallments, PlotReceipts = res4, PlotInstallmentsSurcharge = UpdateSurChargeInstallments };
+            var res = new PlotDetailData { PlotData = res1, PlotOwners = res2, PlotInstallments = UpdatePlotInstallments, PlotReceipts = res4, PlotInstallmentsSurcharge = UpdateSurChargeInstallments , Discounts = discount };
             return PartialView(res);
         }
         public JsonResult UpdateConstructionStatus(long Id, string DevelopStatus)
@@ -2875,7 +2875,7 @@ namespace MeherEstateDevelopers.Controllers
 
                         var res = db.Sp_Add_Voucher(string.Join(",", res2.Select(x => x.Postal_Address)), rd.Amount, rd.AmountInWords, rd.Bank, rd.Branch, rd.Ch_bk_Pay_Date, rd.PayChqNo, string.Join(",", res2.Select(x => x.Mobile_1)), "Against Cancellation of Plot no: " + res1.Plot_No + " Block No: " + res1.Block_Name + "`" + Description,
                         string.Join(",", res2.Select(x => x.Father_Husband)), res1.Id, Modules.PlotManagement.ToString(), string.Join(",", res2.Select(x => x.Name)), rd.PaymentType, "Meher Estate Developers",
-                         "", userid, Payments.Cancellation.ToString(), userid, null, comp.Id).FirstOrDefault();
+                         "", userid, Payments.Cancellation.ToString(), userid, null, comp.Id,null,null,null).FirstOrDefault();
 
 
                         string Sales = "";
@@ -2945,7 +2945,7 @@ namespace MeherEstateDevelopers.Controllers
 
                         var res = db.Sp_Add_Voucher(string.Join(",", res2.Select(x => x.Postal_Address)), rd.Amount, rd.AmountInWords, bank.Bank, branch, instDate, instNo, string.Join(",", res2.Select(x => x.Mobile_1)), "Against Cancellation of Plot no: " + res1.Plot_No + " Block No: " + res1.Block_Name + "`" + Description,
                        string.Join(",", res2.Select(x => x.Father_Husband)), res1.Id, Modules.PlotManagement.ToString(), string.Join(",", res2.Select(x => x.Name)), rd.PaymentType, "Meher Estate Developers",
-                        "", userid, Payments.Cancellation.ToString(), userid, null, comp.Id).FirstOrDefault();
+                        "", userid, Payments.Cancellation.ToString(), userid, null, comp.Id,null,null,null).FirstOrDefault();
 
 
                         string Sales = "";
@@ -3863,7 +3863,7 @@ namespace MeherEstateDevelopers.Controllers
             var TransactionId = new Helpers().RandomNumber();
             var res = db.Sp_Add_Voucher(res2.Postal_Address, rd.Amount, rd.AmountInWords, rd.Bank, rd.Branch, rd.Ch_bk_Pay_Date, rd.PayChqNo, res2.Mobile_1, "Refund Amount against the " + res3.PaymentType + " Receipt No " + res3.ReceiptNo + "  of Plot no: " + res1.Plot_No + " Block No: " + res1.Block_Name + "`" + Description,
                 res2.Father_Husband, res1.Id, Modules.PlotManagement.ToString(), res2.Name, rd.PaymentType, "Meher Estate Developers",
-                 "", TransactionId, Payments.Receipt_Refund.ToString(), userid, null, comp.Id).FirstOrDefault();
+                 "", TransactionId, Payments.Receipt_Refund.ToString(), userid, null, comp.Id,null,null,null).FirstOrDefault();
             bool headcashier = false;
             if (User.IsInRole("Head Cashier"))
             {

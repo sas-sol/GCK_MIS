@@ -21,5 +21,6 @@ namespace MeherEstateDevelopers.Models
         public string Address { get; set; }
         public string Status { get; set; }
         public string COA_Code { get; set; }
+        public string COA_CommisionCode { get; set; }
     }
 }

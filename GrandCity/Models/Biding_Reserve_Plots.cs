@@ -30,5 +30,6 @@ namespace MeherEstateDevelopers.Models
         public Nullable<decimal> CommisionAmount { get; set; }
         public Nullable<int> Installments_Seg { get; set; }
         public Nullable<decimal> Percentage_Adj { get; set; }
+        public Nullable<decimal> DealerShipCommisionAmt { get; set; }
     }
 }

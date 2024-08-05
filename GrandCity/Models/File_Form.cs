@@ -45,5 +45,6 @@ namespace MeherEstateDevelopers.Models
         public string Project { get; set; }
         public string Sector { get; set; }
         public Nullable<decimal> SecCommission { get; set; }
+        public Nullable<decimal> DealerShipCommisionAmt { get; set; }
     }
 }

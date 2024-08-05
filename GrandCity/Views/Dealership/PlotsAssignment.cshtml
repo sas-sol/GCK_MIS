@@ -47,13 +47,16 @@
                     <label><b>Development Charges</b></label>
                 </div>
                 <div class="col-md-1">
-                    <label><b>Dealer Commission</b></label>
+                    <label><b>Dealer Commission Percentage</b></label>
                 </div>
                 <div class="col-md-1">
                     <label><b>Total Price</b></label>
                 </div>
                 <div class="col-md-1">
                     <label><b>Percentage Adj</b></label>
+                </div>
+                <div class="col-md-1">
+                    <label><b>DealerShip Commission Amount</b></label>
                 </div>
             </div>
         </div>
@@ -178,6 +181,9 @@
                 <div class="col-md-1">
                     <input type="text" class="form-control coma plt-deal-adj" placeholder="Dealer Adj %" value="0" />
                 </div>
+                  <div class="col-md-1">
+                  <input type="text" class="form-control coma dealershipcomamt" placeholder="Dealership Amount" value="0" />
+                  </div>
                     <i class="fa fa-trash rmv-row-plt-assgnmnt"></i>
             </div>`;
             $('.plts-asgnmnt-area').append(__strctr__);
@@ -272,6 +278,7 @@
                     let _prc_dc_chg = parseFloat(RemoveComma($(this).find('.plt-dc-chg-fld').val()));
                     let _prc_deal_comm = parseFloat(RemoveComma($(this).find('.plt-deal-com-chg-fld').val()));
                     let _plt_deal_adj = parseFloat(RemoveComma($(this).find('.plt-deal-adj').val()));
+                    let _dealerShipComAmt = parseFloat(RemoveComma($(this).find('.dealershipcomamt').val()));
                     let _pltId = $(this).find('.plts-lst option:selected').val();
                     let _pltNum = $(this).find('.plts-lst option:selected').text();
                     _prc_dc_chg = isNaN(_prc_dc_chg) ? 0 : _prc_dc_chg;
@@ -287,7 +294,8 @@
                         SpecialPrefAmount: _prc_sp_chg,
                         DCAmount: _prc_dc_chg,
                         CommisionAmount: _prc_deal_comm,
-                        Percentage_Adj: _plt_deal_adj
+                        Percentage_Adj: _plt_deal_adj,
+                        DealerShipCommisionAmt: _dealerShipComAmt
                     });
                 }
             });

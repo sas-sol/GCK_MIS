@@ -271,10 +271,10 @@
                                 <label>Branch </label>
                                 <input type="text" class="form-control" id="Branch" placeholder="Mall Rd" disabled required>
                             </div>
-                                    @*<div class="form-group col-md-1 paymentotherinfo">
-                                    <label>Scan File </label>
-                                    <button class=" btn btn-block" data-v="1" type="button" id="scanbtn">Scan</button>
-                                    </div>*@
+                            @*<div class="form-group col-md-1 paymentotherinfo">
+            <label>Scan File </label>
+            <button class=" btn btn-block" data-v="1" type="button" id="scanbtn">Scan</button>
+            </div>*@
                             <div class="form-group col-md-3">
                                 @*<input type="button" onclick="UpFileee()" id="btnUpload" value="Upload Files" />*@
                                 <div style="padding-bottom: 10px !important; cursor: pointer;" onclick="UpFileee()" id="btnUpload" value="Upload Files">Upload</div>
@@ -282,12 +282,46 @@
                             </div>
                             <div id="images-1" class="col-md-1 images"></div>
                         </div>
+                        <div class="mT-30 del-bal-div" style="display:none">
+                            <div class="form-row">
+                                <div class="form-group col-md-2">
+                                    <label>Dealership:</label>
+                                    <h6 id="del-nam"></h6>
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <label>Available Balance:</label>
+                                    <h6 id="avl-bal"></h6>
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <label>Amount</label>
+                                    <input class="form-control coma" id="Amount" placeholder="250,000" required>
+                                    <input type="hidden" id="rec-amt" required>
+                                    @*<input value="" class="form-control coma" id="rec-amt" />*@
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <label>Dealer Commission</label>
+                                    <input class="form-control Dealercom" placeholder="250,000" required>
+                                    <input type="hidden" id="Dealercom" required>
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <label>Dealer Principal Credit</label>
+                                    <input class="form-control DealerPC" placeholder="250,000" required>
+                                    <input type="hidden" id="DealerPC" required>
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <label>Net to Co-Cash</label>
+                                    <input class="form-control Nettocash" placeholder="250,000" required>
+                                    <input type="hidden" id="Nettocash" required>
+                                </div>
+                            </div>
+                        </div>
                         <div class="form-row">
                             <div class="col-md-7">
                                 <button type="submit" id="reg-file" class="btn btn-primary">Register</button>
                             </div>
                         </div>
                     </div>
+                  
                 </div>
             }
         </div>
@@ -504,14 +538,21 @@
 
         //});
         // Register  a file
-        $(document).on("submit", "#re-fil-new-fil", function (e) {
+    $(document).on("submit", "#re-fil-new-fil", function (e) {
+        function RemoveComma(value) {
+            return value.replace(/,/g, '');
+        }
             debugger;
             e.preventDefault();
             var advamt = parseFloat(RemoveComma($("#adv-pmt").text()));
 
             var payType = $(".pay-check option:selected").val();
 
-            var recamt = $("#rec-amt").val();
+        var recamt = $("#rec-amt").val();
+        var Dealercomision = Number(RemoveComma($('.Dealercom').val()));
+        var DealerShipPC = Number(RemoveComma($('.DealerPC').val()));
+        var Netcash = Number(RemoveComma($('.Nettocash').val()));
+        var totalAmt = Dealercomision + DealerShipPC + Netcash;
            /* recamt = recamt.replace(/,/g, '');*/
             var avlbal = $("#avl-bal").text();
     /*        avlbal = avlbal.replace(/,/g, '');*/
@@ -528,6 +569,12 @@
                         text: "Unable to Register File Due to Insufficient Dealer Balance"
                     });
                     return false;
+                }
+                if (recamt != totalAmt) {
+                    Swal.fire({
+                        icon: 'info',
+                        text: "Unable to Register File because Adjustment Amount is not equal to Total Amount"
+                    });
                 }
             }
             else
@@ -575,9 +622,11 @@
                 console.log(recedata);
             }
             $("#reg-file").prop("disabled", true);
+            debugger;
             var fileno = $("#app-num").val();
             var fulpaid = $("#full-paid").is(":checked");
             var delerId = $("#Dealership").val();
+         
             var allowners = [];
             var regfiledata;
             $('.owner').each(function () {
@@ -628,7 +677,10 @@
                 FullPaid: fulpaid,
                 DelerId: delerId,
                 recamt: recamt,
-                payType: payType
+                payType: payType,
+                Dealercomision: Dealercomision,
+                DealerPercentCredit: DealerShipPC,
+                NetToCash: Netcash
             };
             var con = confirm("Are you sure you want to Register File");
             if (con) {
