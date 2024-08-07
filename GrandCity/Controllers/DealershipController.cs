@@ -229,9 +229,9 @@ namespace MeherEstateDevelopers.Controllers
             var res = db.Dealerships.SingleOrDefault(x => x.Id == Id);
             return PartialView(res);
         }
-        public JsonResult UpdateDealership(long Id, string Dealername, string Status, DateTime Date)
+        public JsonResult UpdateDealership(long Id, string Dealername, string Status, DateTime Date, string COA_Code, string COA_ComCode)
         {
-            var res = db.Sp_Update_Dealership(Id, Dealername, Date, Status,"","");
+            var res = db.Sp_Update_Dealership(Id, Dealername, Date, Status, COA_ComCode ,COA_Code);
             long userid = long.Parse(User.Identity.GetUserId());
 
             db.Sp_Add_DealershipComments(Id, "Updated Details " + string.Join(" , ",Dealername,Status,Date), userid, "Update_Dealership");
