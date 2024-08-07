@@ -69,7 +69,7 @@ namespace MeherEstateDevelopers.Controllers
             return View();
         }
         [HttpPost]
-        public JsonResult AddDealer(string Dealership, List<Dealer> Dealers)
+        public JsonResult AddDealer(string Dealership, string COA_CommisionCodes, string COA_Codes, List<Dealer> Dealers)
         {
 
             long userid = long.Parse(User.Identity.GetUserId());

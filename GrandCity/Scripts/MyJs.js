@@ -944,6 +944,10 @@ $(document).on("submit", "#a-d", function (e) {
     e.preventDefault();
     var dealersdata = [];
     var dealership = $('#Dealership_Name').val();
+    var COA_CommisionCode = $('#COA_CommisionCode').val();
+    var COA_Code = $('#COA_Code').val();
+    console.log(COA_CommisionCode);
+    console.log(COA_Code);
     for (var i = 1; i <= dealercounter; i++) {
         var dealers = { Name: "", Father_Name: "", CNIC_NICOP: "", Mobile_1: "", Mobile_2: "", Image: "" };
         dealers.Name = $('#dealer-' + i + ' .name').val();
@@ -954,7 +958,7 @@ $(document).on("submit", "#a-d", function (e) {
         dealers.Image = $('#dealer-' + i + ' .deal-img').attr("src");
         dealersdata.push(dealers);
     }
-    var data = { Dealership: dealership, Dealers: dealersdata };
+    var data = { Dealership: dealership, COA_CommisionCodes: COA_CommisionCode, COA_Codes: COA_Code,  Dealers: dealersdata };
     $.ajax({
         type: "POST",
         contentType: "application/json; charset=utf-8",
