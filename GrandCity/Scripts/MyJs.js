@@ -11761,14 +11761,17 @@ $(document).on("click", "#add-part", function () {
 });
 //
 $(document).on("click", "#del-update", function () {
+    debugger;
     var id = $("#deal-id").val();
     var name = $("#deal-nam").val();
     var date = $("#reg-dat").val();
     var stat = $("#stat").val();
+    var coacodes = $("#coa-code").val();
+    var coacomcodes = $("#coa-com").val();
     $.ajax({
         type: "POST",
         url: '/Dealership/UpdateDealership/',
-        data: { Id: id, Dealername: name, Status: stat, Date: date },
+        data: { Id: id, Dealername: name, Status: stat, Date: date, COA_Code: coacodes, COA_ComCode: coacomcodes },
         success: function (data) {
             alert("Dealership Status Updated")
             window.location.reload();
