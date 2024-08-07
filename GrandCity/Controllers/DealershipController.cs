@@ -92,7 +92,7 @@ namespace MeherEstateDevelopers.Controllers
             {
                 try
                 {
-                    var res = db.Sp_Add_Dealership_Dealers(Dealership, Qrid.Id, DealerXML).FirstOrDefault();
+                    var res = db.Sp_Add_Dealership_Dealers(Dealership, Qrid.Id, DealerXML, COA_CommisionCodes,COA_Codes).FirstOrDefault();
 
                     //Adding Income Account if not Present
 

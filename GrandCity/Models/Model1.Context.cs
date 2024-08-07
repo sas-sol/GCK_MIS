@@ -2746,23 +2746,6 @@ namespace MeherEstateDevelopers.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<bool>>("Sp_Add_Dealers", nameParameter, fnamParameter, cnicParameter, mob1Parameter, mob2Parameter, addreParameter, dea_idParameter, cityParameter, datebirthParameter);
         }
     
-        public virtual ObjectResult<Nullable<long>> Sp_Add_Dealership_Dealers(string name, Nullable<long> qrid, string dealer)
-        {
-            var nameParameter = name != null ?
-                new ObjectParameter("name", name) :
-                new ObjectParameter("name", typeof(string));
-    
-            var qridParameter = qrid.HasValue ?
-                new ObjectParameter("qrid", qrid) :
-                new ObjectParameter("qrid", typeof(long));
-    
-            var dealerParameter = dealer != null ?
-                new ObjectParameter("dealer", dealer) :
-                new ObjectParameter("dealer", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<long>>("Sp_Add_Dealership_Dealers", nameParameter, qridParameter, dealerParameter);
-        }
-    
         public virtual int Sp_Add_DealershipComments(Nullable<long> dealershipid, string coment, Nullable<long> userid, string type)
         {
             var dealershipidParameter = dealershipid.HasValue ?
@@ -24660,6 +24643,31 @@ namespace MeherEstateDevelopers.Models
                 new ObjectParameter("DealerCommissionAdj", typeof(long));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Sp_Add_Voucher_Result>("Sp_Add_Voucher", addressParameter, amountParameter, amountinWordsParameter, bankParameter, branch_NameParameter, ch_Pay_Draft_DateParameter, ch_Pay_Draft_NoParameter, contactParameter, descriptionParameter, father_NameParameter, file_Plot_IdParameter, moduleParameter, nameParameter, paymentTypeParameter, projectParameter, textParameter, tokenParameterParameter, typeParameter, useridParameter, vendorParameter, comp_IdParameter, dealerPrincipalCreditParameter, netToCashParameter, dealerCommissionAdjParameter);
+        }
+    
+        public virtual ObjectResult<Nullable<long>> Sp_Add_Dealership_Dealers(string name, Nullable<long> qrid, string dealer, string cOA_CommissionCode, string cOA_Code)
+        {
+            var nameParameter = name != null ?
+                new ObjectParameter("name", name) :
+                new ObjectParameter("name", typeof(string));
+    
+            var qridParameter = qrid.HasValue ?
+                new ObjectParameter("qrid", qrid) :
+                new ObjectParameter("qrid", typeof(long));
+    
+            var dealerParameter = dealer != null ?
+                new ObjectParameter("dealer", dealer) :
+                new ObjectParameter("dealer", typeof(string));
+    
+            var cOA_CommissionCodeParameter = cOA_CommissionCode != null ?
+                new ObjectParameter("COA_CommissionCode", cOA_CommissionCode) :
+                new ObjectParameter("COA_CommissionCode", typeof(string));
+    
+            var cOA_CodeParameter = cOA_Code != null ?
+                new ObjectParameter("COA_Code", cOA_Code) :
+                new ObjectParameter("COA_Code", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<long>>("Sp_Add_Dealership_Dealers", nameParameter, qridParameter, dealerParameter, cOA_CommissionCodeParameter, cOA_CodeParameter);
         }
     }
 }
