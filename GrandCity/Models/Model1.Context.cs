@@ -18755,27 +18755,6 @@ namespace MeherEstateDevelopers.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("Sp_Update_Dealers_Deal", idParameter, amountParameter, advanceParameter, rebateParameter);
         }
     
-        public virtual int Sp_Update_Dealership(Nullable<long> id, string name, Nullable<System.DateTime> date, string status)
-        {
-            var idParameter = id.HasValue ?
-                new ObjectParameter("id", id) :
-                new ObjectParameter("id", typeof(long));
-    
-            var nameParameter = name != null ?
-                new ObjectParameter("name", name) :
-                new ObjectParameter("name", typeof(string));
-    
-            var dateParameter = date.HasValue ?
-                new ObjectParameter("date", date) :
-                new ObjectParameter("date", typeof(System.DateTime));
-    
-            var statusParameter = status != null ?
-                new ObjectParameter("status", status) :
-                new ObjectParameter("status", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("Sp_Update_Dealership", idParameter, nameParameter, dateParameter, statusParameter);
-        }
-    
         public virtual int Sp_Update_DealParty_Information(Nullable<long> id, string name, string mob, string add, Nullable<decimal> off_rate, Nullable<decimal> rate, Nullable<decimal> com, string status, string com_type)
         {
             var idParameter = id.HasValue ?
@@ -24668,6 +24647,35 @@ namespace MeherEstateDevelopers.Models
                 new ObjectParameter("COA_Code", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<long>>("Sp_Add_Dealership_Dealers", nameParameter, qridParameter, dealerParameter, cOA_CommissionCodeParameter, cOA_CodeParameter);
+        }
+    
+        public virtual int Sp_Update_Dealership(Nullable<long> id, string name, Nullable<System.DateTime> date, string status, string cOA_ComCode, string cOA_Code)
+        {
+            var idParameter = id.HasValue ?
+                new ObjectParameter("id", id) :
+                new ObjectParameter("id", typeof(long));
+    
+            var nameParameter = name != null ?
+                new ObjectParameter("name", name) :
+                new ObjectParameter("name", typeof(string));
+    
+            var dateParameter = date.HasValue ?
+                new ObjectParameter("date", date) :
+                new ObjectParameter("date", typeof(System.DateTime));
+    
+            var statusParameter = status != null ?
+                new ObjectParameter("status", status) :
+                new ObjectParameter("status", typeof(string));
+    
+            var cOA_ComCodeParameter = cOA_ComCode != null ?
+                new ObjectParameter("COA_ComCode", cOA_ComCode) :
+                new ObjectParameter("COA_ComCode", typeof(string));
+    
+            var cOA_CodeParameter = cOA_Code != null ?
+                new ObjectParameter("COA_Code", cOA_Code) :
+                new ObjectParameter("COA_Code", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("Sp_Update_Dealership", idParameter, nameParameter, dateParameter, statusParameter, cOA_ComCodeParameter, cOA_CodeParameter);
         }
     }
 }

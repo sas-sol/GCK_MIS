@@ -231,7 +231,7 @@ namespace MeherEstateDevelopers.Controllers
         }
         public JsonResult UpdateDealership(long Id, string Dealername, string Status, DateTime Date)
         {
-            var res = db.Sp_Update_Dealership(Id, Dealername, Date, Status);
+            var res = db.Sp_Update_Dealership(Id, Dealername, Date, Status,"","");
             long userid = long.Parse(User.Identity.GetUserId());
 
             db.Sp_Add_DealershipComments(Id, "Updated Details " + string.Join(" , ",Dealername,Status,Date), userid, "Update_Dealership");
